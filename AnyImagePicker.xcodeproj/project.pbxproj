@@ -23,6 +23,9 @@
 		A5A27BB0232F82AE00D966B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BAE232F82AE00D966B8 /* Main.storyboard */; };
 		A5A27BB2232F82B000D966B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BB1232F82B000D966B8 /* Assets.xcassets */; };
 		A5A27BB5232F82B000D966B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BB3232F82B000D966B8 /* LaunchScreen.storyboard */; };
+		A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */; };
+		A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */; };
+		A5A27BC3232F840900D966B8 /* Asset.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BC2232F840900D966B8 /* Asset.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +75,9 @@
 		A5A27BB1232F82B000D966B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5A27BB4232F82B000D966B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5A27BB6232F82B000D966B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberCircleButton.swift; sourceTree = "<group>"; };
+		A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OriginalButton.swift; sourceTree = "<group>"; };
+		A5A27BC2232F840900D966B8 /* Asset.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Asset.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,9 +160,11 @@
 				A099CC63232F3BF70023CC3D /* AnyImagePicker.h */,
 				A099CC64232F3BF70023CC3D /* Info.plist */,
 				A0800418232F5F90006B4711 /* Core */,
+				A5A27BBA232F83C900D966B8 /* View */,
 				A0F4753A232F7DDB00BB117B /* Model */,
 				A0800417232F5F87006B4711 /* Util */,
 				A0800416232F5F7F006B4711 /* Extension */,
+				A5A27BBF232F83E700D966B8 /* Resources */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -199,6 +207,23 @@
 				A5A27BB6232F82B000D966B8 /* Info.plist */,
 			);
 			path = Example;
+			sourceTree = "<group>";
+		};
+		A5A27BBA232F83C900D966B8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */,
+				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A5A27BBF232F83E700D966B8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A5A27BC2232F840900D966B8 /* Asset.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,6 +341,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5A27BC3232F840900D966B8 /* Asset.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +370,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0800415232F5F7A006B4711 /* PhotoManager.swift in Sources */,
+				A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
+				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A0800413232F5B44006B4711 /* PhotoPickerViewController.swift in Sources */,
 				A0F4753C232F7DE500BB117B /* Album.swift in Sources */,
