@@ -7,14 +7,18 @@
 //
 
 import UIKit
+import AnyImagePicker
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(111)
     }
 
-
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let vc = TestViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 

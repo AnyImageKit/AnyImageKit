@@ -26,10 +26,22 @@
 		A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */; };
 		A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */; };
 		A5A27BC3232F840900D966B8 /* Asset.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BC2232F840900D966B8 /* Asset.xcassets */; };
+		A5A27BC6232F874500D966B8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BC8232F874500D966B8 /* Localizable.strings */; };
+		A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BCA232F884F00D966B8 /* BundleHelper.swift */; };
+		A5A27BCC232F88E900D966B8 /* AnyImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */; };
+		A5A27BCD232F88E900D966B8 /* AnyImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BD3232F89E800D966B8 /* TestViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		A099CC6B232F3BF70023CC3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A099CC57232F3BF70023CC3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A099CC5F232F3BF70023CC3D;
+			remoteInfo = AnyImagePicker;
+		};
+		A5A27BCE232F88E900D966B8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A099CC57232F3BF70023CC3D /* Project object */;
 			proxyType = 1;
@@ -46,6 +58,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A5A27BA0232F81CF00D966B8 /* SnapKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5A27BD0232F88E900D966B8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A5A27BCD232F88E900D966B8 /* AnyImagePicker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +101,10 @@
 		A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberCircleButton.swift; sourceTree = "<group>"; };
 		A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OriginalButton.swift; sourceTree = "<group>"; };
 		A5A27BC2232F840900D966B8 /* Asset.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Asset.xcassets; sourceTree = "<group>"; };
+		A5A27BC7232F874500D966B8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A5A27BC9232F874F00D966B8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A5A27BCA232F884F00D966B8 /* BundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleHelper.swift; sourceTree = "<group>"; };
+		A5A27BD3232F89E800D966B8 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5A27BCC232F88E900D966B8 /* AnyImagePicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				A0800414232F5F7A006B4711 /* PhotoManager.swift */,
+				A5A27BCA232F884F00D966B8 /* BundleHelper.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -127,6 +156,7 @@
 			children = (
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
 				A0800412232F5B44006B4711 /* PhotoPickerViewController.swift */,
+				A5A27BD3232F89E800D966B8 /* TestViewController.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -222,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				A5A27BC2232F840900D966B8 /* Asset.xcassets */,
+				A5A27BC8232F874500D966B8 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -284,10 +315,12 @@
 				A5A27BA2232F82AE00D966B8 /* Sources */,
 				A5A27BA3232F82AE00D966B8 /* Frameworks */,
 				A5A27BA4232F82AE00D966B8 /* Resources */,
+				A5A27BD0232F88E900D966B8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A5A27BCF232F88E900D966B8 /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -323,6 +356,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = A099CC56232F3BF70023CC3D;
 			productRefGroup = A099CC61232F3BF70023CC3D /* Products */;
@@ -342,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5A27BC3232F840900D966B8 /* Asset.xcassets in Resources */,
+				A5A27BC6232F874500D966B8 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +411,8 @@
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A0800413232F5B44006B4711 /* PhotoPickerViewController.swift in Sources */,
 				A0F4753C232F7DE500BB117B /* Album.swift in Sources */,
+				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
+				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +442,11 @@
 			target = A099CC5F232F3BF70023CC3D /* AnyImagePicker */;
 			targetProxy = A099CC6B232F3BF70023CC3D /* PBXContainerItemProxy */;
 		};
+		A5A27BCF232F88E900D966B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A099CC5F232F3BF70023CC3D /* AnyImagePicker */;
+			targetProxy = A5A27BCE232F88E900D966B8 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -424,6 +466,15 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		A5A27BC8232F874500D966B8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5A27BC7232F874500D966B8 /* en */,
+				A5A27BC9232F874F00D966B8 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -431,6 +482,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -494,6 +546,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -653,6 +706,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5HZKWDU956;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -670,6 +728,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5HZKWDU956;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

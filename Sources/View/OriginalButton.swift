@@ -16,7 +16,7 @@ final class OriginalButton: UIControl {
     }()
     private lazy var label: UILabel = {
         let view = UILabel()
-        view.text = "原图"
+        view.text = BundleHelper.localizedString(key: "Full image")
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 14)
         return view
@@ -33,16 +33,18 @@ final class OriginalButton: UIControl {
     }
     
     private func setupView() {
-        let sv = UIStackView(arrangedSubviews: [circleView, label])
-        sv.spacing = 5
-        sv.isUserInteractionEnabled = false
-        addSubview(sv)
-        sv.snp.makeConstraints { (maker) in
-            maker.center.equalToSuperview()
-        }
+        addSubview(circleView)
+        addSubview(label)
         circleView.snp.makeConstraints { (maker) in
+            maker.left.equalToSuperview()
+            maker.centerY.equalToSuperview()
             maker.height.equalTo(self).multipliedBy(0.6)
             maker.width.equalTo(circleView.snp.height)
+        }
+        label.snp.makeConstraints { (maker) in
+            maker.left.equalTo(circleView.snp.right).offset(5)
+            maker.right.equalToSuperview()
+            maker.centerY.equalToSuperview()
         }
     }
     
