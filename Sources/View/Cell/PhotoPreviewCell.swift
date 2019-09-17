@@ -11,6 +11,8 @@ import UIKit
 protocol PhotoPreviewCellDelegate: class {
     /// 拖动时回调。scale:缩放比率
     func previewCell(_ cell: PhotoPreviewCell, didPanScale scale: CGFloat)
+    
+    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit flag: Bool)
 
     /// 单击时回调
     func previewCellDidSingleTap(_ cell: PhotoPreviewCell)
@@ -168,7 +170,7 @@ extension PhotoPreviewCell {
             imageView.frame = panResult(pan).0
             if pan.velocity(in: self).y > 0 {
                 // dismiss
-                onSingleTap()
+                delegate?.previewCell(self, didEndPanWithExit: true)
             } else {
                 // 取消dismiss
                 endPan()
@@ -204,6 +206,7 @@ extension PhotoPreviewCell {
 
     private func endPan() {
         delegate?.previewCell(self, didPanScale: 1.0)
+        delegate?.previewCell(self, didEndPanWithExit: false)
         // 如果图片当前显示的size小于原size，则重置为原size
         let size = fitSize
         let needResetSize = imageView.bounds.size.width < size.width

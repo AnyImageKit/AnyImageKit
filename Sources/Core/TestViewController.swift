@@ -55,7 +55,7 @@ final public class TestViewController: UIViewController {
         let vc = PhotoPreviewController()
         vc.delegate = self
         vc.dataSource = self
-        presentAsPush(vc)
+        present(vc, animated: true, completion: nil)
     }
 }
 

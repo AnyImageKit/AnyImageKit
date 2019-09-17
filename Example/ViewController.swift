@@ -13,12 +13,12 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(111)
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("Start")
+        
         let vc = TestViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

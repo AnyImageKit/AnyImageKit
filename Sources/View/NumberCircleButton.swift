@@ -18,7 +18,7 @@ final class NumberCircleButton: UIControl {
     
     private(set) lazy var circleIV: UIImageView = {
         let view = UIImageView()
-        view.image = BundleHelper.image(named: "picker_circle_normal")
+        view.image = BundleHelper.image(named: "PickerCircleNormal")
         return view
     }()
     private(set) lazy var numLabel: UILabel = {
@@ -56,10 +56,10 @@ final class NumberCircleButton: UIControl {
         addSubview(circleIV)
         addSubview(numLabel)
         circleIV.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview().offset(3)
+            maker.edges.equalToSuperview().inset(3)
         }
         numLabel.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview().offset(3)
+            maker.edges.equalToSuperview().inset(3)
         }
     }
     
