@@ -8,9 +8,9 @@
 
 import Photos
 
-final public class PhotoManager {
+final class PhotoManager {
     
-    public let shared: PhotoManager = PhotoManager()
+    static let shared: PhotoManager = PhotoManager()
     
     var sortAscendingByModificationDate: Bool = true
 
@@ -36,13 +36,13 @@ extension PhotoManager {
         for smartAlbum in smartAlbums {
             if smartAlbum.estimatedAssetCount <= 0 { continue }
             if smartAlbum.isCameraRoll {
-                let result = Album(result: fetchResult, name: smartAlbum.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                let result = Album(result: fetchResult, id: smartAlbum.localIdentifier, name: smartAlbum.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
                 completion(result)
             }
         }
     }
     
-    func getAllAlbums(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping ([Album]) -> Void) {
+    func fetchAllAlbums(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping ([Album]) -> Void) {
         var results = [Album]()
         let options = PHFetchOptions()
         if !allowPickingVideo {
@@ -65,18 +65,19 @@ extension PhotoManager {
                 let assetFetchResult = PHAsset.fetchAssets(in: smartAlbum, options: options)
                 if assetFetchResult.count <= 0 && !smartAlbum.isCameraRoll { continue }
                 
-                if smartAlbum.assetCollectionSubtype == .smartAlbumAllHidden { continue }
-                if smartAlbum.assetCollectionSubtype.rawValue == 1000000201  {
-                    print(smartAlbum.localizedTitle!)
-                    continue
-                } //『最近删除』相册
+                if smartAlbum.isAllHidden { continue }
+                if smartAlbum.isRecentlyDeleted  { continue }
                 
                 if smartAlbum.isCameraRoll {
-                    let album = Album(result: fetchResult, name: smartAlbum.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
-                    results.insert(album, at: 0)
+                    if !results.contains(where: { $0.id == smartAlbum.localIdentifier }) {
+                        let album = Album(result: fetchResult, id: smartAlbum.localIdentifier, name: smartAlbum.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                        results.insert(album, at: 0)
+                    }
                 } else {
-                    let album = Album(result: fetchResult, name: smartAlbum.localizedTitle, isCameraRoll: false, needFetchAssets: needFetchAssets)
-                    results.append(album)
+                    if !results.contains(where: { $0.id == smartAlbum.localIdentifier }) {
+                        let album = Album(result: fetchResult, id: smartAlbum.localIdentifier, name: smartAlbum.localizedTitle, isCameraRoll: false, needFetchAssets: needFetchAssets)
+                        results.append(album)
+                    }
                 }
             }
         }

@@ -14,6 +14,10 @@ final public class TestViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupView()
+        
+        PhotoManager.shared.fetchAllAlbums(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: true) { (albums) in
+            print(albums)
+        }
     }
     
     private func setupView() {
