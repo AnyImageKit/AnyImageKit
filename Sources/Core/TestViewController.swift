@@ -20,10 +20,6 @@ final public class TestViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupView()
-        
-        PhotoManager.shared.fetchAllAlbums(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: true) { (albums) in
-            print(albums)
-        }
     }
     
     private func setupView() {
@@ -52,10 +48,13 @@ final public class TestViewController: UIViewController {
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
-        let vc = PhotoPreviewController()
-        vc.delegate = self
-        vc.dataSource = self
-        presentAsPush(vc)
+//        let vc = PhotoPreviewController()
+//        vc.delegate = self
+//        vc.dataSource = self
+//        presentAsPush(vc)
+        
+        let controller = AlbumPickerViewController()
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
