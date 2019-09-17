@@ -13,4 +13,12 @@ extension PHAssetCollection {
     var isCameraRoll: Bool {
         return assetCollectionSubtype == .smartAlbumUserLibrary
     }
+    
+    var isAllHidden: Bool {
+        return assetCollectionSubtype == .smartAlbumAllHidden
+    }
+    
+    var isRecentlyDeleted: Bool {
+        return assetCollectionSubtype.rawValue == 1000000201
+    }
 }
