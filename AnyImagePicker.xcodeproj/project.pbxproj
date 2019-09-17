@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0604E7023307ABD00D9AA01 /* Ex+PHFetchResult.swift */; };
 		A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800410232F4EE4006B4711 /* ImagePickerController.swift */; };
 		A0800413232F5B44006B4711 /* PhotoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800412232F5B44006B4711 /* PhotoPickerViewController.swift */; };
 		A0800415232F5F7A006B4711 /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800414232F5F7A006B4711 /* PhotoManager.swift */; };
@@ -15,6 +16,8 @@
 		A099CC71232F3BF70023CC3D /* AnyImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = A099CC63232F3BF70023CC3D /* AnyImagePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0F4753C232F7DE500BB117B /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753B232F7DE500BB117B /* Album.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
+		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
+		A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A0604E7023307ABD00D9AA01 /* Ex+PHFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+PHFetchResult.swift"; sourceTree = "<group>"; };
 		A080040E232F4EC8006B4711 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A080040F232F4EC8006B4711 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		A0800410232F4EE4006B4711 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
@@ -41,6 +45,8 @@
 		A099CC70232F3BF70023CC3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0F4753B232F7DE500BB117B /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		A0F4753D232F7DFA00BB117B /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
+		A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+PHAssetCollection.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +71,8 @@
 		A0800416232F5F7F006B4711 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */,
+				A0604E7023307ABD00D9AA01 /* Ex+PHFetchResult.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -81,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
+				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
 				A0800412232F5B44006B4711 /* PhotoPickerViewController.swift */,
 			);
 			path = Core;
@@ -251,7 +260,10 @@
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A0800413232F5B44006B4711 /* PhotoPickerViewController.swift in Sources */,
+				A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */,
+				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				A0F4753C232F7DE500BB117B /* Album.swift in Sources */,
+				A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

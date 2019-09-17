@@ -10,12 +10,16 @@ import Photos
 
 final public class PhotoManager {
     
+    public let shared: PhotoManager = PhotoManager()
     
+    var sortAscendingByModificationDate: Bool = true
+
+    private init() { }
 }
 
 extension PhotoManager {
     
-    func fetchCameraRollAlbum(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: () -> Void) {
+    func fetchCameraRollAlbum(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping (Album) -> Void) {
         let options = PHFetchOptions()
         if !allowPickingVideo {
             options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
@@ -23,39 +27,86 @@ extension PhotoManager {
         if !allowPickingImage {
             options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
         }
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
-        options.sortDescriptors = [sortDescriptor]
-        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
-        smartAlbums.enumerateObjects { (assetCollection, index, isAtEnd) in
-            if assetCollection.estimatedAssetCount > 0 {
-                
+        if !sortAscendingByModificationDate {
+            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: sortAscendingByModificationDate)
+            options.sortDescriptors = [sortDescriptor]
+        }
+        let fetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
+        let smartAlbums = fetchResult.objects()
+        for smartAlbum in smartAlbums {
+            if smartAlbum.estimatedAssetCount <= 0 { continue }
+            if smartAlbum.isCameraRoll {
+                let result = Album(result: fetchResult, name: smartAlbum.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                completion(result)
             }
         }
     }
     
-//    - (void)getCameraRollAlbum:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage needFetchAssets:(BOOL)needFetchAssets completion:(void (^)(TZAlbumModel *model))completion {
-//        __block TZAlbumModel *model;
-//        PHFetchOptions *option = [[PHFetchOptions alloc] init];
-//        if (!allowPickingVideo) option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
-//        if (!allowPickingImage) option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld",
-//                                                    PHAssetMediaTypeVideo];
-//        // option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"modificationDate" ascending:self.sortAscendingByModificationDate]];
-//        if (!self.sortAscendingByModificationDate) {
-//            option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:self.sortAscendingByModificationDate]];
-//        }
-//        PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-//        for (PHAssetCollection *collection in smartAlbums) {
-//            // 有可能是PHCollectionList类的的对象，过滤掉
-//            if (![collection isKindOfClass:[PHAssetCollection class]]) continue;
-//            // 过滤空相册
-//            if (collection.estimatedAssetCount <= 0) continue;
-//            if ([self isCameraRollAlbum:collection]) {
-//                PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-//                model = [self modelWithResult:fetchResult name:collection.localizedTitle isCameraRoll:YES needFetchAssets:needFetchAssets];
-//                if (completion) completion(model);
-//                break;
-//            }
-//        }
-//    }
-    
+    func getAllAlbums(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping ([Album]) -> Void) {
+        var results = [Album]()
+        let options = PHFetchOptions()
+        if !allowPickingVideo {
+            options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+        }
+        if !allowPickingImage {
+            options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
+        }
+        if !sortAscendingByModificationDate {
+            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: sortAscendingByModificationDate)
+            options.sortDescriptors = [sortDescriptor]
+        }
+        
+        let allAlbumSubTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream, .albumRegular, .albumSyncedAlbum, .albumCloudShared]
+        let fetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
+        for fetchResult in fetchResults {
+            let smartAlbums = fetchResult.objects()
+            for smartAlbum in smartAlbums {
+                if smartAlbum.estimatedAssetCount <= 0 && !smartAlbum.isCameraRoll { continue }
+                let assetFetchResult = PHAsset.fetchAssets(in: smartAlbum, options: options)
+                if assetFetchResult.count <= 0 && !smartAlbum.isCameraRoll { continue }
+                
+                if smartAlbum.assetCollectionSubtype == .smartAlbumAllHidden { continue }
+                if smartAlbum.assetCollectionSubtype.rawValue == 1000000201  {
+                    print(smartAlbum.localizedTitle)
+                    continue
+                } //『最近删除』相册
+                
+                if smartAlbum.isCameraRoll {
+                    let album = Album(result: fetchResult, name: smartAlbum.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                    results.insert(album, at: 0)
+                } else {
+                    let album = Album(result: fetchResult, name: smartAlbum.localizedTitle, isCameraRoll: false, needFetchAssets: needFetchAssets)
+                    results.append(album)
+                }
+            }
+        }
+        completion(results)
+    }
 }
+
+/*
+
+
+            PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
+            if (fetchResult.count < 1 && ![self isCameraRollAlbum:collection]) continue;
+            
+            if ([self.pickerDelegate respondsToSelector:@selector(isAlbumCanSelect:result:)]) {
+                if (![self.pickerDelegate isAlbumCanSelect:collection.localizedTitle result:fetchResult]) {
+                    continue;
+                }
+            }
+            
+            if (collection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumAllHidden) continue;
+            if (collection.assetCollectionSubtype == 1000000201) continue; //『最近删除』相册
+            if ([self isCameraRollAlbum:collection]) {
+                [albumArr insertObject:[self modelWithResult:fetchResult name:collection.localizedTitle isCameraRoll:YES needFetchAssets:needFetchAssets] atIndex:0];
+            } else {
+                [albumArr addObject:[self modelWithResult:fetchResult name:collection.localizedTitle isCameraRoll:NO needFetchAssets:needFetchAssets]];
+            }
+        }
+    }
+    if (completion) {
+        completion(albumArr);
+    }
+}
+*/
