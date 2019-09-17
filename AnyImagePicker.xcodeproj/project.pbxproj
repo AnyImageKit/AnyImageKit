@@ -23,6 +23,9 @@
 		A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */; };
 		A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8023307F7D00EBFC48 /* PhotoPreviewCell.swift */; };
 		A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8223307F8A00EBFC48 /* VideoPreviewCell.swift */; };
+		A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */; };
+		A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */; };
+		A56A3C8A2330AAC900EBFC48 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C892330AAC900EBFC48 /* Ex+UIViewController.swift */; };
 		A5A27B9F232F81CF00D966B8 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; };
 		A5A27BA0232F81CF00D966B8 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
@@ -106,6 +109,9 @@
 		A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewControllerDelegate.swift; sourceTree = "<group>"; };
 		A56A3C8023307F7D00EBFC48 /* PhotoPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewCell.swift; sourceTree = "<group>"; };
 		A56A3C8223307F8A00EBFC48 /* VideoPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewCell.swift; sourceTree = "<group>"; };
+		A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UICollectionView.swift"; sourceTree = "<group>"; };
+		A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleAnimator.swift; sourceTree = "<group>"; };
+		A56A3C892330AAC900EBFC48 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		A5A27BA6232F82AE00D966B8 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -157,6 +163,8 @@
 			children = (
 				A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */,
 				A0604E7023307ABD00D9AA01 /* Ex+PHFetchResult.swift */,
+				A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */,
+				A56A3C892330AAC900EBFC48 /* Ex+UIViewController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -217,6 +225,7 @@
 				A56A3C7C233075C300EBFC48 /* Protocol */,
 				A0800417232F5F87006B4711 /* Util */,
 				A0800416232F5F7F006B4711 /* Extension */,
+				A56A3C862330A43B00EBFC48 /* Animation */,
 				A5A27BBF232F83E700D966B8 /* Resources */,
 				A56A3C792330746A00EBFC48 /* Presentation */,
 			);
@@ -264,6 +273,14 @@
 				A56A3C8223307F8A00EBFC48 /* VideoPreviewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		A56A3C862330A43B00EBFC48 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		A5A27B9D232F81CF00D966B8 /* Frameworks */ = {
@@ -459,15 +476,18 @@
 				A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
+				A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */,
+				A56A3C8A2330AAC900EBFC48 /* Ex+UIViewController.swift in Sources */,
 				A0800413232F5B44006B4711 /* PhotoPickerViewController.swift in Sources */,
 				A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */,
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
 				A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */,
+				A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */,
 				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,

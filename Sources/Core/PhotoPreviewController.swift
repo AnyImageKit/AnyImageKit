@@ -33,7 +33,8 @@ final class PhotoPreviewController: UIViewController {
     }
     /// 缩放型转场协调器
     private weak var scalePresentationController: ScalePresentationController?
-    
+    /// 退场效果
+    private var dismissStyle: DismissStyle = .push
     
     private lazy var flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -48,25 +49,59 @@ final class PhotoPreviewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
-//        collectionView.registerCell(ANPhotoBrowserCell.self)
+        collectionView.registerCell(PhotoPreviewCell.self)
+        collectionView.registerCell(VideoPreviewCell.self)
         collectionView.isPagingEnabled = true
         collectionView.alwaysBounceVertical = false
         return collectionView
     }()
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        transitioningDelegate = self
+        modalPresentationStyle = .custom
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = UIColor.clear
+        setupViews()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        layoutViews()
+    }
     
+    /// 添加视图
+    private func setupViews() {
+        
+        view.addSubview(collectionView)
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
+    }
+
+    /// 视图布局
+    private func layoutViews() {
+        flowLayout.minimumLineSpacing = photoSpacing
+        flowLayout.itemSize = view.bounds.size
+        collectionView.frame = view.bounds
+        collectionView.frame.size.width = view.bounds.width + photoSpacing
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: photoSpacing)
+    }
 }
 
+// MARK: - UICollectionViewDelegate
 extension PhotoPreviewController: UICollectionViewDelegate {
     
 }
 
+// MARK: - UICollectionViewDataSource
 extension PhotoPreviewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -74,8 +109,87 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
+        cell.imageView.contentMode = imageScaleMode
+        cell.delegate = self
+        cell.imageMaximumZoomScale = imageMaximumZoomScale
+        cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+        // TODO: 加载图片
+        cell.imageView.backgroundColor = UIColor.lightGray
+        cell.imageView.image = BundleHelper.image(named: "test_img")
+        cell.loadImage()
+        return cell
+    }
+}
+
+// MARK: - PhotoPreviewCellDelegate
+extension PhotoPreviewController: PhotoPreviewCellDelegate {
+    
+    func previewCell(_ cell: PhotoPreviewCell, didPanScale scale: CGFloat) {
+        // 实测用scale的平方，效果比线性好些
+        let alpha = scale * scale
+        scalePresentationController?.maskAlpha = alpha
     }
     
-    
+    func previewCellDidSingleTap(_ cell: PhotoPreviewCell) {
+        // TODO: 唤出工具栏
+        dismissAsPop()
+    }
+}
+
+// MARK: - UIViewControllerTransitioningDelegate
+extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
+    /// 提供进场动画
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        // 立即布局
+        setupViews()
+        layoutViews()
+        // 立即加载collectionView
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        collectionView.reloadData()
+        collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
+        collectionView.layoutIfNeeded()
+        return makeScalePresentationAnimator(indexPath: indexPath)
+    }
+
+    /// 提供退场动画
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        print(0000)
+        return makeDismissedAnimator()
+    }
+
+    /// 提供转场协调器
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
+        scalePresentationController = controller
+        return controller
+    }
+
+    /// 创建缩放型进场动画
+    private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
+        let cell = collectionView.cellForItem(at: indexPath) as? PhotoPreviewCell
+        let imageView = UIImageView(image: cell?.imageView.image)
+        imageView.contentMode = imageScaleMode
+        imageView.clipsToBounds = true
+        // 创建animator
+        return ScaleAnimator(startView: relatedView, endView: cell?.imageView, scaleView: imageView)
+    }
+
+    /// 创建缩放型退场动画
+    private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
+        guard let cell = collectionView.visibleCells.first as? PhotoPreviewCell else {
+            return nil
+        }
+        let imageView = UIImageView(image: cell.imageView.image)
+        imageView.contentMode = imageScaleMode
+        imageView.clipsToBounds = true
+        return ScaleAnimator(startView: cell.imageView, endView: relatedView, scaleView: imageView)
+    }
+}
+
+extension PhotoPreviewController {
+    enum DismissStyle {
+        case push
+        case scale
+    }
 }
