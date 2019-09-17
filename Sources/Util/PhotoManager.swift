@@ -67,7 +67,7 @@ extension PhotoManager {
                 
                 if smartAlbum.assetCollectionSubtype == .smartAlbumAllHidden { continue }
                 if smartAlbum.assetCollectionSubtype.rawValue == 1000000201  {
-                    print(smartAlbum.localizedTitle)
+                    print(smartAlbum.localizedTitle!)
                     continue
                 } //『最近删除』相册
                 
@@ -83,30 +83,3 @@ extension PhotoManager {
         completion(results)
     }
 }
-
-/*
-
-
-            PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-            if (fetchResult.count < 1 && ![self isCameraRollAlbum:collection]) continue;
-            
-            if ([self.pickerDelegate respondsToSelector:@selector(isAlbumCanSelect:result:)]) {
-                if (![self.pickerDelegate isAlbumCanSelect:collection.localizedTitle result:fetchResult]) {
-                    continue;
-                }
-            }
-            
-            if (collection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumAllHidden) continue;
-            if (collection.assetCollectionSubtype == 1000000201) continue; //『最近删除』相册
-            if ([self isCameraRollAlbum:collection]) {
-                [albumArr insertObject:[self modelWithResult:fetchResult name:collection.localizedTitle isCameraRoll:YES needFetchAssets:needFetchAssets] atIndex:0];
-            } else {
-                [albumArr addObject:[self modelWithResult:fetchResult name:collection.localizedTitle isCameraRoll:NO needFetchAssets:needFetchAssets]];
-            }
-        }
-    }
-    if (completion) {
-        completion(albumArr);
-    }
-}
-*/
