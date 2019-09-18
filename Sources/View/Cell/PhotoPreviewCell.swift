@@ -52,12 +52,16 @@ final class PhotoPreviewCell: UICollectionViewCell {
 
     /// 取图片适屏size
     private var fitSize: CGSize {
-        guard let image = imageView.image else {
-            return CGSize.zero
-        }
+        guard let image = imageView.image else { return CGSize.zero }
         let width = scrollView.bounds.width
         let scale = image.size.height / image.size.width
-        return CGSize(width: width, height: scale * width)
+        var size = CGSize(width: width, height: scale * width)
+        let screenSize = UIScreen.main.bounds.size
+        if size.width > size.height {
+            size.width = size.width * screenSize.height / size.height
+            size.height = screenSize.height
+        }
+        return size
     }
 
     /// 取图片适屏frame
@@ -117,7 +121,26 @@ final class PhotoPreviewCell: UICollectionViewCell {
         scrollView.frame = contentView.bounds
         scrollView.setZoomScale(1.0, animated: false)
         imageView.frame = fitFrame
-        scrollView.setZoomScale(1.0, animated: false)
+        scrollView.minimumZoomScale = getDefaultScale()
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+        
+//        let frame = fitFrame
+//        let screenSize = UIScreen.main.bounds.size
+//        if frame.size.height > screenSize.height {
+//            scrollView.minimumZoomScale = screenSize.height / frame.height
+//        }
+    }
+    
+    private func getDefaultScale() -> CGFloat {
+        guard let image = imageView.image else { return 1.0 }
+        let width = scrollView.bounds.width
+        let scale = image.size.height / image.size.width
+        let size = CGSize(width: width, height: scale * width)
+        let screenSize = UIScreen.main.bounds.size
+        if size.width > screenSize.width {
+            return screenSize.width / size.width
+        }
+        return 1.0
     }
 }
 
@@ -143,15 +166,21 @@ extension PhotoPreviewCell {
         // 如果当前没有任何缩放，则放大到目标比例
         // 否则重置到原比例
         if scrollView.zoomScale == 1.0 {
-            // 以点击的位置为中心，放大
-            let pointInView = dbTap.location(in: imageView)
-            let w = scrollView.bounds.size.width / imageZoomScaleForDoubleTap
-            let h = scrollView.bounds.size.height / imageZoomScaleForDoubleTap
-            let x = pointInView.x - (w / 2.0)
-            let y = pointInView.y - (h / 2.0)
-            scrollView.zoom(to: CGRect(x: x, y: y, width: w, height: h), animated: true)
-        } else {
+            if scrollView.minimumZoomScale == scrollView.zoomScale {
+                // 以点击的位置为中心，放大
+                let pointInView = dbTap.location(in: imageView)
+                let w = scrollView.bounds.size.width / imageZoomScaleForDoubleTap
+                let h = scrollView.bounds.size.height / imageZoomScaleForDoubleTap
+                let x = pointInView.x - (w / 2.0)
+                let y = pointInView.y - (h / 2.0)
+                scrollView.zoom(to: CGRect(x: x, y: y, width: w, height: h), animated: true)
+            } else {
+                scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+            }
+        } else if scrollView.zoomScale == scrollView.minimumZoomScale {
             scrollView.setZoomScale(1.0, animated: true)
+        } else {
+            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         }
     }
 

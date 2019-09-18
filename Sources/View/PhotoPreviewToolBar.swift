@@ -70,4 +70,9 @@ final class PhotoPreviewToolBar: UIView {
         }
     }
 
+    public func hiddenEditAndOriginalButton(_ hidden: Bool) {
+        editButton.isHidden = hidden
+        originalButton.isHidden = hidden
+    }
+    
 }

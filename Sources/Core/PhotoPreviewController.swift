@@ -63,10 +63,14 @@ final class PhotoPreviewController: UIViewController {
     private lazy var navigationBar: PhotoPreviewNavigationBar = {
         let view = PhotoPreviewNavigationBar()
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private lazy var toolBar: PhotoPreviewToolBar = {
         let view = PhotoPreviewToolBar()
+        view.editButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.addTarget(self, action: #selector(originalButtonTapped(_:)), for: .touchUpInside)
+        view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -188,8 +192,32 @@ extension PhotoPreviewController {
 // MARK: - Target
 extension PhotoPreviewController {
     
+    /// NavigationBar - Back
     @objc private func backButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    /// NavigationBar - Select
+    @objc private func selectButtonTapped(_ sender: UIButton) {
+        
+    }
+    
+    /// ToolBar - Edit
+    @objc private func editButtonTapped(_ sender: UIButton) {
+        let vc = PhotoEditViewController()
+        vc.imageView.image = BundleHelper.image(named: "test_img")
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false, completion: nil)
+    }
+    
+    /// ToolBar - Original
+    @objc private func originalButtonTapped(_ sender: UIButton) {
+        
+    }
+    
+    /// ToolBar - Done
+    @objc private func doneButtonTapped(_ sender: UIButton) {
+        
     }
 }
 
