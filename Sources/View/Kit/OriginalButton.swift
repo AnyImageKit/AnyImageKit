@@ -74,7 +74,7 @@ fileprivate class CircleView: UIView {
         let view = UIView()
         view.isHidden = true
         view.clipsToBounds = true
-        view.backgroundColor = UIColor.green
+        view.backgroundColor = UIColor.wechat_green
         return view
     }()
     

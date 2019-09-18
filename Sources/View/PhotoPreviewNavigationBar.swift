@@ -22,7 +22,7 @@ final class PhotoPreviewNavigationBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.color(hex: 0x212121)
+        backgroundColor = UIColor.color(hex: 0x2E2E2E).withAlphaComponent(0.95)
         setupView()
     }
     

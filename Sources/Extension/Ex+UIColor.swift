@@ -28,7 +28,7 @@ extension UIColor {
 
 extension UIColor {
     
-    static var wechat_green: UIColor { UIColor.color(hex: 0x57BD6A) }
+    static var wechat_green: UIColor { UIColor.color(hex: 0x57BE6A) }
     
     static var wechat_dark_text: UIColor { UIColor.color(hex: 0xEAEAEA) }
     

@@ -13,7 +13,7 @@ final class PhotoPreviewToolBar: UIView {
     private(set) lazy var editButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitle("编辑", for: .normal)
+        view.setTitle(BundleHelper.localizedString(key: "Edit"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         return view
@@ -26,7 +26,7 @@ final class PhotoPreviewToolBar: UIView {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
-        view.backgroundColor = UIColor.green
+        view.backgroundColor = UIColor.wechat_green
         view.setTitleColor(UIColor.white, for: .normal)
         view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
@@ -35,7 +35,7 @@ final class PhotoPreviewToolBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.color(hex: 0x212121)
+        backgroundColor = UIColor.color(hex: 0x5C5C5C)
         setupView()
     }
     
