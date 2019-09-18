@@ -72,9 +72,9 @@ extension AssetPickerViewController {
     @objc private func titleViewTapped(_ sender: ArrowButton) {
         let controller = AlbumPickerViewController()
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
-        let d = UIApplication.shared.statusBarFrame.height
-        print(d)
-        presentationController.navigationHeight = UIScreen.main.bounds.height - (view.frame.height - (navigationController?.navigationBar.bounds.height ?? 0))
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let isFullScreen = UIScreen.main.bounds.height == view.frame.height
+        presentationController.navigationHeight = UIScreen.main.bounds.height - (view.frame.height - (navigationController?.navigationBar.bounds.height ?? 0)) + (isFullScreen ? statusBarHeight : 0)
         presentationController.cornerRadius = 8
         presentationController.corners = [.bottomLeft, .bottomRight]
         controller.transitioningDelegate = presentationController
