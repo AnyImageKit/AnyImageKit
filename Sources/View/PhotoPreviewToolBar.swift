@@ -10,6 +10,14 @@ import UIKit
 
 final class PhotoPreviewToolBar: UIView {
 
+    private(set) lazy var editButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.backgroundColor = UIColor.clear
+        view.setTitle("编辑", for: .normal)
+        view.setTitleColor(UIColor.white, for: .normal)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        return view
+    }()
     private(set) lazy var originalButton: OriginalButton = {
         let view = OriginalButton(frame: .zero)
         return view
@@ -38,14 +46,20 @@ final class PhotoPreviewToolBar: UIView {
     private func setupView() {
         let contentView = UILayoutGuide()
         addLayoutGuide(contentView)
+        addSubview(editButton)
         addSubview(originalButton)
         addSubview(doneButton)
         contentView.snp.makeConstraints { (maker) in
             maker.top.left.right.equalToSuperview()
             maker.height.equalTo(50)
         }
-        originalButton.snp.makeConstraints { (maker) in
+        editButton.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview().offset(15)
+            maker.centerY.equalTo(contentView)
+            maker.height.equalTo(30)
+        }
+        originalButton.snp.makeConstraints { (maker) in
+            maker.centerX.equalToSuperview()
             maker.centerY.equalTo(contentView)
             maker.height.equalTo(30)
         }

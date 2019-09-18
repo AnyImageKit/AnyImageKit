@@ -43,13 +43,10 @@ final public class TestViewController: UIViewController {
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
-        btn4.setTitle(Bool.random() ? "相册" : "最近项目")
-        
-        
         let vc = PhotoPreviewController()
         vc.delegate = self
         vc.dataSource = self
-//        present(vc, animated: true, completion: nil)
+        present(vc, animated: true, completion: nil)
         
 //        let controller = AlbumPickerViewController()
 //        navigationController?.pushViewController(controller, animated: true)

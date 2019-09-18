@@ -227,6 +227,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
         // TODO:
         navigationBar.selectButton.num = 1
         navigationBar.selectButton.setSelect(Bool.random())
+        // TODO: 视频隐藏原图
     }
 }
 

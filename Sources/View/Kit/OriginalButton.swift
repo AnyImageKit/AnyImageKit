@@ -12,6 +12,7 @@ final class OriginalButton: UIControl {
 
     private var circleView: CircleView = {
         let view = CircleView(frame: .zero)
+        view.isUserInteractionEnabled = false
         return view
     }()
     private lazy var label: UILabel = {
