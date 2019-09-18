@@ -13,7 +13,7 @@ final class AssetPickerViewController: UIViewController {
     private var album: Album?
     
     private lazy var titleView: ArrowButton = {
-        let view = ArrowButton(frame: .zero)
+        let view = ArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
         return view
     }()
     

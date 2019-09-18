@@ -24,8 +24,9 @@ final class ArrowButton: UIControl {
     }()
     
     private lazy var effectView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .light)
+        let effect = UIBlurEffect(style: .dark)
         let view = UIVisualEffectView(effect: effect)
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         return view
