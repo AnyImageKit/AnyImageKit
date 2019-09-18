@@ -97,7 +97,7 @@ final class PhotoEditViewController: UIViewController {
     }()
     private lazy var bottomCoverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        let height: CGFloat = 34 + 100 // TODO:
+        let height: CGFloat = 100 + (UIDevice.isMordenPhone ? 34 : 0)
         layer.frame = CGRect(x: 0, y: self.view.bounds.height-height, width: UIScreen.main.bounds.width, height: height)
         layer.colors = [
             UIColor.black.withAlphaComponent(0.12).cgColor,
@@ -172,6 +172,11 @@ final class PhotoEditViewController: UIViewController {
 //    }
     
     override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    @available(iOS 11.0, *)
+    override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
 }
