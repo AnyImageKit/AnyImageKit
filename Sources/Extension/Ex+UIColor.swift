@@ -22,3 +22,21 @@ extension UIColor {
         return color(r: r, g: g, b: b, a: alpha)
     }
 }
+
+// MARK: - Wechat Theme
+// TODO: remove to theme
+
+extension UIColor {
+    
+    static var wechat_green: UIColor { UIColor.color(hex: 0x57BD6A) }
+    
+    static var wechat_dark_text: UIColor { UIColor.color(hex: 0xEAEAEA) }
+    
+    static var wechat_dark_subText: UIColor { UIColor.color(hex: 0x6E6E6E) }
+    
+    static var wechat_dark_background: UIColor { UIColor.color(hex: 0x31302F) }
+    
+    static var wechat_dark_background_selected: UIColor { UIColor.color(hex: 0x171717) }
+    
+    static var wechat_dark_separatorLine: UIColor { UIColor.color(hex: 0x454444) }
+}
