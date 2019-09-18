@@ -60,6 +60,7 @@ final class AlbumCell: UITableViewCell {
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subTitleLabel)
+        addSubview(separatorLine)
         posterImageView.snp.makeConstraints { maker in
             maker.left.top.bottom.equalToSuperview()
             maker.width.equalTo(posterImageView.snp.height)
@@ -71,6 +72,10 @@ final class AlbumCell: UITableViewCell {
         subTitleLabel.snp.makeConstraints { maker in
             maker.centerY.equalTo(contentView.snp.centerY)
             maker.left.equalTo(titleLabel.snp.right).offset(8)
+        }
+        separatorLine.snp.makeConstraints { maker in
+            maker.left.right.bottom.equalToSuperview()
+            maker.height.equalTo(0.5)
         }
     }
 }
