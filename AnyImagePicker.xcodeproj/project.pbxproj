@@ -24,6 +24,7 @@
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
 		A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */; };
+		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
 		A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */; };
 		A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */; };
 		A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */; };
@@ -31,11 +32,13 @@
 		A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8223307F8A00EBFC48 /* VideoPreviewCell.swift */; };
 		A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */; };
 		A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */; };
-		A56A3C8A2330AAC900EBFC48 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C892330AAC900EBFC48 /* Ex+UIViewController.swift */; };
+		A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */; };
+		A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */; };
+		A56A3C902330BCF700EBFC48 /* Ex+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8F2330BCF700EBFC48 /* Ex+UIColor.swift */; };
+		A57AB3E12330D5CE00EF344B /* Ex+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AB3E02330D5CE00EF344B /* Ex+UITableView.swift */; };
 		A5A27B9F232F81CF00D966B8 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; };
 		A5A27BA0232F81CF00D966B8 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
-		A5A27BAB232F82AE00D966B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BAA232F82AE00D966B8 /* SceneDelegate.swift */; };
 		A5A27BAD232F82AE00D966B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BAC232F82AE00D966B8 /* ViewController.swift */; };
 		A5A27BB0232F82AE00D966B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BAE232F82AE00D966B8 /* Main.storyboard */; };
 		A5A27BB2232F82B000D966B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BB1232F82B000D966B8 /* Assets.xcassets */; };
@@ -115,6 +118,7 @@
 		A0F4753D232F7DFA00BB117B /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
 		A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+PHAssetCollection.swift"; sourceTree = "<group>"; };
+		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
 		A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalePresentationController.swift; sourceTree = "<group>"; };
 		A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -122,11 +126,13 @@
 		A56A3C8223307F8A00EBFC48 /* VideoPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewCell.swift; sourceTree = "<group>"; };
 		A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UICollectionView.swift"; sourceTree = "<group>"; };
 		A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleAnimator.swift; sourceTree = "<group>"; };
-		A56A3C892330AAC900EBFC48 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
+		A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewNavigationBar.swift; sourceTree = "<group>"; };
+		A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewToolBar.swift; sourceTree = "<group>"; };
+		A56A3C8F2330BCF700EBFC48 /* Ex+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIColor.swift"; sourceTree = "<group>"; };
+		A57AB3E02330D5CE00EF344B /* Ex+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		A5A27BA6232F82AE00D966B8 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A5A27BAA232F82AE00D966B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A5A27BAC232F82AE00D966B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A5A27BAF232F82AE00D966B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A5A27BB1232F82B000D966B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -215,6 +221,7 @@
 				A5A27BA7232F82AE00D966B8 /* Example */,
 				A099CC61232F3BF70023CC3D /* Products */,
 				A5A27B9D232F81CF00D966B8 /* Frameworks */,
+				A58FB1A22330D4C200208F67 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -264,6 +271,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		A5325EA32331C09900ADA116 /* Kit */ = {
+			isa = PBXGroup;
+			children = (
+				A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */,
+				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
+				A5325EA42331C14F00ADA116 /* ArrowButton.swift */,
+			);
+			path = Kit;
+			sourceTree = "<group>";
+		};
 		A56A3C792330746A00EBFC48 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +316,14 @@
 			path = Animation;
 			sourceTree = "<group>";
 		};
+		A58FB1A22330D4C200208F67 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		A5A27B9D232F81CF00D966B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,7 +336,6 @@
 			isa = PBXGroup;
 			children = (
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
-				A5A27BAA232F82AE00D966B8 /* SceneDelegate.swift */,
 				A5A27BAC232F82AE00D966B8 /* ViewController.swift */,
 				A5A27BAE232F82AE00D966B8 /* Main.storyboard */,
 				A5A27BB1232F82B000D966B8 /* Assets.xcassets */,
@@ -324,9 +348,10 @@
 		A5A27BBA232F83C900D966B8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */,
-				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
+				A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */,
+				A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */,
 				A56A3C7F23307C9C00EBFC48 /* Cell */,
+				A5325EA32331C09900ADA116 /* Kit */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -491,26 +516,29 @@
 				A0800415232F5F7A006B4711 /* PhotoManager.swift in Sources */,
 				A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */,
 				A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */,
+				A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */,
+				A56A3C902330BCF700EBFC48 /* Ex+UIColor.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */,
-				A036C3962330B5EE00D32ED8 /* Ex+UITableView.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
 				A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */,
-				A56A3C8A2330AAC900EBFC48 /* Ex+UIViewController.swift in Sources */,
 				A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */,
 				A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */,
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
+				A57AB3E12330D5CE00EF344B /* Ex+UITableView.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
 				A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */,
 				A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */,
 				A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */,
+				A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */,
 				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,
+				A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +556,6 @@
 			files = (
 				A5A27BAD232F82AE00D966B8 /* ViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
-				A5A27BAB232F82AE00D966B8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -810,6 +837,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -832,6 +860,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

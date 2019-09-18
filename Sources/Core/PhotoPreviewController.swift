@@ -25,6 +25,8 @@ final class PhotoPreviewController: UIViewController {
     /// 双击放大图片时的目标比例
     public var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
+    // MARK: - Private
+    
     /// 是否使用原图
     private var useOriginalPhoto: Bool = false
     /// 当前正在显示视图的前一个页面关联视图
@@ -33,8 +35,11 @@ final class PhotoPreviewController: UIViewController {
     }
     /// 缩放型转场协调器
     private weak var scalePresentationController: ScalePresentationController?
-    /// 退场效果
-    private var dismissStyle: DismissStyle = .push
+    /// 保存原windowLevel
+    private lazy var originWindowLevel: UIWindow.Level? = { [weak self] in
+        let window = self?.view.window ?? UIApplication.shared.keyWindow
+        return window?.windowLevel
+    }()
     
     private lazy var flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -55,6 +60,15 @@ final class PhotoPreviewController: UIViewController {
         collectionView.alwaysBounceVertical = false
         return collectionView
     }()
+    private lazy var navigationBar: PhotoPreviewNavigationBar = {
+        let view = PhotoPreviewNavigationBar()
+        view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        return view
+    }()
+    private lazy var toolBar: PhotoPreviewToolBar = {
+        let view = PhotoPreviewToolBar()
+        return view
+    }()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -66,39 +80,125 @@ final class PhotoPreviewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
         setupViews()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        layoutViews()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        coverStatusBar(true)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        coverStatusBar(false)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateLayout()
+    }
+}
+
+// MARK: - Private function
+extension PhotoPreviewController {
     /// 添加视图
     private func setupViews() {
-        
-        view.addSubview(collectionView)
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
+        view.addSubview(collectionView)
+        view.addSubview(navigationBar)
+        view.addSubview(toolBar)
+        setupLayout()
+        
+        // TODO: 单击和双击有冲突
+//        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
+//        collectionView.addGestureRecognizer(singleTap)
     }
 
-    /// 视图布局
-    private func layoutViews() {
+//    @objc private func onSingleTap() {
+//        setBar(hidden: navigationBar.alpha == 1, animated: false)
+//    }
+    
+    /// 设置视图布局
+    private func setupLayout() {
+        navigationBar.snp.makeConstraints { (maker) in
+            maker.top.equalToSuperview()
+            maker.left.right.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
+            } else {
+                maker.height.equalTo(64)
+            }
+        }
+        toolBar.snp.makeConstraints { (maker) in
+            maker.left.right.bottom.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            } else {
+                maker.height.equalTo(50)
+            }
+        }
+    }
+    
+    /// 更新视图布局
+    private func updateLayout() {
         flowLayout.minimumLineSpacing = photoSpacing
-        flowLayout.itemSize = view.bounds.size
+        flowLayout.itemSize = UIScreen.main.bounds.size
         collectionView.frame = view.bounds
         collectionView.frame.size.width = view.bounds.width + photoSpacing
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: photoSpacing)
+    }
+    
+    private func setBar(hidden: Bool, animated: Bool = true) {
+        if navigationBar.alpha == 0 && hidden { return }
+        if navigationBar.alpha == 1 && !hidden { return }
+        if animated {
+            UIView.animate(withDuration: 0.25) {
+                self.navigationBar.alpha = hidden ? 0 : 1
+                self.toolBar.alpha = hidden ? 0 : 1
+            }
+        } else {
+            navigationBar.alpha = hidden ? 0 : 1
+            toolBar.alpha = hidden ? 0 : 1
+        }
+    }
+    
+    /// 遮盖状态栏。以改变 windowLevel 的方式遮盖
+    /// - parameter cover: true-遮盖；false-不遮盖
+    private func coverStatusBar(_ cover: Bool) {
+        guard let window = view.window ?? UIApplication.shared.keyWindow else {
+            return
+        }
+        if originWindowLevel == nil {
+            originWindowLevel = window.windowLevel
+        }
+        guard let originLevel = originWindowLevel else {
+            return
+        }
+        window.windowLevel = cover ? UIWindow.Level.statusBar + 1 : originLevel
+    }
+}
+
+// MARK: - Target
+extension PhotoPreviewController {
+    
+    @objc private func backButtonTapped(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension PhotoPreviewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? PhotoPreviewCell else { return }
+        cell.reset()
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -122,6 +222,14 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     }
 }
 
+extension PhotoPreviewController: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // TODO:
+        navigationBar.selectButton.num = 1
+        navigationBar.selectButton.setSelect(Bool.random())
+    }
+}
+
 // MARK: - PhotoPreviewCellDelegate
 extension PhotoPreviewController: PhotoPreviewCellDelegate {
     
@@ -129,11 +237,19 @@ extension PhotoPreviewController: PhotoPreviewCellDelegate {
         // 实测用scale的平方，效果比线性好些
         let alpha = scale * scale
         scalePresentationController?.maskAlpha = alpha
+        setBar(hidden: true)
+    }
+    
+    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit flag: Bool) {
+        if flag {
+            dismiss(animated: true, completion: nil)
+        } else {
+            setBar(hidden: false)
+        }
     }
     
     func previewCellDidSingleTap(_ cell: PhotoPreviewCell) {
-        // TODO: 唤出工具栏
-        dismissAsPop()
+        setBar(hidden: navigationBar.alpha == 1, animated: false)
     }
 }
 
@@ -141,9 +257,7 @@ extension PhotoPreviewController: PhotoPreviewCellDelegate {
 extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     /// 提供进场动画
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        // 立即布局
-        setupViews()
-        layoutViews()
+        updateLayout()
         // 立即加载collectionView
         let indexPath = IndexPath(item: currentIndex, section: 0)
         collectionView.reloadData()
@@ -154,7 +268,6 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
 
     /// 提供退场动画
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        print(0000)
         return makeDismissedAnimator()
     }
 
@@ -184,12 +297,5 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
         imageView.contentMode = imageScaleMode
         imageView.clipsToBounds = true
         return ScaleAnimator(startView: cell.imageView, endView: relatedView, scaleView: imageView)
-    }
-}
-
-extension PhotoPreviewController {
-    enum DismissStyle {
-        case push
-        case scale
     }
 }
