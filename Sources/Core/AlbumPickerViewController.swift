@@ -15,6 +15,7 @@ final class AlbumPickerViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.registerCell(AlbumCell.self)
+        view.separatorStyle = .none
         view.dataSource = self
         view.delegate = self
         return view
@@ -22,7 +23,6 @@ final class AlbumPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigation()
         setupView()
     }
     
@@ -45,10 +45,6 @@ extension AlbumPickerViewController {
 // MARK: - Private
 
 extension AlbumPickerViewController {
-    
-    private func setupNavigation() {
-        navigationItem.title = "相簿"
-    }
     
     private func setupView() {
         view.addSubview(tableView)
@@ -83,6 +79,7 @@ extension AlbumPickerViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
         let album = albums[indexPath.row]
         cell.set(content: album)
+        
         return cell
     }
 }
@@ -93,12 +90,11 @@ extension AlbumPickerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let album = albums[indexPath.row]
-        let controller = AssetPickerViewController(album: album)
-        navigationController?.pushViewController(controller, animated: true)
+        // TODO
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 55
     }
 }
