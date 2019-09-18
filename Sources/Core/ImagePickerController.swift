@@ -22,13 +22,24 @@ open class ImagePickerController: UINavigationController {
         return .lightContent
     }
     
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait]
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+    
     public init(maxCount: UInt = 1, columnNumber: UInt = 4, delegate: ImagePickerControllerDelegate) {
         let rootViewController = AssetPickerViewController()
         super.init(rootViewController: rootViewController)
         self.pickerDelegate = delegate
-        modalPresentationStyle = .fullScreen
         navigationBar.barTintColor = UIColor.wechat_dark_background
         navigationBar.tintColor = UIColor.wechat_dark_text
+    }
+    
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")

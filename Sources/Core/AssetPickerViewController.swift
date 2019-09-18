@@ -14,6 +14,7 @@ final class AssetPickerViewController: UIViewController {
     
     private lazy var titleView: ArrowButton = {
         let view = ArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
+        view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -67,6 +68,18 @@ extension AssetPickerViewController {
 // MARK: - Action
 
 extension AssetPickerViewController {
+    
+    @objc private func titleViewTapped(_ sender: ArrowButton) {
+        let controller = AlbumPickerViewController()
+        let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
+        let d = UIApplication.shared.statusBarFrame.height
+        print(d)
+        presentationController.navigationHeight = UIScreen.main.bounds.height - (view.frame.height - (navigationController?.navigationBar.bounds.height ?? 0))
+        presentationController.cornerRadius = 8
+        presentationController.corners = [.bottomLeft, .bottomRight]
+        controller.transitioningDelegate = presentationController
+        present(controller, animated: true, completion: nil)
+    }
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)

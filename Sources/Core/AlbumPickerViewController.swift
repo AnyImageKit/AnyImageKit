@@ -15,6 +15,7 @@ final class AlbumPickerViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.registerCell(AlbumCell.self)
+        view.backgroundColor = UIColor.wechat_dark_background
         view.separatorStyle = .none
         view.dataSource = self
         view.delegate = self
@@ -23,8 +24,19 @@ final class AlbumPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        updatePreferredContentSize(with: traitCollection)
         setupView()
         loadAlbumsIfNeeded()
+    }
+    
+    override public func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        updatePreferredContentSize(with: newCollection)
+    }
+    
+    private func updatePreferredContentSize(with traitCollection: UITraitCollection) {
+        let size = UIScreen.main.bounds.size
+        preferredContentSize = CGSize(width: size.width, height: size.height*(2.0/3.0))
     }
 }
 
@@ -86,7 +98,7 @@ extension AlbumPickerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let album = albums[indexPath.row]
-        // TODO
+        dismiss(animated: true, completion: nil)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
