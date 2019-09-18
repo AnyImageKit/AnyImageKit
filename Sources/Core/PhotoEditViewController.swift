@@ -8,11 +8,24 @@
 
 import UIKit
 
-class PhotoEditViewController: UIViewController {
+final class PhotoEditViewController: UIViewController {
 
-    
-    public let imageView = UIImageView()
-    public let scrollView = UIScrollView()
+    public lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        view.clipsToBounds = true
+        return view
+    }()
+    public lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.delegate = self
+        view.maximumZoomScale = imageMaximumZoomScale
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        if #available(iOS 11.0, *) {
+            view.contentInsetAdjustmentBehavior = .never
+        }
+        return view
+    }()
     
     /// 双击放大图片时的目标比例
     public var imageZoomScaleForDoubleTap: CGFloat = 2.0
@@ -22,25 +35,29 @@ class PhotoEditViewController: UIViewController {
             self.scrollView.maximumZoomScale = imageMaximumZoomScale
         }
     }
-
-//    /// 计算contentSize应处于的中心位置
-//    private var centerOfContentSize: CGPoint {
-//        let deltaWidth = bounds.width - scrollView.contentSize.width
-//        let offsetX = deltaWidth > 0 ? deltaWidth * 0.5 : 0
-//        let deltaHeight = bounds.height - scrollView.contentSize.height
-//        let offsetY = deltaHeight > 0 ? deltaHeight * 0.5 : 0
-//        return CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
-//                       y: scrollView.contentSize.height * 0.5 + offsetY)
-//    }
+    
+    /// 计算contentSize应处于的中心位置
+    private var centerOfContentSize: CGPoint {
+        let deltaWidth = view.bounds.width - scrollView.contentSize.width
+        let offsetX = deltaWidth > 0 ? deltaWidth * 0.5 : 0
+        let deltaHeight = view.bounds.height - scrollView.contentSize.height
+        let offsetY = deltaHeight > 0 ? deltaHeight * 0.5 : 0
+        return CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
+                       y: scrollView.contentSize.height * 0.5 + offsetY)
+    }
 
     /// 取图片适屏size
     private var fitSize: CGSize {
-        guard let image = imageView.image else {
-            return CGSize.zero
-        }
+        guard let image = imageView.image else { return CGSize.zero }
         let width = scrollView.bounds.width
         let scale = image.size.height / image.size.width
-        return CGSize(width: width, height: scale * width)
+        var size = CGSize(width: width, height: scale * width)
+        let screenSize = UIScreen.main.bounds.size
+        if size.width > size.height {
+            size.width = size.width * screenSize.height / size.height
+            size.height = screenSize.height
+        }
+        return size
     }
 
     /// 取图片适屏frame
@@ -56,19 +73,185 @@ class PhotoEditViewController: UIViewController {
     /// 记录pan手势开始时，手势位置
     private var beganTouch = CGPoint.zero
     
+    /// 返回按钮
+    private lazy var backButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(BundleHelper.image(named: "EditReturnBackButton"), for: .normal)
+        view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        return view
+    }()
+    
+    private lazy var topCoverLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        layer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight + 120)
+        layer.colors = [
+            UIColor.black.withAlphaComponent(0.12).cgColor,
+            UIColor.black.withAlphaComponent(0.12).cgColor,
+            UIColor.black.withAlphaComponent(0.06).cgColor,
+            UIColor.black.withAlphaComponent(0).cgColor]
+        layer.locations = [0, 0.7, 0.85, 1]
+        layer.startPoint = CGPoint(x: 0.5, y: 0)
+        layer.endPoint = CGPoint(x: 0.5, y: 1)
+        return layer
+    }()
+    private lazy var bottomCoverLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        let height: CGFloat = 34 + 100 // TODO:
+        layer.frame = CGRect(x: 0, y: self.view.bounds.height-height, width: UIScreen.main.bounds.width, height: height)
+        layer.colors = [
+            UIColor.black.withAlphaComponent(0.12).cgColor,
+            UIColor.black.withAlphaComponent(0.12).cgColor,
+            UIColor.black.withAlphaComponent(0.06).cgColor,
+            UIColor.black.withAlphaComponent(0).cgColor]
+        layer.locations = [0, 0.7, 0.85, 1]
+        layer.startPoint = CGPoint(x: 0.5, y: 1)
+        layer.endPoint = CGPoint(x: 0.5, y: 0)
+        return layer
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        setupView()
+        layout()
+//        scrollView.isUserInteractionEnabled = false
     }
+    
+//    private var paths: [UIBezierPath] = []
+//    private var currentPath: UIBezierPath?
+//    private var currentLayer: CAShapeLayer?
+//
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        guard let touch = touches.first else { return }
+//        let point = touch.location(in: scrollView)
+//        let path = UIBezierPath()
+//        path.move(to: point)
+//        path.lineWidth = 3
+//        currentPath = path
+//
+//        let layer = CAShapeLayer()
+//        layer.path = path.cgPath
+//        layer.fillColor = UIColor.red.cgColor
+//        currentLayer = layer
+//        scrollView.layer.addSublayer(layer)
+//    }
+//
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        guard let touch = touches.first else { return }
+//        let point = touch.location(in: scrollView)
+//        currentPath?.addLine(to: point)
+//        drawCurrent()
+//    }
+//
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        guard let touch = touches.first else { return }
+//        let point = touch.location(in: scrollView)
+//        currentPath?.addLine(to: point)
+//        guard let path = currentPath else { return }
+//        paths.append(path)
+//        draw()
+//    }
+//
+//    private func draw() {
+//        let list = scrollView.layer.sublayers?.filter{ $0 is CAShapeLayer } ?? []
+//        for layer in list {
+//            layer.removeFromSuperlayer()
+//        }
+//
+//        for path in paths {
+//            let layer = CAShapeLayer()
+//            layer.path = path.cgPath
+//            layer.fillColor = UIColor.red.cgColor
+//            scrollView.layer.addSublayer(layer)
+//        }
+//    }
+//
+//    private func drawCurrent() {
+//        currentLayer?.path = currentPath?.cgPath
+//    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+}
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        dismiss(animated: false, completion: nil)
+// MARK: - Private function
+extension PhotoEditViewController {
+    
+    private func setupView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(imageView)
+        imageView.clipsToBounds = true
+
+        // 单击手势
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
+        view.addGestureRecognizer(singleTap)
+        // 添加阴影
+        view.layer.addSublayer(topCoverLayer)
+        view.layer.addSublayer(bottomCoverLayer)
+        
+        view.addSubview(backButton)
+        layout()
     }
 
     private func layout() {
         scrollView.frame = view.bounds
         scrollView.setZoomScale(1.0, animated: false)
         imageView.frame = fitFrame
-        scrollView.setZoomScale(1.0, animated: false)
+        scrollView.minimumZoomScale = getDefaultScale()
+        if imageView.frame.size.width < imageView.frame.size.height {
+            scrollView.setZoomScale(1.0, animated: false)
+        } else {
+            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+        }
+        
+        backButton.snp.makeConstraints { (maker) in
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            } else {
+                maker.top.equalToSuperview().offset(40)
+            }
+            maker.left.equalToSuperview().offset(20)
+            maker.width.height.equalTo(30)
+        }
+    }
+    
+    private func getDefaultScale() -> CGFloat {
+        guard let image = imageView.image else { return 1.0 }
+        let width = scrollView.bounds.width
+        let scale = image.size.height / image.size.width
+        let size = CGSize(width: width, height: scale * width)
+        let screenSize = UIScreen.main.bounds.size
+        if size.width > screenSize.width {
+            return screenSize.width / size.width
+        } else if size.height > screenSize.height {
+            return screenSize.height / size.height
+        }
+        return 1.0
+    }
+}
+
+
+// MARK: - Target
+extension PhotoEditViewController {
+    
+    @objc private func backButtonTapped(_ sender: UIButton) {
+        dismiss(animated: false, completion: nil)
+    }
+    
+    @objc private func onSingleTap() {
+//        delegate?.previewCellDidSingleTap(self)
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension PhotoEditViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        imageView.center = centerOfContentSize
     }
 }

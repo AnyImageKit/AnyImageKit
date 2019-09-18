@@ -123,12 +123,6 @@ final class PhotoPreviewCell: UICollectionViewCell {
         imageView.frame = fitFrame
         scrollView.minimumZoomScale = getDefaultScale()
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-        
-//        let frame = fitFrame
-//        let screenSize = UIScreen.main.bounds.size
-//        if frame.size.height > screenSize.height {
-//            scrollView.minimumZoomScale = screenSize.height / frame.height
-//        }
     }
     
     private func getDefaultScale() -> CGFloat {
