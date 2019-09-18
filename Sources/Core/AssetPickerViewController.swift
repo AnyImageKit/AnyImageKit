@@ -10,7 +10,12 @@ import UIKit
 
 final class AssetPickerViewController: UIViewController {
     
-    private var album: Album!
+    private var album: Album?
+    
+    private lazy var titleView: ArrowButton = {
+        let view = ArrowButton(frame: .zero)
+        return view
+    }()
     
     private(set) lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewLayout()
@@ -25,11 +30,13 @@ final class AssetPickerViewController: UIViewController {
         super.viewDidLoad()
         setupNavigation()
         setupView()
+        loadDefaultAlbumIfNeeded()
     }
     
     private func setupNavigation() {
+        navigationItem.titleView = titleView
         let cancel = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
-        navigationItem.rightBarButtonItem = cancel
+        navigationItem.leftBarButtonItem = cancel
     }
     
     private func setupView() {
@@ -42,9 +49,17 @@ final class AssetPickerViewController: UIViewController {
 
 extension AssetPickerViewController {
     
+    private func loadDefaultAlbumIfNeeded() {
+        guard album == nil else { return }
+        PhotoManager.shared.fetchCameraRollAlbum(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: true) { [weak self] album in
+            guard let self = self else { return }
+            self.setAlbum(album)
+        }
+    }
+    
     func setAlbum(_ album: Album) {
         self.album = album
-        navigationItem.title = album.name
+        titleView.setTitle(album.name)
         collectionView.reloadData()
     }
 }
@@ -67,13 +82,14 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return album.assets.count
+        return album?.assets.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        let asset = album.assets[indexPath.item]
-        cell.set(content: asset)
+        if let asset = album?.assets[indexPath.item] {
+            cell.set(content: asset)
+        }
         return cell
     }
 }

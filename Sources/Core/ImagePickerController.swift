@@ -18,7 +18,16 @@ open class ImagePickerController: UINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
+    public init(maxCount: UInt = 1, columnNumber: UInt = 4, delegate: ImagePickerControllerDelegate) {
+        let rootViewController = AssetPickerViewController()
+        super.init(rootViewController: rootViewController)
+        self.pickerDelegate = delegate
+        navigationBar.barTintColor = UIColor.wechat_dark_background
+        navigationBar.tintColor = UIColor.wechat_dark_text
+    }
     
-    
-    
+    @available(*, deprecated, message: "init(coder:) has not been implemented")
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
