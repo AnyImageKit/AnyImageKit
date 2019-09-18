@@ -22,6 +22,8 @@
 		A099CC71232F3BF70023CC3D /* AnyImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = A099CC63232F3BF70023CC3D /* AnyImagePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0C03C1A2331D426005F742C /* Ex+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C182331D426005F742C /* Ex+UITableView.swift */; };
 		A0C03C1B2331D426005F742C /* Ex+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C192331D426005F742C /* Ex+UIColor.swift */; };
+		A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */; };
+		A0C03C1F23322B26005F742C /* Ex+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
 		A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */; };
@@ -37,7 +39,6 @@
 		A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */; };
 		A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */; };
 		A5A27B9F232F81CF00D966B8 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; };
-		A5A27BA0232F81CF00D966B8 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
 		A5A27BAD232F82AE00D966B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BAC232F82AE00D966B8 /* ViewController.swift */; };
 		A5A27BB0232F82AE00D966B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BAE232F82AE00D966B8 /* Main.storyboard */; };
@@ -71,17 +72,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A5A27BA1232F81CF00D966B8 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				A5A27BA0232F81CF00D966B8 /* SnapKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A5A27BD0232F88E900D966B8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -116,6 +106,8 @@
 		A099CC70232F3BF70023CC3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0C03C182331D426005F742C /* Ex+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A0C03C192331D426005F742C /* Ex+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UIColor.swift"; sourceTree = "<group>"; };
+		A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDropDownPresentationController.swift; sourceTree = "<group>"; };
+		A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
 		A0F4753B232F7DE500BB117B /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		A0F4753D232F7DFA00BB117B /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +180,7 @@
 				A0C03C182331D426005F742C /* Ex+UITableView.swift */,
 				A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */,
 				A0C03C192331D426005F742C /* Ex+UIColor.swift */,
+				A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -205,10 +198,11 @@
 			isa = PBXGroup;
 			children = (
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
-				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
 				A0800412232F5B44006B4711 /* AssetPickerViewController.swift */,
+				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
 				A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */,
 				A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */,
+				A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */,
 				A5A27BD3232F89E800D966B8 /* TestViewController.swift */,
 			);
 			path = Core;
@@ -393,7 +387,6 @@
 				A099CC5C232F3BF70023CC3D /* Sources */,
 				A099CC5D232F3BF70023CC3D /* Frameworks */,
 				A099CC5E232F3BF70023CC3D /* Resources */,
-				A5A27BA1232F81CF00D966B8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -528,6 +521,7 @@
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
+				A0C03C1F23322B26005F742C /* Ex+UIDevice.swift in Sources */,
 				A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */,
 				A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
@@ -545,6 +539,7 @@
 				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,
+				A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */,
 				A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
