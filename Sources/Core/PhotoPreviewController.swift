@@ -195,7 +195,10 @@ extension PhotoPreviewController {
 
 // MARK: - UICollectionViewDelegate
 extension PhotoPreviewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? PhotoPreviewCell else { return }
+        cell.reset()
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -216,6 +219,14 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         cell.imageView.image = BundleHelper.image(named: "test_img")
         cell.loadImage()
         return cell
+    }
+}
+
+extension PhotoPreviewController: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // TODO:
+        navigationBar.selectButton.num = 1
+        navigationBar.selectButton.setSelect(Bool.random())
     }
 }
 

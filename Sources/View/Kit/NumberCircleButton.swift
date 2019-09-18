@@ -69,24 +69,35 @@ final class NumberCircleButton: UIControl {
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
+        isSelected.toggle()
+        showNumber(true)
+    }
+    
+    public func setSelect(_ isSelected: Bool) {
+        self.isSelected = isSelected
+        showNumber(false)
+    }
+    
+    private func showNumber(_ animated: Bool) {
         if isSelected {
-            numLabel.isHidden = true
-        } else {
             numLabel.isHidden = false
-            self.numLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            UIView.animate(withDuration: 0.15, animations: {
-                self.numLabel.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-            }) { (_) in
+            if animated {
+                self.numLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
                 UIView.animate(withDuration: 0.15, animations: {
-                    self.numLabel.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                    self.numLabel.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
                 }) { (_) in
-                    UIView.animate(withDuration: 0.15) {
-                        self.numLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                    UIView.animate(withDuration: 0.15, animations: {
+                        self.numLabel.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                    }) { (_) in
+                        UIView.animate(withDuration: 0.15) {
+                            self.numLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                        }
                     }
                 }
             }
+        } else {
+            numLabel.isHidden = true
         }
-        isSelected.toggle()
     }
 }
 

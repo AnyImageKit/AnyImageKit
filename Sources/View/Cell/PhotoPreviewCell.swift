@@ -126,6 +126,9 @@ extension PhotoPreviewCell {
         layout()
     }
     
+    public func reset() {
+        scrollView.setZoomScale(1.0, animated: false)
+    }
 }
 
 // MARK: - Target

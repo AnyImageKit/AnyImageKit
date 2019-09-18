@@ -22,6 +22,7 @@
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
 		A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */; };
+		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
 		A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */; };
 		A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */; };
 		A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */; };
@@ -114,6 +115,7 @@
 		A0F4753D232F7DFA00BB117B /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
 		A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+PHAssetCollection.swift"; sourceTree = "<group>"; };
+		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
 		A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalePresentationController.swift; sourceTree = "<group>"; };
 		A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -265,6 +267,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		A5325EA32331C09900ADA116 /* Kit */ = {
+			isa = PBXGroup;
+			children = (
+				A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */,
+				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
+				A5325EA42331C14F00ADA116 /* ArrowButton.swift */,
+			);
+			path = Kit;
+			sourceTree = "<group>";
+		};
 		A56A3C792330746A00EBFC48 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,11 +344,10 @@
 		A5A27BBA232F83C900D966B8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */,
-				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
 				A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */,
 				A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */,
 				A56A3C7F23307C9C00EBFC48 /* Cell */,
+				A5325EA32331C09900ADA116 /* Kit */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -518,6 +529,7 @@
 				A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */,
 				A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */,
 				A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */,
+				A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */,
 				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,

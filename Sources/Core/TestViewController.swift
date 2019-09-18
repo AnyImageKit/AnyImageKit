@@ -15,46 +15,44 @@ final public class TestViewController: UIViewController {
         view.backgroundColor = UIColor.lightGray
         return view
     }()
+    private(set) lazy var btn4: ArrowButton = {
+        return ArrowButton()
+    }()
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.color(hex: 0x33393C)
         setupView()
     }
     
     private func setupView() {
-        let btn = NumberCircleButton(style: .large)
-        view.addSubview(btn)
-        btn.snp.makeConstraints { (maker) in
-            maker.top.left.equalToSuperview().offset(100)
-            maker.width.height.equalTo(25)
-        }
-        
-        let btn2 = OriginalButton()
-        btn2.backgroundColor = UIColor.black
-        view.addSubview(btn2)
-        btn2.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview().offset(130)
+        view.addSubview(btn4)
+        btn4.snp.makeConstraints { (maker) in
+            maker.top.equalToSuperview().offset(100)
+            maker.width.equalTo(200)
+            maker.height.equalTo(35)
             maker.centerX.equalToSuperview()
-            maker.height.equalTo(30)
         }
         
         view.addSubview(btn3)
         btn3.snp.makeConstraints { (maker) in
             maker.center.equalToSuperview()
-            maker.height.width.equalTo(50)
+            maker.height.width.equalTo(80)
         }
         btn3.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
-//        let vc = PhotoPreviewController()
-//        vc.delegate = self
-//        vc.dataSource = self
-//        presentAsPush(vc)
+        btn4.setTitle(Bool.random() ? "相册" : "最近项目")
         
-        let controller = AlbumPickerViewController()
-        navigationController?.pushViewController(controller, animated: true)
+        
+        let vc = PhotoPreviewController()
+        vc.delegate = self
+        vc.dataSource = self
+//        present(vc, animated: true, completion: nil)
+        
+//        let controller = AlbumPickerViewController()
+//        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
