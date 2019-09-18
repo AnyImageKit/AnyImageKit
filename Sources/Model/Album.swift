@@ -14,10 +14,10 @@ class Album {
     let id: String
     let name: String
     let isCameraRoll: Bool
-    let result: PHFetchResult<PHAssetCollection>
+    let result: PHFetchResult<PHAsset>
     private(set) var assets: [Asset] = []
     
-    init(result: PHFetchResult<PHAssetCollection>, id: String, name: String?, isCameraRoll: Bool, needFetchAssets: Bool) {
+    init(result: PHFetchResult<PHAsset>, id: String, name: String?, isCameraRoll: Bool, needFetchAssets: Bool) {
         self.id = id
         self.name = name ?? ""
         self.isCameraRoll = isCameraRoll

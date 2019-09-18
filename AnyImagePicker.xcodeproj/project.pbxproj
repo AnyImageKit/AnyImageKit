@@ -13,6 +13,7 @@
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
 		A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3922330B5D000D32ED8 /* AssetCell.swift */; };
 		A036C3962330B5EE00D32ED8 /* Ex+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */; };
+		A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */; };
 		A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0604E7023307ABD00D9AA01 /* Ex+PHFetchResult.swift */; };
 		A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800410232F4EE4006B4711 /* ImagePickerController.swift */; };
 		A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800412232F5B44006B4711 /* AssetPickerViewController.swift */; };
@@ -97,6 +98,7 @@
 		A036C3912330B5D000D32ED8 /* AlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
 		A036C3922330B5D000D32ED8 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
+		A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
 		A0604E7023307ABD00D9AA01 /* Ex+PHFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+PHFetchResult.swift"; sourceTree = "<group>"; };
 		A080040E232F4EC8006B4711 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A080040F232F4EC8006B4711 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */,
 				A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */,
 				A56A3C892330AAC900EBFC48 /* Ex+UIViewController.swift */,
+				A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */,
 				A036C3962330B5EE00D32ED8 /* Ex+UITableView.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
+				A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */,
 				A56A3C8A2330AAC900EBFC48 /* Ex+UIViewController.swift in Sources */,

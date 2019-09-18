@@ -10,7 +10,7 @@ import UIKit
 
 final class AssetPickerViewController: UIViewController {
     
-    private let album: Album
+    private var album: Album!
     
     private(set) lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewLayout()
@@ -21,15 +21,6 @@ final class AssetPickerViewController: UIViewController {
         return view
     }()
     
-    init(album: Album) {
-        self.album = album
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
@@ -37,7 +28,6 @@ final class AssetPickerViewController: UIViewController {
     }
     
     private func setupNavigation() {
-        navigationItem.title = album.name
         let cancel = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.rightBarButtonItem = cancel
     }
@@ -47,6 +37,15 @@ final class AssetPickerViewController: UIViewController {
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalTo(view.snp.edges)
         }
+    }
+}
+
+extension AssetPickerViewController {
+    
+    func setAlbum(_ album: Album) {
+        self.album = album
+        navigationItem.title = album.name
+        collectionView.reloadData()
     }
 }
 

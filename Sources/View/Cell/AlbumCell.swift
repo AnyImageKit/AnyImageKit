@@ -12,23 +12,30 @@ final class AlbumCell: UITableViewCell {
     
     private var album: Album?
     
-    private(set) lazy var posterImageView: UIImageView = {
+    private lazy var posterImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        
+        view.contentMode = .scaleAspectFill
+        view.layer.masksToBounds = true
         return view
     }()
     
-    private(set) lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
         view.textColor = UIColor.black
         return view
     }()
     
-    private(set) lazy var subTitleLabel: UILabel = {
+    private lazy var subTitleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
         view.textColor = UIColor.gray
+        return view
+    }()
+    
+    private lazy var separatorLine: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = UIColor.color(hex: 0x454444)
         return view
     }()
     
@@ -42,18 +49,17 @@ final class AlbumCell: UITableViewCell {
     }
     
     private func setupView() {
-        accessoryType = .disclosureIndicator
+        accessoryType = .checkmark
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subTitleLabel)
         posterImageView.snp.makeConstraints { maker in
-            maker.size.equalTo(CGSize(width: 70, height: 70))
-            maker.left.equalTo(contentView.snp.left)
-            maker.centerY.equalTo(contentView.snp.centerY)
+            maker.left.top.bottom.equalToSuperview()
+            maker.width.equalTo(posterImageView.snp.height)
         }
         titleLabel.snp.makeConstraints { maker in
             maker.centerY.equalTo(contentView.snp.centerY)
-            maker.left.equalTo(posterImageView.snp.right).offset(8)
+            maker.left.equalTo(posterImageView.snp.right).offset(16)
         }
         subTitleLabel.snp.makeConstraints { maker in
             maker.centerY.equalTo(contentView.snp.centerY)
@@ -68,5 +74,9 @@ extension AlbumCell {
         self.album = album
         titleLabel.text = album.name
         subTitleLabel.text = "(\(album.count))"
+        PhotoManager.shared.requestImage(from: album) { [weak self] (image, info, isDegraded) in
+            guard let self = self else { return }
+            self.posterImageView.image = image
+        }
     }
 }
