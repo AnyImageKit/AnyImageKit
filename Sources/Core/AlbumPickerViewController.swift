@@ -78,7 +78,7 @@ extension AlbumPickerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
         let album = albums[indexPath.row]
-        cell.set(content: album)
+        cell.setContent(album)
         
         return cell
     }
