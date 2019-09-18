@@ -10,8 +10,6 @@ import UIKit
 
 final class AlbumCell: UITableViewCell {
     
-    private var album: Album?
-    
     private lazy var posterImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         view.contentMode = .scaleAspectFill
@@ -22,20 +20,20 @@ final class AlbumCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
-        view.textColor = UIColor.black
+        view.textColor = UIColor.wechat_dark_text
         return view
     }()
     
     private lazy var subTitleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
-        view.textColor = UIColor.gray
+        view.textColor = UIColor.wechat_dark_subText
         return view
     }()
     
     private lazy var separatorLine: UIView = {
         let view = UIView(frame: .zero)
-        view.backgroundColor = UIColor.color(hex: 0x454444)
+        view.backgroundColor = UIColor.wechat_dark_separatorLine
         return view
     }()
     
@@ -49,7 +47,16 @@ final class AlbumCell: UITableViewCell {
     }
     
     private func setupView() {
+        // Accessory Type
         accessoryType = .checkmark
+        tintColor = UIColor.wechat_green
+        // Background Color
+        backgroundColor = UIColor.wechat_dark_background
+        // Selected Background Color
+        let view = UIView(frame: .zero)
+        view.backgroundColor = UIColor.wechat_dark_background_selected
+        selectedBackgroundView = view
+        // Subviews
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subTitleLabel)
@@ -70,8 +77,7 @@ final class AlbumCell: UITableViewCell {
 
 extension AlbumCell {
     
-    func set(content album: Album) {
-        self.album = album
+    func setContent(_ album: Album) {
         titleLabel.text = album.name
         subTitleLabel.text = "(\(album.count))"
         PhotoManager.shared.requestImage(from: album) { [weak self] (image, info, isDegraded) in

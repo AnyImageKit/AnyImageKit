@@ -24,10 +24,6 @@ final class AlbumPickerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         loadAlbumsIfNeeded()
     }
 }
@@ -78,7 +74,7 @@ extension AlbumPickerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
         let album = albums[indexPath.row]
-        cell.set(content: album)
+        cell.setContent(album)
         
         return cell
     }

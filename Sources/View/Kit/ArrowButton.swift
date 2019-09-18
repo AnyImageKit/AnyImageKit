@@ -9,24 +9,24 @@
 import UIKit
 
 final class ArrowButton: UIControl {
-
-    private(set) var isOpen = false
     
     private lazy var label: UILabel = {
         let view = UILabel()
-        view.text = "最近项目"
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
     }()
+    
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.image = BundleHelper.image(named: "Arrow")
         return view
     }()
-    private lazy var contentView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .light)
+    
+    private lazy var effectView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .dark)
         let view = UIVisualEffectView(effect: effect)
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         return view
@@ -44,24 +44,24 @@ final class ArrowButton: UIControl {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.layer.cornerRadius = contentView.bounds.height * 0.5
+        effectView.layer.cornerRadius = effectView.bounds.height * 0.5
     }
     
     private func setupView() {
-        addSubview(contentView)
-        contentView.contentView.addSubview(label)
-        contentView.contentView.addSubview(imageView)
-        contentView.snp.makeConstraints { (maker) in
-            maker.centerY.equalToSuperview()
-            maker.centerX.equalToSuperview()
-            maker.height.equalTo(35)
+        addSubview(effectView)
+        effectView.contentView.addSubview(label)
+        effectView.contentView.addSubview(imageView)
+        let height: CGFloat = 32
+        effectView.snp.makeConstraints { (maker) in
+            maker.height.equalTo(height)
+            maker.edges.equalTo(snp.edges)
         }
         label.snp.makeConstraints { (maker) in
             maker.top.bottom.equalToSuperview()
-            maker.left.equalToSuperview().offset(10)
+            maker.left.equalToSuperview().offset(12)
         }
         imageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(label.snp.right).offset(5)
+            maker.left.equalTo(label.snp.right).offset(8)
             maker.right.equalToSuperview().offset(-6)
             maker.width.height.equalTo(20)
             maker.centerY.equalToSuperview()
@@ -69,16 +69,16 @@ final class ArrowButton: UIControl {
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
-        isOpen.toggle()
+        isSelected.toggle()
         UIView.animate(withDuration: 0.2) {
-            self.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(self.isOpen ? Double.pi : 0))
+            self.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(self.isSelected ? Double.pi : 0))
             self.layoutIfNeeded()
         }
     }
     
     public func setTitle(_ title: String) {
-        if isOpen {
-            isOpen = false
+        if isSelected {
+            isSelected = false
         }
         UIView.animate(withDuration: 0.2) {
             self.label.text = title
