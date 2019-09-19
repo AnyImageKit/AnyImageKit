@@ -215,8 +215,9 @@ extension PhotoPreviewController {
     
     /// ToolBar - Edit
     @objc private func editButtonTapped(_ sender: UIButton) {
+        guard let cell = collectionView.visibleCells.first as? PhotoPreviewCell else { return }
         let vc = PhotoEditViewController()
-        vc.imageView.image = BundleHelper.image(named: "test_img")
+        vc.imageView.image = cell.imageView.image
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: false, completion: nil)
     }
@@ -253,10 +254,14 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         cell.delegate = self
         cell.imageMaximumZoomScale = imageMaximumZoomScale
         cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-        // TODO: 加载图片
-        cell.imageView.backgroundColor = UIColor.lightGray
-        cell.imageView.image = BundleHelper.image(named: "test_img")
-        cell.loadImage()
+
+        if let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) {
+            cell.setImage(data.thumbnail)
+            PhotoManager.shared.requestImage(for: data.asset.asset, width: 2000) { (image, _, _) in
+                cell.setImage(image)
+            }
+        }
+        
         return cell
     }
 }

@@ -27,8 +27,6 @@ final class PhotoEditViewController: UIViewController {
         return view
     }()
     
-    /// 双击放大图片时的目标比例
-    public var imageZoomScaleForDoubleTap: CGFloat = 2.0
     /// 捏合手势放大图片时的最大允许比例
     public var imageMaximumZoomScale: CGFloat = 3.0 {
         didSet {
@@ -118,59 +116,6 @@ final class PhotoEditViewController: UIViewController {
 //        scrollView.isUserInteractionEnabled = false
     }
     
-//    private var paths: [UIBezierPath] = []
-//    private var currentPath: UIBezierPath?
-//    private var currentLayer: CAShapeLayer?
-//
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        guard let touch = touches.first else { return }
-//        let point = touch.location(in: scrollView)
-//        let path = UIBezierPath()
-//        path.move(to: point)
-//        path.lineWidth = 3
-//        currentPath = path
-//
-//        let layer = CAShapeLayer()
-//        layer.path = path.cgPath
-//        layer.fillColor = UIColor.red.cgColor
-//        currentLayer = layer
-//        scrollView.layer.addSublayer(layer)
-//    }
-//
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        guard let touch = touches.first else { return }
-//        let point = touch.location(in: scrollView)
-//        currentPath?.addLine(to: point)
-//        drawCurrent()
-//    }
-//
-//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        guard let touch = touches.first else { return }
-//        let point = touch.location(in: scrollView)
-//        currentPath?.addLine(to: point)
-//        guard let path = currentPath else { return }
-//        paths.append(path)
-//        draw()
-//    }
-//
-//    private func draw() {
-//        let list = scrollView.layer.sublayers?.filter{ $0 is CAShapeLayer } ?? []
-//        for layer in list {
-//            layer.removeFromSuperlayer()
-//        }
-//
-//        for path in paths {
-//            let layer = CAShapeLayer()
-//            layer.path = path.cgPath
-//            layer.fillColor = UIColor.red.cgColor
-//            scrollView.layer.addSublayer(layer)
-//        }
-//    }
-//
-//    private func drawCurrent() {
-//        currentLayer?.path = currentPath?.cgPath
-//    }
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -205,11 +150,7 @@ extension PhotoEditViewController {
         scrollView.setZoomScale(1.0, animated: false)
         imageView.frame = fitFrame
         scrollView.minimumZoomScale = getDefaultScale()
-        if imageView.frame.size.width < imageView.frame.size.height {
-            scrollView.setZoomScale(1.0, animated: false)
-        } else {
-            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-        }
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         
         backButton.snp.makeConstraints { (maker) in
             if #available(iOS 11.0, *) {
@@ -228,10 +169,8 @@ extension PhotoEditViewController {
         let scale = image.size.height / image.size.width
         let size = CGSize(width: width, height: scale * width)
         let screenSize = UIScreen.main.bounds.size
-        if size.width > screenSize.width {
-            return screenSize.width / size.width
-        } else if size.height > screenSize.height {
-            return screenSize.height / size.height
+        if size.width > size.height {
+            return size.height / screenSize.height
         }
         return 1.0
     }

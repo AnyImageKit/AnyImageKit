@@ -131,14 +131,19 @@ final class PhotoPreviewCell: UICollectionViewCell {
         let scale = image.size.height / image.size.width
         let size = CGSize(width: width, height: scale * width)
         let screenSize = UIScreen.main.bounds.size
-        if size.width > screenSize.width {
-            return screenSize.width / size.width
+        if size.width > size.height {
+            return size.height / screenSize.height
         }
         return 1.0
     }
 }
 
 extension PhotoPreviewCell {
+    public func setImage(_ image: UIImage?) {
+        imageView.image = image
+        layout()
+    }
+    
     public func loadImage() {
         layout()
     }
