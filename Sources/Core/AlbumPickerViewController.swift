@@ -8,7 +8,15 @@
 
 import UIKit
 
+protocol AlbumPickerViewControllerDelegate: class {
+    
+    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album)
+    func albumPickerWillDisappear()
+}
+
 final class AlbumPickerViewController: UIViewController {
+    
+    weak var delegate: AlbumPickerViewControllerDelegate?
     
     private var albums = [Album]()
     
@@ -27,6 +35,11 @@ final class AlbumPickerViewController: UIViewController {
         updatePreferredContentSize(with: traitCollection)
         setupView()
         loadAlbumsIfNeeded()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate?.albumPickerWillDisappear()
     }
     
     override public func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -87,7 +100,6 @@ extension AlbumPickerViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
         let album = albums[indexPath.row]
         cell.setContent(album)
-        
         return cell
     }
 }
@@ -98,6 +110,7 @@ extension AlbumPickerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let album = albums[indexPath.row]
+        delegate?.albumPicker(self, didSelected: album)
         dismiss(animated: true, completion: nil)
         tableView.deselectRow(at: indexPath, animated: true)
     }
