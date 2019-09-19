@@ -126,9 +126,11 @@ extension AssetPickerViewController: UICollectionViewDataSource {
 extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let asset = album?.assets[indexPath.item] {
-            
-        }
+        let controller = PhotoPreviewController()
+        controller.currentIndex = indexPath.item
+        controller.dataSource = self
+        controller.delegate = self
+        present(controller, animated: true, completion: nil)
     }
 }
 
@@ -141,5 +143,32 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
         let columnNumber: CGFloat = 4
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
+    }
+}
+
+// MARK: - PhotoPreviewControllerDataSource
+
+extension AssetPickerViewController: PhotoPreviewControllerDataSource {
+    
+    func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
+        return album!.assets.count
+    }
+    
+    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> Asset {
+        return album!.assets[index]
+    }
+    
+    func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
+        let indexPath = IndexPath(item: index, section: 0)
+        return collectionView.cellForItem(at: indexPath)
+    }
+}
+
+// MARK: - PhotoPreviewControllerDelegate
+
+extension AssetPickerViewController: PhotoPreviewControllerDelegate {
+    
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) -> Int {
+        return 1
     }
 }
