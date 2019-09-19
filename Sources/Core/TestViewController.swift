@@ -70,8 +70,8 @@ extension TestViewController: PhotoPreviewControllerDelegate, PhotoPreviewContro
         fatalError()
     }
 
-    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) -> Int {
-        return 1
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
+        
     }
 
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {

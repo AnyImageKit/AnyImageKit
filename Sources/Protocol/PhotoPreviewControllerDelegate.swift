@@ -25,7 +25,7 @@ protocol PhotoPreviewControllerDataSource: class {
 protocol PhotoPreviewControllerDelegate: class {
     
     /// 选择一张图片，需要返回所选图片的序号
-    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) -> Int
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int)
     
     /// 取消选择一张图片
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int)
@@ -41,6 +41,7 @@ protocol PhotoPreviewControllerDelegate: class {
 }
 
 extension PhotoPreviewControllerDelegate {
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) { }
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) { }
     func previewController(_ controller: PhotoPreviewController, useOriginalPhoto flag: Bool) { }
     func previewControllerDidClickBack(_ controller: PhotoPreviewController) { }
