@@ -10,7 +10,12 @@ import UIKit
 
 final class AssetCell: UICollectionViewCell {
     
-    var asset: Asset?
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView(frame: .zero)
+        view.contentMode = .scaleAspectFill
+        view.layer.masksToBounds = true
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,15 +27,22 @@ final class AssetCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        
+        contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { maker in
+            maker.edges.equalTo(contentView.snp.edges)
+        }
     }
 }
 
 extension AssetCell {
     
-    func set(content asset: Asset) {
+    func setContent(_ asset: Asset) {
+        let width = imageView.frame.width * UIScreen.main.nativeScale
+        PhotoManager.shared.requestImage(for: asset.asset, width: width, completion: { [weak self] (image, info, isDegraded) in
+            guard let self = self else { return }
+            print("image did Updated,image=\(image)")
+            self.imageView.image = image
+        })
         
     }
-    
 }
- 

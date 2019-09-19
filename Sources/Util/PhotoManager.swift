@@ -108,7 +108,7 @@ extension PhotoManager {
     }
     
     @discardableResult
-    func requestImage(for asset: PHAsset, width: CGFloat, isNetworkAccessAllowed: Bool = true, completion: @escaping PhotoFetchHander, pregressHander: PHAssetImageProgressHandler? = nil) -> PHImageRequestID {
+    func requestImage(for asset: PHAsset, width: CGFloat, isNetworkAccessAllowed: Bool = true, progressHandler: PHAssetImageProgressHandler? = nil, completion: @escaping PhotoFetchHander) -> PHImageRequestID {
         
         let options1 = PHImageRequestOptions()
         options1.resizeMode = .fast
@@ -129,7 +129,7 @@ extension PhotoManager {
             let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
             if isInCloud && image == nil && isNetworkAccessAllowed {
                 let options2 = PHImageRequestOptions()
-                options2.progressHandler = pregressHander
+                options2.progressHandler = progressHandler
                 options2.isNetworkAccessAllowed = isNetworkAccessAllowed
                 options2.resizeMode = .fast
                 PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in

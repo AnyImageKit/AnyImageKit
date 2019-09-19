@@ -8,6 +8,8 @@
 
 import UIKit
 
+let defaultAssetSpacing: CGFloat = 2
+
 final class AssetPickerViewController: UIViewController {
     
     private var album: Album?
@@ -19,11 +21,21 @@ final class AssetPickerViewController: UIViewController {
     }()
     
     private(set) lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewLayout()
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = defaultAssetSpacing
+        layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing, left: defaultAssetSpacing, bottom: defaultAssetSpacing, right: defaultAssetSpacing)
+        view.backgroundColor = UIColor.wechat_dark_background
         view.registerCell(AssetCell.self)
         view.dataSource = self
         view.delegate = self
+        return view
+    }()
+    
+    private(set) lazy var toolBar: PhotoPreviewToolBar = {
+        let view = PhotoPreviewToolBar(frame: .zero)
+        
         return view
     }()
     
@@ -61,6 +73,7 @@ extension AssetPickerViewController {
     func setAlbum(_ album: Album) {
         self.album = album
         titleView.setTitle(album.name)
+        album.fetchAssets()
         collectionView.reloadData()
     }
 }
@@ -101,8 +114,9 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         if let asset = album?.assets[indexPath.item] {
-            cell.set(content: asset)
+            cell.setContent(asset)
         }
+        cell.backgroundColor = UIColor.white
         return cell
     }
 }
@@ -112,6 +126,20 @@ extension AssetPickerViewController: UICollectionViewDataSource {
 extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        if let asset = album?.assets[indexPath.item] {
+            
+        }
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
+        let columnNumber: CGFloat = 4
+        let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
+        return CGSize(width: width, height: width)
     }
 }

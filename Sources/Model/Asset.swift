@@ -21,6 +21,12 @@ class Asset {
         self.type = type
         self.timeLength = timeLength
     }
+    
+    init(asset: PHAsset, type: PHAssetMediaType, timeLength: String = "") {
+        self.asset = asset
+        self.type = .photo
+        self.timeLength = timeLength
+    }
 }
 
 extension Asset {
