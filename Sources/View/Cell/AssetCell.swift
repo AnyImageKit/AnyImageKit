@@ -44,12 +44,9 @@ extension AssetCell {
 extension AssetCell {
     
     func setContent(_ asset: Asset) {
-        let width = imageView.frame.width * UIScreen.main.nativeScale
-        PhotoManager.shared.requestImage(for: asset.asset, width: width, completion: { [weak self] (image, info, isDegraded) in
+        PhotoManager.shared.requestImage(for: asset.asset, width: 100*UIScreen.main.nativeScale, completion: { [weak self] (image, info, isDegraded) in
             guard let self = self else { return }
-            print("image did Updated,image=\(image)")
             self.imageView.image = image
         })
-        
     }
 }

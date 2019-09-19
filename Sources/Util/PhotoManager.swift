@@ -122,7 +122,8 @@ extension PhotoManager {
             
             let isDownload = !isCancelled && error == nil
             if isDownload, let image = image {
-                completion(image, info, isDegraded)
+                let resizedImage = UIImage.resize(from: image, size: targetSize)
+                completion(resizedImage, info, isDegraded)
             }
             
             // Download image from iCloud

@@ -14,6 +14,8 @@ final class AssetPickerViewController: UIViewController {
     
     private var album: Album?
     
+    private var autoScrollToBottom: Bool = false
+    
     private lazy var titleView: ArrowButton = {
         let view = ArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
         view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
@@ -46,6 +48,14 @@ final class AssetPickerViewController: UIViewController {
         loadDefaultAlbumIfNeeded()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if autoScrollToBottom {
+            collectionView.scrollToBottom(animated: false)
+            autoScrollToBottom = false
+        }
+    }
+    
     private func setupNavigation() {
         navigationItem.titleView = titleView
         let cancel = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
@@ -67,6 +77,7 @@ extension AssetPickerViewController {
         PhotoManager.shared.fetchCameraRollAlbum(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: true) { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
+            self.collectionView.scrollToBottom(animated: false)
         }
     }
     
@@ -75,6 +86,7 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         album.fetchAssets()
         collectionView.reloadData()
+        autoScrollToBottom = true
     }
 }
 

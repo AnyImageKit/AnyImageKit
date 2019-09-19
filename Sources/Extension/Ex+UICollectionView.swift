@@ -23,3 +23,14 @@ extension UICollectionView {
         return cell
     }
 }
+
+extension UICollectionView {
+    
+    func scrollToBottom(animated: Bool) {
+        guard numberOfSections > 0 else { return }
+        let lastSection = numberOfSections - 1
+        guard numberOfItems(inSection: lastSection) > 0 else { return }
+        let lastIndexPath = IndexPath(item: numberOfItems(inSection: lastSection)-1, section: lastSection)
+        scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
+    }
+}
