@@ -12,7 +12,7 @@ protocol PhotoPreviewCellDelegate: class {
     /// 拖动时回调。scale:缩放比率
     func previewCell(_ cell: PhotoPreviewCell, didPanScale scale: CGFloat)
     
-    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit flag: Bool)
+    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit isExit: Bool)
 
     /// 单击时回调
     func previewCellDidSingleTap(_ cell: PhotoPreviewCell)

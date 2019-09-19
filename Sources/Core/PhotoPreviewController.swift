@@ -227,7 +227,12 @@ extension PhotoPreviewController {
         data.asset.isSelected = sender.isSelected
         // TODO:
         navigationBar.selectButton.setNum(1, isSelected: data.asset.isSelected, animated: true)
-        delegate?.previewController(self, didSelected: currentIndex)
+        // TODO: select 状态已经更改，是否还有必要使用使用 delegate
+        if sender.isSelected {
+            delegate?.previewController(self, didSelected: currentIndex)
+        } else {
+            delegate?.previewController(self, didDeselected: currentIndex)
+        }
     }
     
     /// ToolBar - Edit
@@ -307,8 +312,8 @@ extension PhotoPreviewController: PhotoPreviewCellDelegate {
         setBar(hidden: true)
     }
     
-    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit flag: Bool) {
-        if flag {
+    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit isExit: Bool) {
+        if isExit {
             dismiss(animated: true, completion: nil)
         } else {
             setBar(hidden: false)

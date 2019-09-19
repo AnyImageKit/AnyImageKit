@@ -139,6 +139,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         if let asset = album?.assets[indexPath.item] {
             cell.setContent(asset)
         }
+        
         cell.backgroundColor = UIColor.white
         return cell
     }
