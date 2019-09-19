@@ -97,6 +97,11 @@ final class PhotoPreviewController: UIViewController {
         coverStatusBar(true)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setBar(hidden: false, animated: true)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         coverStatusBar(false)
@@ -105,6 +110,11 @@ final class PhotoPreviewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateLayout()
+    }
+    
+    @available(iOS 11.0, *)
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
     }
 }
 
@@ -119,6 +129,7 @@ extension PhotoPreviewController {
         view.addSubview(navigationBar)
         view.addSubview(toolBar)
         setupLayout()
+        setBar(hidden: true, animated: false)
         
         // TODO: 单击和双击有冲突
 //        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
