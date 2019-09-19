@@ -15,7 +15,11 @@ final class PhotoPreviewController: UIViewController {
     public weak var dataSource: PhotoPreviewControllerDataSource? = nil
     
     /// 图片索引
-    public var currentIndex: Int = 0
+    public var currentIndex: Int = 0 {
+        didSet {
+            didSetCurrentIdx()
+        }
+    }
     /// 左右两张图之间的间隙
     public var photoSpacing: CGFloat = 30
     /// 图片缩放模式
@@ -198,6 +202,14 @@ extension PhotoPreviewController {
         }
         window.windowLevel = cover ? UIWindow.Level.statusBar + 1 : originLevel
     }
+    
+    private func didSetCurrentIdx() {
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        // TODO:
+        navigationBar.selectButton.isEnabled = true
+        navigationBar.selectButton.setNum(1, isSelected: data.asset.isSelected, animated: false)
+        toolBar.hiddenEditAndOriginalButton(data.asset.type != .photo)
+    }
 }
 
 // MARK: - Target
@@ -210,7 +222,12 @@ extension PhotoPreviewController {
     
     /// NavigationBar - Select
     @objc private func selectButtonTapped(_ sender: UIButton) {
-        
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        sender.isSelected.toggle()
+        data.asset.isSelected = sender.isSelected
+        // TODO:
+        navigationBar.selectButton.setNum(1, isSelected: data.asset.isSelected, animated: true)
+        delegate?.previewController(self, didSelected: currentIndex)
     }
     
     /// ToolBar - Edit
@@ -254,24 +271,29 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         cell.delegate = self
         cell.imageMaximumZoomScale = imageMaximumZoomScale
         cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-
+        
+        // 加载图片
         if let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) {
             cell.setImage(data.thumbnail)
             PhotoManager.shared.requestImage(for: data.asset.asset, width: 2000) { (image, _, _) in
                 cell.setImage(image)
             }
         }
-        
         return cell
     }
 }
 
 extension PhotoPreviewController: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        // TODO:
-        navigationBar.selectButton.num = 1
-        navigationBar.selectButton.setSelect(Bool.random())
-        // TODO: 视频隐藏原图
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        var idx = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+        let x = scrollView.contentOffset.x.truncatingRemainder(dividingBy: scrollView.bounds.width)
+        if x > scrollView.bounds.width / 2 {
+            idx += 1
+        }
+        if idx != currentIndex {
+            currentIndex = idx
+        }
     }
 }
 
@@ -279,7 +301,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
 extension PhotoPreviewController: PhotoPreviewCellDelegate {
     
     func previewCell(_ cell: PhotoPreviewCell, didPanScale scale: CGFloat) {
-        // 实测用scale的平方，效果比线性好些
+        // 实测用 scale 的平方，效果比线性好些
         let alpha = scale * scale
         scalePresentationController?.maskAlpha = alpha
         setBar(hidden: true)

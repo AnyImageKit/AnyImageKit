@@ -144,12 +144,8 @@ extension PhotoPreviewCell {
         layout()
     }
     
-    public func loadImage() {
-        layout()
-    }
-    
     public func reset() {
-        scrollView.setZoomScale(1.0, animated: false)
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
 }
 

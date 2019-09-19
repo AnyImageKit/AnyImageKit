@@ -10,22 +10,15 @@ import UIKit
 
 final class NumberCircleButton: UIControl {
     
-    public var num = 1 {
-        didSet {
-            numLabel.text = num.description
-        }
-    }
-    
-    private(set) lazy var circleIV: UIImageView = {
+    private lazy var circleIV: UIImageView = {
         let view = UIImageView()
         view.image = BundleHelper.image(named: "PickerCircleNormal")
         return view
     }()
-    private(set) lazy var numLabel: UILabel = {
+    private lazy var numLabel: UILabel = {
         let view = UILabel()
         view.isHidden = true
         view.clipsToBounds = true
-        view.text = num.description
         view.textColor = UIColor.white
         view.textAlignment = .center
         view.backgroundColor = UIColor.wechat_green
@@ -45,7 +38,6 @@ final class NumberCircleButton: UIControl {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -68,16 +60,6 @@ final class NumberCircleButton: UIControl {
         numLabel.layer.cornerRadius = numLabel.bounds.width * 0.5
     }
     
-    @objc private func buttonTapped(_ sender: UIButton) {
-        isSelected.toggle()
-        showNumber(true)
-    }
-    
-    public func setSelect(_ isSelected: Bool) {
-        self.isSelected = isSelected
-        showNumber(false)
-    }
-    
     private func showNumber(_ animated: Bool) {
         if isSelected {
             numLabel.isHidden = false
@@ -98,6 +80,15 @@ final class NumberCircleButton: UIControl {
         } else {
             numLabel.isHidden = true
         }
+    }
+}
+
+extension NumberCircleButton {
+    
+    public func setNum(_ num: Int, isSelected: Bool, animated: Bool) {
+        self.isSelected = isSelected
+        numLabel.text = num.description
+        showNumber(animated)
     }
 }
 

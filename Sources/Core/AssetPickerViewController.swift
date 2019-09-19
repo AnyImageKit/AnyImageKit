@@ -194,7 +194,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
 
 extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
-    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) -> Int {
-        return 1
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
+        
     }
 }
