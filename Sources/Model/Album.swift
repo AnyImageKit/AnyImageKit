@@ -38,7 +38,7 @@ extension Album {
 extension Album {
     
     func fetchAssets() {
-        assets = result.objects().map { Asset(asset: $0, type: $0.mediaType) }
+        assets = result.objects().map { Asset(asset: $0) }
     }
 }
 
