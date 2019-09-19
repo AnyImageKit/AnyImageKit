@@ -32,6 +32,15 @@ final class ArrowButton: UIControl {
         return view
     }()
     
+    override var isSelected: Bool {
+        didSet {
+            UIView.animate(withDuration: 0.2) {
+                self.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(self.isSelected ? Double.pi : 0))
+                self.layoutIfNeeded()
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -70,10 +79,6 @@ final class ArrowButton: UIControl {
     
     @objc private func buttonTapped(_ sender: UIButton) {
         isSelected.toggle()
-        UIView.animate(withDuration: 0.2) {
-            self.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(self.isSelected ? Double.pi : 0))
-            self.layoutIfNeeded()
-        }
     }
     
     public func setTitle(_ title: String) {
@@ -82,7 +87,6 @@ final class ArrowButton: UIControl {
         }
         UIView.animate(withDuration: 0.2) {
             self.label.text = title
-            self.imageView.transform = CGAffineTransform(rotationAngle: 0)
             self.layoutIfNeeded()
         }
     }

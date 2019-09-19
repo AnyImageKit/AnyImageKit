@@ -77,7 +77,7 @@ extension AssetPickerViewController {
         PhotoManager.shared.fetchCameraRollAlbum(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: true) { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
-            self.collectionView.scrollToBottom(animated: false)
+            self.autoScrollToBottom = true
         }
     }
     
@@ -86,7 +86,7 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         album.fetchAssets()
         collectionView.reloadData()
-        autoScrollToBottom = true
+        collectionView.scrollToBottom(animated: false)
     }
 }
 
@@ -96,6 +96,7 @@ extension AssetPickerViewController {
     
     @objc private func titleViewTapped(_ sender: ArrowButton) {
         let controller = AlbumPickerViewController()
+        controller.delegate = self
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let isFullScreen = UIScreen.main.bounds.height == view.frame.height
@@ -156,6 +157,17 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
         let columnNumber: CGFloat = 4
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
+    }
+}
+
+extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
+    
+    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
+        setAlbum(album)
+    }
+    
+    func albumPickerWillDisappear() {
+        titleView.isSelected = false
     }
 }
 
