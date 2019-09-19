@@ -38,6 +38,7 @@
 		A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */; };
 		A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */; };
 		A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */; };
+		A58E148D233372D800ACE099 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58E148C233372D800ACE099 /* VideoView.swift */; };
 		A5A27B9F232F81CF00D966B8 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
 		A5A27BAD232F82AE00D966B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BAC232F82AE00D966B8 /* ViewController.swift */; };
@@ -125,6 +126,7 @@
 		A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewToolBar.swift; sourceTree = "<group>"; };
 		A56A3C8F2330BCF700EBFC48 /* Ex+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIColor.swift"; sourceTree = "<group>"; };
 		A57AB3E02330D5CE00EF344B /* Ex+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
+		A58E148C233372D800ACE099 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		A5A27BA6232F82AE00D966B8 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -198,8 +200,8 @@
 			isa = PBXGroup;
 			children = (
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
-				A0800412232F5B44006B4711 /* AssetPickerViewController.swift */,
 				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
+				A0800412232F5B44006B4711 /* AssetPickerViewController.swift */,
 				A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */,
 				A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */,
 				A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */,
@@ -275,6 +277,7 @@
 				A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */,
 				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
 				A5325EA42331C14F00ADA116 /* ArrowButton.swift */,
+				A58E148C233372D800ACE099 /* VideoView.swift */,
 			);
 			path = Kit;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 				A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
+				A58E148D233372D800ACE099 /* VideoView.swift in Sources */,
 				A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
 				A0C03C1F23322B26005F742C /* Ex+UIDevice.swift in Sources */,
