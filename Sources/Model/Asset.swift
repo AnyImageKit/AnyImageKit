@@ -16,16 +16,10 @@ class Asset {
     let timeLength: String
     var isSelected: Bool = false
     
-    init(asset: PHAsset, type: MediaType, timeLength: String = "") {
-        self.asset = asset
-        self.type = type
-        self.timeLength = timeLength
-    }
-    
-    init(asset: PHAsset, type: PHAssetMediaType, timeLength: String = "") {
+    init(asset: PHAsset) {
         self.asset = asset
         self.type = .photo
-        self.timeLength = timeLength
+        self.timeLength = ""
     }
 }
 
@@ -37,6 +31,5 @@ extension Asset {
         case livePhoto
         case photoGif
         case video
-        case auido
     }
 }
