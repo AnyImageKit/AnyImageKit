@@ -17,8 +17,7 @@ protocol AlbumPickerViewControllerDelegate: class {
 final class AlbumPickerViewController: UIViewController {
     
     weak var delegate: AlbumPickerViewControllerDelegate?
-    
-    private var albums = [Album]()
+    var albums = [Album]()
     
     private(set) lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
@@ -34,7 +33,6 @@ final class AlbumPickerViewController: UIViewController {
         super.viewDidLoad()
         updatePreferredContentSize(with: traitCollection)
         setupView()
-        loadAlbumsIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -71,15 +69,6 @@ extension AlbumPickerViewController {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { maker in
             maker.edges.equalTo(view.snp.edges)
-        }
-    }
-    
-    private func loadAlbumsIfNeeded() {
-        guard albums.isEmpty else { return }
-        PhotoManager.shared.fetchAllAlbums(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: false) { [weak self] fetchedAlbums in
-            guard let self = self else { return }
-            self.albums = fetchedAlbums
-            self.tableView.reloadData()
         }
     }
 }

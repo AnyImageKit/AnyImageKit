@@ -16,6 +16,8 @@ final class PhotoManager {
     var sortAscendingByModificationDate: Bool = true
 
     private init() { }
+    
+    private let workQueue = DispatchQueue(label: "com.anotheren.AnyImagePicker.PhotoManager")
 }
 
 // MARK: - Album
@@ -47,48 +49,52 @@ extension PhotoManager {
     }
     
     func fetchAllAlbums(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping ([Album]) -> Void) {
-        var results = [Album]()
-        let options = PHFetchOptions()
-        if !allowPickingVideo {
-            options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
-        }
-        if !allowPickingImage {
-            options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
-        }
-        if !sortAscendingByModificationDate {
-            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: sortAscendingByModificationDate)
-            options.sortDescriptors = [sortDescriptor]
-        }
-        
-        let allAlbumSubTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream, .albumRegular, .albumSyncedAlbum, .albumCloudShared]
-        let assetCollectionsfetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
-        for assetCollectionsFetchResult in assetCollectionsfetchResults {
-            let assetCollections = assetCollectionsFetchResult.objects()
-            for assetCollection in assetCollections {
-                let isCameraRoll = assetCollection.isCameraRoll
-                
-                if assetCollection.estimatedAssetCount <= 0 && !isCameraRoll { continue }
-                
-                if assetCollection.isAllHidden { continue }
-                if assetCollection.isRecentlyDeleted  { continue }
-                
-                let assetFetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
-                if assetFetchResult.count <= 0 && !isCameraRoll { continue }
-                
-                if isCameraRoll {
-                    if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                        let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
-                        results.insert(album, at: 0)
-                    }
-                } else {
-                    if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                        let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, needFetchAssets: needFetchAssets)
-                        results.append(album)
+        workQueue.async {
+            var results = [Album]()
+            let options = PHFetchOptions()
+            if !allowPickingVideo {
+                options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+            }
+            if !allowPickingImage {
+                options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
+            }
+            if !self.sortAscendingByModificationDate {
+                let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: self.sortAscendingByModificationDate)
+                options.sortDescriptors = [sortDescriptor]
+            }
+            
+            let allAlbumSubTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream, .albumRegular, .albumSyncedAlbum, .albumCloudShared]
+            let assetCollectionsfetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
+            for assetCollectionsFetchResult in assetCollectionsfetchResults {
+                let assetCollections = assetCollectionsFetchResult.objects()
+                for assetCollection in assetCollections {
+                    let isCameraRoll = assetCollection.isCameraRoll
+                    
+                    if assetCollection.estimatedAssetCount <= 0 && !isCameraRoll { continue }
+                    
+                    if assetCollection.isAllHidden { continue }
+                    if assetCollection.isRecentlyDeleted  { continue }
+                    
+                    let assetFetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
+                    if assetFetchResult.count <= 0 && !isCameraRoll { continue }
+                    
+                    if isCameraRoll {
+                        if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
+                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                            results.insert(album, at: 0)
+                        }
+                    } else {
+                        if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
+                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, needFetchAssets: needFetchAssets)
+                            results.append(album)
+                        }
                     }
                 }
             }
+            DispatchQueue.main.async {
+                completion(results)
+            }
         }
-        completion(results)
     }
 }
 
@@ -100,7 +106,7 @@ extension PhotoManager {
     
     @discardableResult
     func requestImage(from album: Album, completion: @escaping PhotoFetchHander) -> PHImageRequestID {
-        if let asset = album.result.firstObject {
+        if let asset = album.result.lastObject {
             let sacle = UIScreen.main.nativeScale
             return requestImage(for: asset, width: 55*sacle, completion: completion)
         }

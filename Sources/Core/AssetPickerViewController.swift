@@ -13,6 +13,7 @@ let defaultAssetSpacing: CGFloat = 2
 final class AssetPickerViewController: UIViewController {
     
     private var album: Album?
+    private var albums = [Album]()
     
     private var autoScrollToBottom: Bool = false
     
@@ -46,6 +47,7 @@ final class AssetPickerViewController: UIViewController {
         setupNavigation()
         setupView()
         loadDefaultAlbumIfNeeded()
+        preLoadAlbums()
     }
     
     override func viewDidLayoutSubviews() {
@@ -81,6 +83,13 @@ extension AssetPickerViewController {
         }
     }
     
+    private func preLoadAlbums() {
+        PhotoManager.shared.fetchAllAlbums(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: false) { [weak self] fetchedAlbums in
+            guard let self = self else { return }
+            self.albums = fetchedAlbums
+        }
+    }
+    
     func setAlbum(_ album: Album) {
         self.album = album
         titleView.setTitle(album.name)
@@ -96,6 +105,7 @@ extension AssetPickerViewController {
     
     @objc private func titleViewTapped(_ sender: ArrowButton) {
         let controller = AlbumPickerViewController()
+        controller.albums = albums
         controller.delegate = self
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
