@@ -36,6 +36,13 @@ final class AssetCell: UICollectionViewCell {
 
 extension AssetCell {
     
+    var image: UIImage? {
+        return imageView.image
+    }
+}
+
+extension AssetCell {
+    
     func setContent(_ asset: Asset) {
         let width = imageView.frame.width * UIScreen.main.nativeScale
         PhotoManager.shared.requestImage(for: asset.asset, width: width, completion: { [weak self] (image, info, isDegraded) in

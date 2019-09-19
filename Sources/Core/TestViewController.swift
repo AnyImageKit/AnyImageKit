@@ -15,9 +15,9 @@ final public class TestViewController: UIViewController {
         view.backgroundColor = UIColor.lightGray
         return view
     }()
-    private(set) lazy var btn4: ArrowButton = {
-        return ArrowButton()
-    }()
+//    private(set) lazy var btn4: ArrowButton = {
+//        return ArrowButton()
+//    }()
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -26,14 +26,14 @@ final public class TestViewController: UIViewController {
     }
     
     private func setupView() {
-        view.addSubview(btn4)
-        btn4.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview().offset(100)
-            maker.width.equalTo(200)
-            maker.height.equalTo(35)
-            maker.centerX.equalToSuperview()
-        }
-        
+//        view.addSubview(btn4)
+//        btn4.snp.makeConstraints { (maker) in
+//            maker.top.equalToSuperview().offset(100)
+//            maker.width.equalTo(200)
+//            maker.height.equalTo(35)
+//            maker.centerX.equalToSuperview()
+//        }
+//
         view.addSubview(btn3)
         btn3.snp.makeConstraints { (maker) in
             maker.center.equalToSuperview()
@@ -43,13 +43,21 @@ final public class TestViewController: UIViewController {
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
-        let vc = PhotoPreviewController()
-        vc.delegate = self
-        vc.dataSource = self
-        present(vc, animated: true, completion: nil)
+//        let vc = PhotoPreviewController()
+//        vc.delegate = self
+//        vc.dataSource = self
+//        present(vc, animated: true, completion: nil)
         
-//        let controller = AlbumPickerViewController()
+        let controller = ImagePickerController(maxCount: 1, columnNumber: 4, delegate: self)
+        present(controller, animated: true, completion: nil)
 //        navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+extension TestViewController: ImagePickerControllerDelegate {
+
+    public func imagePicker(_ picker: ImagePickerController) {
+
     }
 }
 
@@ -57,18 +65,16 @@ extension TestViewController: PhotoPreviewControllerDelegate, PhotoPreviewContro
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
         return btn3
     }
-    
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> Asset {
+
+    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
         fatalError()
     }
-    
+
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) -> Int {
         return 1
     }
-    
+
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         return 10
     }
-    
-    
 }

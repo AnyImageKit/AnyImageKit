@@ -154,8 +154,10 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
         return album!.assets.count
     }
     
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> Asset {
-        return album!.assets[index]
+    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
+        let indexPath = IndexPath(item: index, section: 0)
+        let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
+        return (cell?.image, album!.assets[index])
     }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {

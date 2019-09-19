@@ -10,11 +10,13 @@ import UIKit
 
 protocol PhotoPreviewControllerDataSource: class {
     
+    typealias PreviewData = (thumbnail: UIImage?, asset: Asset)
+    
     /// 获取需要展示图片的数量
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int
     
     /// 获取索引对应的数据模型
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> Asset
+    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData
     
     /// 获取转场动画时的缩略图所在的 view
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
