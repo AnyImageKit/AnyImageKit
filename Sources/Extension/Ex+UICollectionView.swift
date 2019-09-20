@@ -26,11 +26,11 @@ extension UICollectionView {
 
 extension UICollectionView {
     
-    func scrollToBottom(animated: Bool) {
+    func scrollToLast(at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
         guard numberOfSections > 0 else { return }
         let lastSection = numberOfSections - 1
         guard numberOfItems(inSection: lastSection) > 0 else { return }
         let lastIndexPath = IndexPath(item: numberOfItems(inSection: lastSection)-1, section: lastSection)
-        scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
+        scrollToItem(at: lastIndexPath, at: scrollPosition, animated: animated)
     }
 }

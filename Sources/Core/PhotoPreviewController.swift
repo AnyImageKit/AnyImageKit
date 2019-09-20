@@ -70,9 +70,9 @@ final class PhotoPreviewController: UIViewController {
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var toolBar: PhotoPreviewToolBar = {
-        let view = PhotoPreviewToolBar()
-        view.editButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
+    private lazy var toolBar: PhotoToolBar = {
+        let view = PhotoToolBar(style: .preview)
+        view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -166,7 +166,7 @@ extension PhotoPreviewController {
         indexView.snp.makeConstraints { (maker) in
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(toolBar.snp.top)
-            maker.height.equalTo(80)
+            maker.height.equalTo(96)
         }
     }
     

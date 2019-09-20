@@ -44,7 +44,7 @@ final class AssetCell: UICollectionViewCell {
     private(set) lazy var boxCoverView: UIView = {
         let view = UIView()
         view.isHidden = true
-        view.layer.borderWidth = 3
+        view.layer.borderWidth = 4
         view.layer.borderColor = UIColor.wechat_green.cgColor
         return view
     }()

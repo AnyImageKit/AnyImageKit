@@ -1,5 +1,5 @@
 //
-//  PhotoPreviewToolBar.swift
+//  PhotoToolBar.swift
 //  AnyImagePicker
 //
 //  Created by 蒋惠 on 2019/9/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PhotoPreviewToolBar: UIView {
+final class PhotoToolBar: UIView {
     
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
@@ -17,10 +17,9 @@ final class PhotoPreviewToolBar: UIView {
         return view
     }()
 
-    private(set) lazy var editButton: UIButton = {
+    private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitle(BundleHelper.localizedString(key: "Edit"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
@@ -42,8 +41,11 @@ final class PhotoPreviewToolBar: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private var style: Style = .picker
+    
+    init(style: Style) {
+        super.init(frame: .zero)
+        self.style = style
         setupView()
     }
     
@@ -52,20 +54,29 @@ final class PhotoPreviewToolBar: UIView {
     }
     
     private func setupView() {
-        addSubview(backgroundView)
+        switch style {
+        case .picker:
+            addSubview(backgroundView)
+            backgroundView.snp.makeConstraints { maker in
+                maker.edges.equalToSuperview()
+            }
+            leftButton.setTitle(BundleHelper.localizedString(key: "Preview"), for: .normal)
+        case .preview:
+            backgroundColor = UIColor.color(hex: 0x5C5C5C)
+            leftButton.setTitle(BundleHelper.localizedString(key: "Edit"), for: .normal)
+        }
+        
         let contentView = UILayoutGuide()
         addLayoutGuide(contentView)
-        addSubview(editButton)
+        addSubview(leftButton)
         addSubview(originalButton)
         addSubview(doneButton)
-        backgroundView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
-        }
+        
         contentView.snp.makeConstraints { (maker) in
             maker.top.left.right.equalToSuperview()
             maker.height.equalTo(56)
         }
-        editButton.snp.makeConstraints { (maker) in
+        leftButton.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview().offset(15)
             maker.centerY.equalTo(contentView)
             maker.height.equalTo(30)
@@ -83,7 +94,15 @@ final class PhotoPreviewToolBar: UIView {
     }
 
     public func hiddenEditAndOriginalButton(_ hidden: Bool) {
-        editButton.isHidden = hidden
+        leftButton.isHidden = hidden
         originalButton.isHidden = hidden
+    }
+}
+
+extension PhotoToolBar {
+    
+    enum Style {
+        case picker
+        case preview
     }
 }

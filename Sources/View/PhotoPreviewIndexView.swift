@@ -25,13 +25,18 @@ final class PhotoPreviewIndexView: UIView {
     }
     
     private var lastIdx: Int = 0
+    private var lastAssetList: [Asset] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = defaultAssetSpacing
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.contentInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
+        view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         view.backgroundColor = UIColor.color(hex: 0x5C5C5C)
+        view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self
         view.delegate = self
@@ -58,7 +63,9 @@ final class PhotoPreviewIndexView: UIView {
     private func didSetCurrentIndex() {
         isHidden = PhotoManager.shared.selectdAsset.isEmpty
         if let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0.idx == currentIndex }) {
-            collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
+            let indexPath = IndexPath(item: idx, section: 0)
+            collectionView.reloadItems(at: [indexPath])
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
         if let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0.idx == lastIdx }) {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
@@ -69,8 +76,20 @@ final class PhotoPreviewIndexView: UIView {
 extension PhotoPreviewIndexView {
     
     public func didChangeSelectedAsset() {
-        self.isHidden = PhotoManager.shared.selectdAsset.isEmpty
-        collectionView.reloadSections(IndexSet(integer: 0))
+        let assetList = PhotoManager.shared.selectdAsset
+        self.isHidden = assetList.isEmpty
+        if lastAssetList.count < assetList.count {
+            collectionView.insertItems(at: [IndexPath(item: assetList.count-1, section: 0)])
+            collectionView.scrollToLast(at: .right, animated: true)
+        } else if lastAssetList.count > assetList.count {
+            for (idx, asset) in lastAssetList.enumerated() {
+                if !assetList.contains(asset) {
+                    collectionView.deleteItems(at: [IndexPath(item: idx, section: 0)])
+                    break
+                }
+            }
+        }
+        lastAssetList = assetList
     }
 }
 

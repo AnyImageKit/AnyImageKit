@@ -37,7 +37,7 @@
 		A56A3C85233087D300EBFC48 /* Ex+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */; };
 		A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */; };
 		A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */; };
-		A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */; };
+		A56A3C8E2330BCB000EBFC48 /* PhotoToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8D2330BCB000EBFC48 /* PhotoToolBar.swift */; };
 		A58E148D233372D800ACE099 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58E148C233372D800ACE099 /* VideoView.swift */; };
 		A5A27B9F232F81CF00D966B8 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A27B9E232F81CF00D966B8 /* SnapKit.framework */; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
@@ -129,7 +129,7 @@
 		A56A3C84233087D300EBFC48 /* Ex+UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UICollectionView.swift"; sourceTree = "<group>"; };
 		A56A3C872330A44B00EBFC48 /* ScaleAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleAnimator.swift; sourceTree = "<group>"; };
 		A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewNavigationBar.swift; sourceTree = "<group>"; };
-		A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewToolBar.swift; sourceTree = "<group>"; };
+		A56A3C8D2330BCB000EBFC48 /* PhotoToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoToolBar.swift; sourceTree = "<group>"; };
 		A56A3C8F2330BCF700EBFC48 /* Ex+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIColor.swift"; sourceTree = "<group>"; };
 		A57AB3E02330D5CE00EF344B /* Ex+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A58E148C233372D800ACE099 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
@@ -356,7 +356,7 @@
 			isa = PBXGroup;
 			children = (
 				A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */,
-				A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */,
+				A56A3C8D2330BCB000EBFC48 /* PhotoToolBar.swift */,
 				A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */,
 				A56A3C7F23307C9C00EBFC48 /* Cell */,
 				A5325EA32331C09900ADA116 /* Kit */,
@@ -549,7 +549,7 @@
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,
 				A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */,
-				A56A3C8E2330BCB000EBFC48 /* PhotoPreviewToolBar.swift in Sources */,
+				A56A3C8E2330BCB000EBFC48 /* PhotoToolBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

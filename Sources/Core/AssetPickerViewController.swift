@@ -36,12 +36,9 @@ final class AssetPickerViewController: UIViewController {
         return view
     }()
     
-    private(set) lazy var toolBar: PhotoPreviewToolBar = {
-        let view = PhotoPreviewToolBar(frame: .zero)
-        view.editButton.setTitle(BundleHelper.localizedString(key: "Preview"), for: .normal)
-        view.editButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
-        view.originalButton.isHidden = true
-        view.doneButton.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
+    private(set) lazy var toolBar: PhotoToolBar = {
+        let view = PhotoToolBar(style: .picker)
+        view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -58,7 +55,7 @@ final class AssetPickerViewController: UIViewController {
         super.viewDidLayoutSubviews()
         collectionView.contentInset.bottom = 56+defaultAssetSpacing
         if autoScrollToBottom {
-            collectionView.scrollToBottom(animated: false)
+            collectionView.scrollToLast(at: .bottom, animated: false)
             autoScrollToBottom = false
         }
     }
@@ -106,7 +103,7 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         album.fetchAssets()
         collectionView.reloadData()
-        collectionView.scrollToBottom(animated: false)
+        collectionView.scrollToLast(at: .bottom, animated: false)
         PhotoManager.shared.removeAllSelectedAsset()
     }
 }

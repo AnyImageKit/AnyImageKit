@@ -19,7 +19,7 @@ final class OriginalButton: UIControl {
         let view = UILabel()
         view.text = BundleHelper.localizedString(key: "Full image")
         view.textColor = UIColor.white
-        view.font = UIFont.systemFont(ofSize: 14)
+        view.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
 
