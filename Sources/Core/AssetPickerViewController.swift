@@ -38,6 +38,7 @@ final class AssetPickerViewController: UIViewController {
     
     private(set) lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .picker)
+        view.leftButton.isEnabled = false
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -136,16 +137,27 @@ extension AssetPickerViewController {
         asset.isSelected = !sender.isSelected
         if asset.isSelected {
             PhotoManager.shared.addSelectedAsset(asset)
+            if let cell = collectionView.cellForItem(at: IndexPath(item: sender.tag, section: 0)) as? AssetCell {
+                cell.setContent(asset, animated: true)
+            }
         } else {
             PhotoManager.shared.removeSelectedAsset(asset)
+            var updateIndexPath: [IndexPath] = [IndexPath(item: asset.idx, section: 0)]
+            for selectedAsset in PhotoManager.shared.selectdAsset {
+                updateIndexPath.append(IndexPath(item: selectedAsset.idx, section: 0))
+            }
+            collectionView.reloadItems(at: updateIndexPath)
         }
-        if let cell = collectionView.cellForItem(at: IndexPath(item: sender.tag, section: 0)) as? AssetCell {
-            cell.setContent(asset, animated: true)
-        }
+        toolBar.leftButton.isEnabled = !PhotoManager.shared.selectdAsset.isEmpty
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
-        
+        guard let asset = PhotoManager.shared.selectdAsset.first else { return }
+        let controller = PhotoPreviewController()
+        controller.currentIndex = asset.idx
+        controller.dataSource = self
+        controller.delegate = self
+        present(controller, animated: true, completion: nil)
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {

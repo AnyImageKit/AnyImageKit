@@ -221,7 +221,12 @@ extension PhotoManager {
     public func addSelectedAsset(_ asset: Asset) {
         selectdAsset.append(asset)
         asset.selectedNum = selectdAsset.count
-        NotificationCenter.default.post(name: .didUpdateSelectedAsset, object: nil)
+        // 加载原图，缓存到内存
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+            self.requestOriginalImage(for: asset.asset) { (_, _, _) in
+            }
+        }
     }
     
     public func removeSelectedAsset(_ asset: Asset) {
@@ -232,17 +237,9 @@ extension PhotoManager {
             }
         }
         selectdAsset.remove(at: idx)
-        NotificationCenter.default.post(name: .didUpdateSelectedAsset, object: nil)
     }
     
     public func removeAllSelectedAsset() {
         selectdAsset.removeAll()
     }
-}
-
-
-extension Notification.Name {
-    
-    static let didUpdateSelectedAsset = Notification.Name("com.anotheren.AnyImagePicker.didUpdateSelectedAsset")
-    
 }

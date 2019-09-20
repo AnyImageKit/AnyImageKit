@@ -21,6 +21,7 @@ final class PhotoToolBar: UIView {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
         view.setTitleColor(UIColor.white, for: .normal)
+        view.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .disabled)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()

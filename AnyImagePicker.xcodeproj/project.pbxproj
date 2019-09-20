@@ -355,8 +355,8 @@
 		A5A27BBA232F83C900D966B8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */,
 				A56A3C8D2330BCB000EBFC48 /* PhotoToolBar.swift */,
+				A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */,
 				A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */,
 				A56A3C7F23307C9C00EBFC48 /* Cell */,
 				A5325EA32331C09900ADA116 /* Kit */,
