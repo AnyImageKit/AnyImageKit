@@ -11,13 +11,15 @@ import Photos
 
 class Asset: Equatable {
 
+    let idx: Int
     let asset: PHAsset
     let type: MediaType
     let timeLength: String
     var isSelected: Bool = false
     var selectedNum: Int = 1
     
-    init(asset: PHAsset) {
+    init(idx: Int, asset: PHAsset) {
+        self.idx = idx
         self.asset = asset
         self.type = .photo
         self.timeLength = ""

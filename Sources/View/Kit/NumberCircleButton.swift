@@ -31,7 +31,7 @@ final class NumberCircleButton: UIControl {
         case .default:
             numLabel.font = UIFont.systemFont(ofSize: 14)
         case .large:
-            numLabel.font = UIFont.systemFont(ofSize: 20)
+            numLabel.font = UIFont.systemFont(ofSize: 18)
         }
     }
     

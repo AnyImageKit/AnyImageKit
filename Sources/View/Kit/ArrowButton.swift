@@ -24,9 +24,9 @@ final class ArrowButton: UIControl {
     }()
     
     private lazy var effectView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .dark)
+        let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.wechat_dark_background//.withAlphaComponent(0.7)
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         return view

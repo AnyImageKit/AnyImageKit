@@ -42,7 +42,7 @@ extension Album {
 extension Album {
     
     func fetchAssets() {
-        assets = result.objects().map { Asset(asset: $0) }
+        assets = result.objects().enumerated().map { Asset(idx: $0.offset, asset: $0.element) }
     }
 }
 

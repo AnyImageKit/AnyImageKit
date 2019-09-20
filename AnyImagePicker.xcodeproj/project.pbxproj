@@ -53,6 +53,7 @@
 		A5A27BCC232F88E900D966B8 /* AnyImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */; };
 		A5A27BCD232F88E900D966B8 /* AnyImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BD3232F89E800D966B8 /* TestViewController.swift */; };
+		A5CC86C123349D4B00BCB372 /* PhotoPreviewIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +143,7 @@
 		A5A27BC9232F874F00D966B8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A5A27BCA232F884F00D966B8 /* BundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleHelper.swift; sourceTree = "<group>"; };
 		A5A27BD3232F89E800D966B8 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewIndexView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,6 +355,7 @@
 			children = (
 				A56A3C8B2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift */,
 				A56A3C8D2330BCB000EBFC48 /* PhotoPreviewToolBar.swift */,
+				A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */,
 				A56A3C7F23307C9C00EBFC48 /* Cell */,
 				A5325EA32331C09900ADA116 /* Kit */,
 			);
@@ -519,6 +522,7 @@
 				A0C03C1B2331D426005F742C /* Ex+UIColor.swift in Sources */,
 				A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */,
 				A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */,
+				A5CC86C123349D4B00BCB372 /* PhotoPreviewIndexView.swift in Sources */,
 				A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,

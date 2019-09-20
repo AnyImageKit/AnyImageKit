@@ -158,20 +158,28 @@ extension PhotoManager {
     public func addSelectedAsset(_ asset: Asset) {
         selectdAsset.append(asset)
         asset.selectedNum = selectdAsset.count
+        NotificationCenter.default.post(name: .didUpdateSelectedAsset, object: nil)
     }
     
     public func removeSelectedAsset(_ asset: Asset) {
-        if let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0 == asset }) {
-            selectdAsset.remove(at: idx)
-        }
+        guard let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0 == asset }) else { return }
         for item in selectdAsset {
             if item.selectedNum > asset.selectedNum {
                 item.selectedNum -= 1
             }
         }
+        selectdAsset.remove(at: idx)
+        NotificationCenter.default.post(name: .didUpdateSelectedAsset, object: nil)
     }
     
     public func removeAllSelectedAsset() {
         selectdAsset.removeAll()
     }
+}
+
+
+extension Notification.Name {
+    
+    static let didUpdateSelectedAsset = Notification.Name("com.anotheren.AnyImagePicker.didUpdateSelectedAsset")
+    
 }

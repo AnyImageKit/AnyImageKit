@@ -77,6 +77,12 @@ final class PhotoPreviewController: UIViewController {
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
+    private lazy var indexView: PhotoPreviewIndexView = {
+        let view = PhotoPreviewIndexView()
+        view.isHidden = true
+        view.delegate = self
+        return view
+    }()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -133,6 +139,7 @@ extension PhotoPreviewController {
         view.addSubview(collectionView)
         view.addSubview(navigationBar)
         view.addSubview(toolBar)
+        view.addSubview(indexView)
         setupLayout()
         setBar(hidden: true, animated: false)
         
@@ -164,6 +171,11 @@ extension PhotoPreviewController {
                 maker.height.equalTo(50)
             }
         }
+        indexView.snp.makeConstraints { (maker) in
+            maker.left.right.equalToSuperview()
+            maker.bottom.equalTo(toolBar.snp.top)
+            maker.height.equalTo(80)
+        }
     }
     
     /// 更新视图布局
@@ -182,10 +194,12 @@ extension PhotoPreviewController {
             UIView.animate(withDuration: 0.25) {
                 self.navigationBar.alpha = hidden ? 0 : 1
                 self.toolBar.alpha = hidden ? 0 : 1
+                self.indexView.alpha = hidden ? 0 : 1
             }
         } else {
             navigationBar.alpha = hidden ? 0 : 1
             toolBar.alpha = hidden ? 0 : 1
+            indexView.alpha = hidden ? 0 : 1
         }
     }
     
@@ -209,6 +223,7 @@ extension PhotoPreviewController {
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         toolBar.hiddenEditAndOriginalButton(data.asset.type != .photo)
+        indexView.currentIndex = currentIndex
     }
 }
 
@@ -236,6 +251,7 @@ extension PhotoPreviewController {
         } else {
             delegate?.previewController(self, didDeselected: currentIndex)
         }
+        indexView.didChangeSelectedAsset()
     }
     
     /// ToolBar - Edit
@@ -325,6 +341,15 @@ extension PhotoPreviewController: PhotoPreviewCellDelegate {
     
     func previewCellDidSingleTap(_ cell: PhotoPreviewCell) {
         setBar(hidden: navigationBar.alpha == 1, animated: false)
+    }
+}
+
+// MARK: - PhotoPreviewIndexViewDelegate
+extension PhotoPreviewController: PhotoPreviewIndexViewDelegate {
+    
+    func photoPreviewSubView(_ view: PhotoPreviewIndexView, didSelect idx: Int) {
+        currentIndex = idx
+        collectionView.scrollToItem(at: IndexPath(item: idx, section: 0), at: .left, animated: false)
     }
 }
 
