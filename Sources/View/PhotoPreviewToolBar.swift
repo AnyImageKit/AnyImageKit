@@ -9,6 +9,13 @@
 import UIKit
 
 final class PhotoPreviewToolBar: UIView {
+    
+    private lazy var backgroundView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: effect)
+        view.contentView.backgroundColor = UIColor.wechat_dark_background.withAlphaComponent(0.7)
+        return view
+    }()
 
     private(set) lazy var editButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -18,10 +25,12 @@ final class PhotoPreviewToolBar: UIView {
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
+    
     private(set) lazy var originalButton: OriginalButton = {
         let view = OriginalButton(frame: .zero)
         return view
     }()
+    
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
@@ -35,7 +44,6 @@ final class PhotoPreviewToolBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.color(hex: 0x5C5C5C)
         setupView()
     }
     
@@ -44,14 +52,18 @@ final class PhotoPreviewToolBar: UIView {
     }
     
     private func setupView() {
+        addSubview(backgroundView)
         let contentView = UILayoutGuide()
         addLayoutGuide(contentView)
         addSubview(editButton)
         addSubview(originalButton)
         addSubview(doneButton)
+        backgroundView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
         contentView.snp.makeConstraints { (maker) in
             maker.top.left.right.equalToSuperview()
-            maker.height.equalTo(50)
+            maker.height.equalTo(56)
         }
         editButton.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview().offset(15)
@@ -74,5 +86,4 @@ final class PhotoPreviewToolBar: UIView {
         editButton.isHidden = hidden
         originalButton.isHidden = hidden
     }
-    
 }

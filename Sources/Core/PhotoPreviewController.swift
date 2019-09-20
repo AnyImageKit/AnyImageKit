@@ -150,19 +150,11 @@ extension PhotoPreviewController {
         navigationBar.snp.makeConstraints { (maker) in
             maker.top.equalToSuperview()
             maker.left.right.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
-            } else {
-                maker.height.equalTo(64)
-            }
+            maker.bottom.equalTo(topLayoutGuide.snp.bottom).offset(44)
         }
         toolBar.snp.makeConstraints { (maker) in
             maker.left.right.bottom.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
-            } else {
-                maker.height.equalTo(50)
-            }
+            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
         }
     }
     
@@ -282,9 +274,13 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         
         // 加载图片
         if let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) {
-            cell.setImage(data.thumbnail)
-            PhotoManager.shared.requestImage(for: data.asset.asset, width: 2000) { (image, _, _) in
-                cell.setImage(image)
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+                cell.setImage(originalImage)
+            } else {
+                cell.setImage(data.thumbnail)
+                PhotoManager.shared.requestOriginalImage(for: data.asset.asset) { (image, _, _) in
+                    cell.setImage(image)
+                }
             }
         }
         return cell

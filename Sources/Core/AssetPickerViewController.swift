@@ -56,6 +56,7 @@ final class AssetPickerViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        collectionView.contentInset.bottom = 56+defaultAssetSpacing
         if autoScrollToBottom {
             collectionView.scrollToBottom(animated: false)
             autoScrollToBottom = false
@@ -72,12 +73,10 @@ final class AssetPickerViewController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(toolBar)
         collectionView.snp.makeConstraints { maker in
-            maker.top.equalTo(topLayoutGuide.snp.bottom)
-            maker.left.right.equalToSuperview()
+            maker.edges.equalToSuperview()
         }
         toolBar.snp.makeConstraints { maker in
-            maker.top.equalTo(collectionView.snp.bottom)
-            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-55)
+            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
             maker.left.right.bottom.equalToSuperview()
         }
     }
