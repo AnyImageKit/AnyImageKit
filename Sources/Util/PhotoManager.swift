@@ -14,7 +14,10 @@ final class PhotoManager {
     static let shared: PhotoManager = PhotoManager()
     
     var sortAscendingByModificationDate: Bool = true
-
+    
+    /// 已选中的资源
+    private(set) var selectdAsset: [Asset] = []
+    
     private init() { }
     
     private let workQueue = DispatchQueue(label: "com.anotheren.AnyImagePicker.PhotoManager")
@@ -147,5 +150,28 @@ extension PhotoManager {
             }
         }
         return imageRequestID
+    }
+}
+
+extension PhotoManager {
+    
+    public func addSelectedAsset(_ asset: Asset) {
+        selectdAsset.append(asset)
+        asset.selectedNum = selectdAsset.count
+    }
+    
+    public func removeSelectedAsset(_ asset: Asset) {
+        if let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0 == asset }) {
+            selectdAsset.remove(at: idx)
+        }
+        for item in selectdAsset {
+            if item.selectedNum > asset.selectedNum {
+                item.selectedNum -= 1
+            }
+        }
+    }
+    
+    public func removeAllSelectedAsset() {
+        selectdAsset.removeAll()
     }
 }

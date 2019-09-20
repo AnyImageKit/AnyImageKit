@@ -98,6 +98,7 @@ final class PhotoPreviewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        didSetCurrentIdx()
         coverStatusBar(true)
     }
     
@@ -205,9 +206,8 @@ extension PhotoPreviewController {
     
     private func didSetCurrentIdx() {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        // TODO:
         navigationBar.selectButton.isEnabled = true
-        navigationBar.selectButton.setNum(1, isSelected: data.asset.isSelected, animated: false)
+        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         toolBar.hiddenEditAndOriginalButton(data.asset.type != .photo)
     }
 }
@@ -223,12 +223,15 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc private func selectButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        sender.isSelected.toggle()
-        data.asset.isSelected = sender.isSelected
-        // TODO:
-        navigationBar.selectButton.setNum(1, isSelected: data.asset.isSelected, animated: true)
-        // TODO: select 状态已经更改，是否还有必要使用使用 delegate
-        if sender.isSelected {
+        data.asset.isSelected = !sender.isSelected
+        if data.asset.isSelected {
+            PhotoManager.shared.addSelectedAsset(data.asset)
+        } else {
+            PhotoManager.shared.removeSelectedAsset(data.asset)
+        }
+        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
+        
+        if data.asset.isSelected {
             delegate?.previewController(self, didSelected: currentIndex)
         } else {
             delegate?.previewController(self, didDeselected: currentIndex)

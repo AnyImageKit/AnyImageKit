@@ -266,8 +266,8 @@
 		A0F4753A232F7DDB00BB117B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A0F4753D232F7DFA00BB117B /* Asset.swift */,
 				A0F4753B232F7DE500BB117B /* Album.swift */,
+				A0F4753D232F7DFA00BB117B /* Asset.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

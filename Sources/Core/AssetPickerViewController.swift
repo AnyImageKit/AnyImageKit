@@ -102,11 +102,13 @@ extension AssetPickerViewController {
     }
     
     func setAlbum(_ album: Album) {
+        guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.name)
         album.fetchAssets()
         collectionView.reloadData()
         collectionView.scrollToBottom(animated: false)
+        PhotoManager.shared.removeAllSelectedAsset()
     }
 }
 
@@ -130,6 +132,20 @@ extension AssetPickerViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
+        PhotoManager.shared.removeAllSelectedAsset()
+    }
+    
+    @objc private func selectButtonTapped(_ sender: UIButton) {
+        guard let asset = album?.assets[sender.tag] else { return }
+        asset.isSelected = !sender.isSelected
+        if asset.isSelected {
+            PhotoManager.shared.addSelectedAsset(asset)
+        } else {
+            PhotoManager.shared.removeSelectedAsset(asset)
+        }
+        if let cell = collectionView.cellForItem(at: IndexPath(item: sender.tag, section: 0)) as? AssetCell {
+            cell.setContent(asset, animated: true)
+        }
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
@@ -158,7 +174,8 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         if let asset = album?.assets[indexPath.item] {
             cell.setContent(asset)
         }
-        
+        cell.selectButton.tag = indexPath.item
+        cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         cell.backgroundColor = UIColor.white
         return cell
     }
@@ -225,6 +242,10 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
 extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
-        
+        collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+    }
+    
+    func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
+        collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
     }
 }

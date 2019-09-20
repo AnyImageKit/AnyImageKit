@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-class Album {
+class Album: Equatable {
     
     let id: String
     let name: String
@@ -25,6 +25,10 @@ class Album {
         if needFetchAssets {
             fetchAssets()
         }
+    }
+    
+    static func == (lhs: Album, rhs: Album) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 

@@ -9,17 +9,22 @@
 import Foundation
 import Photos
 
-class Asset {
-    
+class Asset: Equatable {
+
     let asset: PHAsset
     let type: MediaType
     let timeLength: String
     var isSelected: Bool = false
+    var selectedNum: Int = 1
     
     init(asset: PHAsset) {
         self.asset = asset
         self.type = .photo
         self.timeLength = ""
+    }
+    
+    static func == (lhs: Asset, rhs: Asset) -> Bool {
+        return lhs.asset.localIdentifier == rhs.asset.localIdentifier
     }
 }
 
