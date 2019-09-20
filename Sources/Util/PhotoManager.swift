@@ -16,7 +16,7 @@ final class PhotoManager {
     var sortAscendingByModificationDate: Bool = true
     
     /// 已选中的资源
-    private var selectdAsset: [Asset] = []
+    private(set) var selectdAsset: [Asset] = []
     
     /// 缓存
     private var cacheList = [(String, UIImage)]()
