@@ -38,7 +38,11 @@ final class AssetPickerViewController: UIViewController {
     
     private(set) lazy var toolBar: PhotoPreviewToolBar = {
         let view = PhotoPreviewToolBar(frame: .zero)
-        
+        view.editButton.setTitle(BundleHelper.localizedString(key: "Preview"), for: .normal)
+        view.editButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.isHidden = true
+        view.doneButton.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
+        view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -60,14 +64,21 @@ final class AssetPickerViewController: UIViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: BundleHelper.localizedString(key: "Cancel"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
     private func setupView() {
         view.addSubview(collectionView)
+        view.addSubview(toolBar)
         collectionView.snp.makeConstraints { maker in
-            maker.edges.equalTo(view.snp.edges)
+            maker.top.equalTo(topLayoutGuide.snp.bottom)
+            maker.left.right.equalToSuperview()
+        }
+        toolBar.snp.makeConstraints { maker in
+            maker.top.equalTo(collectionView.snp.bottom)
+            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-55)
+            maker.left.right.bottom.equalToSuperview()
         }
     }
 }
@@ -119,6 +130,14 @@ extension AssetPickerViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func previewButtonTapped(_ sender: UIButton) {
+        
+    }
+    
+    @objc private func doneButtonTapped(_ sender: UIButton) {
+        
     }
 }
 

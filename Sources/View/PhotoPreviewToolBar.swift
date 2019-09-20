@@ -15,7 +15,7 @@ final class PhotoPreviewToolBar: UIView {
         view.backgroundColor = UIColor.clear
         view.setTitle(BundleHelper.localizedString(key: "Edit"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
-        view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     private(set) lazy var originalButton: OriginalButton = {
@@ -29,7 +29,7 @@ final class PhotoPreviewToolBar: UIView {
         view.backgroundColor = UIColor.wechat_green
         view.setTitleColor(UIColor.white, for: .normal)
         view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
-        view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     
