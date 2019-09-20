@@ -99,7 +99,7 @@ final class AssetCell: UICollectionViewCell {
             maker.edges.equalToSuperview()
         }
         selectButton.snp.makeConstraints { (maker) in
-            maker.top.right.equalToSuperview()
+            maker.top.right.equalToSuperview().inset(3)
             maker.width.height.equalTo(30)
         }
     }
@@ -114,7 +114,7 @@ extension AssetCell {
 
 extension AssetCell {
     
-    func setContent(_ asset: Asset, isPreview: Bool = false) {
+    func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
         PhotoManager.shared.requestImage(for: asset.asset, width: 100*UIScreen.main.nativeScale, completion: { [weak self] (image, info, isDegraded) in
             guard let self = self else { return }
             self.imageView.image = image
@@ -134,10 +134,10 @@ extension AssetCell {
         }
         
         if !isPreview {
-            // TODO: setNum
-            selectButton.setNum(1, isSelected: asset.isSelected, animated: false)
+            selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
 //            unableCoverView.isHidden = !(selectCount == max && !asset.isSelected) // TODO:
+//            selectButton.isEnabled = (selectCount == max && !asset.isSelected)
         }
     }
 }
