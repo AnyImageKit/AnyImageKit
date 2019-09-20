@@ -24,6 +24,7 @@ final class PhotoPreviewIndexView: UIView {
         }
     }
     
+    private var isFirst = true
     private var lastIdx: Int = 0
     private var lastAssetList: [Asset] = []
     
@@ -51,6 +52,11 @@ final class PhotoPreviewIndexView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        selectItemAtFirstTime()
     }
     
     private func setupView() {
@@ -90,6 +96,16 @@ extension PhotoPreviewIndexView {
             }
         }
         lastAssetList = assetList
+    }
+    
+    private func selectItemAtFirstTime() {
+        if !isFirst { return }
+        isFirst = false
+        if let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0.idx == currentIndex }) {
+            let indexPath = IndexPath(item: idx, section: 0)
+            collectionView.reloadItems(at: [indexPath])
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        }
     }
 }
 
