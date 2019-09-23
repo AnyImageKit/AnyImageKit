@@ -143,7 +143,6 @@ extension PhotoManager {
         
         let options1 = PHImageRequestOptions()
         options1.resizeMode = .fast
-        
         let targetSize = CGSize(width: width, height: width)
         let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options1) { (image, info) in
             guard let info = info else { return }
@@ -155,18 +154,18 @@ extension PhotoManager {
             if isDownload, let image = image {
                 let resizedImage = UIImage.resize(from: image, size: targetSize)
                 completion(resizedImage, info, isDegraded)
-            }
-            
-            // Download image from iCloud
-            let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
-            if isInCloud && image == nil && isNetworkAccessAllowed {
-                let options2 = PHImageRequestOptions()
-                options2.progressHandler = progressHandler
-                options2.isNetworkAccessAllowed = isNetworkAccessAllowed
-                options2.resizeMode = .fast
-                PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in
-                    if let data = data, let info = info, let image = UIImage.resize(from: data, size: targetSize) {
-                        completion(image, info, false)
+            } else {
+                // Download image from iCloud
+                let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
+                if isInCloud && image == nil && isNetworkAccessAllowed {
+                    let options2 = PHImageRequestOptions()
+                    options2.progressHandler = progressHandler
+                    options2.isNetworkAccessAllowed = isNetworkAccessAllowed
+                    options2.resizeMode = .fast
+                    PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in
+                        if let data = data, let info = info, let image = UIImage.resize(from: data, size: targetSize) {
+                            completion(image, info, false)
+                        }
                     }
                 }
             }
@@ -174,15 +173,12 @@ extension PhotoManager {
         return imageRequestID
     }
     
-    //TODO
     @discardableResult
     func requestOriginalImage(for asset: PHAsset, isNetworkAccessAllowed: Bool = true, progressHandler: PHAssetImageProgressHandler? = nil, completion: @escaping PhotoFetchHander) -> PHImageRequestID {
         
         let options1 = PHImageRequestOptions()
         options1.resizeMode = .fast
-        
-        let targetSize = CGSize(width: 3000, height: 3000)
-        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options1) { [weak self] (image, info) in
+        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options1) { [weak self] (image, info) in
             guard let self = self else { return }
             guard let info = info else { return }
             let isCancelled = info[PHImageCancelledKey] as? Bool ?? false
@@ -191,23 +187,22 @@ extension PhotoManager {
             
             let isDownload = !isCancelled && error == nil
             if isDownload, let image = image {
-                let resizedImage = UIImage.resize(from: image, size: targetSize)
                 if !isDegraded {
-                    self.writeCache(image: resizedImage, for: asset.localIdentifier)
+                    self.writeCache(image: image, for: asset.localIdentifier)
                 }
-                completion(resizedImage, info, isDegraded)
-            }
-            
-            // Download image from iCloud
-            let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
-            if isInCloud && image == nil && isNetworkAccessAllowed {
-                let options2 = PHImageRequestOptions()
-                options2.progressHandler = progressHandler
-                options2.isNetworkAccessAllowed = isNetworkAccessAllowed
-                options2.resizeMode = .fast
-                PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in
-                    if let data = data, let info = info, let image = UIImage.resize(from: data, size: targetSize) {
-                        completion(image, info, false)
+                completion(image, info, isDegraded)
+            } else {
+                // Download image from iCloud
+                let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
+                if isInCloud && image == nil && isNetworkAccessAllowed {
+                    let options2 = PHImageRequestOptions()
+                    options2.progressHandler = progressHandler
+                    options2.isNetworkAccessAllowed = isNetworkAccessAllowed
+                    options2.resizeMode = .fast
+                    PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in
+                        if let data = data, let info = info, let image = UIImage(data: data) {
+                            completion(image, info, false)
+                        }
                     }
                 }
             }
