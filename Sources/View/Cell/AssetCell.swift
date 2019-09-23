@@ -115,7 +115,8 @@ extension AssetCell {
 extension AssetCell {
     
     func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
-        PhotoManager.shared.requestImage(for: asset.asset, width: 100*UIScreen.main.nativeScale, completion: { [weak self] (image, info, isDegraded) in
+        let options = PhotoFetchOptions(mode: .resize(100*UIScreen.main.nativeScale))
+        PhotoManager.shared.requestImage(for: asset.asset, options: options, completion: { [weak self] (image, info, isDegraded) in
             guard let self = self else { return }
             self.imageView.image = image
             if asset.type == .video && !isPreview {
