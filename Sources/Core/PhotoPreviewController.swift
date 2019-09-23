@@ -295,8 +295,13 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             } else {
                 cell.setImage(data.thumbnail)
                 let options = PhotoFetchOptions(mode: .original)
-                PhotoManager.shared.requestImage(for: data.asset.asset, options: options) { (image, _, _) in
-                    cell.setImage(image)
+                PhotoManager.shared.requestImage(for: data.asset.asset, options: options) { result in
+                    switch result {
+                    case .success(let image, _):
+                        cell.setImage(image)
+                    case .failure(let error):
+                        print(error)
+                    }
                 }
             }
         }

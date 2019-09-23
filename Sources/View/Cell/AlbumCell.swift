@@ -85,9 +85,14 @@ extension AlbumCell {
     func setContent(_ album: Album) {
         titleLabel.text = album.name
         subTitleLabel.text = "(\(album.count))"
-        PhotoManager.shared.requestImage(from: album) { [weak self] (image, info, isDegraded) in
+        PhotoManager.shared.requestImage(from: album) { [weak self] result in
             guard let self = self else { return }
-            self.posterImageView.image = image
+            switch result {
+            case .success(let image, _):
+                self.posterImageView.image = image
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }
