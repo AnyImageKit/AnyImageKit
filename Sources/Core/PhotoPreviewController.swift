@@ -294,7 +294,8 @@ extension PhotoPreviewController: UICollectionViewDataSource {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
-                PhotoManager.shared.requestOriginalImage(for: data.asset.asset) { (image, _, _) in
+                let options = PhotoFetchOptions(mode: .original)
+                PhotoManager.shared.requestImage(for: data.asset.asset, options: options) { (image, _, _) in
                     cell.setImage(image)
                 }
             }

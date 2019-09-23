@@ -30,6 +30,10 @@ final class PhotoManager {
 
 extension PhotoManager {
     
+    func clearCache() {
+        cacheList.removeAll()
+    }
+    
     func readCache(for identifier: String) -> UIImage? {
         return cacheList.first(where: { $0.0 == identifier })?.1
     }
@@ -123,6 +127,36 @@ extension PhotoManager {
     }
 }
 
+struct PhotoFetchOptions {
+    
+    var mode: SizeMode = .resize(100)
+    var isNetworkAccessAllowed: Bool = true
+    var progressHandler: PHAssetImageProgressHandler? = nil
+    
+    enum SizeMode: Equatable {
+        
+        case resize(CGFloat)
+        case original
+        
+        var targetSize: CGSize {
+            switch self {
+            case .resize(let width):
+                return CGSize(width: width, height: width)
+            case .original:
+                return PHImageManagerMaximumSize
+            }
+        }
+    }
+}
+
+enum PhotoFetchError: Error {
+    
+    case invalidInfo
+    case other(Error)
+}
+
+typealias PhotoFetchCompletion = Result<(UIImage, Bool), PhotoFetchError>
+
 // MARK: - Asset
 
 extension PhotoManager {
@@ -133,81 +167,53 @@ extension PhotoManager {
     func requestImage(from album: Album, completion: @escaping PhotoFetchHander) -> PHImageRequestID {
         if let asset = album.result.lastObject {
             let sacle = UIScreen.main.nativeScale
-            return requestImage(for: asset, width: 55*sacle, completion: completion)
+            let options = PhotoFetchOptions(mode: .resize(55*sacle))
+            return requestImage(for: asset, options: options, completion: completion)
         }
         return PHInvalidImageRequestID
     }
     
     @discardableResult
-    func requestImage(for asset: PHAsset, width: CGFloat, isNetworkAccessAllowed: Bool = true, progressHandler: PHAssetImageProgressHandler? = nil, completion: @escaping PhotoFetchHander) -> PHImageRequestID {
-        
-        let options1 = PHImageRequestOptions()
-        options1.resizeMode = .fast
-        
-        let targetSize = CGSize(width: width, height: width)
-        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options1) { (image, info) in
+    func requestImage(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchHander) -> PHImageRequestID {
+        let requestOptions1 = PHImageRequestOptions()
+        requestOptions1.resizeMode = .fast
+        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: options.mode.targetSize, contentMode: .aspectFill, options: requestOptions1) { (image, info) in
             guard let info = info else { return }
             let isCancelled = info[PHImageCancelledKey] as? Bool ?? false
             let error = info[PHImageErrorKey] as? Error
             let isDegraded = info[PHImageResultIsDegradedKey] as? Bool ?? false
-            
             let isDownload = !isCancelled && error == nil
             if isDownload, let image = image {
-                let resizedImage = UIImage.resize(from: image, size: targetSize)
-                completion(resizedImage, info, isDegraded)
-            }
-            
-            // Download image from iCloud
-            let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
-            if isInCloud && image == nil && isNetworkAccessAllowed {
-                let options2 = PHImageRequestOptions()
-                options2.progressHandler = progressHandler
-                options2.isNetworkAccessAllowed = isNetworkAccessAllowed
-                options2.resizeMode = .fast
-                PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in
-                    if let data = data, let info = info, let image = UIImage.resize(from: data, size: targetSize) {
-                        completion(image, info, false)
+                switch options.mode {
+                case .original:
+                    if !isDegraded {
+                        self.writeCache(image: image, for: asset.localIdentifier)
                     }
+                    completion(image, info, isDegraded)
+                case .resize:
+                    let resizedImage = UIImage.resize(from: image, size: options.mode.targetSize)
+                    completion(resizedImage, info, isDegraded)
                 }
-            }
-        }
-        return imageRequestID
-    }
-    
-    //TODO
-    @discardableResult
-    func requestOriginalImage(for asset: PHAsset, isNetworkAccessAllowed: Bool = true, progressHandler: PHAssetImageProgressHandler? = nil, completion: @escaping PhotoFetchHander) -> PHImageRequestID {
-        
-        let options1 = PHImageRequestOptions()
-        options1.resizeMode = .fast
-        
-        let targetSize = CGSize(width: 3000, height: 3000)
-        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options1) { [weak self] (image, info) in
-            guard let self = self else { return }
-            guard let info = info else { return }
-            let isCancelled = info[PHImageCancelledKey] as? Bool ?? false
-            let error = info[PHImageErrorKey] as? Error
-            let isDegraded = info[PHImageResultIsDegradedKey] as? Bool ?? false
-            
-            let isDownload = !isCancelled && error == nil
-            if isDownload, let image = image {
-                let resizedImage = UIImage.resize(from: image, size: targetSize)
-                if !isDegraded {
-                    self.writeCache(image: resizedImage, for: asset.localIdentifier)
-                }
-                completion(resizedImage, info, isDegraded)
-            }
-            
-            // Download image from iCloud
-            let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
-            if isInCloud && image == nil && isNetworkAccessAllowed {
-                let options2 = PHImageRequestOptions()
-                options2.progressHandler = progressHandler
-                options2.isNetworkAccessAllowed = isNetworkAccessAllowed
-                options2.resizeMode = .fast
-                PHImageManager.default().requestImageData(for: asset, options: options2) { (data, uti, orientation, info) in
-                    if let data = data, let info = info, let image = UIImage.resize(from: data, size: targetSize) {
-                        completion(image, info, false)
+            } else {
+                // Download image from iCloud
+                print("Download image from iCloud")
+                let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
+                if isInCloud && image == nil && options.isNetworkAccessAllowed {
+                    let requestOptions2 = PHImageRequestOptions()
+                    requestOptions2.progressHandler = options.progressHandler
+                    requestOptions2.isNetworkAccessAllowed = options.isNetworkAccessAllowed
+                    requestOptions2.resizeMode = .fast
+                    PHImageManager.default().requestImageData(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
+                        switch options.mode {
+                        case .original:
+                            if let data = data, let info = info, let image = UIImage(data: data) {
+                                completion(image, info, false)
+                            }
+                        case .resize:
+                            if let data = data, let info = info, let image = UIImage.resize(from: data, size: options.mode.targetSize) {
+                                completion(image, info, false)
+                            }
+                        }
                     }
                 }
             }
@@ -224,7 +230,8 @@ extension PhotoManager {
         // 加载原图，缓存到内存
         workQueue.async { [weak self] in
             guard let self = self else { return }
-            self.requestOriginalImage(for: asset.asset) { (_, _, _) in
+            let options = PhotoFetchOptions(mode: .original)
+            self.requestImage(for: asset.asset, options: options) { (_, _, _) in
             }
         }
     }
