@@ -115,12 +115,12 @@ extension AssetCell {
 extension AssetCell {
     
     func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
-        let options = PhotoFetchOptions(mode: .resize(100*UIScreen.main.nativeScale))
+        let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale))
         PhotoManager.shared.requestImage(for: asset.asset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let image, _):
-                self.imageView.image = image
+            case .success(let response):
+                self.imageView.image = response.image
                 if asset.type == .video && !isPreview {
                     // TODO:
                     self.videoView.setVideoTime(0)

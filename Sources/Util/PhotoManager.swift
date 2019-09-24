@@ -129,7 +129,7 @@ extension PhotoManager {
 
 struct PhotoFetchOptions {
     
-    var mode: SizeMode = .resize(100)
+    var sizeMode: SizeMode = .resize(100)
     var isNetworkAccessAllowed: Bool = true
     var progressHandler: PHAssetImageProgressHandler? = nil
     
@@ -149,14 +149,15 @@ struct PhotoFetchOptions {
     }
 }
 
-enum PhotoFetchError: Error {
+enum ImagePickerError: Error {
     
     case invalidInfo
     case invalidData
     case other(Error)
 }
 
-typealias PhotoFetchCompletion = (Result<(UIImage, Bool), PhotoFetchError>) -> Void
+typealias PhotoFetchResponse = (image: UIImage, isDegraded: Bool)
+typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
 
 // MARK: - Asset
 
@@ -166,7 +167,7 @@ extension PhotoManager {
     func requestImage(from album: Album, completion: @escaping PhotoFetchCompletion) -> PHImageRequestID {
         if let asset = album.result.lastObject {
             let sacle = UIScreen.main.nativeScale
-            let options = PhotoFetchOptions(mode: .resize(55*sacle))
+            let options = PhotoFetchOptions(sizeMode: .resize(55*sacle))
             return requestImage(for: asset, options: options, completion: completion)
         }
         return PHInvalidImageRequestID
@@ -176,7 +177,7 @@ extension PhotoManager {
     func requestImage(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) -> PHImageRequestID {
         let requestOptions1 = PHImageRequestOptions()
         requestOptions1.resizeMode = .fast
-        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: options.mode.targetSize, contentMode: .aspectFill, options: requestOptions1) { (image, info) in
+        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: options.sizeMode.targetSize, contentMode: .aspectFill, options: requestOptions1) { (image, info) in
             guard let info = info else {
                 completion(.failure(.invalidInfo))
                 return
@@ -186,19 +187,15 @@ extension PhotoManager {
             let isDegraded = info[PHImageResultIsDegradedKey] as? Bool ?? false
             let isDownload = !isCancelled && error == nil
             if isDownload, let image = image {
-                switch options.mode {
+                switch options.sizeMode {
                 case .original:
                     if !isDegraded {
                         self.writeCache(image: image, for: asset.localIdentifier)
                     }
                     completion(.success((image, isDegraded)))
                 case .resize:
-                    if isDegraded {
-                        completion(.success((image, isDegraded)))
-                    } else {
-                        let resizedImage = UIImage.resize(from: image, size: options.mode.targetSize)
-                        completion(.success((resizedImage, isDegraded)))
-                    }
+                    let resizedImage = UIImage.resize(from: image, size: options.sizeMode.targetSize)
+                    completion(.success((resizedImage, isDegraded)))
                 }
             } else {
                 // Download image from iCloud
@@ -214,7 +211,7 @@ extension PhotoManager {
                             completion(.failure(.invalidData))
                             return
                         }
-                        switch options.mode {
+                        switch options.sizeMode {
                         case .original:
                             guard let image = UIImage(data: data) else {
                                 completion(.failure(.invalidData))
@@ -222,7 +219,7 @@ extension PhotoManager {
                             }
                             completion(.success((image, false)))
                         case .resize:
-                            guard let image = UIImage.resize(from: data, size: options.mode.targetSize) else {
+                            guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
                                 completion(.failure(.invalidData))
                                 return
                             }
@@ -236,6 +233,35 @@ extension PhotoManager {
     }
 }
 
+enum DataUTI {
+    
+    case jpeg
+    case png
+    case gif
+    case heif
+    case mp4
+    case mov
+    case other(String)
+}
+
+struct DataFetchOptions {
+    
+    var isNetworkAccessAllowed: Bool = true
+    var progressHandler: PHAssetImageProgressHandler? = nil
+}
+
+
+typealias DataFetchResponse = (data: Data, uti: DataUTI, url: URL)
+typealias DataFetchCompletion = (Result<DataFetchResponse, ImagePickerError>) -> Void
+
+extension PhotoManager {
+    
+    func requestData(for asset: PHAsset, options: DataFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) {
+        
+        
+    }
+}
+
 extension PhotoManager {
     
     public func addSelectedAsset(_ asset: Asset) {
@@ -244,7 +270,7 @@ extension PhotoManager {
         // 加载原图，缓存到内存
         workQueue.async { [weak self] in
             guard let self = self else { return }
-            let options = PhotoFetchOptions(mode: .original)
+            let options = PhotoFetchOptions(sizeMode: .original)
             self.requestImage(for: asset.asset, options: options) { _ in }
         }
     }

@@ -88,8 +88,8 @@ extension AlbumCell {
         PhotoManager.shared.requestImage(from: album) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let image, _):
-                self.posterImageView.image = image
+            case .success(let response):
+                self.posterImageView.image = response.image
             case .failure(let error):
                 print(error)
             }
