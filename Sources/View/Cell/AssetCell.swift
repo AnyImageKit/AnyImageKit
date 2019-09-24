@@ -45,7 +45,7 @@ final class AssetCell: UICollectionViewCell {
         let view = UIView()
         view.isHidden = true
         view.layer.borderWidth = 4
-        view.layer.borderColor = UIColor.wechat_green.cgColor
+        view.layer.borderColor = PhotoManager.shared.config.theme.mainColor.cgColor
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
@@ -120,7 +120,11 @@ extension AssetCell {
             guard let self = self else { return }
             switch result {
             case .success(let image, _):
-                self.imageView.image = image
+                if self.imageView.image != image {
+                    print(1)
+                    self.imageView.image = image
+                }
+                
                 if asset.type == .video && !isPreview {
                     // TODO:
                     self.videoView.setVideoTime(0)
@@ -130,6 +134,10 @@ extension AssetCell {
             }
         })
         
+        updateState(asset, animated: animated, isPreview: isPreview)
+    }
+    
+    func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
         switch asset.type {
         case .photoGif:
             gifLabel.isHidden = false
@@ -142,8 +150,7 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-//            unableCoverView.isHidden = !(selectCount == max && !asset.isSelected) // TODO:
-//            selectButton.isEnabled = (selectCount == max && !asset.isSelected)
+            unableCoverView.isHidden = !(PhotoManager.shared.isSelectAll && !asset.isSelected)
         }
     }
 }

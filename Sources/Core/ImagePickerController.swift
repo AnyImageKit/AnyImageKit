@@ -18,6 +18,10 @@ open class ImagePickerController: UINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
+    public var config: Config {
+        return PhotoManager.shared.config
+    }
+    
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -30,12 +34,14 @@ open class ImagePickerController: UINavigationController {
         return .portrait
     }
     
-    public init(maxCount: UInt = 1, columnNumber: UInt = 4, delegate: ImagePickerControllerDelegate) {
+    public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
+        PhotoManager.shared.config = config
         let rootViewController = AssetPickerViewController()
         super.init(rootViewController: rootViewController)
         self.pickerDelegate = delegate
-        navigationBar.barTintColor = UIColor.wechat_dark_background
-        navigationBar.tintColor = UIColor.wechat_dark_text
+        
+        navigationBar.barTintColor = config.theme.backgroundColor
+        navigationBar.tintColor = config.theme.textColor
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {

@@ -36,7 +36,7 @@ final class PhotoPreviewIndexView: UIView {
         layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        view.backgroundColor = UIColor.color(hex: 0x5C5C5C)
+        view.backgroundColor = PhotoManager.shared.config.theme.toolBarColor
         view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self

@@ -29,7 +29,7 @@ final class AssetPickerViewController: UIViewController {
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing, left: defaultAssetSpacing, bottom: defaultAssetSpacing, right: defaultAssetSpacing)
-        view.backgroundColor = UIColor.wechat_dark_background
+        view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         view.registerCell(AssetCell.self)
         view.dataSource = self
         view.delegate = self
@@ -133,20 +133,31 @@ extension AssetPickerViewController {
     }
     
     @objc private func selectButtonTapped(_ sender: UIButton) {
-        guard let asset = album?.assets[sender.tag] else { return }
+        guard let album = album else { return }
+        let asset = album.assets[sender.tag]
+        if !asset.isSelected && PhotoManager.shared.isSelectAll {
+            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.maxCount)
+            let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
         asset.isSelected = !sender.isSelected
         if asset.isSelected {
             PhotoManager.shared.addSelectedAsset(asset)
-            if let cell = collectionView.cellForItem(at: IndexPath(item: sender.tag, section: 0)) as? AssetCell {
-                cell.setContent(asset, animated: true)
+            for cell in collectionView.visibleCells {
+                if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
+                    cell.updateState(album.assets[indexPath.item], animated: indexPath.item == sender.tag)
+                }
             }
         } else {
             PhotoManager.shared.removeSelectedAsset(asset)
-            var updateIndexPath: [IndexPath] = [IndexPath(item: asset.idx, section: 0)]
-            for selectedAsset in PhotoManager.shared.selectdAsset {
-                updateIndexPath.append(IndexPath(item: selectedAsset.idx, section: 0))
+            for cell in collectionView.visibleCells {
+                if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
+                    cell.updateState(album.assets[indexPath.item], animated: indexPath.item == sender.tag)
+                }
             }
-            collectionView.reloadItems(at: updateIndexPath)
         }
         toolBar.leftButton.isEnabled = !PhotoManager.shared.selectdAsset.isEmpty
     }
@@ -194,6 +205,9 @@ extension AssetPickerViewController: UICollectionViewDataSource {
 extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let album = album else { return }
+        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isSelectAll { return }
+        
         let controller = PhotoPreviewController()
         controller.currentIndex = indexPath.item
         controller.dataSource = self
@@ -208,7 +222,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
-        let columnNumber: CGFloat = 4
+        let columnNumber = CGFloat(PhotoManager.shared.config.columnNumber)
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
     }

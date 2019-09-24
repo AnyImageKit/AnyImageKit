@@ -13,7 +13,7 @@ final class PhotoToolBar: UIView {
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = UIColor.wechat_dark_background.withAlphaComponent(0.7)
+        view.contentView.backgroundColor = PhotoManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
         return view
     }()
 
@@ -35,7 +35,7 @@ final class PhotoToolBar: UIView {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
-        view.backgroundColor = UIColor.wechat_green
+        view.backgroundColor = PhotoManager.shared.config.theme.mainColor
         view.setTitleColor(UIColor.white, for: .normal)
         view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -63,7 +63,7 @@ final class PhotoToolBar: UIView {
             }
             leftButton.setTitle(BundleHelper.localizedString(key: "Preview"), for: .normal)
         case .preview:
-            backgroundColor = UIColor.color(hex: 0x5C5C5C)
+            backgroundColor = PhotoManager.shared.config.theme.toolBarColor
             leftButton.setTitle(BundleHelper.localizedString(key: "Edit"), for: .normal)
         }
         

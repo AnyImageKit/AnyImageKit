@@ -20,20 +20,20 @@ final class AlbumCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
-        view.textColor = UIColor.wechat_dark_text
+        view.textColor = PhotoManager.shared.config.theme.textColor
         return view
     }()
     
     private lazy var subTitleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
-        view.textColor = UIColor.wechat_dark_subText
+        view.textColor = PhotoManager.shared.config.theme.subTextColor
         return view
     }()
     
     private lazy var separatorLine: UIView = {
         let view = UIView(frame: .zero)
-        view.backgroundColor = UIColor.wechat_dark_separatorLine
+        view.backgroundColor = PhotoManager.shared.config.theme.separatorLineColor
         return view
     }()
     
@@ -49,12 +49,12 @@ final class AlbumCell: UITableViewCell {
     private func setupView() {
         // Accessory Type
         accessoryType = .checkmark
-        tintColor = UIColor.wechat_green
+        tintColor = PhotoManager.shared.config.theme.mainColor
         // Background Color
-        backgroundColor = UIColor.wechat_dark_background
+        backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         // Selected Background Color
         let view = UIView(frame: .zero)
-        view.backgroundColor = UIColor.wechat_dark_background_selected
+        view.backgroundColor = PhotoManager.shared.config.theme.backgroundSelectedColor
         selectedBackgroundView = view
         // Subviews
         contentView.addSubview(posterImageView)

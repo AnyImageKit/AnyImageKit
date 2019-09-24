@@ -11,3 +11,6 @@
 "Edit" = "编辑";
 "Preview" = "预览";
 "Cancel" = "取消";
+"OK" = "好的";
+"Alert" = "提示";
+"Select a maximum of %zd photos" = "你最多只能选择 %zd 张照片";

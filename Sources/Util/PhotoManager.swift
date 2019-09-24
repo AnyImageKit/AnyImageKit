@@ -14,6 +14,11 @@ final class PhotoManager {
     static let shared: PhotoManager = PhotoManager()
     
     var sortAscendingByModificationDate: Bool = true
+    var config = ImagePickerController.Config()
+    
+    var isSelectAll: Bool {
+        return selectdAsset.count == config.maxCount
+    }
     
     /// 已选中的资源
     private(set) var selectdAsset: [Asset] = []
