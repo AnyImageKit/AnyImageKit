@@ -120,11 +120,7 @@ extension AssetCell {
             guard let self = self else { return }
             switch result {
             case .success(let image, _):
-                if self.imageView.image != image {
-                    print(1)
-                    self.imageView.image = image
-                }
-                
+                self.imageView.image = image
                 if asset.type == .video && !isPreview {
                     // TODO:
                     self.videoView.setVideoTime(0)

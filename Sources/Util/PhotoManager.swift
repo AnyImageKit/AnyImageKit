@@ -47,7 +47,7 @@ extension PhotoManager {
         if cacheList.contains(where: { $0.0 == identifier }) {
             return
         }
-        if cacheList.count > 9 { // TODO
+        if cacheList.count > PhotoManager.shared.config.maxCount {
             cacheList.removeFirst()
         }
         cacheList.append((identifier, image))

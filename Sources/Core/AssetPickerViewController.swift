@@ -107,6 +107,15 @@ extension AssetPickerViewController {
         collectionView.scrollToLast(at: .bottom, animated: false)
         PhotoManager.shared.removeAllSelectedAsset()
     }
+    
+    private func updateVisibleCellState(_ animatedItem: Int = -1) {
+        guard let album = album else { return }
+        for cell in collectionView.visibleCells {
+            if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
+                cell.updateState(album.assets[indexPath.item], animated: animatedItem == indexPath.item)
+            }
+        }
+    }
 }
 
 // MARK: - Action
@@ -146,18 +155,10 @@ extension AssetPickerViewController {
         asset.isSelected = !sender.isSelected
         if asset.isSelected {
             PhotoManager.shared.addSelectedAsset(asset)
-            for cell in collectionView.visibleCells {
-                if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                    cell.updateState(album.assets[indexPath.item], animated: indexPath.item == sender.tag)
-                }
-            }
+            updateVisibleCellState(sender.tag)
         } else {
             PhotoManager.shared.removeSelectedAsset(asset)
-            for cell in collectionView.visibleCells {
-                if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                    cell.updateState(album.assets[indexPath.item], animated: indexPath.item == sender.tag)
-                }
-            }
+            updateVisibleCellState(sender.tag)
         }
         toolBar.leftButton.isEnabled = !PhotoManager.shared.selectdAsset.isEmpty
     }
@@ -264,10 +265,10 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
 extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
-        collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+        updateVisibleCellState()
     }
     
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
-        collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+        updateVisibleCellState()
     }
 }
