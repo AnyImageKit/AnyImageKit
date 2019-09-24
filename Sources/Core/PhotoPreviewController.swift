@@ -230,7 +230,7 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc private func selectButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if !data.asset.isSelected && PhotoManager.shared.isSelectAll {
+        if !data.asset.isSelected && PhotoManager.shared.isMaxCount {
             let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.maxCount)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))

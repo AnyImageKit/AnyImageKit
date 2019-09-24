@@ -13,12 +13,13 @@ final class PhotoManager {
     
     static let shared: PhotoManager = PhotoManager()
     
-    var sortAscendingByModificationDate: Bool = true
     var config = ImagePickerController.Config()
     
-    var isSelectAll: Bool {
+    var isMaxCount: Bool {
         return selectdAsset.count == config.maxCount
     }
+    
+    var isOriginPhoto: Bool = false
     
     /// 已选中的资源
     private(set) var selectdAsset: [Asset] = []
@@ -58,16 +59,16 @@ extension PhotoManager {
 
 extension PhotoManager {
     
-    func fetchCameraRollAlbum(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping (Album) -> Void) {
+    func fetchCameraRollAlbum(completion: @escaping (Album) -> Void) {
         let options = PHFetchOptions()
-        if !allowPickingVideo {
+        if !config.selectOptions.contains(.video) {
             options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
-        if !allowPickingImage {
+        if !config.selectOptions.contains(.photo) {
             options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
         }
-        if !sortAscendingByModificationDate {
-            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: sortAscendingByModificationDate)
+        if config.orderByDate == .desc {
+            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
             options.sortDescriptors = [sortDescriptor]
         }
         let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
@@ -76,24 +77,24 @@ extension PhotoManager {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
-                let result = Album(result: assetsfetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                let result = Album(result: assetsfetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: true)
                 completion(result)
             }
         }
     }
     
-    func fetchAllAlbums(allowPickingVideo: Bool, allowPickingImage: Bool, needFetchAssets: Bool, completion: @escaping ([Album]) -> Void) {
+    func fetchAllAlbums(completion: @escaping ([Album]) -> Void) {
         workQueue.async {
             var results = [Album]()
             let options = PHFetchOptions()
-            if !allowPickingVideo {
+            if !self.config.selectOptions.contains(.video) {
                 options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
             }
-            if !allowPickingImage {
+            if !self.config.selectOptions.contains(.photo) {
                 options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
             }
-            if !self.sortAscendingByModificationDate {
-                let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: self.sortAscendingByModificationDate)
+            if self.config.orderByDate == .desc {
+                let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
                 options.sortDescriptors = [sortDescriptor]
             }
             
@@ -114,12 +115,12 @@ extension PhotoManager {
                     
                     if isCameraRoll {
                         if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: needFetchAssets)
+                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: true)
                             results.insert(album, at: 0)
                         }
                     } else {
                         if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, needFetchAssets: needFetchAssets)
+                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, needFetchAssets: true)
                             results.append(album)
                         }
                     }

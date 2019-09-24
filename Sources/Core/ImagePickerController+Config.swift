@@ -23,10 +23,19 @@ extension ImagePickerController {
         public var allowUseOriginPhoto: Bool = true
         /// 可选择的类型，默认可选择图片+视频
         public var selectOptions: SelectOptions = [.photo, .video]
+        /// 按日期排序
+        public var orderByDate: Sort = .asc
         
         public init() {
             
         }
+    }
+    
+    public enum Sort: Equatable {
+        /// 升序
+        case asc
+        /// 降序
+        case desc
     }
     
     public struct SelectOptions: OptionSet {

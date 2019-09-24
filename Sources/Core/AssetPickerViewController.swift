@@ -84,7 +84,7 @@ extension AssetPickerViewController {
     
     private func loadDefaultAlbumIfNeeded() {
         guard album == nil else { return }
-        PhotoManager.shared.fetchCameraRollAlbum(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: true) { [weak self] album in
+        PhotoManager.shared.fetchCameraRollAlbum { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
             self.autoScrollToBottom = true
@@ -92,9 +92,9 @@ extension AssetPickerViewController {
     }
     
     private func preLoadAlbums() {
-        PhotoManager.shared.fetchAllAlbums(allowPickingVideo: true, allowPickingImage: true, needFetchAssets: false) { [weak self] fetchedAlbums in
+        PhotoManager.shared.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
-            self.albums = fetchedAlbums
+            self.albums = albums
         }
     }
     
@@ -144,7 +144,7 @@ extension AssetPickerViewController {
     @objc private func selectButtonTapped(_ sender: UIButton) {
         guard let album = album else { return }
         let asset = album.assets[sender.tag]
-        if !asset.isSelected && PhotoManager.shared.isSelectAll {
+        if !asset.isSelected && PhotoManager.shared.isMaxCount {
             let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.maxCount)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
@@ -207,7 +207,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let album = album else { return }
-        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isSelectAll { return }
+        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isMaxCount { return }
         
         let controller = PhotoPreviewController()
         controller.currentIndex = indexPath.item
