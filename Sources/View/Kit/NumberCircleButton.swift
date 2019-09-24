@@ -21,7 +21,7 @@ final class NumberCircleButton: UIControl {
         view.clipsToBounds = true
         view.textColor = UIColor.white
         view.textAlignment = .center
-        view.backgroundColor = UIColor.wechat_green
+        view.backgroundColor = PhotoManager.shared.config.theme.mainColor
         return view
     }()
     

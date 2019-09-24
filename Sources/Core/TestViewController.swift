@@ -48,7 +48,7 @@ final public class TestViewController: UIViewController {
 //        vc.dataSource = self
 //        present(vc, animated: true, completion: nil)
         
-        let controller = ImagePickerController(maxCount: 1, columnNumber: 4, delegate: self)
+        let controller = ImagePickerController(config: ImagePickerController.Config(), delegate: self)
         present(controller, animated: true, completion: nil)
 //        navigationController?.pushViewController(controller, animated: true)
     }

@@ -14,6 +14,11 @@ final class PhotoManager {
     static let shared: PhotoManager = PhotoManager()
     
     var sortAscendingByModificationDate: Bool = true
+    var config = ImagePickerController.Config()
+    
+    var isSelectAll: Bool {
+        return selectdAsset.count == config.maxCount
+    }
     
     /// 已选中的资源
     private(set) var selectdAsset: [Asset] = []
@@ -42,7 +47,7 @@ extension PhotoManager {
         if cacheList.contains(where: { $0.0 == identifier }) {
             return
         }
-        if cacheList.count > 9 { // TODO
+        if cacheList.count > PhotoManager.shared.config.maxCount {
             cacheList.removeFirst()
         }
         cacheList.append((identifier, image))

@@ -11,3 +11,6 @@
 "Edit" = "Edit";
 "Preview" = "Preview";
 "Cancel" = "Cancel";
+"Alert" = "Alert";
+"OK" = "OK";
+"Select a maximum of %zd photos" = "Select a maximum of %zd photos";

@@ -21,6 +21,23 @@ extension UIColor {
         let b = CGFloat((hex & 0x0000FF))
         return color(r: r, g: g, b: b, a: alpha)
     }
+    
+    /// 创建动态 UIColor 的方法
+    /// - Parameter lightColor: light 模式下的颜色
+    /// - Parameter darkColor: dark 模式下的颜色，低于 iOS 13.0 不生效
+    static func create(light lightColor: UIColor, dark darkColor: UIColor?) -> UIColor {
+        if #available(iOS 13.0, *) {
+            return UIColor { (traitCollection) -> UIColor in
+                if let darkColor = darkColor, traitCollection.userInterfaceStyle == .dark {
+                    return darkColor
+                } else {
+                    return lightColor
+                }
+            }
+        } else {
+            return lightColor
+        }
+    }
 }
 
 // MARK: - Wechat Theme
@@ -28,15 +45,32 @@ extension UIColor {
 
 extension UIColor {
     
-    static var wechat_green: UIColor { UIColor.color(hex: 0x57BE6A) }
+    static var wechatGreen: UIColor {
+        return UIColor.create(light: .green, dark: UIColor.color(hex: 0x57BE6A))
+    }
     
-    static var wechat_dark_text: UIColor { UIColor.color(hex: 0xEAEAEA) }
+    static var wechatText: UIColor {
+        return UIColor.create(light: .black, dark: UIColor.color(hex: 0xEAEAEA))
+    }
     
-    static var wechat_dark_subText: UIColor { UIColor.color(hex: 0x6E6E6E) }
+    static var wechatSubText: UIColor {
+        return UIColor.create(light: .black, dark: UIColor.color(hex: 0x6E6E6E))
+    }
     
-    static var wechat_dark_background: UIColor { UIColor.color(hex: 0x31302F) }
+    static var wechatBackground: UIColor {
+        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x31302F))
+    }
     
-    static var wechat_dark_background_selected: UIColor { UIColor.color(hex: 0x171717) }
+    static var wechatBackgroundSelected: UIColor {
+        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x171717))
+    }
     
-    static var wechat_dark_separatorLine: UIColor { UIColor.color(hex: 0x454444) }
+    static var wechatSeparatorLine: UIColor {
+        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x454444))
+    }
+    
+    static var wechatToolBar: UIColor {
+        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x5C5C5C))
+    }
+    
 }
