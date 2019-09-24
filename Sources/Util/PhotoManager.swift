@@ -26,6 +26,7 @@ final class PhotoManager {
     
     /// 缓存
     private var cacheList = [(String, UIImage)]()
+    private var cacheList2 = [(String, UIImage)]()
     
     private init() { }
     
@@ -40,18 +41,38 @@ extension PhotoManager {
         cacheList.removeAll()
     }
     
-    func readCache(for identifier: String) -> UIImage? {
-        return cacheList.first(where: { $0.0 == identifier })?.1
+    func readCache(for identifier: String, sizeMode: PhotoSizeMode) -> UIImage? {
+        switch sizeMode {
+        case .original:
+            return cacheList2.first(where: { $0.0 == identifier })?.1
+        case .preview:
+            return cacheList.first(where: { $0.0 == identifier })?.1
+        case .resize:
+            return nil
+        }
     }
     
-    private func writeCache(image: UIImage, for identifier: String) {
-        if cacheList.contains(where: { $0.0 == identifier }) {
-            return
+    private func writeCache(image: UIImage, sizeMode: PhotoSizeMode, for identifier: String) {
+        switch sizeMode {
+        case .original:
+            if !selectdAsset.contains(where: { $0.asset.localIdentifier == identifier }) {
+                return
+            }
+            if cacheList2.contains(where: { $0.0 == identifier }) {
+                return
+            }
+            cacheList2.append((identifier, image))
+        case .preview:
+            if cacheList.contains(where: { $0.0 == identifier }) {
+                return
+            }
+            if cacheList.count > PhotoManager.shared.config.maxCount {
+                cacheList.removeFirst()
+            }
+            cacheList.append((identifier, image))
+        case .resize:
+            break
         }
-        if cacheList.count > PhotoManager.shared.config.maxCount {
-            cacheList.removeFirst()
-        }
-        cacheList.append((identifier, image))
     }
 }
 
@@ -135,22 +156,28 @@ extension PhotoManager {
 
 struct PhotoFetchOptions {
     
-    var sizeMode: SizeMode = .resize(100)
+    var sizeMode: PhotoSizeMode = .resize(100)
     var isNetworkAccessAllowed: Bool = true
     var progressHandler: PHAssetImageProgressHandler? = nil
+}
+
+enum PhotoSizeMode: Equatable {
     
-    enum SizeMode: Equatable {
-        
-        case resize(CGFloat)
-        case original
-        
-        var targetSize: CGSize {
-            switch self {
-            case .resize(let width):
-                return CGSize(width: width, height: width)
-            case .original:
-                return PHImageManagerMaximumSize
-            }
+    case resize(CGFloat)
+    case preview
+    case original
+    
+    var targetSize: CGSize {
+        switch self {
+        case .resize(let width):
+            return CGSize(width: width, height: width)
+        case .preview:
+            let width = UIScreen.main.bounds.width
+            let scale = UIScreen.main.nativeScale
+            let screenWidth = width * scale
+            return CGSize(width: screenWidth, height: screenWidth)
+        case .original:
+            return PHImageManagerMaximumSize
         }
     }
 }
@@ -196,9 +223,15 @@ extension PhotoManager {
                 switch options.sizeMode {
                 case .original:
                     if !isDegraded {
-                        self.writeCache(image: image, for: asset.localIdentifier)
+                        self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
                     }
                     completion(.success((image, isDegraded)))
+                case .preview:
+                    let resizedImage = UIImage.resize(from: image, size: options.sizeMode.targetSize)
+                    if !isDegraded {
+                        self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
+                    }
+                    completion(.success((resizedImage, isDegraded)))
                 case .resize:
                     let resizedImage = UIImage.resize(from: image, size: options.sizeMode.targetSize)
                     completion(.success((resizedImage, isDegraded)))
@@ -223,6 +256,14 @@ extension PhotoManager {
                                 completion(.failure(.invalidData))
                                 return
                             }
+                            self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
+                            completion(.success((image, false)))
+                        case .preview:
+                            guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                completion(.failure(.invalidData))
+                                return
+                            }
+                            self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
                             completion(.success((image, false)))
                         case .resize:
                             guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
@@ -276,8 +317,18 @@ extension PhotoManager {
         // 加载原图，缓存到内存
         workQueue.async { [weak self] in
             guard let self = self else { return }
-            let options = PhotoFetchOptions(sizeMode: .original)
-            self.requestImage(for: asset.asset, options: options) { _ in }
+            let options = PhotoFetchOptions(sizeMode: .preview)
+            self.requestImage(for: asset.asset, options: options) { result in
+                switch result {
+                case .success(let response):
+                    if !response.isDegraded {
+                        let options2 = PhotoFetchOptions(sizeMode: .original)
+                        self.requestImage(for: asset.asset, options: options2) { _ in }
+                    }
+                case .failure:
+                    break
+                }
+            }
         }
     }
     

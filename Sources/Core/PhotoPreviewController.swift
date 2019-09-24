@@ -298,11 +298,11 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         
         // 加载图片
         if let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) {
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier, sizeMode: .preview) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
-                let options = PhotoFetchOptions(sizeMode: .original)
+                let options = PhotoFetchOptions(sizeMode: .preview)
                 PhotoManager.shared.requestImage(for: data.asset.asset, options: options) { result in
                     switch result {
                     case .success(let response):
