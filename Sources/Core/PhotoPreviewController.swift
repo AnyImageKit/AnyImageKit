@@ -298,7 +298,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         
         // 加载图片
         if let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) {
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier, sizeMode: .preview) {
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)

@@ -26,7 +26,6 @@ final class PhotoManager {
     
     /// 缓存
     private var cacheList = [(String, UIImage)]()
-    private var cacheList2 = [(String, UIImage)]()
     
     private init() { }
     
@@ -41,38 +40,24 @@ extension PhotoManager {
         cacheList.removeAll()
     }
     
-    func readCache(for identifier: String, sizeMode: PhotoSizeMode) -> UIImage? {
-        switch sizeMode {
-        case .original:
-            return cacheList2.first(where: { $0.0 == identifier })?.1
-        case .preview:
-            return cacheList.first(where: { $0.0 == identifier })?.1
-        case .resize:
-            return nil
+    private func removeCache(for identifier: String) {
+        if let index = cacheList.firstIndex(where: { $0.0 == identifier }) {
+            cacheList.remove(at: index)
         }
     }
     
-    private func writeCache(image: UIImage, sizeMode: PhotoSizeMode, for identifier: String) {
-        switch sizeMode {
-        case .original:
-            if !selectdAsset.contains(where: { $0.asset.localIdentifier == identifier }) {
-                return
-            }
-            if cacheList2.contains(where: { $0.0 == identifier }) {
-                return
-            }
-            cacheList2.append((identifier, image))
-        case .preview:
-            if cacheList.contains(where: { $0.0 == identifier }) {
-                return
-            }
-            if cacheList.count > PhotoManager.shared.config.maxCount {
-                cacheList.removeFirst()
-            }
-            cacheList.append((identifier, image))
-        case .resize:
-            break
+    func readCache(for identifier: String) -> UIImage? {
+        return cacheList.first(where: { $0.0 == identifier })?.1
+    }
+    
+    func writeCache(image: UIImage, for identifier: String) {
+        if cacheList.contains(where: { $0.0 == identifier }) {
+            return
         }
+        if cacheList.count > PhotoManager.shared.config.maxCount {
+            cacheList.removeFirst()
+        }
+        cacheList.append((identifier, image))
     }
 }
 
@@ -222,14 +207,11 @@ extension PhotoManager {
             if isDownload, let image = image {
                 switch options.sizeMode {
                 case .original:
-                    if !isDegraded {
-                        self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
-                    }
                     completion(.success((image, isDegraded)))
                 case .preview:
                     let resizedImage = UIImage.resize(from: image, size: options.sizeMode.targetSize)
                     if !isDegraded {
-                        self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
+                        self.writeCache(image: image, for: asset.localIdentifier)
                     }
                     completion(.success((resizedImage, isDegraded)))
                 case .resize:
@@ -256,14 +238,13 @@ extension PhotoManager {
                                 completion(.failure(.invalidData))
                                 return
                             }
-                            self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
                             completion(.success((image, false)))
                         case .preview:
                             guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
                                 completion(.failure(.invalidData))
                                 return
                             }
-                            self.writeCache(image: image, sizeMode: options.sizeMode, for: asset.localIdentifier)
+                            self.writeCache(image: image, for: asset.localIdentifier)
                             completion(.success((image, false)))
                         case .resize:
                             guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
