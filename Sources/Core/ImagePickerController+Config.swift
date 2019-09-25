@@ -20,7 +20,7 @@ extension ImagePickerController {
         /// 导出图片的宽度
         public var photoWidth: Int = 1200
         /// 是否显示原图
-        public var allowUseOriginPhoto: Bool = true
+        public var allowUseOriginalPhoto: Bool = true
         /// 可选择的类型，默认可选择图片+视频
         public var selectOptions: SelectOptions = [.photo, .video]
         /// 按日期排序

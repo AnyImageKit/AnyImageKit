@@ -39,7 +39,10 @@ final class AssetPickerViewController: UIViewController {
     private(set) lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .picker)
         view.leftButton.isEnabled = false
+        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalPhoto
+        view.originalButton.isSelected = PhotoManager.shared.isOriginalPhoto
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.addTarget(self, action: #selector(originalPhotoButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -172,6 +175,10 @@ extension AssetPickerViewController {
         present(controller, animated: true, completion: nil)
     }
     
+    @objc private func originalPhotoButtonTapped(_ sender: OriginalButton) {
+        PhotoManager.shared.isOriginalPhoto = sender.isSelected
+    }
+    
     @objc private func doneButtonTapped(_ sender: UIButton) {
         
     }
@@ -270,5 +277,9 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
         updateVisibleCellState()
+    }
+    
+    func previewController(_ controller: PhotoPreviewController, useOriginalPhoto: Bool) {
+        toolBar.originalButton.isSelected = useOriginalPhoto
     }
 }

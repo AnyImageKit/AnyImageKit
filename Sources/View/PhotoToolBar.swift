@@ -96,7 +96,9 @@ final class PhotoToolBar: UIView {
 
     public func hiddenEditAndOriginalButton(_ hidden: Bool) {
         leftButton.isHidden = hidden
-        originalButton.isHidden = hidden
+        if PhotoManager.shared.config.allowUseOriginalPhoto {
+            originalButton.isHidden = hidden
+        }
     }
 }
 

@@ -10,6 +10,12 @@ import UIKit
 
 final class OriginalButton: UIControl {
 
+    override var isSelected: Bool {
+        didSet {
+            circleView.isSelected = isSelected
+        }
+    }
+    
     private var circleView: CircleView = {
         let view = CircleView(frame: .zero)
         view.isUserInteractionEnabled = false

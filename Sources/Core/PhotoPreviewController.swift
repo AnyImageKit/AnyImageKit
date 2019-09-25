@@ -40,7 +40,7 @@ final class PhotoPreviewController: UIViewController {
     /// 缩放型转场协调器
     private weak var scalePresentationController: ScalePresentationController?
     /// 保存原windowLevel
-    private lazy var originWindowLevel: UIWindow.Level? = { [weak self] in
+    private lazy var originalWindowLevel: UIWindow.Level? = { [weak self] in
         let window = self?.view.window ?? UIApplication.shared.keyWindow
         return window?.windowLevel
     }()
@@ -72,8 +72,10 @@ final class PhotoPreviewController: UIViewController {
     }()
     private lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .preview)
+        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalPhoto
+        view.originalButton.isSelected = PhotoManager.shared.isOriginalPhoto
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
-        view.originalButton.addTarget(self, action: #selector(originalButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.addTarget(self, action: #selector(originalPhotoButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -201,13 +203,13 @@ extension PhotoPreviewController {
         guard let window = view.window ?? UIApplication.shared.keyWindow else {
             return
         }
-        if originWindowLevel == nil {
-            originWindowLevel = window.windowLevel
+        if originalWindowLevel == nil {
+            originalWindowLevel = window.windowLevel
         }
-        guard let originLevel = originWindowLevel else {
+        guard let originalLevel = originalWindowLevel else {
             return
         }
-        window.windowLevel = cover ? UIWindow.Level.statusBar + 1 : originLevel
+        window.windowLevel = cover ? UIWindow.Level.statusBar + 1 : originalLevel
     }
     
     private func didSetCurrentIdx() {
@@ -264,8 +266,9 @@ extension PhotoPreviewController {
     }
     
     /// ToolBar - Original
-    @objc private func originalButtonTapped(_ sender: UIButton) {
-        
+    @objc private func originalPhotoButtonTapped(_ sender: OriginalButton) {
+        PhotoManager.shared.isOriginalPhoto = sender.isSelected
+        delegate?.previewController(self, useOriginalPhoto: sender.isSelected)
     }
     
     /// ToolBar - Done
