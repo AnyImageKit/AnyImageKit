@@ -29,6 +29,7 @@
 		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
 		A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A5601D3A233B0F6200D0E95E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A5601D39233B0F6200D0E95E /* SnapKit */; };
+		A5601D51233B3FC400D0E95E /* StatusBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */; };
 		A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */; };
 		A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */; };
 		A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */; };
@@ -123,6 +124,7 @@
 		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
 		A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditViewController.swift; sourceTree = "<group>"; };
 		A5601D4F233B0FE500D0E95E /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
+		A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarHelper.swift; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
 		A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalePresentationController.swift; sourceTree = "<group>"; };
 		A56A3C7D233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			children = (
 				A0800414232F5F7A006B4711 /* PhotoManager.swift */,
 				A5A27BCA232F884F00D966B8 /* BundleHelper.swift */,
+				A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,
+				A5601D51233B3FC400D0E95E /* StatusBarHelper.swift in Sources */,
 				A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */,
 				A56A3C8E2330BCB000EBFC48 /* PhotoToolBar.swift in Sources */,
 			);

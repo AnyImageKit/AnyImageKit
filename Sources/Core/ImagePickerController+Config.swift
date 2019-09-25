@@ -94,17 +94,14 @@ extension ImagePickerController {
             switch self {
             case .auto:
                 if #available(iOS 13.0, *) {
-                    if let style = UIApplication.shared.keyWindow?.traitCollection.userInterfaceStyle {
-                        switch style {
-                        case .light:
-                            return .light
-                        case .dark:
-                            return .dark
-                        default:
-                            return .light
-                        }
+                    switch UITraitCollection.current.userInterfaceStyle {
+                    case .light:
+                        return .light
+                    case .dark:
+                        return .dark
+                    default:
+                        return .light
                     }
-                    return .light
                 } else {
                     return .light
                 }

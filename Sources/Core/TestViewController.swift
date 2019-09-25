@@ -49,6 +49,7 @@ final public class TestViewController: UIViewController {
 //        present(vc, animated: true, completion: nil)
         
         let controller = ImagePickerController(config: ImagePickerController.Config(), delegate: self)
+//        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
 //        navigationController?.pushViewController(controller, animated: true)
     }

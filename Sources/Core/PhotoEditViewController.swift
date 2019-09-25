@@ -81,7 +81,7 @@ final class PhotoEditViewController: UIViewController {
     
     private lazy var topCoverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight = StatusBarHelper.height
         layer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight + 120)
         layer.colors = [
             UIColor.black.withAlphaComponent(0.12).cgColor,

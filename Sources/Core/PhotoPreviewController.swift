@@ -41,7 +41,7 @@ final class PhotoPreviewController: UIViewController {
     private weak var scalePresentationController: ScalePresentationController?
     /// 保存原windowLevel
     private lazy var originalWindowLevel: UIWindow.Level? = { [weak self] in
-        let window = self?.view.window ?? UIApplication.shared.keyWindow
+        let window = self?.view.window
         return window?.windowLevel
     }()
     
@@ -159,11 +159,19 @@ extension PhotoPreviewController {
         navigationBar.snp.makeConstraints { (maker) in
             maker.top.equalToSuperview()
             maker.left.right.equalToSuperview()
-            maker.bottom.equalTo(topLayoutGuide.snp.bottom).offset(44)
+            if #available(iOS 11, *) {
+                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
+            } else {
+                maker.bottom.equalTo(topLayoutGuide.snp.bottom).offset(44)
+            }
         }
         toolBar.snp.makeConstraints { (maker) in
             maker.left.right.bottom.equalToSuperview()
-            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+            if #available(iOS 11, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
+            } else {
+                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+            }
         }
         indexView.snp.makeConstraints { (maker) in
             maker.left.right.equalToSuperview()
@@ -200,7 +208,7 @@ extension PhotoPreviewController {
     /// 遮盖状态栏。以改变 windowLevel 的方式遮盖
     /// - parameter cover: true-遮盖；false-不遮盖
     private func coverStatusBar(_ cover: Bool) {
-        guard let window = view.window ?? UIApplication.shared.keyWindow else {
+        guard let window = view.window else {
             return
         }
         if originalWindowLevel == nil {

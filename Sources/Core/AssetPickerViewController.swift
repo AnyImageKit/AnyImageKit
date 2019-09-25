@@ -81,7 +81,11 @@ final class AssetPickerViewController: UIViewController {
             maker.edges.equalToSuperview()
         }
         toolBar.snp.makeConstraints { maker in
-            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+            if #available(iOS 11, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
+            } else {
+                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+            }
             maker.left.right.bottom.equalToSuperview()
         }
     }
@@ -135,10 +139,11 @@ extension AssetPickerViewController {
     
     @objc private func titleViewTapped(_ sender: ArrowButton) {
         let controller = AlbumPickerViewController()
+        controller.album = album
         controller.albums = albums
         controller.delegate = self
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight = StatusBarHelper.height
         let isFullScreen = UIScreen.main.bounds.height == view.frame.height
         presentationController.navigationHeight = UIScreen.main.bounds.height - (view.frame.height - (navigationController?.navigationBar.bounds.height ?? 0)) + (isFullScreen ? statusBarHeight : 0)
         presentationController.cornerRadius = 8
