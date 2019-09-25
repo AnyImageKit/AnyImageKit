@@ -183,7 +183,7 @@ extension PhotoManager {
     
     @discardableResult
     func requestImage(from album: Album, completion: @escaping PhotoFetchCompletion) -> PHImageRequestID {
-        if let asset = album.result.lastObject {
+        if let asset = config.orderByDate == .asc ? album.result.lastObject : album.result.firstObject {
             let sacle = UIScreen.main.nativeScale
             let options = PhotoFetchOptions(sizeMode: .resize(55*sacle))
             return requestImage(for: asset, options: options, completion: completion)

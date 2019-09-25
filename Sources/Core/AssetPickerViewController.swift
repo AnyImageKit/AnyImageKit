@@ -15,7 +15,7 @@ final class AssetPickerViewController: UIViewController {
     private var album: Album?
     private var albums = [Album]()
     
-    private var autoScrollToBottom: Bool = false
+    private var autoScrollToLatest: Bool = false
     
     private lazy var titleView: ArrowButton = {
         let view = ArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
@@ -58,9 +58,13 @@ final class AssetPickerViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.contentInset.bottom = 56+defaultAssetSpacing
-        if autoScrollToBottom {
-            collectionView.scrollToLast(at: .bottom, animated: false)
-            autoScrollToBottom = false
+        if autoScrollToLatest {
+            if PhotoManager.shared.config.orderByDate == .asc {
+                collectionView.scrollToLast(at: .bottom, animated: false)
+            } else {
+                collectionView.scrollToFirst(at: .top, animated: false)
+            }
+            autoScrollToLatest = false
         }
     }
     
@@ -90,7 +94,7 @@ extension AssetPickerViewController {
         PhotoManager.shared.fetchCameraRollAlbum { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
-            self.autoScrollToBottom = true
+            self.autoScrollToLatest = true
         }
     }
     
@@ -107,7 +111,11 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         album.fetchAssets()
         collectionView.reloadData()
-        collectionView.scrollToLast(at: .bottom, animated: false)
+        if PhotoManager.shared.config.orderByDate == .asc {
+            collectionView.scrollToLast(at: .bottom, animated: false)
+        } else {
+            collectionView.scrollToFirst(at: .top, animated: false)
+        }
         PhotoManager.shared.removeAllSelectedAsset()
     }
     

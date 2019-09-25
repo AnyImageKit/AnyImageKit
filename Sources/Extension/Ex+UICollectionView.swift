@@ -26,6 +26,13 @@ extension UICollectionView {
 
 extension UICollectionView {
     
+    func scrollToFirst(at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+        guard numberOfSections > 0 else { return }
+        guard numberOfItems(inSection: 0) > 0 else { return }
+        let indexPath = IndexPath(item: 0, section: 0)
+        scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+    }
+    
     func scrollToLast(at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
         guard numberOfSections > 0 else { return }
         let lastSection = numberOfSections - 1
