@@ -306,7 +306,9 @@ extension PhotoPreviewController: UICollectionViewDataSource {
                 PhotoManager.shared.requestImage(for: data.asset.asset, options: options) { result in
                     switch result {
                     case .success(let response):
-                        cell.setImage(response.image)
+                        if !response.isDegraded {
+                            cell.setImage(response.image)
+                        }
                     case .failure(let error):
                         print(error)
                     }
