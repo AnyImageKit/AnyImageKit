@@ -16,7 +16,7 @@ struct StatusBarHelper {
                 return windowScene.statusBarManager?.statusBarFrame.height ?? defaultHeight
             } else {
                 // Should never use this code.
-                return UIApplication.shared.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? defaultHeight
+                return defaultHeight
             }
         } else {
             return UIApplication.shared.statusBarFrame.height

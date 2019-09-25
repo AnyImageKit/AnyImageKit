@@ -81,7 +81,11 @@ final class AssetPickerViewController: UIViewController {
             maker.edges.equalToSuperview()
         }
         toolBar.snp.makeConstraints { maker in
-            maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+            if #available(iOS 11, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
+            } else {
+                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+            }
             maker.left.right.bottom.equalToSuperview()
         }
     }
