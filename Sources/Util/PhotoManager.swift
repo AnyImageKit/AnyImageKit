@@ -227,31 +227,61 @@ extension PhotoManager {
                     requestOptions2.progressHandler = options.progressHandler
                     requestOptions2.isNetworkAccessAllowed = options.isNetworkAccessAllowed
                     requestOptions2.resizeMode = .fast
-                    PHImageManager.default().requestImageData(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
-                        guard let data = data else {
-                            completion(.failure(.invalidData))
-                            return
+                    if #available(iOS 13, *) {
+                        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
+                            guard let data = data else {
+                                completion(.failure(.invalidData))
+                                return
+                            }
+                            switch options.sizeMode {
+                            case .original:
+                                guard let image = UIImage(data: data) else {
+                                    completion(.failure(.invalidData))
+                                    return
+                                }
+                                completion(.success((image, false)))
+                            case .preview:
+                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                    completion(.failure(.invalidData))
+                                    return
+                                }
+                                self.writeCache(image: image, for: asset.localIdentifier)
+                                completion(.success((image, false)))
+                            case .resize:
+                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                    completion(.failure(.invalidData))
+                                    return
+                                }
+                                completion(.success((image, false)))
+                            }
                         }
-                        switch options.sizeMode {
-                        case .original:
-                            guard let image = UIImage(data: data) else {
+                    } else {
+                        PHImageManager.default().requestImageData(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
+                            guard let data = data else {
                                 completion(.failure(.invalidData))
                                 return
                             }
-                            completion(.success((image, false)))
-                        case .preview:
-                            guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
-                                completion(.failure(.invalidData))
-                                return
+                            switch options.sizeMode {
+                            case .original:
+                                guard let image = UIImage(data: data) else {
+                                    completion(.failure(.invalidData))
+                                    return
+                                }
+                                completion(.success((image, false)))
+                            case .preview:
+                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                    completion(.failure(.invalidData))
+                                    return
+                                }
+                                self.writeCache(image: image, for: asset.localIdentifier)
+                                completion(.success((image, false)))
+                            case .resize:
+                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                    completion(.failure(.invalidData))
+                                    return
+                                }
+                                completion(.success((image, false)))
                             }
-                            self.writeCache(image: image, for: asset.localIdentifier)
-                            completion(.success((image, false)))
-                        case .resize:
-                            guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
-                                completion(.failure(.invalidData))
-                                return
-                            }
-                            completion(.success((image, false)))
                         }
                     }
                 }
@@ -272,19 +302,19 @@ enum DataUTI {
     case other(String)
 }
 
-struct DataFetchOptions {
+struct ImageDataFetchOptions {
     
     var isNetworkAccessAllowed: Bool = true
     var progressHandler: PHAssetImageProgressHandler? = nil
 }
 
 
-typealias DataFetchResponse = (data: Data, uti: DataUTI, url: URL)
-typealias DataFetchCompletion = (Result<DataFetchResponse, ImagePickerError>) -> Void
+typealias ImageDataFetchResponse = (image: UIImage, url: URL, uti: DataUTI)
+typealias ImageDataFetchCompletion = (Result<ImageDataFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
-    func requestData(for asset: PHAsset, options: DataFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) {
+    func requestImageData(for asset: PHAsset, options: ImageDataFetchOptions = .init(), completion: @escaping ImageDataFetchCompletion) {
         
         
     }
