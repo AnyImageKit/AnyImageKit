@@ -139,7 +139,7 @@ extension AssetPickerViewController {
         controller.albums = albums
         controller.delegate = self
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight = StatusBarHelper.height
         let isFullScreen = UIScreen.main.bounds.height == view.frame.height
         presentationController.navigationHeight = UIScreen.main.bounds.height - (view.frame.height - (navigationController?.navigationBar.bounds.height ?? 0)) + (isFullScreen ? statusBarHeight : 0)
         presentationController.cornerRadius = 8
