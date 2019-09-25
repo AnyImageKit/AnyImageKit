@@ -47,8 +47,6 @@ final class AlbumCell: UITableViewCell {
     }
     
     private func setupView() {
-        // Accessory Type
-        accessoryType = .checkmark
         tintColor = PhotoManager.shared.config.theme.mainColor
         // Background Color
         backgroundColor = PhotoManager.shared.config.theme.backgroundColor

@@ -135,6 +135,7 @@ extension AssetPickerViewController {
     
     @objc private func titleViewTapped(_ sender: ArrowButton) {
         let controller = AlbumPickerViewController()
+        controller.album = album
         controller.albums = albums
         controller.delegate = self
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)

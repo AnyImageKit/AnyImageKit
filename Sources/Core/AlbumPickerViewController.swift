@@ -17,6 +17,7 @@ protocol AlbumPickerViewControllerDelegate: class {
 final class AlbumPickerViewController: UIViewController {
     
     weak var delegate: AlbumPickerViewControllerDelegate?
+    var album: Album?
     var albums = [Album]()
     
     private(set) lazy var tableView: UITableView = {
@@ -89,6 +90,7 @@ extension AlbumPickerViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
         let album = albums[indexPath.row]
         cell.setContent(album)
+        cell.accessoryType = self.album == album ? .checkmark : .none
         return cell
     }
 }
