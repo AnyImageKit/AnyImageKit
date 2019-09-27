@@ -318,7 +318,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             } else {
                 cell.setImage(data.thumbnail)
                 let options = PhotoFetchOptions(sizeMode: .preview)
-                PhotoManager.shared.requestImage(for: data.asset.asset, options: options) { result in
+                PhotoManager.shared.requestPhoto(for: data.asset.asset, options: options) { result in
                     switch result {
                     case .success(let response):
                         if !response.isDegraded {

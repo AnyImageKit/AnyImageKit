@@ -505,9 +505,7 @@ extension AnimatedImageView {
                 return nil
             }
 
-            let image = UIImage(cgImage: cgImage)
-            return image
-//            return backgroundDecode ? image.kf.decoded : image
+            return UIImage(cgImage: cgImage)
         }
         
         private func updatePreloadedFrames() {
