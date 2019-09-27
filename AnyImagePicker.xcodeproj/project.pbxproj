@@ -60,6 +60,7 @@
 		A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BD3232F89E800D966B8 /* TestViewController.swift */; };
 		A5CC86C123349D4B00BCB372 /* PhotoPreviewIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */; };
 		A5CEB00D233DAF4700C67706 /* PhotoGIFPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */; };
+		A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +161,7 @@
 		A5A27BD3232F89E800D966B8 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewIndexView.swift; sourceTree = "<group>"; };
 		A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGIFPreviewCell.swift; sourceTree = "<group>"; };
+		A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +326,7 @@
 		A56A3C7F23307C9C00EBFC48 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */,
 				A56A3C8023307F7D00EBFC48 /* PhotoPreviewCell.swift */,
 				A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */,
 				A56A3C8223307F8A00EBFC48 /* VideoPreviewCell.swift */,
@@ -582,6 +585,7 @@
 				A59332622338AED8003CE652 /* AnimatedImage.swift in Sources */,
 				A5A27BD4232F89E900D966B8 /* TestViewController.swift in Sources */,
 				A56A3C7E233075D500EBFC48 /* PhotoPreviewControllerDelegate.swift in Sources */,
+				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
 				A5A27BCB232F884F00D966B8 /* BundleHelper.swift in Sources */,
 				A00869BD233C987600237651 /* AssociatedObject.swift in Sources */,
 				A5601D51233B3FC400D0E95E /* StatusBarHelper.swift in Sources */,
