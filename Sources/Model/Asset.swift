@@ -46,7 +46,7 @@ extension Asset {
 //                if asset.mediaSubtypes == .photoLive { // not support live photo
 //                    self = .photoLive
 //                }
-                if let fileName = asset.value(forKey: "filename") as? String, fileName.hasSuffix("GIF") {
+                if asset.isGIF {
                     self = .photoGif
                 } else {
                     self = .photo
