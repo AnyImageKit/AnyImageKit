@@ -142,6 +142,7 @@ open class AnimatedImageView: UIImageView {
     public var repeatCount = RepeatCount.infinite {
         didSet {
             if oldValue != repeatCount {
+                reset()
                 setNeedsDisplay()
                 layer.setNeedsDisplay()
             }
@@ -176,6 +177,9 @@ open class AnimatedImageView: UIImageView {
     // MARK: - Override
     override open var image: UIImage? {
         didSet {
+            if image != oldValue {
+                reset()
+            }
             setNeedsDisplay()
             layer.setNeedsDisplay()
         }
@@ -228,6 +232,28 @@ open class AnimatedImageView: UIImageView {
     
     override open func didMoveToSuperview() {
         super.didMoveToSuperview()
+        didMove()
+    }
+
+    // Reset the animator.
+    private func reset() {
+        animator = nil
+        if let imageSource = image?._imageSource {
+            let scale = UIScreen.main.scale
+            let targetSize = CGSize(width: bounds.width*scale, height: bounds.height*scale)
+            let animator = Animator(
+                imageSource: imageSource,
+                contentMode: contentMode,
+                size: targetSize,
+                framePreloadCount: framePreloadCount,
+                repeatCount: repeatCount,
+                preloadQueue: preloadQueue)
+            animator.delegate = self
+            animator.needsPrescaling = needsPrescaling
+            animator.backgroundDecode = backgroundDecode
+            animator.prepareFramesAsynchronously()
+            self.animator = animator
+        }
         didMove()
     }
     
@@ -481,7 +507,6 @@ extension AnimatedImageView {
 
             let image = UIImage(cgImage: cgImage)
             return image
-            // TODO: 可能有问题
 //            return backgroundDecode ? image.kf.decoded : image
         }
         

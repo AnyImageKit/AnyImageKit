@@ -59,6 +59,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerCell(PhotoPreviewCell.self)
+        collectionView.registerCell(PhotoGIFPreviewCell.self)
         collectionView.registerCell(VideoPreviewCell.self)
         collectionView.isPagingEnabled = true
         collectionView.alwaysBounceVertical = false
@@ -301,14 +302,17 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
-        cell.imageView.contentMode = imageScaleMode
-        cell.delegate = self
-        cell.imageMaximumZoomScale = imageMaximumZoomScale
-        cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-        
-        // 加载图片
-        if let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) {
+        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
+
+        switch data.asset.type {
+        case .photo:
+            let cell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
+            cell.imageView.contentMode = imageScaleMode
+            cell.delegate = self
+            cell.imageMaximumZoomScale = imageMaximumZoomScale
+            cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+            
+            // 加载图片
             if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
@@ -325,13 +329,45 @@ extension PhotoPreviewController: UICollectionViewDataSource {
                     }
                 }
             }
+            return cell
+        case .photoGif:
+            let cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
+            let options = PhotoGIFFetchOptions()
+            PhotoManager.shared.requsetPhotoGIF(for: data.asset.asset, options: options) { (result) in
+                switch result {
+                case .success(let response):
+                    cell.imageView.image = response
+                    if collectionView.visibleCells.count > 1 {
+                        cell.imageView.stopAnimating()
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            return cell
+        case .video:
+            break
+        default:
+            break
         }
-        return cell
+        return UICollectionViewCell()
     }
 }
 
 extension PhotoPreviewController: UIScrollViewDelegate {
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if let cell = collectionView.visibleCells.first as? PhotoGIFPreviewCell {
+            cell.imageView.stopAnimating()
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let cell = collectionView.visibleCells.first as? PhotoGIFPreviewCell {
+            cell.imageView.startAnimating()
+        }
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         var idx = Int(scrollView.contentOffset.x / scrollView.bounds.width)
         let x = scrollView.contentOffset.x.truncatingRemainder(dividingBy: scrollView.bounds.width)

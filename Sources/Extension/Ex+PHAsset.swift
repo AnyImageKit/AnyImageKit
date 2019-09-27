@@ -12,15 +12,11 @@ import MobileCoreServices
 extension PHAsset {
     
     var isGIF: Bool {
-        guard let resource = PHAssetResource.assetResources(for: self).first else {
-            if let fileName = value(forKey: "filename") as? String {
-                return fileName.hasSuffix("GIF")
-            } else {
-                return false
-            }
+        if let fileName = value(forKey: "filename") as? String {
+            return fileName.hasSuffix("GIF")
+        } else {
+            return false
         }
-        let uti = resource.uniformTypeIdentifier
-        return UTTypeConformsTo(uti as CFString, kUTTypeGIF)
     }
     
     var videoDuration: String {
