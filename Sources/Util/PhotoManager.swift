@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MobileCoreServices
 import Photos
 
 final class PhotoManager {
@@ -171,6 +172,8 @@ enum ImagePickerError: Error {
     
     case invalidInfo
     case invalidData
+    case invalidDataUTI(expect: String, actual: String?)
+    case invalidImage
     case other(Error)
 }
 
@@ -227,61 +230,42 @@ extension PhotoManager {
                     requestOptions2.progressHandler = options.progressHandler
                     requestOptions2.isNetworkAccessAllowed = options.isNetworkAccessAllowed
                     requestOptions2.resizeMode = .fast
-                    if #available(iOS 13, *) {
-                        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
-                            guard let data = data else {
+                    
+                    func handle(data: Data?, uti: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable: Any]?, completion: @escaping PhotoFetchCompletion) {
+                        guard let data = data else {
+                            completion(.failure(.invalidData))
+                            return
+                        }
+                        switch options.sizeMode {
+                        case .original:
+                            guard let image = UIImage(data: data) else {
                                 completion(.failure(.invalidData))
                                 return
                             }
-                            switch options.sizeMode {
-                            case .original:
-                                guard let image = UIImage(data: data) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                completion(.success((image, false)))
-                            case .preview:
-                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                self.writeCache(image: image, for: asset.localIdentifier)
-                                completion(.success((image, false)))
-                            case .resize:
-                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                completion(.success((image, false)))
+                            completion(.success((image, false)))
+                        case .preview:
+                            guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                completion(.failure(.invalidData))
+                                return
                             }
+                            self.writeCache(image: image, for: asset.localIdentifier)
+                            completion(.success((image, false)))
+                        case .resize:
+                            guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
+                                completion(.failure(.invalidData))
+                                return
+                            }
+                            completion(.success((image, false)))
+                        }
+                    }
+                    
+                    if #available(iOS 13, *) {
+                        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
+                            handle(data: data, uti: uti, orientation: orientation, info: info, completion: completion)
                         }
                     } else {
                         PHImageManager.default().requestImageData(for: asset, options: requestOptions2) { (data, uti, orientation, info) in
-                            guard let data = data else {
-                                completion(.failure(.invalidData))
-                                return
-                            }
-                            switch options.sizeMode {
-                            case .original:
-                                guard let image = UIImage(data: data) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                completion(.success((image, false)))
-                            case .preview:
-                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                self.writeCache(image: image, for: asset.localIdentifier)
-                                completion(.success((image, false)))
-                            case .resize:
-                                guard let image = UIImage.resize(from: data, size: options.sizeMode.targetSize) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                completion(.success((image, false)))
-                            }
+                            handle(data: data, uti: uti, orientation: CGImagePropertyOrientation(orientation), info: info, completion: completion)
                         }
                     }
                 }
@@ -317,6 +301,57 @@ extension PhotoManager {
     func requestImageData(for asset: PHAsset, options: ImageDataFetchOptions = .init(), completion: @escaping ImageDataFetchCompletion) {
         
         
+        
+    }
+}
+
+
+struct PhotoGIFFetchOptions {
+    
+    var isNetworkAccessAllowed: Bool = true
+    var progressHandler: PHAssetImageProgressHandler? = nil
+}
+
+typealias PhotoGIFFetchResponse = UIImage
+typealias PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImagePickerError>) -> Void
+
+extension PhotoManager {
+    
+    func requsetPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping PhotoGIFFetchCompletion) {
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.progressHandler = options.progressHandler
+        requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
+        
+        func handle(data: Data?, dataUTI: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable: Any]?, completion: @escaping PhotoGIFFetchCompletion) {
+            guard let data = data else {
+                completion(.failure(.invalidData))
+                return
+            }
+            guard let dataUTI = dataUTI else {
+                completion(.failure(.invalidDataUTI(expect: kUTTypeGIF as String, actual: nil)))
+                return
+            }
+            guard UTTypeConformsTo(dataUTI as CFString, kUTTypeGIF) else {
+                completion(.failure(.invalidDataUTI(expect: kUTTypeGIF as String, actual: dataUTI)))
+                return
+            }
+            let creatingOptions = ImageCreatingOptions()
+            guard let image = UIImage.animatedImage(data: data, options: creatingOptions) else {
+                completion(.failure(.invalidImage))
+                return
+            }
+            completion(.success(image))
+        }
+        
+        if #available(iOS 13, *) {
+            PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
+                handle(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
+            }
+        } else {
+            PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
+                handle(data: data, dataUTI: dataUTI, orientation: CGImagePropertyOrientation(orientation), info: info, completion: completion)
+            }
+        }
     }
 }
 
