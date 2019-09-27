@@ -13,16 +13,13 @@ struct PhotoDataFetchOptions {
     let version: PHImageRequestOptionsVersion
     let isNetworkAccessAllowed: Bool
     let progressHandler: PHAssetImageProgressHandler?
-    let resizeMode: PHImageRequestOptionsResizeMode
     
     init(version: PHImageRequestOptionsVersion = .current,
          isNetworkAccessAllowed: Bool = true,
-         progressHandler: PHAssetImageProgressHandler? = nil,
-         resizeMode: PHImageRequestOptionsResizeMode = .fast) {
+         progressHandler: PHAssetImageProgressHandler? = nil) {
         self.version = version
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
-        self.resizeMode = resizeMode
     }
 }
 

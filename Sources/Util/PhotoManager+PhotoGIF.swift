@@ -30,8 +30,7 @@ extension PhotoManager {
     func requsetPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping PhotoGIFFetchCompletion) {
         let photoDataOptions = PhotoDataFetchOptions(version: .unadjusted,
                                                      isNetworkAccessAllowed: options.isNetworkAccessAllowed,
-                                                     progressHandler: options.progressHandler,
-                                                     resizeMode: .fast)
+                                                     progressHandler: options.progressHandler)
         self.requestPhotoData(for: asset, options: photoDataOptions) { result in
             switch result {
             case .success(let response):
