@@ -83,7 +83,7 @@ extension AlbumCell {
     func setContent(_ album: Album) {
         titleLabel.text = album.name
         subTitleLabel.text = "(\(album.count))"
-        PhotoManager.shared.requestImage(from: album) { [weak self] result in
+        PhotoManager.shared.requestPhoto(for: album) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):

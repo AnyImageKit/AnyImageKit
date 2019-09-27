@@ -116,7 +116,7 @@ extension AssetCell {
     
     func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
         let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale))
-        PhotoManager.shared.requestImage(for: asset.asset, options: options, completion: { [weak self] result in
+        PhotoManager.shared.requestPhoto(for: asset.asset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):
