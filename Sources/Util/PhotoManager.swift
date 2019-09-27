@@ -275,17 +275,6 @@ extension PhotoManager {
     }
 }
 
-enum DataUTI {
-    
-    case jpeg
-    case png
-    case gif
-    case heif
-    case mp4
-    case mov
-    case other(String)
-}
-
 struct ImageDataFetchOptions {
     
     var isNetworkAccessAllowed: Bool = true
@@ -293,7 +282,7 @@ struct ImageDataFetchOptions {
 }
 
 
-typealias ImageDataFetchResponse = (image: UIImage, url: URL, uti: DataUTI)
+typealias ImageDataFetchResponse = (image: UIImage, url: URL, uti: String)
 typealias ImageDataFetchCompletion = (Result<ImageDataFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
@@ -319,6 +308,7 @@ extension PhotoManager {
     
     func requsetPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping PhotoGIFFetchCompletion) {
         let requestOptions = PHImageRequestOptions()
+        requestOptions.version = .unadjusted
         requestOptions.progressHandler = options.progressHandler
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         
