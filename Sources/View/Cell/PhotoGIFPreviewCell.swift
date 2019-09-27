@@ -8,14 +8,16 @@
 
 import UIKit
 
-final class PhotoGIFPreviewCell: UICollectionViewCell {
-
-    /// 显示图像
-    public let imageView = AnimatedImageView()
+final class PhotoGIFPreviewCell: PreviewCell {
+    
+    /// 取图片适屏size
+    override var fitSize: CGSize {
+        guard let image = imageView.image else { return CGSize.zero }
+        return image.size
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clear
         setupView()
     }
     
@@ -24,11 +26,9 @@ final class PhotoGIFPreviewCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        addSubview(imageView)
-        imageView.contentMode = .center
-        imageView.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview()
-        }
+        imageView.removeFromSuperview()
+        imageView = AnimatedImageView()
+        imageView.contentMode = .scaleToFill
+        scrollView.addSubview(imageView)
     }
-    
 }

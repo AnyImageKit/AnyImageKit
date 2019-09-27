@@ -332,11 +332,13 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             return cell
         case .photoGif:
             let cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
+            cell.delegate = self
             let options = PhotoGIFFetchOptions()
             PhotoManager.shared.requsetPhotoGIF(for: data.asset.asset, options: options) { (result) in
                 switch result {
                 case .success(let response):
-                    cell.imageView.image = response
+                    cell.setImage(response)
+//                    cell.imageView.image = response
                     if collectionView.visibleCells.count > 1 {
                         cell.imageView.stopAnimating()
                     }
@@ -357,14 +359,18 @@ extension PhotoPreviewController: UICollectionViewDataSource {
 extension PhotoPreviewController: UIScrollViewDelegate {
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if let cell = collectionView.visibleCells.first as? PhotoGIFPreviewCell {
-            cell.imageView.stopAnimating()
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? PhotoGIFPreviewCell {
+                cell.imageView.stopAnimating()
+            }
         }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if let cell = collectionView.visibleCells.first as? PhotoGIFPreviewCell {
-            cell.imageView.startAnimating()
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? PhotoGIFPreviewCell {
+                cell.imageView.startAnimating()
+            }
         }
     }
     
@@ -380,17 +386,17 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     }
 }
 
-// MARK: - PhotoPreviewCellDelegate
-extension PhotoPreviewController: PhotoPreviewCellDelegate {
+// MARK: - PreviewCellDelegate
+extension PhotoPreviewController: PreviewCellDelegate {
     
-    func previewCell(_ cell: PhotoPreviewCell, didPanScale scale: CGFloat) {
+    func previewCell(_ cell: PreviewCell, didPanScale scale: CGFloat) {
         // 实测用 scale 的平方，效果比线性好些
         let alpha = scale * scale
         scalePresentationController?.maskAlpha = alpha
         setBar(hidden: true)
     }
     
-    func previewCell(_ cell: PhotoPreviewCell, didEndPanWithExit isExit: Bool) {
+    func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool) {
         if isExit {
             dismiss(animated: true, completion: nil)
         } else {
@@ -398,7 +404,7 @@ extension PhotoPreviewController: PhotoPreviewCellDelegate {
         }
     }
     
-    func previewCellDidSingleTap(_ cell: PhotoPreviewCell) {
+    func previewCellDidSingleTap(_ cell: PreviewCell) {
         setBar(hidden: navigationBar.alpha == 1, animated: false)
     }
 }
@@ -449,7 +455,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
 
     /// 创建缩放型退场动画
     private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
-        guard let cell = collectionView.visibleCells.first as? PhotoPreviewCell else {
+        guard let cell = collectionView.visibleCells.first as? PreviewCell else {
             return nil
         }
         let imageView = UIImageView(image: cell.imageView.image)
