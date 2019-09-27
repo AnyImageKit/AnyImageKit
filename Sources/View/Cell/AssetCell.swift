@@ -21,7 +21,7 @@ final class AssetCell: UICollectionViewCell {
         view.isHidden = true
         view.text = "GIF"
         view.textColor = UIColor.white
-        view.font = UIFont.systemFont(ofSize: 16)
+        view.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         return view
     }()
     private lazy var videoView: VideoView = {
@@ -122,8 +122,7 @@ extension AssetCell {
             case .success(let response):
                 self.imageView.image = response.image
                 if asset.type == .video && !isPreview {
-                    // TODO:
-                    self.videoView.setVideoTime(0)
+                    self.videoView.setVideoTime(asset.timeLength)
                 }
             case .failure(let error):
                 print(error)

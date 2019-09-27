@@ -69,10 +69,8 @@ final class VideoView: UIView {
 extension VideoView {
     
     /// 设置视频时间，单位：秒
-    public func setVideoTime(_ time: Int) {
+    public func setVideoTime(_ time: String) {
         videoLabel.isHidden = false
-        let min = time / 60
-        let sec = time % 60
-        videoLabel.text = String(format: "%02ld:%02ld", min, sec)
+        videoLabel.text = time
     }
 }
