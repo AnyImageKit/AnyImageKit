@@ -89,8 +89,7 @@ extension PhotoManager {
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud && image == nil && options.isNetworkAccessAllowed {
                     let photoDataOptions = PhotoDataFetchOptions(isNetworkAccessAllowed: options.isNetworkAccessAllowed,
-                                                                 progressHandler: options.progressHandler,
-                                                                 resizeMode: options.resizeMode)
+                                                                 progressHandler: options.progressHandler)
                     self.requestPhotoData(for: asset, options: photoDataOptions) { [unowned self] result in
                         switch result {
                         case .success(let response):
