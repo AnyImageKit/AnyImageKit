@@ -100,14 +100,22 @@ class PreviewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-// MARK: - Public function
-extension PreviewCell {
     
+    // MARK: - Public function
+    
+    /// 设置图片
     public func setImage(_ image: UIImage?) {
         imageView.image = image
         layout()
+    }
+    
+    /// 重新布局
+    internal func layout() {
+        scrollView.frame = contentView.bounds
+        scrollView.setZoomScale(1.0, animated: false)
+        imageView.frame = fitFrame
+        scrollView.minimumZoomScale = getDefaultScale()
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
 }
 
@@ -122,15 +130,6 @@ extension PreviewCell {
         contentView.addGestureRecognizer(singleTap)
         // 必须加在scrollView上。不能加在contentView上，否则长图下拉不能触发
         scrollView.addGestureRecognizer(pan)
-    }
-    
-    /// 重新布局
-    private func layout() {
-        scrollView.frame = contentView.bounds
-        scrollView.setZoomScale(1.0, animated: false)
-        imageView.frame = fitFrame
-        scrollView.minimumZoomScale = getDefaultScale()
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
     
     /// 获取缩放比例
