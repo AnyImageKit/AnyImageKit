@@ -56,9 +56,9 @@ final public class TestViewController: UIViewController {
 }
 
 extension TestViewController: ImagePickerControllerDelegate {
-
-    public func imagePicker(_ picker: ImagePickerController) {
-
+    
+    public func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginal: Bool) {
+        
     }
 }
 

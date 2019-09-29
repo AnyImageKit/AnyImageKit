@@ -349,8 +349,6 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             return cell
         case .video:
             break
-        default:
-            break
         }
         return UICollectionViewCell()
     }

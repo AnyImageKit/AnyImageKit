@@ -11,7 +11,7 @@ import SnapKit
 
 public protocol ImagePickerControllerDelegate: class {
     
-    func imagePicker(_ picker: ImagePickerController)
+    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginal: Bool)
 }
 
 open class ImagePickerController: UINavigationController {
@@ -34,7 +34,7 @@ open class ImagePickerController: UINavigationController {
         return .portrait
     }
     
-    public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
+    required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
         PhotoManager.shared.config = config
         let rootViewController = AssetPickerViewController()
         super.init(rootViewController: rootViewController)
