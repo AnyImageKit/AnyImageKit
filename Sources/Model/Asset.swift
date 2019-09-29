@@ -6,15 +6,17 @@
 //  Copyright © 2019 anotheren.com. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Photos
 
-class Asset: Equatable {
+public class Asset: Equatable {
 
+    public let asset: PHAsset
+    public let type: MediaType
+    public internal(set) var image: UIImage = UIImage()
+    
     let idx: Int
-    let asset: PHAsset
-    let type: MediaType
-    let timeLength: String
+    let videoDuration: String
     var isSelected: Bool = false
     var selectedNum: Int = 1
     
@@ -22,42 +24,25 @@ class Asset: Equatable {
         self.idx = idx
         self.asset = asset
         self.type = MediaType(asset: asset)
-        self.timeLength = asset.videoDuration
+        self.videoDuration = asset.videoDuration
     }
     
-    static func == (lhs: Asset, rhs: Asset) -> Bool {
+    public static func == (lhs: Asset, rhs: Asset) -> Bool {
         return lhs.asset.localIdentifier == rhs.asset.localIdentifier
     }
 }
 
+// MARK: - Original Photo
+
 extension Asset {
     
-    enum MediaType: UInt, Equatable {
-        
-        case photo
-        case photoLive
-        case photoGif
-        case video
-        case audio
-        
-        init(asset: PHAsset) {
-            switch asset.mediaType {
-            case .image:
-//                if asset.mediaSubtypes == .photoLive { // not support live photo
-//                    self = .photoLive
-//                }
-                if asset.isGIF {
-                    self = .photoGif
-                } else {
-                    self = .photo
-                }
-            case .video:
-                self = .video
-            case .audio:
-                self = .audio
-            default:
-                self = .photo
-            }
-        }
-    }
+    // TODO
 }
+
+// MARK: - Video
+
+extension Asset {
+    
+    // TODO
+}
+

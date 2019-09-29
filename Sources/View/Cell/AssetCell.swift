@@ -122,7 +122,7 @@ extension AssetCell {
             case .success(let response):
                 self.imageView.image = response.image
                 if asset.type == .video && !isPreview {
-                    self.videoView.setVideoTime(asset.timeLength)
+                    self.videoView.setVideoTime(asset.videoDuration)
                 }
             case .failure(let error):
                 print(error)
