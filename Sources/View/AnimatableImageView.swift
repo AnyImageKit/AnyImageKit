@@ -109,7 +109,7 @@ open class AnimatedImageView: UIImageView {
     
     // MARK: - Public property
     /// Whether automatically play the animation when the view become visible. Default is `true`.
-    public var autoPlayAnimatedImage = true
+    public var autoPlayAnimatedImage = false
     
     /// The count of the frames should be preloaded before shown.
     public var framePreloadCount = 10

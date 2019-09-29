@@ -109,6 +109,7 @@ final class PhotoPreviewController: UIViewController {
         super.viewWillAppear(animated)
         didSetCurrentIdx()
         coverStatusBar(true)
+        setGIF(animated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -190,6 +191,7 @@ extension PhotoPreviewController {
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: photoSpacing)
     }
     
+    /// 显示/隐藏工具栏
     private func setBar(hidden: Bool, animated: Bool = true) {
         if navigationBar.alpha == 0 && hidden { return }
         if navigationBar.alpha == 1 && !hidden { return }
@@ -227,6 +229,20 @@ extension PhotoPreviewController {
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         toolBar.hiddenEditAndOriginalButton(data.asset.type != .photo)
         indexView.currentIndex = currentIndex
+    }
+    
+    /// 播放/暂停 GIF
+    /// - Parameter animated: true-播放；false-暂停
+    private func setGIF(animated: Bool) {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? PhotoGIFPreviewCell {
+                if animated {
+                    cell.imageView.startAnimating()
+                } else {
+                    cell.imageView.stopAnimating()
+                }
+            }
+        }
     }
 }
 
@@ -338,10 +354,6 @@ extension PhotoPreviewController: UICollectionViewDataSource {
                 switch result {
                 case .success(let response):
                     cell.setImage(response)
-//                    cell.imageView.image = response
-                    if collectionView.visibleCells.count > 1 {
-                        cell.imageView.stopAnimating()
-                    }
                 case .failure(let error):
                     print(error)
                 }
@@ -359,19 +371,11 @@ extension PhotoPreviewController: UICollectionViewDataSource {
 extension PhotoPreviewController: UIScrollViewDelegate {
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PhotoGIFPreviewCell {
-                cell.imageView.stopAnimating()
-            }
-        }
+        setGIF(animated: false)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PhotoGIFPreviewCell {
-                cell.imageView.startAnimating()
-            }
-        }
+        setGIF(animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
