@@ -14,5 +14,6 @@ public enum ImagePickerError: Error {
     case invalidData
     case invalidDataUTI
     case invalidImage
+    case invalidVideo
     case other(Error)
 }

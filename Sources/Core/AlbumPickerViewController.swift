@@ -20,7 +20,7 @@ final class AlbumPickerViewController: UIViewController {
     var album: Album?
     var albums = [Album]()
     
-    private(set) lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.registerCell(AlbumCell.self)
         view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
