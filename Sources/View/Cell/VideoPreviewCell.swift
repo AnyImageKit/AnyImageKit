@@ -12,7 +12,10 @@ import MediaPlayer
 final class VideoPreviewCell: PreviewCell {
     
     public var isPlaying: Bool {
-        player
+        if let player = player {
+            return player.rate != 0
+        }
+        return false
     }
     
     private var player: AVPlayer?
