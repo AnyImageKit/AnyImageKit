@@ -39,7 +39,7 @@ final class AssetPickerViewController: UIViewController {
     
     private(set) lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .picker)
-        view.leftButton.isEnabled = false
+        view.setEnable(false)
         view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalPhoto
         view.originalButton.isSelected = PhotoManager.shared.isOriginalPhoto
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
@@ -209,7 +209,7 @@ extension AssetPickerViewController {
             PhotoManager.shared.removeSelectedAsset(asset)
             updateVisibleCellState(sender.tag)
         }
-        toolBar.leftButton.isEnabled = !PhotoManager.shared.selectdAsset.isEmpty
+        toolBar.setEnable(!PhotoManager.shared.selectdAsset.isEmpty)
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
