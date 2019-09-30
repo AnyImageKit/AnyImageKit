@@ -73,4 +73,8 @@ extension UIColor {
         return UIColor.create(light: .white, dark: UIColor.color(hex: 0x5C5C5C))
     }
     
+    static var wechatButtonDisableBackgroundColor: UIColor {
+        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x515253))
+    }
+    
 }

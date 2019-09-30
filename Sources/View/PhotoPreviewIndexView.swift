@@ -118,7 +118,6 @@ extension PhotoPreviewIndexView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         let asset = PhotoManager.shared.selectdAsset[indexPath.item]
-        cell.backgroundColor = UIColor.white
         cell.setContent(asset, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
         cell.boxCoverView.isHidden = asset.idx != currentIndex

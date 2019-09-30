@@ -20,8 +20,8 @@ final class PhotoToolBar: UIView {
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitleColor(UIColor.white, for: .normal)
-        view.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .disabled)
+        view.setTitleColor(PhotoManager.shared.config.theme.textColor, for: .normal)
+        view.setTitleColor(PhotoManager.shared.config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
@@ -36,7 +36,8 @@ final class PhotoToolBar: UIView {
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
         view.backgroundColor = PhotoManager.shared.config.theme.mainColor
-        view.setTitleColor(UIColor.white, for: .normal)
+        view.setTitleColor(PhotoManager.shared.config.theme.textColor, for: .normal)
+        view.setTitleColor(PhotoManager.shared.config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
         view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
@@ -93,12 +94,22 @@ final class PhotoToolBar: UIView {
             maker.size.equalTo(CGSize(width: 60, height: 30))
         }
     }
+}
 
+// MARK: - Public function
+extension PhotoToolBar {
+    
     public func hiddenEditAndOriginalButton(_ hidden: Bool) {
-        leftButton.isHidden = hidden
-        if PhotoManager.shared.config.allowUseOriginalPhoto {
-            originalButton.isHidden = hidden
-        }
+           leftButton.isHidden = hidden
+           if PhotoManager.shared.config.allowUseOriginalPhoto {
+               originalButton.isHidden = hidden
+           }
+       }
+       
+    public func setEnable(_ enable: Bool) {
+        leftButton.isEnabled = enable
+        doneButton.isEnabled = enable
+        doneButton.backgroundColor = enable ? PhotoManager.shared.config.theme.mainColor : PhotoManager.shared.config.theme.buttonDisableBackgroundColor
     }
 }
 

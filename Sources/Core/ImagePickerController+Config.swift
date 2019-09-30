@@ -58,6 +58,7 @@ extension ImagePickerController {
         public var backgroundColor: UIColor
         public var backgroundSelectedColor: UIColor
         public var separatorLineColor: UIColor
+        public var buttonDisableBackgroundColor: UIColor
         
         public static func wechat(style: UserInterfaceStyle = .dark) -> Theme {
             switch style {
@@ -69,7 +70,8 @@ extension ImagePickerController {
                 toolBarColor: UIColor.wechatToolBar,
                 backgroundColor: UIColor.wechatBackground,
                 backgroundSelectedColor: UIColor.wechatBackgroundSelected,
-                separatorLineColor: UIColor.wechatSeparatorLine)
+                separatorLineColor: UIColor.wechatSeparatorLine,
+                buttonDisableBackgroundColor: UIColor.wechatButtonDisableBackgroundColor)
             case .light:
                 fatalError()
             case .dark:
@@ -80,7 +82,8 @@ extension ImagePickerController {
                              toolBarColor: UIColor.color(hex: 0x5C5C5C),
                              backgroundColor: UIColor.color(hex: 0x31302F),
                              backgroundSelectedColor: UIColor.color(hex: 0x171717),
-                             separatorLineColor: UIColor.color(hex: 0x454444))
+                             separatorLineColor: UIColor.color(hex: 0x454444),
+                             buttonDisableBackgroundColor: UIColor.color(hex: 0x515253))
             }
         }
     }
