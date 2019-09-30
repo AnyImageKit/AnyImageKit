@@ -38,10 +38,7 @@ final class VideoPreviewCell: PreviewCell {
     }
     
     private func setupView() {
-        imageView.removeFromSuperview()
-        imageView = AnimatedImageView()
-        imageView.contentMode = .scaleToFill
-        scrollView.addSubview(imageView)
+        
     }
     
     override func layout() {

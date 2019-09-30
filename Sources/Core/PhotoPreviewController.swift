@@ -360,9 +360,40 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             }
             return cell
         case .video:
-            break
+            let cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
+            cell.imageView.contentMode = imageScaleMode
+            cell.delegate = self
+            // 加载图片
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+                cell.setImage(originalImage)
+            } else {
+                cell.setImage(data.thumbnail)
+                let options = PhotoFetchOptions(sizeMode: .resize(500))
+                PhotoManager.shared.requestPhoto(for: data.asset.asset, options: options) { result in
+                    switch result {
+                    case .success(let response):
+                        if !response.isDegraded {
+                            cell.setImage(response.image)
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            // 加载视频
+            let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
+                // Update UI, only iCloud
+            }
+            PhotoManager.shared.requestVideo(for: data.asset.asset, options: options) { result in
+                switch result {
+                case .success(let videoResponse):
+                    cell.setPlayerItem(videoResponse)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            return cell
         }
-        return UICollectionViewCell()
     }
 }
 
