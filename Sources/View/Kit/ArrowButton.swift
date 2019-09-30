@@ -12,6 +12,7 @@ final class ArrowButton: UIControl {
     
     private lazy var label: UILabel = {
         let view = UILabel()
+        view.text = BundleHelper.localizedString(key: "Photo")
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 let defaultAssetSpacing: CGFloat = 2
 
@@ -47,12 +48,17 @@ final class AssetPickerViewController: UIViewController {
         return view
     }()
     
+    private lazy var permissionView: PermissionDeniedView = {
+        let view = PermissionDeniedView()
+        view.isHidden = true
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
         setupView()
-        loadDefaultAlbumIfNeeded()
-        preLoadAlbums()
+        check()
     }
     
     override func viewDidLayoutSubviews() {
@@ -77,6 +83,7 @@ final class AssetPickerViewController: UIViewController {
     private func setupView() {
         view.addSubview(collectionView)
         view.addSubview(toolBar)
+        view.addSubview(permissionView)
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
@@ -88,10 +95,36 @@ final class AssetPickerViewController: UIViewController {
             }
             maker.left.right.bottom.equalToSuperview()
         }
+        permissionView.snp.makeConstraints { (maker) in
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            } else {
+                maker.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
+            }
+            maker.left.right.bottom.equalToSuperview()
+        }
     }
 }
 
+// MARK: - Private function
 extension AssetPickerViewController {
+    
+    private func check() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { [weak self] (_) in
+                DispatchQueue.main.async {
+                    self?.check()
+                }
+            }
+        case .authorized:
+            self.loadDefaultAlbumIfNeeded()
+            self.preLoadAlbums()
+        default:
+            permissionView.isHidden = false
+        }
+    }
     
     private func loadDefaultAlbumIfNeeded() {
         guard album == nil else { return }
