@@ -45,6 +45,12 @@ final class VideoPreviewCell: PreviewCell {
         return UIImageView(image: BundleHelper.image(named: "VideoPlay"))
     }()
     
+    private lazy var iCloudView: LoadingiCloudView = {
+        let view = LoadingiCloudView()
+        view.isHidden = true
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -56,9 +62,16 @@ final class VideoPreviewCell: PreviewCell {
     
     private func setupView() {
         addSubview(playImageView)
+        addSubview(iCloudView)
+        
         playImageView.snp.makeConstraints { (maker) in
             maker.width.height.equalTo(80)
             maker.center.equalToSuperview()
+        }
+        iCloudView.snp.makeConstraints { (maker) in
+            maker.top.equalToSuperview().offset(100)
+            maker.left.equalToSuperview().offset(5)
+            maker.height.equalTo(20)
         }
     }
     
@@ -128,6 +141,10 @@ extension VideoPreviewCell {
         setPlayButton(hidden: false)
     }
     
+    public func setDownloadingProgress(_ progress: Double) {
+        iCloudView.isHidden = progress == 1
+        iCloudView.setProgress(progress)
+    }
 }
 
 // MARK: - Action

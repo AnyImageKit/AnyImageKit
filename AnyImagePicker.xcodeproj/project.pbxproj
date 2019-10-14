@@ -36,6 +36,7 @@
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
 		A0F475422330736200BB117B /* Ex+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */; };
 		A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */; };
+		A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531105623544C0D00D457A8 /* LoadingiCloudView.swift */; };
 		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
 		A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A5601D3A233B0F6200D0E95E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A5601D39233B0F6200D0E95E /* SnapKit */; };
@@ -144,6 +145,7 @@
 		A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
 		A0F475412330736200BB117B /* Ex+PHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+PHAssetCollection.swift"; sourceTree = "<group>"; };
 		A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+Config.swift"; sourceTree = "<group>"; };
+		A531105623544C0D00D457A8 /* LoadingiCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingiCloudView.swift; sourceTree = "<group>"; };
 		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
 		A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditViewController.swift; sourceTree = "<group>"; };
 		A5601D4F233B0FE500D0E95E /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
 				A5325EA42331C14F00ADA116 /* ArrowButton.swift */,
 				A58E148C233372D800ACE099 /* VideoView.swift */,
+				A531105623544C0D00D457A8 /* LoadingiCloudView.swift */,
 			);
 			path = Kit;
 			sourceTree = "<group>";
@@ -595,6 +598,7 @@
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
 				A0C03C1F23322B26005F742C /* Ex+UIDevice.swift in Sources */,
 				A05C8DA3233DEFD7005B0F3C /* PhotoManager+Photo.swift in Sources */,
+				A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */,
 				A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */,
 				A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,

@@ -391,6 +391,8 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             }
             // 加载视频
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
+                print(progress)
+                cell.setDownloadingProgress(progress)
                 // Update UI, only iCloud
             }
             PhotoManager.shared.requestVideo(for: data.asset.asset, options: options) { result in
