@@ -37,12 +37,15 @@ extension PhotoManager {
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.progressHandler
-        PHImageManager.default().requestPlayerItem(forVideo: asset, options: requestOptions) { (playerItem, info) in
+        let requestID = PHImageManager.default().requestPlayerItem(forVideo: asset, options: requestOptions) { (playerItem, info) in
             if let playerItem = playerItem {
                 completion(.success(playerItem))
             } else {
                 completion(.failure(.invalidVideo))
             }
+            let requestID = info?[PHImageResultRequestIDKey] as? PHImageRequestID
+            self.dequeueFetch(for: asset, requestID: requestID)
         }
+        enqueueFetch(for: asset, requestID: requestID)
     }
 }

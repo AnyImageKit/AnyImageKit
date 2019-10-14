@@ -9,6 +9,12 @@
 import UIKit
 import Photos
 
+struct FetchRecord {
+    
+    var identifier: String
+    var requestIDs: [PHImageRequestID]
+}
+
 final class PhotoManager {
     
     static let shared: PhotoManager = PhotoManager()
@@ -24,12 +30,59 @@ final class PhotoManager {
     /// 已选中的资源
     private(set) var selectdAsset: [Asset] = []
     
+    /// Running Fetch Requests
+    private var fetchRecords = [FetchRecord]()
+    
     /// 缓存
     private var cacheList = [(String, UIImage)]()
     
     private init() { }
     
     let workQueue = DispatchQueue(label: "com.anotheren.AnyImagePicker.PhotoManager")
+}
+
+// MARK: - Fetch Queue
+
+extension PhotoManager {
+    
+    func enqueueFetch(for asset: PHAsset, requestID: PHImageRequestID) {
+        workQueue.async {
+            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
+                self.fetchRecords[index].requestIDs.append(requestID)
+            } else {
+                self.fetchRecords.append(FetchRecord(identifier: asset.localIdentifier, requestIDs: [requestID]))
+            }
+        }
+    }
+    
+    func dequeueFetch(for asset: PHAsset, requestID: PHImageRequestID?) {
+        workQueue.async {
+            guard let requestID = requestID else { return }
+            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
+                if let idx = self.fetchRecords[index].requestIDs.firstIndex(of: requestID) {
+                    self.fetchRecords[index].requestIDs.remove(at: idx)
+                }
+            }
+        }
+    }
+    
+    func cancelFetch(for asset: PHAsset) {
+        workQueue.async {
+            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
+                let fetchRecord = self.fetchRecords.remove(at: index)
+                fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
+            }
+        }
+    }
+    
+    func cancelAllFetch() {
+        workQueue.async {
+            for fetchRecord in self.fetchRecords {
+                fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
+            }
+            self.fetchRecords.removeAll()
+        }
+    }
 }
 
 // MARK: - Cache

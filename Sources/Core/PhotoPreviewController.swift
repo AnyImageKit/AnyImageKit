@@ -392,8 +392,9 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             // 加载视频
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
                 print(progress)
-                cell.setDownloadingProgress(progress)
-                // Update UI, only iCloud
+                DispatchQueue.main.async {
+                    cell.setDownloadingProgress(progress)
+                }
             }
             PhotoManager.shared.requestVideo(for: data.asset.asset, options: options) { result in
                 switch result {
@@ -417,6 +418,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         setGIF(animated: true)
+        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
