@@ -450,6 +450,10 @@ extension PhotoPreviewController: PreviewCellDelegate {
     func previewCellDidSingleTap(_ cell: PreviewCell) {
         setBar(hidden: navigationBar.alpha == 1, animated: false)
     }
+    
+    func previewCellGetToolBarHiddenState() -> Bool {
+        return navigationBar.alpha == 0
+    }
 }
 
 // MARK: - PhotoPreviewIndexViewDelegate

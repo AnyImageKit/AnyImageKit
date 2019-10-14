@@ -9,16 +9,7 @@
 import UIKit
 import MediaPlayer
 
-protocol VideoPreviewCellDelegate: class {
-    
-    func videoCellDidPlay()
-    func videoCellDidPlayOver()
-    
-}
-
 final class VideoPreviewCell: PreviewCell {
-    
-    public weak var videoDelegate: VideoPreviewCellDelegate?
     
     /// 取图片适屏size
     override var fitSize: CGSize {
@@ -78,14 +69,18 @@ final class VideoPreviewCell: PreviewCell {
     
     // Play / Pause
     override func singleTapped() {
-        super.singleTapped()
-        if isPlaying {
+        if !(delegate?.previewCellGetToolBarHiddenState() ?? false) && isPlaying {
             player?.pause()
         } else {
-            player?.play()
+            super.singleTapped()
+            if isPlaying {
+                player?.pause()
+            } else {
+                player?.play()
+            }
         }
         
-        playImageView.isHidden = isPlaying
+        playImageView.alpha = isPlaying ? 0 : 1
     }
     
     override func panScale(_ scale: CGFloat) {
@@ -118,7 +113,7 @@ extension VideoPreviewCell {
     
     public func pause() {
         player?.pause()
-        playImageView.isHidden = false
+        playImageView.alpha = 1
     }
     
 }

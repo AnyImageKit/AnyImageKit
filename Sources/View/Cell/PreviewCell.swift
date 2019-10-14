@@ -16,6 +16,9 @@ protocol PreviewCellDelegate: class {
 
     /// 单击时回调
     func previewCellDidSingleTap(_ cell: PreviewCell)
+    
+    /// 获取工具栏的显示状态
+    func previewCellGetToolBarHiddenState() -> Bool
 }
 
 class PreviewCell: UICollectionViewCell {
