@@ -492,7 +492,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
 
     /// 创建缩放型进场动画
     private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
-        let cell = collectionView.cellForItem(at: indexPath) as? PhotoPreviewCell
+        let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell
         let imageView = UIImageView(image: cell?.imageView.image)
         imageView.contentMode = imageScaleMode
         imageView.clipsToBounds = true
