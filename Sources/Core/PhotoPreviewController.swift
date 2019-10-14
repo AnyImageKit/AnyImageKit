@@ -131,6 +131,14 @@ final class PhotoPreviewController: UIViewController {
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
+    
+    deinit {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? PreviewCell {
+                PhotoManager.shared.cancelFetch(for: cell.asset.asset)
+            }
+        }
+    }
 }
 
 // MARK: - Private function
@@ -348,21 +356,6 @@ extension PhotoPreviewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension PhotoPreviewController: UICollectionViewDelegate {
     
-    /// Cell 离开屏幕
-    /// PhotoPreviewCell - 重设图片缩放比例
-    /// VideoPreviewCell - 取消数据请求
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        switch cell {
-        case let cell as PhotoPreviewCell:
-            cell.reset()
-        case let cell as VideoPreviewCell:
-            cell.reset()
-            PhotoManager.shared.cancelFetch(for: cell.asset.asset)
-        default:
-            break
-        }
-    }
-    
     /// Cell 进入屏幕
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
@@ -385,6 +378,21 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.requestPhoto()
             }
             cell.requestVideo()
+        default:
+            break
+        }
+    }
+    
+    /// Cell 离开屏幕
+    /// PhotoPreviewCell - 重设图片缩放比例
+    /// VideoPreviewCell - 取消数据请求
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        switch cell {
+        case let cell as PhotoPreviewCell:
+            cell.reset()
+        case let cell as VideoPreviewCell:
+            cell.reset()
+            PhotoManager.shared.cancelFetch(for: cell.asset.asset)
         default:
             break
         }

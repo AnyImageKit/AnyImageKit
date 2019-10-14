@@ -144,18 +144,25 @@ extension VideoPreviewCell {
     
     // 加载视频
     public func requestVideo() {
-        let options = VideoFetchOptions(isNetworkAccessAllowed: true) { [weak self] (progress, error, isAtEnd, info) in
-            print(progress)
-            DispatchQueue.main.async {
-                self?.setDownloadingProgress(progress)
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let options = VideoFetchOptions(isNetworkAccessAllowed: true) { [weak self] (progress, error, isAtEnd, info) in
+                print(progress)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.setDownloadingProgress(progress)
+                }
             }
-        }
-        PhotoManager.shared.requestVideo(for: asset.asset, options: options) { [weak self] result in
-            switch result {
-            case .success(let videoResponse):
-                self?.setPlayerItem(videoResponse)
-            case .failure(let error):
-                print(error)
+            PhotoManager.shared.requestVideo(for: self.asset.asset, options: options) { [weak self] result in
+                switch result {
+                case .success(let videoResponse):
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.setPlayerItem(videoResponse)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }
