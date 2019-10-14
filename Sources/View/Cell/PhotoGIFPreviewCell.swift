@@ -46,3 +46,20 @@ final class PhotoGIFPreviewCell: PreviewCell {
         scrollView.addSubview(imageView)
     }
 }
+
+// MARK: - Public function
+extension PhotoGIFPreviewCell {
+    
+    /// 加载 GIF
+    public func requestGIF() {
+        let options = PhotoGIFFetchOptions()
+        PhotoManager.shared.requsetPhotoGIF(for: asset.asset, options: options) { [weak self] (result) in
+            switch result {
+            case .success(let response):
+                self?.setImage(response)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+}

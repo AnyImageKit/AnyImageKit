@@ -311,14 +311,6 @@ extension PhotoPreviewController {
     }
 }
 
-// MARK: - UICollectionViewDelegate
-extension PhotoPreviewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let cell = cell as? PhotoPreviewCell else { return }
-        cell.reset()
-    }
-}
-
 // MARK: - UICollectionViewDataSource
 extension PhotoPreviewController: UICollectionViewDataSource {
     
@@ -336,89 +328,64 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             cell.delegate = self
             cell.imageMaximumZoomScale = imageMaximumZoomScale
             cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+            cell.asset = data.asset
             
-            // 加载图片
             if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
-                let options = PhotoFetchOptions(sizeMode: .preview)
-                PhotoManager.shared.requestPhoto(for: data.asset.asset, options: options) { result in
-                    switch result {
-                    case .success(let response):
-                        if !response.isDegraded {
-                            cell.setImage(response.image)
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
+                cell.requestPhoto()
             }
             return cell
         case .photoGif:
             let cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
             cell.delegate = self
-            let options = PhotoGIFFetchOptions()
-            PhotoManager.shared.requsetPhotoGIF(for: data.asset.asset, options: options) { (result) in
-                switch result {
-                case .success(let response):
-                    cell.setImage(response)
-                case .failure(let error):
-                    print(error)
-                }
-            }
+            cell.asset = data.asset
+            cell.requestGIF()
             return cell
         case .video:
             let cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
             cell.delegate = self
-            // 加载图片
+            cell.asset = data.asset
+            
             if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
-                let options = PhotoFetchOptions(sizeMode: .resize(500))
-                PhotoManager.shared.requestPhoto(for: data.asset.asset, options: options) { result in
-                    switch result {
-                    case .success(let response):
-                        if !response.isDegraded {
-                            cell.setImage(response.image)
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
+                cell.requestPhoto()
             }
-            // 加载视频
-            let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
-                print(progress)
-                DispatchQueue.main.async {
-                    cell.setDownloadingProgress(progress)
-                }
-            }
-            PhotoManager.shared.requestVideo(for: data.asset.asset, options: options) { result in
-                switch result {
-                case .success(let videoResponse):
-                    cell.setPlayerItem(videoResponse)
-                case .failure(let error):
-                    print(error)
-                }
-            }
+            cell.requestVideo()
             return cell
         }
     }
 }
 
+// MARK: - UICollectionViewDelegate
+extension PhotoPreviewController: UICollectionViewDelegate {
+    
+    /// Cell 离开屏幕
+    /// PhotoPreviewCell - 重设图片缩放比例
+    /// VideoPreviewCell - 取消数据请求
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        switch cell {
+        case let cell as PhotoPreviewCell:
+            cell.reset()
+        case let cell as VideoPreviewCell:
+            PhotoManager.shared.cancelFetch(for: cell.asset.asset)
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - UIScrollViewDelegate
 extension PhotoPreviewController: UIScrollViewDelegate {
 
+    /// 开始滑动 - 停止 GIF 和视频
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         setGIF(animated: false)
         stopVideo()
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        setGIF(animated: true)
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

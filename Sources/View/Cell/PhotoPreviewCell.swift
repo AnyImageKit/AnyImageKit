@@ -35,18 +35,6 @@ final class PhotoPreviewCell: PreviewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-// MARK: - Public function
-extension PhotoPreviewCell {
-    
-    public func reset() {
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-    }
-}
-
-// MARK: - Private function
-extension PhotoPreviewCell {
     
     private func setupView() {
         scrollView.delegate = self
@@ -55,6 +43,30 @@ extension PhotoPreviewCell {
         // 双击手势
         contentView.addGestureRecognizer(doubleTap)
         singleTap.require(toFail: doubleTap)
+    }
+}
+
+// MARK: - Public function
+extension PhotoPreviewCell {
+    
+    /// 重置图片缩放比例
+    public func reset() {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    }
+    
+    /// 加载图片
+    public func requestPhoto() {
+        let options = PhotoFetchOptions(sizeMode: .preview)
+        PhotoManager.shared.requestPhoto(for: asset.asset, options: options) { [weak self] result in
+            switch result {
+            case .success(let response):
+                if !response.isDegraded {
+                    self?.setImage(response.image)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 

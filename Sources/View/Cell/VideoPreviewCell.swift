@@ -80,7 +80,7 @@ final class VideoPreviewCell: PreviewCell {
         playerLayer?.frame = fitFrame
     }
     
-    // Play / Pause
+    /// 单击事件触发时，处理播放和暂停的逻辑
     override func singleTapped() {
         if !(delegate?.previewCellGetToolBarHiddenState() ?? false) && isPlaying {
             player?.pause()
@@ -111,9 +111,68 @@ final class VideoPreviewCell: PreviewCell {
     }
 }
 
+// MARK: - Public function
+extension VideoPreviewCell {
+    
+    /// 暂停
+    public func pause() {
+        player?.pause()
+        setPlayButton(hidden: false)
+    }
+    
+    /// 加载图片
+    public func requestPhoto() {
+        let options = PhotoFetchOptions(sizeMode: .resize(500))
+        PhotoManager.shared.requestPhoto(for: asset.asset, options: options) { [weak self] result in
+            switch result {
+            case .success(let response):
+                if !response.isDegraded {
+                    self?.setImage(response.image)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    // 加载视频
+    public func requestVideo() {
+        let options = VideoFetchOptions(isNetworkAccessAllowed: true) { [weak self] (progress, error, isAtEnd, info) in
+            print(progress)
+            DispatchQueue.main.async {
+                self?.setDownloadingProgress(progress)
+            }
+        }
+        PhotoManager.shared.requestVideo(for: asset.asset, options: options) { [weak self] result in
+            switch result {
+            case .success(let videoResponse):
+                self?.setPlayerItem(videoResponse)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+}
+
 // MARK: - Private function
 extension VideoPreviewCell {
     
+    /// 设置 PlayerItem
+    private func setPlayerItem(_ item: AVPlayerItem) {
+        player = AVPlayer(playerItem: item)
+        playerLayer = AVPlayerLayer(player: player)
+        imageView.layer.addSublayer(playerLayer!)
+        playerLayer?.frame = imageView.bounds
+        NotificationCenter.default.addObserver(self, selector: #selector(didPlayOver), name: .AVPlayerItemDidPlayToEndTime, object: item)
+    }
+    
+    /// 设置 iCloud 下载进度
+    private func setDownloadingProgress(_ progress: Double) {
+        iCloudView.isHidden = progress == 1
+        iCloudView.setProgress(progress)
+    }
+    
+    /// 设置播放按钮的展示状态
     private func setPlayButton(hidden: Bool, animated: Bool = false) {
         if animated {
             UIView.animate(withDuration: 0.25) {
@@ -122,28 +181,6 @@ extension VideoPreviewCell {
         } else {
             playImageView.alpha = hidden ? 0 : 1
         }
-    }
-}
-
-// MARK: - Public function
-extension VideoPreviewCell {
-    
-    public func setPlayerItem(_ item: AVPlayerItem) {
-        player = AVPlayer(playerItem: item)
-        playerLayer = AVPlayerLayer(player: player)
-        imageView.layer.addSublayer(playerLayer!)
-        playerLayer?.frame = imageView.bounds
-        NotificationCenter.default.addObserver(self, selector: #selector(didPlayOver), name: .AVPlayerItemDidPlayToEndTime, object: item)
-    }
-    
-    public func pause() {
-        player?.pause()
-        setPlayButton(hidden: false)
-    }
-    
-    public func setDownloadingProgress(_ progress: Double) {
-        iCloudView.isHidden = progress == 1
-        iCloudView.setProgress(progress)
     }
 }
 

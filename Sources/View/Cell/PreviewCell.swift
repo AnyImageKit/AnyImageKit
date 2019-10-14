@@ -23,7 +23,9 @@ protocol PreviewCellDelegate: class {
 
 class PreviewCell: UICollectionViewCell {
     
-    open weak var delegate: PreviewCellDelegate? = nil
+    public weak var delegate: PreviewCellDelegate? = nil
+    
+    public var asset: Asset!
     
     /// 内嵌容器。本类不能继承UIScrollView。
     /// 因为实测UIScrollView遵循了UIGestureRecognizerDelegate协议，而本类也需要遵循此协议，
