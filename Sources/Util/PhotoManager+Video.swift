@@ -11,11 +11,17 @@ import Photos
 struct VideoFetchOptions {
     
     let isNetworkAccessAllowed: Bool
+    let version: PHVideoRequestOptionsVersion
+    let deliveryMode: PHVideoRequestOptionsDeliveryMode
     let progressHandler: PHAssetVideoProgressHandler?
     
     init(isNetworkAccessAllowed: Bool = true,
+         version: PHVideoRequestOptionsVersion = .current,
+         deliveryMode: PHVideoRequestOptionsDeliveryMode = .fastFormat,
          progressHandler: PHAssetVideoProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
+        self.version = version
+        self.deliveryMode = deliveryMode
         self.progressHandler = progressHandler
     }
 }
@@ -27,7 +33,9 @@ extension PhotoManager {
     
     func requestVideo(for asset: PHAsset, options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
         let requestOptions = PHVideoRequestOptions()
+        requestOptions.version = options.version
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
+        requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.progressHandler
         PHImageManager.default().requestPlayerItem(forVideo: asset, options: requestOptions) { (playerItem, info) in
             if let playerItem = playerItem {
