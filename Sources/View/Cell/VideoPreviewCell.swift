@@ -80,22 +80,34 @@ final class VideoPreviewCell: PreviewCell {
             }
         }
         
-        playImageView.alpha = isPlaying ? 0 : 1
+        self.setPlayButton(hidden: isPlaying)
     }
     
     override func panScale(_ scale: CGFloat) {
         super.panScale(scale)
         UIView.animate(withDuration: 0.25) {
-            self.playImageView.alpha = 0
+            self.setPlayButton(hidden: true, animated: true)
         }
     }
     
     override func panEnded(_ exit: Bool) {
         super.panEnded(exit)
         if !exit && !isPlaying {
+            self.setPlayButton(hidden: false, animated: true)
+        }
+    }
+}
+
+// MARK: - Private function
+extension VideoPreviewCell {
+    
+    private func setPlayButton(hidden: Bool, animated: Bool = false) {
+        if animated {
             UIView.animate(withDuration: 0.25) {
-                self.playImageView.alpha = 1
+                self.playImageView.alpha = hidden ? 0 : 1
             }
+        } else {
+            playImageView.alpha = hidden ? 0 : 1
         }
     }
 }
@@ -113,7 +125,7 @@ extension VideoPreviewCell {
     
     public func pause() {
         player?.pause()
-        playImageView.alpha = 1
+        setPlayButton(hidden: false)
     }
     
 }
@@ -123,7 +135,7 @@ extension VideoPreviewCell {
     
     @objc private func didPlayOver() {
         super.singleTapped()
-        playImageView.isHidden = false
+        setPlayButton(hidden: false)
         player?.pause()
         player?.seek(to: .zero)
     }
