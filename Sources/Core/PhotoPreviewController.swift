@@ -244,6 +244,15 @@ extension PhotoPreviewController {
             }
         }
     }
+    
+    /// 暂停视频
+    private func stopVideo() {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? VideoPreviewCell {
+                cell.pause()
+            }
+        }
+    }
 }
 
 // MARK: - Target
@@ -401,6 +410,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         setGIF(animated: false)
+        stopVideo()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

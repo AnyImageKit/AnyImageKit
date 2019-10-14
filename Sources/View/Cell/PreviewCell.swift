@@ -20,7 +20,7 @@ protocol PreviewCellDelegate: class {
 
 class PreviewCell: UICollectionViewCell {
     
-    public weak var delegate: PreviewCellDelegate? = nil
+    open weak var delegate: PreviewCellDelegate? = nil
     
     /// 内嵌容器。本类不能继承UIScrollView。
     /// 因为实测UIScrollView遵循了UIGestureRecognizerDelegate协议，而本类也需要遵循此协议，
@@ -117,6 +117,20 @@ class PreviewCell: UICollectionViewCell {
         scrollView.minimumZoomScale = getDefaultScale()
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
+    
+    // MARK: - Override
+    
+    public func singleTapped() {
+        delegate?.previewCellDidSingleTap(self)
+    }
+    
+    public func panScale(_ scale: CGFloat) {
+        delegate?.previewCell(self, didPanScale: scale)
+    }
+    
+    public func panEnded(_ exit: Bool) {
+        delegate?.previewCell(self, didEndPanWithExit: exit)
+    }
 }
 
 // MARK: - Private function
@@ -150,7 +164,7 @@ extension PreviewCell {
 extension PreviewCell {
     /// 响应单击
     @objc private func onSingleTap() {
-        delegate?.previewCellDidSingleTap(self)
+        singleTapped()
     }
 
     /// 响应拖动
@@ -166,12 +180,12 @@ extension PreviewCell {
             let result = panResult(pan)
             imageView.frame = result.0
             // 通知代理，发生了缩放。代理可依scale值改变背景蒙板alpha值
-            delegate?.previewCell(self, didPanScale: result.1)
+            panScale(result.1)
         case .ended, .cancelled:
             imageView.frame = panResult(pan).0
             if pan.velocity(in: self).y > 0 {
                 // dismiss
-                delegate?.previewCell(self, didEndPanWithExit: true)
+                panEnded(true)
             } else {
                 // 取消dismiss
                 endPan()
@@ -206,8 +220,8 @@ extension PreviewCell {
     }
 
     private func endPan() {
-        delegate?.previewCell(self, didPanScale: 1.0)
-        delegate?.previewCell(self, didEndPanWithExit: false)
+        panScale(1.0)
+        panEnded(false)
         // 如果图片当前显示的size小于原size，则重置为原size
         let size = fitSize
         let needResetSize = imageView.bounds.size.width < size.width
