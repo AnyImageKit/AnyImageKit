@@ -56,6 +56,7 @@ final class LoadingiCloudView: UIView {
         }
         progressLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(tipLabel.snp.right).offset(1)
+            maker.right.equalToSuperview()
             maker.centerY.equalToSuperview()
         }
     }
