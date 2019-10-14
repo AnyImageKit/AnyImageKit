@@ -329,33 +329,17 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             cell.imageMaximumZoomScale = imageMaximumZoomScale
             cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
             cell.asset = data.asset
-            
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
-                cell.setImage(originalImage)
-            } else {
-                cell.setImage(data.thumbnail)
-                cell.requestPhoto()
-            }
             return cell
         case .photoGif:
             let cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
             cell.delegate = self
             cell.asset = data.asset
-            cell.requestGIF()
             return cell
         case .video:
             let cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
             cell.delegate = self
             cell.asset = data.asset
-            
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
-                cell.setImage(originalImage)
-            } else {
-                cell.setImage(data.thumbnail)
-                cell.requestPhoto()
-            }
-            cell.requestVideo()
             return cell
         }
     }
@@ -372,7 +356,35 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PhotoPreviewCell:
             cell.reset()
         case let cell as VideoPreviewCell:
+            cell.reset()
             PhotoManager.shared.cancelFetch(for: cell.asset.asset)
+        default:
+            break
+        }
+    }
+    
+    /// Cell 进入屏幕
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
+        
+        switch cell {
+        case let cell as PhotoPreviewCell:
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+                cell.setImage(originalImage)
+            } else {
+                cell.setImage(data.thumbnail)
+                cell.requestPhoto()
+            }
+        case let cell as PhotoGIFPreviewCell:
+            cell.requestGIF()
+        case let cell as VideoPreviewCell:
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+                cell.setImage(originalImage)
+            } else {
+                cell.setImage(data.thumbnail)
+                cell.requestPhoto()
+            }
+            cell.requestVideo()
         default:
             break
         }

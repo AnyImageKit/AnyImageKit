@@ -120,6 +120,13 @@ extension VideoPreviewCell {
         setPlayButton(hidden: false)
     }
     
+    /// 重置
+    public func reset() {
+        setPlayButton(hidden: false)
+        player?.pause()
+        player?.seek(to: .zero)
+    }
+    
     /// 加载图片
     public func requestPhoto() {
         let options = PhotoFetchOptions(sizeMode: .resize(500))
@@ -189,8 +196,6 @@ extension VideoPreviewCell {
     
     @objc private func didPlayOver() {
         super.singleTapped()
-        setPlayButton(hidden: false)
-        player?.pause()
-        player?.seek(to: .zero)
+        reset()
     }
 }
