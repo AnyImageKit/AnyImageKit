@@ -30,20 +30,20 @@ import ImageIO
 
 /// Represents a set of image creating options used in Kingfisher.
 public struct ImageCreatingOptions {
-
+    
     /// The target scale of image needs to be created.
     public let scale: CGFloat
-
+    
     /// The expected animation duration if an animated image being created.
     public let duration: TimeInterval
-
+    
     /// For an animated image, whether or not all frames should be loaded before displaying.
     public let preloadAll: Bool
-
+    
     /// For an animated image, whether or not only the first image should be
     /// loaded as a static image. It is useful for preview purpose of an animated image.
     public let onlyFirstFrame: Bool
-
+    
     /// Creates an `ImageCreatingOptions` object.
     ///
     /// - Parameters:
@@ -110,12 +110,12 @@ class GIFAnimatedImage {
         guard let frameDuration = duration else { return defaultFrameDuration }
         return frameDuration.doubleValue > 0.011 ? frameDuration.doubleValue : defaultFrameDuration
     }
-
+    
     // Calculates frame duration at a specific index for a gif from an `imageSource`.
     static func getFrameDuration(from imageSource: CGImageSource, at index: Int) -> TimeInterval {
         guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil)
             as? [String: Any] else { return 0.0 }
-
+        
         let gifInfo = properties[kCGImagePropertyGIFDictionary as String] as? [String: Any]
         return getFrameDuration(from: gifInfo)
     }

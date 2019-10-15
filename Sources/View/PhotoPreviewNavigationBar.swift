@@ -9,7 +9,7 @@
 import UIKit
 
 final class PhotoPreviewNavigationBar: UIView {
-
+    
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
         let image = BundleHelper.image(named: "ReturnButton", style: PhotoManager.shared.config.theme.style)
@@ -52,5 +52,5 @@ final class PhotoPreviewNavigationBar: UIView {
             maker.width.height.equalTo(35)
         }
     }
-
+    
 }

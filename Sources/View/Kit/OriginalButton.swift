@@ -9,7 +9,7 @@
 import UIKit
 
 final class OriginalButton: UIControl {
-
+    
     override var isSelected: Bool {
         didSet {
             circleView.isSelected = isSelected
@@ -28,7 +28,7 @@ final class OriginalButton: UIControl {
         view.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

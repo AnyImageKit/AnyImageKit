@@ -16,9 +16,9 @@ struct VideoFetchOptions {
     let progressHandler: PHAssetVideoProgressHandler?
     
     init(isNetworkAccessAllowed: Bool = true,
-                version: PHVideoRequestOptionsVersion = .current,
-                deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
-                progressHandler: PHAssetVideoProgressHandler? = nil) {
+         version: PHVideoRequestOptionsVersion = .current,
+         deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+         progressHandler: PHAssetVideoProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
         self.deliveryMode = deliveryMode

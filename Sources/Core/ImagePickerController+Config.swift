@@ -64,14 +64,14 @@ extension ImagePickerController {
             switch style {
             case .auto:
                 return Theme(style: .auto,
-                mainColor: UIColor.wechatGreen,
-                textColor: UIColor.wechatText,
-                subTextColor: UIColor.wechatSubText,
-                toolBarColor: UIColor.wechatToolBar,
-                backgroundColor: UIColor.wechatBackground,
-                backgroundSelectedColor: UIColor.wechatBackgroundSelected,
-                separatorLineColor: UIColor.wechatSeparatorLine,
-                buttonDisableBackgroundColor: UIColor.wechatButtonDisableBackgroundColor)
+                             mainColor: UIColor.wechatGreen,
+                             textColor: UIColor.wechatText,
+                             subTextColor: UIColor.wechatSubText,
+                             toolBarColor: UIColor.wechatToolBar,
+                             backgroundColor: UIColor.wechatBackground,
+                             backgroundSelectedColor: UIColor.wechatBackgroundSelected,
+                             separatorLineColor: UIColor.wechatSeparatorLine,
+                             buttonDisableBackgroundColor: UIColor.wechatButtonDisableBackgroundColor)
             case .light:
                 return Theme(style: .light,
                              mainColor: UIColor.color(hex: 0x57BE6A),

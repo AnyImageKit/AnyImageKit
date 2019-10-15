@@ -9,7 +9,7 @@
 import UIKit
 
 final class PhotoEditViewController: UIViewController {
-
+    
     public lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
@@ -43,7 +43,7 @@ final class PhotoEditViewController: UIViewController {
         return CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
                        y: scrollView.contentSize.height * 0.5 + offsetY)
     }
-
+    
     /// 取图片适屏size
     private var fitSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
@@ -57,17 +57,17 @@ final class PhotoEditViewController: UIViewController {
         }
         return size
     }
-
+    
     /// 取图片适屏frame
     private var fitFrame: CGRect {
         let size = fitSize
         let y = (scrollView.bounds.height - size.height) > 0 ? (scrollView.bounds.height - size.height) * 0.5 : 0
         return CGRect(x: 0, y: y, width: size.width, height: size.height)
     }
-
+    
     /// 记录pan手势开始时imageView的位置
     private var beganFrame = CGRect.zero
-
+    
     /// 记录pan手势开始时，手势位置
     private var beganTouch = CGPoint.zero
     
@@ -113,7 +113,7 @@ final class PhotoEditViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         layout()
-//        scrollView.isUserInteractionEnabled = false
+        //        scrollView.isUserInteractionEnabled = false
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -133,7 +133,7 @@ extension PhotoEditViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         imageView.clipsToBounds = true
-
+        
         // 单击手势
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
         view.addGestureRecognizer(singleTap)
@@ -144,7 +144,7 @@ extension PhotoEditViewController {
         view.addSubview(backButton)
         layout()
     }
-
+    
     private func layout() {
         scrollView.frame = view.bounds
         scrollView.setZoomScale(1.0, animated: false)
@@ -185,7 +185,7 @@ extension PhotoEditViewController {
     }
     
     @objc private func onSingleTap() {
-//        delegate?.previewCellDidSingleTap(self)
+        //        delegate?.previewCellDidSingleTap(self)
     }
 }
 
@@ -194,7 +194,7 @@ extension PhotoEditViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
-
+    
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         imageView.center = centerOfContentSize
     }

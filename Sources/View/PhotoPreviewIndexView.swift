@@ -14,7 +14,7 @@ protocol PhotoPreviewIndexViewDelegate: class {
 }
 
 final class PhotoPreviewIndexView: UIView {
-
+    
     public weak var delegate: PhotoPreviewIndexViewDelegate? = nil
     
     public var currentIndex: Int = 0 {

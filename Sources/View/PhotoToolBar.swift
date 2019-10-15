@@ -16,7 +16,7 @@ final class PhotoToolBar: UIView {
         view.contentView.backgroundColor = PhotoManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
         return view
     }()
-
+    
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
@@ -102,12 +102,12 @@ final class PhotoToolBar: UIView {
 extension PhotoToolBar {
     
     public func hiddenEditAndOriginalButton(_ hidden: Bool) {
-           leftButton.isHidden = hidden
-           if PhotoManager.shared.config.allowUseOriginalPhoto {
-               originalButton.isHidden = hidden
-           }
-       }
-       
+        leftButton.isHidden = hidden
+        if PhotoManager.shared.config.allowUseOriginalPhoto {
+            originalButton.isHidden = hidden
+        }
+    }
+    
     public func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable

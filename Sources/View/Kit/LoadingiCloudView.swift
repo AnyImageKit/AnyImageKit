@@ -9,7 +9,7 @@
 import UIKit
 
 final class LoadingiCloudView: UIView {
-
+    
     private lazy var imageView: UIImageView = {
         let view = UIImageView(image: BundleHelper.image(named: "iCloud"))
         return view
@@ -22,7 +22,7 @@ final class LoadingiCloudView: UIView {
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()
-
+    
     private lazy var progressLabel: UILabel = {
         let view = UILabel()
         view.text = "0%"

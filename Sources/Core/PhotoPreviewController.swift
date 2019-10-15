@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 final class PhotoPreviewController: UIViewController {
-
+    
     public weak var delegate: PhotoPreviewControllerDelegate? = nil
     public weak var dataSource: PhotoPreviewControllerDataSource? = nil
     
@@ -61,7 +61,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.isPagingEnabled = true
         collectionView.alwaysBounceHorizontal = false
         return collectionView
-    }()
+        }()
     private lazy var navigationBar: PhotoPreviewNavigationBar = {
         let view = PhotoPreviewNavigationBar()
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
@@ -151,13 +151,13 @@ extension PhotoPreviewController {
         setBar(hidden: true, animated: false, isNormal: false)
         
         // TODO: 单击和双击有冲突
-//        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
-//        collectionView.addGestureRecognizer(singleTap)
+        //        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
+        //        collectionView.addGestureRecognizer(singleTap)
     }
-
-//    @objc private func onSingleTap() {
-//        setBar(hidden: navigationBar.alpha == 1, animated: false)
-//    }
+    
+    //    @objc private func onSingleTap() {
+    //        setBar(hidden: navigationBar.alpha == 1, animated: false)
+    //    }
     
     /// 设置视图布局
     private func setupLayout() {
@@ -383,7 +383,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
 
 // MARK: - UIScrollViewDelegate
 extension PhotoPreviewController: UIScrollViewDelegate {
-
+    
     /// 开始滑动 - 停止 GIF 和视频
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         setGIF(animated: false)
@@ -461,19 +461,19 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
         collectionView.layoutIfNeeded()
         return makeScalePresentationAnimator(indexPath: indexPath)
     }
-
+    
     /// 提供退场动画
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return makeDismissedAnimator()
     }
-
+    
     /// 提供转场协调器
     public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
         scalePresentationController = controller
         return controller
     }
-
+    
     /// 创建缩放型进场动画
     private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
         let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell
@@ -483,7 +483,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
         // 创建animator
         return ScaleAnimator(startView: relatedView, endView: cell?.imageView, scaleView: imageView)
     }
-
+    
     /// 创建缩放型退场动画
     private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
         guard let cell = collectionView.visibleCells.first as? PreviewCell else {
