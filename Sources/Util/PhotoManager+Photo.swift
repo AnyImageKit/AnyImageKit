@@ -86,36 +86,63 @@ extension PhotoManager {
                 }
             } else {
                 // Download image from iCloud
+                print("Download image from iCloud")
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud && image == nil && options.isNetworkAccessAllowed {
                     let photoDataOptions = PhotoDataFetchOptions(isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                                  progressHandler: options.progressHandler)
-                    self.requestPhotoData(for: asset, options: photoDataOptions) { [unowned self] result in
-                        switch result {
-                        case .success(let response):
-                            switch options.sizeMode {
-                            case .original:
-                                guard let image = UIImage(data: response.data) else {
-                                    completion(.failure(.invalidData))
-                                    return
+                    self.workQueue.async {
+                        self.requestPhotoData(for: asset, options: photoDataOptions) { [unowned self] result in
+                            switch result {
+                            case .success(let response):
+                                switch options.sizeMode {
+                                case .original:
+                                    guard let image = UIImage(data: response.data) else {
+                                        DispatchQueue.main.async {
+                                            completion(.failure(.invalidData))
+                                        }
+                                        return
+                                    }
+                                    DispatchQueue.main.async {
+                                        completion(.success((image, false)))
+                                    }
+                                case .preview:
+                                    let aspectRatio = CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
+                                    let targetSize = options.sizeMode.targetSize
+                                    var pixelWidth = targetSize.width * aspectRatio
+                                    if aspectRatio > 1.8 {
+                                        pixelWidth = pixelWidth * aspectRatio
+                                    }
+                                    if aspectRatio < 0.2 {
+                                        pixelWidth = pixelWidth * 0.5
+                                    }
+                                    let pixelHeight = pixelWidth / aspectRatio
+                                    guard let image = UIImage.resize(from: response.data, size: CGSize(width: pixelWidth, height: pixelHeight)) else {
+                                        DispatchQueue.main.async {
+                                            completion(.failure(.invalidData))
+                                        }
+                                        return
+                                    }
+                                    self.writeCache(image: image, for: asset.localIdentifier)
+                                    DispatchQueue.main.async {
+                                        completion(.success((image, false)))
+                                    }
+                                case .resize:
+                                    guard let image = UIImage.resize(from: response.data, size: options.sizeMode.targetSize) else {
+                                        DispatchQueue.main.async {
+                                            completion(.failure(.invalidData))
+                                        }
+                                        return
+                                    }
+                                    DispatchQueue.main.async {
+                                        completion(.success((image, false)))
+                                    }
                                 }
-                                completion(.success((image, false)))
-                            case .preview:
-                                guard let image = UIImage.resize(from: response.data, size: options.sizeMode.targetSize) else {
-                                    completion(.failure(.invalidData))
-                                    return
+                            case .failure(let error):
+                                DispatchQueue.main.async {
+                                    completion(.failure(error))
                                 }
-                                self.writeCache(image: image, for: asset.localIdentifier)
-                                completion(.success((image, false)))
-                            case .resize:
-                                guard let image = UIImage.resize(from: response.data, size: options.sizeMode.targetSize) else {
-                                    completion(.failure(.invalidData))
-                                    return
-                                }
-                                completion(.success((image, false)))
                             }
-                        case .failure(let error):
-                            completion(.failure(error))
                         }
                     }
                 }

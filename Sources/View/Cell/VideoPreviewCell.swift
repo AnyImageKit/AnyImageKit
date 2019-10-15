@@ -75,6 +75,14 @@ final class VideoPreviewCell: PreviewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        player = nil
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        iCloudView.reset()
+    }
+    
     override func layout() {
         super.layout()
         playerLayer?.frame = fitFrame

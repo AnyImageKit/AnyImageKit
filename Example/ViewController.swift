@@ -15,16 +15,23 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         print("Start")
         
-        let vc = TestViewController()
+        let vc = ImagePickerController(config: .init(), delegate: self)
 //        vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
 //        navigationController?.pushViewController(vc, animated: true)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let vc = TestViewController()
+        print("touchesBegan")
+        let vc = ImagePickerController(config: .init(), delegate: self)
 //        vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
     }
 }
 
+extension ViewController: ImagePickerControllerDelegate {
+    
+    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginal: Bool) {
+        
+    }
+}

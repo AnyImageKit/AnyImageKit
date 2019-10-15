@@ -65,6 +65,11 @@ final class LoadingiCloudView: UIView {
 // MARK: - Public function
 extension LoadingiCloudView {
     
+    public func reset() {
+        setProgress(0)
+        isHidden = true
+    }
+    
     public func setProgress(_ progress: Double) {
         progressLabel.text = "\(Int(progress * 100))%"
     }
