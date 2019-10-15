@@ -166,10 +166,10 @@ extension VideoPreviewCell {
             }
             PhotoManager.shared.requestVideo(for: self.asset.phAsset, options: options) { [weak self] result in
                 switch result {
-                case .success(let videoResponse):
+                case .success(let response):
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
-                        self.setPlayerItem(videoResponse)
+                        self.setPlayerItem(response.playerItem)
                     }
                 case .failure(let error):
                     print(error)
