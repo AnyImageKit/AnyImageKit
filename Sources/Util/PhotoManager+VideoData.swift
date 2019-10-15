@@ -146,7 +146,7 @@ extension PhotoManager {
     }
     
     private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoDataFetchOptions, completion: @escaping VideoDataFetchCompletion) {
-        let tmpPath = NSHomeDirectory().appending("/tmp")
+        let tmpPath = NSTemporaryDirectory()
         if !FileManager.default.fileExists(atPath: tmpPath) {
             do {
                 try FileManager.default.createDirectory(atPath: tmpPath, withIntermediateDirectories: true, attributes: nil)
@@ -163,7 +163,7 @@ extension PhotoManager {
         }
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd-HH:mm:ss"
+        formatter.dateFormat = "yyyyMMdd-HHmmss"
         let outputPath = tmpPath.appending("/video-\(formatter.string(from: Date())).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
         
