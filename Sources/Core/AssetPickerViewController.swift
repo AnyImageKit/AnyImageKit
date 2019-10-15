@@ -9,7 +9,8 @@
 import UIKit
 import Photos
 
-let defaultAssetSpacing: CGFloat = 2
+private let defaultAssetSpacing: CGFloat = 2
+private let toolBarHeight: CGFloat = 56
 
 final class AssetPickerViewController: UIViewController {
     
@@ -29,7 +30,7 @@ final class AssetPickerViewController: UIViewController {
         layout.minimumLineSpacing = defaultAssetSpacing
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing, left: defaultAssetSpacing, bottom: defaultAssetSpacing, right: defaultAssetSpacing)
+        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing, left: defaultAssetSpacing, bottom: toolBarHeight + defaultAssetSpacing, right: defaultAssetSpacing)
         view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         view.registerCell(AssetCell.self)
         view.dataSource = self
@@ -63,7 +64,6 @@ final class AssetPickerViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView.contentInset.bottom = 56+defaultAssetSpacing
         if autoScrollToLatest {
             if PhotoManager.shared.config.orderByDate == .asc {
                 collectionView.scrollToLast(at: .bottom, animated: false)
@@ -89,9 +89,9 @@ final class AssetPickerViewController: UIViewController {
         }
         toolBar.snp.makeConstraints { maker in
             if #available(iOS 11, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-toolBarHeight)
             } else {
-                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
+                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-toolBarHeight)
             }
             maker.left.right.bottom.equalToSuperview()
         }
