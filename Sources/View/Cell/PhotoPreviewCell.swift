@@ -50,7 +50,7 @@ final class PhotoPreviewCell: PreviewCell {
 extension PhotoPreviewCell {
     
     /// 重置图片缩放比例
-    public func reset() {
+    override func reset() {
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
     

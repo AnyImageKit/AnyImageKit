@@ -132,7 +132,7 @@ extension VideoPreviewCell {
     }
     
     /// 重置
-    public func reset() {
+    override func reset() {
         setPlayButton(hidden: false)
         player?.pause()
         player?.seek(to: .zero)
