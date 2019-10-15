@@ -29,7 +29,18 @@ open class ImagePickerController: UINavigationController {
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        switch PhotoManager.shared.config.theme.style {
+        case .light:
+            if #available(iOS 13.0, *) {
+                return .darkContent
+            } else {
+                return .default
+            }
+        case .dark:
+            return .lightContent
+        case .auto:
+            return .default
+        }
     }
     
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {

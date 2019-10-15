@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 public class Asset: Equatable {
-
+    
     public let phAsset: PHAsset
     public let type: MediaType
     public internal(set) var image: UIImage = UIImage()

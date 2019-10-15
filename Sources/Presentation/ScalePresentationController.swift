@@ -9,7 +9,7 @@
 import UIKit
 
 final class ScalePresentationController: UIPresentationController {
-
+    
     public var maskAlpha: CGFloat {
         get {
             return maskView.alpha
@@ -19,16 +19,16 @@ final class ScalePresentationController: UIPresentationController {
     }
     
     /// 蒙板
-    private var maskView: UIView = {
+    private(set) var maskView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.black
+        view.backgroundColor = ColorHelper.createByStyle(light: .white, dark: .black)
         return view
     }()
-
+    
     override func presentationTransitionWillBegin() {
         super.presentationTransitionWillBegin()
         guard let containerView = self.containerView else { return }
-
+        
         containerView.addSubview(maskView)
         maskView.frame = containerView.bounds
         maskView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -37,7 +37,7 @@ final class ScalePresentationController: UIPresentationController {
             self.maskView.alpha = 1
         }, completion: nil)
     }
-
+    
     override func dismissalTransitionWillBegin() {
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
             self.maskView.alpha = 0

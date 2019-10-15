@@ -9,7 +9,7 @@
 import Photos
 
 public enum MediaType: Equatable {
-        
+    
     case photo
     case photoGif
     case video

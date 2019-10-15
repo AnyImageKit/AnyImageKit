@@ -9,7 +9,7 @@
 import UIKit
 
 final class OriginalButton: UIControl {
-
+    
     override var isSelected: Bool {
         didSet {
             circleView.isSelected = isSelected
@@ -28,7 +28,7 @@ final class OriginalButton: UIControl {
         view.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -73,7 +73,7 @@ fileprivate class CircleView: UIView {
         let view = UIView()
         view.clipsToBounds = true
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.white.cgColor
+        view.layer.borderColor = PhotoManager.shared.config.theme.textColor.cgColor
         return view
     }()
     private lazy var smallCircleView: UIView = {
@@ -107,6 +107,15 @@ fileprivate class CircleView: UIView {
         }
         smallCircleView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview().inset(3)
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13, *) {
+            guard PhotoManager.shared.config.theme.style == .auto else { return }
+            guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
+            bigCircleView.layer.borderColor = PhotoManager.shared.config.theme.textColor.cgColor
         }
     }
     

@@ -32,6 +32,19 @@ struct BundleHelper {
         return UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
+    static func image(named: String, style: ImagePickerController.UserInterfaceStyle) -> UIImage? {
+        let imageName: String
+        switch style {
+        case .auto:
+            imageName = named + "Auto"
+        case .light:
+            imageName = named + "Light"
+        case .dark:
+            imageName = named + "Dark"
+        }
+        return UIImage(named: imageName, in: bundle, compatibleWith: nil)
+    }
+    
     static func localizedString(key: String) -> String {
         return localizedString(key: key, value: nil)
     }

@@ -64,16 +64,24 @@ extension ImagePickerController {
             switch style {
             case .auto:
                 return Theme(style: .auto,
-                mainColor: UIColor.wechatGreen,
-                textColor: UIColor.wechatText,
-                subTextColor: UIColor.wechatSubText,
-                toolBarColor: UIColor.wechatToolBar,
-                backgroundColor: UIColor.wechatBackground,
-                backgroundSelectedColor: UIColor.wechatBackgroundSelected,
-                separatorLineColor: UIColor.wechatSeparatorLine,
-                buttonDisableBackgroundColor: UIColor.wechatButtonDisableBackgroundColor)
+                             mainColor: UIColor.wechatGreen,
+                             textColor: UIColor.wechatText,
+                             subTextColor: UIColor.wechatSubText,
+                             toolBarColor: UIColor.wechatToolBar,
+                             backgroundColor: UIColor.wechatBackground,
+                             backgroundSelectedColor: UIColor.wechatBackgroundSelected,
+                             separatorLineColor: UIColor.wechatSeparatorLine,
+                             buttonDisableBackgroundColor: UIColor.wechatButtonDisableBackgroundColor)
             case .light:
-                fatalError()
+                return Theme(style: .light,
+                             mainColor: UIColor.color(hex: 0x57BE6A),
+                             textColor: UIColor.color(hex: 0x333333),
+                             subTextColor: UIColor.color(hex: 0x999999),
+                             toolBarColor: UIColor.color(hex: 0xECECEC),
+                             backgroundColor: UIColor.color(hex: 0xFFFFFF),
+                             backgroundSelectedColor: UIColor.color(hex: 0xE4E5E9),
+                             separatorLineColor: UIColor.color(hex: 0xD6D7DA),
+                             buttonDisableBackgroundColor: UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3))
             case .dark:
                 return Theme(style: .dark,
                              mainColor: UIColor.color(hex: 0x57BE6A),
@@ -90,33 +98,6 @@ extension ImagePickerController {
     
     public enum UserInterfaceStyle {
         case auto
-        case light
-        case dark
-        
-        var currentStyle: _UserInterfaceStyle {
-            switch self {
-            case .auto:
-                if #available(iOS 13.0, *) {
-                    switch UITraitCollection.current.userInterfaceStyle {
-                    case .light:
-                        return .light
-                    case .dark:
-                        return .dark
-                    default:
-                        return .light
-                    }
-                } else {
-                    return .light
-                }
-            case .light:
-                return .light
-            case .dark:
-                return .dark
-            }
-        }
-    }
-    
-    enum _UserInterfaceStyle {
         case light
         case dark
     }

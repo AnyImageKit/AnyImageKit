@@ -70,6 +70,7 @@
 		A5CC86C123349D4B00BCB372 /* PhotoPreviewIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */; };
 		A5CEB00D233DAF4700C67706 /* PhotoGIFPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */; };
 		A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */; };
+		A5DFBCEF23559E1C00B0A58B /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +181,7 @@
 		A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewIndexView.swift; sourceTree = "<group>"; };
 		A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGIFPreviewCell.swift; sourceTree = "<group>"; };
 		A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; };
+		A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 				A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */,
 				A00869BC233C987600237651 /* AssociatedObject.swift */,
 				A59332612338AED8003CE652 /* AnimatedImage.swift */,
+				A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -588,6 +591,7 @@
 				A05C8DAB233E0F56005B0F3C /* MediaType.swift in Sources */,
 				A5CEB00D233DAF4700C67706 /* PhotoGIFPreviewCell.swift in Sources */,
 				A5CC86C123349D4B00BCB372 /* PhotoPreviewIndexView.swift in Sources */,
+				A5DFBCEF23559E1C00B0A58B /* ColorHelper.swift in Sources */,
 				A56A3C8C2330BCA100EBFC48 /* PhotoPreviewNavigationBar.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A05C8DA1233DEBFC005B0F3C /* PhotoManager+PhotoData.swift in Sources */,

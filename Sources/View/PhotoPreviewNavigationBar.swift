@@ -9,10 +9,11 @@
 import UIKit
 
 final class PhotoPreviewNavigationBar: UIView {
-
+    
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.image(named: "ReturnButtonWhite"), for: .normal)
+        let image = BundleHelper.image(named: "ReturnButton", style: PhotoManager.shared.config.theme.style)
+        view.setImage(image, for: .normal)
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
@@ -22,7 +23,8 @@ final class PhotoPreviewNavigationBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = PhotoManager.shared.config.theme.backgroundColor.withAlphaComponent(0.95)
+        let theme = PhotoManager.shared.config.theme
+        backgroundColor = ColorHelper.createByStyle(light: theme.toolBarColor, dark: theme.backgroundColor).withAlphaComponent(0.95)
         setupView()
     }
     
@@ -50,5 +52,5 @@ final class PhotoPreviewNavigationBar: UIView {
             maker.width.height.equalTo(35)
         }
     }
-
+    
 }

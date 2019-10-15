@@ -23,10 +23,10 @@ final class PhotoPreviewCell: PreviewCell {
             self.scrollView.maximumZoomScale = imageMaximumZoomScale
         }
     }
-
+    
     /// 双击放大图片时的目标比例
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -39,7 +39,7 @@ final class PhotoPreviewCell: PreviewCell {
     private func setupView() {
         scrollView.delegate = self
         scrollView.maximumZoomScale = imageMaximumZoomScale
-
+        
         // 双击手势
         contentView.addGestureRecognizer(doubleTap)
         singleTap.require(toFail: doubleTap)
@@ -103,7 +103,7 @@ extension PhotoPreviewCell: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
-
+    
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         imageView.center = centerOfContentSize
     }
