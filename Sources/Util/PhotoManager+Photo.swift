@@ -60,7 +60,7 @@ extension PhotoManager {
     func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
         if let asset = config.orderByDate == .asc ? album.result.lastObject : album.result.firstObject {
             let sacle = UIScreen.main.nativeScale
-            let options = PhotoFetchOptions(sizeMode: .resize(55*sacle))
+            let options = PhotoFetchOptions(sizeMode: .resize(100*sacle))
             requestPhoto(for: asset, options: options, completion: completion)
         }
     }
