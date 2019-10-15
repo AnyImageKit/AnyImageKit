@@ -27,3 +27,10 @@ extension PHAsset {
         return String(format: "%02ld:%02ld", min, sec)
     }
 }
+
+extension PHAsset {
+    
+    var pixelSize: CGSize {
+        return CGSize(width: pixelWidth, height: pixelHeight)
+    }
+}

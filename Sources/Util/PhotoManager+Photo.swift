@@ -107,17 +107,8 @@ extension PhotoManager {
                                         completion(.success((image, false)))
                                     }
                                 case .preview:
-                                    let aspectRatio = CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
-                                    let targetSize = options.sizeMode.targetSize
-                                    var pixelWidth = targetSize.width * aspectRatio
-                                    if aspectRatio > 1.8 {
-                                        pixelWidth = pixelWidth * aspectRatio
-                                    }
-                                    if aspectRatio < 0.2 {
-                                        pixelWidth = pixelWidth * 0.5
-                                    }
-                                    let pixelHeight = pixelWidth / aspectRatio
-                                    guard let image = UIImage.resize(from: response.data, size: CGSize(width: pixelWidth, height: pixelHeight)) else {
+                                    let size = self.resize(from: asset.pixelSize, to: options.sizeMode.targetSize)
+                                    guard let image = UIImage.resize(from: response.data, size: size) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
@@ -128,7 +119,8 @@ extension PhotoManager {
                                         completion(.success((image, false)))
                                     }
                                 case .resize:
-                                    guard let image = UIImage.resize(from: response.data, size: options.sizeMode.targetSize) else {
+                                    let size = self.resize(from: asset.pixelSize, to: options.sizeMode.targetSize)
+                                    guard let image = UIImage.resize(from: response.data, size: size) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
@@ -148,5 +140,18 @@ extension PhotoManager {
                 }
             }
         }
+    }
+    
+    private func resize(from assetSize: CGSize, to targetSize: CGSize) -> CGSize {
+        let aspectRatio = assetSize.width / assetSize.height
+        var pixelWidth = targetSize.width * aspectRatio
+        if aspectRatio > 1.8 {
+            pixelWidth = pixelWidth * aspectRatio
+        }
+        if aspectRatio < 0.2 {
+            pixelWidth = pixelWidth * 0.5
+        }
+        let pixelHeight = pixelWidth / aspectRatio
+        return CGSize(width: pixelWidth, height: pixelHeight)
     }
 }
