@@ -247,7 +247,7 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
-		A0800418232F5F90006B4711 /* Core */ = {
+		A0800418232F5F90006B4711 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
@@ -257,7 +257,7 @@
 				A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */,
 				A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */,
 			);
-			path = Core;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		A099CC56232F3BF70023CC3D = {
@@ -290,7 +290,7 @@
 			children = (
 				A099CC63232F3BF70023CC3D /* AnyImagePicker.h */,
 				A099CC64232F3BF70023CC3D /* Info.plist */,
-				A0800418232F5F90006B4711 /* Core */,
+				A0800418232F5F90006B4711 /* Controller */,
 				A5A27BBA232F83C900D966B8 /* View */,
 				A0F4753A232F7DDB00BB117B /* Model */,
 				A56A3C7C233075C300EBFC48 /* Protocol */,
