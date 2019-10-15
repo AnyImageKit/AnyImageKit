@@ -8,33 +8,33 @@
 
 import Photos
 
-public struct PhotoDataFetchOptions {
+struct PhotoDataFetchOptions {
     
-    public let version: PHImageRequestOptionsVersion
-    public let isNetworkAccessAllowed: Bool
-    public let progressHandler: PHAssetImageProgressHandler?
+    let version: PHImageRequestOptionsVersion
+    let isNetworkAccessAllowed: Bool
+    let progressHandler: PHAssetImageProgressHandler?
     
-    public init(version: PHImageRequestOptionsVersion = .current,
-                isNetworkAccessAllowed: Bool = true,
-                progressHandler: PHAssetImageProgressHandler? = nil) {
+    init(version: PHImageRequestOptionsVersion = .current,
+         isNetworkAccessAllowed: Bool = true,
+         progressHandler: PHAssetImageProgressHandler? = nil) {
         self.version = version
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
 }
 
-public struct PhotoDataFetchResponse {
+struct PhotoDataFetchResponse {
     
-    public let data: Data
-    public let dataUTI: String
-    public let orientation: CGImagePropertyOrientation
+    let data: Data
+    let dataUTI: String
+    let orientation: CGImagePropertyOrientation
 }
 
-public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
+typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
-    public func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
+    func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
         let requestOptions = PHImageRequestOptions()
         requestOptions.version = options.version
         requestOptions.progressHandler = options.progressHandler

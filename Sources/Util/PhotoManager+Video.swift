@@ -8,14 +8,14 @@
 
 import Photos
 
-public struct VideoFetchOptions {
+struct VideoFetchOptions {
     
-    public let isNetworkAccessAllowed: Bool
-    public let version: PHVideoRequestOptionsVersion
-    public let deliveryMode: PHVideoRequestOptionsDeliveryMode
-    public let progressHandler: PHAssetVideoProgressHandler?
+    let isNetworkAccessAllowed: Bool
+    let version: PHVideoRequestOptionsVersion
+    let deliveryMode: PHVideoRequestOptionsDeliveryMode
+    let progressHandler: PHAssetVideoProgressHandler?
     
-    public init(isNetworkAccessAllowed: Bool = true,
+    init(isNetworkAccessAllowed: Bool = true,
                 version: PHVideoRequestOptionsVersion = .current,
                 deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
                 progressHandler: PHAssetVideoProgressHandler? = nil) {
@@ -26,16 +26,16 @@ public struct VideoFetchOptions {
     }
 }
 
-public struct VideoFetchResponse {
+struct VideoFetchResponse {
     
-    public let playerItem: AVPlayerItem
+    let playerItem: AVPlayerItem
 }
 
-public typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImagePickerError>) -> Void
+typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
-    public func requestVideo(for asset: PHAsset, options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
+    func requestVideo(for asset: PHAsset, options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
         let requestOptions = PHVideoRequestOptions()
         requestOptions.version = options.version
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed

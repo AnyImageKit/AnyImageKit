@@ -9,19 +9,19 @@
 import Photos
 import UIKit
 
-public struct PhotoFetchOptions {
+struct PhotoFetchOptions {
     
-    public let sizeMode: PhotoSizeMode
-    public let resizeMode: PHImageRequestOptionsResizeMode
-    public let version: PHImageRequestOptionsVersion
-    public let isNetworkAccessAllowed: Bool
-    public let progressHandler: PHAssetImageProgressHandler?
+    let sizeMode: PhotoSizeMode
+    let resizeMode: PHImageRequestOptionsResizeMode
+    let version: PHImageRequestOptionsVersion
+    let isNetworkAccessAllowed: Bool
+    let progressHandler: PHAssetImageProgressHandler?
     
-    public init(sizeMode: PhotoSizeMode = .resize(100),
-                resizeMode: PHImageRequestOptionsResizeMode = .fast,
-                version: PHImageRequestOptionsVersion = .current,
-                isNetworkAccessAllowed: Bool = true,
-                progressHandler: PHAssetImageProgressHandler? = nil) {
+    init(sizeMode: PhotoSizeMode = .resize(100),
+         resizeMode: PHImageRequestOptionsResizeMode = .fast,
+         version: PHImageRequestOptionsVersion = .current,
+         isNetworkAccessAllowed: Bool = true,
+         progressHandler: PHAssetImageProgressHandler? = nil) {
         self.sizeMode = sizeMode
         self.resizeMode = resizeMode
         self.version = version
@@ -30,7 +30,7 @@ public struct PhotoFetchOptions {
     }
 }
 
-public enum PhotoSizeMode: Equatable {
+enum PhotoSizeMode: Equatable {
     /// Custom Size
     case resize(CGFloat)
     /// Preview Size, based on your screen width
@@ -50,13 +50,13 @@ public enum PhotoSizeMode: Equatable {
     }
 }
 
-public struct PhotoFetchResponse {
+struct PhotoFetchResponse {
     
-    public let image: UIImage
-    public let isDegraded: Bool
+    let image: UIImage
+    let isDegraded: Bool
 }
 
-public typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
+typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
@@ -68,7 +68,7 @@ extension PhotoManager {
         }
     }
     
-    public func requestPhoto(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) {
+    func requestPhoto(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) {
         let requestOptions = PHImageRequestOptions()
         requestOptions.version = options.version
         requestOptions.resizeMode = options.resizeMode

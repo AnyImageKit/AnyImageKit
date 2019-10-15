@@ -122,7 +122,7 @@ extension PhotoManager {
 
 extension PhotoManager {
     
-    public func addSelectedAsset(_ asset: Asset) {
+    func addSelectedAsset(_ asset: Asset) {
         selectdAsset.append(asset)
         asset.selectedNum = selectdAsset.count
         // 加载原图，缓存到内存
@@ -143,7 +143,7 @@ extension PhotoManager {
         }
     }
     
-    public func removeSelectedAsset(_ asset: Asset) {
+    func removeSelectedAsset(_ asset: Asset) {
         guard let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0 == asset }) else { return }
         for item in selectdAsset {
             if item.selectedNum > asset.selectedNum {
@@ -153,7 +153,7 @@ extension PhotoManager {
         selectdAsset.remove(at: idx)
     }
     
-    public func removeAllSelectedAsset() {
+    func removeAllSelectedAsset() {
         selectdAsset.removeAll()
     }
 }
