@@ -10,6 +10,7 @@ import Foundation
 
 public enum ImagePickerError: Error {
     
+    case invalidMediaType
     case invalidInfo
     case invalidData
     case invalidDataUTI
@@ -20,4 +21,5 @@ public enum ImagePickerError: Error {
     case invalidFileType
     case createDirectory
     case exportFail
+    case exportCancel
 }

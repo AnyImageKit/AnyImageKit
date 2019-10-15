@@ -9,7 +9,7 @@
 import Photos
 import AVFoundation
 
-enum VideoDataExportPreset: RawRepresentable {
+public enum VideoDataExportPreset: RawRepresentable, Equatable {
     /// H.264/AVC 640x480
     case h264_640x480
     /// H.264/AVC 960x540
@@ -26,7 +26,7 @@ enum VideoDataExportPreset: RawRepresentable {
     /// H.265/HEVC 3840x2160 when < iOS 11 = h264_3840x2160
     case h265_3840x2160
     
-    var rawValue: String {
+    public var rawValue: String {
         switch self {
         case .h264_640x480:
             return AVAssetExportPreset640x480
@@ -53,7 +53,7 @@ enum VideoDataExportPreset: RawRepresentable {
         }
     }
     
-    init?(rawValue: String) {
+    public init?(rawValue: String) {
         if #available(iOS 11.0, *) {
             switch rawValue {
             case AVAssetExportPreset640x480:
@@ -92,37 +92,42 @@ enum VideoDataExportPreset: RawRepresentable {
     }
 }
 
-struct VideoDataFetchOptions {
+public typealias VideoDataExportProgressHandler = (Double) -> Void
+
+public struct VideoDataFetchOptions {
     
-    let isNetworkAccessAllowed: Bool
-    let version: PHVideoRequestOptionsVersion
-    let deliveryMode: PHVideoRequestOptionsDeliveryMode
-    let progressHandler: PHAssetVideoProgressHandler?
-    let exportPreset: VideoDataExportPreset
+    public let isNetworkAccessAllowed: Bool
+    public let version: PHVideoRequestOptionsVersion
+    public let deliveryMode: PHVideoRequestOptionsDeliveryMode
+    public let fetchProgressHandler: PHAssetVideoProgressHandler?
+    public let exportProgressHandler: VideoDataExportProgressHandler?
+    public let exportPreset: VideoDataExportPreset
     
-    init(isNetworkAccessAllowed: Bool = true,
-         version: PHVideoRequestOptionsVersion = .current,
-         deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
-         progressHandler: PHAssetVideoProgressHandler? = nil,
-         exportPreset: VideoDataExportPreset = .h264_1280x720) {
+    public init(isNetworkAccessAllowed: Bool = true,
+                version: PHVideoRequestOptionsVersion = .current,
+                deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
+                fetchProgressHandler: PHAssetVideoProgressHandler? = nil,
+                exportPreset: VideoDataExportPreset = .h264_1280x720,
+                exportProgressHandler: VideoDataExportProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
         self.deliveryMode = deliveryMode
-        self.progressHandler = progressHandler
+        self.fetchProgressHandler = fetchProgressHandler
         self.exportPreset = exportPreset
+        self.exportProgressHandler = exportProgressHandler
     }
 }
 
-struct VideoDataFetchResponse {
+public struct VideoDataFetchResponse {
     
-    let outputURL: URL
+    public let outputURL: URL
 }
 
-typealias VideoDataFetchCompletion = (Result<VideoDataFetchResponse, ImagePickerError>) -> Void
+public typealias VideoDataFetchCompletion = (Result<VideoDataFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
-    func fetchVideoData(for asset: PHAsset, options: VideoDataFetchOptions = .init(), completion: @escaping VideoDataFetchCompletion) {
+    func requestVideoData(for asset: PHAsset, options: VideoDataFetchOptions = .init(), completion: @escaping VideoDataFetchCompletion) {
         let supportPresets = AVAssetExportSession.allExportPresets()
         guard supportPresets.contains(options.exportPreset.rawValue) else {
             completion(.failure(.invalidExportPreset))
@@ -133,7 +138,7 @@ extension PhotoManager {
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         requestOptions.version = options.version
         requestOptions.deliveryMode = options.deliveryMode
-        requestOptions.progressHandler = options.progressHandler
+        requestOptions.progressHandler = options.fetchProgressHandler
         
         PHImageManager.default().requestExportSession(forVideo: asset, options: requestOptions, exportPreset: options.exportPreset.rawValue) { [weak self] (exportSession, info) in
             guard let self = self else { return }
@@ -164,7 +169,8 @@ extension PhotoManager {
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd-HHmmss"
-        let outputPath = tmpPath.appending("/video-\(formatter.string(from: Date())).mp4")
+        let date = Date()
+        let outputPath = tmpPath.appending("/video-\(formatter.string(from: date)).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
         
         exportSession.shouldOptimizeForNetworkUse = true
@@ -178,13 +184,13 @@ extension PhotoManager {
                 case .waiting:
                     print("waiting")
                 case .exporting:
-                    print("exporting")
+                    options.exportProgressHandler?(Double(exportSession.progress))
                 case .completed:
                     completion(.success(VideoDataFetchResponse(outputURL: outputURL)))
                 case .failed:
                     completion(.failure(.exportFail))
                 case .cancelled:
-                    print("cancelled")
+                    completion(.failure(.exportCancel))
                 @unknown default:
                     break
                 }

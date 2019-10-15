@@ -8,17 +8,17 @@
 
 import Photos
 
-struct VideoFetchOptions {
+public struct VideoFetchOptions {
     
-    let isNetworkAccessAllowed: Bool
-    let version: PHVideoRequestOptionsVersion
-    let deliveryMode: PHVideoRequestOptionsDeliveryMode
-    let progressHandler: PHAssetVideoProgressHandler?
+    public let isNetworkAccessAllowed: Bool
+    public let version: PHVideoRequestOptionsVersion
+    public let deliveryMode: PHVideoRequestOptionsDeliveryMode
+    public let progressHandler: PHAssetVideoProgressHandler?
     
-    init(isNetworkAccessAllowed: Bool = true,
-         version: PHVideoRequestOptionsVersion = .current,
-         deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
-         progressHandler: PHAssetVideoProgressHandler? = nil) {
+    public init(isNetworkAccessAllowed: Bool = true,
+                version: PHVideoRequestOptionsVersion = .current,
+                deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                progressHandler: PHAssetVideoProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
         self.deliveryMode = deliveryMode
@@ -26,12 +26,12 @@ struct VideoFetchOptions {
     }
 }
 
-struct VideoFetchResponse {
+public struct VideoFetchResponse {
     
-    let playerItem: AVPlayerItem
+    public let playerItem: AVPlayerItem
 }
 
-typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImagePickerError>) -> Void
+public typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     

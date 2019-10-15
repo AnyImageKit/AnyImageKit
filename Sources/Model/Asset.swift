@@ -33,16 +33,36 @@ public class Asset: Equatable {
 }
 
 // MARK: - Original Photo
-
 extension Asset {
     
-    // TODO
+    /// 获取原图
+    public func fetchPhotoData(options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
+        guard type == .photo || type == .photoGif else {
+            completion(.failure(.invalidMediaType))
+            return
+        }
+        PhotoManager.shared.requestPhotoData(for: phAsset, options: options, completion: completion)
+    }
 }
 
 // MARK: - Video
-
 extension Asset {
     
-    // TODO
+    /// 获取视频，用于播放
+    public func fetchVideo(options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
+        guard type == .video else {
+            completion(.failure(.invalidMediaType))
+            return
+        }
+        PhotoManager.shared.requestVideo(for: phAsset, options: options, completion: completion)
+    }
+    
+    /// 获取视频数据，用于传输
+    public func fetchVideoData(options: VideoDataFetchOptions = .init(), completion: @escaping VideoDataFetchCompletion) {
+        guard type == .video else {
+            completion(.failure(.invalidMediaType))
+            return
+        }
+        PhotoManager.shared.requestVideoData(for: phAsset, options: options, completion: completion)
+    }
 }
-

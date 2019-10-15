@@ -8,29 +8,29 @@
 
 import Photos
 
-struct PhotoDataFetchOptions {
+public struct PhotoDataFetchOptions {
     
-    let version: PHImageRequestOptionsVersion
-    let isNetworkAccessAllowed: Bool
-    let progressHandler: PHAssetImageProgressHandler?
+    public let version: PHImageRequestOptionsVersion
+    public let isNetworkAccessAllowed: Bool
+    public let progressHandler: PHAssetImageProgressHandler?
     
-    init(version: PHImageRequestOptionsVersion = .current,
-         isNetworkAccessAllowed: Bool = true,
-         progressHandler: PHAssetImageProgressHandler? = nil) {
+    public init(version: PHImageRequestOptionsVersion = .current,
+                isNetworkAccessAllowed: Bool = true,
+                progressHandler: PHAssetImageProgressHandler? = nil) {
         self.version = version
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
 }
 
-struct PhotoDataFetchResponse {
+public struct PhotoDataFetchResponse {
     
-    let data: Data
-    let dataUTI: String
-    let orientation: CGImagePropertyOrientation
+    public let data: Data
+    public let dataUTI: String
+    public let orientation: CGImagePropertyOrientation
 }
 
-typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
+public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
