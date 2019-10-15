@@ -36,8 +36,10 @@ final class PhotoToolBar: UIView {
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
         view.backgroundColor = PhotoManager.shared.config.theme.mainColor
-        view.setTitleColor(PhotoManager.shared.config.theme.textColor, for: .normal)
-        view.setTitleColor(PhotoManager.shared.config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
+        let color = ColorHelper.createByStyle(light: .white, dark: PhotoManager.shared.config.theme.textColor)
+        let disableColor = ColorHelper.createByStyle(light: color.withAlphaComponent(0.7), dark: color.withAlphaComponent(0.3))
+        view.setTitleColor(color, for: .normal)
+        view.setTitleColor(disableColor, for: .disabled)
         view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view

@@ -25,9 +25,10 @@ final class ArrowButton: UIControl {
     }()
     
     private lazy var effectView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .dark)
+        let effect = UIBlurEffect(style: getStyle())
         let view = UIVisualEffectView(effect: effect)
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        let color = ColorHelper.createByStyle(light: UIColor.black.withAlphaComponent(0.1), dark: UIColor.white.withAlphaComponent(0.9))
+        view.backgroundColor = color
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         return view
@@ -78,9 +79,21 @@ final class ArrowButton: UIControl {
         }
     }
     
-    @objc private func buttonTapped(_ sender: UIButton) {
-        isSelected.toggle()
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13, *) {
+            guard PhotoManager.shared.config.theme.style == .auto else { return }
+            guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
+            
+            effectView.effect = UIBlurEffect(style: getStyle())
+            let color = ColorHelper.createByStyle(light: UIColor.black.withAlphaComponent(0.1), dark: UIColor.white.withAlphaComponent(0.9))
+            effectView.backgroundColor = color
+        }
     }
+}
+
+// MARK: - Public function
+extension ArrowButton {
     
     public func setTitle(_ title: String) {
         if isSelected {
@@ -90,5 +103,38 @@ final class ArrowButton: UIControl {
             self.label.text = title
             self.layoutIfNeeded()
         }
+    }
+}
+
+// MARK: - Target
+extension ArrowButton {
+    
+    @objc private func buttonTapped(_ sender: UIButton) {
+        isSelected.toggle()
+    }
+}
+
+// MARK: - Private function
+extension ArrowButton {
+    
+    private func getStyle() -> UIBlurEffect.Style {
+        let style: UIBlurEffect.Style
+        switch PhotoManager.shared.config.theme.style {
+        case .auto:
+            if #available(iOS 13.0, *) {
+                if self.traitCollection.userInterfaceStyle == .dark {
+                    style = .dark
+                } else {
+                    style = .light
+                }
+            } else {
+                style = .light
+            }
+        case .light:
+            style = .light
+        case .dark:
+            style = .dark
+        }
+        return style
     }
 }

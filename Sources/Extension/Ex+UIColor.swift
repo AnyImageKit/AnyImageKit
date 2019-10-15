@@ -46,35 +46,35 @@ extension UIColor {
 extension UIColor {
     
     static var wechatGreen: UIColor {
-        return UIColor.create(light: .green, dark: UIColor.color(hex: 0x57BE6A))
+        return UIColor.create(light: UIColor.color(hex: 0x57BE6A), dark: UIColor.color(hex: 0x57BE6A))
     }
     
     static var wechatText: UIColor {
-        return UIColor.create(light: .black, dark: UIColor.color(hex: 0xEAEAEA))
+        return UIColor.create(light: UIColor.color(hex: 0x333333), dark: UIColor.color(hex: 0xEAEAEA))
     }
     
     static var wechatSubText: UIColor {
-        return UIColor.create(light: .black, dark: UIColor.color(hex: 0x6E6E6E))
-    }
-    
-    static var wechatBackground: UIColor {
-        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x31302F))
-    }
-    
-    static var wechatBackgroundSelected: UIColor {
-        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x171717))
-    }
-    
-    static var wechatSeparatorLine: UIColor {
-        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x454444))
+        return UIColor.create(light: UIColor.color(hex: 0x999999), dark: UIColor.color(hex: 0x6E6E6E))
     }
     
     static var wechatToolBar: UIColor {
-        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x5C5C5C))
+        return UIColor.create(light: UIColor.color(hex: 0xF7F7F7), dark: UIColor.color(hex: 0x5C5C5C))
+    }
+    
+    static var wechatBackground: UIColor {
+        return UIColor.create(light: UIColor.color(hex: 0xFFFFFF), dark: UIColor.color(hex: 0x31302F))
+    }
+    
+    static var wechatBackgroundSelected: UIColor {
+        return UIColor.create(light: UIColor.color(hex: 0xE4E5E9), dark: UIColor.color(hex: 0x171717))
+    }
+    
+    static var wechatSeparatorLine: UIColor {
+        return UIColor.create(light: UIColor.color(hex: 0xD6D7DA), dark: UIColor.color(hex: 0x454444))
     }
     
     static var wechatButtonDisableBackgroundColor: UIColor {
-        return UIColor.create(light: .white, dark: UIColor.color(hex: 0x515253))
+        return UIColor.create(light: UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3), dark: UIColor.color(hex: 0x515253))
     }
     
 }

@@ -39,11 +39,8 @@ final class PhotoPreviewController: UIViewController {
     }
     /// 缩放型转场协调器
     private weak var scalePresentationController: ScalePresentationController?
-    /// 保存原windowLevel
-    private lazy var originalWindowLevel: UIWindow.Level? = { [weak self] in
-        let window = self?.view.window
-        return window?.windowLevel
-    }()
+    ///
+    private var toolBarHiddenStateBeforePan = false
     
     private lazy var flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -108,7 +105,6 @@ final class PhotoPreviewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         didSetCurrentIdx()
-        coverStatusBar(true)
         setGIF(animated: true)
     }
     
@@ -119,7 +115,6 @@ final class PhotoPreviewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        coverStatusBar(false)
     }
     
     override func viewDidLayoutSubviews() {
@@ -153,7 +148,7 @@ extension PhotoPreviewController {
         view.addSubview(toolBar)
         view.addSubview(indexView)
         setupLayout()
-        setBar(hidden: true, animated: false)
+        setBar(hidden: true, animated: false, isNormal: false)
         
         // TODO: 单击和双击有冲突
 //        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
@@ -200,9 +195,14 @@ extension PhotoPreviewController {
     }
     
     /// 显示/隐藏工具栏
-    private func setBar(hidden: Bool, animated: Bool = true) {
+    private func setBar(hidden: Bool, animated: Bool = true, isNormal: Bool = true) {
         if navigationBar.alpha == 0 && hidden { return }
         if navigationBar.alpha == 1 && !hidden { return }
+        if isNormal {
+            NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
+            scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : ColorHelper.createByStyle(light: .white, dark: .black)
+        }
+        
         if animated {
             UIView.animate(withDuration: 0.25) {
                 self.navigationBar.alpha = hidden ? 0 : 1
@@ -214,21 +214,6 @@ extension PhotoPreviewController {
             toolBar.alpha = hidden ? 0 : 1
             indexView.alpha = hidden ? 0 : 1
         }
-    }
-    
-    /// 遮盖状态栏。以改变 windowLevel 的方式遮盖
-    /// - parameter cover: true-遮盖；false-不遮盖
-    private func coverStatusBar(_ cover: Bool) {
-        guard let window = view.window else {
-            return
-        }
-        if originalWindowLevel == nil {
-            originalWindowLevel = window.windowLevel
-        }
-        guard let originalLevel = originalWindowLevel else {
-            return
-        }
-        window.windowLevel = cover ? UIWindow.Level.statusBar + 1 : originalLevel
     }
     
     private func didSetCurrentIdx() {
@@ -426,19 +411,23 @@ extension PhotoPreviewController: UIScrollViewDelegate {
 // MARK: - PreviewCellDelegate
 extension PhotoPreviewController: PreviewCellDelegate {
     
+    func previewCellDidBeginPan(_ cell: PreviewCell) {
+        toolBarHiddenStateBeforePan = navigationBar.alpha == 0
+    }
+    
     func previewCell(_ cell: PreviewCell, didPanScale scale: CGFloat) {
         // 实测用 scale 的平方，效果比线性好些
         let alpha = scale * scale
         scalePresentationController?.maskAlpha = alpha
-        setBar(hidden: true)
+        setBar(hidden: true, isNormal: false)
     }
     
     func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool) {
         if isExit {
             dismiss(animated: true, completion: nil)
             NotificationCenter.default.post(name: .setupStatusBarHidden, object: false)
-        } else {
-            setBar(hidden: false)
+        } else if !toolBarHiddenStateBeforePan {
+            setBar(hidden: false, isNormal: false)
         }
     }
     

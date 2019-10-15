@@ -19,9 +19,9 @@ final class ScalePresentationController: UIPresentationController {
     }
     
     /// 蒙板
-    private var maskView: UIView = {
+    private(set) var maskView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.black
+        view.backgroundColor = ColorHelper.createByStyle(light: .white, dark: .black)
         return view
     }()
 

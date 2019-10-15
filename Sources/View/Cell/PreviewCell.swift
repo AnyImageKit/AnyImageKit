@@ -9,9 +9,14 @@
 import UIKit
 
 protocol PreviewCellDelegate: class {
+    
+    /// 开始拖动
+    func previewCellDidBeginPan(_ cell: PreviewCell)
+    
     /// 拖动时回调。scale:缩放比率
     func previewCell(_ cell: PreviewCell, didPanScale scale: CGFloat)
     
+    /// 结束拖动
     func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool)
 
     /// 单击时回调
@@ -131,6 +136,10 @@ class PreviewCell: UICollectionViewCell {
         delegate?.previewCellDidSingleTap(self)
     }
     
+    public func panBegin() {
+        delegate?.previewCellDidBeginPan(self)
+    }
+    
     public func panScale(_ scale: CGFloat) {
         delegate?.previewCell(self, didPanScale: scale)
     }
@@ -183,6 +192,7 @@ extension PreviewCell {
         case .began:
             beganFrame = imageView.frame
             beganTouch = pan.location(in: scrollView)
+            panBegin()
         case .changed:
             let result = panResult(pan)
             imageView.frame = result.0

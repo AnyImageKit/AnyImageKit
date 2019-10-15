@@ -12,7 +12,7 @@ final class NumberCircleButton: UIControl {
     
     private lazy var circleIV: UIImageView = {
         let view = UIImageView()
-        view.image = BundleHelper.image(named: "PickerCircleNormal")
+        view.image = BundleHelper.image(named: "PickerCircle")
         return view
     }()
     private lazy var numLabel: UILabel = {
