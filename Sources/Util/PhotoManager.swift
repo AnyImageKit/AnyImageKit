@@ -41,6 +41,14 @@ final class PhotoManager {
     let workQueue = DispatchQueue(label: "com.anotheren.AnyImagePicker.PhotoManager")
 }
 
+extension PhotoManager {
+    
+    func clearAll() {
+        selectdAsset.removeAll()
+        cacheList.removeAll()
+    }
+}
+
 // MARK: - Fetch Queue
 
 extension PhotoManager {
@@ -88,10 +96,6 @@ extension PhotoManager {
 // MARK: - Cache
 
 extension PhotoManager {
-    
-    func clearCache() {
-        cacheList.removeAll()
-    }
     
     private func removeCache(for identifier: String) {
         if let index = cacheList.firstIndex(where: { $0.0 == identifier }) {

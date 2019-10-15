@@ -15,9 +15,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         print("Start")
         
-        let vc = ImagePickerController(config: .init(), delegate: self)
+//        let vc = ImagePickerController(config: .init(), delegate: self)
 //        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true, completion: nil)
+//        present(vc, animated: true, completion: nil)
 //        navigationController?.pushViewController(vc, animated: true)
     }
     
