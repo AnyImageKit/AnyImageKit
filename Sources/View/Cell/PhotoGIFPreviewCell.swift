@@ -56,7 +56,7 @@ extension PhotoGIFPreviewCell {
         PhotoManager.shared.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
             switch result {
             case .success(let response):
-                self?.setImage(response)
+                self?.setImage(response.image)
             case .failure(let error):
                 print(error)
             }

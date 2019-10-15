@@ -22,7 +22,11 @@ struct PhotoGIFFetchOptions {
     }
 }
 
-typealias PhotoGIFFetchResponse = UIImage
+struct PhotoGIFFetchResponse {
+    
+    let image: UIImage
+}
+
 typealias PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
@@ -43,7 +47,7 @@ extension PhotoManager {
                     completion(.failure(.invalidImage))
                     return
                 }
-                completion(.success((image)))
+                completion(.success(.init(image: image)))
             case .failure(let error):
                 completion(.failure(error))
             }
