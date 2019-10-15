@@ -8,28 +8,33 @@
 
 import Photos
 
-struct PhotoDataFetchOptions {
+public struct PhotoDataFetchOptions {
     
-    let version: PHImageRequestOptionsVersion
-    let isNetworkAccessAllowed: Bool
-    let progressHandler: PHAssetImageProgressHandler?
+    public let version: PHImageRequestOptionsVersion
+    public let isNetworkAccessAllowed: Bool
+    public let progressHandler: PHAssetImageProgressHandler?
     
-    init(version: PHImageRequestOptionsVersion = .current,
-         isNetworkAccessAllowed: Bool = true,
-         progressHandler: PHAssetImageProgressHandler? = nil) {
+    public init(version: PHImageRequestOptionsVersion = .current,
+                isNetworkAccessAllowed: Bool = true,
+                progressHandler: PHAssetImageProgressHandler? = nil) {
         self.version = version
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
 }
 
-typealias PhotoDataFetchResponse = (data: Data, dataUTI: String, orientation: CGImagePropertyOrientation)
-typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
+public struct PhotoDataFetchResponse {
+    
+    public let data: Data
+    public let dataUTI: String
+    public let orientation: CGImagePropertyOrientation
+}
+
+public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
-    func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
-        
+    public func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
         let requestOptions = PHImageRequestOptions()
         requestOptions.version = options.version
         requestOptions.progressHandler = options.progressHandler
@@ -45,17 +50,21 @@ extension PhotoManager {
                 completion(.failure(.invalidDataUTI))
                 return
             }
-            completion(.success((data, dataUTI, orientation)))
+            completion(.success(.init(data: data, dataUTI: dataUTI, orientation: orientation)))
+            let requestID = info?[PHImageResultRequestIDKey] as? PHImageRequestID
+            self.dequeueFetch(for: asset, requestID: requestID)
         }
         
         if #available(iOS 13, *) {
-            PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
+            let requestID = PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
             }
+            enqueueFetch(for: asset, requestID: requestID)
         } else {
-            PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, uiOrientation, info) in
+            let requestID = PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, uiOrientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: .init(uiOrientation), info: info, completion: completion)
             }
+            enqueueFetch(for: asset, requestID: requestID)
         }
     }
 }
