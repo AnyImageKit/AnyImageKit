@@ -135,7 +135,7 @@ final class PhotoPreviewController: UIViewController {
     deinit {
         for cell in collectionView.visibleCells {
             if let cell = cell as? PreviewCell {
-                PhotoManager.shared.cancelFetch(for: cell.asset.asset)
+                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
             }
         }
     }
@@ -360,7 +360,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
         switch cell {
         case let cell as PhotoPreviewCell:
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
@@ -369,7 +369,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PhotoGIFPreviewCell:
             cell.requestGIF()
         case let cell as VideoPreviewCell:
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
+            if let originalImage = PhotoManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
@@ -390,7 +390,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
             cell.reset()
         case let cell as VideoPreviewCell:
             cell.reset()
-            PhotoManager.shared.cancelFetch(for: cell.asset.asset)
+            PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
         default:
             break
         }

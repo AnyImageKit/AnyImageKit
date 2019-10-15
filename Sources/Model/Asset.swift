@@ -11,7 +11,7 @@ import Photos
 
 public class Asset: Equatable {
 
-    public let asset: PHAsset
+    public let phAsset: PHAsset
     public let type: MediaType
     public internal(set) var image: UIImage = UIImage()
     
@@ -22,13 +22,13 @@ public class Asset: Equatable {
     
     init(idx: Int, asset: PHAsset) {
         self.idx = idx
-        self.asset = asset
+        self.phAsset = asset
         self.type = MediaType(asset: asset)
         self.videoDuration = asset.videoDuration
     }
     
     public static func == (lhs: Asset, rhs: Asset) -> Bool {
-        return lhs.asset.localIdentifier == rhs.asset.localIdentifier
+        return lhs.phAsset.localIdentifier == rhs.phAsset.localIdentifier
     }
 }
 

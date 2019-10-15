@@ -129,12 +129,12 @@ extension PhotoManager {
         workQueue.async { [weak self] in
             guard let self = self else { return }
             let options = PhotoFetchOptions(sizeMode: .preview)
-            self.requestPhoto(for: asset.asset, options: options) { result in
+            self.requestPhoto(for: asset.phAsset, options: options) { result in
                 switch result {
                 case .success(let response):
                     if !response.isDegraded {
                         let options2 = PhotoFetchOptions(sizeMode: .original)
-                        self.requestPhoto(for: asset.asset, options: options2) { _ in }
+                        self.requestPhoto(for: asset.phAsset, options: options2) { _ in }
                     }
                 case .failure:
                     break

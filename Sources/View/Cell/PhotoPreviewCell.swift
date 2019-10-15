@@ -57,7 +57,7 @@ extension PhotoPreviewCell {
     /// 加载图片
     public func requestPhoto() {
         let options = PhotoFetchOptions(sizeMode: .preview)
-        PhotoManager.shared.requestPhoto(for: asset.asset, options: options) { [weak self] result in
+        PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
             case .success(let response):
                 if !response.isDegraded {

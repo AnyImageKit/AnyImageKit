@@ -141,7 +141,7 @@ extension VideoPreviewCell {
     /// 加载图片
     public func requestPhoto() {
         let options = PhotoFetchOptions(sizeMode: .resize(500))
-        PhotoManager.shared.requestPhoto(for: asset.asset, options: options) { [weak self] result in
+        PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
             case .success(let response):
                 if !response.isDegraded {
@@ -164,7 +164,7 @@ extension VideoPreviewCell {
                     self.setDownloadingProgress(progress)
                 }
             }
-            PhotoManager.shared.requestVideo(for: self.asset.asset, options: options) { [weak self] result in
+            PhotoManager.shared.requestVideo(for: self.asset.phAsset, options: options) { [weak self] result in
                 switch result {
                 case .success(let videoResponse):
                     DispatchQueue.main.async { [weak self] in
