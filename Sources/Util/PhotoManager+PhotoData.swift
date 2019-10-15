@@ -53,8 +53,8 @@ extension PhotoManager {
                 handle(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
             }
         } else {
-            PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
-                handle(data: data, dataUTI: dataUTI, orientation: CGImagePropertyOrientation(orientation), info: info, completion: completion)
+            PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, uiOrientation, info) in
+                handle(data: data, dataUTI: dataUTI, orientation: .init(uiOrientation), info: info, completion: completion)
             }
         }
     }
