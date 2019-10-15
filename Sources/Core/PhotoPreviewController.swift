@@ -62,7 +62,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.registerCell(PhotoGIFPreviewCell.self)
         collectionView.registerCell(VideoPreviewCell.self)
         collectionView.isPagingEnabled = true
-        collectionView.alwaysBounceVertical = false
+        collectionView.alwaysBounceHorizontal = false
         return collectionView
     }()
     private lazy var navigationBar: PhotoPreviewNavigationBar = {
@@ -328,7 +328,6 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
-
         switch data.asset.type {
         case .photo:
             let cell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
@@ -356,10 +355,9 @@ extension PhotoPreviewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension PhotoPreviewController: UICollectionViewDelegate {
     
-    /// Cell 进入屏幕
+    /// Cell 进入屏幕 - 请求数据
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
-        
         switch cell {
         case let cell as PhotoPreviewCell:
             if let originalImage = PhotoManager.shared.readCache(for: data.asset.asset.localIdentifier) {
@@ -408,7 +406,13 @@ extension PhotoPreviewController: UIScrollViewDelegate {
         stopVideo()
     }
     
+    /// 停止滑动 - 开始 GIF
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        setGIF(animated: true)
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentSize.width - scrollView.contentOffset.x < scrollView.bounds.width { return } // isLast
         var idx = Int(scrollView.contentOffset.x / scrollView.bounds.width)
         let x = scrollView.contentOffset.x.truncatingRemainder(dividingBy: scrollView.bounds.width)
         if x > scrollView.bounds.width / 2 {

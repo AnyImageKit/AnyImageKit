@@ -90,8 +90,11 @@ final class VideoPreviewCell: PreviewCell {
     
     /// 单击事件触发时，处理播放和暂停的逻辑
     override func singleTapped() {
-        if !(delegate?.previewCellGetToolBarHiddenState() ?? false) && isPlaying {
+        let toolBarIsHidden = delegate?.previewCellGetToolBarHiddenState() ?? true
+        if !toolBarIsHidden && isPlaying { // 工具栏展示 && 在播放视频 -> 暂停视频
             player?.pause()
+        } else if toolBarIsHidden && !isPlaying { // 工具栏隐藏 && 未播放视频 -> 播放视频
+            player?.play()
         } else {
             super.singleTapped()
             if isPlaying {
