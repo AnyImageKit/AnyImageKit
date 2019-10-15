@@ -18,12 +18,22 @@ open class ImagePickerController: UINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
+    private var hiddenStatusBar = false
+    
     public var config: Config {
         return PhotoManager.shared.config
     }
     
+    open override var prefersStatusBarHidden: Bool {
+        return hiddenStatusBar
+    }
+    
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
     }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -42,6 +52,7 @@ open class ImagePickerController: UINavigationController {
         
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
+        addNotification()
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -57,4 +68,26 @@ open class ImagePickerController: UINavigationController {
         print("deinit")
         PhotoManager.shared.clearAll()
     }
+}
+
+// MARK: - Notification
+extension ImagePickerController {
+    
+    private func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(setupStatusBarHidden(notification:)), name: .setupStatusBarHidden, object: nil)
+    }
+    
+    @objc private func setupStatusBarHidden(notification: Notification) {
+        if let hidden = notification.object as? Bool {
+            hiddenStatusBar = hidden
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+}
+
+extension Notification.Name {
+    
+    static let setupStatusBarHidden: Notification.Name = Notification.Name("com.anotheren.AnyImagePicker.setupStatusBar")
+    
 }

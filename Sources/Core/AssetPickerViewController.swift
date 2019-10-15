@@ -267,6 +267,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
+        NotificationCenter.default.post(name: .setupStatusBarHidden, object: true)
     }
 }
 
