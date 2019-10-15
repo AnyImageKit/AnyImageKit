@@ -88,6 +88,13 @@ final class VideoPreviewCell: PreviewCell {
         playerLayer?.frame = fitFrame
     }
     
+    /// 重置
+    override func reset() {
+        setPlayButton(hidden: false)
+        player?.pause()
+        player?.seek(to: .zero)
+    }
+    
     /// 单击事件触发时，处理播放和暂停的逻辑
     override func singleTapped() {
         let toolBarIsHidden = delegate?.previewCellGetToolBarHiddenState() ?? true
@@ -129,13 +136,6 @@ extension VideoPreviewCell {
     public func pause() {
         player?.pause()
         setPlayButton(hidden: false)
-    }
-    
-    /// 重置
-    public func reset() {
-        setPlayButton(hidden: false)
-        player?.pause()
-        player?.seek(to: .zero)
     }
     
     /// 加载图片

@@ -125,6 +125,8 @@ class PreviewCell: UICollectionViewCell {
     
     // MARK: - Override
     
+    public func reset() { }
+    
     public func singleTapped() {
         delegate?.previewCellDidSingleTap(self)
     }

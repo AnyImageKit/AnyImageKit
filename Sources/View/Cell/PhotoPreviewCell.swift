@@ -44,15 +44,15 @@ final class PhotoPreviewCell: PreviewCell {
         contentView.addGestureRecognizer(doubleTap)
         singleTap.require(toFail: doubleTap)
     }
+    
+    /// 重置图片缩放比例
+    override func reset() {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    }
 }
 
 // MARK: - Public function
 extension PhotoPreviewCell {
-    
-    /// 重置图片缩放比例
-    public func reset() {
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-    }
     
     /// 加载图片
     public func requestPhoto() {

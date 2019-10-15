@@ -381,16 +381,14 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         }
     }
     
-    /// Cell 离开屏幕
-    /// PhotoPreviewCell - 重设图片缩放比例
-    /// VideoPreviewCell - 取消数据请求
+    /// Cell 离开屏幕 - 重设状态
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         switch cell {
-        case let cell as PhotoPreviewCell:
+        case let cell as PreviewCell:
             cell.reset()
-        case let cell as VideoPreviewCell:
-            cell.reset()
-            PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
+            if !cell.asset.isSelected {
+                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
+            }
         default:
             break
         }
