@@ -269,6 +269,7 @@ extension PhotoPreviewController {
     /// NavigationBar - Back
     @objc private func backButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+        NotificationCenter.default.post(name: .setupStatusBarHidden, object: false)
     }
     
     /// NavigationBar - Select
@@ -435,6 +436,7 @@ extension PhotoPreviewController: PreviewCellDelegate {
     func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool) {
         if isExit {
             dismiss(animated: true, completion: nil)
+            NotificationCenter.default.post(name: .setupStatusBarHidden, object: false)
         } else {
             setBar(hidden: false)
         }
