@@ -13,15 +13,18 @@ public struct PhotoFetchOptions {
     
     public let sizeMode: PhotoSizeMode
     public let resizeMode: PHImageRequestOptionsResizeMode
+    public let version: PHImageRequestOptionsVersion
     public let isNetworkAccessAllowed: Bool
     public let progressHandler: PHAssetImageProgressHandler?
     
     public init(sizeMode: PhotoSizeMode = .resize(100),
                 resizeMode: PHImageRequestOptionsResizeMode = .fast,
+                version: PHImageRequestOptionsVersion = .current,
                 isNetworkAccessAllowed: Bool = true,
                 progressHandler: PHAssetImageProgressHandler? = nil) {
         self.sizeMode = sizeMode
         self.resizeMode = resizeMode
+        self.version = version
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
@@ -67,6 +70,7 @@ extension PhotoManager {
     
     public func requestPhoto(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) {
         let requestOptions = PHImageRequestOptions()
+        requestOptions.version = options.version
         requestOptions.resizeMode = options.resizeMode
         
         let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.sizeMode.targetSize, contentMode: .aspectFill, options: requestOptions) { [weak self] (image, info) in

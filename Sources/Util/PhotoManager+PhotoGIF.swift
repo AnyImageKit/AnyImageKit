@@ -13,11 +13,14 @@ import MobileCoreServices
 struct PhotoGIFFetchOptions {
     
     let isNetworkAccessAllowed: Bool
+    let version: PHImageRequestOptionsVersion
     let progressHandler: PHAssetImageProgressHandler?
     
     init(isNetworkAccessAllowed: Bool = true,
+         version: PHImageRequestOptionsVersion = .current,
          progressHandler: PHAssetImageProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
+        self.version = version
         self.progressHandler = progressHandler
     }
 }
