@@ -144,14 +144,14 @@ extension PhotoManager {
     
     private func resize(from assetSize: CGSize, to targetSize: CGSize) -> CGSize {
         let aspectRatio = assetSize.width / assetSize.height
-        var pixelWidth = targetSize.width * aspectRatio
+        var width = targetSize.width * aspectRatio
         if aspectRatio > 1.8 {
-            pixelWidth = pixelWidth * aspectRatio
+            width = width * aspectRatio
         }
         if aspectRatio < 0.2 {
-            pixelWidth = pixelWidth * 0.5
+            width = width * 0.5
         }
-        let pixelHeight = pixelWidth / aspectRatio
-        return CGSize(width: pixelWidth, height: pixelHeight)
+        let height = width / aspectRatio
+        return CGSize(width: width, height: height)
     }
 }
