@@ -18,7 +18,7 @@ public enum ImagePickerError: Error {
     case invalidVideo
     case invalidExportPreset
     case invalidExportSession
-    case invalidFileType
+    case unsupportedFileType
     case createDirectory
     case exportFail
     case exportCancel

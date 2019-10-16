@@ -21,9 +21,11 @@ public enum VideoDataExportPreset: RawRepresentable, Equatable {
     /// H.264/AVC 3840x2160
     case h264_3840x2160
     
-    /// H.265/HEVC 3840x2160 when < iOS 11 = h264_1920x1080
+    /// H.265/HEVC 1920x1080
+    @available(iOS 11.0, *)
     case h265_1920x1080
-    /// H.265/HEVC 3840x2160 when < iOS 11 = h264_3840x2160
+    /// H.265/HEVC 3840x2160
+    @available(iOS 11.0, *)
     case h265_3840x2160
     
     public var rawValue: String {
@@ -100,8 +102,8 @@ public struct VideoDataFetchOptions {
     public let version: PHVideoRequestOptionsVersion
     public let deliveryMode: PHVideoRequestOptionsDeliveryMode
     public let fetchProgressHandler: PHAssetVideoProgressHandler?
-    public let exportProgressHandler: VideoDataExportProgressHandler?
     public let exportPreset: VideoDataExportPreset
+    public let exportProgressHandler: VideoDataExportProgressHandler?
     
     public init(isNetworkAccessAllowed: Bool = true,
                 version: PHVideoRequestOptionsVersion = .current,
@@ -163,7 +165,7 @@ extension PhotoManager {
         
         let supportedFileTypes = exportSession.supportedFileTypes
         guard supportedFileTypes.contains(.mp4) else {
-            completion(.failure(.invalidFileType))
+            completion(.failure(.unsupportedFileType))
             return
         }
         

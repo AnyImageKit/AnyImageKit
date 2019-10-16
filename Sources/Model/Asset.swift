@@ -35,7 +35,10 @@ public class Asset: Equatable {
 // MARK: - Original Photo
 extension Asset {
     
-    /// 获取原图
+    /// Fetch Photo Data 获取原图数据
+    /// - Note: Only for media type Photo, PhotoGIF 仅用于媒体类型为照片、GIF
+    /// - Parameter options: Photo Data Fetch Options 原图获取选项
+    /// - Parameter completion: Photo Data Fetch Completion 原图获取结果回调
     public func fetchPhotoData(options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
         guard type == .photo || type == .photoGif else {
             completion(.failure(.invalidMediaType))
@@ -48,7 +51,10 @@ extension Asset {
 // MARK: - Video
 extension Asset {
     
-    /// 获取视频，用于播放
+    /// Fetch Video 获取视频，用于播放
+    /// - Note: Only for media type Video 仅用于媒体类型为视频
+    /// - Parameter options: Video Fetch Options 视频获取选项
+    /// - Parameter completion: Video Fetch Completion 视频获取结果回调
     public func fetchVideo(options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
         guard type == .video else {
             completion(.failure(.invalidMediaType))
@@ -57,7 +63,10 @@ extension Asset {
         PhotoManager.shared.requestVideo(for: phAsset, options: options, completion: completion)
     }
     
-    /// 获取视频数据，用于传输
+    /// Fetch Video Data 获取视频数据，用于传输
+    /// - Note: Only for media type Video 仅用于媒体类型为视频
+    /// - Parameter options: Video Data Fetch Options 视频数据获取选项
+    /// - Parameter completion: Video Data Fetch Completion 视频数据获取结果回调
     public func fetchVideoData(options: VideoDataFetchOptions = .init(), completion: @escaping VideoDataFetchCompletion) {
         guard type == .video else {
             completion(.failure(.invalidMediaType))
