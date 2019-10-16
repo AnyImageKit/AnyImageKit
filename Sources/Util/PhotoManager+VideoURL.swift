@@ -102,6 +102,7 @@ public struct VideoURLFetchOptions {
     public let version: PHVideoRequestOptionsVersion
     public let deliveryMode: PHVideoRequestOptionsDeliveryMode
     public let fetchProgressHandler: PHAssetVideoProgressHandler?
+    public let preferredOutputPath: String
     public let exportPreset: VideoURLExportPreset
     public let exportProgressHandler: VideoURLExportProgressHandler?
     
@@ -109,12 +110,14 @@ public struct VideoURLFetchOptions {
                 version: PHVideoRequestOptionsVersion = .current,
                 deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
                 fetchProgressHandler: PHAssetVideoProgressHandler? = nil,
+                preferredOutputPath: String = NSTemporaryDirectory(),
                 exportPreset: VideoURLExportPreset = .h264_1280x720,
                 exportProgressHandler: VideoURLExportProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
         self.deliveryMode = deliveryMode
         self.fetchProgressHandler = fetchProgressHandler
+        self.preferredOutputPath = preferredOutputPath
         self.exportPreset = exportPreset
         self.exportProgressHandler = exportProgressHandler
     }
@@ -153,28 +156,29 @@ extension PhotoManager {
     }
     
     private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping VideoURLFetchCompletion) {
-        let tempPath = NSTemporaryDirectory()
-        if !FileManager.default.fileExists(atPath: tempPath) {
+        // Check Path
+        var isDirectory: ObjCBool = true
+        if !FileManager.default.fileExists(atPath: options.preferredOutputPath, isDirectory: &isDirectory) {
             do {
-                try FileManager.default.createDirectory(atPath: tempPath, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: options.preferredOutputPath,
+                                                        withIntermediateDirectories: true,
+                                                        attributes: nil)
             } catch {
-                completion(.failure(.createDirectory))
+                completion(.failure(.directoryCreateFail))
                 return
             }
         }
-        
+        // Check File Type
         let supportedFileTypes = exportSession.supportedFileTypes
         guard supportedFileTypes.contains(.mp4) else {
             completion(.failure(.unsupportedFileType))
             return
         }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd-HHmmss"
-        let date = Date()
-        let outputPath = tempPath.appending("/video-\(formatter.string(from: date)).mp4")
+        // Prepare Output URL
+        let timestamp = Int(Date().timeIntervalSince1970)
+        let outputPath = options.preferredOutputPath.appending("/VIDEO-\(timestamp)).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
-        
+        // Setup Export Session
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.outputFileType = .mp4
         exportSession.outputURL = outputURL

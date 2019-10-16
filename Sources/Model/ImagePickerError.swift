@@ -19,7 +19,8 @@ public enum ImagePickerError: Error {
     case invalidExportPreset
     case invalidExportSession
     case unsupportedFileType
-    case createDirectory
+    case directoryCreateFail
+    case fileWriteFail
     case exportFail
     case exportCancel
 }
