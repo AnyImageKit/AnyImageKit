@@ -1,5 +1,5 @@
 //
-//  PhotoManager+VideoData.swift
+//  PhotoManager+VideoURL.swift
 //  AnyImagePicker
 //
 //  Created by 刘栋 on 2019/10/15.
@@ -9,7 +9,7 @@
 import Photos
 import AVFoundation
 
-public enum VideoDataExportPreset: RawRepresentable, Equatable {
+public enum VideoURLExportPreset: RawRepresentable, Equatable {
     /// H.264/AVC 640x480
     case h264_640x480
     /// H.264/AVC 960x540
@@ -94,23 +94,23 @@ public enum VideoDataExportPreset: RawRepresentable, Equatable {
     }
 }
 
-public typealias VideoDataExportProgressHandler = (Double) -> Void
+public typealias VideoURLExportProgressHandler = (Double) -> Void
 
-public struct VideoDataFetchOptions {
+public struct VideoURLFetchOptions {
     
     public let isNetworkAccessAllowed: Bool
     public let version: PHVideoRequestOptionsVersion
     public let deliveryMode: PHVideoRequestOptionsDeliveryMode
     public let fetchProgressHandler: PHAssetVideoProgressHandler?
-    public let exportPreset: VideoDataExportPreset
-    public let exportProgressHandler: VideoDataExportProgressHandler?
+    public let exportPreset: VideoURLExportPreset
+    public let exportProgressHandler: VideoURLExportProgressHandler?
     
     public init(isNetworkAccessAllowed: Bool = true,
                 version: PHVideoRequestOptionsVersion = .current,
                 deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
                 fetchProgressHandler: PHAssetVideoProgressHandler? = nil,
-                exportPreset: VideoDataExportPreset = .h264_1280x720,
-                exportProgressHandler: VideoDataExportProgressHandler? = nil) {
+                exportPreset: VideoURLExportPreset = .h264_1280x720,
+                exportProgressHandler: VideoURLExportProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
         self.deliveryMode = deliveryMode
@@ -120,16 +120,16 @@ public struct VideoDataFetchOptions {
     }
 }
 
-public struct VideoDataFetchResponse {
+public struct VideoURLFetchResponse {
     
-    public let outputURL: URL
+    public let url: URL
 }
 
-public typealias VideoDataFetchCompletion = (Result<VideoDataFetchResponse, ImagePickerError>) -> Void
+public typealias VideoURLFetchCompletion = (Result<VideoURLFetchResponse, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
-    func requestVideoData(for asset: PHAsset, options: VideoDataFetchOptions = .init(), completion: @escaping VideoDataFetchCompletion) {
+    func requestVideoURL(for asset: PHAsset, options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) {
         let supportPresets = AVAssetExportSession.allExportPresets()
         guard supportPresets.contains(options.exportPreset.rawValue) else {
             completion(.failure(.invalidExportPreset))
@@ -152,11 +152,11 @@ extension PhotoManager {
         }
     }
     
-    private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoDataFetchOptions, completion: @escaping VideoDataFetchCompletion) {
-        let tmpPath = NSTemporaryDirectory()
-        if !FileManager.default.fileExists(atPath: tmpPath) {
+    private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping VideoURLFetchCompletion) {
+        let tempPath = NSTemporaryDirectory()
+        if !FileManager.default.fileExists(atPath: tempPath) {
             do {
-                try FileManager.default.createDirectory(atPath: tmpPath, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: tempPath, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 completion(.failure(.createDirectory))
                 return
@@ -172,7 +172,7 @@ extension PhotoManager {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd-HHmmss"
         let date = Date()
-        let outputPath = tmpPath.appending("/video-\(formatter.string(from: date)).mp4")
+        let outputPath = tempPath.appending("/video-\(formatter.string(from: date)).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
         
         exportSession.shouldOptimizeForNetworkUse = true
@@ -188,7 +188,7 @@ extension PhotoManager {
                 case .exporting:
                     options.exportProgressHandler?(Double(exportSession.progress))
                 case .completed:
-                    completion(.success(VideoDataFetchResponse(outputURL: outputURL)))
+                    completion(.success(VideoURLFetchResponse(url: outputURL)))
                 case .failed:
                     completion(.failure(.exportFail))
                 case .cancelled:

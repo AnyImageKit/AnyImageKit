@@ -65,13 +65,13 @@ extension Asset {
     
     /// Fetch Video Data 获取视频数据，用于传输
     /// - Note: Only for media type Video 仅用于媒体类型为视频
-    /// - Parameter options: Video Data Fetch Options 视频数据获取选项
-    /// - Parameter completion: Video Data Fetch Completion 视频数据获取结果回调
-    public func fetchVideoData(options: VideoDataFetchOptions = .init(), completion: @escaping VideoDataFetchCompletion) {
+    /// - Parameter options: Video URL Fetch Options 视频数据获取选项
+    /// - Parameter completion: Video URL Fetch Completion 视频数据获取结果回调
+    public func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) {
         guard type == .video else {
             completion(.failure(.invalidMediaType))
             return
         }
-        PhotoManager.shared.requestVideoData(for: phAsset, options: options, completion: completion)
+        PhotoManager.shared.requestVideoURL(for: phAsset, options: options, completion: completion)
     }
 }
