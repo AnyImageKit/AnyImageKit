@@ -149,15 +149,7 @@ extension PhotoPreviewController {
         view.addSubview(indexView)
         setupLayout()
         setBar(hidden: true, animated: false, isNormal: false)
-        
-        // TODO: 单击和双击有冲突
-        //        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
-        //        collectionView.addGestureRecognizer(singleTap)
     }
-    
-    //    @objc private func onSingleTap() {
-    //        setBar(hidden: navigationBar.alpha == 1, animated: false)
-    //    }
     
     /// 设置视图布局
     private func setupLayout() {
