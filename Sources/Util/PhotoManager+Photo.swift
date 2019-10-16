@@ -89,13 +89,13 @@ extension PhotoManager {
                 case .original:
                     completion(.success(.init(image: image, isDegraded: isDegraded)))
                 case .preview:
-                    let resizedImage = UIImage.resize(from: image, size: options.targetSize)
+                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
                     if !isDegraded {
                         self.writeCache(image: image, for: asset.localIdentifier)
                     }
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 case .resize:
-                    let resizedImage = UIImage.resize(from: image, size: options.targetSize)
+                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 }
             } else {
@@ -122,8 +122,7 @@ extension PhotoManager {
                                         completion(.success(.init(image: image, isDegraded: false)))
                                     }
                                 case .preview:
-                                    let size = self.calculateSize(from: asset.pixelSize, to: options.targetSize)
-                                    guard let image = UIImage.resize(from: response.data, size: size) else {
+                                    guard let image = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
@@ -134,8 +133,7 @@ extension PhotoManager {
                                         completion(.success(.init(image: image, isDegraded: false)))
                                     }
                                 case .resize:
-                                    let size = self.calculateSize(from: asset.pixelSize, to: options.targetSize)
-                                    guard let image = UIImage.resize(from: response.data, size: size) else {
+                                    guard let image = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
@@ -158,18 +156,5 @@ extension PhotoManager {
             self.dequeueFetch(for: asset, requestID: requestID)
         }
         enqueueFetch(for: asset, requestID: requestID)
-    }
-    
-    private func calculateSize(from assetSize: CGSize, to targetSize: CGSize) -> CGSize {
-        let aspectRatio = assetSize.width / assetSize.height
-        var width = targetSize.width * aspectRatio
-        if aspectRatio > 1.8 {
-            width = width * aspectRatio
-        }
-        if aspectRatio < 0.2 {
-            width = width * 0.5
-        }
-        let height = width / aspectRatio
-        return CGSize(width: width, height: height)
     }
 }
