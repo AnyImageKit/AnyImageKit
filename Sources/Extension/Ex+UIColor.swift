@@ -41,7 +41,6 @@ extension UIColor {
 }
 
 // MARK: - Wechat Theme
-// TODO: remove to theme
 
 extension UIColor {
     
@@ -76,5 +75,4 @@ extension UIColor {
     static var wechatButtonDisableBackgroundColor: UIColor {
         return UIColor.create(light: UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3), dark: UIColor.color(hex: 0x515253))
     }
-    
 }

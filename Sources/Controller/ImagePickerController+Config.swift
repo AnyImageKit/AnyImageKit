@@ -11,19 +11,30 @@ import UIKit
 extension ImagePickerController {
     
     public struct Config {
-        /// UI 展示的效果
-        public var theme: Theme = Theme.wechat()
+        /// 主题
+        public var theme: Theme = Theme.wechat(style: .dark)
+        
         /// 最多可选择的图片数量
         public var maxCount: Int = 3
+        
         /// 一行的列数
         public var columnNumber: Int = 4
-        /// 导出图片的宽度
-        public var photoWidth: Int = 1200
+        
+        /// 导出小图的最大宽度
+        public var photoMaxWidth: CGFloat = 800
+        
+        /// 导出大图的最大宽度(勾选原图时)
+        public var largePhotoMaxWidth: CGFloat = 1200
+        
         /// 是否显示原图
         public var allowUseOriginalPhoto: Bool = true
+        
         /// 可选择的类型，默认可选择图片+视频
         public var selectOptions: SelectOptions = [.photo, .video]
+        
         /// 按日期排序
+        /// asc:  按时间升序排列，自动滚动到底部
+        /// desc: 按时间倒序排列，自动滚动到顶部
         public var orderByDate: Sort = .asc
         
         public init() {
@@ -31,6 +42,7 @@ extension ImagePickerController {
         }
     }
     
+    /// 排序规则
     public enum Sort: Equatable {
         /// 升序
         case asc
@@ -38,16 +50,20 @@ extension ImagePickerController {
         case desc
     }
     
+    /// 可选择的类型
     public struct SelectOptions: OptionSet {
+        /// 照片(包括GIF)
+        public static let photo: SelectOptions = SelectOptions(rawValue: 1 << 0)
+        /// 视频
+        public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
+        
         public let rawValue: Int
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
-        
-        public static let photo: SelectOptions = SelectOptions(rawValue: 1 << 0)
-        public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
     }
     
+    /// 主题
     public struct Theme {
         public var style: UserInterfaceStyle
         
@@ -60,7 +76,7 @@ extension ImagePickerController {
         public var separatorLineColor: UIColor
         public var buttonDisableBackgroundColor: UIColor
         
-        public static func wechat(style: UserInterfaceStyle = .dark) -> Theme {
+        public static func wechat(style: UserInterfaceStyle) -> Theme {
             switch style {
             case .auto:
                 return Theme(style: .auto,
@@ -96,9 +112,13 @@ extension ImagePickerController {
         }
     }
     
+    /// 主题风格
     public enum UserInterfaceStyle {
+        /// 自动 iOS 13+ 会根据系统样式自动更改，iOS 13 以下为 Light mode
         case auto
+        /// Light mode
         case light
+        /// Dark mode
         case dark
     }
 }

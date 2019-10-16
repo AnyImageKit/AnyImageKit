@@ -72,6 +72,7 @@ final class PhotoPreviewController: UIViewController {
         let view = PhotoToolBar(style: .preview)
         view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalPhoto
         view.originalButton.isSelected = PhotoManager.shared.isOriginalPhoto
+        view.leftButton.isHidden = true // Edit not finish
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalPhotoButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
@@ -149,15 +150,7 @@ extension PhotoPreviewController {
         view.addSubview(indexView)
         setupLayout()
         setBar(hidden: true, animated: false, isNormal: false)
-        
-        // TODO: 单击和双击有冲突
-        //        let singleTap = UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
-        //        collectionView.addGestureRecognizer(singleTap)
     }
-    
-    //    @objc private func onSingleTap() {
-    //        setBar(hidden: navigationBar.alpha == 1, animated: false)
-    //    }
     
     /// 设置视图布局
     private func setupLayout() {
@@ -223,7 +216,9 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        toolBar.hiddenEditAndOriginalButton(data.asset.type != .photo)
+        if PhotoManager.shared.config.allowUseOriginalPhoto {
+            toolBar.originalButton.isHidden = data.asset.type != .photo
+        }
         indexView.currentIndex = currentIndex
     }
     
@@ -287,13 +282,13 @@ extension PhotoPreviewController {
         indexView.didChangeSelectedAsset()
     }
     
-    /// ToolBar - Edit
+    /// ToolBar - Edit - not finish
     @objc private func editButtonTapped(_ sender: UIButton) {
-        guard let cell = collectionView.visibleCells.first as? PhotoPreviewCell else { return }
-        let vc = PhotoEditViewController()
-        vc.imageView.image = cell.imageView.image
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false, completion: nil)
+//        guard let cell = collectionView.visibleCells.first as? PhotoPreviewCell else { return }
+//        let vc = PhotoEditViewController()
+//        vc.imageView.image = cell.imageView.image
+//        vc.modalPresentationStyle = .fullScreen
+//        present(vc, animated: false, completion: nil)
     }
     
     /// ToolBar - Original
