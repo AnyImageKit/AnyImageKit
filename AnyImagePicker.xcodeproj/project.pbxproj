@@ -59,7 +59,6 @@
 		A59332602338ADBA003CE652 /* AnimatableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593325F2338ADBA003CE652 /* AnimatableImageView.swift */; };
 		A59332622338AED8003CE652 /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59332612338AED8003CE652 /* AnimatedImage.swift */; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
-		A5A27BAD232F82AE00D966B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BAC232F82AE00D966B8 /* ViewController.swift */; };
 		A5A27BB0232F82AE00D966B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BAE232F82AE00D966B8 /* Main.storyboard */; };
 		A5A27BB2232F82B000D966B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BB1232F82B000D966B8 /* Assets.xcassets */; };
 		A5A27BB5232F82B000D966B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BB3232F82B000D966B8 /* LaunchScreen.storyboard */; };
@@ -74,6 +73,7 @@
 		A5CC86C123349D4B00BCB372 /* PhotoPreviewIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */; };
 		A5CEB00D233DAF4700C67706 /* PhotoGIFPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */; };
 		A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */; };
+		A5DC526C2356F61B00A12508 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DC526B2356F61B00A12508 /* ConfigViewController.swift */; };
 		A5DFBCEF23559E1C00B0A58B /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */; };
 /* End PBXBuildFile section */
 
@@ -177,7 +177,6 @@
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		A5A27BA6232F82AE00D966B8 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A5A27BAC232F82AE00D966B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A5A27BB1232F82B000D966B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5A27BB6232F82B000D966B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5A27BBB232F83DE00D966B8 /* NumberCircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberCircleButton.swift; sourceTree = "<group>"; };
@@ -189,6 +188,7 @@
 		A5CC86C023349D4B00BCB372 /* PhotoPreviewIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewIndexView.swift; sourceTree = "<group>"; };
 		A5CEB00C233DAF4700C67706 /* PhotoGIFPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGIFPreviewCell.swift; sourceTree = "<group>"; };
 		A5D4FDA5233DFC4E00A0B138 /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; };
+		A5DC526B2356F61B00A12508 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -408,7 +408,7 @@
 			children = (
 				A5601D4F233B0FE500D0E95E /* Example.entitlements */,
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
-				A5A27BAC232F82AE00D966B8 /* ViewController.swift */,
+				A5DC526B2356F61B00A12508 /* ConfigViewController.swift */,
 				A5A27BAE232F82AE00D966B8 /* Main.storyboard */,
 				A5A27BB1232F82B000D966B8 /* Assets.xcassets */,
 				A5A27BB3232F82B000D966B8 /* LaunchScreen.storyboard */,
@@ -662,7 +662,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5A27BAD232F82AE00D966B8 /* ViewController.swift in Sources */,
+				A5DC526C2356F61B00A12508 /* ConfigViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
