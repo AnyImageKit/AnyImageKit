@@ -177,6 +177,10 @@ extension VideoPreviewCell {
             }
         }
     }
+    
+    public func setCloudLabelColor(_ color: UIColor) {
+        iCloudView.setLabelColor(color)
+    }
 }
 
 // MARK: - Private function

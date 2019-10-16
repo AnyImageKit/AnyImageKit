@@ -18,7 +18,7 @@ final class LoadingiCloudView: UIView {
     private lazy var tipLabel: UILabel = {
         let view = UILabel()
         view.text = BundleHelper.localizedString(key: "Downloading from iCloud")
-        view.textColor = UIColor.white
+        view.textColor = PhotoManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()
@@ -72,5 +72,10 @@ extension LoadingiCloudView {
     
     public func setProgress(_ progress: Double) {
         progressLabel.text = "\(Int(progress * 100))%"
+    }
+    
+    public func setLabelColor(_ color: UIColor) {
+        tipLabel.textColor = color
+        progressLabel.textColor = color
     }
 }
