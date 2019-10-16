@@ -101,13 +101,6 @@ final class PhotoToolBar: UIView {
 // MARK: - Public function
 extension PhotoToolBar {
     
-    public func hiddenEditAndOriginalButton(_ hidden: Bool) {
-        leftButton.isHidden = hidden
-        if PhotoManager.shared.config.allowUseOriginalPhoto {
-            originalButton.isHidden = hidden
-        }
-    }
-    
     public func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
