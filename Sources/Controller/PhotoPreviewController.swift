@@ -39,7 +39,7 @@ final class PhotoPreviewController: UIViewController {
     }
     /// 缩放型转场协调器
     private weak var scalePresentationController: ScalePresentationController?
-    ///
+    /// ToolBar 缩放动画前的状态
     private var toolBarHiddenStateBeforePan = false
     
     private lazy var flowLayout: UICollectionViewFlowLayout = {
@@ -201,6 +201,9 @@ extension PhotoPreviewController {
         if isNormal {
             NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
             scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : ColorHelper.createByStyle(light: .white, dark: .black)
+            if let cell = collectionView.visibleCells.first as? VideoPreviewCell {
+                cell.setCloudLabelColor(hidden ? UIColor.white : PhotoManager.shared.config.theme.textColor)
+            }
         }
         
         if animated {
@@ -258,7 +261,7 @@ extension PhotoPreviewController {
     }
     
     /// NavigationBar - Select
-    @objc private func selectButtonTapped(_ sender: UIButton) {
+    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if !data.asset.isSelected && PhotoManager.shared.isMaxCount {
             let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.maxCount)
@@ -295,8 +298,17 @@ extension PhotoPreviewController {
     
     /// ToolBar - Original
     @objc private func originalPhotoButtonTapped(_ sender: OriginalButton) {
-        PhotoManager.shared.isOriginalPhoto = sender.isSelected
+        let manager = PhotoManager.shared
+        manager.isOriginalPhoto = sender.isSelected
         delegate?.previewController(self, useOriginalPhoto: sender.isSelected)
+        
+        // 选择当前照片
+        if manager.isOriginalPhoto && !manager.isMaxCount {
+            guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+            if !data.asset.isSelected {
+                selectButtonTapped(navigationBar.selectButton)
+            }
+        }
     }
     
     /// ToolBar - Done

@@ -16,12 +16,9 @@ final class AssetCell: UICollectionViewCell {
         view.layer.masksToBounds = true
         return view
     }()
-    private lazy var gifLabel: UILabel = {
-        let view = UILabel()
+    private lazy var gifView: GIFView = {
+        let view = GIFView()
         view.isHidden = true
-        view.text = "GIF"
-        view.textColor = UIColor.white
-        view.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         return view
     }()
     private lazy var videoView: VideoView = {
@@ -56,7 +53,7 @@ final class AssetCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         selectdCoverView.isHidden = true
-        gifLabel.isHidden = true
+        gifView.isHidden = true
         videoView.isHidden = true
         unableCoverView.isHidden = true
         boxCoverView.isHidden = true
@@ -74,7 +71,7 @@ final class AssetCell: UICollectionViewCell {
     private func setupView() {
         addSubview(imageView)
         addSubview(selectdCoverView)
-        addSubview(gifLabel)
+        addSubview(gifView)
         addSubview(videoView)
         addSubview(unableCoverView)
         addSubview(boxCoverView)
@@ -86,8 +83,8 @@ final class AssetCell: UICollectionViewCell {
         selectdCoverView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview()
         }
-        gifLabel.snp.makeConstraints { (maker) in
-            maker.left.bottom.equalToSuperview().inset(5)
+        gifView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
         }
         videoView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview()
@@ -135,7 +132,7 @@ extension AssetCell {
     func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
         switch asset.type {
         case .photoGif:
-            gifLabel.isHidden = false
+            gifView.isHidden = false
         case .video:
             videoView.isHidden = false
         default:

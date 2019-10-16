@@ -268,6 +268,13 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         controller.delegate = self
         present(controller, animated: true, completion: nil)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let asset = album?.assets[indexPath.item] else { return }
+        if let cell = cell as? AssetCell {
+            cell.updateState(asset, animated: false)
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

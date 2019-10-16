@@ -40,6 +40,7 @@
 		A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531105623544C0D00D457A8 /* LoadingiCloudView.swift */; };
 		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
 		A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
+		A55F5CE42356AC44002676B7 /* GIFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55F5CE32356AC44002676B7 /* GIFView.swift */; };
 		A5601D3A233B0F6200D0E95E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A5601D39233B0F6200D0E95E /* SnapKit */; };
 		A5601D51233B3FC400D0E95E /* StatusBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */; };
 		A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */; };
@@ -150,6 +151,7 @@
 		A531105623544C0D00D457A8 /* LoadingiCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingiCloudView.swift; sourceTree = "<group>"; };
 		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
 		A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditViewController.swift; sourceTree = "<group>"; };
+		A55F5CE32356AC44002676B7 /* GIFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFView.swift; sourceTree = "<group>"; };
 		A5601D4F233B0FE500D0E95E /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarHelper.swift; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
 				A5325EA42331C14F00ADA116 /* ArrowButton.swift */,
 				A58E148C233372D800ACE099 /* VideoView.swift */,
+				A55F5CE32356AC44002676B7 /* GIFView.swift */,
 				A531105623544C0D00D457A8 /* LoadingiCloudView.swift */,
 			);
 			path = Kit;
@@ -617,6 +620,7 @@
 				A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */,
 				A07D8796233DA2B8000108C7 /* Ex+PHAsset.swift in Sources */,
 				A0C03C1A2331D426005F742C /* Ex+UITableView.swift in Sources */,
+				A55F5CE42356AC44002676B7 /* GIFView.swift in Sources */,
 				A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */,
 				A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */,
 				A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */,
