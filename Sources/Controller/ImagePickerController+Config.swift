@@ -12,10 +12,10 @@ extension ImagePickerController {
     
     public struct Config {
         /// 主题
-        public var theme: Theme = Theme.wechat(style: .dark)
+        public var theme: Theme = Theme.wechat(style: .auto)
         
         /// 最多可选择的图片数量
-        public var maxCount: Int = 3
+        public var maxCount: Int = 9
         
         /// 一行的列数
         public var columnNumber: Int = 4
@@ -65,7 +65,7 @@ extension ImagePickerController {
     
     /// 主题
     public struct Theme {
-        public var style: UserInterfaceStyle
+        public let style: UserInterfaceStyle
         
         public var mainColor: UIColor
         public var textColor: UIColor
