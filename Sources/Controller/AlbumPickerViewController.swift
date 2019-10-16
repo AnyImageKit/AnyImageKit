@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let rowHeight: CGFloat = 55
+
 protocol AlbumPickerViewControllerDelegate: class {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album)
@@ -48,7 +50,10 @@ final class AlbumPickerViewController: UIViewController {
     
     private func updatePreferredContentSize(with traitCollection: UITraitCollection) {
         let size = UIScreen.main.bounds.size
-        preferredContentSize = CGSize(width: size.width, height: size.height*(2.0/3.0))
+        let height = CGFloat(albums.count) * rowHeight
+        let prefreedMinHeight = rowHeight * 5
+        let prefreedMaxHeight = size.height*(2.0/3.0)
+        preferredContentSize = CGSize(width: size.width, height: max(prefreedMinHeight, min(height, prefreedMaxHeight)))
     }
 }
 
@@ -107,6 +112,6 @@ extension AlbumPickerViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 55
+        return rowHeight
     }
 }
