@@ -10,10 +10,12 @@ import UIKit
 import Photos
 
 public class Asset: Equatable {
-    
+    /// 对应的 PHAsset
     public let phAsset: PHAsset
+    /// 媒体类型
     public let type: MediaType
-    public internal(set) var image: UIImage = UIImage()
+    /// 输出图像
+    public internal(set) var image: UIImage = .init()
     
     let idx: Int
     let videoDuration: String
