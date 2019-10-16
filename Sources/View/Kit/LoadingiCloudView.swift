@@ -26,7 +26,7 @@ final class LoadingiCloudView: UIView {
     private lazy var progressLabel: UILabel = {
         let view = UILabel()
         view.text = "0%"
-        view.textColor = UIColor.white
+        view.textColor = PhotoManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()
