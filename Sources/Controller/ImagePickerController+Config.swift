@@ -12,7 +12,7 @@ extension ImagePickerController {
     
     public struct Config {
         /// 主题
-        public var theme: Theme = Theme.wechat(style: .auto)
+        public var theme: Theme = Theme(style: .auto)
         
         /// 最多可选择的图片数量
         public var maxCount: Int = 9
@@ -76,39 +76,59 @@ extension ImagePickerController {
         public var separatorLineColor: UIColor
         public var buttonDisableBackgroundColor: UIColor
         
-        public static func wechat(style: UserInterfaceStyle) -> Theme {
+        public init(style: UserInterfaceStyle) {
             switch style {
             case .auto:
-                return Theme(style: .auto,
-                             mainColor: UIColor.wechatGreen,
-                             textColor: UIColor.wechatText,
-                             subTextColor: UIColor.wechatSubText,
-                             toolBarColor: UIColor.wechatToolBar,
-                             backgroundColor: UIColor.wechatBackground,
-                             backgroundSelectedColor: UIColor.wechatBackgroundSelected,
-                             separatorLineColor: UIColor.wechatSeparatorLine,
-                             buttonDisableBackgroundColor: UIColor.wechatButtonDisableBackgroundColor)
+                self.init(style: .auto,
+                          mainColor: UIColor.mainColor,
+                          textColor: UIColor.mainText,
+                          subTextColor: UIColor.subText,
+                          toolBarColor: UIColor.toolBar,
+                          backgroundColor: UIColor.background,
+                          backgroundSelectedColor: UIColor.backgroundSelected,
+                          separatorLineColor: UIColor.separatorLine,
+                          buttonDisableBackgroundColor: UIColor.buttonDisableBackground)
             case .light:
-                return Theme(style: .light,
-                             mainColor: UIColor.color(hex: 0x57BE6A),
-                             textColor: UIColor.color(hex: 0x333333),
-                             subTextColor: UIColor.color(hex: 0x999999),
-                             toolBarColor: UIColor.color(hex: 0xECECEC),
-                             backgroundColor: UIColor.color(hex: 0xFFFFFF),
-                             backgroundSelectedColor: UIColor.color(hex: 0xE4E5E9),
-                             separatorLineColor: UIColor.color(hex: 0xD6D7DA),
-                             buttonDisableBackgroundColor: UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3))
+                self.init(style: .light,
+                          mainColor: UIColor.mainColor,
+                          textColor: UIColor.mainTextLight,
+                          subTextColor: UIColor.subTextLight,
+                          toolBarColor: UIColor.toolBarLight,
+                          backgroundColor: UIColor.backgroundLight,
+                          backgroundSelectedColor: UIColor.backgroundSelectedLight,
+                          separatorLineColor: UIColor.separatorLineLight,
+                          buttonDisableBackgroundColor: UIColor.buttonDisableBackgroundLight)
             case .dark:
-                return Theme(style: .dark,
-                             mainColor: UIColor.color(hex: 0x57BE6A),
-                             textColor: UIColor.color(hex: 0xEAEAEA),
-                             subTextColor: UIColor.color(hex: 0x6E6E6E),
-                             toolBarColor: UIColor.color(hex: 0x5C5C5C),
-                             backgroundColor: UIColor.color(hex: 0x31302F),
-                             backgroundSelectedColor: UIColor.color(hex: 0x171717),
-                             separatorLineColor: UIColor.color(hex: 0x454444),
-                             buttonDisableBackgroundColor: UIColor.color(hex: 0x515253))
+                self.init(style: .dark,
+                          mainColor: UIColor.mainColor,
+                          textColor: UIColor.mainTextDark,
+                          subTextColor: UIColor.subTextDark,
+                          toolBarColor: UIColor.toolBarDark,
+                          backgroundColor: UIColor.backgroundDark,
+                          backgroundSelectedColor: UIColor.backgroundSelectedDark,
+                          separatorLineColor: UIColor.separatorLineDark,
+                          buttonDisableBackgroundColor: UIColor.buttonDisableBackgroundDark)
             }
+        }
+        
+        public init(style: UserInterfaceStyle,
+                    mainColor: UIColor,
+                    textColor: UIColor,
+                    subTextColor: UIColor,
+                    toolBarColor: UIColor,
+                    backgroundColor: UIColor,
+                    backgroundSelectedColor: UIColor,
+                    separatorLineColor: UIColor,
+                    buttonDisableBackgroundColor: UIColor) {
+            self.style = style
+            self.mainColor = mainColor
+            self.textColor = textColor
+            self.subTextColor = subTextColor
+            self.toolBarColor = toolBarColor
+            self.backgroundColor = backgroundColor
+            self.backgroundSelectedColor = backgroundSelectedColor
+            self.separatorLineColor = separatorLineColor
+            self.buttonDisableBackgroundColor = buttonDisableBackgroundColor
         }
     }
     
