@@ -70,6 +70,9 @@ extension PhotoManager {
                 if let idx = self.fetchRecords[index].requestIDs.firstIndex(of: requestID) {
                     self.fetchRecords[index].requestIDs.remove(at: idx)
                 }
+                if self.fetchRecords[index].requestIDs.isEmpty {
+                    self.fetchRecords.remove(at: index)
+                }
             }
         }
     }
