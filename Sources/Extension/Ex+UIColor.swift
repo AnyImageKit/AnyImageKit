@@ -44,35 +44,100 @@ extension UIColor {
 
 extension UIColor {
     
-    static var wechatGreen: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0x57BE6A), dark: UIColor.color(hex: 0x57BE6A))
+    static var mainColor: UIColor {
+        return UIColor.color(hex: 0x57BE6A)
     }
     
-    static var wechatText: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0x333333), dark: UIColor.color(hex: 0xEAEAEA))
+    
+    static var mainText: UIColor {
+        return UIColor.create(light: mainTextLight, dark: mainTextDark)
     }
     
-    static var wechatSubText: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0x999999), dark: UIColor.color(hex: 0x6E6E6E))
+    static var mainTextLight: UIColor {
+        return UIColor.color(hex: 0x333333)
     }
     
-    static var wechatToolBar: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0xF7F7F7), dark: UIColor.color(hex: 0x5C5C5C))
+    static var mainTextDark: UIColor {
+        return UIColor.color(hex: 0xEAEAEA)
     }
     
-    static var wechatBackground: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0xFFFFFF), dark: UIColor.color(hex: 0x31302F))
+    
+    static var subText: UIColor {
+        return UIColor.create(light: subTextLight, dark: subTextDark)
     }
     
-    static var wechatBackgroundSelected: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0xE4E5E9), dark: UIColor.color(hex: 0x171717))
+    static var subTextLight: UIColor {
+        return UIColor.color(hex: 0x999999)
     }
     
-    static var wechatSeparatorLine: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0xD6D7DA), dark: UIColor.color(hex: 0x454444))
+    static var subTextDark: UIColor {
+        return UIColor.color(hex: 0x6E6E6E)
     }
     
-    static var wechatButtonDisableBackgroundColor: UIColor {
-        return UIColor.create(light: UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3), dark: UIColor.color(hex: 0x515253))
+    
+    static var toolBar: UIColor {
+        return UIColor.create(light: toolBarLight, dark: toolBarDark)
     }
+    
+    static var toolBarLight: UIColor {
+        return UIColor.color(hex: 0xF7F7F7)
+    }
+    
+    static var toolBarDark: UIColor {
+        return UIColor.color(hex: 0x5C5C5C)
+    }
+    
+    
+    static var background: UIColor {
+        return UIColor.create(light: backgroundLight, dark: backgroundDark)
+    }
+    
+    static var backgroundLight: UIColor {
+        return UIColor.color(hex: 0xFFFFFF)
+    }
+    
+    static var backgroundDark: UIColor {
+        return UIColor.color(hex: 0x31302F)
+    }
+    
+    
+    static var backgroundSelected: UIColor {
+        return UIColor.create(light: backgroundSelectedLight, dark: backgroundSelectedDark)
+    }
+    
+    static var backgroundSelectedLight: UIColor {
+        return UIColor.color(hex: 0xE4E5E9)
+    }
+    
+    static var backgroundSelectedDark: UIColor {
+        return UIColor.color(hex: 0x171717)
+    }
+    
+    
+    static var separatorLine: UIColor {
+        return UIColor.create(light: separatorLineLight, dark: separatorLineDark)
+    }
+    
+    static var separatorLineLight: UIColor {
+        return UIColor.color(hex: 0xD6D7DA)
+    }
+    
+    static var separatorLineDark: UIColor {
+        return UIColor.color(hex: 0x454444)
+    }
+    
+    
+    static var buttonDisableBackground: UIColor {
+        return UIColor.create(light: buttonDisableBackgroundLight, dark: buttonDisableBackgroundDark)
+    }
+    
+    static var buttonDisableBackgroundLight: UIColor {
+        return UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3)
+    }
+    
+    static var buttonDisableBackgroundDark: UIColor {
+        return UIColor.color(hex: 0x515253)
+    }
+    
+    
 }
