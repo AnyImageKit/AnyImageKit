@@ -52,7 +52,7 @@ final class AlbumCell: UITableViewCell {
         backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         // Selected Background Color
         let view = UIView(frame: .zero)
-        view.backgroundColor = PhotoManager.shared.config.theme.backgroundSelectedColor
+        view.backgroundColor = PhotoManager.shared.config.theme.selectedCellColor
         selectedBackgroundView = view
         // Subviews
         contentView.addSubview(posterImageView)

@@ -104,7 +104,7 @@ extension PhotoToolBar {
     public func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
-        doneButton.backgroundColor = enable ? PhotoManager.shared.config.theme.mainColor : PhotoManager.shared.config.theme.buttonDisableBackgroundColor
+        doneButton.backgroundColor = enable ? PhotoManager.shared.config.theme.mainColor : PhotoManager.shared.config.theme.buttonDisableColor
     }
 }
 

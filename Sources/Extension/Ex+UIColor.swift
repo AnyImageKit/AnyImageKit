@@ -40,15 +40,14 @@ extension UIColor {
     }
 }
 
-// MARK: - Wechat Theme
-
 extension UIColor {
     
+    // MARK: - main color
     static var mainColor: UIColor {
         return UIColor.color(hex: 0x57BE6A)
     }
-    
-    
+
+    // MARK: - main text
     static var mainText: UIColor {
         return UIColor.create(light: mainTextLight, dark: mainTextDark)
     }
@@ -61,7 +60,7 @@ extension UIColor {
         return UIColor.color(hex: 0xEAEAEA)
     }
     
-    
+    // MARK: - sub text
     static var subText: UIColor {
         return UIColor.create(light: subTextLight, dark: subTextDark)
     }
@@ -74,7 +73,7 @@ extension UIColor {
         return UIColor.color(hex: 0x6E6E6E)
     }
     
-    
+    // MARK: - toolBar
     static var toolBar: UIColor {
         return UIColor.create(light: toolBarLight, dark: toolBarDark)
     }
@@ -87,7 +86,7 @@ extension UIColor {
         return UIColor.color(hex: 0x5C5C5C)
     }
     
-    
+    // MARK: - background
     static var background: UIColor {
         return UIColor.create(light: backgroundLight, dark: backgroundDark)
     }
@@ -100,20 +99,20 @@ extension UIColor {
         return UIColor.color(hex: 0x31302F)
     }
     
-    
-    static var backgroundSelected: UIColor {
-        return UIColor.create(light: backgroundSelectedLight, dark: backgroundSelectedDark)
+    // MARK: - selected cell
+    static var selectedCell: UIColor {
+        return UIColor.create(light: selectedCellLight, dark: selectedCellDark)
     }
     
-    static var backgroundSelectedLight: UIColor {
+    static var selectedCellLight: UIColor {
         return UIColor.color(hex: 0xE4E5E9)
     }
     
-    static var backgroundSelectedDark: UIColor {
+    static var selectedCellDark: UIColor {
         return UIColor.color(hex: 0x171717)
     }
     
-    
+    // MARK: - separator line
     static var separatorLine: UIColor {
         return UIColor.create(light: separatorLineLight, dark: separatorLineDark)
     }
@@ -126,18 +125,17 @@ extension UIColor {
         return UIColor.color(hex: 0x454444)
     }
     
-    
-    static var buttonDisableBackground: UIColor {
-        return UIColor.create(light: buttonDisableBackgroundLight, dark: buttonDisableBackgroundDark)
+    // MARK: - button disable
+    static var buttonDisable: UIColor {
+        return UIColor.create(light: buttonDisableLight, dark: buttonDisableDark)
     }
     
-    static var buttonDisableBackgroundLight: UIColor {
+    static var buttonDisableLight: UIColor {
         return UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3)
     }
     
-    static var buttonDisableBackgroundDark: UIColor {
+    static var buttonDisableDark: UIColor {
         return UIColor.color(hex: 0x515253)
     }
-    
     
 }

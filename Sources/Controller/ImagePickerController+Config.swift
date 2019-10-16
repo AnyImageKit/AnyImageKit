@@ -11,70 +11,83 @@ import UIKit
 extension ImagePickerController {
     
     public struct Config {
-        /// 主题
+        /// Theme 主题
         public var theme: Theme = Theme(style: .auto)
         
-        /// 最多可选择的图片数量
+        /// Max Count 最多可选择的图片数量
+        /// - Default: 9
         public var maxCount: Int = 9
         
-        /// 一行的列数
+        /// Column Number 每行的列数
+        /// - Default: 4
         public var columnNumber: Int = 4
         
-        /// 导出小图的最大宽度
+        /// Max Width for export Photo 导出小图的最大宽度
+        /// - Default: 800
         public var photoMaxWidth: CGFloat = 800
         
-        /// 导出大图的最大宽度(勾选原图时)
+        /// Max Width for export Large Photo(When User pick original photo) 导出大图的最大宽度(勾选原图时)
+        /// - Default: 1200
         public var largePhotoMaxWidth: CGFloat = 1200
         
-        /// 是否显示原图
+        /// Allow Use Original Photo 是否允许选择原图
+        /// - Default: true
         public var allowUseOriginalPhoto: Bool = true
         
-        /// 可选择的类型，默认可选择图片+视频
+        /// SelectOptions 可选择的类型
+        /// - Default: Photo & Video
         public var selectOptions: SelectOptions = [.photo, .video]
         
-        /// 按日期排序
-        /// asc:  按时间升序排列，自动滚动到底部
-        /// desc: 按时间倒序排列，自动滚动到顶部
+        /// Order by date 按日期排序
+        /// - ASC:  按时间升序排列，自动滚动到底部
+        /// - DESC: 按时间倒序排列，自动滚动到顶部
         public var orderByDate: Sort = .asc
         
-        public init() {
-            
-        }
+        public init() { }
     }
     
-    /// 排序规则
+    /// Sort 排序规则
     public enum Sort: Equatable {
-        /// 升序
+        /// ASC 升序
         case asc
-        /// 降序
+        /// DESC 降序
         case desc
     }
     
-    /// 可选择的类型
+    /// Select Options 可选择的类型
     public struct SelectOptions: OptionSet {
-        /// 照片(包括GIF)
+        /// Photo(include GIF) 照片(包括GIF)
         public static let photo: SelectOptions = SelectOptions(rawValue: 1 << 0)
-        /// 视频
+        /// Video 视频
         public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
         
         public let rawValue: Int
+        
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
     }
     
-    /// 主题
+    /// UI Theme 主题
     public struct Theme {
+        /// User Interface Style 界面风格
         public let style: UserInterfaceStyle
-        
+        /// Main Color 主题色调
         public var mainColor: UIColor
+        /// Text Color 主文本颜色
         public var textColor: UIColor
+        /// Sub Text Color 辅助文本颜色
         public var subTextColor: UIColor
+        /// ToolBar Color 工具栏颜色
         public var toolBarColor: UIColor
+        /// Background Color 背景色
         public var backgroundColor: UIColor
-        public var backgroundSelectedColor: UIColor
+        /// TableView Cell Selected Background Color 列表选中颜色
+        public var selectedCellColor: UIColor
+        /// Separator Line Color 分割线颜色
         public var separatorLineColor: UIColor
-        public var buttonDisableBackgroundColor: UIColor
+        /// Button Disable Color 不可用按钮颜色
+        public var buttonDisableColor: UIColor
         
         public init(style: UserInterfaceStyle) {
             switch style {
@@ -85,9 +98,9 @@ extension ImagePickerController {
                           subTextColor: UIColor.subText,
                           toolBarColor: UIColor.toolBar,
                           backgroundColor: UIColor.background,
-                          backgroundSelectedColor: UIColor.backgroundSelected,
+                          selectedCellColor: UIColor.selectedCell,
                           separatorLineColor: UIColor.separatorLine,
-                          buttonDisableBackgroundColor: UIColor.buttonDisableBackground)
+                          buttonDisableColor: UIColor.buttonDisable)
             case .light:
                 self.init(style: .light,
                           mainColor: UIColor.mainColor,
@@ -95,9 +108,9 @@ extension ImagePickerController {
                           subTextColor: UIColor.subTextLight,
                           toolBarColor: UIColor.toolBarLight,
                           backgroundColor: UIColor.backgroundLight,
-                          backgroundSelectedColor: UIColor.backgroundSelectedLight,
+                          selectedCellColor: UIColor.selectedCellLight,
                           separatorLineColor: UIColor.separatorLineLight,
-                          buttonDisableBackgroundColor: UIColor.buttonDisableBackgroundLight)
+                          buttonDisableColor: UIColor.buttonDisableLight)
             case .dark:
                 self.init(style: .dark,
                           mainColor: UIColor.mainColor,
@@ -105,9 +118,9 @@ extension ImagePickerController {
                           subTextColor: UIColor.subTextDark,
                           toolBarColor: UIColor.toolBarDark,
                           backgroundColor: UIColor.backgroundDark,
-                          backgroundSelectedColor: UIColor.backgroundSelectedDark,
+                          selectedCellColor: UIColor.selectedCellDark,
                           separatorLineColor: UIColor.separatorLineDark,
-                          buttonDisableBackgroundColor: UIColor.buttonDisableBackgroundDark)
+                          buttonDisableColor: UIColor.buttonDisableDark)
             }
         }
         
@@ -117,28 +130,30 @@ extension ImagePickerController {
                     subTextColor: UIColor,
                     toolBarColor: UIColor,
                     backgroundColor: UIColor,
-                    backgroundSelectedColor: UIColor,
+                    selectedCellColor: UIColor,
                     separatorLineColor: UIColor,
-                    buttonDisableBackgroundColor: UIColor) {
+                    buttonDisableColor: UIColor) {
             self.style = style
             self.mainColor = mainColor
             self.textColor = textColor
             self.subTextColor = subTextColor
             self.toolBarColor = toolBarColor
             self.backgroundColor = backgroundColor
-            self.backgroundSelectedColor = backgroundSelectedColor
+            self.selectedCellColor = selectedCellColor
             self.separatorLineColor = separatorLineColor
-            self.buttonDisableBackgroundColor = buttonDisableBackgroundColor
+            self.buttonDisableColor = buttonDisableColor
         }
     }
     
-    /// 主题风格
+    /// User Interface Style 主题风格
     public enum UserInterfaceStyle {
-        /// 自动 iOS 13+ 会根据系统样式自动更改，iOS 13 以下为 Light mode
+        /// Auto model 自动模式
+        /// - iOS 13+ depend on system, below iOS 13 equal to Light mode
+        /// - iOS 13+ 会根据系统样式自动更改，低于 iOS 13 为 Light mode
         case auto
-        /// Light mode
+        /// Light mode 浅色模式
         case light
-        /// Dark mode
+        /// Dark mode 深色模式
         case dark
     }
 }
