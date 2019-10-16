@@ -77,6 +77,7 @@ final class VideoPreviewCell: PreviewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageView.image = nil
         player = nil
         playerLayer?.removeFromSuperlayer()
         playerLayer = nil
