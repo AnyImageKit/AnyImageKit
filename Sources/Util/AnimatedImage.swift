@@ -29,20 +29,20 @@ import UIKit
 import ImageIO
 
 /// Represents a set of image creating options used in Kingfisher.
-public struct ImageCreatingOptions {
+struct ImageCreatingOptions {
     
     /// The target scale of image needs to be created.
-    public let scale: CGFloat
+    let scale: CGFloat
     
     /// The expected animation duration if an animated image being created.
-    public let duration: TimeInterval
+    let duration: TimeInterval
     
     /// For an animated image, whether or not all frames should be loaded before displaying.
-    public let preloadAll: Bool
+    let preloadAll: Bool
     
     /// For an animated image, whether or not only the first image should be
     /// loaded as a static image. It is useful for preview purpose of an animated image.
-    public let onlyFirstFrame: Bool
+    let onlyFirstFrame: Bool
     
     /// Creates an `ImageCreatingOptions` object.
     ///
@@ -56,7 +56,7 @@ public struct ImageCreatingOptions {
     ///   - onlyFirstFrame: For an animated image, whether or not only the first image should be
     ///                     loaded as a static image. It is useful for preview purpose of an animated image.
     ///                     Default is `false`.
-    public init(
+    init(
         scale: CGFloat = 1.0,
         duration: TimeInterval = 0.0,
         preloadAll: Bool = false,
