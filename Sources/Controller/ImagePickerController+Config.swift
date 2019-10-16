@@ -17,8 +17,10 @@ extension ImagePickerController {
         public var maxCount: Int = 3
         /// 一行的列数
         public var columnNumber: Int = 4
-        /// 导出图片的宽度
-        public var photoWidth: Int = 1200
+        /// 导出小图的最大宽度
+        public var photoMaxWidth: CGFloat = 800
+        /// 导出大图的最大宽度(勾选原图时)
+        public var largePhotoMaxWidth: CGFloat = 1200
         /// 是否显示原图
         public var allowUseOriginalPhoto: Bool = true
         /// 可选择的类型，默认可选择图片+视频

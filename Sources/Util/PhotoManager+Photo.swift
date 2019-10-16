@@ -28,26 +28,27 @@ struct PhotoFetchOptions {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
+    
+    var targetSize: CGSize {
+        switch sizeMode {
+        case .resize(let width):
+            return CGSize(width: width, height: width)
+        case .preview:
+            let width = PhotoManager.shared.config.largePhotoMaxWidth
+            return CGSize(width: width, height: width)
+        case .original:
+            return PHImageManagerMaximumSize
+        }
+    }
 }
 
 enum PhotoSizeMode: Equatable {
     /// Custom Size
     case resize(CGFloat)
-    /// Preview Size, based on your screen width
+    /// Preview Size, based on your config
     case preview
     /// Original Size
     case original
-    
-    var targetSize: CGSize {
-        switch self {
-        case .resize(let width):
-            return CGSize(width: width, height: width)
-        case .preview:
-            return UIScreen.main.nativeBounds.size
-        case .original:
-            return PHImageManagerMaximumSize
-        }
-    }
 }
 
 struct PhotoFetchResponse {
@@ -73,7 +74,7 @@ extension PhotoManager {
         requestOptions.version = options.version
         requestOptions.resizeMode = options.resizeMode
         
-        let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.sizeMode.targetSize, contentMode: .aspectFill, options: requestOptions) { [weak self] (image, info) in
+        let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.targetSize, contentMode: .aspectFill, options: requestOptions) { [weak self] (image, info) in
             guard let self = self else { return }
             guard let info = info else {
                 completion(.failure(.invalidInfo))
@@ -88,13 +89,13 @@ extension PhotoManager {
                 case .original:
                     completion(.success(.init(image: image, isDegraded: isDegraded)))
                 case .preview:
-                    let resizedImage = UIImage.resize(from: image, size: options.sizeMode.targetSize)
+                    let resizedImage = UIImage.resize(from: image, size: options.targetSize)
                     if !isDegraded {
                         self.writeCache(image: image, for: asset.localIdentifier)
                     }
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 case .resize:
-                    let resizedImage = UIImage.resize(from: image, size: options.sizeMode.targetSize)
+                    let resizedImage = UIImage.resize(from: image, size: options.targetSize)
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 }
             } else {
@@ -121,7 +122,7 @@ extension PhotoManager {
                                         completion(.success(.init(image: image, isDegraded: false)))
                                     }
                                 case .preview:
-                                    let size = self.calculateSize(from: asset.pixelSize, to: options.sizeMode.targetSize)
+                                    let size = self.calculateSize(from: asset.pixelSize, to: options.targetSize)
                                     guard let image = UIImage.resize(from: response.data, size: size) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
@@ -133,7 +134,7 @@ extension PhotoManager {
                                         completion(.success(.init(image: image, isDegraded: false)))
                                     }
                                 case .resize:
-                                    let size = self.calculateSize(from: asset.pixelSize, to: options.sizeMode.targetSize)
+                                    let size = self.calculateSize(from: asset.pixelSize, to: options.targetSize)
                                     guard let image = UIImage.resize(from: response.data, size: size) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
