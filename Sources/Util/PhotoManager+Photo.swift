@@ -89,11 +89,16 @@ extension PhotoManager {
                 case .original:
                     completion(.success(.init(image: image, isDegraded: isDegraded)))
                 case .preview:
-                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
-                    if !isDegraded {
-                        self.writeCache(image: image, for: asset.localIdentifier)
+                    self.workQueue.async { [weak self] in
+                        guard let self = self else { return }
+                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                        if !isDegraded {
+                            self.writeCache(image: image, for: asset.localIdentifier)
+                        }
+                        DispatchQueue.main.async {
+                            completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
+                        }
                     }
-                    completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 case .resize:
                     let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
