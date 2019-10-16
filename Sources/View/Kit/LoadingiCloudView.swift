@@ -11,7 +11,8 @@ import UIKit
 final class LoadingiCloudView: UIView {
     
     private lazy var imageView: UIImageView = {
-        let view = UIImageView(image: BundleHelper.image(named: "iCloud"))
+        let image = BundleHelper.image(named: "iCloud", style: PhotoManager.shared.config.theme.style)
+        let view = UIImageView(image: image)
         return view
     }()
     
