@@ -209,11 +209,11 @@ extension AssetPickerViewController {
             PhotoManager.shared.removeSelectedAsset(asset)
             updateVisibleCellState(sender.tag)
         }
-        toolBar.setEnable(!PhotoManager.shared.selectdAsset.isEmpty)
+        toolBar.setEnable(!PhotoManager.shared.selectdAssets.isEmpty)
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
-        guard let asset = PhotoManager.shared.selectdAsset.first else { return }
+        guard let asset = PhotoManager.shared.selectdAssets.first else { return }
         let controller = PhotoPreviewController()
         controller.currentIndex = asset.idx
         controller.dataSource = self

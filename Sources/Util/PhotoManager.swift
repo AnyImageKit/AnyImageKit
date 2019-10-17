@@ -22,13 +22,13 @@ final class PhotoManager {
     var config = ImagePickerController.Config()
     
     var isMaxCount: Bool {
-        return selectdAsset.count == config.maxCount
+        return selectdAssets.count == config.maxCount
     }
     
     var isOriginalPhoto: Bool = false
     
     /// 已选中的资源
-    private(set) var selectdAsset: [Asset] = []
+    private(set) var selectdAssets: [Asset] = []
     
     /// Running Fetch Requests
     private var fetchRecords = [FetchRecord]()
@@ -44,7 +44,7 @@ final class PhotoManager {
 extension PhotoManager {
     
     func clearAll() {
-        selectdAsset.removeAll()
+        selectdAssets.removeAll()
         cacheList.removeAll()
     }
 }
@@ -126,8 +126,8 @@ extension PhotoManager {
 extension PhotoManager {
     
     func addSelectedAsset(_ asset: Asset) {
-        selectdAsset.append(asset)
-        asset.selectedNum = selectdAsset.count
+        selectdAssets.append(asset)
+        asset.selectedNum = selectdAssets.count
         // 加载原图，缓存到内存
         workQueue.async { [weak self] in
             guard let self = self else { return }
@@ -147,16 +147,16 @@ extension PhotoManager {
     }
     
     func removeSelectedAsset(_ asset: Asset) {
-        guard let idx = PhotoManager.shared.selectdAsset.firstIndex(where: { $0 == asset }) else { return }
-        for item in selectdAsset {
+        guard let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0 == asset }) else { return }
+        for item in selectdAssets {
             if item.selectedNum > asset.selectedNum {
                 item.selectedNum -= 1
             }
         }
-        selectdAsset.remove(at: idx)
+        selectdAssets.remove(at: idx)
     }
     
     func removeAllSelectedAsset() {
-        selectdAsset.removeAll()
+        selectdAssets.removeAll()
     }
 }
