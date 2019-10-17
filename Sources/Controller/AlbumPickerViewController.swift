@@ -50,10 +50,19 @@ final class AlbumPickerViewController: UIViewController {
     
     private func updatePreferredContentSize(with traitCollection: UITraitCollection) {
         let size = UIScreen.main.bounds.size
-        let height = CGFloat(albums.count) * rowHeight
         let preferredMinHeight = rowHeight * 5
-        let preferredMaxHeight = size.height*(2.0/3.0)
-        preferredContentSize = CGSize(width: size.width, height: max(preferredMinHeight, min(height, preferredMaxHeight)))
+        let preferredMaxHeight = floor(size.height*(2.0/3.0))
+        if albums.isEmpty {
+            preferredContentSize = CGSize(width: size.width, height: preferredMaxHeight)
+        } else {
+            let height = CGFloat(albums.count) * rowHeight
+            let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
+            preferredContentSize = CGSize(width: size.width, height: preferredHeight)
+        }
+    }
+    
+    func reloadData() {
+        tableView.reloadData()
     }
 }
 

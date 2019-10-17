@@ -14,6 +14,7 @@ private let toolBarHeight: CGFloat = 56
 
 final class AssetPickerViewController: UIViewController {
     
+    private var albumsPicker: AlbumPickerViewController?
     private var album: Album?
     private var albums = [Album]()
     
@@ -30,7 +31,10 @@ final class AssetPickerViewController: UIViewController {
         layout.minimumLineSpacing = defaultAssetSpacing
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing, left: defaultAssetSpacing, bottom: toolBarHeight + defaultAssetSpacing, right: defaultAssetSpacing)
+        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
+                                         left: defaultAssetSpacing,
+                                         bottom: toolBarHeight + defaultAssetSpacing,
+                                         right: defaultAssetSpacing)
         view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         view.registerCell(AssetCell.self)
         view.dataSource = self
@@ -138,7 +142,7 @@ extension AssetPickerViewController {
     private func preLoadAlbums() {
         PhotoManager.shared.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
-            self.albums = albums
+            self.setAlbums(albums)
         }
     }
     
@@ -156,6 +160,15 @@ extension AssetPickerViewController {
         PhotoManager.shared.removeAllSelectedAsset()
     }
     
+    func setAlbums(_ albums: [Album]) {
+        self.albums = albums
+        if let albumsPicker = albumsPicker {
+            print(albumsPicker.isBeingPresented)
+            albumsPicker.albums = albums
+            albumsPicker.reloadData()
+        }
+    }
+    
     private func updateVisibleCellState(_ animatedItem: Int = -1) {
         guard let album = album else { return }
         for cell in collectionView.visibleCells {
@@ -167,7 +180,6 @@ extension AssetPickerViewController {
 }
 
 // MARK: - Action
-
 extension AssetPickerViewController {
     
     @objc private func titleViewTapped(_ sender: ArrowButton) {
@@ -182,6 +194,7 @@ extension AssetPickerViewController {
         presentationController.cornerRadius = 8
         presentationController.corners = [.bottomLeft, .bottomRight]
         controller.transitioningDelegate = presentationController
+        self.albumsPicker = controller
         present(controller, animated: true, completion: nil)
     }
     
@@ -231,7 +244,6 @@ extension AssetPickerViewController {
 }
 
 // MARK: - UICollectionViewDataSource
-
 extension AssetPickerViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -255,7 +267,6 @@ extension AssetPickerViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
-
 extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -278,7 +289,6 @@ extension AssetPickerViewController: UICollectionViewDelegate {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-
 extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -289,6 +299,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - AlbumPickerViewControllerDelegate
 extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
@@ -297,11 +308,11 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
     func albumPickerWillDisappear() {
         titleView.isSelected = false
+        albumsPicker = nil
     }
 }
 
 // MARK: - PhotoPreviewControllerDataSource
-
 extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
@@ -321,7 +332,6 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
 }
 
 // MARK: - PhotoPreviewControllerDelegate
-
 extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
