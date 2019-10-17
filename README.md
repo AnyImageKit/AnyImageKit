@@ -7,12 +7,19 @@
 - [x] Light mode, Dard mode or Auto mode support
 - [x] Default theme is similar with Wechat 
 - [x] Multiple/mix select
-- Support Media Type:
+- [ ] Support Media Type:
     - [x] Photo
     - [x] GIF
     - [ ] LivePhoto
     - [x] Video
+- [ ] Camera
 - [ ] Edit Image
+- [ ] Multiple platform support
+    - [x] iOS
+    - [ ] iPadOS
+    - [ ] tvOS
+    - [ ] Catalyst
+    - [ ] macOS
 
 ## Requirements
 
