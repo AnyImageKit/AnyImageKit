@@ -153,7 +153,7 @@ extension AssetPickerViewController {
         }
     }
     
-    func setAlbum(_ album: Album) {
+    private func setAlbum(_ album: Album) {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.name)
@@ -165,12 +165,12 @@ extension AssetPickerViewController {
             collectionView.scrollToFirst(at: .top, animated: false)
         }
         PhotoManager.shared.removeAllSelectedAsset()
+        PhotoManager.shared.cancelAllFetch()
     }
     
     private func setAlbums(_ albums: [Album]) {
         self.albums = albums
         if let albumsPicker = albumsPicker {
-            print(albumsPicker.isBeingPresented)
             albumsPicker.albums = albums
             albumsPicker.reloadData()
         }

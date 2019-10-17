@@ -93,7 +93,7 @@ extension ImagePickerController {
         let assets = manager.selectdAssets
         var isReady = true
         for asset in assets {
-            if !(asset._image != nil || (asset.type == .video && asset.videoDidDownload)) {
+            if !asset.isReady {
                 showWaitHUD()
                 isReady = false
                 PhotoManager.shared.syncAsset(asset)
