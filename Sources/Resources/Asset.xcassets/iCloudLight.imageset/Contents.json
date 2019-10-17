@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "iCloudLight.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "iCloudLight@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "iCloud.png",
+      "filename" : "iCloudLight@3x.png",
       "scale" : "3x"
     }
   ],

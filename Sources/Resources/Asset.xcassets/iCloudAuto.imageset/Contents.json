@@ -2,40 +2,44 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "iCloudLight.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "1x",
+      "filename" : "iCloudDark.png",
       "appearances" : [
         {
           "appearance" : "luminosity",
           "value" : "dark"
         }
-      ]
+      ],
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "iCloudLight@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
+      "filename" : "iCloudDark@2x.png",
       "appearances" : [
         {
           "appearance" : "luminosity",
           "value" : "dark"
         }
-      ]
+      ],
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "iCloud.png",
+      "filename" : "iCloudLight@3x.png",
       "scale" : "3x"
     },
     {
       "idiom" : "universal",
-      "filename" : "iCloud-1.png",
+      "filename" : "iCloudDark@3x.png",
       "appearances" : [
         {
           "appearance" : "luminosity",
