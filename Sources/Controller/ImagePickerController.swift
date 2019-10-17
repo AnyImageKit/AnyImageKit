@@ -11,7 +11,7 @@ import SnapKit
 
 public protocol ImagePickerControllerDelegate: class {
     
-    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginal: Bool)
+    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginalImage: Bool)
 }
 
 open class ImagePickerController: UINavigationController {
@@ -102,7 +102,7 @@ extension ImagePickerController {
         if !isReady { return }
         hideHUD()
         
-        pickerDelegate?.imagePicker(self, didSelect: assets, isOriginal: manager.isOriginalPhoto)
+        pickerDelegate?.imagePicker(self, didSelect: assets, isOriginalImage: manager.useOriginalImage)
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
 }

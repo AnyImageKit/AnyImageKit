@@ -31,8 +31,6 @@ final class PhotoPreviewController: UIViewController {
     
     // MARK: - Private
     
-    /// 是否使用原图
-    private var useOriginalPhoto: Bool = false
     /// 当前正在显示视图的前一个页面关联视图
     private var relatedView: UIView? {
         return dataSource?.previewController(self, thumbnailViewForIndex: currentIndex)
@@ -70,11 +68,11 @@ final class PhotoPreviewController: UIViewController {
     }()
     private lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .preview)
-        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalPhoto
-        view.originalButton.isSelected = PhotoManager.shared.isOriginalPhoto
+        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalImage
+        view.originalButton.isSelected = PhotoManager.shared.useOriginalImage
         view.leftButton.isHidden = true // Edit not finish
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
-        view.originalButton.addTarget(self, action: #selector(originalPhotoButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -216,7 +214,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        if PhotoManager.shared.config.allowUseOriginalPhoto {
+        if PhotoManager.shared.config.allowUseOriginalImage {
             toolBar.originalButton.isHidden = data.asset.type != .photo
         }
         indexView.currentIndex = currentIndex
@@ -292,13 +290,13 @@ extension PhotoPreviewController {
     }
     
     /// ToolBar - Original
-    @objc private func originalPhotoButtonTapped(_ sender: OriginalButton) {
+    @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
         let manager = PhotoManager.shared
-        manager.isOriginalPhoto = sender.isSelected
-        delegate?.previewController(self, useOriginalPhoto: sender.isSelected)
+        manager.useOriginalImage = sender.isSelected
+        delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
         // 选择当前照片
-        if manager.isOriginalPhoto && !manager.isMaxCount {
+        if manager.useOriginalImage && !manager.isMaxCount {
             guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
             if !data.asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)

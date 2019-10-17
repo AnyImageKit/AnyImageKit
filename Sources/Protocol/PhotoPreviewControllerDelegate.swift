@@ -31,7 +31,7 @@ protocol PhotoPreviewControllerDelegate: class {
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int)
     
     /// 开启/关闭原图
-    func previewController(_ controller: PhotoPreviewController, useOriginalPhoto: Bool)
+    func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool)
     
     /// 点击返回
     func previewControllerDidClickBack(_ controller: PhotoPreviewController)
@@ -43,7 +43,7 @@ protocol PhotoPreviewControllerDelegate: class {
 extension PhotoPreviewControllerDelegate {
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) { }
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) { }
-    func previewController(_ controller: PhotoPreviewController, useOriginalPhoto: Bool) { }
+    func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) { }
     func previewControllerDidClickBack(_ controller: PhotoPreviewController) { }
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
 }

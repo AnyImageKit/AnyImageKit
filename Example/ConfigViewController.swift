@@ -18,7 +18,7 @@ final class ConfigViewController: UITableViewController {
     // MARK: - Action
     
     @IBAction func pickButtonTapped(_ sender: UIBarButtonItem) {
-        let controller = ImagePickerController(config: config, delegate: self)
+        let controller = ImagePickerController(delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
         }
@@ -40,8 +40,8 @@ final class ConfigViewController: UITableViewController {
                 maxCountTapped()
             case .columnNumber:
                 columnNumberTapped()
-            case .allowUseOriginalPhoto:
-                allowUseOriginalPhotoTapped()
+            case .allowUseOriginalImage:
+                allowUseOriginalImageTapped()
             case .selectOptions:
                 selectOptionsTapped()
             case .orderbyDate:
@@ -62,7 +62,7 @@ final class ConfigViewController: UITableViewController {
 
 extension ConfigViewController: ImagePickerControllerDelegate {
     
-    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginal: Bool) {
+    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginalImage: Bool) {
         print(assets)
     }
     
@@ -115,10 +115,10 @@ extension ConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func allowUseOriginalPhotoTapped() {
-        let indexPath = ConfigRowType.allowUseOriginalPhoto.indexPath
-        config.allowUseOriginalPhoto.toggle()
-        tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(config.allowUseOriginalPhoto)"
+    private func allowUseOriginalImageTapped() {
+        let indexPath = ConfigRowType.allowUseOriginalImage.indexPath
+        config.allowUseOriginalImage.toggle()
+        tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(config.allowUseOriginalImage)"
     }
     
     private func selectOptionsTapped() {
@@ -168,7 +168,7 @@ enum ConfigRowType: Int {
     case theme = 0
     case maxCount
     case columnNumber
-    case allowUseOriginalPhoto
+    case allowUseOriginalImage
     case selectOptions
     case orderbyDate
     

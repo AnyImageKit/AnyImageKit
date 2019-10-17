@@ -52,10 +52,10 @@ final class AssetPickerViewController: UIViewController {
     private(set) lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .picker)
         view.setEnable(false)
-        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalPhoto
-        view.originalButton.isSelected = PhotoManager.shared.isOriginalPhoto
+        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalImage
+        view.originalButton.isSelected = PhotoManager.shared.useOriginalImage
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
-        view.originalButton.addTarget(self, action: #selector(originalPhotoButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -241,8 +241,8 @@ extension AssetPickerViewController {
         present(controller, animated: true, completion: nil)
     }
     
-    @objc private func originalPhotoButtonTapped(_ sender: OriginalButton) {
-        PhotoManager.shared.isOriginalPhoto = sender.isSelected
+    @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
+        PhotoManager.shared.useOriginalImage = sender.isSelected
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
@@ -349,8 +349,8 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         updateVisibleCellState()
     }
     
-    func previewController(_ controller: PhotoPreviewController, useOriginalPhoto: Bool) {
-        toolBar.originalButton.isSelected = useOriginalPhoto
+    func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) {
+        toolBar.originalButton.isSelected = useOriginalImage
     }
     
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {

@@ -32,7 +32,7 @@ extension ImagePickerController {
         
         /// Allow Use Original Photo 是否允许选择原图
         /// - Default: true
-        public var allowUseOriginalPhoto: Bool = true
+        public var allowUseOriginalImage: Bool = true
         
         /// SelectOptions 可选择的类型
         /// - Default: Photo & Video

@@ -25,7 +25,7 @@ final class PhotoManager {
         return selectdAssets.count == config.maxCount
     }
     
-    var isOriginalPhoto: Bool = false
+    var useOriginalImage: Bool = false
     
     /// 已选中的资源
     private(set) var selectdAssets: [Asset] = []
