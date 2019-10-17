@@ -34,6 +34,13 @@ public class Asset: Equatable {
     }
 }
 
+extension Asset: CustomStringConvertible {
+    
+    public var description: String {
+        return "<Asset> \(phAsset.localIdentifier) mediaType=\(type) image=\(image)"
+    }
+}
+
 // MARK: - Original Photo
 extension Asset {
     

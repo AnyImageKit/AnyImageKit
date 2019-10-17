@@ -8,7 +8,7 @@
 
 import Photos
 
-public enum MediaType: Equatable {
+public enum MediaType: Equatable, CustomStringConvertible {
     
     case photo
     case photoGif
@@ -26,6 +26,17 @@ public enum MediaType: Equatable {
             self = .video
         default:
             self = .photo
+        }
+    }
+    
+    public var description: String {
+        switch self {
+        case .photo:
+            return "PHOTO"
+        case .photoGif:
+            return "PHOTO/GIF"
+        case .video:
+            return "VIDEO"
         }
     }
 }
