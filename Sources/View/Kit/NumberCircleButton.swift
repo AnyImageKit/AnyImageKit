@@ -25,7 +25,7 @@ final class NumberCircleButton: UIControl {
         return view
     }()
     
-    public convenience init(style: Style) {
+    convenience init(style: Style) {
         self.init(frame: .zero)
         switch style {
         case .default:
@@ -85,7 +85,7 @@ final class NumberCircleButton: UIControl {
 
 extension NumberCircleButton {
     
-    public func setNum(_ num: Int, isSelected: Bool, animated: Bool) {
+    func setNum(_ num: Int, isSelected: Bool, animated: Bool) {
         self.isSelected = isSelected
         numLabel.text = num.description
         showNumber(animated)

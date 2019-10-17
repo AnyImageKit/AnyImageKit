@@ -10,7 +10,7 @@ import UIKit
 
 final class ScalePresentationController: UIPresentationController {
     
-    public var maskAlpha: CGFloat {
+    var maskAlpha: CGFloat {
         get {
             return maskView.alpha
         } set {

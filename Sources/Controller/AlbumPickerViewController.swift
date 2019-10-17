@@ -43,7 +43,7 @@ final class AlbumPickerViewController: UIViewController {
         delegate?.albumPickerWillDisappear()
     }
     
-    override public func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         updatePreferredContentSize(with: newCollection)
     }

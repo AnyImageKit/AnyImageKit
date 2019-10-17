@@ -47,11 +47,11 @@ final class PhotoGIFPreviewCell: PreviewCell {
     }
 }
 
-// MARK: - Public function
+// MARK: - function
 extension PhotoGIFPreviewCell {
     
     /// 加载 GIF
-    public func requestGIF() {
+    func requestGIF() {
         let options = PhotoGIFFetchOptions()
         PhotoManager.shared.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
             switch result {

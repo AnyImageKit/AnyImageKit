@@ -92,10 +92,10 @@ final class ArrowButton: UIControl {
     }
 }
 
-// MARK: - Public function
+// MARK: - function
 extension ArrowButton {
     
-    public func setTitle(_ title: String) {
+    func setTitle(_ title: String) {
         if isSelected {
             isSelected = false
         }

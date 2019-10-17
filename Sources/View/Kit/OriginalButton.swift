@@ -63,7 +63,7 @@ final class OriginalButton: UIControl {
 
 fileprivate class CircleView: UIView {
     
-    public var isSelected = false {
+    var isSelected = false {
         didSet {
             smallCircleView.isHidden = !isSelected
         }

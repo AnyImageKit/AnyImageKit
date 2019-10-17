@@ -63,19 +63,19 @@ final class LoadingiCloudView: UIView {
     }
 }
 
-// MARK: - Public function
+// MARK: - function
 extension LoadingiCloudView {
     
-    public func reset() {
+    func reset() {
         setProgress(0)
         isHidden = true
     }
     
-    public func setProgress(_ progress: Double) {
+    func setProgress(_ progress: Double) {
         progressLabel.text = "\(Int(progress * 100))%"
     }
     
-    public func setLabelColor(_ color: UIColor) {
+    func setLabelColor(_ color: UIColor) {
         tipLabel.textColor = color
         progressLabel.textColor = color
     }

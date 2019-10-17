@@ -11,23 +11,23 @@ import Photos
 
 final class PhotoPreviewController: UIViewController {
     
-    public weak var delegate: PhotoPreviewControllerDelegate? = nil
-    public weak var dataSource: PhotoPreviewControllerDataSource? = nil
+    weak var delegate: PhotoPreviewControllerDelegate? = nil
+    weak var dataSource: PhotoPreviewControllerDataSource? = nil
     
     /// 图片索引
-    public var currentIndex: Int = 0 {
+    var currentIndex: Int = 0 {
         didSet {
             didSetCurrentIdx()
         }
     }
     /// 左右两张图之间的间隙
-    public var photoSpacing: CGFloat = 30
+    var photoSpacing: CGFloat = 30
     /// 图片缩放模式
-    public var imageScaleMode: UIView.ContentMode = .scaleAspectFill
+    var imageScaleMode: UIView.ContentMode = .scaleAspectFill
     /// 捏合手势放大图片时的最大允许比例
-    public var imageMaximumZoomScale: CGFloat = 2.0
+    var imageMaximumZoomScale: CGFloat = 2.0
     /// 双击放大图片时的目标比例
-    public var imageZoomScaleForDoubleTap: CGFloat = 2.0
+    var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
     // MARK: - Private
     
@@ -459,7 +459,7 @@ extension PhotoPreviewController: PhotoPreviewIndexViewDelegate {
 // MARK: - UIViewControllerTransitioningDelegate
 extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     /// 提供进场动画
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         updateLayout()
         // 立即加载collectionView
         let indexPath = IndexPath(item: currentIndex, section: 0)
@@ -470,12 +470,12 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     }
     
     /// 提供退场动画
-    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return makeDismissedAnimator()
     }
     
     /// 提供转场协调器
-    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
         scalePresentationController = controller
         return controller

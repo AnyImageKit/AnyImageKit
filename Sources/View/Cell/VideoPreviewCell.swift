@@ -31,7 +31,7 @@ final class VideoPreviewCell: PreviewCell {
         return size
     }
     
-    public var isPlaying: Bool {
+    var isPlaying: Bool {
         if let player = player {
             return player.rate != 0
         }
@@ -134,17 +134,17 @@ final class VideoPreviewCell: PreviewCell {
     }
 }
 
-// MARK: - Public function
+// MARK: - function
 extension VideoPreviewCell {
     
     /// 暂停
-    public func pause() {
+    func pause() {
         player?.pause()
         setPlayButton(hidden: false)
     }
     
     /// 加载图片
-    public func requestPhoto() {
+    func requestPhoto() {
         let options = PhotoFetchOptions(sizeMode: .resize(500))
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
@@ -159,7 +159,7 @@ extension VideoPreviewCell {
     }
     
     // 加载视频
-    public func requestVideo() {
+    func requestVideo() {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { [weak self] (progress, error, isAtEnd, info) in
@@ -183,7 +183,7 @@ extension VideoPreviewCell {
         }
     }
     
-    public func setCloudLabelColor(_ color: UIColor) {
+    func setCloudLabelColor(_ color: UIColor) {
         iCloudView.setLabelColor(color)
     }
 }

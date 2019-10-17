@@ -51,11 +51,11 @@ final class PhotoPreviewCell: PreviewCell {
     }
 }
 
-// MARK: - Public function
+// MARK: - function
 extension PhotoPreviewCell {
     
     /// 加载图片
-    public func requestPhoto() {
+    func requestPhoto() {
         let options = PhotoFetchOptions(sizeMode: .preview)
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
