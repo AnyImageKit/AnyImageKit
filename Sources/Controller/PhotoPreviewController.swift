@@ -308,7 +308,7 @@ extension PhotoPreviewController {
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        
+        delegate?.previewControllerDidClickDone(self)
     }
 }
 

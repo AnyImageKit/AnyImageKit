@@ -164,7 +164,7 @@ extension AssetPickerViewController {
         PhotoManager.shared.removeAllSelectedAsset()
     }
     
-    func setAlbums(_ albums: [Album]) {
+    private func setAlbums(_ albums: [Album]) {
         self.albums = albums
         if let albumsPicker = albumsPicker {
             print(albumsPicker.isBeingPresented)
@@ -180,6 +180,13 @@ extension AssetPickerViewController {
                 cell.updateState(album.assets[indexPath.item], animated: animatedItem == indexPath.item)
             }
         }
+    }
+    
+    private func didFinishSelect() {
+        guard let navigationController = navigationController else { return }
+        let assets = PhotoManager.shared.selectdAssets
+        navigationController.pickerDelegate?.imagePicker(navigationController, didSelect: assets, isOriginal: PhotoManager.shared.isOriginalPhoto)
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -243,7 +250,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        
+        didFinishSelect()
     }
 }
 
@@ -348,5 +355,13 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, useOriginalPhoto: Bool) {
         toolBar.originalButton.isSelected = useOriginalPhoto
+    }
+    
+    func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
+        guard let album = album else { return }
+        if PhotoManager.shared.selectdAssets.isEmpty {
+            PhotoManager.shared.addSelectedAsset(album.assets[controller.currentIndex])
+        }
+        didFinishSelect()
     }
 }
