@@ -27,10 +27,6 @@
 - Xcode 11+
 - Swift 5+
 
-## Usage
-
-
-
 ## Installation
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
@@ -61,6 +57,38 @@ github "anotheren/AnyImagePicker"
 ```bash
 $ carthage update
 ```
+
+## Usage
+
+### Quick Start
+
+```swift
+import AnyImagePicker
+
+let controller = ImagePickerController(delegate: self)
+present(controller, animated: true, completion: nil)
+
+/// ImagePickerControllerDelegate
+func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], useOriginalImage: Bool) {
+    let image = assets.image
+    // Your code
+}
+```
+
+### Fetch content data
+```swift
+/// Fetch Video URL 
+/// - Note: Only for `MediaType` Video
+/// - Parameter options: Video URL Fetch Options
+/// - Parameter completion: Video URL Fetch Completion
+func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion)
+
+// Call
+asset.fetchVideoURL { (result) in
+    // Your code
+}
+```
+
 
 ## License
 
