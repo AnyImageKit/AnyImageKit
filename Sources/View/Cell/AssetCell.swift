@@ -46,7 +46,7 @@ final class AssetCell: UICollectionViewCell {
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
-        let view = NumberCircleButton(style: .default)
+        let view = NumberCircleButton(frame: .zero, style: .default)
         return view
     }()
     

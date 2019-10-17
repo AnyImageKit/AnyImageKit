@@ -17,7 +17,7 @@ final class PhotoPreviewNavigationBar: UIView {
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
-        let view = NumberCircleButton(style: .large)
+        let view = NumberCircleButton(frame: .zero, style: .large)
         return view
     }()
     

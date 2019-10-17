@@ -10,9 +10,9 @@ import UIKit
 
 final class NumberCircleButton: UIControl {
     
-    private lazy var circleIV: UIImageView = {
-        let view = UIImageView()
-        view.image = BundleHelper.image(named: "PickerCircle")
+    private lazy var circleView: CircleView = {
+        let view = CircleView(style: style)
+        view.isUserInteractionEnabled = false
         return view
     }()
     private lazy var numLabel: UILabel = {
@@ -24,18 +24,10 @@ final class NumberCircleButton: UIControl {
         view.backgroundColor = PhotoManager.shared.config.theme.mainColor
         return view
     }()
+    private let style: Style
     
-    convenience init(style: Style) {
-        self.init(frame: .zero)
-        switch style {
-        case .default:
-            numLabel.font = UIFont.systemFont(ofSize: 14)
-        case .large:
-            numLabel.font = UIFont.systemFont(ofSize: 18)
-        }
-    }
-    
-    override init(frame: CGRect) {
+    init(frame: CGRect, style: Style) {
+        self.style = style
         super.init(frame: frame)
         setupView()
     }
@@ -45,13 +37,19 @@ final class NumberCircleButton: UIControl {
     }
     
     private func setupView() {
-        addSubview(circleIV)
+        addSubview(circleView)
         addSubview(numLabel)
-        circleIV.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview().inset(3)
+        circleView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview().inset(4)
         }
         numLabel.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview().inset(3)
+        }
+        switch style {
+        case .default:
+            numLabel.font = UIFont.systemFont(ofSize: 14)
+        case .large:
+            numLabel.font = UIFont.systemFont(ofSize: 18)
         }
     }
     
@@ -97,5 +95,43 @@ extension NumberCircleButton {
     enum Style {
         case `default`
         case large
+    }
+}
+
+extension NumberCircleButton {
+    
+    private class CircleView: UIView {
+        
+        private lazy var imageView: UIImageView = {
+            let view = UIImageView(frame: .zero)
+            let style = PhotoManager.shared.config.theme.style
+            view.image = BundleHelper.image(named: "PickerCircle", style: style)
+            return view
+        }()
+        
+        init(style: Style) {
+            super.init(frame: .zero)
+            switch style {
+            case .default:
+                backgroundColor = UIColor.gray.withAlphaComponent(0.25)
+                layer.masksToBounds = true
+                layer.borderColor = UIColor.white.cgColor
+                layer.borderWidth = 1.5
+            case .large:
+                addSubview(imageView)
+                imageView.snp.makeConstraints { maker in
+                    maker.edges.equalToSuperview()
+                }
+            }
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            layer.cornerRadius = bounds.size.width/2
+        }
     }
 }

@@ -35,6 +35,7 @@
 		A0C101E82356BD81000DBBC6 /* PhotoManager+PhotoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */; };
 		A0C101EA2356E8D7000DBBC6 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E92356E8D7000DBBC6 /* FileHelper.swift */; };
 		A0C101EC23570392000DBBC6 /* Ex+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101EB23570392000DBBC6 /* Ex+CGSize.swift */; };
+		A0DB968723586703001FC48B /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A0DFAA0B235597520020690F /* PhotoManager+VideoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DFAA0A235597520020690F /* PhotoManager+VideoURL.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
@@ -44,7 +45,6 @@
 		A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */; };
 		A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531105623544C0D00D457A8 /* LoadingiCloudView.swift */; };
 		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
-		A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A55F5CE42356AC44002676B7 /* GIFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55F5CE32356AC44002676B7 /* GIFView.swift */; };
 		A5601D3A233B0F6200D0E95E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A5601D39233B0F6200D0E95E /* SnapKit */; };
 		A5601D51233B3FC400D0E95E /* StatusBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */; };
@@ -624,7 +624,7 @@
 				A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */,
 				A0C101EA2356E8D7000DBBC6 /* FileHelper.swift in Sources */,
 				A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */,
-				A5325EA72331D78D00ADA116 /* PhotoEditViewController.swift in Sources */,
+				A0DB968723586703001FC48B /* PhotoEditViewController.swift in Sources */,
 				A519D048235830F0006A40F0 /* HUDViewController.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */,
