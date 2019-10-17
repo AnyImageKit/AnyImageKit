@@ -59,6 +59,10 @@ final class AssetPickerViewController: UIViewController {
         return view
     }()
     
+    override var navigationController: ImagePickerController? {
+        return super.navigationController as? ImagePickerController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
