@@ -1,31 +1,35 @@
 # AnyImagePicker
 
-`AnyImagePicker` is an image picker which support multiple photos, GIF or video. [中文说明](./README_CN.md)
+`AnyImagePicker` is an image picker which support for multiple photos, GIFs or videos. [中文说明](./README_CN.md)
 
 ## Features
 
-- [x] Light mode, Dard mode or Auto mode support
+- [x] Light mode, dark mode or auto mode support
 - [x] Default theme is similar with Wechat 
-- [x] Multiple/mix select
-- [ ] Support Media Type:
+- [x] Multiple & mix select support
+- [ ] Supported media types:
     - [x] Photo
     - [x] GIF
-    - [ ] LivePhoto
+    - [ ] Live Photo
     - [x] Video
 - [ ] Camera
-- [ ] Edit Image
+- [ ] Edit image
 - [ ] Multiple platform support
     - [x] iOS
     - [ ] iPadOS
-    - [ ] tvOS
-    - [ ] Catalyst
+    - [ ] Mac Catalyst
     - [ ] macOS
+    - [ ] tvOS
 
 ## Requirements
 
 - iOS 10.0+
 - Xcode 11+
 - Swift 5+
+
+## Usage
+
+
 
 ## Installation
 
