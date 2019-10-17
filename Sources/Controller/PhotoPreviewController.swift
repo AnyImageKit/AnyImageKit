@@ -130,7 +130,7 @@ final class PhotoPreviewController: UIViewController {
     
     deinit {
         for cell in collectionView.visibleCells {
-            if let cell = cell as? PreviewCell, !cell.isSelected {
+            if let cell = cell as? PreviewCell, !cell.asset.isSelected {
                 PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
             }
         }

@@ -104,3 +104,15 @@ extension Asset {
         PhotoManager.shared.requestVideoURL(for: phAsset, options: options, completion: completion)
     }
 }
+
+extension Asset {
+    
+    var isReady: Bool {
+        switch type {
+        case .photo, .photoGif:
+            return _image != nil
+        case .video:
+            return videoDidDownload
+        }
+    }
+}

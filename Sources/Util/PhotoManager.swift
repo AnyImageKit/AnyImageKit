@@ -140,6 +140,7 @@ extension PhotoManager {
             }
         }
         selectdAssets.remove(at: idx)
+        asset._image = nil
     }
     
     func removeAllSelectedAsset() {
@@ -165,26 +166,39 @@ extension PhotoManager {
                             }
                         case .failure(let error):
                             print(error)
-                            NotificationCenter.default.post(name: .didSyncAsset, object: "Error")
+                            let message = BundleHelper.localizedString(key: "Fetch failed, please retry")
+                            NotificationCenter.default.post(name: .didSyncAsset, object: message)
                         }
                     }
                 }
             }
         case .video:
-            if asset.type == .video {
-                workQueue.async { [weak self] in
+            workQueue.async { [weak self] in
+                guard let self = self else { return }
+                let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale))
+                self.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                     guard let self = self else { return }
-                    self.requestVideo(for: asset.phAsset) { (result) in
-                        switch result {
-                        case .success(_):
-                            asset.videoDidDownload = true
-                            NotificationCenter.default.post(name: .didSyncAsset, object: nil)
-                        case .failure(let error):
-                            print(error)
-                            NotificationCenter.default.post(name: .didSyncAsset, object: "Error")
+                    switch result {
+                    case .success(let response):
+                        asset._image = response.image
+                    case .failure:
+                        break
+                    }
+                    self.workQueue.async { [weak self] in
+                        guard let self = self else { return }
+                        self.requestVideo(for: asset.phAsset) { (result) in
+                            switch result {
+                            case .success(_):
+                                asset.videoDidDownload = true
+                                NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                            case .failure(let error):
+                                print(error)
+                                let message = BundleHelper.localizedString(key: "Fetch failed, please retry")
+                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                            }
                         }
                     }
-                }
+                })
             }
         }
     }

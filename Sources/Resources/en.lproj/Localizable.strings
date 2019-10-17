@@ -18,3 +18,4 @@
 "Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "Allow %@ to access your album in \"Settings > Privacy > Photos\"";
 "Go to Settings" = "Go to Settings";
 "Downloading from iCloud" = "Downloading from iCloud";
+"Fetch failed, please retry" = "Fetch failed, please retry";

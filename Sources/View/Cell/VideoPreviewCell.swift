@@ -145,11 +145,12 @@ extension VideoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
+        let id = asset.phAsset.localIdentifier
         let options = PhotoFetchOptions(sizeMode: .resize(500))
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
             case .success(let response):
-                if !response.isDegraded {
+                if !response.isDegraded && self?.asset.phAsset.localIdentifier == id {
                     self?.setImage(response.image)
                 }
             case .failure(let error):
@@ -160,21 +161,24 @@ extension VideoPreviewCell {
     
     // 加载视频
     func requestVideo() {
+        let id = asset.phAsset.localIdentifier
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            let options = VideoFetchOptions(isNetworkAccessAllowed: true) { [weak self] (progress, error, isAtEnd, info) in
+            let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
                 print(progress)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.setDownloadingProgress(progress)
                 }
             }
-            PhotoManager.shared.requestVideo(for: self.asset.phAsset, options: options) { [weak self] result in
+            PhotoManager.shared.requestVideo(for: self.asset.phAsset, options: options) { result in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
-                        self.setPlayerItem(response.playerItem)
+                        if self.asset.phAsset.localIdentifier == id {
+                            self.setPlayerItem(response.playerItem)
+                        }
                     }
                 case .failure(let error):
                     print(error)
