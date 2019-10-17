@@ -26,15 +26,15 @@ extension ImagePickerController {
         /// - Default: 800
         public var photoMaxWidth: CGFloat = 800
         
-        /// Max Width for export Large Photo(When User pick original photo) 导出大图的最大宽度(勾选原图时)
+        /// Max Width for export Large Photo(When User pick original image) 导出大图的最大宽度(勾选原图时)
         /// - Default: 1200
         public var largePhotoMaxWidth: CGFloat = 1200
         
-        /// Allow Use Original Photo 是否允许选择原图
+        /// Allow Use Original Image 是否允许选择原图
         /// - Default: true
         public var allowUseOriginalImage: Bool = true
         
-        /// SelectOptions 可选择的类型
+        /// Select Options 可选择的类型
         /// - Default: Photo & Video
         public var selectOptions: SelectOptions = [.photo, .video]
         

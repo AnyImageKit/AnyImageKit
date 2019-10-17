@@ -62,7 +62,7 @@ final class ConfigViewController: UITableViewController {
 
 extension ConfigViewController: ImagePickerControllerDelegate {
     
-    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], isOriginalImage: Bool) {
+    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], useOriginalImage: Bool) {
         print(assets)
     }
     
