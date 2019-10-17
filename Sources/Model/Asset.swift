@@ -15,7 +15,15 @@ public class Asset: Equatable {
     /// 媒体类型
     public let type: MediaType
     /// 输出图像
-    public internal(set) var image: UIImage = .init()
+    public var image: UIImage {
+        if let image = _image {
+            return image
+        }
+        return .init()
+    }
+    
+    var _image: UIImage?
+    var videoDidDownload: Bool = false
     
     let idx: Int
     let videoDuration: String

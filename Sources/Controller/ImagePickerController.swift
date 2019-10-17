@@ -18,8 +18,6 @@ open class ImagePickerController: UINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
-    private var hiddenStatusBar = false
-    
     public var config: Config {
         return PhotoManager.shared.config
     }
@@ -55,11 +53,17 @@ open class ImagePickerController: UINavigationController {
         return .portrait
     }
     
+    private var hiddenStatusBar = false
+    private var didFinishSelect = false
+    internal var hudWindow: UIWindow?
+    internal var hud: HUDViewController = HUDViewController()
+    
     required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
         PhotoManager.shared.config = config
         let rootViewController = AssetPickerViewController()
         super.init(rootViewController: rootViewController)
         self.pickerDelegate = delegate
+        rootViewController.delegate = self
         
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
@@ -81,11 +85,43 @@ open class ImagePickerController: UINavigationController {
     }
 }
 
+// MARK: - Private function
+extension ImagePickerController {
+    
+    private func finishSelect() {
+        let manager = PhotoManager.shared
+        let assets = manager.selectdAssets
+        var isReady = true
+        for asset in assets {
+            if !(asset._image != nil || (asset.type == .video && asset.videoDidDownload)) {
+                showWaitHUD()
+                isReady = false
+                PhotoManager.shared.syncAsset(asset)
+            }
+        }
+        if !isReady { return }
+        hideHUD()
+        
+        pickerDelegate?.imagePicker(self, didSelect: assets, isOriginal: manager.isOriginalPhoto)
+        presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - AssetPickerViewControllerDelegate
+extension ImagePickerController: AssetPickerViewControllerDelegate {
+    
+    func assetPickerControllerDidClickDone(_ controller: AssetPickerViewController) {
+        didFinishSelect = true
+        finishSelect()
+    }
+}
+
 // MARK: - Notification
 extension ImagePickerController {
     
     private func addNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(setupStatusBarHidden(notification:)), name: .setupStatusBarHidden, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(notification:)), name: .didSyncAsset, object: nil)
     }
     
     @objc private func setupStatusBarHidden(notification: Notification) {
@@ -95,6 +131,15 @@ extension ImagePickerController {
         }
     }
     
+    @objc private func didSyncAsset(notification: Notification) {
+        if didFinishSelect {
+            if let message = notification.object as? String {
+                showMessageHUD(message)
+            } else {
+                finishSelect()
+            }
+        }
+    }
 }
 
 extension Notification.Name {

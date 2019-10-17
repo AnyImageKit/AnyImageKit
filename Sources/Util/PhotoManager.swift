@@ -126,24 +126,10 @@ extension PhotoManager {
 extension PhotoManager {
     
     func addSelectedAsset(_ asset: Asset) {
+        if selectdAssets.contains(asset) { return }
         selectdAssets.append(asset)
         asset.selectedNum = selectdAssets.count
-        // 加载原图，缓存到内存
-        workQueue.async { [weak self] in
-            guard let self = self else { return }
-            let options = PhotoFetchOptions(sizeMode: .preview)
-            self.requestPhoto(for: asset.phAsset, options: options) { result in
-                switch result {
-                case .success(let response):
-                    if !response.isDegraded {
-                        let options2 = PhotoFetchOptions(sizeMode: .original)
-                        self.requestPhoto(for: asset.phAsset, options: options2) { _ in }
-                    }
-                case .failure:
-                    break
-                }
-            }
-        }
+        syncAsset(asset)
     }
     
     func removeSelectedAsset(_ asset: Asset) {
@@ -159,4 +145,53 @@ extension PhotoManager {
     func removeAllSelectedAsset() {
         selectdAssets.removeAll()
     }
+    
+    func syncAsset(_ asset: Asset) {
+        switch asset.type {
+        case .photo, .photoGif:
+            // 勾选图片就开始加载
+            if let image = readCache(for: asset.phAsset.localIdentifier) {
+                asset._image = image
+            } else {
+                workQueue.async { [weak self] in
+                    guard let self = self else { return }
+                    let options = PhotoFetchOptions(sizeMode: .preview)
+                    self.requestPhoto(for: asset.phAsset, options: options) { result in
+                        switch result {
+                        case .success(let response):
+                            if !response.isDegraded {
+                                asset._image = response.image
+                                NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                            }
+                        case .failure(let error):
+                            print(error)
+                            NotificationCenter.default.post(name: .didSyncAsset, object: "Error")
+                        }
+                    }
+                }
+            }
+        case .video:
+            if asset.type == .video {
+                workQueue.async { [weak self] in
+                    guard let self = self else { return }
+                    self.requestVideo(for: asset.phAsset) { (result) in
+                        switch result {
+                        case .success(_):
+                            asset.videoDidDownload = true
+                            NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                        case .failure(let error):
+                            print(error)
+                            NotificationCenter.default.post(name: .didSyncAsset, object: "Error")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension Notification.Name {
+    
+    static let didSyncAsset: Notification.Name = Notification.Name("com.anotheren.AnyImagePicker.didSyncAsset")
+    
 }

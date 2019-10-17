@@ -12,7 +12,14 @@ import Photos
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
 
+protocol AssetPickerViewControllerDelegate: class {
+    
+    func assetPickerControllerDidClickDone(_ controller: AssetPickerViewController)
+}
+
 final class AssetPickerViewController: UIViewController {
+    
+    public weak var delegate: AssetPickerViewControllerDelegate?
     
     private var albumsPicker: AlbumPickerViewController?
     private var album: Album?
@@ -58,10 +65,6 @@ final class AssetPickerViewController: UIViewController {
         view.isHidden = true
         return view
     }()
-    
-    override var navigationController: ImagePickerController? {
-        return super.navigationController as? ImagePickerController
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,13 +184,6 @@ extension AssetPickerViewController {
             }
         }
     }
-    
-    private func didFinishSelect() {
-        guard let navigationController = navigationController else { return }
-        let assets = PhotoManager.shared.selectdAssets
-        navigationController.pickerDelegate?.imagePicker(navigationController, didSelect: assets, isOriginal: PhotoManager.shared.isOriginalPhoto)
-        presentingViewController?.dismiss(animated: true, completion: nil)
-    }
 }
 
 // MARK: - Action
@@ -250,7 +246,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        didFinishSelect()
+        delegate?.assetPickerControllerDidClickDone(self)
     }
 }
 
@@ -362,6 +358,6 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         if PhotoManager.shared.selectdAssets.isEmpty {
             PhotoManager.shared.addSelectedAsset(album.assets[controller.currentIndex])
         }
-        didFinishSelect()
+        delegate?.assetPickerControllerDidClickDone(self)
     }
 }
