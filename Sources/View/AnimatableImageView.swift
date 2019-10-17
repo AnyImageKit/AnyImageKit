@@ -38,7 +38,7 @@ import UIKit
 import ImageIO
 
 /// Protocol of `AnimatedImageView`.
-public protocol AnimatedImageViewDelegate: AnyObject {
+protocol AnimatedImageViewDelegate: AnyObject {
     
     /// Called after the animatedImageView has finished each animation loop.
     ///
@@ -54,8 +54,8 @@ public protocol AnimatedImageViewDelegate: AnyObject {
 }
 
 extension AnimatedImageViewDelegate {
-    public func animatedImageView(_ imageView: AnimatedImageView, didPlayAnimationLoops count: UInt) {}
-    public func animatedImageViewDidFinishAnimating(_ imageView: AnimatedImageView) {}
+    func animatedImageView(_ imageView: AnimatedImageView, didPlayAnimationLoops count: UInt) {}
+    func animatedImageViewDidFinishAnimating(_ imageView: AnimatedImageView) { }
 }
 
 let KFRunLoopModeCommon = RunLoop.Mode.common
@@ -68,7 +68,7 @@ let KFRunLoopModeCommon = RunLoop.Mode.common
 ///
 /// Kingfisher supports setting GIF animated data to either `UIImageView` and `AnimatedImageView` out of box. So
 /// it would be fairly easy to switch between them.
-open class AnimatedImageView: UIImageView {
+class AnimatedImageView: UIImageView {
     
     /// Proxy object for preventing a reference cycle between the `CADDisplayLink` and `AnimatedImageView`.
     class TargetProxy {
@@ -84,12 +84,12 @@ open class AnimatedImageView: UIImageView {
     }
     
     /// Enumeration that specifies repeat count of GIF
-    public enum RepeatCount: Equatable {
+    enum RepeatCount: Equatable {
         case once
         case finite(count: UInt)
         case infinite
         
-        public static func ==(lhs: RepeatCount, rhs: RepeatCount) -> Bool {
+        static func ==(lhs: RepeatCount, rhs: RepeatCount) -> Bool {
             switch (lhs, rhs) {
             case let (.finite(l), .finite(r)):
                 return l == r
@@ -107,25 +107,25 @@ open class AnimatedImageView: UIImageView {
         }
     }
     
-    // MARK: - Public property
+    // MARK: - property
     /// Whether automatically play the animation when the view become visible. Default is `true`.
-    public var autoPlayAnimatedImage = false
+    var autoPlayAnimatedImage = false
     
     /// The count of the frames should be preloaded before shown.
-    public var framePreloadCount = 10
+    var framePreloadCount = 10
     
     /// Specifies whether the GIF frames should be pre-scaled to the image view's size or not.
     /// If the downloaded image is larger than the image view's size, it will help to reduce some memory use.
     /// Default is `true`.
-    public var needsPrescaling = true
+    var needsPrescaling = true
     
     /// Decode the GIF frames in background thread before using. It will decode frames data and do a off-screen
     /// rendering to extract pixel information in background. This can reduce the main thread CPU usage.
-    public var backgroundDecode = true
+    var backgroundDecode = true
     
     /// The animation timer's run loop mode. Default is `RunLoop.Mode.common`.
     /// Set this property to `RunLoop.Mode.default` will make the animation pause during UIScrollView scrolling.
-    public var runLoopMode = KFRunLoopModeCommon {
+    var runLoopMode = KFRunLoopModeCommon {
         willSet {
             guard runLoopMode != newValue else { return }
             stopAnimating()
@@ -139,7 +139,7 @@ open class AnimatedImageView: UIImageView {
     /// Setting this value to another one will reset current animation.
     ///
     /// Default is `.infinite`, which means the animation will last forever.
-    public var repeatCount = RepeatCount.infinite {
+    var repeatCount = RepeatCount.infinite {
         didSet {
             if oldValue != repeatCount {
                 reset()
@@ -150,7 +150,7 @@ open class AnimatedImageView: UIImageView {
     }
     
     /// Delegate of this `AnimatedImageView` object. See `AnimatedImageViewDelegate` protocol for more.
-    public weak var delegate: AnimatedImageViewDelegate?
+    weak var delegate: AnimatedImageViewDelegate?
     
     // MARK: - Private property
     /// `Animator` instance that holds the frames of a specific image in memory.
@@ -158,7 +158,7 @@ open class AnimatedImageView: UIImageView {
     
     // Dispatch queue used for preloading images.
     private lazy var preloadQueue: DispatchQueue = {
-        return DispatchQueue(label: "com.onevcat.Kingfisher.Animator.preloadQueue")
+        return DispatchQueue(label: "com.anotheren.AnyImagePicker.Animator")
     }()
     
     // A flag to avoid invalidating the displayLink on deinit if it was never created, because displayLink is so lazy.
@@ -175,7 +175,7 @@ open class AnimatedImageView: UIImageView {
     }()
     
     // MARK: - Override
-    override open var image: UIImage? {
+    override var image: UIImage? {
         didSet {
             if image != oldValue {
                 reset()
@@ -191,7 +191,7 @@ open class AnimatedImageView: UIImageView {
         }
     }
     
-    override open var isAnimating: Bool {
+    override var isAnimating: Bool {
         if isDisplayLinkInitialized {
             return !displayLink.isPaused
         } else {
@@ -200,7 +200,7 @@ open class AnimatedImageView: UIImageView {
     }
     
     /// Starts the animation.
-    override open func startAnimating() {
+    override func startAnimating() {
         guard !isAnimating else { return }
         if animator?.isReachMaxRepeatCount ?? false {
             return
@@ -210,14 +210,14 @@ open class AnimatedImageView: UIImageView {
     }
     
     /// Stops the animation.
-    override open func stopAnimating() {
+    override func stopAnimating() {
         super.stopAnimating()
         if isDisplayLinkInitialized {
             displayLink.isPaused = true
         }
     }
     
-    override open func display(_ layer: CALayer) {
+    override func display(_ layer: CALayer) {
         if let currentFrame = animator?.currentFrameImage {
             layer.contents = currentFrame.cgImage
         } else {
@@ -225,12 +225,12 @@ open class AnimatedImageView: UIImageView {
         }
     }
     
-    override open func didMoveToWindow() {
+    override func didMoveToWindow() {
         super.didMoveToWindow()
         didMove()
     }
     
-    override open func didMoveToSuperview() {
+    override func didMoveToSuperview() {
         super.didMoveToSuperview()
         didMove()
     }

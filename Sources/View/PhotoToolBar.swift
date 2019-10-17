@@ -98,10 +98,10 @@ final class PhotoToolBar: UIView {
     }
 }
 
-// MARK: - Public function
+// MARK: - function
 extension PhotoToolBar {
     
-    public func setEnable(_ enable: Bool) {
+    func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
         doneButton.backgroundColor = enable ? PhotoManager.shared.config.theme.mainColor : PhotoManager.shared.config.theme.buttonDisableColor

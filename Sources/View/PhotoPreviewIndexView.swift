@@ -15,9 +15,9 @@ protocol PhotoPreviewIndexViewDelegate: class {
 
 final class PhotoPreviewIndexView: UIView {
     
-    public weak var delegate: PhotoPreviewIndexViewDelegate? = nil
+    weak var delegate: PhotoPreviewIndexViewDelegate? = nil
     
-    public var currentIndex: Int = 0 {
+    var currentIndex: Int = 0 {
         didSet {
             lastIdx = oldValue
             didSetCurrentIndex()
@@ -81,7 +81,7 @@ final class PhotoPreviewIndexView: UIView {
 
 extension PhotoPreviewIndexView {
     
-    public func didChangeSelectedAsset() {
+    func didChangeSelectedAsset() {
         let assetList = PhotoManager.shared.selectdAssets
         self.isHidden = assetList.isEmpty
         if lastAssetList.count < assetList.count {

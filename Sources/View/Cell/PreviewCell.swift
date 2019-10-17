@@ -28,9 +28,9 @@ protocol PreviewCellDelegate: class {
 
 class PreviewCell: UICollectionViewCell {
     
-    public weak var delegate: PreviewCellDelegate? = nil
+    weak var delegate: PreviewCellDelegate? = nil
     
-    public var asset: Asset!
+    var asset: Asset!
     
     /// 内嵌容器。本类不能继承UIScrollView。
     /// 因为实测UIScrollView遵循了UIGestureRecognizerDelegate协议，而本类也需要遵循此协议，
@@ -111,10 +111,10 @@ class PreviewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Public function
+    // MARK: - function
     
     /// 设置图片
-    public func setImage(_ image: UIImage?) {
+    func setImage(_ image: UIImage?) {
         imageView.image = image
         layout()
     }
@@ -130,21 +130,21 @@ class PreviewCell: UICollectionViewCell {
     
     // MARK: - Override
     
-    public func reset() { }
+    func reset() { }
     
-    public func singleTapped() {
+    func singleTapped() {
         delegate?.previewCellDidSingleTap(self)
     }
     
-    public func panBegin() {
+    func panBegin() {
         delegate?.previewCellDidBeginPan(self)
     }
     
-    public func panScale(_ scale: CGFloat) {
+    func panScale(_ scale: CGFloat) {
         delegate?.previewCell(self, didPanScale: scale)
     }
     
-    public func panEnded(_ exit: Bool) {
+    func panEnded(_ exit: Bool) {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
 }
