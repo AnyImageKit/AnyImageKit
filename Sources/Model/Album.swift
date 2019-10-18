@@ -14,17 +14,13 @@ class Album: Equatable {
     let id: String
     let name: String
     let isCameraRoll: Bool
-    let result: PHFetchResult<PHAsset>
     private(set) var assets: [Asset] = []
     
-    init(result: PHFetchResult<PHAsset>, id: String, name: String?, isCameraRoll: Bool, needFetchAssets: Bool) {
+    init(result: PHFetchResult<PHAsset>, id: String, name: String?, isCameraRoll: Bool, selectOptions: ImagePickerController.SelectOptions) {
         self.id = id
         self.name = name ?? ""
         self.isCameraRoll = isCameraRoll
-        self.result = result
-        if needFetchAssets {
-            fetchAssets()
-        }
+        fetchAssets(result: result, selectOptions: selectOptions)
     }
     
     static func == (lhs: Album, rhs: Album) -> Bool {
@@ -35,14 +31,36 @@ class Album: Equatable {
 extension Album {
     
     var count: Int {
-        return result.count
+        return assets.count
     }
 }
 
 extension Album {
     
-    func fetchAssets() {
-        assets = result.objects().enumerated().map { Asset(idx: $0.offset, asset: $0.element) }
+    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: ImagePickerController.SelectOptions) {
+        var array: [Asset] = []
+        let selectPhoto = selectOptions.contains(.photo)
+        let selectPhotoGIF = selectOptions.contains(.photoGIF)
+        let selectVideo = selectOptions.contains(.video)
+        
+        for phAsset in result.objects() {
+            let asset = Asset(idx: array.count, asset: phAsset)
+            switch asset.type {
+            case .photo:
+                if selectPhoto {
+                    array.append(asset)
+                }
+            case .photoGif:
+                if selectPhotoGIF {
+                    array.append(asset)
+                }
+            case .video:
+                if selectVideo {
+                    array.append(asset)
+                }
+            }
+        }
+        assets = array
     }
 }
 

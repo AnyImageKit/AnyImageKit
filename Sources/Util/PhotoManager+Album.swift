@@ -12,10 +12,10 @@ extension PhotoManager {
     
     func fetchCameraRollAlbum(completion: @escaping (Album) -> Void) {
         let options = PHFetchOptions()
-        if !config.selectOptions.contains(.video) {
+        if !config.selectOptions.mediaTypes.contains(.video) {
             options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
-        if !config.selectOptions.contains(.photo) {
+        if !config.selectOptions.mediaTypes.contains(.image) {
             options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
         }
         if config.orderByDate == .desc {
@@ -28,7 +28,7 @@ extension PhotoManager {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
-                let result = Album(result: assetsfetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: true)
+                let result = Album(result: assetsfetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, selectOptions: config.selectOptions)
                 completion(result)
             }
         }
@@ -38,10 +38,10 @@ extension PhotoManager {
         workQueue.async {
             var results = [Album]()
             let options = PHFetchOptions()
-            if !self.config.selectOptions.contains(.video) {
+            if !self.config.selectOptions.mediaTypes.contains(.video) {
                 options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
             }
-            if !self.config.selectOptions.contains(.photo) {
+            if !self.config.selectOptions.mediaTypes.contains(.image) {
                 options.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
             }
             if self.config.orderByDate == .desc {
@@ -66,12 +66,12 @@ extension PhotoManager {
                     
                     if isCameraRoll {
                         if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, needFetchAssets: true)
+                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, selectOptions: self.config.selectOptions)
                             results.insert(album, at: 0)
                         }
                     } else {
                         if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, needFetchAssets: true)
+                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, selectOptions: self.config.selectOptions)
                             results.append(album)
                         }
                     }

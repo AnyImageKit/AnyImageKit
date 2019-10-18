@@ -157,7 +157,6 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.name)
-        album.fetchAssets()
         collectionView.reloadData()
         if PhotoManager.shared.config.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: false)
@@ -169,7 +168,7 @@ extension AssetPickerViewController {
     }
     
     private func setAlbums(_ albums: [Album]) {
-        self.albums = albums
+        self.albums = albums.filter{ !$0.assets.isEmpty }
         if let albumsPicker = albumsPicker {
             albumsPicker.albums = albums
             albumsPicker.reloadData()

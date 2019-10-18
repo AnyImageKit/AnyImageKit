@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 extension ImagePickerController {
     
@@ -56,15 +57,28 @@ extension ImagePickerController {
     
     /// Select Options 可选择的类型
     public struct SelectOptions: OptionSet {
-        /// Photo(include GIF) 照片(包括GIF)
+        /// Photo 照片
         public static let photo: SelectOptions = SelectOptions(rawValue: 1 << 0)
         /// Video 视频
         public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
+        /// GIF   动图
+        public static let photoGIF: SelectOptions = SelectOptions(rawValue: 1 << 2)
         
         public let rawValue: Int
         
         public init(rawValue: Int) {
             self.rawValue = rawValue
+        }
+        
+        var mediaTypes: [PHAssetMediaType] {
+            var result: [PHAssetMediaType] = []
+            if contains(.photo) || contains(.photoGIF) {
+                result.append(.image)
+            }
+            if contains(.video) {
+                result.append(.video)
+            }
+            return result
         }
     }
     
