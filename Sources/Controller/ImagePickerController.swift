@@ -100,6 +100,7 @@ extension ImagePickerController {
             }
         }
         if !isReady { return }
+        didFinishSelect = false
         resizeImagesIfNeeded(assets)
         hideHUD()
         
