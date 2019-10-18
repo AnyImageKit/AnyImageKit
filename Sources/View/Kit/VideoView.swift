@@ -55,7 +55,7 @@ final class VideoView: UIView {
         
         videoImageView.snp.makeConstraints { (maker) in
             maker.left.bottom.equalToSuperview().inset(8)
-            maker.width.equalTo(videoImageView.snp.height).multipliedBy(65.0/40)
+            maker.width.equalTo(24)
             maker.height.equalTo(15)
         }
         videoLabel.snp.makeConstraints { (maker) in
