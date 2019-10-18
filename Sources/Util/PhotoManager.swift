@@ -54,7 +54,8 @@ extension PhotoManager {
 extension PhotoManager {
     
     func enqueueFetch(for asset: PHAsset, requestID: PHImageRequestID) {
-        workQueue.async {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
                 self.fetchRecords[index].requestIDs.append(requestID)
             } else {
@@ -64,7 +65,8 @@ extension PhotoManager {
     }
     
     func dequeueFetch(for asset: PHAsset, requestID: PHImageRequestID?) {
-        workQueue.async {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             guard let requestID = requestID else { return }
             if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
                 if let idx = self.fetchRecords[index].requestIDs.firstIndex(of: requestID) {
@@ -78,7 +80,8 @@ extension PhotoManager {
     }
     
     func cancelFetch(for asset: PHAsset) {
-        workQueue.async {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
                 let fetchRecord = self.fetchRecords.remove(at: index)
                 fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
@@ -87,7 +90,8 @@ extension PhotoManager {
     }
     
     func cancelAllFetch() {
-        workQueue.async {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             for fetchRecord in self.fetchRecords {
                 fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
             }

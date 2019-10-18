@@ -62,7 +62,7 @@ typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) 
 extension PhotoManager {
     
     func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
-        if let asset = config.orderByDate == .asc ? album.result.lastObject : album.result.firstObject {
+        if let asset = config.orderByDate == .asc ? album.assets.last?.phAsset : album.assets.first?.phAsset {
             let sacle = UIScreen.main.nativeScale
             let options = PhotoFetchOptions(sizeMode: .resize(100*sacle))
             requestPhoto(for: asset, options: options, completion: completion)
@@ -110,7 +110,8 @@ extension PhotoManager {
                 if isInCloud && image == nil && options.isNetworkAccessAllowed {
                     let photoDataOptions = PhotoDataFetchOptions(isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                                  progressHandler: options.progressHandler)
-                    self.workQueue.async {
+                    self.workQueue.async { [weak self] in
+                        guard let self = self else { return }
                         self.requestPhotoData(for: asset, options: photoDataOptions) { [weak self] result in
                             guard let self = self else { return }
                             switch result {
