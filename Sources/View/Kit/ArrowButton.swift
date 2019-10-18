@@ -20,7 +20,8 @@ final class ArrowButton: UIControl {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.image = BundleHelper.image(named: "Arrow")
+        let style = PhotoManager.shared.config.theme.style
+        view.image = BundleHelper.image(named: "AlbumArrow", style: style)
         return view
     }()
     
