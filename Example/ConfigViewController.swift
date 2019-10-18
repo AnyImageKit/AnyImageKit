@@ -18,11 +18,10 @@ final class ConfigViewController: UITableViewController {
     // MARK: - Action
     
     @IBAction func pickButtonTapped(_ sender: UIBarButtonItem) {
-        let controller = ImagePickerController(delegate: self)
+        let controller = ImagePickerController(config: config, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
         }
-        print(config.selectOptions)
         present(controller, animated: true, completion: nil)
     }
     
