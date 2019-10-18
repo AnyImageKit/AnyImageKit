@@ -110,7 +110,8 @@ extension PhotoManager {
                 if isInCloud && image == nil && options.isNetworkAccessAllowed {
                     let photoDataOptions = PhotoDataFetchOptions(isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                                  progressHandler: options.progressHandler)
-                    self.workQueue.async {
+                    self.workQueue.async { [weak self] in
+                        guard let self = self else { return }
                         self.requestPhotoData(for: asset, options: photoDataOptions) { [weak self] result in
                             guard let self = self else { return }
                             switch result {

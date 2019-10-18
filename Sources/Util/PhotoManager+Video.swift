@@ -42,7 +42,8 @@ extension PhotoManager {
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.progressHandler
         
-        let requestID = PHImageManager.default().requestPlayerItem(forVideo: asset, options: requestOptions) { (playerItem, info) in
+        let requestID = PHImageManager.default().requestPlayerItem(forVideo: asset, options: requestOptions) { [weak self] (playerItem, info) in
+            guard let self = self else { return }
             if let playerItem = playerItem {
                 completion(.success(.init(playerItem: playerItem)))
             } else {

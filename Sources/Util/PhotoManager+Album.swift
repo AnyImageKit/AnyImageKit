@@ -35,7 +35,8 @@ extension PhotoManager {
     }
     
     func fetchAllAlbums(completion: @escaping ([Album]) -> Void) {
-        workQueue.async {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             var results = [Album]()
             let options = PHFetchOptions()
             if !self.config.selectOptions.mediaTypes.contains(.video) {
