@@ -186,9 +186,9 @@ extension PhotoManager {
             DispatchQueue.main.async {
                 switch exportSession.status {
                 case .unknown:
-                    print("unknown")
+                    break
                 case .waiting:
-                    print("waiting")
+                    break
                 case .exporting:
                     options.exportProgressHandler?(Double(exportSession.progress))
                 case .completed:

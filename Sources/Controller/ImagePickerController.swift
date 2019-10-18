@@ -80,7 +80,6 @@ open class ImagePickerController: UINavigationController {
     }
     
     deinit {
-        print("deinit")
         PhotoManager.shared.clearAll()
     }
 }
