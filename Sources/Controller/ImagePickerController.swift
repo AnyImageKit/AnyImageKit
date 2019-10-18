@@ -89,21 +89,36 @@ open class ImagePickerController: UINavigationController {
 extension ImagePickerController {
     
     private func finishSelect() {
+        showWaitHUD()
         let manager = PhotoManager.shared
         let assets = manager.selectdAssets
         var isReady = true
         for asset in assets {
             if !asset.isReady {
-                showWaitHUD()
                 isReady = false
                 PhotoManager.shared.syncAsset(asset)
             }
         }
         if !isReady { return }
+        didFinishSelect = false
+        resizeImagesIfNeeded(assets)
         hideHUD()
         
         pickerDelegate?.imagePicker(self, didSelect: assets, useOriginalImage: manager.useOriginalImage)
         presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    private func resizeImagesIfNeeded(_ assets: [Asset]) {
+        if !PhotoManager.shared.useOriginalImage {
+            let limitSize = CGSize(width: PhotoManager.shared.config.photoMaxWidth,
+                                   height: PhotoManager.shared.config.photoMaxWidth)
+            for asset in assets {
+                if let image = asset._image, image.size != .zero  {
+                    let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
+                    asset._image = resizedImage
+                }
+            }
+        }
     }
 }
 

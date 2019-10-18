@@ -44,6 +44,7 @@ final class PhotoManager {
 extension PhotoManager {
     
     func clearAll() {
+        useOriginalImage = false
         selectdAssets.removeAll()
         cacheList.removeAll()
     }

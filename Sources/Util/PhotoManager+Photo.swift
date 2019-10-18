@@ -95,7 +95,7 @@ extension PhotoManager {
                 case .preview:
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
-                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: true)
                         if !isDegraded && options.needCache {
                             self.writeCache(image: image, for: asset.localIdentifier)
                         }
@@ -104,7 +104,7 @@ extension PhotoManager {
                         }
                     }
                 case .resize:
-                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: false)
                     if !isDegraded && options.needCache {
                         self.writeCache(image: resizedImage, for: asset.localIdentifier)
                     }

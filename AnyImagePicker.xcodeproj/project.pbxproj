@@ -34,7 +34,6 @@
 		A0C03C1F23322B26005F742C /* Ex+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */; };
 		A0C101E82356BD81000DBBC6 /* PhotoManager+PhotoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */; };
 		A0C101EA2356E8D7000DBBC6 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E92356E8D7000DBBC6 /* FileHelper.swift */; };
-		A0C101EC23570392000DBBC6 /* Ex+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101EB23570392000DBBC6 /* Ex+CGSize.swift */; };
 		A0DB968723586703001FC48B /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A0DFAA0B235597520020690F /* PhotoManager+VideoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DFAA0A235597520020690F /* PhotoManager+VideoURL.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
@@ -144,7 +143,6 @@
 		A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
 		A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+PhotoURL.swift"; sourceTree = "<group>"; };
 		A0C101E92356E8D7000DBBC6 /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
-		A0C101EB23570392000DBBC6 /* Ex+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+CGSize.swift"; sourceTree = "<group>"; };
 		A0DBD4ED2334A14600121FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A0DBD4EE2334A14600121FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0DBD4EF2334A1FA00121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
@@ -236,7 +234,6 @@
 				A07D8793233CA257000108C7 /* Ex+CGImagePropertyOrientation.swift */,
 				A0C03C192331D426005F742C /* Ex+UIColor.swift */,
 				A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */,
-				A0C101EB23570392000DBBC6 /* Ex+CGSize.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -634,7 +631,6 @@
 				A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */,
 				A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,
-				A0C101EC23570392000DBBC6 /* Ex+CGSize.swift in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
 				A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */,
 				A07D8796233DA2B8000108C7 /* Ex+PHAsset.swift in Sources */,
