@@ -1,33 +1,33 @@
 # AnyImagePicker
 
-`AnyImagePicker` is an image picker which support for multiple photos, GIFs or videos. [中文说明](./README_CN.md)
+`AnyImagePicker` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。
 
-## Features
+## 功能
 
-- [x] Light mode, dark mode or auto mode support
-- [x] Default theme is similar with Wechat 
-- [x] Multiple & mix select support
-- [ ] Supported media types:
+- [x] UI 外观支持浅色/深色/自动 (iOS 13.0+)
+- [x] 默认主题与微信相似
+- [x] 支持多选/混合内容选择
+- [ ] 支持的媒体类型:
     - [x] Photo
     - [x] GIF
     - [ ] Live Photo
     - [x] Video
-- [ ] Camera
-- [ ] Edit image
-- [ ] Multiple platform support
+- [ ] 支持在选择时直接拍照
+- [ ] 编辑图片
+- [ ] 多平台支持
     - [x] iOS
     - [ ] iPadOS
     - [ ] Mac Catalyst
     - [ ] macOS
     - [ ] tvOS
 
-## Requirements
+## 要求
 
 - iOS 10.0+
 - Xcode 11.0+
 - Swift 5.0+
 
-## Installation
+## 安装
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
@@ -40,7 +40,7 @@ target 'YOUR_TARGET_NAME' do
 end
 ```
 
-Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
+替换 `YOUR_TARGET_NAME`，然后在 `Podfile` 的文件目录下执行：
 
 ```bash
 $ pod install
@@ -48,19 +48,21 @@ $ pod install
 
 ### [Carthage](https://github.com/Carthage/Carthage)
 
-Add this to `Cartfile`
+将下面内容添加到 `Cartfile`
 
 ```
 github "anotheren/AnyImagePicker"
 ```
 
+然后执行：
+
 ```bash
 $ carthage update
 ```
 
-## Usage
+## 使用方法
 
-### Quick Start
+### 快速上手
 
 ```swift
 import AnyImagePicker
@@ -75,7 +77,7 @@ func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], use
 }
 ```
 
-### Fetch content data
+### 获取内容数据
 ```swift
 /// Fetch Video URL 
 /// - Note: Only for `MediaType` Video
@@ -90,6 +92,6 @@ asset.fetchVideoURL { (result) in
 ```
 
 
-## License
+## 版权协议
 
-AnyImagePicker is released under the MIT license. See [LICENSE](./LICENSE) for details.
+AnyImagePicker 基于 MIT 协议进行分发和使用，更多信息参见[协议文件](./LICENSE)。
