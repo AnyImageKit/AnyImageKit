@@ -34,6 +34,7 @@
 		A0C03C1F23322B26005F742C /* Ex+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */; };
 		A0C101E82356BD81000DBBC6 /* PhotoManager+PhotoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */; };
 		A0C101EA2356E8D7000DBBC6 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E92356E8D7000DBBC6 /* FileHelper.swift */; };
+		A0C8AD342359B70200211150 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8AD332359B70200211150 /* ResultsViewController.swift */; };
 		A0DB968723586703001FC48B /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A0DFAA0B235597520020690F /* PhotoManager+VideoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DFAA0A235597520020690F /* PhotoManager+VideoURL.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
@@ -143,6 +144,7 @@
 		A0C03C1E23322B26005F742C /* Ex+UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
 		A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+PhotoURL.swift"; sourceTree = "<group>"; };
 		A0C101E92356E8D7000DBBC6 /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		A0C8AD332359B70200211150 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		A0DBD4ED2334A14600121FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A0DBD4EE2334A14600121FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0DBD4EF2334A1FA00121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
@@ -412,6 +414,7 @@
 				A5601D4F233B0FE500D0E95E /* Example.entitlements */,
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
 				A5DC526B2356F61B00A12508 /* ConfigViewController.swift */,
+				A0C8AD332359B70200211150 /* ResultsViewController.swift */,
 				A5A27BAE232F82AE00D966B8 /* Main.storyboard */,
 				A5A27BB1232F82B000D966B8 /* Assets.xcassets */,
 				A5A27BB3232F82B000D966B8 /* LaunchScreen.storyboard */,
@@ -668,6 +671,7 @@
 			files = (
 				A5DC526C2356F61B00A12508 /* ConfigViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
+				A0C8AD342359B70200211150 /* ResultsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,7 +862,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -887,7 +891,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -944,7 +948,7 @@
 				DEVELOPMENT_TEAM = 5HZKWDU956;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -967,7 +971,7 @@
 				DEVELOPMENT_TEAM = 5HZKWDU956;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
