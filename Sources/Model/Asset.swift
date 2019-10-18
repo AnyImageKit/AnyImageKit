@@ -16,10 +16,7 @@ public class Asset: Equatable {
     public let type: MediaType
     /// 输出图像
     public var image: UIImage {
-        if let image = _image {
-            return image
-        }
-        return .init()
+        return _image ?? .init()
     }
     
     var _image: UIImage?
