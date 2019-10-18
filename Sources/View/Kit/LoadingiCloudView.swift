@@ -10,8 +10,18 @@ import UIKit
 
 final class LoadingiCloudView: UIView {
     
+    private lazy var effectView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: effect)
+        view.backgroundColor = UIColor.color(hex: 0xA7A7A7).withAlphaComponent(0.7)
+        view.isUserInteractionEnabled = false
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 5
+        return view
+    }()
+    
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "iCloud", style: PhotoManager.shared.config.theme.style)
+        let image = BundleHelper.image(named: "iCloud")
         let view = UIImageView(image: image)
         return view
     }()
@@ -19,7 +29,7 @@ final class LoadingiCloudView: UIView {
     private lazy var tipLabel: UILabel = {
         let view = UILabel()
         view.text = BundleHelper.localizedString(key: "Downloading from iCloud")
-        view.textColor = PhotoManager.shared.config.theme.textColor
+        view.textColor = UIColor.white //PhotoManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()
@@ -27,7 +37,7 @@ final class LoadingiCloudView: UIView {
     private lazy var progressLabel: UILabel = {
         let view = UILabel()
         view.text = "0%"
-        view.textColor = PhotoManager.shared.config.theme.textColor
+        view.textColor = UIColor.white //PhotoManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()
@@ -43,13 +53,18 @@ final class LoadingiCloudView: UIView {
     }
     
     private func setupView() {
+        addSubview(effectView)
         addSubview(imageView)
         addSubview(tipLabel)
         addSubview(progressLabel)
         
+        effectView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
+        }
         imageView.snp.makeConstraints { (maker) in
-            maker.top.left.bottom.equalToSuperview()
-            maker.width.equalTo(imageView.snp.height)
+            maker.left.equalToSuperview().offset(5)
+            maker.centerY.equalToSuperview()
+            maker.width.height.equalTo(20)
         }
         tipLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(imageView.snp.right).offset(5)
@@ -57,7 +72,7 @@ final class LoadingiCloudView: UIView {
         }
         progressLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(tipLabel.snp.right).offset(1)
-            maker.right.equalToSuperview()
+            maker.right.equalToSuperview().offset(-5)
             maker.centerY.equalToSuperview()
         }
     }
@@ -76,7 +91,7 @@ extension LoadingiCloudView {
     }
     
     func setLabelColor(_ color: UIColor) {
-        tipLabel.textColor = color
-        progressLabel.textColor = color
+//        tipLabel.textColor = color
+//        progressLabel.textColor = color
     }
 }

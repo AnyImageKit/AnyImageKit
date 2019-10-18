@@ -14,17 +14,20 @@ struct PhotoFetchOptions {
     let sizeMode: PhotoSizeMode
     let resizeMode: PHImageRequestOptionsResizeMode
     let version: PHImageRequestOptionsVersion
+    let needCache: Bool
     let isNetworkAccessAllowed: Bool
     let progressHandler: PHAssetImageProgressHandler?
     
     init(sizeMode: PhotoSizeMode = .resize(100),
          resizeMode: PHImageRequestOptionsResizeMode = .fast,
          version: PHImageRequestOptionsVersion = .current,
+         needCache: Bool = true,
          isNetworkAccessAllowed: Bool = true,
          progressHandler: PHAssetImageProgressHandler? = nil) {
         self.sizeMode = sizeMode
         self.resizeMode = resizeMode
         self.version = version
+        self.needCache = needCache
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
@@ -64,7 +67,7 @@ extension PhotoManager {
     func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
         if let asset = config.orderByDate == .asc ? album.assets.last?.phAsset : album.assets.first?.phAsset {
             let sacle = UIScreen.main.nativeScale
-            let options = PhotoFetchOptions(sizeMode: .resize(100*sacle))
+            let options = PhotoFetchOptions(sizeMode: .resize(100*sacle), needCache: false)
             requestPhoto(for: asset, options: options, completion: completion)
         }
     }
@@ -73,6 +76,7 @@ extension PhotoManager {
         let requestOptions = PHImageRequestOptions()
         requestOptions.version = options.version
         requestOptions.resizeMode = options.resizeMode
+        requestOptions.isSynchronous = false
         
         let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.targetSize, contentMode: .aspectFill, options: requestOptions) { [weak self] (image, info) in
             guard let self = self else { return }
@@ -92,7 +96,7 @@ extension PhotoManager {
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
                         let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
-                        if !isDegraded {
+                        if !isDegraded && options.needCache {
                             self.writeCache(image: image, for: asset.localIdentifier)
                         }
                         DispatchQueue.main.async {
@@ -101,6 +105,9 @@ extension PhotoManager {
                     }
                 case .resize:
                     let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                    if !isDegraded && options.needCache {
+                        self.writeCache(image: resizedImage, for: asset.localIdentifier)
+                    }
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 }
             } else {

@@ -70,8 +70,8 @@ final class VideoPreviewCell: PreviewCell {
         }
         iCloudView.snp.makeConstraints { (maker) in
             maker.top.equalToSuperview().offset(100)
-            maker.left.equalToSuperview().offset(5)
-            maker.height.equalTo(20)
+            maker.left.equalToSuperview().offset(10)
+            maker.height.equalTo(25)
         }
     }
     
@@ -86,7 +86,7 @@ final class VideoPreviewCell: PreviewCell {
     
     override func layout() {
         super.layout()
-        playerLayer?.frame = fitFrame
+        playerLayer?.frame = imageView.bounds
     }
     
     /// 重置
@@ -94,6 +94,7 @@ final class VideoPreviewCell: PreviewCell {
         setPlayButton(hidden: false)
         player?.pause()
         player?.seek(to: .zero)
+        imageView.image = nil
     }
     
     /// 单击事件触发时，处理播放和暂停的逻辑
@@ -146,7 +147,7 @@ extension VideoPreviewCell {
     /// 加载图片
     func requestPhoto() {
         let id = asset.phAsset.localIdentifier
-        let options = PhotoFetchOptions(sizeMode: .resize(500))
+        let options = PhotoFetchOptions(sizeMode: .resize(500), needCache: true)
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
             case .success(let response):
@@ -165,7 +166,6 @@ extension VideoPreviewCell {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
-                print(progress)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.setDownloadingProgress(progress)

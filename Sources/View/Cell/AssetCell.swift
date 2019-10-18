@@ -112,7 +112,7 @@ extension AssetCell {
 extension AssetCell {
     
     func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
-        let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale))
+        let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {

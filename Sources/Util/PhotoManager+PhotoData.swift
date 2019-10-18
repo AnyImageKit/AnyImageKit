@@ -39,7 +39,7 @@ extension PhotoManager {
         requestOptions.version = options.version
         requestOptions.progressHandler = options.progressHandler
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
-        requestOptions.isSynchronous = true
+        requestOptions.isSynchronous = false
         
         func handle(data: Data?, dataUTI: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable: Any]?, completion: @escaping PhotoDataFetchCompletion) {
             guard let data = data else {

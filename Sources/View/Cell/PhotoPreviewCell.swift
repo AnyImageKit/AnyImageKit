@@ -56,12 +56,28 @@ extension PhotoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
+        if imageView.image == nil { // thumbnail
+            let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
+            PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    if self.imageView.image == nil {
+                        self.setImage(response.image)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            })
+        }
+        
         let options = PhotoFetchOptions(sizeMode: .preview)
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let response):
                 if !response.isDegraded {
-                    self?.setImage(response.image)
+                    self.setImage(response.image)
                 }
             case .failure(let error):
                 print(error)

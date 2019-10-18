@@ -42,7 +42,6 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         // 判断是presentataion动画还是dismissal动画
         guard let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to) else {
-                print("获取 viewController 失败")
                 transitionContext.completeTransition(false)
                 return
         }
@@ -57,7 +56,6 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let containerView = transitionContext.containerView
         
         guard let startView = self.startView, let scaleView = self.scaleView else {
-            print("获取 startView/scaleView 失败")
             transitionContext.completeTransition(false)
             return
         }

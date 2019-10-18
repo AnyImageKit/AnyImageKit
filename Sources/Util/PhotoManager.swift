@@ -179,7 +179,7 @@ extension PhotoManager {
         case .video:
             workQueue.async { [weak self] in
                 guard let self = self else { return }
-                let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale))
+                let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
                 self.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                     guard let self = self else { return }
                     switch result {
