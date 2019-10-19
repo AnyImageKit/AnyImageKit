@@ -53,12 +53,12 @@ final class VideoView: UIView {
         addSubview(videoImageView)
         addSubview(videoLabel)
         
-        videoImageView.snp.makeConstraints { (maker) in
+        videoImageView.snp.makeConstraints { maker in
             maker.left.bottom.equalToSuperview().inset(8)
             maker.width.equalTo(24)
             maker.height.equalTo(15)
         }
-        videoLabel.snp.makeConstraints { (maker) in
+        videoLabel.snp.makeConstraints { maker in
             maker.left.equalTo(videoImageView.snp.right).offset(3)
             maker.centerY.equalTo(videoImageView)
         }

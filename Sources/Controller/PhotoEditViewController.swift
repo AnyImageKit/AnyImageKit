@@ -152,7 +152,7 @@ extension PhotoEditViewController {
         scrollView.minimumZoomScale = getDefaultScale()
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         
-        backButton.snp.makeConstraints { (maker) in
+        backButton.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             } else {

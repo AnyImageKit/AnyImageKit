@@ -76,21 +76,21 @@ final class PhotoToolBar: UIView {
         addSubview(originalButton)
         addSubview(doneButton)
         
-        contentView.snp.makeConstraints { (maker) in
+        contentView.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview()
             maker.height.equalTo(56)
         }
-        leftButton.snp.makeConstraints { (maker) in
+        leftButton.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(15)
             maker.centerY.equalTo(contentView)
             maker.height.equalTo(30)
         }
-        originalButton.snp.makeConstraints { (maker) in
+        originalButton.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.centerY.equalTo(contentView)
             maker.height.equalTo(30)
         }
-        doneButton.snp.makeConstraints { (maker) in
+        doneButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview().offset(-15)
             maker.centerY.equalTo(contentView)
             maker.size.equalTo(CGSize(width: 60, height: 30))

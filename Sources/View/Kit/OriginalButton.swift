@@ -42,13 +42,13 @@ final class OriginalButton: UIControl {
     private func setupView() {
         addSubview(circleView)
         addSubview(label)
-        circleView.snp.makeConstraints { (maker) in
+        circleView.snp.makeConstraints { maker in
             maker.left.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.height.equalTo(self).multipliedBy(0.6)
             maker.width.equalTo(circleView.snp.height)
         }
-        label.snp.makeConstraints { (maker) in
+        label.snp.makeConstraints { maker in
             maker.left.equalTo(circleView.snp.right).offset(5)
             maker.right.equalToSuperview()
             maker.centerY.equalToSuperview()
@@ -102,10 +102,10 @@ fileprivate class CircleView: UIView {
     private func setupView() {
         addSubview(bigCircleView)
         addSubview(smallCircleView)
-        bigCircleView.snp.makeConstraints { (maker) in
+        bigCircleView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        smallCircleView.snp.makeConstraints { (maker) in
+        smallCircleView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview().inset(3)
         }
     }

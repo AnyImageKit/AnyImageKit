@@ -64,11 +64,11 @@ final class VideoPreviewCell: PreviewCell {
         addSubview(playImageView)
         addSubview(iCloudView)
         
-        playImageView.snp.makeConstraints { (maker) in
+        playImageView.snp.makeConstraints { maker in
             maker.width.height.equalTo(80)
             maker.center.equalToSuperview()
         }
-        iCloudView.snp.makeConstraints { (maker) in
+        iCloudView.snp.makeConstraints { maker in
             maker.top.equalToSuperview().offset(100)
             maker.left.equalToSuperview().offset(10)
             maker.height.equalTo(25)

@@ -61,7 +61,7 @@ extension ImagePickerController {
         public static let photo: SelectOptions = SelectOptions(rawValue: 1 << 0)
         /// Video 视频
         public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
-        /// GIF   动图
+        /// GIF 动图
         public static let photoGIF: SelectOptions = SelectOptions(rawValue: 1 << 2)
         
         public let rawValue: Int

@@ -37,16 +37,16 @@ final class PhotoPreviewNavigationBar: UIView {
         addLayoutGuide(contentView)
         addSubview(backButton)
         addSubview(selectButton)
-        contentView.snp.makeConstraints { (maker) in
+        contentView.snp.makeConstraints { maker in
             maker.left.right.bottom.equalToSuperview()
             maker.height.equalTo(44)
         }
-        backButton.snp.makeConstraints { (maker) in
+        backButton.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(15)
             maker.centerY.equalTo(contentView)
             maker.height.equalTo(44)
         }
-        selectButton.snp.makeConstraints { (maker) in
+        selectButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview().offset(-8)
             maker.centerY.equalTo(contentView)
             maker.width.height.equalTo(35)

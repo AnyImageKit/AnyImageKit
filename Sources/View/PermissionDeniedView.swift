@@ -41,10 +41,10 @@ final class PermissionDeniedView: UIView {
     private func setupView() {
         addSubview(label)
         addSubview(button)
-        label.snp.makeConstraints { (maker) in
+        label.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview().inset(15)
         }
-        button.snp.makeConstraints { (maker) in
+        button.snp.makeConstraints { maker in
             maker.top.equalTo(label.snp.bottom).offset(10)
             maker.left.right.equalToSuperview()
             maker.height.equalTo(40)

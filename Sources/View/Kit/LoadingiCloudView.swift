@@ -58,19 +58,19 @@ final class LoadingiCloudView: UIView {
         addSubview(tipLabel)
         addSubview(progressLabel)
         
-        effectView.snp.makeConstraints { (maker) in
+        effectView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        imageView.snp.makeConstraints { (maker) in
+        imageView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(5)
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(20)
         }
-        tipLabel.snp.makeConstraints { (maker) in
+        tipLabel.snp.makeConstraints { maker in
             maker.left.equalTo(imageView.snp.right).offset(5)
             maker.centerY.equalToSuperview()
         }
-        progressLabel.snp.makeConstraints { (maker) in
+        progressLabel.snp.makeConstraints { maker in
             maker.left.equalTo(tipLabel.snp.right).offset(1)
             maker.right.equalToSuperview().offset(-5)
             maker.centerY.equalToSuperview()

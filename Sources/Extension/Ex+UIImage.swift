@@ -20,7 +20,7 @@ extension UIImage {
         }
         let size = calculate(from: image.size, to: limitSize)
         let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { (context) in
+        return renderer.image { context in
             image.draw(in: CGRect(origin: .zero, size: size))
         }
     }

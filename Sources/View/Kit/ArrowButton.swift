@@ -64,15 +64,15 @@ final class ArrowButton: UIControl {
         effectView.contentView.addSubview(label)
         effectView.contentView.addSubview(imageView)
         let height: CGFloat = 32
-        effectView.snp.makeConstraints { (maker) in
+        effectView.snp.makeConstraints { maker in
             maker.height.equalTo(height)
             maker.edges.equalTo(snp.edges)
         }
-        label.snp.makeConstraints { (maker) in
+        label.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.left.equalToSuperview().offset(12)
         }
-        imageView.snp.makeConstraints { (maker) in
+        imageView.snp.makeConstraints { maker in
             maker.left.equalTo(label.snp.right).offset(8)
             maker.right.equalToSuperview().offset(-6)
             maker.width.height.equalTo(20)

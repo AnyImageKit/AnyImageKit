@@ -106,7 +106,7 @@ final class AssetPickerViewController: UIViewController {
             }
             maker.left.right.bottom.equalToSuperview()
         }
-        permissionView.snp.makeConstraints { (maker) in
+        permissionView.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             } else {

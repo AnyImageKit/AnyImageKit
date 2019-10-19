@@ -39,10 +39,10 @@ final class NumberCircleButton: UIControl {
     private func setupView() {
         addSubview(circleView)
         addSubview(numLabel)
-        circleView.snp.makeConstraints { (maker) in
+        circleView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview().inset(4)
         }
-        numLabel.snp.makeConstraints { (maker) in
+        numLabel.snp.makeConstraints { maker in
             maker.edges.equalToSuperview().inset(3)
         }
         switch style {
@@ -65,10 +65,10 @@ final class NumberCircleButton: UIControl {
                 self.numLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
                 UIView.animate(withDuration: 0.15, animations: {
                     self.numLabel.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-                }) { (_) in
+                }) { _ in
                     UIView.animate(withDuration: 0.15, animations: {
                         self.numLabel.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                    }) { (_) in
+                    }) { _ in
                         UIView.animate(withDuration: 0.15) {
                             self.numLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                         }

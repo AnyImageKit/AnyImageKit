@@ -61,7 +61,7 @@ final class PhotoPreviewIndexView: UIView {
     
     private func setupView() {
         addSubview(collectionView)
-        collectionView.snp.makeConstraints { (maker) in
+        collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
     }

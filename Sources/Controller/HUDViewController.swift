@@ -58,18 +58,18 @@ final class HUDViewController: UIViewController {
         view.addSubview(labelCoverView)
         labelCoverView.addSubview(label)
         
-        indicatorCoverView.snp.remakeConstraints { (maker) in
+        indicatorCoverView.snp.remakeConstraints { maker in
             maker.center.equalToSuperview()
             maker.width.height.equalTo(100)
         }
-        indicator.snp.makeConstraints { (maker) in
+        indicator.snp.makeConstraints { maker in
             maker.center.equalToSuperview()
             maker.width.height.equalTo(60)
         }
-        labelCoverView.snp.makeConstraints { (maker) in
+        labelCoverView.snp.makeConstraints { maker in
             maker.center.equalToSuperview()
         }
-        label.snp.makeConstraints { (maker) in
+        label.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview().inset(15)
             maker.left.right.equalToSuperview().inset(20)
         }
@@ -91,7 +91,7 @@ extension HUDViewController {
         label.text = message
         UIView.animate(withDuration: 0.25, animations: {
             self.labelCoverView.alpha = 1
-        }) { (_) in
+        }) { _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
                 self?.hide()
             }
@@ -102,7 +102,7 @@ extension HUDViewController {
         UIView.animate(withDuration: 0.25, animations: {
             self.indicatorCoverView.alpha = 0
             self.labelCoverView.alpha = 0
-        }) { (_) in
+        }) { _ in
             self.hudDidHide?()
         }
     }

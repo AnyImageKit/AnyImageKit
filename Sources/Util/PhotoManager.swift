@@ -191,7 +191,7 @@ extension PhotoManager {
                     }
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
-                        self.requestVideo(for: asset.phAsset) { (result) in
+                        self.requestVideo(for: asset.phAsset) { result in
                             switch result {
                             case .success(_):
                                 asset.videoDidDownload = true

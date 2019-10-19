@@ -47,7 +47,7 @@ final class GIFView: UIView {
         layer.addSublayer(gifCoverLayer)
         addSubview(gifLabel)
         
-        gifLabel.snp.makeConstraints { (maker) in
+        gifLabel.snp.makeConstraints { maker in
             maker.left.bottom.equalToSuperview().inset(8)
             maker.height.equalTo(15)
         }

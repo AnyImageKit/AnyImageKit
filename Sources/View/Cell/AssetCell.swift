@@ -32,7 +32,7 @@ final class AssetCell: UICollectionViewCell {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         return view
     }()
-    private lazy var unableCoverView: UIView = {
+    private lazy var disableCoverView: UIView = {
         let view = UIView()
         view.isHidden = true
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
@@ -55,7 +55,7 @@ final class AssetCell: UICollectionViewCell {
         selectdCoverView.isHidden = true
         gifView.isHidden = true
         videoView.isHidden = true
-        unableCoverView.isHidden = true
+        disableCoverView.isHidden = true
         boxCoverView.isHidden = true
     }
     
@@ -73,29 +73,29 @@ final class AssetCell: UICollectionViewCell {
         addSubview(selectdCoverView)
         addSubview(gifView)
         addSubview(videoView)
-        addSubview(unableCoverView)
+        addSubview(disableCoverView)
         addSubview(boxCoverView)
         addSubview(selectButton)
         
         imageView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        selectdCoverView.snp.makeConstraints { (maker) in
+        selectdCoverView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        gifView.snp.makeConstraints { (maker) in
+        gifView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        videoView.snp.makeConstraints { (maker) in
+        videoView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        unableCoverView.snp.makeConstraints { (maker) in
+        disableCoverView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        boxCoverView.snp.makeConstraints { (maker) in
+        boxCoverView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        selectButton.snp.makeConstraints { (maker) in
+        selectButton.snp.makeConstraints { maker in
             maker.top.right.equalToSuperview().inset(3)
             maker.width.height.equalTo(30)
         }
@@ -142,7 +142,7 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-            unableCoverView.isHidden = !(PhotoManager.shared.isMaxCount && !asset.isSelected)
+            disableCoverView.isHidden = !(PhotoManager.shared.isMaxCount && !asset.isSelected)
         }
     }
 }
