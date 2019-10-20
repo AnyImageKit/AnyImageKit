@@ -52,19 +52,19 @@ extension PhotoManager {
             }
             completion(.success(.init(data: data, dataUTI: dataUTI, orientation: orientation)))
             let requestID = info?[PHImageResultRequestIDKey] as? PHImageRequestID
-            self.dequeueFetch(for: asset, requestID: requestID)
+            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
         
         if #available(iOS 13, *) {
             let requestID = PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
             }
-            enqueueFetch(for: asset, requestID: requestID)
+            enqueueFetch(for: asset.localIdentifier, requestID: requestID)
         } else {
             let requestID = PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, uiOrientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: .init(uiOrientation), info: info, completion: completion)
             }
-            enqueueFetch(for: asset, requestID: requestID)
+            enqueueFetch(for: asset.localIdentifier, requestID: requestID)
         }
     }
 }

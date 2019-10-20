@@ -17,7 +17,7 @@ extension ImagePickerController {
         
         /// Max Count 最多可选择的图片数量
         /// - Default: 9
-        public var maxCount: Int = 9
+        public var countLimit: Int = 9
         
         /// Column Number 每行的列数
         /// - Default: 4

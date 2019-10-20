@@ -129,7 +129,7 @@ final class PhotoPreviewController: UIViewController {
     deinit {
         for cell in collectionView.visibleCells {
             if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
+                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
             }
         }
     }
@@ -257,7 +257,7 @@ extension PhotoPreviewController {
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if !data.asset.isSelected && PhotoManager.shared.isMaxCount {
-            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.maxCount)
+            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.countLimit)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -378,7 +378,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PreviewCell:
             cell.reset()
             if !cell.asset.isSelected {
-                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset)
+                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
             }
         default:
             break

@@ -213,7 +213,7 @@ extension AssetPickerViewController {
         guard let album = album else { return }
         let asset = album.assets[sender.tag]
         if !asset.isSelected && PhotoManager.shared.isMaxCount {
-            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.maxCount)
+            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.countLimit)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)

@@ -96,7 +96,7 @@ extension ConfigViewController {
         let alert = UIAlertController(title: "MaxCount", message: nil, preferredStyle: .alert)
         for i in 3...9 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (_) in
-                self?.config.maxCount = i
+                self?.config.countLimit = i
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(i)"
             }))
         }

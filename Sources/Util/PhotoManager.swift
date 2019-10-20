@@ -11,7 +11,7 @@ import Photos
 
 struct FetchRecord {
     
-    var identifier: String
+    let identifier: String
     var requestIDs: [PHImageRequestID]
 }
 
@@ -22,7 +22,7 @@ final class PhotoManager {
     var config = ImagePickerController.Config()
     
     var isMaxCount: Bool {
-        return selectdAssets.count == config.maxCount
+        return selectdAssets.count == config.countLimit
     }
     
     var useOriginalImage: Bool = false
@@ -34,7 +34,7 @@ final class PhotoManager {
     private var fetchRecords = [FetchRecord]()
     
     /// 缓存
-    private var cacheList = [(String, UIImage)]()
+    private var cache = NSCache<NSString, UIImage>()
     
     private init() { }
     
@@ -46,7 +46,6 @@ extension PhotoManager {
     func clearAll() {
         useOriginalImage = false
         selectdAssets.removeAll()
-        cacheList.removeAll()
     }
 }
 
@@ -54,22 +53,22 @@ extension PhotoManager {
 
 extension PhotoManager {
     
-    func enqueueFetch(for asset: PHAsset, requestID: PHImageRequestID) {
+    func enqueueFetch(for identifier: String, requestID: PHImageRequestID) {
         workQueue.async { [weak self] in
             guard let self = self else { return }
-            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
+            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == identifier }) {
                 self.fetchRecords[index].requestIDs.append(requestID)
             } else {
-                self.fetchRecords.append(FetchRecord(identifier: asset.localIdentifier, requestIDs: [requestID]))
+                self.fetchRecords.append(FetchRecord(identifier: identifier, requestIDs: [requestID]))
             }
         }
     }
     
-    func dequeueFetch(for asset: PHAsset, requestID: PHImageRequestID?) {
+    func dequeueFetch(for identifier: String, requestID: PHImageRequestID?) {
         workQueue.async { [weak self] in
             guard let self = self else { return }
             guard let requestID = requestID else { return }
-            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
+            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == identifier }) {
                 if let idx = self.fetchRecords[index].requestIDs.firstIndex(of: requestID) {
                     self.fetchRecords[index].requestIDs.remove(at: idx)
                 }
@@ -80,10 +79,10 @@ extension PhotoManager {
         }
     }
     
-    func cancelFetch(for asset: PHAsset) {
+    func cancelFetch(for identifier: String) {
         workQueue.async { [weak self] in
             guard let self = self else { return }
-            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == asset.localIdentifier }) {
+            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == identifier }) {
                 let fetchRecord = self.fetchRecords.remove(at: index)
                 fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
             }
@@ -105,24 +104,12 @@ extension PhotoManager {
 
 extension PhotoManager {
     
-    private func removeCache(for identifier: String) {
-        if let index = cacheList.firstIndex(where: { $0.0 == identifier }) {
-            cacheList.remove(at: index)
-        }
-    }
-    
     func readCache(for identifier: String) -> UIImage? {
-        return cacheList.first(where: { $0.0 == identifier })?.1
+        return cache.object(forKey: identifier as NSString)
     }
     
     func writeCache(image: UIImage, for identifier: String) {
-        if cacheList.contains(where: { $0.0 == identifier }) {
-            return
-        }
-        if cacheList.count > PhotoManager.shared.config.maxCount {
-            cacheList.removeFirst()
-        }
-        cacheList.append((identifier, image))
+        cache.setObject(image, forKey: identifier as NSString)
     }
 }
 

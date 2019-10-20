@@ -50,8 +50,8 @@ extension PhotoManager {
                 completion(.failure(.invalidVideo))
             }
             let requestID = info?[PHImageResultRequestIDKey] as? PHImageRequestID
-            self.dequeueFetch(for: asset, requestID: requestID)
+            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
-        enqueueFetch(for: asset, requestID: requestID)
+        enqueueFetch(for: asset.localIdentifier, requestID: requestID)
     }
 }
