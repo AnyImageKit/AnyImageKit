@@ -46,6 +46,7 @@ extension PhotoManager {
     func clearAll() {
         useOriginalImage = false
         selectdAssets.removeAll()
+        cache.removeAllObjects()
     }
 }
 
