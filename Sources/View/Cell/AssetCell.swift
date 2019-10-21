@@ -122,7 +122,7 @@ extension AssetCell {
                     self.videoView.setVideoTime(asset.videoDuration)
                 }
             case .failure(let error):
-                print(error)
+                _print(error)
             }
         })
         

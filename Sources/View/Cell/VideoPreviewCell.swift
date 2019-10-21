@@ -155,7 +155,7 @@ extension VideoPreviewCell {
                     self?.setImage(response.image)
                 }
             case .failure(let error):
-                print(error)
+                _print(error)
             }
         }
     }
@@ -168,6 +168,7 @@ extension VideoPreviewCell {
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
+                    _print("Download video from iCloud: \(progress)")
                     self.setDownloadingProgress(progress)
                 }
             }
@@ -181,7 +182,7 @@ extension VideoPreviewCell {
                         }
                     }
                 case .failure(let error):
-                    print(error)
+                    _print(error)
                 }
             }
         }

@@ -44,6 +44,9 @@ extension ImagePickerController {
         /// - DESC: 按时间倒序排列，自动滚动到顶部
         public var orderByDate: Sort = .asc
         
+        /// Enable Debug Log 启用调试日志
+        public var enableDebugLog: Bool = false
+        
         public init() { }
     }
     

@@ -58,7 +58,7 @@ extension PhotoGIFPreviewCell {
             case .success(let response):
                 self?.setImage(response.image)
             case .failure(let error):
-                print(error)
+                _print(error)
             }
         }
     }
