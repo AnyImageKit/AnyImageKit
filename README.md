@@ -33,31 +33,18 @@
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
+Add this to `Podfile`, and then update dependency:
+
 ```ruby
-# Podfile
-use_frameworks!
-
-target 'YOUR_TARGET_NAME' do
-    pod 'AnyImagePicker'
-end
-```
-
-Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
-
-```bash
-$ pod install
+pod 'AnyImagePicker'
 ```
 
 ### [Carthage](https://github.com/Carthage/Carthage)
 
-Add this to `Cartfile`
+Add this to `Cartfile`, and then update dependency:
 
-```
+```ogdl
 github "anotheren/AnyImagePicker"
-```
-
-```bash
-$ carthage update
 ```
 
 ## Usage

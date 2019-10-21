@@ -31,33 +31,18 @@
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
+将下面内容添加到 `Podfile`，并执行依赖更新
+
 ```ruby
-# Podfile
-use_frameworks!
-
-target 'YOUR_TARGET_NAME' do
-    pod 'AnyImagePicker'
-end
-```
-
-替换 `YOUR_TARGET_NAME`，然后在 `Podfile` 的文件目录下执行：
-
-```bash
-$ pod install
+pod 'AnyImagePicker'
 ```
 
 ### [Carthage](https://github.com/Carthage/Carthage)
 
-将下面内容添加到 `Cartfile`
+将下面内容添加到 `Cartfile`，并执行依赖更新
 
-```
+```ogdl
 github "anotheren/AnyImagePicker"
-```
-
-然后执行：
-
-```bash
-$ carthage update
 ```
 
 ## 使用方法
