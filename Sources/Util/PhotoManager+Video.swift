@@ -32,6 +32,7 @@ public struct VideoFetchResponse {
 }
 
 public typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImagePickerError>) -> Void
+typealias VideoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
@@ -53,5 +54,26 @@ extension PhotoManager {
             self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
         enqueueFetch(for: asset.localIdentifier, requestID: requestID)
+    }
+    
+    func saveVideo(for url: URL, completion: @escaping VideoSaveCompletion) {
+        var localIdentifier: String = ""
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+            localIdentifier = request?.placeholderForCreatedAsset?.localIdentifier ?? ""
+        }) { (isSuccess, error) in
+            DispatchQueue.main.async {
+                if isSuccess {
+                    if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
+                        completion(.success(asset))
+                    } else {
+                        completion(.failure(.saveVideoFail))
+                    }
+                } else if error != nil {
+                    _print("Save video error: \(error!.localizedDescription)")
+                    completion(.failure(.saveVideoFail))
+                }
+            }
+        }
     }
 }

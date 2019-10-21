@@ -25,4 +25,5 @@ public enum ImagePickerError: Error {
     case exportCancel
     
     case savePhotoFail
+    case saveVideoFail
 }

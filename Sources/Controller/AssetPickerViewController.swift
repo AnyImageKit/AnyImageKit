@@ -194,6 +194,7 @@ extension AssetPickerViewController {
         controller.delegate = self
         controller.allowsEditing = false
         controller.sourceType = .camera
+        controller.videoMaximumDuration = manager.config.videoMaximumDuration
         var mediaTypes: [String] = []
         if manager.config.allowTakePhoto {
             mediaTypes.append(kUTTypeImage as String)
@@ -441,8 +442,15 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
                 }
             }
         case mediaTypeMovie:
-            let videoUrl = info[.mediaURL]
-            // Save video
+            guard let videoUrl = info[.mediaURL] as? URL else { return }
+            PhotoManager.shared.saveVideo(for: videoUrl) { [weak self] (result) in
+                switch result {
+                case .success(let asset):
+                    self?.addPHAsset(asset)
+                case .failure(let error):
+                    _print(error.localizedDescription)
+                }
+            }
         default:
             break
         }

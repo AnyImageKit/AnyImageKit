@@ -18,6 +18,7 @@ final class ConfigViewController: UITableViewController {
     // MARK: - Action
     
     @IBAction func pickButtonTapped(_ sender: UIBarButtonItem) {
+        config.enableDebugLog = true
         let controller = ImagePickerController(config: config, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic

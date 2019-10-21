@@ -48,10 +48,13 @@ extension ImagePickerController {
         public var enableDebugLog: Bool = false
         
         /// Allow take photo 允许拍照
-        public var allowTakePhoto: Bool = false
+        public var allowTakePhoto: Bool = true
         
         /// Allow take video 允许录像
-        public var allowTakeVideo: Bool = false
+        public var allowTakeVideo: Bool = true
+        
+        /// Video maximum duration 视频最大拍摄时间，单位秒
+        public var videoMaximumDuration: TimeInterval = 60 * 10
         
         public init() { }
     }
