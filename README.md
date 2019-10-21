@@ -19,7 +19,7 @@
     - [x] GIF
     - [ ] Live Photo
     - [x] Video
-- [ ] Camera
+- [x] Camera
 - [ ] Edit image
 - [ ] Multiple platform support
     - [x] iOS
