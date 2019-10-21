@@ -57,6 +57,7 @@ open class ImagePickerController: UINavigationController {
     private var didFinishSelect = false
     internal var hudWindow: UIWindow?
     internal var hud: HUDViewController = HUDViewController()
+    internal var lock: NSLock = NSLock()
     
     required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
         PhotoManager.shared.config = config
@@ -87,7 +88,7 @@ open class ImagePickerController: UINavigationController {
 // MARK: - Private function
 extension ImagePickerController {
     
-    private func finishSelect() {
+    private func checkData() {
         showWaitHUD()
         let manager = PhotoManager.shared
         let assets = manager.selectdAssets
@@ -95,16 +96,24 @@ extension ImagePickerController {
         for asset in assets {
             if !asset.isReady {
                 isReady = false
-                PhotoManager.shared.syncAsset(asset)
+                PhotoManager.shared.syncAsset(asset, postNotification: true)
             }
         }
         if !isReady { return }
-        didFinishSelect = false
         resizeImagesIfNeeded(assets)
         hideHUD()
-        
-        pickerDelegate?.imagePicker(self, didSelect: assets, useOriginalImage: manager.useOriginalImage)
-        presentingViewController?.dismiss(animated: true, completion: nil)
+        finishSelect()
+    }
+    
+    private func finishSelect() {
+        lock.lock()
+        if didFinishSelect {
+            didFinishSelect = false
+            let manager = PhotoManager.shared
+            pickerDelegate?.imagePicker(self, didSelect: manager.selectdAssets, useOriginalImage: manager.useOriginalImage)
+            presentingViewController?.dismiss(animated: true, completion: nil)
+        }
+        lock.unlock()
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {
@@ -126,7 +135,7 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
     
     func assetPickerControllerDidClickDone(_ controller: AssetPickerViewController) {
         didFinishSelect = true
-        finishSelect()
+        checkData()
     }
 }
 
@@ -146,12 +155,10 @@ extension ImagePickerController {
     }
     
     @objc private func didSyncAsset(notification: Notification) {
-        if didFinishSelect {
-            if let message = notification.object as? String {
-                showMessageHUD(message)
-            } else {
-                finishSelect()
-            }
+        if let message = notification.object as? String {
+            showMessageHUD(message)
+        } else {
+            checkData()
         }
     }
 }

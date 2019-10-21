@@ -122,7 +122,7 @@ extension PhotoManager {
         if selectdAssets.contains(asset) { return }
         selectdAssets.append(asset)
         asset.selectedNum = selectdAssets.count
-        syncAsset(asset)
+        syncAsset(asset, postNotification: false)
     }
     
     func removeSelectedAsset(_ asset: Asset) {
@@ -140,7 +140,7 @@ extension PhotoManager {
         selectdAssets.removeAll()
     }
     
-    func syncAsset(_ asset: Asset) {
+    func syncAsset(_ asset: Asset, postNotification: Bool) {
         switch asset.type {
         case .photo, .photoGif:
             // 勾选图片就开始加载
@@ -155,12 +155,16 @@ extension PhotoManager {
                         case .success(let response):
                             if !response.isDegraded {
                                 asset._image = response.image
-                                NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                                if postNotification {
+                                    NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                                }
                             }
                         case .failure(let error):
                             print(error)
                             let message = BundleHelper.localizedString(key: "Fetch failed, please retry")
-                            NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                            if postNotification {
+                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                            }
                         }
                     }
                 }
@@ -183,11 +187,15 @@ extension PhotoManager {
                             switch result {
                             case .success(_):
                                 asset.videoDidDownload = true
-                                NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                                if postNotification {
+                                    NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                                }
                             case .failure(let error):
                                 print(error)
                                 let message = BundleHelper.localizedString(key: "Fetch failed, please retry")
-                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                                if postNotification {                                
+                                    NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                                }
                             }
                         }
                     }
