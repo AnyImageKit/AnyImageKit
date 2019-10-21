@@ -1,0 +1,5 @@
+language: swift
+xcode_project: AnyImagePicker.xcodeproj
+xcode_scheme: AnyImagePicker
+xcode_destination: platform=iOS Simulator,OS=13.1,name=iPhone 11
+osx_image: xcode11.1
