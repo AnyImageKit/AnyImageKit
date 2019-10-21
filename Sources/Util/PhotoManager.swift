@@ -201,6 +201,8 @@ extension PhotoManager {
                     }
                 })
             }
+        case .photoLive:
+            break // TODO
         }
     }
 }

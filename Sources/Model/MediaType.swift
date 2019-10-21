@@ -13,14 +13,20 @@ public enum MediaType: Equatable, CustomStringConvertible {
     case photo
     case photoGif
     case video
+    case photoLive
     
     init(asset: PHAsset) {
         switch asset.mediaType {
         case .image:
-            if asset.isGIF {
-                self = .photoGif
-            } else {
-                self = .photo
+            switch asset.mediaSubtypes {
+            case .photoLive:
+                self = .photoLive
+            default:
+                if asset.isGIF {
+                    self = .photoGif
+                } else {
+                    self = .photo
+                }
             }
         case .video:
             self = .video
@@ -37,6 +43,8 @@ public enum MediaType: Equatable, CustomStringConvertible {
             return "PHOTO/GIF"
         case .video:
             return "VIDEO"
+        case .photoLive:
+            return "LIVEPHOTO"
         }
     }
 }

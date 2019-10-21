@@ -319,27 +319,26 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
+        let cell: PreviewCell
         switch data.asset.type {
         case .photo:
-            let cell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
-            cell.imageView.contentMode = imageScaleMode
-            cell.delegate = self
-            cell.imageMaximumZoomScale = imageMaximumZoomScale
-            cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-            cell.asset = data.asset
-            return cell
+            let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
+            photoCell.imageView.contentMode = imageScaleMode
+            photoCell.imageMaximumZoomScale = imageMaximumZoomScale
+            photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+            cell = photoCell
         case .photoGif:
-            let cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
-            cell.delegate = self
-            cell.asset = data.asset
-            return cell
+            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
         case .video:
-            let cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
+            cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
-            cell.delegate = self
-            cell.asset = data.asset
-            return cell
+        case .photoLive:
+            cell = collectionView.dequeueReusableCell(LivePhotoPreviewCell.self, for: indexPath)
+            // TODO:
         }
+        cell.delegate = self
+        cell.asset = data.asset
+        return cell
     }
 }
 

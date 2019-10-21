@@ -72,6 +72,8 @@ extension ImagePickerController {
         public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
         /// GIF 动图
         public static let photoGIF: SelectOptions = SelectOptions(rawValue: 1 << 2)
+        /// Live photo 实况照片
+        public static let photoLive: SelectOptions = SelectOptions(rawValue: 1 << 3)
         
         public let rawValue: Int
         
@@ -81,7 +83,7 @@ extension ImagePickerController {
         
         var mediaTypes: [PHAssetMediaType] {
             var result: [PHAssetMediaType] = []
-            if contains(.photo) || contains(.photoGIF) {
+            if contains(.photo) || contains(.photoGIF) || contains(.photoLive) {
                 result.append(.image)
             }
             if contains(.video) {
