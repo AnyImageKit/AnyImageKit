@@ -24,8 +24,6 @@
 		A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800410232F4EE4006B4711 /* ImagePickerController.swift */; };
 		A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800412232F5B44006B4711 /* AssetPickerViewController.swift */; };
 		A0800415232F5F7A006B4711 /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800414232F5F7A006B4711 /* PhotoManager.swift */; };
-		A099CC6A232F3BF70023CC3D /* AnyImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */; };
-		A099CC6F232F3BF70023CC3D /* AnyImagePickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099CC6E232F3BF70023CC3D /* AnyImagePickerTests.swift */; };
 		A099CC71232F3BF70023CC3D /* AnyImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = A099CC63232F3BF70023CC3D /* AnyImagePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A09FFE6123404923000DEF87 /* PhotoManager+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09FFE6023404923000DEF87 /* PhotoManager+Video.swift */; };
 		A0C03C1A2331D426005F742C /* Ex+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C182331D426005F742C /* Ex+UITableView.swift */; };
@@ -80,13 +78,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A099CC6B232F3BF70023CC3D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A099CC57232F3BF70023CC3D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A099CC5F232F3BF70023CC3D;
-			remoteInfo = AnyImagePicker;
-		};
 		A5A27BCE232F88E900D966B8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A099CC57232F3BF70023CC3D /* Project object */;
@@ -134,9 +125,6 @@
 		A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AnyImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A099CC63232F3BF70023CC3D /* AnyImagePicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnyImagePicker.h; sourceTree = "<group>"; };
 		A099CC64232F3BF70023CC3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A099CC69232F3BF70023CC3D /* AnyImagePickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnyImagePickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A099CC6E232F3BF70023CC3D /* AnyImagePickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImagePickerTests.swift; sourceTree = "<group>"; };
-		A099CC70232F3BF70023CC3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A09FFE6023404923000DEF87 /* PhotoManager+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+Video.swift"; sourceTree = "<group>"; };
 		A0C03C182331D426005F742C /* Ex+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A0C03C192331D426005F742C /* Ex+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UIColor.swift"; sourceTree = "<group>"; };
@@ -202,14 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5601D3A233B0F6200D0E95E /* SnapKit in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A099CC66232F3BF70023CC3D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A099CC6A232F3BF70023CC3D /* AnyImagePicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +263,6 @@
 				A080040E232F4EC8006B4711 /* README.md */,
 				A029D04E233084B600BC6720 /* Cartfile */,
 				A099CC62232F3BF70023CC3D /* Sources */,
-				A099CC6D232F3BF70023CC3D /* Tests */,
 				A5A27BA7232F82AE00D966B8 /* Example */,
 				A099CC61232F3BF70023CC3D /* Products */,
 				A5A27B9D232F81CF00D966B8 /* Frameworks */,
@@ -295,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */,
-				A099CC69232F3BF70023CC3D /* AnyImagePickerTests.xctest */,
 				A5A27BA6232F82AE00D966B8 /* Example.app */,
 			);
 			name = Products;
@@ -317,15 +295,6 @@
 				A56A3C792330746A00EBFC48 /* Presentation */,
 			);
 			path = Sources;
-			sourceTree = "<group>";
-		};
-		A099CC6D232F3BF70023CC3D /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				A099CC6E232F3BF70023CC3D /* AnyImagePickerTests.swift */,
-				A099CC70232F3BF70023CC3D /* Info.plist */,
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 		A0F4753A232F7DDB00BB117B /* Model */ = {
@@ -481,24 +450,6 @@
 			productReference = A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		A099CC68232F3BF70023CC3D /* AnyImagePickerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A099CC77232F3BF70023CC3D /* Build configuration list for PBXNativeTarget "AnyImagePickerTests" */;
-			buildPhases = (
-				A099CC65232F3BF70023CC3D /* Sources */,
-				A099CC66232F3BF70023CC3D /* Frameworks */,
-				A099CC67232F3BF70023CC3D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A099CC6C232F3BF70023CC3D /* PBXTargetDependency */,
-			);
-			name = AnyImagePickerTests;
-			productName = AnyImagePickerTests;
-			productReference = A099CC69232F3BF70023CC3D /* AnyImagePickerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		A5A27BA5232F82AE00D966B8 /* Example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A5A27BB7232F82B000D966B8 /* Build configuration list for PBXNativeTarget "Example" */;
@@ -532,9 +483,6 @@
 						CreatedOnToolsVersion = 11.0;
 						LastSwiftMigration = 1100;
 					};
-					A099CC68232F3BF70023CC3D = {
-						CreatedOnToolsVersion = 11.0;
-					};
 					A5A27BA5232F82AE00D966B8 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -558,7 +506,6 @@
 			projectRoot = "";
 			targets = (
 				A099CC5F232F3BF70023CC3D /* AnyImagePicker */,
-				A099CC68232F3BF70023CC3D /* AnyImagePickerTests */,
 				A5A27BA5232F82AE00D966B8 /* Example */,
 			);
 		};
@@ -571,13 +518,6 @@
 			files = (
 				A5A27BC3232F840900D966B8 /* Asset.xcassets in Resources */,
 				A5A27BC6232F874500D966B8 /* Localizable.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A099CC67232F3BF70023CC3D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,14 +597,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A099CC65232F3BF70023CC3D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A099CC6F232F3BF70023CC3D /* AnyImagePickerTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A5A27BA2232F82AE00D966B8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -678,11 +610,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A099CC6C232F3BF70023CC3D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A099CC5F232F3BF70023CC3D /* AnyImagePicker */;
-			targetProxy = A099CC6B232F3BF70023CC3D /* PBXContainerItemProxy */;
-		};
 		A5A27BCF232F88E900D966B8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A099CC5F232F3BF70023CC3D /* AnyImagePicker */;
@@ -900,44 +827,6 @@
 			};
 			name = Release;
 		};
-		A099CC78232F3BF70023CC3D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7SA22A9L3L;
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePickerTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A099CC79232F3BF70023CC3D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7SA22A9L3L;
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePickerTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		A5A27BB8232F82B000D966B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -953,6 +842,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -976,6 +866,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -1001,15 +892,6 @@
 			buildConfigurations = (
 				A099CC75232F3BF70023CC3D /* Debug */,
 				A099CC76232F3BF70023CC3D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A099CC77232F3BF70023CC3D /* Build configuration list for PBXNativeTarget "AnyImagePickerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A099CC78232F3BF70023CC3D /* Debug */,
-				A099CC79232F3BF70023CC3D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
