@@ -428,7 +428,7 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
         guard let mediaType = info[.mediaType] as? String else { return }
         let mediaTypeImage = kUTTypeImage as String
         let mediaTypeMovie = kUTTypeMovie as String
-        // TODO: HUD
+        showWaitHUD()
         switch mediaType {
         case mediaTypeImage:
             guard let image = info[.originalImage] as? UIImage else { return }
@@ -440,6 +440,7 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
+                hideHUD()
             }
         case mediaTypeMovie:
             guard let videoUrl = info[.mediaURL] as? URL else { return }
@@ -450,6 +451,7 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
+                hideHUD()
             }
         default:
             break
