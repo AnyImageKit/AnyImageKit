@@ -61,6 +61,7 @@ struct PhotoFetchResponse {
 }
 
 typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
+typealias PhotoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Void
 
 extension PhotoManager {
     
@@ -169,5 +170,42 @@ extension PhotoManager {
             self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
         enqueueFetch(for: asset.localIdentifier, requestID: requestID)
+    }
+    
+    func savePhoto(_ image: UIImage, meta: [String:Any], completion: @escaping PhotoSaveCompletion) {
+        guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+            completion(.failure(.savePhotoFail))
+            return
+        }
+        let timestamp = Int(Date().timeIntervalSince1970)
+        let filePath = NSTemporaryDirectory() + "SAVE-PHOTO-\(timestamp).jpeg"
+        let url = URL(fileURLWithPath: filePath)
+        // Write to file
+        do {
+            try imageData.write(to: url)
+        } catch {
+            completion(.failure(.savePhotoFail))
+        }
+        
+        // Write to library
+        var localIdentifier: String = ""
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+            localIdentifier = request?.placeholderForCreatedAsset?.localIdentifier ?? ""
+        }) { (isSuccess, error) in
+            try? FileManager.default.removeItem(atPath: filePath)
+            DispatchQueue.main.async {
+                if isSuccess {
+                    if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
+                        completion(.success(asset))
+                    } else {
+                        completion(.failure(.savePhotoFail))
+                    }
+                } else if error != nil {
+                    _print("Save photo error: \(error!.localizedDescription)")
+                    completion(.failure(.savePhotoFail))
+                }
+            }
+        }
     }
 }

@@ -47,6 +47,12 @@ extension ImagePickerController {
         /// Enable Debug Log 启用调试日志
         public var enableDebugLog: Bool = false
         
+        /// Allow take photo 允许拍照
+        public var allowTakePhoto: Bool = false
+        
+        /// Allow take video 允许录像
+        public var allowTakeVideo: Bool = false
+        
         public init() { }
     }
     

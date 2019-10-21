@@ -23,4 +23,6 @@ public enum ImagePickerError: Error {
     case fileWriteFail
     case exportFail
     case exportCancel
+    
+    case savePhotoFail
 }
