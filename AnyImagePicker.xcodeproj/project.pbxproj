@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		626203D0A397F4E714F206AE /* Pods_AnyImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5A07D75FEFB43DBC3B08017 /* Pods_AnyImagePicker.framework */; };
+		71036186235E6BDB00669A7B /* PhotoManager+LivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71036185235E6BDB00669A7B /* PhotoManager+LivePhoto.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
 		A029D04F2330856C00BC6720 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753B232F7DE500BB117B /* Album.swift */; };
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
@@ -109,6 +110,7 @@
 		3781DE0B7E286D98D2E846C5 /* Pods-AnyImagePicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImagePicker.release.xcconfig"; path = "Target Support Files/Pods-AnyImagePicker/Pods-AnyImagePicker.release.xcconfig"; sourceTree = "<group>"; };
 		54D3D54A58FB9A7E3E55CF45 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6689A626B83552178B21532B /* Pods-AnyImagePicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImagePicker.debug.xcconfig"; path = "Target Support Files/Pods-AnyImagePicker/Pods-AnyImagePicker.debug.xcconfig"; sourceTree = "<group>"; };
+		71036185235E6BDB00669A7B /* PhotoManager+LivePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+LivePhoto.swift"; sourceTree = "<group>"; };
 		A00869BC233C987600237651 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 		A029D04E233084B600BC6720 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		A036C3912330B5D000D32ED8 /* AlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */,
 				A09FFE6023404923000DEF87 /* PhotoManager+Video.swift */,
 				A0DFAA0A235597520020690F /* PhotoManager+VideoURL.swift */,
+				71036185235E6BDB00669A7B /* PhotoManager+LivePhoto.swift */,
 				A5A27BCA232F884F00D966B8 /* BundleHelper.swift */,
 				A5601D50233B3FC400D0E95E /* StatusBarHelper.swift */,
 				A00869BC233C987600237651 /* AssociatedObject.swift */,
@@ -665,6 +668,7 @@
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				A5A7AAE6235DA518008781B7 /* HUDHelper.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Ex+PHFetchResult.swift in Sources */,
+				71036186235E6BDB00669A7B /* PhotoManager+LivePhoto.swift in Sources */,
 				A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
