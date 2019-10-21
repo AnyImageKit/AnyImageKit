@@ -30,8 +30,17 @@ class Album: Equatable {
 
 extension Album {
     
-    var count: Int {
-        return assets.count
+    public func insertAsset(_ asset: Asset, at: Int) {
+        assets.insert(asset, at: at)
+        reloadIndex()
+    }
+    
+    public func addAsset(_ asset: Asset, atLast: Bool) {
+        if atLast {
+            assets.append(asset)
+        } else {
+            assets.insert(asset, at: assets.count-1)
+        }
     }
 }
 
@@ -61,6 +70,28 @@ extension Album {
             }
         }
         assets = array
+    }
+    
+    private func reloadIndex() {
+        var idx = 0
+        let array: [Asset]
+        switch PhotoManager.shared.config.orderByDate {
+        case .asc:
+            array = Array(assets[0..<assets.count-1])
+        case .desc:
+            array = Array(assets[1..<assets.count])
+        }
+        for asset in array {
+            asset.idx = idx
+            idx += 1
+        }
+    }
+}
+
+extension Album {
+    
+    var count: Int {
+        return assets.count
     }
 }
 

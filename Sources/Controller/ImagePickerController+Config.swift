@@ -47,6 +47,12 @@ extension ImagePickerController {
         /// Enable Debug Log 启用调试日志
         public var enableDebugLog: Bool = false
         
+        /// Capture Media Options 可拍摄类型
+        public var captureMediaOptions: CaptureMediaOptions = []
+        
+        /// Video maximum duration 视频最大拍摄时间，单位秒
+        public var videoMaximumDuration: TimeInterval = 60 * 10
+        
         public init() { }
     }
     
@@ -82,6 +88,19 @@ extension ImagePickerController {
                 result.append(.video)
             }
             return result
+        }
+    }
+    
+    public struct CaptureMediaOptions: OptionSet {
+        /// Photo 照片
+        public static let photo: CaptureMediaOptions = CaptureMediaOptions(rawValue: 1 << 0)
+        /// Video 视频
+        public static let video: CaptureMediaOptions = CaptureMediaOptions(rawValue: 1 << 1)
+        
+        public let rawValue: Int
+        
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
         }
     }
     

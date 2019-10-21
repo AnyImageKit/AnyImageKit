@@ -55,8 +55,6 @@ open class ImagePickerController: UINavigationController {
     
     private var hiddenStatusBar = false
     private var didFinishSelect = false
-    internal var hudWindow: UIWindow?
-    internal var hud: HUDViewController = HUDViewController()
     internal var lock: NSLock = NSLock()
     
     required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {

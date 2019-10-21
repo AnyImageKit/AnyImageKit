@@ -22,7 +22,7 @@ public class Asset: Equatable {
     var _image: UIImage?
     var videoDidDownload: Bool = false
     
-    let idx: Int
+    var idx: Int
     let videoDuration: String
     var isSelected: Bool = false
     var selectedNum: Int = 1
@@ -43,6 +43,12 @@ extension Asset: CustomStringConvertible {
     
     public var description: String {
         return "<Asset> \(phAsset.localIdentifier) mediaType=\(type) image=\(image)"
+    }
+}
+
+extension Asset {
+    var isCamera: Bool {
+        return idx == -1
     }
 }
 

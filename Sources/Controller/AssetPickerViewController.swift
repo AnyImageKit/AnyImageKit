@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import MobileCoreServices
 
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
@@ -44,6 +45,7 @@ final class AssetPickerViewController: UIViewController {
                                          right: defaultAssetSpacing)
         view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         view.registerCell(AssetCell.self)
+        view.registerCell(TakePhotoCell.self)
         view.dataSource = self
         view.delegate = self
         return view
@@ -157,6 +159,7 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.name)
+        addCameraAsset()
         collectionView.reloadData()
         if PhotoManager.shared.config.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: false)
@@ -181,6 +184,54 @@ extension AssetPickerViewController {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
                 cell.updateState(album.assets[indexPath.item], animated: animatedItem == indexPath.item)
             }
+        }
+    }
+    
+    /// 弹出 UIImagePickerController
+    private func showUIImagePicker() {
+        let config = PhotoManager.shared.config
+        let controller = UIImagePickerController()
+        controller.delegate = self
+        controller.allowsEditing = false
+        controller.sourceType = .camera
+        controller.videoMaximumDuration = config.videoMaximumDuration
+        var mediaTypes: [String] = []
+        if config.captureMediaOptions.contains(.photo) {
+            mediaTypes.append(kUTTypeImage as String)
+        }
+        if config.captureMediaOptions.contains(.video) {
+            mediaTypes.append(kUTTypeMovie as String)
+        }
+        controller.mediaTypes = mediaTypes
+        present(controller, animated: true, completion: nil)
+    }
+    
+    /// 添加拍照 Item
+    private func addCameraAsset() {
+        guard let album = album, album.isCameraRoll else { return }
+        let config = PhotoManager.shared.config
+        let sortType = config.orderByDate
+        if !config.captureMediaOptions.isEmpty {
+            switch sortType {
+            case .asc:
+                album.addAsset(Asset(idx: -1, asset: PHAsset()), atLast: true)
+            case .desc:
+                album.insertAsset(Asset(idx: -1, asset: PHAsset()), at: 0)
+            }
+        }
+    }
+    
+    /// 拍照结束后，插入 PHAsset
+    private func addPHAsset(_ phAsset: PHAsset) {
+        guard let album = album else { return }
+        let sortType = PhotoManager.shared.config.orderByDate
+        switch sortType {
+        case .asc:
+            album.addAsset(Asset(idx: album.assets.count, asset: phAsset), atLast: false)
+            collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+        case .desc:
+            album.insertAsset(Asset(idx: 0, asset: phAsset), at: 1)
+            collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
         }
     }
 }
@@ -209,9 +260,11 @@ extension AssetPickerViewController {
         PhotoManager.shared.removeAllSelectedAsset()
     }
     
-    @objc private func selectButtonTapped(_ sender: UIButton) {
+    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let album = album else { return }
-        let asset = album.assets[sender.tag]
+        guard let cell = sender.superview as? AssetCell else { return }
+        guard let idx = collectionView.indexPath(for: cell)?.item else { return }
+        let asset = album.assets[idx]
         if !asset.isSelected && PhotoManager.shared.isMaxCount {
             let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.countLimit)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
@@ -223,10 +276,10 @@ extension AssetPickerViewController {
         asset.isSelected = !sender.isSelected
         if asset.isSelected {
             PhotoManager.shared.addSelectedAsset(asset)
-            updateVisibleCellState(sender.tag)
+            updateVisibleCellState(idx)
         } else {
             PhotoManager.shared.removeSelectedAsset(asset)
-            updateVisibleCellState(sender.tag)
+            updateVisibleCellState(idx)
         }
         toolBar.setEnable(!PhotoManager.shared.selectdAssets.isEmpty)
     }
@@ -261,11 +314,14 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        if let asset = album?.assets[indexPath.item] {
-            cell.setContent(asset)
+        guard let asset = album?.assets[indexPath.item] else { return UICollectionViewCell() }
+        if asset.isCamera {
+            let cell = collectionView.dequeueReusableCell(TakePhotoCell.self, for: indexPath)
+            return cell
         }
-        cell.selectButton.tag = indexPath.item
+        
+        let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
+        cell.setContent(asset)
         cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         cell.backgroundColor = UIColor.white
         return cell
@@ -277,8 +333,12 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let album = album else { return }
-        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isMaxCount { return }
+        if album.assets[indexPath.item].isCamera { // 点击拍照 Item
+            showUIImagePicker()
+            return
+        }
         
+        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isMaxCount { return }
         let controller = PhotoPreviewController()
         controller.currentIndex = indexPath.item
         controller.dataSource = self
@@ -287,7 +347,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let asset = album?.assets[indexPath.item] else { return }
+        guard let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
         if let cell = cell as? AssetCell {
             cell.updateState(asset, animated: false)
         }
@@ -359,4 +419,46 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         }
         delegate?.assetPickerControllerDidClickDone(self)
     }
+}
+
+extension AssetPickerViewController: UIImagePickerControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let mediaType = info[.mediaType] as? String else { return }
+        let mediaTypeImage = kUTTypeImage as String
+        let mediaTypeMovie = kUTTypeMovie as String
+        showWaitHUD()
+        switch mediaType {
+        case mediaTypeImage:
+            guard let image = info[.originalImage] as? UIImage else { return }
+            guard let meta = info[.mediaMetadata] as? [String:Any] else { return }
+            PhotoManager.shared.savePhoto(image, meta: meta) { [weak self] (result) in
+                switch result {
+                case .success(let asset):
+                    self?.addPHAsset(asset)
+                case .failure(let error):
+                    _print(error.localizedDescription)
+                }
+                hideHUD()
+            }
+        case mediaTypeMovie:
+            guard let videoUrl = info[.mediaURL] as? URL else { return }
+            PhotoManager.shared.saveVideo(for: videoUrl) { [weak self] (result) in
+                switch result {
+                case .success(let asset):
+                    self?.addPHAsset(asset)
+                case .failure(let error):
+                    _print(error.localizedDescription)
+                }
+                hideHUD()
+            }
+        default:
+            break
+        }
+    }
+}
+
+extension AssetPickerViewController: UINavigationControllerDelegate {
+    
 }

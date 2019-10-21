@@ -45,17 +45,7 @@ extension PhotoManager {
             switch result {
             case .success(let response):
                 // Check Path
-                var isDirectory: ObjCBool = true
-                if !FileManager.default.fileExists(atPath: options.preferredOutputPath, isDirectory: &isDirectory) {
-                    do {
-                        try FileManager.default.createDirectory(atPath: options.preferredOutputPath,
-                                                                withIntermediateDirectories: true,
-                                                                attributes: nil)
-                    } catch {
-                        completion(.failure(.directoryCreateFail))
-                        return
-                    }
-                }
+                FileHelper.checkDirectory(path: options.preferredOutputPath)
                 // Prepare Output URL
                 let timestamp = Int(Date().timeIntervalSince1970)
                 let outputPath = options.preferredOutputPath.appending("/PHOTO-\(timestamp)).\(FileHelper.fileExtension(from: response.dataUTI as CFString))")

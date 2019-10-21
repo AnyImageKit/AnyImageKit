@@ -157,17 +157,7 @@ extension PhotoManager {
     
     private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping VideoURLFetchCompletion) {
         // Check Path
-        var isDirectory: ObjCBool = true
-        if !FileManager.default.fileExists(atPath: options.preferredOutputPath, isDirectory: &isDirectory) {
-            do {
-                try FileManager.default.createDirectory(atPath: options.preferredOutputPath,
-                                                        withIntermediateDirectories: true,
-                                                        attributes: nil)
-            } catch {
-                completion(.failure(.directoryCreateFail))
-                return
-            }
-        }
+        FileHelper.checkDirectory(path: options.preferredOutputPath)
         // Check File Type
         let supportedFileTypes = exportSession.supportedFileTypes
         guard supportedFileTypes.contains(.mp4) else {
