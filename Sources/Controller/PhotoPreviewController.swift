@@ -366,6 +366,8 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.requestPhoto()
             }
             cell.requestVideo()
+        case let cell as LivePhotoPreviewCell:
+            cell.requestLivePhoto()
         default:
             break
         }
