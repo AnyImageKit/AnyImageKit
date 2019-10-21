@@ -109,6 +109,7 @@
 		A036C3922330B5D000D32ED8 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
+		A0514F02235D455600D4AA0F /* AnyImagePicker.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = AnyImagePicker.podspec; sourceTree = "<group>"; };
 		A05C8DA0233DEBFC005B0F3C /* PhotoManager+PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+PhotoData.swift"; sourceTree = "<group>"; };
 		A05C8DA2233DEFD7005B0F3C /* PhotoManager+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+Photo.swift"; sourceTree = "<group>"; };
 		A05C8DA4233DFA28005B0F3C /* PhotoManager+PhotoGIF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+PhotoGIF.swift"; sourceTree = "<group>"; };
@@ -265,6 +266,7 @@
 				A080040F232F4EC8006B4711 /* LICENSE */,
 				A080040E232F4EC8006B4711 /* README.md */,
 				A029D04E233084B600BC6720 /* Cartfile */,
+				A0514F02235D455600D4AA0F /* AnyImagePicker.podspec */,
 				A099CC62232F3BF70023CC3D /* Sources */,
 				A5A27BA7232F82AE00D966B8 /* Example */,
 				A099CC61232F3BF70023CC3D /* Products */,
