@@ -10,9 +10,16 @@ import UIKit
 
 final class TakePhotoCell: UICollectionViewCell {
     
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        view.image = BundleHelper.image(named: "Camera")
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.yellow
+        backgroundColor = UIColor.color(hex: 0xDEDFE0)
         setupView()
     }
     
@@ -21,6 +28,10 @@ final class TakePhotoCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        
+        addSubview(imageView)
+        imageView.snp.makeConstraints { (maker) in
+            maker.center.equalToSuperview()
+            maker.width.height.equalTo(self.snp.width).multipliedBy(0.5)
+        }
     }
 }
