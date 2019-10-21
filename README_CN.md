@@ -1,6 +1,8 @@
 # AnyImagePicker
 
-`AnyImagePicker` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。
+![TitleMap](./Resources/TitleMap.png)
+
+`AnyImagePicker` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。使用 Swift 编写。
 
 ## 功能
 

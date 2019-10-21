@@ -1,6 +1,10 @@
 # AnyImagePicker
 
-`AnyImagePicker` is an image picker which support for multiple photos, GIFs or videos. [中文说明](./README_CN.md)
+[]()
+
+`AnyImagePicker` is an image picker which support for multiple photos, GIFs or videos. It's written in Swift. 
+
+> [中文说明](./README_CN.md)
 
 ## Features
 
