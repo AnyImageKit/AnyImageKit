@@ -1,5 +1,10 @@
 ![AnyImagePicker](./Resources/TitleMap.png)
 
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImagePicker.svg)](https://img.shields.io/cocoapods/v/AnyImagePicker.svg)
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Platform](https://img.shields.io/cocoapods/p/AnyImagePicker.svg?style=flat)](./)
+[![License](https://img.shields.io/cocoapods/l/AnyImagePicker.svg?style=flat)](https://raw.githubusercontent.com/anotheren/AnyImagePicker/master/LICENSE)
+
 `AnyImagePicker` is an image picker which support for multiple photos, GIFs or videos. It's written in Swift. 
 
 > [中文说明](./README_CN.md)
