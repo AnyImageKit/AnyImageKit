@@ -47,6 +47,8 @@ final class ConfigViewController: UITableViewController {
                 selectOptionsTapped()
             case .orderbyDate:
                 orderbyDateTapped()
+            case .captureMediaOptions:
+                captureMediaOptionsTapped()
             }
         case 1:
             let rowType = OtherConfigRowType(rawValue: indexPath.row)!
@@ -166,6 +168,29 @@ extension ConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func captureMediaOptionsTapped() {
+        let indexPath = ConfigRowType.captureMediaOptions.indexPath
+        let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
+            self?.config.captureMediaOptions = []
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
+        }))
+        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
+            self?.config.captureMediaOptions = [.photo, .video]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
+        }))
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
+            self?.config.captureMediaOptions = [.photo]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
+        }))
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
+            self?.config.captureMediaOptions = [.video]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - Other Config
     
     private func fullScreenTapped() {
@@ -182,6 +207,7 @@ enum ConfigRowType: Int {
     case allowUseOriginalImage
     case selectOptions
     case orderbyDate
+    case captureMediaOptions
     
     var indexPath: IndexPath {
         return IndexPath(row: rawValue, section: 0)

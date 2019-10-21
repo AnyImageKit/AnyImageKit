@@ -189,17 +189,17 @@ extension AssetPickerViewController {
     
     /// 弹出 UIImagePickerController
     private func showUIImagePicker() {
-        let manager = PhotoManager.shared
+        let config = PhotoManager.shared.config
         let controller = UIImagePickerController()
         controller.delegate = self
         controller.allowsEditing = false
         controller.sourceType = .camera
-        controller.videoMaximumDuration = manager.config.videoMaximumDuration
+        controller.videoMaximumDuration = config.videoMaximumDuration
         var mediaTypes: [String] = []
-        if manager.config.allowTakePhoto {
+        if config.captureMediaOptions.contains(.photo) {
             mediaTypes.append(kUTTypeImage as String)
         }
-        if manager.config.allowTakeVideo {
+        if config.captureMediaOptions.contains(.video) {
             mediaTypes.append(kUTTypeMovie as String)
         }
         controller.mediaTypes = mediaTypes
@@ -209,9 +209,9 @@ extension AssetPickerViewController {
     /// 添加拍照 Item
     private func addCameraAsset() {
         guard let album = album, album.isCameraRoll else { return }
-        let manager = PhotoManager.shared
-        let sortType = manager.config.orderByDate
-        if manager.config.allowTakePhoto || manager.config.allowTakeVideo {
+        let config = PhotoManager.shared.config
+        let sortType = config.orderByDate
+        if !config.captureMediaOptions.isEmpty {
             switch sortType {
             case .asc:
                 album.addAsset(Asset(idx: -1, asset: PHAsset()), atLast: true)
