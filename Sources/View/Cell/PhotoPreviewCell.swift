@@ -66,7 +66,7 @@ extension PhotoPreviewCell {
                         self.setImage(response.image)
                     }
                 case .failure(let error):
-                    print(error)
+                    _print(error)
                 }
             })
         }
@@ -80,7 +80,7 @@ extension PhotoPreviewCell {
                     self.setImage(response.image)
                 }
             case .failure(let error):
-                print(error)
+                _print(error)
             }
         }
     }

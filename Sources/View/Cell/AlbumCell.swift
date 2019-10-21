@@ -89,7 +89,7 @@ extension AlbumCell {
             case .success(let response):
                 self.posterImageView.image = response.image
             case .failure(let error):
-                print(error)
+                _print(error)
             }
         }
     }
