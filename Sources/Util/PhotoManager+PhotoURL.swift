@@ -47,7 +47,7 @@ extension PhotoManager {
                 // Check Path
                 FileHelper.checkDirectory(path: options.preferredOutputPath)
                 // Prepare Output URL
-                let timestamp = Int(Date().timeIntervalSince1970)
+                let timestamp = Int(Date().timeIntervalSince1970*1000)
                 let outputPath = options.preferredOutputPath.appending("/PHOTO-\(timestamp)).\(FileHelper.fileExtension(from: response.dataUTI as CFString))")
                 let outputURL = URL(fileURLWithPath: outputPath)
                 // Write to File

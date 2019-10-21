@@ -165,7 +165,7 @@ extension PhotoManager {
             return
         }
         // Prepare Output URL
-        let timestamp = Int(Date().timeIntervalSince1970)
+        let timestamp = Int(Date().timeIntervalSince1970*1000)
         let outputPath = options.preferredOutputPath.appending("/VIDEO-\(timestamp)).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
         // Setup Export Session
