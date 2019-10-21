@@ -177,9 +177,9 @@ extension PhotoManager {
             completion(.failure(.savePhotoFail))
             return
         }
-        // TODO: Check directory
         let timestamp = Int(Date().timeIntervalSince1970)
         let filePath = NSTemporaryDirectory() + "SAVE-PHOTO-\(timestamp).jpeg"
+        FileHelper.checkDirectory(path: filePath)
         let url = URL(fileURLWithPath: filePath)
         // Write to file
         do {

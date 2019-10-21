@@ -19,4 +19,17 @@ struct FileHelper {
         }
         return fileExtension
     }
+    
+    static func checkDirectory(path: String) {
+        var isDirectory: ObjCBool = true
+        if !FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
+            do {
+                try FileManager.default.createDirectory(atPath: path,
+                                                        withIntermediateDirectories: true,
+                                                        attributes: nil)
+            } catch {
+                _print(error.localizedDescription)
+            }
+        }
+    }
 }
