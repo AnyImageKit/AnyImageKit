@@ -1,0 +1,8 @@
+language: swift
+osx_image: xcode10.2
+xcode_project: AnyImagePicker.xcworkspace
+xcode_scheme: Example
+xcode_destination: platform=iOS Simulator,OS=12.1,name=iPhone Xs
+
+cache: cocoapods
+podfile: Podfile
