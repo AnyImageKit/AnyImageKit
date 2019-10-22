@@ -173,13 +173,13 @@ extension PhotoManager {
         enqueueFetch(for: asset.localIdentifier, requestID: requestID)
     }
     
-    func savePhoto(_ image: UIImage, meta: [String:Any], completion: @escaping PhotoSaveCompletion) {
+    func savePhoto(_ image: UIImage, metadata: [String: Any], completion: @escaping PhotoSaveCompletion) {
         guard let imageData = image.jpegData(compressionQuality: 1.0) else {
             completion(.failure(.savePhotoFail))
             return
         }
         let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let filePath = NSTemporaryDirectory() + "SAVE-PHOTO-\(timestamp).jpeg"
+        let filePath = NSTemporaryDirectory().appending("PHOTO-SAVED-\(timestamp).jpg")
         FileHelper.checkDirectory(path: NSTemporaryDirectory())
         let url = URL(fileURLWithPath: filePath)
         // Write to file
