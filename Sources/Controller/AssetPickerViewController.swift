@@ -433,8 +433,8 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
         switch mediaType {
         case mediaTypeImage:
             guard let image = info[.originalImage] as? UIImage else { return }
-            guard let meta = info[.mediaMetadata] as? [String:Any] else { return }
-            PhotoManager.shared.savePhoto(image, meta: meta) { [weak self] (result) in
+            guard let metadata = info[.mediaMetadata] as? [String:Any] else { return }
+            PhotoManager.shared.savePhoto(image, metadata: metadata) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
                     self?.addPHAsset(asset)
