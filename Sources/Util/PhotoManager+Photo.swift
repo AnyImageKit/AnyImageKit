@@ -116,7 +116,8 @@ extension PhotoManager {
                 _print("Download image from iCloud")
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud && image == nil && options.isNetworkAccessAllowed {
-                    let photoDataOptions = PhotoDataFetchOptions(isNetworkAccessAllowed: options.isNetworkAccessAllowed,
+                    let photoDataOptions = PhotoDataFetchOptions(version: options.version,
+                                                                 isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                                  progressHandler: options.progressHandler)
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
