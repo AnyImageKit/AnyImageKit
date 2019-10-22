@@ -56,7 +56,7 @@ extension PhotoManager {
         enqueueFetch(for: asset.localIdentifier, requestID: requestID)
     }
     
-    func saveVideo(for url: URL, completion: @escaping VideoSaveCompletion) {
+    func saveVideo(at url: URL, completion: @escaping VideoSaveCompletion) {
         var localIdentifier: String = ""
         PHPhotoLibrary.shared().performChanges({
             let request = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)

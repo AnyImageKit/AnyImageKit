@@ -444,7 +444,7 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
             }
         case mediaTypeMovie:
             guard let videoUrl = info[.mediaURL] as? URL else { return }
-            PhotoManager.shared.saveVideo(for: videoUrl) { [weak self] (result) in
+            PhotoManager.shared.saveVideo(at: videoUrl) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
                     self?.addPHAsset(asset)
