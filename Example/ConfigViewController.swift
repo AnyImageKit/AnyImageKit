@@ -133,21 +133,25 @@ extension ConfigViewController {
             self?.config.selectOptions = [.photo, .video]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
         }))
-        alert.addAction(UIAlertAction(title: "Photo+GIF", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Photo+GIF+LivePhoto", style: .default, handler: { [weak self] (_) in
             self?.config.selectOptions = [.photo, .photoGIF]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+GIF"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+GIF+LivePhoto"
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
             self?.config.selectOptions = [.photo]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
         }))
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
+            self?.config.selectOptions = [.video]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
+        }))
         alert.addAction(UIAlertAction(title: "GIF", style: .default, handler: { [weak self] (_) in
             self?.config.selectOptions = [.photoGIF]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "GIF"
         }))
-        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
-            self?.config.selectOptions = [.video]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
+        alert.addAction(UIAlertAction(title: "LivePhoto", style: .default, handler: { [weak self] (_) in
+            self?.config.selectOptions = [.photoLive]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "LivePhoto"
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)

@@ -37,20 +37,26 @@ extension ImagePickerController {
         
         /// Select Options 可选择的类型
         /// - Default: Photo & Video
-        public var selectOptions: SelectOptions = [.photo, .video, .photoLive]
+        /// - Without .photoLive, Live Photo will be treated as normal photo, with .photoLive, Live Photo will be specially noted and can be played.
+        /// - 没有 .photoLive，Live Photo 会当做普通 photo 处理，有 .photoLive，Live Photo 会特别注明并可播放
+        public var selectOptions: SelectOptions = [.photo, .video]
         
         /// Order by date 按日期排序
+        /// - Default: ASC
         /// - ASC:  按时间升序排列，自动滚动到底部
         /// - DESC: 按时间倒序排列，自动滚动到顶部
         public var orderByDate: Sort = .asc
         
         /// Enable Debug Log 启用调试日志
+        /// - Default: false
         public var enableDebugLog: Bool = false
         
         /// Capture Media Options 可拍摄类型
+        /// - Default: []
         public var captureMediaOptions: CaptureMediaOptions = []
         
         /// Video maximum duration 视频最大拍摄时间，单位秒
+        /// - Default: 600 seconds
         public var videoMaximumDuration: TimeInterval = 60 * 10
         
         public init() { }

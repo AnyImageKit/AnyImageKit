@@ -27,6 +27,8 @@ final class LivePhotoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.cornerRadius = 4
+        backgroundColor = PhotoManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
         setupView()
     }
     

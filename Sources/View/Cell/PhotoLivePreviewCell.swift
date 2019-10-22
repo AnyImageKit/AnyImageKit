@@ -38,12 +38,17 @@ final class PhotoLivePreviewCell: PreviewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layout() {
+        super.layout()
+        livePhotoView.frame = CGRect(origin: .zero, size: fitSize)
+    }
+    
     private func setupView() {
+        scrollView.delegate = self
+        
         imageView.addSubview(livePhotoView)
-        addSubview(livePhotoTipView)
-        livePhotoView.snp.makeConstraints { maker in
-            maker.edges.equalTo(imageView)
-        }
+        contentView.addSubview(livePhotoTipView)
+        
         livePhotoTipView.snp.makeConstraints { maker in
             maker.top.equalToSuperview().offset(100)
             maker.left.equalToSuperview().offset(10)
@@ -105,7 +110,6 @@ extension PhotoLivePreviewCell {
                         guard let self = self else { return }
                         if self.asset.phAsset.localIdentifier == id {
                             self.livePhotoView.livePhoto = response.livePhoto
-                            // TODO: Show icon
                         }
                     }
                 case .failure(let error):
@@ -130,5 +134,17 @@ extension PhotoLivePreviewCell {
         default:
             break
         }
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension PhotoLivePreviewCell: UIScrollViewDelegate {
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        imageView.center = centerOfContentSize
     }
 }
