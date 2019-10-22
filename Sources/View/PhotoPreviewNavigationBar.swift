@@ -14,6 +14,7 @@ final class PhotoPreviewNavigationBar: UIView {
         let view = UIButton(type: .custom)
         let image = BundleHelper.image(named: "ReturnButton", style: PhotoManager.shared.config.theme.style)
         view.setImage(image, for: .normal)
+        view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
@@ -42,9 +43,9 @@ final class PhotoPreviewNavigationBar: UIView {
             maker.height.equalTo(44)
         }
         backButton.snp.makeConstraints { maker in
-            maker.left.equalToSuperview().offset(15)
+            maker.left.equalToSuperview().offset(8)
             maker.centerY.equalTo(contentView)
-            maker.height.equalTo(44)
+            maker.width.height.equalTo(44)
         }
         selectButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview().offset(-8)
@@ -52,5 +53,4 @@ final class PhotoPreviewNavigationBar: UIView {
             maker.width.height.equalTo(35)
         }
     }
-    
 }
