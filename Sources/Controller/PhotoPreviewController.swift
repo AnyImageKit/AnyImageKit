@@ -59,6 +59,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.registerCell(PhotoLivePreviewCell.self)
         collectionView.isPagingEnabled = true
         collectionView.alwaysBounceHorizontal = false
+        collectionView.isPrefetchingEnabled = false
         return collectionView
         }()
     private lazy var navigationBar: PhotoPreviewNavigationBar = {
