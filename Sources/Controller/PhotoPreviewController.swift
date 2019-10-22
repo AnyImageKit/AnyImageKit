@@ -179,8 +179,8 @@ extension PhotoPreviewController {
     
     /// 更新视图布局
     private func updateLayout() {
-        flowLayout.minimumLineSpacing = photoSpacing
-        flowLayout.itemSize = UIScreen.main.bounds.size
+//        flowLayout.minimumLineSpacing = photoSpacing
+//        flowLayout.itemSize = UIScreen.main.bounds.size
         collectionView.frame = view.bounds
         collectionView.frame.size.width = view.bounds.width + photoSpacing
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: photoSpacing)
@@ -386,6 +386,15 @@ extension PhotoPreviewController: UICollectionViewDelegate {
     }
 }
 
+extension PhotoPreviewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row), !data.asset.isCamera else { return .zero }
+        return UIScreen.main.bounds.size
+    }
+    
+}
+
 // MARK: - UIScrollViewDelegate
 extension PhotoPreviewController: UIScrollViewDelegate {
     
@@ -402,7 +411,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentSize.width - scrollView.contentOffset.x < scrollView.bounds.width { return } // isLast
-        var idx = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+        var idx = Int(scrollView.contentOffset.x / (scrollView.bounds.width))
         let x = scrollView.contentOffset.x.truncatingRemainder(dividingBy: scrollView.bounds.width)
         if x > scrollView.bounds.width / 2 {
             idx += 1
