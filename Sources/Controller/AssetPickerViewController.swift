@@ -392,7 +392,11 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
 extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
-        return album!.assets.count
+        guard let album = album else { return 0 }
+        if album.isCameraRoll && !PhotoManager.shared.config.captureMediaOptions.isEmpty {
+            return album.assets.count - 1
+        }
+        return album.assets.count
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
