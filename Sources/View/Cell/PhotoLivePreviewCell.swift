@@ -38,6 +38,12 @@ final class PhotoLivePreviewCell: PreviewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        livePhotoView.livePhoto = nil
+    }
+    
     override func layout() {
         super.layout()
         livePhotoView.frame = CGRect(origin: .zero, size: fitSize)
