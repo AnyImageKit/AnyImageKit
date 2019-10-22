@@ -216,7 +216,7 @@ extension AssetPickerViewController {
             case .asc:
                 album.addAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), atLast: true)
             case .desc:
-                album.insertAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), at: 0)
+                album.insertAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), at: 0, sort: config.orderByDate)
             }
         }
     }
@@ -231,7 +231,7 @@ extension AssetPickerViewController {
             album.addAsset(Asset(idx: album.assets.count, asset: phAsset, selectOptions: config.selectOptions), atLast: false)
             collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
         case .desc:
-            album.insertAsset(Asset(idx: 0, asset: phAsset, selectOptions: config.selectOptions), at: 1)
+            album.insertAsset(Asset(idx: 0, asset: phAsset, selectOptions: config.selectOptions), at: 1, sort: config.orderByDate)
             collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
         }
     }

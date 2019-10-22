@@ -30,9 +30,9 @@ class Album: Equatable {
 
 extension Album {
     
-    public func insertAsset(_ asset: Asset, at: Int) {
+    public func insertAsset(_ asset: Asset, at: Int, sort: ImagePickerController.Sort) {
         assets.insert(asset, at: at)
-        reloadIndex()
+        reloadIndex(sort: sort)
     }
     
     public func addAsset(_ asset: Asset, atLast: Bool) {
@@ -77,10 +77,10 @@ extension Album {
         assets = array
     }
     
-    private func reloadIndex() {
+    private func reloadIndex(sort: ImagePickerController.Sort) {
         var idx = 0
         let array: [Asset]
-        switch PhotoManager.shared.config.orderByDate {
+        switch sort {
         case .asc:
             array = Array(assets[0..<assets.count-1])
         case .desc:
