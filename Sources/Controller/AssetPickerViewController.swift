@@ -414,10 +414,12 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
         updateVisibleCellState()
+        toolBar.setEnable(true)
     }
     
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
         updateVisibleCellState()
+        toolBar.setEnable(!PhotoManager.shared.selectdAssets.isEmpty)
     }
     
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) {
