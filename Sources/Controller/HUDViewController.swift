@@ -44,7 +44,7 @@ final class HUDViewController: UIViewController {
         return view
     }()
     
-    public var hudDidHide: (() -> Void)?
+    var hudDidHide: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +78,7 @@ final class HUDViewController: UIViewController {
 
 extension HUDViewController {
     
-    public func wait() {
+    func wait() {
         labelCoverView.alpha = 0
         indicator.startAnimating()
         UIView.animate(withDuration: 0.25) {
@@ -86,7 +86,7 @@ extension HUDViewController {
         }
     }
     
-    public func show(message: String) {
+    func show(message: String) {
         indicatorCoverView.alpha = 0
         label.text = message
         UIView.animate(withDuration: 0.25, animations: {
@@ -98,7 +98,7 @@ extension HUDViewController {
         }
     }
     
-    public func hide() {
+    func hide() {
         UIView.animate(withDuration: 0.25, animations: {
             self.indicatorCoverView.alpha = 0
             self.labelCoverView.alpha = 0
