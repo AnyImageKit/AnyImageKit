@@ -45,12 +45,6 @@ final class VideoPreviewCell: PreviewCell {
         return UIImageView(image: BundleHelper.image(named: "VideoPlay"))
     }()
     
-    private lazy var iCloudView: LoadingiCloudView = {
-        let view = LoadingiCloudView()
-        view.isHidden = true
-        return view
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -62,16 +56,9 @@ final class VideoPreviewCell: PreviewCell {
     
     private func setupView() {
         addSubview(playImageView)
-        addSubview(iCloudView)
-        
         playImageView.snp.makeConstraints { maker in
             maker.width.height.equalTo(80)
             maker.center.equalToSuperview()
-        }
-        iCloudView.snp.makeConstraints { maker in
-            maker.top.equalToSuperview().offset(100)
-            maker.left.equalToSuperview().offset(10)
-            maker.height.equalTo(25)
         }
     }
     
@@ -81,7 +68,6 @@ final class VideoPreviewCell: PreviewCell {
         player = nil
         playerLayer?.removeFromSuperlayer()
         playerLayer = nil
-        iCloudView.reset()
     }
     
     override func layout() {
@@ -187,10 +173,6 @@ extension VideoPreviewCell {
             }
         }
     }
-    
-    func setCloudLabelColor(_ color: UIColor) {
-        iCloudView.setLabelColor(color)
-    }
 }
 
 // MARK: - Private function
@@ -203,12 +185,6 @@ extension VideoPreviewCell {
         imageView.layer.addSublayer(playerLayer!)
         playerLayer?.frame = imageView.bounds
         NotificationCenter.default.addObserver(self, selector: #selector(didPlayOver), name: .AVPlayerItemDidPlayToEndTime, object: item)
-    }
-    
-    /// 设置 iCloud 下载进度
-    private func setDownloadingProgress(_ progress: Double) {
-        iCloudView.isHidden = progress == 1
-        iCloudView.setProgress(progress)
     }
     
     /// 设置播放按钮的展示状态

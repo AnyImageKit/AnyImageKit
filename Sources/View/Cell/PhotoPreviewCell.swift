@@ -71,7 +71,13 @@ extension PhotoPreviewCell {
             })
         }
         
-        let options = PhotoFetchOptions(sizeMode: .preview)
+        let options = PhotoFetchOptions(sizeMode: .preview) { (progress, error, isAtEnd, info) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                _print("Download photo from iCloud: \(progress)")
+                self.setDownloadingProgress(progress)
+            }
+        }
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             guard let self = self else { return }
             switch result {

@@ -52,7 +52,13 @@ extension PhotoGIFPreviewCell {
     
     /// 加载 GIF
     func requestGIF() {
-        let options = PhotoGIFFetchOptions()
+        let options = PhotoGIFFetchOptions() { (progress, error, isAtEnd, info) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                _print("Download GIF from iCloud: \(progress)")
+                self.setDownloadingProgress(progress)
+            }
+        }
         PhotoManager.shared.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
             switch result {
             case .success(let response):
