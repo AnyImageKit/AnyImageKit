@@ -112,7 +112,7 @@ extension Asset {
     
     var isReady: Bool {
         switch type {
-        case .photo, .photoGif, .photoLive: // TODO:
+        case .photo, .photoGif, .photoLive:
             return _image != nil
         case .video:
             return videoDidDownload

@@ -193,9 +193,6 @@ extension PhotoPreviewController {
         if isNormal {
             NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
             scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : ColorHelper.createByStyle(light: .white, dark: .black)
-            if let cell = collectionView.visibleCells.first as? VideoPreviewCell {
-                cell.setCloudLabelColor(hidden ? UIColor.white : PhotoManager.shared.config.theme.textColor)
-            }
         }
         
         if animated {

@@ -52,6 +52,13 @@ class PreviewCell: UICollectionViewCell {
         return view
     }()
     
+    /// 下载进度
+    lazy var iCloudView: LoadingiCloudView = {
+        let view = LoadingiCloudView()
+        view.isHidden = true
+        return view
+    }()
+    
     /// 单击手势
     lazy var singleTap: UITapGestureRecognizer = {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
@@ -111,6 +118,11 @@ class PreviewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        iCloudView.reset()
+    }
+    
     // MARK: - function
     
     /// 设置图片
@@ -126,6 +138,12 @@ class PreviewCell: UICollectionViewCell {
         imageView.frame = fitFrame
         scrollView.minimumZoomScale = getDefaultScale()
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    }
+    
+    /// 设置 iCloud 下载进度
+    internal func setDownloadingProgress(_ progress: Double) {
+        iCloudView.isHidden = progress == 1
+        iCloudView.setProgress(progress)
     }
     
     // MARK: - Override
@@ -155,6 +173,13 @@ extension PreviewCell {
     private func setupView() {
         contentView.addSubview(scrollView)
         scrollView.addSubview(imageView)
+        contentView.addSubview(iCloudView)
+        
+        iCloudView.snp.makeConstraints { maker in
+            maker.top.equalToSuperview().offset(100)
+            maker.left.equalToSuperview().offset(10)
+            maker.height.equalTo(25)
+        }
         
         // 添加手势
         contentView.addGestureRecognizer(singleTap)
