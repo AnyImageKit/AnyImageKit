@@ -11,7 +11,7 @@ import UIKit
 final class PhotoPreviewCell: PreviewCell {
     
     /// 双击手势
-    lazy var doubleTap: UITapGestureRecognizer = {
+    private lazy var doubleTap: UITapGestureRecognizer = {
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(onDoubleTap(_:)))
         doubleTap.numberOfTapsRequired = 2
         return doubleTap

@@ -35,7 +35,7 @@ class PreviewCell: UICollectionViewCell {
     /// 内嵌容器。本类不能继承UIScrollView。
     /// 因为实测UIScrollView遵循了UIGestureRecognizerDelegate协议，而本类也需要遵循此协议，
     /// 若继承UIScrollView则会覆盖UIScrollView的协议实现，故只内嵌而不继承。
-    lazy var scrollView: UIScrollView = {
+    private(set) lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
@@ -53,19 +53,19 @@ class PreviewCell: UICollectionViewCell {
     }()
     
     /// 下载进度
-    lazy var iCloudView: LoadingiCloudView = {
+    private(set) lazy var iCloudView: LoadingiCloudView = {
         let view = LoadingiCloudView()
         view.isHidden = true
         return view
     }()
     
     /// 单击手势
-    lazy var singleTap: UITapGestureRecognizer = {
+    private(set) lazy var singleTap: UITapGestureRecognizer = {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
     }()
     
     /// 拖动手势
-    lazy var pan: UIPanGestureRecognizer = {
+    private(set) lazy var pan: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
         pan.delegate = self
         return pan

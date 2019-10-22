@@ -20,7 +20,7 @@ protocol AssetPickerViewControllerDelegate: class {
 
 final class AssetPickerViewController: UIViewController {
     
-    public weak var delegate: AssetPickerViewControllerDelegate?
+    weak var delegate: AssetPickerViewControllerDelegate?
     
     private var albumsPicker: AlbumPickerViewController?
     private var album: Album?
@@ -422,6 +422,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
 }
 
+// MARK: - UIImagePickerControllerDelegate
 extension AssetPickerViewController: UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
