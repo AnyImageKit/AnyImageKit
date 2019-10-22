@@ -68,6 +68,15 @@ final class AssetPickerViewController: UIViewController {
         return view
     }()
     
+    private lazy var itemOffset: Int = {
+        switch PhotoManager.shared.config.orderByDate {
+        case .asc:
+            return 0
+        case .desc:
+            return 1
+        }
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
@@ -228,7 +237,7 @@ extension AssetPickerViewController {
         let sortType = config.orderByDate
         switch sortType {
         case .asc:
-            album.addAsset(Asset(idx: album.assets.count, asset: phAsset, selectOptions: config.selectOptions), atLast: false)
+            album.addAsset(Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: config.selectOptions), atLast: false)
             collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
         case .desc:
             album.insertAsset(Asset(idx: 0, asset: phAsset, selectOptions: config.selectOptions), at: 1, sort: config.orderByDate)
@@ -341,7 +350,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         
         if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isMaxCount { return }
         let controller = PhotoPreviewController()
-        controller.currentIndex = indexPath.item
+        controller.currentIndex = indexPath.item - itemOffset
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
@@ -387,13 +396,15 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
-        let indexPath = IndexPath(item: index, section: 0)
+        let idx = index + itemOffset
+        let indexPath = IndexPath(item: idx, section: 0)
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-        return (cell?.image, album!.assets[index])
+        return (cell?.image, album!.assets[idx])
     }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
-        let indexPath = IndexPath(item: index, section: 0)
+        let idx = index + itemOffset
+        let indexPath = IndexPath(item: idx, section: 0)
         return collectionView.cellForItem(at: indexPath)
     }
 }
@@ -416,7 +427,8 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
         guard let album = album else { return }
         if PhotoManager.shared.selectdAssets.isEmpty {
-            PhotoManager.shared.addSelectedAsset(album.assets[controller.currentIndex])
+            let idx = controller.currentIndex + itemOffset
+            PhotoManager.shared.addSelectedAsset(album.assets[idx])
         }
         delegate?.assetPickerControllerDidClickDone(self)
     }
