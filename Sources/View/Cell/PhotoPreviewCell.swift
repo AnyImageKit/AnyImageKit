@@ -84,6 +84,7 @@ extension PhotoPreviewCell {
             case .success(let response):
                 if !response.isDegraded {
                     self.setImage(response.image)
+                    self.setDownloadingProgress(1.0)
                 }
             case .failure(let error):
                 _print(error)
