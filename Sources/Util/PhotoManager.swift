@@ -142,7 +142,7 @@ extension PhotoManager {
     
     func syncAsset(_ asset: Asset, postNotification: Bool) {
         switch asset.type {
-        case .photo, .photoGif:
+        case .photo, .photoGif, .photoLive:
             // 勾选图片就开始加载
             if let image = readCache(for: asset.phAsset.localIdentifier) {
                 asset._image = image
@@ -201,8 +201,6 @@ extension PhotoManager {
                     }
                 })
             }
-        case .photoLive:
-            break // TODO
         }
     }
 }

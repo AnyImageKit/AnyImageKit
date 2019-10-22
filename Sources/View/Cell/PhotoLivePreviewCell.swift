@@ -24,6 +24,11 @@ final class PhotoLivePreviewCell: PreviewCell {
         return gr
     }()
     
+    private lazy var livePhotoTipView: LivePhotoView = {
+        let view = LivePhotoView()
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -35,25 +40,48 @@ final class PhotoLivePreviewCell: PreviewCell {
     
     private func setupView() {
         imageView.addSubview(livePhotoView)
+        addSubview(livePhotoTipView)
         livePhotoView.snp.makeConstraints { maker in
             maker.edges.equalTo(imageView)
+        }
+        livePhotoTipView.snp.makeConstraints { maker in
+            maker.top.equalToSuperview().offset(100)
+            maker.left.equalToSuperview().offset(10)
+            maker.height.equalTo(25)
         }
         
         contentView.addGestureRecognizer(longPress)
     }
     
+    override func singleTapped() {
+        super.singleTapped()
+        if let hidden = delegate?.previewCellGetToolBarHiddenState() {
+            livePhotoTipView.isHidden = hidden
+        }
+    }
+    
     override func panBegin() {
         super.panBegin()
         livePhotoView.isHidden = true
+        livePhotoTipView.isHidden = true
     }
     
     override func panEnded(_ exit: Bool) {
         super.panEnded(exit)
         if !exit {
             DispatchQueue.main.asyncAfter(deadline: .now()+0.25) { [weak self] in
-                self?.livePhotoView.isHidden = false
+                guard let self = self else { return }
+                self.livePhotoView.isHidden = false
+                if let hidden = self.delegate?.previewCellGetToolBarHiddenState() {
+                    self.livePhotoTipView.isHidden = hidden
+                }
             }
         }
+    }
+    
+    override func setDownloadingProgress(_ progress: Double) {
+        super.setDownloadingProgress(progress)
+        livePhotoTipView.isHidden = progress != 1
     }
 }
 

@@ -56,11 +56,11 @@ extension Asset {
 extension Asset {
     
     /// Fetch Photo Data 获取原图数据
-    /// - Note: Only for `MediaType` Photo, PhotoGIF 仅用于媒体类型为照片、GIF
+    /// - Note: Only for `MediaType` Photo, GIF, LivePhoto 仅用于媒体类型为照片、GIF、实况
     /// - Parameter options: Photo Data Fetch Options 原图获取选项
     /// - Parameter completion: Photo Data Fetch Completion 原图获取结果回调
     public func fetchPhotoData(options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
-        guard type == .photo || type == .photoGif else {
+        guard phAsset.mediaType == .image else {
             completion(.failure(.invalidMediaType))
             return
         }
@@ -72,7 +72,7 @@ extension Asset {
     /// - Parameter options: Photo URL Fetch Options 原图路径获取选项
     /// - Parameter completion: Photo URL Fetch Completion 原图路径获取结果回调
     public func fetchPhotoURL(options: PhotoURLFetchOptions = .init(), completion: @escaping PhotoURLFetchCompletion) {
-        guard type == .photo || type == .photoGif else {
+        guard phAsset.mediaType == .image else {
             completion(.failure(.invalidMediaType))
             return
         }
@@ -88,7 +88,7 @@ extension Asset {
     /// - Parameter options: Video Fetch Options 视频获取选项
     /// - Parameter completion: Video Fetch Completion 视频获取结果回调
     public func fetchVideo(options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
-        guard type == .video else {
+        guard phAsset.mediaType == .video else {
             completion(.failure(.invalidMediaType))
             return
         }
@@ -100,7 +100,7 @@ extension Asset {
     /// - Parameter options: Video URL Fetch Options 视频路径获取选项
     /// - Parameter completion: Video URL Fetch Completion 视频路径获取结果回调
     public func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) {
-        guard type == .video else {
+        guard phAsset.mediaType == .video else {
             completion(.failure(.invalidMediaType))
             return
         }

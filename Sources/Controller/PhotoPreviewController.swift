@@ -213,7 +213,7 @@ extension PhotoPreviewController {
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         if PhotoManager.shared.config.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = data.asset.type != .photo
+            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         indexView.currentIndex = currentIndex
     }

@@ -37,7 +37,7 @@ extension ImagePickerController {
         
         /// Select Options 可选择的类型
         /// - Default: Photo & Video
-        public var selectOptions: SelectOptions = [.photo, .video]
+        public var selectOptions: SelectOptions = [.photo, .video, .photoLive]
         
         /// Order by date 按日期排序
         /// - ASC:  按时间升序排列，自动滚动到底部
