@@ -116,6 +116,7 @@ extension PhotoLivePreviewCell {
                         guard let self = self else { return }
                         if self.asset.phAsset.localIdentifier == id {
                             self.livePhotoView.livePhoto = response.livePhoto
+                            self.setDownloadingProgress(1.0)
                         }
                     }
                 case .failure(let error):

@@ -63,6 +63,7 @@ extension PhotoGIFPreviewCell {
             switch result {
             case .success(let response):
                 self?.setImage(response.image)
+                self?.setDownloadingProgress(1.0)
             case .failure(let error):
                 _print(error)
             }
