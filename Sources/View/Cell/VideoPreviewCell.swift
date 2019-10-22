@@ -62,14 +62,6 @@ final class VideoPreviewCell: PreviewCell {
         }
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        imageView.image = nil
-        player = nil
-        playerLayer?.removeFromSuperlayer()
-        playerLayer = nil
-    }
-    
     override func layout() {
         super.layout()
         playerLayer?.frame = imageView.bounds
@@ -78,9 +70,14 @@ final class VideoPreviewCell: PreviewCell {
     /// 重置
     override func reset() {
         setPlayButton(hidden: false)
-        player?.pause()
-        player?.seek(to: .zero)
+        
         imageView.image = nil
+        player = nil
+        playerLayer = nil
+        
+        for layer in imageView.layer.sublayers ?? [] {
+            layer.removeFromSuperlayer()
+        }
     }
     
     /// 单击事件触发时，处理播放和暂停的逻辑
@@ -132,6 +129,21 @@ extension VideoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
+        if imageView.image == nil { // thumbnail
+            let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
+            PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    if self.imageView.image == nil {
+                        self.setImage(response.image)
+                    }
+                case .failure(let error):
+                    _print(error)
+                }
+            })
+        }
+        
         let id = asset.phAsset.localIdentifier
         let options = PhotoFetchOptions(sizeMode: .resize(500), needCache: true)
         PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
@@ -204,6 +216,8 @@ extension VideoPreviewCell {
     
     @objc private func didPlayOver() {
         super.singleTapped()
-        reset()
+        setPlayButton(hidden: false)
+        player?.pause()
+        player?.seek(to: .zero)
     }
 }

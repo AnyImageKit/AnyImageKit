@@ -127,6 +127,7 @@ class PreviewCell: UICollectionViewCell {
     
     /// 设置图片
     func setImage(_ image: UIImage?) {
+        if image == nil { print(111) }
         imageView.image = image
         layout()
     }
