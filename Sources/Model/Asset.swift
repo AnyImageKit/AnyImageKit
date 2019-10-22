@@ -27,10 +27,10 @@ public class Asset: Equatable {
     var isSelected: Bool = false
     var selectedNum: Int = 1
     
-    init(idx: Int, asset: PHAsset) {
+    init(idx: Int, asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
         self.idx = idx
         self.phAsset = asset
-        self.type = MediaType(asset: asset)
+        self.type = MediaType(asset: asset, selectOptions: selectOptions)
         self.videoDuration = asset.videoDuration
     }
     

@@ -56,6 +56,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.registerCell(PhotoPreviewCell.self)
         collectionView.registerCell(PhotoGIFPreviewCell.self)
         collectionView.registerCell(VideoPreviewCell.self)
+        collectionView.registerCell(PhotoLivePreviewCell.self)
         collectionView.isPagingEnabled = true
         collectionView.alwaysBounceHorizontal = false
         return collectionView
@@ -327,14 +328,13 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             photoCell.imageMaximumZoomScale = imageMaximumZoomScale
             photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
             cell = photoCell
-        case .photoGif:
-            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
         case .video:
             cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
+        case .photoGif:
+            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
         case .photoLive:
-            cell = collectionView.dequeueReusableCell(LivePhotoPreviewCell.self, for: indexPath)
-            // TODO:
+            cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
         }
         cell.delegate = self
         cell.asset = data.asset
@@ -356,8 +356,6 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.setImage(data.thumbnail)
                 cell.requestPhoto()
             }
-        case let cell as PhotoGIFPreviewCell:
-            cell.requestGIF()
         case let cell as VideoPreviewCell:
             if let originalImage = PhotoManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
@@ -366,7 +364,10 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.requestPhoto()
             }
             cell.requestVideo()
-        case let cell as LivePhotoPreviewCell:
+        case let cell as PhotoGIFPreviewCell:
+            cell.requestGIF()
+        case let cell as PhotoLivePreviewCell:
+            cell.setImage(data.thumbnail)
             cell.requestLivePhoto()
         default:
             break

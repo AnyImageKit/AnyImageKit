@@ -214,9 +214,9 @@ extension AssetPickerViewController {
         if !config.captureMediaOptions.isEmpty {
             switch sortType {
             case .asc:
-                album.addAsset(Asset(idx: -1, asset: PHAsset()), atLast: true)
+                album.addAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), atLast: true)
             case .desc:
-                album.insertAsset(Asset(idx: -1, asset: PHAsset()), at: 0)
+                album.insertAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), at: 0)
             }
         }
     }
@@ -224,13 +224,14 @@ extension AssetPickerViewController {
     /// 拍照结束后，插入 PHAsset
     private func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
-        let sortType = PhotoManager.shared.config.orderByDate
+        let config = PhotoManager.shared.config
+        let sortType = config.orderByDate
         switch sortType {
         case .asc:
-            album.addAsset(Asset(idx: album.assets.count, asset: phAsset), atLast: false)
+            album.addAsset(Asset(idx: album.assets.count, asset: phAsset, selectOptions: config.selectOptions), atLast: false)
             collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
         case .desc:
-            album.insertAsset(Asset(idx: 0, asset: phAsset), at: 1)
+            album.insertAsset(Asset(idx: 0, asset: phAsset, selectOptions: config.selectOptions), at: 1)
             collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
         }
     }

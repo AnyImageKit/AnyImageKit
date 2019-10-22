@@ -11,17 +11,18 @@ import Photos
 public enum MediaType: Equatable, CustomStringConvertible {
     
     case photo
-    case photoGif
     case video
+    case photoGif
     case photoLive
     
-    init(asset: PHAsset) {
+    init(asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
+        let selectPhotoLive = selectOptions.contains(.photoLive)
+        
         switch asset.mediaType {
         case .image:
-            switch asset.mediaSubtypes {
-            case .photoLive:
+            if selectPhotoLive && asset.mediaSubtypes == .photoLive {
                 self = .photoLive
-            default:
+            } else {
                 if asset.isGIF {
                     self = .photoGif
                 } else {
@@ -39,12 +40,12 @@ public enum MediaType: Equatable, CustomStringConvertible {
         switch self {
         case .photo:
             return "PHOTO"
-        case .photoGif:
-            return "PHOTO/GIF"
         case .video:
             return "VIDEO"
+        case .photoGif:
+            return "PHOTO/GIF"
         case .photoLive:
-            return "LIVEPHOTO"
+            return "PHOTO/LIVE"
         }
     }
 }

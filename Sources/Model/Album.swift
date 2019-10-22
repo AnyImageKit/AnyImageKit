@@ -49,23 +49,23 @@ extension Album {
     private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: ImagePickerController.SelectOptions) {
         var array: [Asset] = []
         let selectPhoto = selectOptions.contains(.photo)
-        let selectPhotoGIF = selectOptions.contains(.photoGIF)
         let selectVideo = selectOptions.contains(.video)
+        let selectPhotoGIF = selectOptions.contains(.photoGIF)
         let selectPhotoLive = selectOptions.contains(.photoLive)
         
         for phAsset in result.objects() {
-            let asset = Asset(idx: array.count, asset: phAsset)
+            let asset = Asset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
             switch asset.type {
             case .photo:
                 if selectPhoto {
                     array.append(asset)
                 }
-            case .photoGif:
-                if selectPhotoGIF {
-                    array.append(asset)
-                }
             case .video:
                 if selectVideo {
+                    array.append(asset)
+                }
+            case .photoGif:
+                if selectPhotoGIF {
                     array.append(asset)
                 }
             case .photoLive:
