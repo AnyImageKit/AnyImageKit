@@ -89,9 +89,4 @@ extension LoadingiCloudView {
     func setProgress(_ progress: Double) {
         progressLabel.text = "\(Int(progress * 100))%"
     }
-    
-    func setLabelColor(_ color: UIColor) {
-//        tipLabel.textColor = color
-//        progressLabel.textColor = color
-    }
 }

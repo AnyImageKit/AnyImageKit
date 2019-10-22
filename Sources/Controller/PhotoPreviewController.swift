@@ -56,6 +56,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.registerCell(PhotoPreviewCell.self)
         collectionView.registerCell(PhotoGIFPreviewCell.self)
         collectionView.registerCell(VideoPreviewCell.self)
+        collectionView.registerCell(PhotoLivePreviewCell.self)
         collectionView.isPagingEnabled = true
         collectionView.alwaysBounceHorizontal = false
         return collectionView
@@ -192,9 +193,6 @@ extension PhotoPreviewController {
         if isNormal {
             NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
             scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : ColorHelper.createByStyle(light: .white, dark: .black)
-            if let cell = collectionView.visibleCells.first as? VideoPreviewCell {
-                cell.setCloudLabelColor(hidden ? UIColor.white : PhotoManager.shared.config.theme.textColor)
-            }
         }
         
         if animated {
@@ -215,7 +213,7 @@ extension PhotoPreviewController {
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         if PhotoManager.shared.config.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = data.asset.type != .photo
+            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         indexView.currentIndex = currentIndex
     }
@@ -319,27 +317,25 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
+        let cell: PreviewCell
         switch data.asset.type {
         case .photo:
-            let cell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
-            cell.imageView.contentMode = imageScaleMode
-            cell.delegate = self
-            cell.imageMaximumZoomScale = imageMaximumZoomScale
-            cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-            cell.asset = data.asset
-            return cell
-        case .photoGif:
-            let cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
-            cell.delegate = self
-            cell.asset = data.asset
-            return cell
+            let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
+            photoCell.imageView.contentMode = imageScaleMode
+            photoCell.imageMaximumZoomScale = imageMaximumZoomScale
+            photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+            cell = photoCell
         case .video:
-            let cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
+            cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
-            cell.delegate = self
-            cell.asset = data.asset
-            return cell
+        case .photoGif:
+            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
+        case .photoLive:
+            cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
         }
+        cell.delegate = self
+        cell.asset = data.asset
+        return cell
     }
 }
 
@@ -357,8 +353,6 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.setImage(data.thumbnail)
                 cell.requestPhoto()
             }
-        case let cell as PhotoGIFPreviewCell:
-            cell.requestGIF()
         case let cell as VideoPreviewCell:
             if let originalImage = PhotoManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
@@ -367,6 +361,11 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.requestPhoto()
             }
             cell.requestVideo()
+        case let cell as PhotoGIFPreviewCell:
+            cell.requestGIF()
+        case let cell as PhotoLivePreviewCell:
+            cell.setImage(data.thumbnail)
+            cell.requestLivePhoto()
         default:
             break
         }

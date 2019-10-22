@@ -113,7 +113,6 @@ extension PhotoManager {
                 }
             } else {
                 // Download image from iCloud
-                _print("Download image from iCloud")
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud && image == nil && options.isNetworkAccessAllowed {
                     let photoDataOptions = PhotoDataFetchOptions(version: options.version,
