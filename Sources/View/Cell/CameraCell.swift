@@ -1,5 +1,5 @@
 //
-//  TakePhotoCell.swift
+//  CameraCell.swift
 //  AnyImagePicker
 //
 //  Created by 蒋惠 on 2019/10/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class TakePhotoCell: UICollectionViewCell {
+final class CameraCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()

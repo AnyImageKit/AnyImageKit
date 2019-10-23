@@ -45,7 +45,7 @@ final class AssetPickerViewController: UIViewController {
                                          right: defaultAssetSpacing)
         view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
         view.registerCell(AssetCell.self)
-        view.registerCell(TakePhotoCell.self)
+        view.registerCell(CameraCell.self)
         view.dataSource = self
         view.delegate = self
         return view
@@ -326,7 +326,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let asset = album?.assets[indexPath.item] else { return UICollectionViewCell() }
         if asset.isCamera {
-            let cell = collectionView.dequeueReusableCell(TakePhotoCell.self, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             return cell
         }
         
