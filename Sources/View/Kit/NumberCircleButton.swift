@@ -62,18 +62,10 @@ final class NumberCircleButton: UIControl {
         if isSelected {
             numLabel.isHidden = false
             if animated {
-                self.numLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                UIView.animate(withDuration: 0.15, animations: {
-                    self.numLabel.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-                }) { _ in
-                    UIView.animate(withDuration: 0.15, animations: {
-                        self.numLabel.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                    }) { _ in
-                        UIView.animate(withDuration: 0.15) {
-                            self.numLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                        }
-                    }
-                }
+                self.numLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+                UIViewPropertyAnimator(duration: 0.8, dampingRatio: 0.35) {
+                    self.numLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                }.startAnimation()
             }
         } else {
             numLabel.isHidden = true
