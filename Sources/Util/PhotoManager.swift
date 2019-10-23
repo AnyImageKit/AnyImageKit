@@ -120,7 +120,9 @@ extension PhotoManager {
     
     func addSelectedAsset(_ asset: Asset) {
         if selectdAssets.contains(asset) { return }
+        if selectdAssets.count == PhotoManager.shared.config.countLimit { return }
         selectdAssets.append(asset)
+        asset.isSelected = true
         asset.selectedNum = selectdAssets.count
         syncAsset(asset, postNotification: false)
     }
@@ -133,6 +135,7 @@ extension PhotoManager {
             }
         }
         selectdAssets.remove(at: idx)
+        asset.isSelected = false
         asset._image = nil
     }
     
