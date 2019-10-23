@@ -1,4 +1,4 @@
-![AnyImagePicker](./Resources/TitleMap@2x.png)
+![AnyImagePicker](https://raw.githubusercontent.com/AnyImageProject/AnyImagePicker/master/Resources/TitleMap@2x.png)
 
 `AnyImagePicker` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。使用 Swift 编写。
 

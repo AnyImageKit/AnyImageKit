@@ -1,4 +1,4 @@
-![AnyImagePicker](./Resources/TitleMap@2x.png)
+![AnyImagePicker](https://raw.githubusercontent.com/AnyImageProject/AnyImagePicker/master/Resources/TitleMap@2x.png)
 
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImagePicker.svg)](https://img.shields.io/cocoapods/v/AnyImagePicker.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
