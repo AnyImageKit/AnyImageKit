@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>AnyImagePicker requires access to your phone’s microphone.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>AnyImagePicker requires access to your phone’s camera.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -26,6 +22,10 @@
 	<string>public.app-category.photography</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>AnyImagePicker requires access to your phone’s camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>AnyImagePicker requires access to your phone’s microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Use Photos</string>
 	<key>UILaunchStoryboardName</key>

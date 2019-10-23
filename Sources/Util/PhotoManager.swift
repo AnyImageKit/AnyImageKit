@@ -3,7 +3,7 @@
 //  AnyImagePicker
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2019 anotheren.com. All rights reserved.
+//  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -38,7 +38,7 @@ final class PhotoManager {
     
     private init() { }
     
-    let workQueue = DispatchQueue(label: "com.anotheren.AnyImagePicker.PhotoManager")
+    let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImagePicker.PhotoManager")
 }
 
 extension PhotoManager {
@@ -207,6 +207,6 @@ extension PhotoManager {
 
 extension Notification.Name {
     
-    static let didSyncAsset: Notification.Name = Notification.Name("com.anotheren.AnyImagePicker.didSyncAsset")
+    static let didSyncAsset: Notification.Name = Notification.Name("org.AnyImageProject.AnyImagePicker.didSyncAsset")
     
 }

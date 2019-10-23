@@ -516,7 +516,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1110;
 				LastUpgradeCheck = 1100;
-				ORGANIZATIONNAME = anotheren.com;
+				ORGANIZATIONNAME = AnyImageProject.org;
 				TargetAttributes = {
 					A099CC5F232F3BF70023CC3D = {
 						CreatedOnToolsVersion = 11.0;
@@ -896,7 +896,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -926,7 +926,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -951,7 +951,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker.Example;
 				PRODUCT_NAME = AnyImagePickerExample;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
@@ -976,7 +976,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anotheren.AnyImagePicker.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker.Example;
 				PRODUCT_NAME = AnyImagePickerExample;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;

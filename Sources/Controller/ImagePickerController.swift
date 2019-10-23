@@ -3,7 +3,7 @@
 //  AnyImagePicker
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2019 anotheren.com. All rights reserved.
+//  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -163,6 +163,6 @@ extension ImagePickerController {
 
 extension Notification.Name {
     
-    static let setupStatusBarHidden: Notification.Name = Notification.Name("com.anotheren.AnyImagePicker.setupStatusBar")
+    static let setupStatusBarHidden: Notification.Name = Notification.Name("org.AnyImageProject.AnyImagePicker.setupStatusBar")
     
 }
