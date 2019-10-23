@@ -233,16 +233,22 @@ extension AssetPickerViewController {
     /// 拍照结束后，插入 PHAsset
     private func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
-        let config = PhotoManager.shared.config
-        let sortType = config.orderByDate
+        let manager = PhotoManager.shared
+        let sortType = manager.config.orderByDate
         switch sortType {
         case .asc:
-            album.addAsset(Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: config.selectOptions), atLast: false)
+            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.config.selectOptions)
+            album.addAsset(asset, atLast: false)
+            manager.addSelectedAsset(asset)
             collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
         case .desc:
-            album.insertAsset(Asset(idx: 0, asset: phAsset, selectOptions: config.selectOptions), at: 1, sort: config.orderByDate)
+            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.config.selectOptions)
+            album.insertAsset(asset, at: 1, sort: manager.config.orderByDate)
+            manager.addSelectedAsset(asset)
             collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
         }
+        updateVisibleCellState()
+        toolBar.setEnable(true)
     }
 }
 
