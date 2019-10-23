@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImagePicker'
-    s.version = '0.1.0'
+    s.version = '0.2.0'
     s.license = 'MIT'
     s.summary = 'AnyImagePicker is an image picker which support for multiple photos, GIFs or videos.'
     s.homepage = 'https://github.com/AnyImageProject/AnyImagePicker'
