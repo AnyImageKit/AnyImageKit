@@ -66,9 +66,9 @@ extension PermissionDeniedView {
     
     private func getAppName() -> String {
         let info = getInfoPlist()
-        if let  appName = info["CFBundleDisplayName"] as? String { return appName }
-        if let  appName = info["CFBundleName"] as? String { return appName }
-        if let  appName = info["CFBundleExecutable"] as? String { return appName }
+        if let appName = info["CFBundleDisplayName"] as? String { return appName }
+        if let appName = info["CFBundleName"] as? String { return appName }
+        if let appName = info["CFBundleExecutable"] as? String { return appName }
         return ""
     }
     
@@ -79,7 +79,7 @@ extension PermissionDeniedView {
         }
         if info == nil || info?.count == 0 {
             let path = Bundle.main.path(forResource: "Info", ofType: "plist") ?? ""
-            info = NSDictionary(contentsOfFile: path) as? [String:Any]
+            info = NSDictionary(contentsOfFile: path) as? [String: Any]
         }
         return info ?? [:]
     }
