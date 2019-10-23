@@ -14,7 +14,7 @@
 - [x] Light mode, dark mode or auto mode support
 - [x] Default theme is similar with Wechat 
 - [x] Multiple & mix select support
-- [ ] Supported media types:
+- [x] Supported media types:
     - [x] Photo
     - [x] GIF
     - [x] Live Photo

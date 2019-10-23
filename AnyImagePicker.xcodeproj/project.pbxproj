@@ -119,6 +119,8 @@
 		A036C3922330B5D000D32ED8 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
+		A03E9CAA236042F0003C6335 /* README_CN.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
+		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0514F02235D455600D4AA0F /* AnyImagePicker.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = AnyImagePicker.podspec; sourceTree = "<group>"; };
 		A05C8DA0233DEBFC005B0F3C /* PhotoManager+PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+PhotoData.swift"; sourceTree = "<group>"; };
 		A05C8DA2233DEFD7005B0F3C /* PhotoManager+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+Photo.swift"; sourceTree = "<group>"; };
@@ -146,9 +148,7 @@
 		A0C101E92356E8D7000DBBC6 /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		A0C8AD332359B70200211150 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		A0DBD4ED2334A14600121FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A0DBD4EE2334A14600121FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0DBD4EF2334A1FA00121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
-		A0DBD4F02334A1FA00121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.storyboard"; sourceTree = "<group>"; };
 		A0DBD4F12334A20700121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A0DFAA0A235597520020690F /* PhotoManager+VideoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+VideoURL.swift"; sourceTree = "<group>"; };
 		A0F4753B232F7DE500BB117B /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
@@ -293,6 +293,7 @@
 			children = (
 				A080040F232F4EC8006B4711 /* LICENSE */,
 				A080040E232F4EC8006B4711 /* README.md */,
+				A03E9CAA236042F0003C6335 /* README_CN.md */,
 				A029D04E233084B600BC6720 /* Cartfile */,
 				A0514F02235D455600D4AA0F /* AnyImagePicker.podspec */,
 				A099CC62232F3BF70023CC3D /* Sources */,
@@ -735,8 +736,7 @@
 		A5A27BB3232F82B000D966B8 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A0DBD4EE2334A14600121FC0 /* en */,
-				A0DBD4F02334A1FA00121FC0 /* zh-Hans */,
+				A03E9CAC23604373003C6335 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -895,7 +895,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -925,7 +925,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -950,7 +950,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker.Example;
 				PRODUCT_NAME = AnyImagePickerExample;
 				SUPPORTS_MACCATALYST = YES;
@@ -975,7 +975,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker.Example;
 				PRODUCT_NAME = AnyImagePickerExample;
 				SUPPORTS_MACCATALYST = YES;
