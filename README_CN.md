@@ -1,4 +1,4 @@
-![AnyImagePicker](./Resources/TitleMap.png)
+![AnyImagePicker](./Resources/TitleMap@2x.png)
 
 `AnyImagePicker` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。使用 Swift 编写。
 
@@ -10,7 +10,7 @@
 - [ ] 支持的媒体类型:
     - [x] Photo
     - [x] GIF
-    - [ ] Live Photo
+    - [x] Live Photo
     - [x] Video
 - [x] 支持在选择时直接拍照
 - [ ] 编辑图片
@@ -42,7 +42,7 @@ pod 'AnyImagePicker'
 将下面内容添加到 `Cartfile`，并执行依赖更新
 
 ```ogdl
-github "anotheren/AnyImagePicker"
+github "AnyImageProject/AnyImagePicker"
 ```
 
 ## 使用方法
@@ -75,7 +75,6 @@ asset.fetchVideoURL { (result) in
     // Your code
 }
 ```
-
 
 ## 版权协议
 

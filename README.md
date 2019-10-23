@@ -17,7 +17,7 @@
 - [ ] Supported media types:
     - [x] Photo
     - [x] GIF
-    - [ ] Live Photo
+    - [x] Live Photo
     - [x] Video
 - [x] Camera
 - [ ] Edit image
@@ -82,7 +82,6 @@ asset.fetchVideoURL { (result) in
     // Your code
 }
 ```
-
 
 ## License
 
