@@ -14,6 +14,7 @@
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
 		A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3922330B5D000D32ED8 /* AssetCell.swift */; };
 		A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */; };
+		A050A1882361905D00A59299 /* ScreenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050A1872361905D00A59299 /* ScreenHelper.swift */; };
 		A05C8DA1233DEBFC005B0F3C /* PhotoManager+PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA0233DEBFC005B0F3C /* PhotoManager+PhotoData.swift */; };
 		A05C8DA3233DEFD7005B0F3C /* PhotoManager+Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA2233DEFD7005B0F3C /* PhotoManager+Photo.swift */; };
 		A05C8DA5233DFA28005B0F3C /* PhotoManager+PhotoGIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA4233DFA28005B0F3C /* PhotoManager+PhotoGIF.swift */; };
@@ -121,6 +122,7 @@
 		A036C3972330E5F300D32ED8 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
 		A03E9CAA236042F0003C6335 /* README_CN.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A050A1872361905D00A59299 /* ScreenHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenHelper.swift; sourceTree = "<group>"; };
 		A0514F02235D455600D4AA0F /* AnyImagePicker.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = AnyImagePicker.podspec; sourceTree = "<group>"; };
 		A05C8DA0233DEBFC005B0F3C /* PhotoManager+PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+PhotoData.swift"; sourceTree = "<group>"; };
 		A05C8DA2233DEFD7005B0F3C /* PhotoManager+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+Photo.swift"; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 				A0C101E92356E8D7000DBBC6 /* FileHelper.swift */,
 				A557BF98235D3E9A0029CCDB /* DebugHelper.swift */,
 				A5A7AAE5235DA518008781B7 /* HUDHelper.swift */,
+				A050A1872361905D00A59299 /* ScreenHelper.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				A05C8DA7233DFC71005B0F3C /* PhotoManager+Album.swift in Sources */,
 				A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PhotoManager.swift in Sources */,
+				A050A1882361905D00A59299 /* ScreenHelper.swift in Sources */,
 				A07D8794233CA257000108C7 /* Ex+CGImagePropertyOrientation.swift in Sources */,
 				A05C8DA5233DFA28005B0F3C /* PhotoManager+PhotoGIF.swift in Sources */,
 				A557BF9B235D5B820029CCDB /* CameraCell.swift in Sources */,
