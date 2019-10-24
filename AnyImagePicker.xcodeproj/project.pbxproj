@@ -36,7 +36,6 @@
 		A0C101E82356BD81000DBBC6 /* PhotoManager+PhotoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E72356BD81000DBBC6 /* PhotoManager+PhotoURL.swift */; };
 		A0C101EA2356E8D7000DBBC6 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E92356E8D7000DBBC6 /* FileHelper.swift */; };
 		A0C8AD342359B70200211150 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8AD332359B70200211150 /* ResultsViewController.swift */; };
-		A0DB968723586703001FC48B /* PhotoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */; };
 		A0DFAA0B235597520020690F /* PhotoManager+VideoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DFAA0A235597520020690F /* PhotoManager+VideoURL.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
@@ -161,7 +160,6 @@
 		A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+Config.swift"; sourceTree = "<group>"; };
 		A531105623544C0D00D457A8 /* LoadingiCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingiCloudView.swift; sourceTree = "<group>"; };
 		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
-		A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditViewController.swift; sourceTree = "<group>"; };
 		A557BF98235D3E9A0029CCDB /* DebugHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHelper.swift; sourceTree = "<group>"; };
 		A557BF9A235D5B820029CCDB /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
 		A55F5CE32356AC44002676B7 /* GIFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFView.swift; sourceTree = "<group>"; };
@@ -285,7 +283,6 @@
 				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
 				A0800412232F5B44006B4711 /* AssetPickerViewController.swift */,
 				A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */,
-				A5325EA62331D78D00ADA116 /* PhotoEditViewController.swift */,
 				A519D047235830F0006A40F0 /* HUDViewController.swift */,
 			);
 			path = Controller;
@@ -672,7 +669,6 @@
 				A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */,
 				A0C101EA2356E8D7000DBBC6 /* FileHelper.swift in Sources */,
 				A036C3982330E5F300D32ED8 /* Ex+UIImage.swift in Sources */,
-				A0DB968723586703001FC48B /* PhotoEditViewController.swift in Sources */,
 				A519D048235830F0006A40F0 /* HUDViewController.swift in Sources */,
 				A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */,
 				A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */,
