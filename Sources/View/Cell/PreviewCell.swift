@@ -87,7 +87,7 @@ class PreviewCell: UICollectionViewCell {
         let width = scrollView.bounds.width
         let scale = image.size.height / image.size.width
         var size = CGSize(width: width, height: scale * width)
-        let screenSize = UIScreen.main.bounds.size
+        let screenSize = ScreenHelper.mainBounds.size
         if size.width > size.height {
             size.width = size.width * screenSize.height / size.height
             size.height = screenSize.height
@@ -194,7 +194,7 @@ extension PreviewCell {
         let width = scrollView.bounds.width
         let scale = image.size.height / image.size.width
         let size = CGSize(width: width, height: scale * width)
-        let screenSize = UIScreen.main.bounds.size
+        let screenSize = ScreenHelper.mainBounds.size
         if size.width > size.height {
             return size.height / screenSize.height
         }

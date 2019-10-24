@@ -69,7 +69,11 @@ extension ConfigViewController: ImagePickerControllerDelegate {
         print(assets)
         let contoller = ResultsViewController()
         contoller.assets = assets
-        navigationController?.pushViewController(contoller, animated: true)
+        if let splitViewController = self.splitViewController {
+            splitViewController.showDetailViewController(contoller, sender: nil)
+        } else {
+            navigationController?.pushViewController(contoller, animated: true)
+        }
     }
 }
 

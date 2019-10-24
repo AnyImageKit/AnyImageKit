@@ -270,7 +270,7 @@
         <!--Split View Controller-->
         <scene sceneID="ITt-Ad-Ief">
             <objects>
-                <splitViewController id="FQV-P7-fuz" sceneMemberID="viewController">
+                <splitViewController id="FQV-P7-fuz" customClass="SplitViewController" customModule="AnyImagePickerExample" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="yRI-0D-yug" kind="relationship" relationship="detailViewController" id="K1O-U2-DiI"/>
                         <segue destination="WKo-cs-Uvc" kind="relationship" relationship="masterViewController" id="KLb-rw-aCJ"/>

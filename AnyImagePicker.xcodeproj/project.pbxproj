@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		626203D0A397F4E714F206AE /* Pods_AnyImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5A07D75FEFB43DBC3B08017 /* Pods_AnyImagePicker.framework */; };
 		71036186235E6BDB00669A7B /* PhotoManager+LivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71036185235E6BDB00669A7B /* PhotoManager+LivePhoto.swift */; };
+		A0031FD02361A9F0005CD342 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0031FCF2361A9F0005CD342 /* SplitViewController.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
 		A029D04F2330856C00BC6720 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753B232F7DE500BB117B /* Album.swift */; };
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
@@ -113,6 +114,7 @@
 		54D3D54A58FB9A7E3E55CF45 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6689A626B83552178B21532B /* Pods-AnyImagePicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImagePicker.debug.xcconfig"; path = "Target Support Files/Pods-AnyImagePicker/Pods-AnyImagePicker.debug.xcconfig"; sourceTree = "<group>"; };
 		71036185235E6BDB00669A7B /* PhotoManager+LivePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoManager+LivePhoto.swift"; sourceTree = "<group>"; };
+		A0031FCF2361A9F0005CD342 /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		A00869BC233C987600237651 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 		A029D04E233084B600BC6720 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		A036C3912330B5D000D32ED8 /* AlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 			children = (
 				A5601D4F233B0FE500D0E95E /* Example.entitlements */,
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
+				A0031FCF2361A9F0005CD342 /* SplitViewController.swift */,
 				A5DC526B2356F61B00A12508 /* ConfigViewController.swift */,
 				A0C8AD332359B70200211150 /* ResultsViewController.swift */,
 				A5A27BAE232F82AE00D966B8 /* Main.storyboard */,
@@ -710,6 +713,7 @@
 				A5DC526C2356F61B00A12508 /* ConfigViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
 				A0C8AD342359B70200211150 /* ResultsViewController.swift in Sources */,
+				A0031FD02361A9F0005CD342 /* SplitViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

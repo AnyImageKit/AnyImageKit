@@ -34,7 +34,7 @@ func hideHUD() {
 
 private func createHUDWindowIfNeeded() {
     if hudWindow == nil {
-        let window = UIWindow(frame: UIScreen.main.bounds)
+        let window = UIWindow(frame: ScreenHelper.mainBounds)
         window.alpha = 1
         window.isHidden = false
         window.windowLevel = .alert

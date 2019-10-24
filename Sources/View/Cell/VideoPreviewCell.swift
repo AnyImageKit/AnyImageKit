@@ -19,7 +19,7 @@ final class VideoPreviewCell: PreviewCell {
         if image.size.height > image.size.width {
             let scale = image.size.height / image.size.width
             size = CGSize(width: width, height: scale * width)
-            let screenSize = UIScreen.main.bounds.size
+            let screenSize = ScreenHelper.mainBounds.size
             if size.width > size.height {
                 size.width = size.width * screenSize.height / size.height
                 size.height = screenSize.height

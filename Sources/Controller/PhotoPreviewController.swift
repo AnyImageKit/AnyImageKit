@@ -181,9 +181,9 @@ extension PhotoPreviewController {
     /// 更新视图布局
     private func updateLayout() {
         flowLayout.minimumLineSpacing = photoSpacing
-        flowLayout.itemSize = UIScreen.main.bounds.size
-        collectionView.frame = view.bounds
-        collectionView.frame.size.width = view.bounds.width + photoSpacing
+        flowLayout.itemSize = ScreenHelper.mainBounds.size
+        collectionView.frame = ScreenHelper.mainBounds
+        collectionView.frame.size.width = ScreenHelper.mainBounds.width + photoSpacing
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: photoSpacing)
     }
     

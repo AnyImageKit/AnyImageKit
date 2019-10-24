@@ -11,7 +11,7 @@ import UIKit
 extension UIDevice {
     
     static var isMordenPhone: Bool {
-        let size = UIScreen.main.bounds.size
+        let size = ScreenHelper.mainBounds.size
         switch size {
         /// iPhone X/Xs/11Pro
         case CGSize(width: 375, height: 812), CGSize(width: 812, height: 375):

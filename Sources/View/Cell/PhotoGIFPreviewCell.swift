@@ -13,7 +13,7 @@ final class PhotoGIFPreviewCell: PreviewCell {
     /// 取图片适屏size
     override var fitSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
-        let screenSize = UIScreen.main.bounds.size
+        let screenSize = ScreenHelper.mainBounds.size
         if image.size.width > screenSize.width {
             let width = scrollView.bounds.width
             let scale = image.size.height / image.size.width
