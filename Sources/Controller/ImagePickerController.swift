@@ -53,6 +53,7 @@ open class ImagePickerController: UINavigationController {
         return .portrait
     }
     
+    private var hasOverrideGeneratingDeviceOrientation = false
     private var hiddenStatusBar = false
     private var didFinishSelect = false
     internal var lock: NSLock = NSLock()
@@ -79,6 +80,7 @@ open class ImagePickerController: UINavigationController {
     }
     
     deinit {
+        endGeneratingDeviceOrientationNotifications()
         PhotoManager.shared.clearAll()
     }
 }
@@ -140,7 +142,21 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
 // MARK: - Notification
 extension ImagePickerController {
     
+    private func beginGeneratingDeviceOrientationNotifications() {
+        if !UIDevice.current.isGeneratingDeviceOrientationNotifications {
+            hasOverrideGeneratingDeviceOrientation = true
+            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        }
+    }
+    
+    private func endGeneratingDeviceOrientationNotifications() {
+        if UIDevice.current.isGeneratingDeviceOrientationNotifications && hasOverrideGeneratingDeviceOrientation {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        }
+    }
+    
     private func addNotification() {
+        beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(setupStatusBarHidden(notification:)), name: .setupStatusBarHidden, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(notification:)), name: .didSyncAsset, object: nil)
     }
