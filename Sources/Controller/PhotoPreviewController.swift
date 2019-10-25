@@ -329,7 +329,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         case .video:
             cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
-        case .photoGif:
+        case .photoGIF:
             cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
         case .photoLive:
             cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)

@@ -64,7 +64,7 @@ extension Album {
                 if selectVideo {
                     array.append(asset)
                 }
-            case .photoGif:
+            case .photoGIF:
                 if selectPhotoGIF {
                     array.append(asset)
                 }

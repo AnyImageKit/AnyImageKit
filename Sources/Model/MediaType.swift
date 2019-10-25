@@ -12,7 +12,7 @@ public enum MediaType: Equatable, CustomStringConvertible {
     
     case photo
     case video
-    case photoGif
+    case photoGIF
     case photoLive
     
     init(asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
@@ -24,7 +24,7 @@ public enum MediaType: Equatable, CustomStringConvertible {
                 self = .photoLive
             } else {
                 if asset.isGIF {
-                    self = .photoGif
+                    self = .photoGIF
                 } else {
                     self = .photo
                 }
@@ -42,7 +42,7 @@ public enum MediaType: Equatable, CustomStringConvertible {
             return "PHOTO"
         case .video:
             return "VIDEO"
-        case .photoGif:
+        case .photoGIF:
             return "PHOTO/GIF"
         case .photoLive:
             return "PHOTO/LIVE"

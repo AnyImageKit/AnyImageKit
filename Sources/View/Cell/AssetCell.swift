@@ -131,7 +131,7 @@ extension AssetCell {
     
     func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
         switch asset.type {
-        case .photoGif:
+        case .photoGIF:
             gifView.isHidden = false
         case .video:
             videoView.isHidden = false
