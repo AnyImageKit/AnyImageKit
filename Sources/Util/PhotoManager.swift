@@ -118,17 +118,20 @@ extension PhotoManager {
 
 extension PhotoManager {
     
-    func addSelectedAsset(_ asset: Asset) {
-        if selectdAssets.contains(asset) { return }
-        if selectdAssets.count == PhotoManager.shared.config.countLimit { return }
+    @discardableResult
+    func addSelectedAsset(_ asset: Asset) -> Bool {
+        if selectdAssets.contains(asset) { return false }
+        if selectdAssets.count == PhotoManager.shared.config.countLimit { return false }
         selectdAssets.append(asset)
         asset.isSelected = true
         asset.selectedNum = selectdAssets.count
         syncAsset(asset, postNotification: false)
+        return true
     }
     
-    func removeSelectedAsset(_ asset: Asset) {
-        guard let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0 == asset }) else { return }
+    @discardableResult
+    func removeSelectedAsset(_ asset: Asset) -> Bool {
+        guard let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0 == asset }) else { return false }
         for item in selectdAssets {
             if item.selectedNum > asset.selectedNum {
                 item.selectedNum -= 1
@@ -137,6 +140,7 @@ extension PhotoManager {
         selectdAssets.remove(at: idx)
         asset.isSelected = false
         asset._image = nil
+        return true
     }
     
     func removeAllSelectedAsset() {

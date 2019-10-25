@@ -241,20 +241,31 @@ extension AssetPickerViewController {
         guard let album = album else { return }
         let manager = PhotoManager.shared
         let sortType = manager.config.orderByDate
+        let addSuccess: Bool
         switch sortType {
         case .asc:
             let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.config.selectOptions)
             album.addAsset(asset, atLast: false)
-            manager.addSelectedAsset(asset)
+            addSuccess = manager.addSelectedAsset(asset)
             collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
         case .desc:
             let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.config.selectOptions)
             album.insertAsset(asset, at: 1, sort: manager.config.orderByDate)
-            manager.addSelectedAsset(asset)
+            addSuccess = manager.addSelectedAsset(asset)
             collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
         }
         updateVisibleCellState()
         toolBar.setEnable(true)
+        if addSuccess {
+            finishSelectedIfNeeded()
+        }
+    }
+    
+    /// 拍照结束后，如果 limit=1 直接返回
+    private func finishSelectedIfNeeded() {
+        if PhotoManager.shared.config.countLimit == 1 {
+            delegate?.assetPickerControllerDidClickDone(self)
+        }
     }
 }
 
