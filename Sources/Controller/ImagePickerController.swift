@@ -18,6 +18,8 @@ open class ImagePickerController: UINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
+    open var tag: Int = 0
+    
     public var config: Config {
         return PhotoManager.shared.config
     }
