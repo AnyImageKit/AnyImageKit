@@ -118,7 +118,7 @@ extension AssetCell {
             switch result {
             case .success(let response):
                 self.imageView.image = response.image
-                if asset.type == .video && !isPreview {
+                if asset.mediaType == .video && !isPreview {
                     self.videoView.setVideoTime(asset.videoDuration)
                 }
             case .failure(let error):
@@ -130,7 +130,7 @@ extension AssetCell {
     }
     
     func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
-        switch asset.type {
+        switch asset.mediaType {
         case .photoGIF:
             gifView.isHidden = false
         case .video:

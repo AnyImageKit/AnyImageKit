@@ -13,53 +13,76 @@ extension ImagePickerController {
     
     public struct Config {
         /// Theme 主题
-        public var theme: Theme = Theme(style: .auto)
+        /// - Default: Auto
+        public var theme: Theme
         
-        /// Max Count 最多可选择的图片数量
+        /// Select Limit 最多可选择的资源数量
         /// - Default: 9
-        public var countLimit: Int = 9
+        public var selectLimit: Int
         
         /// Column Number 每行的列数
         /// - Default: 4
-        public var columnNumber: Int = 4
+        public var columnNumber: Int
         
         /// Max Width for export Photo 导出小图的最大宽度
         /// - Default: 800
-        public var photoMaxWidth: CGFloat = 800
+        public var photoMaxWidth: CGFloat
         
         /// Max Width for export Large Photo(When User pick original image) 导出大图的最大宽度(勾选原图时)
         /// - Default: 1200
-        public var largePhotoMaxWidth: CGFloat = 1200
+        public var largePhotoMaxWidth: CGFloat
         
         /// Allow Use Original Image 是否允许选择原图
         /// - Default: true
-        public var allowUseOriginalImage: Bool = true
+        public var allowUseOriginalImage: Bool
         
         /// Select Options 可选择的类型
-        /// - Default: Photo & Video
+        /// - Default: Photo
         /// - Without .photoLive, Live Photo will be treated as normal photo, with .photoLive, Live Photo will be specially noted and can be played.
         /// - 没有 .photoLive，Live Photo 会当做普通 photo 处理，有 .photoLive，Live Photo 会特别注明并可播放
-        public var selectOptions: SelectOptions = [.photo, .video]
+        public var selectOptions: SelectOptions
         
         /// Order by date 按日期排序
         /// - Default: ASC
         /// - ASC:  按时间升序排列，自动滚动到底部
         /// - DESC: 按时间倒序排列，自动滚动到顶部
-        public var orderByDate: Sort = .asc
+        public var orderByDate: Sort
         
         /// Enable Debug Log 启用调试日志
         /// - Default: false
-        public var enableDebugLog: Bool = false
+        public var enableDebugLog: Bool
         
         /// Capture Media Options 可拍摄类型
         /// - Default: []
-        public var captureMediaOptions: CaptureMediaOptions = []
+        public var captureMediaOptions: CaptureMediaOptions
         
         /// Video maximum duration 视频最大拍摄时间，单位秒
-        /// - Default: 600 seconds
-        public var videoMaximumDuration: TimeInterval = 60 * 10
+        /// - Default: 20 seconds
+        public var videoMaximumDuration: TimeInterval
         
-        public init() { }
+        public init(theme: Theme = .init(style: .auto),
+                    selectLimit: Int = 9,
+                    columnNumber: Int = 4,
+                    photoMaxWidth: CGFloat = 800,
+                    largePhotoMaxWidth: CGFloat = 1200,
+                    allowUseOriginalImage: Bool = true,
+                    selectOptions: SelectOptions = [.photo],
+                    orderByDate: Sort = .asc,
+                    enableDebugLog: Bool = false,
+                    captureMediaOptions: CaptureMediaOptions = [],
+                    videoMaximumDuration: TimeInterval = 20) {
+            self.theme = theme
+            self.selectLimit = selectLimit
+            self.columnNumber = columnNumber
+            self.photoMaxWidth = photoMaxWidth
+            self.largePhotoMaxWidth = largePhotoMaxWidth
+            self.allowUseOriginalImage = allowUseOriginalImage
+            self.selectOptions = selectOptions
+            self.orderByDate = orderByDate
+            self.enableDebugLog = enableDebugLog
+            self.captureMediaOptions = captureMediaOptions
+            self.videoMaximumDuration = videoMaximumDuration
+        }
     }
     
     /// Sort 排序规则

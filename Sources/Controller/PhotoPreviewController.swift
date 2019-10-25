@@ -256,7 +256,7 @@ extension PhotoPreviewController {
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if !data.asset.isSelected && PhotoManager.shared.isMaxCount {
-            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.countLimit)
+            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.selectLimit)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -319,7 +319,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
         let cell: PreviewCell
-        switch data.asset.type {
+        switch data.asset.mediaType {
         case .photo:
             let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
             photoCell.imageView.contentMode = imageScaleMode

@@ -22,7 +22,7 @@ final class PhotoManager {
     var config = ImagePickerController.Config()
     
     var isMaxCount: Bool {
-        return selectdAssets.count == config.countLimit
+        return selectdAssets.count == config.selectLimit
     }
     
     var useOriginalImage: Bool = false
@@ -121,7 +121,7 @@ extension PhotoManager {
     @discardableResult
     func addSelectedAsset(_ asset: Asset) -> Bool {
         if selectdAssets.contains(asset) { return false }
-        if selectdAssets.count == PhotoManager.shared.config.countLimit { return false }
+        if selectdAssets.count == PhotoManager.shared.config.selectLimit { return false }
         selectdAssets.append(asset)
         asset.isSelected = true
         asset.selectedNum = selectdAssets.count
@@ -148,7 +148,7 @@ extension PhotoManager {
     }
     
     func syncAsset(_ asset: Asset, postNotification: Bool) {
-        switch asset.type {
+        switch asset.mediaType {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载
             if let image = readCache(for: asset.phAsset.localIdentifier) {

@@ -48,4 +48,12 @@ public enum MediaType: Equatable, CustomStringConvertible {
             return "PHOTO/LIVE"
         }
     }
+    
+    public var isImage: Bool {
+        return self != .video
+    }
+    
+    public var isVideo: Bool {
+        return self == .video
+    }
 }

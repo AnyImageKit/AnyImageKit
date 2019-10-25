@@ -13,7 +13,7 @@ public class Asset: Equatable {
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
-    public let type: MediaType
+    public let mediaType: MediaType
     /// 输出图像
     public var image: UIImage {
         return _image ?? .init()
@@ -30,7 +30,7 @@ public class Asset: Equatable {
     init(idx: Int, asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
         self.idx = idx
         self.phAsset = asset
-        self.type = MediaType(asset: asset, selectOptions: selectOptions)
+        self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)
         self.videoDuration = asset.videoDuration
     }
     
@@ -42,7 +42,7 @@ public class Asset: Equatable {
 extension Asset: CustomStringConvertible {
     
     public var description: String {
-        return "<Asset> \(phAsset.localIdentifier) mediaType=\(type) image=\(image)"
+        return "<Asset> \(phAsset.localIdentifier) mediaType=\(mediaType) image=\(image)"
     }
 }
 
@@ -111,7 +111,7 @@ extension Asset {
 extension Asset {
     
     var isReady: Bool {
-        switch type {
+        switch mediaType {
         case .photo, .photoGIF, .photoLive:
             return _image != nil
         case .video:

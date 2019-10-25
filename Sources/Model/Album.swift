@@ -55,7 +55,7 @@ extension Album {
         
         for phAsset in result.objects() {
             let asset = Asset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
-            switch asset.type {
+            switch asset.mediaType {
             case .photo:
                 if selectPhoto {
                     array.append(asset)
