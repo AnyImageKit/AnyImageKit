@@ -255,7 +255,7 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if !data.asset.isSelected && PhotoManager.shared.isMaxCount {
+        if !data.asset.isSelected && PhotoManager.shared.isUpToLimit {
             let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.selectLimit)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
@@ -295,7 +295,7 @@ extension PhotoPreviewController {
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
         // 选择当前照片
-        if manager.useOriginalImage && !manager.isMaxCount {
+        if manager.useOriginalImage && !manager.isUpToLimit {
             guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
             if !data.asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)

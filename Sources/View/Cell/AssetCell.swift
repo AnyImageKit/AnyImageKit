@@ -142,7 +142,7 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-            disableCoverView.isHidden = !(PhotoManager.shared.isMaxCount && !asset.isSelected)
+            disableCoverView.isHidden = !(PhotoManager.shared.isUpToLimit && !asset.isSelected)
         }
     }
 }

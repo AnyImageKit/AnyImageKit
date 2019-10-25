@@ -16,6 +16,7 @@ public enum MediaType: Equatable, CustomStringConvertible {
     case photoLive
     
     init(asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
+        let selectPhotoGIF = selectOptions.contains(.photoGIF)
         let selectPhotoLive = selectOptions.contains(.photoLive)
         
         switch asset.mediaType {
@@ -23,7 +24,7 @@ public enum MediaType: Equatable, CustomStringConvertible {
             if selectPhotoLive && asset.mediaSubtypes == .photoLive {
                 self = .photoLive
             } else {
-                if asset.isGIF {
+                if selectPhotoGIF && asset.isGIF {
                     self = .photoGIF
                 } else {
                     self = .photo

@@ -298,7 +298,7 @@ extension AssetPickerViewController {
         guard let cell = sender.superview as? AssetCell else { return }
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
         let asset = album.assets[idx]
-        if !asset.isSelected && PhotoManager.shared.isMaxCount {
+        if !asset.isSelected && PhotoManager.shared.isUpToLimit {
             let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.selectLimit)
             let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
@@ -371,7 +371,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             return
         }
         
-        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isMaxCount { return }
+        if !album.assets[indexPath.item].isSelected && PhotoManager.shared.isUpToLimit { return }
         let controller = PhotoPreviewController()
         controller.currentIndex = indexPath.item - itemOffset
         controller.dataSource = self

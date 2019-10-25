@@ -21,7 +21,7 @@ final class PhotoManager {
     
     var config = ImagePickerController.Config()
     
-    var isMaxCount: Bool {
+    var isUpToLimit: Bool {
         return selectdAssets.count == config.selectLimit
     }
     

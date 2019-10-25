@@ -37,8 +37,8 @@ final class ConfigViewController: UITableViewController {
             switch rowType {
             case .theme:
                 themeTapped()
-            case .maxCount:
-                maxCountTapped()
+            case .selectLimit:
+                selectLimitTapped()
             case .columnNumber:
                 columnNumberTapped()
             case .allowUseOriginalImage:
@@ -98,9 +98,9 @@ extension ConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func maxCountTapped() {
-        let indexPath = ConfigRowType.maxCount.indexPath
-        let alert = UIAlertController(title: "MaxCount", message: nil, preferredStyle: .alert)
+    private func selectLimitTapped() {
+        let indexPath = ConfigRowType.selectLimit.indexPath
+        let alert = UIAlertController(title: "SelectLimit", message: nil, preferredStyle: .alert)
         for i in 1...9 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (_) in
                 self?.config.selectLimit = i
@@ -210,7 +210,7 @@ extension ConfigViewController {
 
 enum ConfigRowType: Int {
     case theme = 0
-    case maxCount
+    case selectLimit
     case columnNumber
     case allowUseOriginalImage
     case selectOptions

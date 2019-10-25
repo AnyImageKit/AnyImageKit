@@ -38,8 +38,8 @@ extension ImagePickerController {
         
         /// Select Options 可选择的类型
         /// - Default: Photo
-        /// - Without .photoLive, Live Photo will be treated as normal photo, with .photoLive, Live Photo will be specially noted and can be played.
-        /// - 没有 .photoLive，Live Photo 会当做普通 photo 处理，有 .photoLive，Live Photo 会特别注明并可播放
+        /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
+        /// - .photoLive 和 .photoGIF 是 .photo 的子项，当不显式指明时，都会作为 photo 处理，否则会特殊处理（可播放&专有标识）
         public var selectOptions: SelectOptions
         
         /// Order by date 按日期排序
