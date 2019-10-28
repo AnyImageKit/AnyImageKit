@@ -92,19 +92,25 @@ extension ImagePickerController {
     
     private func checkData() {
         showWaitHUD()
-        let manager = PhotoManager.shared
-        let assets = manager.selectdAssets
-        var isReady = true
-        for asset in assets {
-            if !asset.isReady {
-                isReady = false
-                PhotoManager.shared.syncAsset(asset, postNotification: true)
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let manager = PhotoManager.shared
+            let assets = manager.selectdAssets
+            var isReady = true
+            for asset in assets {
+                if !asset.isReady {
+                    isReady = false
+                    PhotoManager.shared.syncAsset(asset, postNotification: true)
+                }
+            }
+            if !isReady { return }
+            self.resizeImagesIfNeeded(assets)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                hideHUD()
+                self.finishSelect()
             }
         }
-        if !isReady { return }
-        resizeImagesIfNeeded(assets)
-        hideHUD()
-        finishSelect()
     }
     
     private func finishSelect() {
