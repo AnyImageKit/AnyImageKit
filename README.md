@@ -52,6 +52,8 @@ Add this to `Cartfile`, and then update dependency:
 github "AnyImageProject/AnyImagePicker"
 ```
 
+> Unsupport `--no-use-binaries`
+
 ## Usage
 
 ### Quick Start

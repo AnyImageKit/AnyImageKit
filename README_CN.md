@@ -45,6 +45,8 @@ pod 'AnyImagePicker'
 github "AnyImageProject/AnyImagePicker"
 ```
 
+> 由于 Carthage 的依赖问题，不支持 `--no-use-binaries`，请直接使用我们的二进制文件
+
 ## 使用方法
 
 ### 快速上手
