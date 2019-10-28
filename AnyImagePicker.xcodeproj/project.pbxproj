@@ -194,7 +194,7 @@
 		A593325F2338ADBA003CE652 /* AnimatableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableImageView.swift; sourceTree = "<group>"; };
 		A59332612338AED8003CE652 /* AnimatedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedImage.swift; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
-		A5A27BA6232F82AE00D966B8 /* AnyImagePickerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnyImagePickerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5A27BA6232F82AE00D966B8 /* Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Picker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5A27BB1232F82B000D966B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5A27BB6232F82B000D966B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -315,7 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				A099CC60232F3BF70023CC3D /* AnyImagePicker.framework */,
-				A5A27BA6232F82AE00D966B8 /* AnyImagePickerExample.app */,
+				A5A27BA6232F82AE00D966B8 /* Picker.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -509,7 +509,7 @@
 			);
 			name = Example;
 			productName = Example;
-			productReference = A5A27BA6232F82AE00D966B8 /* AnyImagePickerExample.app */;
+			productReference = A5A27BA6232F82AE00D966B8 /* Picker.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -898,7 +898,7 @@
 				);
 				MARKETING_VERSION = 0.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker.Example;
-				PRODUCT_NAME = AnyImagePickerExample;
+				PRODUCT_NAME = Picker;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -925,7 +925,7 @@
 				);
 				MARKETING_VERSION = 0.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImagePicker.Example;
-				PRODUCT_NAME = AnyImagePickerExample;
+				PRODUCT_NAME = Picker;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
