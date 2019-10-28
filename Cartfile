@@ -1,4 +1,4 @@
-github "SnapKit/SnapKit"
+github "SnapKit/SnapKit" ~> 5.0
 
 
 # How to update
