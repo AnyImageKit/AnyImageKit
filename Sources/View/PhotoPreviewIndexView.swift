@@ -47,7 +47,7 @@ final class PhotoPreviewIndexView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        
+        setupData()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,6 +64,10 @@ final class PhotoPreviewIndexView: UIView {
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
+    }
+    
+    private func setupData() {
+        lastAssetList = PhotoManager.shared.selectdAssets
     }
     
     private func didSetCurrentIndex() {
