@@ -6,3 +6,26 @@ xcode_destination: platform=iOS Simulator,OS=12.1,name=iPhone Xs
 
 cache: cocoapods
 podfile: Podfile
+
+env:
+  global:
+    - LANG=en_US.UTF-8
+    - LC_ALL=en_US.UTF-8
+    - DESTINATION="OS=12.0,name=iPhone XS"
+  matrix:
+    - SCHEME="Example"
+
+before_install:
+  - gem install xcpretty --no-document --quiet
+  - gem install cocoapods --pre --no-document --quiet
+  - pod install 
+
+script:
+  - set -o pipefail
+  - pod repo update
+  - xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+  - xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+  - pod lib lint --allow-warnings
+
+after_success:
+  - sleep 3
