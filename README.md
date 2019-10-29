@@ -24,7 +24,7 @@
 - [ ] Multiple platform support
     - [x] iOS
     - [x] iPadOS
-    - [x] Mac Catalyst ( Technology preview )
+    - [x] Mac Catalyst ( Technical Preview )
     - [ ] macOS
     - [ ] tvOS
 
