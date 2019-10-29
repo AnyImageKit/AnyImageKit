@@ -84,10 +84,9 @@ class PreviewCell: UICollectionViewCell {
     /// 取图片适屏size
     var fitSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
-        let width = scrollView.bounds.width
-        let scale = image.size.height / image.size.width
-        var size = CGSize(width: width, height: scale * width)
         let screenSize = ScreenHelper.mainBounds.size
+        let scale = image.size.height / image.size.width
+        var size = CGSize(width: screenSize.width, height: scale * screenSize.width)
         if size.width > size.height {
             size.width = size.width * screenSize.height / size.height
             size.height = screenSize.height
@@ -127,9 +126,16 @@ class PreviewCell: UICollectionViewCell {
     
     /// 设置图片
     func setImage(_ image: UIImage?) {
-        if image == nil { print(111) }
+        if image == nil { return }
         imageView.image = image
         layout()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if UIDevice.current.userInterfaceIdiom == .pad { // Optimize performance, fit size classes
+            layout()
+        }
     }
     
     /// 重新布局
