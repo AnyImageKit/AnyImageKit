@@ -6,10 +6,6 @@ xcode_scheme: Example
 cache: cocoapods
 podfile: Podfile
 
-env:
-  - DESTINATION='platform=macOS' SWIFT_VERSION=5.1
-  - DESTINATION='platform=iOS Simulator,name=iPhone 8' SWIFT_VERSION=5.1
-
 before_install:
   - gem install xcpretty --no-document --quiet
   - gem install cocoapods --pre --no-document --quiet
@@ -17,6 +13,7 @@ before_install:
 
 script:
   - pod repo update
+  - xcodebuild -workspace AnyImagePicker.xcworkspace -scheme Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 
 after_success:
   - sleep 3
