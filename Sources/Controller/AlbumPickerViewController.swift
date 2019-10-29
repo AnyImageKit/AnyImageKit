@@ -49,15 +49,17 @@ final class AlbumPickerViewController: UIViewController {
     }
     
     private func updatePreferredContentSize(with traitCollection: UITraitCollection) {
-        let size = ScreenHelper.mainBounds.size
+        let screenSize = ScreenHelper.mainBounds.size
         let preferredMinHeight = rowHeight * 5
-        let preferredMaxHeight = floor(size.height*(2.0/3.0))
+        let preferredMaxHeight = floor(screenSize.height*(2.0/3.0))
+        let presentingViewController = (self.presentingViewController as? ImagePickerController)?.topViewController
+        let preferredWidth = presentingViewController?.view.bounds.size.width ?? screenSize.width
         if albums.isEmpty {
-            preferredContentSize = CGSize(width: size.width, height: preferredMaxHeight)
+            preferredContentSize = CGSize(width: preferredWidth, height: preferredMaxHeight)
         } else {
             let height = CGFloat(albums.count) * rowHeight
             let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
-            preferredContentSize = CGSize(width: size.width, height: preferredHeight)
+            preferredContentSize = CGSize(width: preferredWidth, height: preferredHeight)
         }
     }
     

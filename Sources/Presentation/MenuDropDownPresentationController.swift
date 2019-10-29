@@ -12,9 +12,11 @@ final class MenuDropDownPresentationController: UIPresentationController {
     
     private var dimmingView: UIView?
     private var presentationWrappingView: UIView?
+    private var opaqueView: UIView?
     
-    var navigationHeight: CGFloat = 88
-    var menuHeight: CGFloat = 0
+    
+    var isFullScreen = true
+    var extraTopMenuHeight: CGFloat = 0
     var cornerRadius: CGFloat = 0
     var corners: UIRectCorner = .allCorners
     
@@ -22,6 +24,10 @@ final class MenuDropDownPresentationController: UIPresentationController {
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
         presentedViewController.modalPresentationStyle = .custom
     }
+    
+    private lazy var topOffsetHeight: CGFloat = calculateTopOffsetHeight()
+    private lazy var bottomOffsetHeight: CGFloat = calculateBottomOffsetHeight()
+    private lazy var navigationBarHeight: CGFloat = calculateNavigationBarHeight()
     
     override var presentedView: UIView? {
         return presentationWrappingView
@@ -59,25 +65,19 @@ final class MenuDropDownPresentationController: UIPresentationController {
         
         // mask
         if let containerView = containerView {
-            // clear area
-            var topRect = containerView.bounds
-            topRect.size.height = navigationHeight + menuHeight
-            let topOpaqueView = UIView(frame: topRect)
-            topOpaqueView.isOpaque = false
-            topOpaqueView.backgroundColor = UIColor.clear
-            topOpaqueView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             // opaque area
-            var bottomRect = containerView.bounds
-            bottomRect.size.height -= (navigationHeight + menuHeight)
-            bottomRect.origin.y += (navigationHeight + menuHeight)
-            let bottomOpaqueView = UIView(frame: bottomRect)
-            bottomOpaqueView.isOpaque = false
-            bottomOpaqueView.backgroundColor = UIColor.black
-            bottomOpaqueView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            let opaqueViewFrame = calculateOpaqueViewFrame()
+            let opaqueView = UIView(frame: opaqueViewFrame)
+            opaqueView.isOpaque = false
+            opaqueView.backgroundColor = UIColor.black
+            opaqueView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            if cornerRadius > 0 {
+                opaqueView.layer.cornerRadius = cornerRadius
+            }
+            self.opaqueView = opaqueView
             // clickable area
             let dimmingView = UIView(frame: containerView.bounds)
-            dimmingView.addSubview(topOpaqueView)
-            dimmingView.addSubview(bottomOpaqueView)
+            dimmingView.addSubview(opaqueView)
             dimmingView.isOpaque = false
             dimmingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             let gesture = UITapGestureRecognizer(target: self, action: #selector(dimmingViewTapped(_:)))
@@ -129,11 +129,10 @@ final class MenuDropDownPresentationController: UIPresentationController {
     override var frameOfPresentedViewInContainerView: CGRect {
         let containerViewBounds = containerView?.bounds ?? .zero
         let presentedViewContentSize = size(forChildContentContainer: presentedViewController, withParentContainerSize: containerViewBounds.size)
-        var presentedViewControllerFrame = containerViewBounds
-        presentedViewControllerFrame.size.height = presentedViewContentSize.height
-        presentedViewControllerFrame.size.width = containerViewBounds.width
-        presentedViewControllerFrame.origin.x = 0
-        presentedViewControllerFrame.origin.y = navigationHeight + menuHeight
+        let presentedViewControllerFrame = CGRect(x: (containerViewBounds.width - presentedViewContentSize.width)/2,
+                                                  y: topOffsetHeight + navigationBarHeight + extraTopMenuHeight,
+                                                  width: presentedViewContentSize.width,
+                                                  height: presentedViewContentSize.height)
         return presentedViewControllerFrame
     }
     
@@ -141,6 +140,53 @@ final class MenuDropDownPresentationController: UIPresentationController {
         super.containerViewWillLayoutSubviews()
         dimmingView?.frame = containerView?.bounds ?? .zero
         presentationWrappingView?.frame = frameOfPresentedViewInContainerView
+    }
+    
+    private func calculateTopOffsetHeight() -> CGFloat {
+        if isFullScreen {
+            return StatusBarHelper.height
+        } else {
+            if traitCollection.horizontalSizeClass == .compact {
+                return abs(presentingViewController.view.bounds.height - (containerView?.bounds.height ?? 0))
+            } else {
+                return abs(presentingViewController.view.bounds.height - (containerView?.bounds.height ?? 0))/2
+            }
+        }
+    }
+    
+    private func calculateBottomOffsetHeight() -> CGFloat {
+        if isFullScreen {
+            return 0
+        } else {
+            if traitCollection.horizontalSizeClass == .compact {
+                return 0
+            } else {
+                return abs(presentingViewController.view.bounds.height - (containerView?.bounds.height ?? 0))/2
+            }
+        }
+    }
+    
+    private func calculateNavigationBarHeight() -> CGFloat {
+        var bounds: CGRect?
+        if let navigationController = presentingViewController as? UINavigationController {
+            bounds = navigationController.topViewController?.navigationController?.navigationBar.bounds
+        } else {
+            bounds = presentingViewController.navigationController?.navigationBar.bounds
+        }
+        return bounds?.height ?? .zero
+    }
+    
+    private func calculateOpaqueViewFrame() -> CGRect {
+        guard let containerView = containerView else { return .zero }
+        var rect = containerView.bounds
+        rect.size.height -= (topOffsetHeight + navigationBarHeight + extraTopMenuHeight)
+        rect.origin.y += (topOffsetHeight + navigationBarHeight + extraTopMenuHeight)
+        if !isFullScreen {
+            rect.origin.x = abs(presentingViewController.view.frame.width - containerView.bounds.width)/2
+            rect.size.width = presentingViewController.view.frame.width
+            rect.size.height -= bottomOffsetHeight
+        }
+        return rect
     }
 }
 
@@ -176,7 +222,7 @@ extension MenuDropDownPresentationController: UIViewControllerAnimatedTransition
             containerView.addSubview(toView)
             var toViewInitialFrame = transitionContext.initialFrame(for: toViewController)
             let toViewFinalFrame = transitionContext.finalFrame(for: toViewController)
-            toViewInitialFrame.origin = CGPoint(x: 0, y: navigationHeight + menuHeight)
+            toViewInitialFrame.origin = CGPoint(x: toViewFinalFrame.origin.x, y: topOffsetHeight + navigationBarHeight + extraTopMenuHeight)
             toViewInitialFrame.size = CGSize(width: toViewFinalFrame.width, height: 0)
             toView.frame = toViewInitialFrame
             // animation
@@ -189,7 +235,7 @@ extension MenuDropDownPresentationController: UIViewControllerAnimatedTransition
         } else {
             guard let fromView = transitionContext.view(forKey: .from) else { return }
             var fromViewFinalFrame = transitionContext.finalFrame(for: fromViewController)
-            fromViewFinalFrame.origin = CGPoint(x: 0, y: navigationHeight + menuHeight)
+            fromViewFinalFrame.origin = CGPoint(x: fromView.frame.origin.x, y: topOffsetHeight + navigationBarHeight + extraTopMenuHeight)
             fromViewFinalFrame.size.height = 0
             // animation
             UIView.animate(withDuration: duration, animations: {
