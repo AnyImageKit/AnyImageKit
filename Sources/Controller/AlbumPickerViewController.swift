@@ -34,6 +34,7 @@ final class AlbumPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addNotification()
         updatePreferredContentSize(with: traitCollection)
         setupView()
     }
@@ -75,12 +76,21 @@ extension AlbumPickerViewController {
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc private func orientationDidChangeNotification(_ sender: Notification) {
+        // TODO: Fix orientation change
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 
 // MARK: - Private
 
 extension AlbumPickerViewController {
+    
+    private func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
     
     private func setupView() {
         view.addSubview(tableView)

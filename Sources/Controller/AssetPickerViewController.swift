@@ -26,6 +26,7 @@ final class AssetPickerViewController: UIViewController {
     private var album: Album?
     private var albums = [Album]()
     
+    private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
     
     private lazy var titleView: ArrowButton = {
@@ -79,6 +80,7 @@ final class AssetPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addNotification()
         setupNavigation()
         setupView()
         check()
@@ -130,6 +132,10 @@ final class AssetPickerViewController: UIViewController {
 
 // MARK: - Private function
 extension AssetPickerViewController {
+    
+    private func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
+    }
     
     private func check() {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -271,6 +277,10 @@ extension AssetPickerViewController {
 
 // MARK: - Action
 extension AssetPickerViewController {
+    
+    @objc private func containerSizeDidChange(_ sender: Notification) {
+        collectionView.reloadData()
+    }
     
     @objc private func titleViewTapped(_ sender: ArrowButton) {
         let controller = AlbumPickerViewController()

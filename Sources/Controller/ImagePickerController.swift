@@ -55,6 +55,7 @@ open class ImagePickerController: UINavigationController {
         return .portrait
     }
     
+    private var containerSize: CGSize = .zero
     private var hasOverrideGeneratingDeviceOrientation = false
     private var hiddenStatusBar = false
     private var didFinishSelect = false
@@ -70,6 +71,16 @@ open class ImagePickerController: UINavigationController {
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
         addNotification()
+    }
+    
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let newSize = view.frame.size
+        if containerSize != .zero, containerSize != newSize {
+            _print("ImagePickerController container size did change, new size = \(newSize)")
+            NotificationCenter.default.post(name: .containerSizeDidChange, object: nil, userInfo: [containerSizeKey: newSize])
+        }
+        containerSize = newSize
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -188,5 +199,7 @@ extension ImagePickerController {
 extension Notification.Name {
     
     static let setupStatusBarHidden: Notification.Name = Notification.Name("org.AnyImageProject.AnyImagePicker.setupStatusBar")
-    
+    static let containerSizeDidChange: Notification.Name = Notification.Name("org.AnyImageProject.AnyImagePicker.containerSizeDidChange")
 }
+
+let containerSizeKey: String = "org.AnyImageProject.AnyImagePicker.containerSizeKey"

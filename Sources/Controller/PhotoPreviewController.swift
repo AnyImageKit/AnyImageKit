@@ -99,7 +99,7 @@ final class PhotoPreviewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.clear
+        addNotification()
         setupViews()
     }
     
@@ -139,8 +139,14 @@ final class PhotoPreviewController: UIViewController {
 
 // MARK: - Private function
 extension PhotoPreviewController {
+    
+    private func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
+    }
+    
     /// 添加视图
     private func setupViews() {
+        view.backgroundColor = UIColor.clear
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
@@ -245,6 +251,12 @@ extension PhotoPreviewController {
 
 // MARK: - Target
 extension PhotoPreviewController {
+    
+    @objc private func containerSizeDidChange(_ sender: Notification) {
+        collectionView.reloadData()
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+    }
     
     /// NavigationBar - Back
     @objc private func backButtonTapped(_ sender: UIButton) {
