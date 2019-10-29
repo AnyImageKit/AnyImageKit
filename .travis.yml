@@ -2,18 +2,13 @@ language: swift
 osx_image: xcode11.1
 xcode_project: AnyImagePicker.xcworkspace
 xcode_scheme: Example
-xcode_destination: platform=iOS Simulator,OS=12.1,name=iPhone Xs
 
 cache: cocoapods
 podfile: Podfile
 
 env:
-  global:
-    - LANG=en_US.UTF-8
-    - LC_ALL=en_US.UTF-8
-    - DESTINATION="OS=12.0,name=iPhone XS"
-  matrix:
-    - SCHEME="Example"
+  - DESTINATION='platform=macOS' SWIFT_VERSION=5.1
+  - DESTINATION='platform=iOS Simulator,name=iPhone 8' SWIFT_VERSION=5.1
 
 before_install:
   - gem install xcpretty --no-document --quiet
@@ -21,7 +16,6 @@ before_install:
   - pod install 
 
 script:
-  - set -o pipefail
   - pod repo update
 
 after_success:
