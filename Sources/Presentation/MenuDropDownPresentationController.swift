@@ -144,7 +144,11 @@ final class MenuDropDownPresentationController: UIPresentationController {
     
     private func calculateTopOffsetHeight() -> CGFloat {
         if isFullScreen {
+            #if targetEnvironment(macCatalyst)
+            return 28
+            #else
             return StatusBarHelper.height
+            #endif
         } else {
             if traitCollection.horizontalSizeClass == .compact {
                 return abs(presentingViewController.view.bounds.height - (containerView?.bounds.height ?? 0))
