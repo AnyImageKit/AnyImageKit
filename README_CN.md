@@ -16,8 +16,8 @@
 - [ ] 编辑图片
 - [ ] 多平台支持
     - [x] iOS
-    - [ ] iPadOS
-    - [ ] Mac Catalyst
+    - [x] iPadOS
+    - [x] Mac Catalyst (技术预览版)
     - [ ] macOS
     - [ ] tvOS
 

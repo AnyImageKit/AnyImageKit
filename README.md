@@ -23,8 +23,8 @@
 - [ ] Edit image
 - [ ] Multiple platform support
     - [x] iOS
-    - [ ] iPadOS
-    - [ ] Mac Catalyst
+    - [x] iPadOS
+    - [x] Mac Catalyst ( Technology preview )
     - [ ] macOS
     - [ ] tvOS
 
