@@ -138,7 +138,7 @@ extension ConfigViewController {
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
         }))
         alert.addAction(UIAlertAction(title: "Photo+GIF+LivePhoto", style: .default, handler: { [weak self] (_) in
-            self?.config.selectOptions = [.photo, .photoGIF]
+            self?.config.selectOptions = [.photo, .photoGIF, .photoLive]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+GIF+LivePhoto"
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
