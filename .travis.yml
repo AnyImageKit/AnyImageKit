@@ -23,9 +23,6 @@ before_install:
 script:
   - set -o pipefail
   - pod repo update
-  - xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
-  - xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
-  - pod lib lint --allow-warnings
 
 after_success:
   - sleep 3
