@@ -40,7 +40,7 @@ final class PhotoToolBar: UIView {
         let disableColor = ColorHelper.createByStyle(light: color.withAlphaComponent(0.7), dark: color.withAlphaComponent(0.3))
         view.setTitleColor(color, for: .normal)
         view.setTitleColor(disableColor, for: .disabled)
-        view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
+        view.setTitle(BundleHelper.pickerLocalizedString(key: "Done"), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
@@ -64,10 +64,10 @@ final class PhotoToolBar: UIView {
             backgroundView.snp.makeConstraints { maker in
                 maker.edges.equalToSuperview()
             }
-            leftButton.setTitle(BundleHelper.localizedString(key: "Preview"), for: .normal)
+            leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Preview"), for: .normal)
         case .preview:
             backgroundColor = PhotoManager.shared.config.theme.toolBarColor
-            leftButton.setTitle(BundleHelper.localizedString(key: "Edit"), for: .normal)
+            leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Edit"), for: .normal)
         }
         
         let contentView = UILayoutGuide()

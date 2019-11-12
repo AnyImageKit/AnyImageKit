@@ -48,12 +48,12 @@ struct BundleHelper {
     }
     
     static func localizedString(key: String) -> String {
-        return localizedString(key: key, value: nil)
+        return localizedString(key: key, value: nil, table: nil)
     }
     
-    static func localizedString(key: String, value: String?) -> String {
+    static func localizedString(key: String, value: String?, table: String?) -> String {
         var value = value
-        value = languageBundle?.localizedString(forKey: key, value: value, table: nil)
-        return Bundle.main.localizedString(forKey: key, value: value, table: nil)
+        value = languageBundle?.localizedString(forKey: key, value: value, table: table)
+        return Bundle.main.localizedString(forKey: key, value: value, table: table)
     }
 }

@@ -31,7 +31,7 @@ final class PhotoCropToolView: UIView {
     }()
     private(set) lazy var resetbutton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setTitle(BundleHelper.localizedString(key: "Reset"), for: .normal)
+        view.setTitle(BundleHelper.editorLocalizedString(key: "Reset"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         return view

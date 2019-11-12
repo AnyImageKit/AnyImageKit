@@ -90,7 +90,7 @@ final class PhotoToolView: UIView {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
         view.backgroundColor = config.tintColor
-        view.setTitle(BundleHelper.localizedString(key: "Done"), for: .normal)
+        view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)

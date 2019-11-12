@@ -168,7 +168,7 @@ extension PhotoManager {
                             }
                         case .failure(let error):
                             _print(error)
-                            let message = BundleHelper.localizedString(key: "Fetch failed, please retry")
+                            let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
                             if postNotification {
                                 NotificationCenter.default.post(name: .didSyncAsset, object: message)
                             }
@@ -199,7 +199,7 @@ extension PhotoManager {
                                 }
                             case .failure(let error):
                                 _print(error)
-                                let message = BundleHelper.localizedString(key: "Fetch failed, please retry")
+                                let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
                                 if postNotification {                                
                                     NotificationCenter.default.post(name: .didSyncAsset, object: message)
                                 }

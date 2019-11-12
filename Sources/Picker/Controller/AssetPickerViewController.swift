@@ -100,7 +100,7 @@ final class AssetPickerViewController: UIViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: BundleHelper.localizedString(key: "Cancel"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: BundleHelper.pickerLocalizedString(key: "Cancel"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
@@ -308,9 +308,9 @@ extension AssetPickerViewController {
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
         let asset = album.assets[idx]
         if !asset.isSelected && PhotoManager.shared.isUpToLimit {
-            let message = String(format: BundleHelper.localizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.selectLimit)
-            let alert = UIAlertController(title: BundleHelper.localizedString(key: "Alert"), message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK"), style: .default, handler: nil))
+            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.selectLimit)
+            let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             return
         }

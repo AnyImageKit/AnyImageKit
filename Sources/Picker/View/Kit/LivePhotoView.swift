@@ -18,7 +18,7 @@ final class LivePhotoView: UIView {
     
     private lazy var label: UILabel = {
         let view = UILabel()
-        view.text = BundleHelper.localizedString(key: "Live photo")
+        view.text = BundleHelper.pickerLocalizedString(key: "Live photo")
         let color = ColorHelper.createByStyle(light: UIColor.color(hex: 666666), dark: UIColor.color(hex: 0x999999))
         view.textColor = color
         view.font = UIFont.systemFont(ofSize: 12)

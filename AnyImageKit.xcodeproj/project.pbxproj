@@ -76,6 +76,8 @@
 		A50B211D237AA24300A894A9 /* PhotoContentView+Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F4237AA24200A894A9 /* PhotoContentView+Mosaic.swift */; };
 		A50B211E237AA24300A894A9 /* PhotoContentView+Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F5237AA24200A894A9 /* PhotoContentView+Crop.swift */; };
 		A52E1D80237AA5A80002174A /* Editor.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52E1D82237AA5A80002174A /* Editor.strings */; };
+		A52E1D85237AAA560002174A /* Picker+BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D84237AAA560002174A /* Picker+BundleHelper.swift */; };
+		A52E1D87237AAACC0002174A /* Editor+BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D86237AAACC0002174A /* Editor+BundleHelper.swift */; };
 		A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */; };
 		A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531105623544C0D00D457A8 /* LoadingiCloudView.swift */; };
 		A5325EA52331C14F00ADA116 /* ArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* ArrowButton.swift */; };
@@ -227,6 +229,8 @@
 		A50B20F5237AA24200A894A9 /* PhotoContentView+Crop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoContentView+Crop.swift"; sourceTree = "<group>"; };
 		A52E1D81237AA5A80002174A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Editor.strings; sourceTree = "<group>"; };
 		A52E1D83237AA5A90002174A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Editor.strings"; sourceTree = "<group>"; };
+		A52E1D84237AAA560002174A /* Picker+BundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+BundleHelper.swift"; sourceTree = "<group>"; };
+		A52E1D86237AAACC0002174A /* Editor+BundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Editor+BundleHelper.swift"; sourceTree = "<group>"; };
 		A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+Config.swift"; sourceTree = "<group>"; };
 		A531105623544C0D00D457A8 /* LoadingiCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingiCloudView.swift; sourceTree = "<group>"; };
 		A5325EA42331C14F00ADA116 /* ArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowButton.swift; sourceTree = "<group>"; };
@@ -332,6 +336,7 @@
 				A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */,
 				A07D8793233CA257000108C7 /* Picker+CGImagePropertyOrientation.swift */,
 				A0C03C192331D426005F742C /* Picker+UIColor.swift */,
+				A52E1D84237AAA560002174A /* Picker+BundleHelper.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -567,6 +572,7 @@
 				A5DF1E7F237AA32C00E3A32E /* Editor+CGPoint.swift */,
 				A5DF1E81237AA32C00E3A32E /* Editor+CGRect.swift */,
 				A5DF1E80237AA32C00E3A32E /* Editor+CABasicAnimation.swift */,
+				A52E1D86237AAACC0002174A /* Editor+BundleHelper.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -870,6 +876,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A52E1D87237AAACC0002174A /* Editor+BundleHelper.swift in Sources */,
 				A50B2101237AA24200A894A9 /* ResponseTouch.swift in Sources */,
 				A50B2117237AA24300A894A9 /* PhotoContentView.swift in Sources */,
 				A50B2107237AA24200A894A9 /* CropData.swift in Sources */,
@@ -923,6 +930,7 @@
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */,
 				71036186235E6BDB00669A7B /* PhotoManager+LivePhoto.swift in Sources */,
+				A52E1D85237AAA560002174A /* Picker+BundleHelper.swift in Sources */,
 				A50B211C237AA24300A894A9 /* PhotoContentView+Pen.swift in Sources */,
 				A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,

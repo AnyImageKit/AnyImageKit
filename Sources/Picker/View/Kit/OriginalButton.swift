@@ -23,7 +23,7 @@ final class OriginalButton: UIControl {
     }()
     private lazy var label: UILabel = {
         let view = UILabel()
-        view.text = BundleHelper.localizedString(key: "Original image")
+        view.text = BundleHelper.pickerLocalizedString(key: "Original image")
         view.textColor = PhotoManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16)
         return view

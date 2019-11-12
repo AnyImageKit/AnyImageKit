@@ -12,7 +12,7 @@ final class PermissionDeniedView: UIView {
     
     private lazy var label: UILabel = {
         let view = UILabel()
-        let text = String(format: BundleHelper.localizedString(key: "Allow %@ to access your album in \"Settings -> Privacy -> Photos\""), getAppName())
+        let text = String(format: BundleHelper.pickerLocalizedString(key: "Allow %@ to access your album in \"Settings -> Privacy -> Photos\""), getAppName())
         view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
@@ -22,7 +22,7 @@ final class PermissionDeniedView: UIView {
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
-        view.setTitle(BundleHelper.localizedString(key: "Go to Settings"), for: .normal)
+        view.setTitle(BundleHelper.pickerLocalizedString(key: "Go to Settings"), for: .normal)
         view.setTitleColor(PhotoManager.shared.config.theme.mainColor, for: .normal)
         view.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         return view
