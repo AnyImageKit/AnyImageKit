@@ -1,15 +1,15 @@
 //
-//  ResultsViewController.swift
+//  PickerResultViewController.swift
 //  Example
 //
-//  Created by 刘栋 on 2019/10/18.
+//  Created by 蒋惠 on 2019/11/12.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
 import AnyImageKit
 
-final class ResultsViewController: UIViewController {
+final class PickerResultViewController: UIViewController {
     
     var assets: [Asset] = []
     
@@ -18,7 +18,7 @@ final class ResultsViewController: UIViewController {
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.register(PreviewCell.self, forCellWithReuseIdentifier: "PreviewCell")
+        view.register(PickerPreviewCell.self, forCellWithReuseIdentifier: "PreviewCell")
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         view.backgroundColor = .systemBackground
         view.dataSource = self
@@ -39,7 +39,7 @@ final class ResultsViewController: UIViewController {
     }
 }
 
-extension ResultsViewController: UICollectionViewDataSource {
+extension PickerResultViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -50,14 +50,14 @@ extension ResultsViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as! PreviewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as! PickerPreviewCell
         cell.imageView.image = assets[indexPath.item].image
         cell.titleLabel.text = assets[indexPath.item].mediaType.description
         return cell
     }
 }
 
-extension ResultsViewController: UICollectionViewDelegate {
+extension PickerResultViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = assets[indexPath.item]
@@ -67,48 +67,10 @@ extension ResultsViewController: UICollectionViewDelegate {
     }
 }
 
-extension ResultsViewController: UICollectionViewDelegateFlowLayout {
+extension PickerResultViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - 20 - 10*2)/3
         return CGSize(width: width, height: width)
-    }
-}
-
-final class PreviewCell: UICollectionViewCell {
-    
-    private(set) lazy var titleLabel: UILabel = {
-        let view = UILabel(frame: .zero)
-        view.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.9)
-        view.textColor = .label
-        view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        return view
-    }()
-    
-    private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView(frame: .zero)
-        view.contentMode = .scaleAspectFill
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupView() {
-        contentView.addSubview(imageView)
-        contentView.addSubview(titleLabel)
-        imageView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
-        }
-        titleLabel.snp.makeConstraints { maker in
-            maker.top.left.equalToSuperview().offset(4)
-        }
     }
 }

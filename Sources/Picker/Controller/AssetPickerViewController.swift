@@ -205,7 +205,7 @@ extension AssetPickerViewController {
     /// 弹出 UIImagePickerController
     private func showUIImagePicker() {
         #if !targetEnvironment(simulator)
-        let config = PhotoManager.shared.config
+        let config = PickerManager.shared.config
         let controller = UIImagePickerController()
         controller.delegate = self
         controller.allowsEditing = false

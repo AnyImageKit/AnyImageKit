@@ -14,9 +14,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        setupWindow()
         return true
     }
 
 }
 
+extension AppDelegate {
+    
+    private func setupWindow() {
+        let windows = UIWindow(frame: UIScreen.main.bounds)
+        let splitController = UISplitViewController()
+        splitController.preferredDisplayMode = .allVisible
+        let homeController = HomeViewController(style: .plain)
+        let navigationController = UINavigationController(rootViewController: homeController)
+        splitController.viewControllers = [navigationController]
+        windows.rootViewController = splitController
+        windows.makeKeyAndVisible()
+        self.window = windows
+    }
+}

@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  AnyImageEditor
+
+  Created by 蒋惠 on 2019/11/8.
+  Copyright © 2019 AnyImageProject.org. All rights reserved.
+*/
+
+"Open picker" = "Open picker";
+
+// Picker
+"Theme" = "Theme";
+"SelectLimit" = "SelectLimit";
+"ColumnNumber" = "ColumnNumber";
+"AllowUseOriginalImage" = "AllowUseOriginalImage";
+"SelectOptions" = "SelectOptions";
+"OrderByDate" = "OrderByDate";
+"CaptureMediaOptions" = "CaptureMediaOptions";
+"FullScreen" = "FullScreen";
+
+// Editor
+"EditOptions" = "EditOptions";
+"PenWidth" = "PenWidth";
+"MosaicOptions" = "MosaicOptions";
+"MosaicWidth" = "MosaicWidth";
+"MosaicLevel" = "MosaicLevel";
