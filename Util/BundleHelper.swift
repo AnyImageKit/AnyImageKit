@@ -8,9 +8,11 @@
 
 import UIKit
 
+private class _BundleClass { }
+
 struct BundleHelper {
     
-    static var bundle = Bundle(for: ImagePickerController.self)
+    static var bundle = Bundle(for: _BundleClass.self)
     static private var _languageBundle: Bundle?
     
     static var languageBundle: Bundle? {
@@ -32,7 +34,7 @@ struct BundleHelper {
         return UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
-    static func image(named: String, style: ImagePickerController.UserInterfaceStyle) -> UIImage? {
+    static func image(named: String, style: UserInterfaceStyle) -> UIImage? {
         let imageName: String
         switch style {
         case .auto:

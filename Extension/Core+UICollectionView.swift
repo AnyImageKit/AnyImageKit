@@ -1,5 +1,5 @@
 //
-//  Ex+UICollectionView.swift
+//  Core+UICollectionView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.

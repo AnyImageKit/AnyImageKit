@@ -1,5 +1,5 @@
 //
-//  Ex+UIDevice.swift
+//  Core+UIDevice.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/18.
