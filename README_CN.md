@@ -1,6 +1,6 @@
-![AnyImagePicker](https://raw.githubusercontent.com/AnyImageProject/AnyImagePicker/master/Resources/TitleMap@2x.png)
+![AnyImageKit](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/Resources/TitleMap@2x.png)
 
-`AnyImagePicker` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。使用 Swift 编写。
+`AnyImageKit` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。使用 Swift 编写。
 
 ## 功能
 
@@ -34,7 +34,7 @@
 将下面内容添加到 `Podfile`，并执行依赖更新
 
 ```ruby
-pod 'AnyImagePicker'
+pod 'AnyImageKit'
 ```
 
 ### [Carthage](https://github.com/Carthage/Carthage)
@@ -42,7 +42,7 @@ pod 'AnyImagePicker'
 将下面内容添加到 `Cartfile`，并执行依赖更新
 
 ```ogdl
-github "AnyImageProject/AnyImagePicker"
+github "AnyImageProject/AnyImageKit"
 ```
 
 > 由于 Carthage 的依赖问题，不支持 `--no-use-binaries`，请直接使用我们的二进制文件
@@ -52,7 +52,7 @@ github "AnyImageProject/AnyImagePicker"
 ### 快速上手
 
 ```swift
-import AnyImagePicker
+import AnyImageKit
 
 let controller = ImagePickerController(delegate: self)
 present(controller, animated: true, completion: nil)
@@ -80,4 +80,4 @@ asset.fetchVideoURL { (result) in
 
 ## 版权协议
 
-AnyImagePicker 基于 MIT 协议进行分发和使用，更多信息参见[协议文件](./LICENSE)。
+AnyImageKit 基于 MIT 协议进行分发和使用，更多信息参见[协议文件](./LICENSE)。

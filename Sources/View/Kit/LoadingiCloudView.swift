@@ -1,6 +1,6 @@
 //
 //  LoadingiCloudView.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/14.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  PhotoManager+LivePhoto.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/22.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.

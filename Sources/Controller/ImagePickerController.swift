@@ -1,6 +1,6 @@
 //
 //  ImagePickerController.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
@@ -198,8 +198,8 @@ extension ImagePickerController {
 
 extension Notification.Name {
     
-    static let setupStatusBarHidden: Notification.Name = Notification.Name("org.AnyImageProject.AnyImagePicker.setupStatusBar")
-    static let containerSizeDidChange: Notification.Name = Notification.Name("org.AnyImageProject.AnyImagePicker.containerSizeDidChange")
+    static let setupStatusBarHidden: Notification.Name = Notification.Name("org.AnyImageProject.AnyImageKit.setupStatusBar")
+    static let containerSizeDidChange: Notification.Name = Notification.Name("org.AnyImageProject.AnyImageKit.containerSizeDidChange")
 }
 
-let containerSizeKey: String = "org.AnyImageProject.AnyImagePicker.containerSizeKey"
+let containerSizeKey: String = "org.AnyImageProject.AnyImageKit.containerSizeKey"

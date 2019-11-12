@@ -1,6 +1,6 @@
 //
 //  AnimatableImageView.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  Created by bl4ckra1sond3tre on 4/22/16.
 //
@@ -158,7 +158,7 @@ class AnimatedImageView: UIImageView {
     
     // Dispatch queue used for preloading images.
     private lazy var preloadQueue: DispatchQueue = {
-        return DispatchQueue(label: "org.AnyImageProject.AnyImagePicker.Animator")
+        return DispatchQueue(label: "org.AnyImageProject.AnyImageKit.Animator")
     }()
     
     // A flag to avoid invalidating the displayLink on deinit if it was never created, because displayLink is so lazy.

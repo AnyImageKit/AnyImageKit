@@ -1,12 +1,12 @@
-![AnyImagePicker](https://raw.githubusercontent.com/AnyImageProject/AnyImagePicker/master/Resources/TitleMap@2x.png)
+![AnyImageKit](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/Resources/TitleMap@2x.png)
 
-[![Travis CI](https://api.travis-ci.org/AnyImageProject/AnyImagePicker.svg?branch=master)](https://travis-ci.com/AnyImageProject/AnyImagePicker)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImagePicker.svg)](https://img.shields.io/cocoapods/v/AnyImagePicker.svg)
+[![Travis CI](https://api.travis-ci.org/AnyImageProject/AnyImageKit.svg?branch=master)](https://travis-ci.com/AnyImageProject/AnyImageKit)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImageKit.svg)](https://img.shields.io/cocoapods/v/AnyImageKit.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Platform](https://img.shields.io/cocoapods/p/AnyImagePicker.svg?style=flat)](./)
-[![License](https://img.shields.io/cocoapods/l/AnyImagePicker.svg?style=flat)](https://raw.githubusercontent.com/AnyImageProject/AnyImagePicker/master/LICENSE)
+[![Platform](https://img.shields.io/cocoapods/p/AnyImageKit.svg?style=flat)](./)
+[![License](https://img.shields.io/cocoapods/l/AnyImageKit.svg?style=flat)](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/LICENSE)
 
-`AnyImagePicker` is an image picker which support for multiple photos, GIFs or videos. It's written in Swift. 
+`AnyImageKit` is an image picker which support for multiple photos, GIFs or videos. It's written in Swift. 
 
 > [中文说明](./README_CN.md)
 
@@ -42,7 +42,7 @@
 Add this to `Podfile`, and then update dependency:
 
 ```ruby
-pod 'AnyImagePicker'
+pod 'AnyImageKit'
 ```
 
 ### [Carthage](https://github.com/Carthage/Carthage)
@@ -50,7 +50,7 @@ pod 'AnyImagePicker'
 Add this to `Cartfile`, and then update dependency:
 
 ```ogdl
-github "AnyImageProject/AnyImagePicker"
+github "AnyImageProject/AnyImageKit"
 ```
 
 > Unsupport `--no-use-binaries`
@@ -60,7 +60,7 @@ github "AnyImageProject/AnyImagePicker"
 ### Quick Start
 
 ```swift
-import AnyImagePicker
+import AnyImageKit
 
 let controller = ImagePickerController(delegate: self)
 present(controller, animated: true, completion: nil)
@@ -88,4 +88,4 @@ asset.fetchVideoURL { (result) in
 
 ## License
 
-AnyImagePicker is released under the MIT license. See [LICENSE](./LICENSE) for details.
+AnyImageKit is released under the MIT license. See [LICENSE](./LICENSE) for details.

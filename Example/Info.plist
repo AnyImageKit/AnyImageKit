@@ -25,7 +25,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>AnyImagePicker requires access to your phone’s camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>AnyImagePicker requires access to your phone’s microphone.</string>
+	<string>AnyImageKit requires access to your phone’s microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Use Photos</string>
 	<key>UILaunchStoryboardName</key>

@@ -1,6 +1,6 @@
 //
 //  AnimatedImage.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  The AnimatedImage is a modified version of
 //  some classes from onevcat's Kingfisher project (https://github.com/onevcat/Kingfisher)

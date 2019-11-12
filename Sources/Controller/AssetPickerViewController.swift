@@ -1,6 +1,6 @@
 //
 //  AssetPickerViewController.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.

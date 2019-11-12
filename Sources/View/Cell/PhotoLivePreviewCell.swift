@@ -1,6 +1,6 @@
 //
 //  PhotoLivePreviewCell.swift
-//  AnyImagePicker
+//  AnyImageKit
 //
 //  Created by Ray on 2019/10/22.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
