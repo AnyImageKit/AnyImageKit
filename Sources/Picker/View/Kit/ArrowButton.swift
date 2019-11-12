@@ -13,14 +13,14 @@ final class ArrowButton: UIControl {
     private lazy var label: UILabel = {
         let view = UILabel()
         view.text = BundleHelper.pickerLocalizedString(key: "Photo")
-        view.textColor = PhotoManager.shared.config.theme.textColor
+        view.textColor = PickerManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
     }()
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        let style = PhotoManager.shared.config.theme.style
+        let style = PickerManager.shared.config.theme.style
         view.image = BundleHelper.image(named: "AlbumArrow", style: style)
         return view
     }()
@@ -83,7 +83,7 @@ final class ArrowButton: UIControl {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13, *) {
-            guard PhotoManager.shared.config.theme.style == .auto else { return }
+            guard PickerManager.shared.config.theme.style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
             
             effectView.effect = UIBlurEffect(style: getStyle())
@@ -120,7 +120,7 @@ extension ArrowButton {
     
     private func getStyle() -> UIBlurEffect.Style {
         let style: UIBlurEffect.Style
-        switch PhotoManager.shared.config.theme.style {
+        switch PickerManager.shared.config.theme.style {
         case .auto:
             if #available(iOS 13.0, *) {
                 if self.traitCollection.userInterfaceStyle == .dark {

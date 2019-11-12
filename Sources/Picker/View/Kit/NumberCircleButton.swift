@@ -21,7 +21,7 @@ final class NumberCircleButton: UIControl {
         view.clipsToBounds = true
         view.textColor = UIColor.white
         view.textAlignment = .center
-        view.backgroundColor = PhotoManager.shared.config.theme.mainColor
+        view.backgroundColor = PickerManager.shared.config.theme.mainColor
         return view
     }()
     private let style: Style
@@ -96,7 +96,7 @@ extension NumberCircleButton {
         
         private lazy var imageView: UIImageView = {
             let view = UIImageView(frame: .zero)
-            let style = PhotoManager.shared.config.theme.style
+            let style = PickerManager.shared.config.theme.style
             view.image = BundleHelper.image(named: "PickerCircle", style: style)
             return view
         }()

@@ -16,21 +16,21 @@ final class PermissionDeniedView: UIView {
         view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
-        view.textColor = PhotoManager.shared.config.theme.textColor
+        view.textColor = PickerManager.shared.config.theme.textColor
         return view
     }()
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
         view.setTitle(BundleHelper.pickerLocalizedString(key: "Go to Settings"), for: .normal)
-        view.setTitleColor(PhotoManager.shared.config.theme.mainColor, for: .normal)
+        view.setTitleColor(PickerManager.shared.config.theme.mainColor, for: .normal)
         view.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = PhotoManager.shared.config.theme.backgroundColor
+        backgroundColor = PickerManager.shared.config.theme.backgroundColor
         setupView()
     }
     

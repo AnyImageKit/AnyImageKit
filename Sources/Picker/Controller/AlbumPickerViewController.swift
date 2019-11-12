@@ -25,7 +25,7 @@ final class AlbumPickerViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.registerCell(AlbumCell.self)
-        view.backgroundColor = PhotoManager.shared.config.theme.backgroundColor
+        view.backgroundColor = PickerManager.shared.config.theme.backgroundColor
         view.separatorStyle = .none
         view.dataSource = self
         view.delegate = self

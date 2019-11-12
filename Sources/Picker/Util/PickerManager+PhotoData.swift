@@ -1,5 +1,5 @@
 //
-//  PhotoManager+PhotoData.swift
+//  PickerManager+PhotoData.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -32,7 +32,7 @@ public struct PhotoDataFetchResponse {
 
 public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
         let requestOptions = PHImageRequestOptions()

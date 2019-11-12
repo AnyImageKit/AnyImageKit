@@ -24,7 +24,7 @@ final class OriginalButton: UIControl {
     private lazy var label: UILabel = {
         let view = UILabel()
         view.text = BundleHelper.pickerLocalizedString(key: "Original image")
-        view.textColor = PhotoManager.shared.config.theme.textColor
+        view.textColor = PickerManager.shared.config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
@@ -73,14 +73,14 @@ fileprivate class CircleView: UIView {
         let view = UIView()
         view.clipsToBounds = true
         view.layer.borderWidth = 1
-        view.layer.borderColor = PhotoManager.shared.config.theme.textColor.cgColor
+        view.layer.borderColor = PickerManager.shared.config.theme.textColor.cgColor
         return view
     }()
     private lazy var smallCircleView: UIView = {
         let view = UIView()
         view.isHidden = true
         view.clipsToBounds = true
-        view.backgroundColor = PhotoManager.shared.config.theme.mainColor
+        view.backgroundColor = PickerManager.shared.config.theme.mainColor
         return view
     }()
     
@@ -113,9 +113,9 @@ fileprivate class CircleView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13, *) {
-            guard PhotoManager.shared.config.theme.style == .auto else { return }
+            guard PickerManager.shared.config.theme.style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
-            bigCircleView.layer.borderColor = PhotoManager.shared.config.theme.textColor.cgColor
+            bigCircleView.layer.borderColor = PickerManager.shared.config.theme.textColor.cgColor
         }
     }
     

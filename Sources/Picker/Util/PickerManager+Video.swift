@@ -1,5 +1,5 @@
 //
-//  PhotoManager+Video.swift
+//  PickerManager+Video.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/29.
@@ -34,7 +34,7 @@ public struct VideoFetchResponse {
 public typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImagePickerError>) -> Void
 typealias VideoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requestVideo(for asset: PHAsset, options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
         let requestOptions = PHVideoRequestOptions()

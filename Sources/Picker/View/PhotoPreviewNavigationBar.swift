@@ -12,7 +12,7 @@ final class PhotoPreviewNavigationBar: UIView {
     
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
-        let image = BundleHelper.image(named: "ReturnButton", style: PhotoManager.shared.config.theme.style)
+        let image = BundleHelper.image(named: "ReturnButton", style: PickerManager.shared.config.theme.style)
         view.setImage(image, for: .normal)
         view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
         return view
@@ -24,7 +24,7 @@ final class PhotoPreviewNavigationBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        let theme = PhotoManager.shared.config.theme
+        let theme = PickerManager.shared.config.theme
         backgroundColor = ColorHelper.createByStyle(light: theme.toolBarColor, dark: theme.backgroundColor).withAlphaComponent(0.95)
         setupView()
     }

@@ -1,5 +1,5 @@
 //
-//  PhotoManager+VideoURL.swift
+//  PickerManager+VideoURL.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/10/15.
@@ -130,7 +130,7 @@ public struct VideoURLFetchResponse {
 
 public typealias VideoURLFetchCompletion = (Result<VideoURLFetchResponse, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requestVideoURL(for asset: PHAsset, options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) {
         let supportPresets = AVAssetExportSession.allExportPresets()

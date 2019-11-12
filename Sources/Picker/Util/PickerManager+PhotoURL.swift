@@ -1,5 +1,5 @@
 //
-//  PhotoManager+PhotoURL.swift
+//  PickerManager+PhotoURL.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/10/16.
@@ -35,7 +35,7 @@ public struct PhotoURLFetchResponse {
 
 public typealias PhotoURLFetchCompletion = (Result<PhotoURLFetchResponse, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requestPhotoURL(for asset: PHAsset, options: PhotoURLFetchOptions = .init(), completion: @escaping PhotoURLFetchCompletion) {
         let photoDataOptions = PhotoDataFetchOptions(version: options.version,

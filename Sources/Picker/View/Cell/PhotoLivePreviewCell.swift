@@ -109,7 +109,7 @@ extension PhotoLivePreviewCell {
                     self.setDownloadingProgress(progress)
                 }
             }
-            PhotoManager.shared.requestLivePhoto(for: self.asset.phAsset, options: options) { (result) in
+            PickerManager.shared.requestLivePhoto(for: self.asset.phAsset, options: options) { (result) in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in

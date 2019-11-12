@@ -36,7 +36,7 @@ final class PhotoPreviewIndexView: UIView {
         layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        view.backgroundColor = PhotoManager.shared.config.theme.toolBarColor
+        view.backgroundColor = PickerManager.shared.config.theme.toolBarColor
         view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self
@@ -67,17 +67,17 @@ final class PhotoPreviewIndexView: UIView {
     }
     
     private func setupData() {
-        lastAssetList = PhotoManager.shared.selectdAssets
+        lastAssetList = PickerManager.shared.selectdAssets
     }
     
     private func didSetCurrentIndex() {
-        isHidden = PhotoManager.shared.selectdAssets.isEmpty
-        if let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        isHidden = PickerManager.shared.selectdAssets.isEmpty
+        if let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0.idx == currentIndex }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
-        if let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0.idx == lastIdx }) {
+        if let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0.idx == lastIdx }) {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
         }
     }
@@ -86,7 +86,7 @@ final class PhotoPreviewIndexView: UIView {
 extension PhotoPreviewIndexView {
     
     func didChangeSelectedAsset() {
-        let assetList = PhotoManager.shared.selectdAssets
+        let assetList = PickerManager.shared.selectdAssets
         self.isHidden = assetList.isEmpty
         if lastAssetList.count < assetList.count {
             collectionView.insertItems(at: [IndexPath(item: assetList.count-1, section: 0)])
@@ -105,7 +105,7 @@ extension PhotoPreviewIndexView {
     private func selectItemAtFirstTime() {
         if !isFirst { return }
         isFirst = false
-        if let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        if let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0.idx == currentIndex }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
@@ -116,12 +116,12 @@ extension PhotoPreviewIndexView {
 extension PhotoPreviewIndexView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return PhotoManager.shared.selectdAssets.count
+        return PickerManager.shared.selectdAssets.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        let asset = PhotoManager.shared.selectdAssets[indexPath.item]
+        let asset = PickerManager.shared.selectdAssets[indexPath.item]
         cell.setContent(asset, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
         cell.boxCoverView.isHidden = asset.idx != currentIndex
@@ -133,6 +133,6 @@ extension PhotoPreviewIndexView: UICollectionViewDataSource {
 extension PhotoPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.photoPreviewSubView(self, didSelect: PhotoManager.shared.selectdAssets[indexPath.item].idx)
+        delegate?.photoPreviewSubView(self, didSelect: PickerManager.shared.selectdAssets[indexPath.item].idx)
     }
 }

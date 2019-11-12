@@ -1,5 +1,5 @@
 //
-//  PhotoManager+LivePhoto.swift
+//  PickerManager+LivePhoto.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/22.
@@ -38,7 +38,7 @@ struct LivePhotoFetchResponse {
 
 typealias LivePhotoFetchCompletion = (Result<LivePhotoFetchResponse, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requestLivePhoto(for asset: PHAsset, options: LivePhotoFetchOptions = .init(), completion: @escaping LivePhotoFetchCompletion) {
         let requestOptions = PHLivePhotoRequestOptions()

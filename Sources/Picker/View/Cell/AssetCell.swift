@@ -42,7 +42,7 @@ final class AssetCell: UICollectionViewCell {
         let view = UIView()
         view.isHidden = true
         view.layer.borderWidth = 4
-        view.layer.borderColor = PhotoManager.shared.config.theme.mainColor.cgColor
+        view.layer.borderColor = PickerManager.shared.config.theme.mainColor.cgColor
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
@@ -113,7 +113,7 @@ extension AssetCell {
     
     func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
         let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
-        PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+        PickerManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):
@@ -142,7 +142,7 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-            disableCoverView.isHidden = !(PhotoManager.shared.isUpToLimit && !asset.isSelected)
+            disableCoverView.isHidden = !(PickerManager.shared.isUpToLimit && !asset.isSelected)
         }
     }
 }

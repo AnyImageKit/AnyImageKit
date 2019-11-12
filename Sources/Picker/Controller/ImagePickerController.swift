@@ -21,7 +21,7 @@ open class ImagePickerController: UINavigationController {
     open var tag: Int = 0
     
     public var config: Config {
-        return PhotoManager.shared.config
+        return PickerManager.shared.config
     }
     
     open override var prefersStatusBarHidden: Bool {
@@ -29,7 +29,7 @@ open class ImagePickerController: UINavigationController {
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch PhotoManager.shared.config.theme.style {
+        switch PickerManager.shared.config.theme.style {
         case .light:
             if #available(iOS 13.0, *) {
                 return .darkContent
@@ -62,7 +62,7 @@ open class ImagePickerController: UINavigationController {
     internal var lock: NSLock = NSLock()
     
     required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
-        PhotoManager.shared.config = config
+        PickerManager.shared.config = config
         let rootViewController = AssetPickerViewController()
         super.init(rootViewController: rootViewController)
         self.pickerDelegate = delegate
@@ -94,7 +94,7 @@ open class ImagePickerController: UINavigationController {
     
     deinit {
         endGeneratingDeviceOrientationNotifications()
-        PhotoManager.shared.clearAll()
+        PickerManager.shared.clearAll()
     }
 }
 
@@ -105,13 +105,13 @@ extension ImagePickerController {
         showWaitHUD()
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            let manager = PhotoManager.shared
+            let manager = PickerManager.shared
             let assets = manager.selectdAssets
             var isReady = true
             for asset in assets {
                 if !asset.isReady {
                     isReady = false
-                    PhotoManager.shared.syncAsset(asset, postNotification: true)
+                    PickerManager.shared.syncAsset(asset, postNotification: true)
                 }
             }
             if !isReady { return }
@@ -128,7 +128,7 @@ extension ImagePickerController {
         lock.lock()
         if didFinishSelect {
             didFinishSelect = false
-            let manager = PhotoManager.shared
+            let manager = PickerManager.shared
             pickerDelegate?.imagePicker(self, didSelect: manager.selectdAssets, useOriginalImage: manager.useOriginalImage)
             presentingViewController?.dismiss(animated: true, completion: nil)
         }
@@ -136,9 +136,9 @@ extension ImagePickerController {
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {
-        if !PhotoManager.shared.useOriginalImage {
-            let limitSize = CGSize(width: PhotoManager.shared.config.photoMaxWidth,
-                                   height: PhotoManager.shared.config.photoMaxWidth)
+        if !PickerManager.shared.useOriginalImage {
+            let limitSize = CGSize(width: PickerManager.shared.config.photoMaxWidth,
+                                   height: PickerManager.shared.config.photoMaxWidth)
             for asset in assets {
                 if let image = asset._image, image.size != .zero  {
                     let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)

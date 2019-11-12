@@ -11,7 +11,7 @@ import UIKit
 final class LivePhotoView: UIView {
 
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "LivePhoto", style: PhotoManager.shared.config.theme.style)
+        let image = BundleHelper.image(named: "LivePhoto", style: PickerManager.shared.config.theme.style)
         let view = UIImageView(image: image)
         return view
     }()
@@ -28,7 +28,7 @@ final class LivePhotoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 4
-        backgroundColor = PhotoManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
+        backgroundColor = PickerManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
         setupView()
     }
     

@@ -1,5 +1,5 @@
 //
-//  PhotoManager+PhotoGIF.swift
+//  PickerManager+PhotoGIF.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -32,7 +32,7 @@ struct PhotoGIFFetchResponse {
 
 typealias PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requsetPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping PhotoGIFFetchCompletion) {
         let photoDataOptions = PhotoDataFetchOptions(version: .unadjusted,

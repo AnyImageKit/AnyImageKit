@@ -64,7 +64,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PhotoManager.shared.requestPhotoData(for: phAsset, options: options, completion: completion)
+        PickerManager.shared.requestPhotoData(for: phAsset, options: options, completion: completion)
     }
     
     /// Fetch Photo URL 获取原图路径
@@ -76,7 +76,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PhotoManager.shared.requestPhotoURL(for: phAsset, options: options, completion: completion)
+        PickerManager.shared.requestPhotoURL(for: phAsset, options: options, completion: completion)
     }
 }
 
@@ -92,7 +92,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PhotoManager.shared.requestVideo(for: phAsset, options: options, completion: completion)
+        PickerManager.shared.requestVideo(for: phAsset, options: options, completion: completion)
     }
     
     /// Fetch Video URL 获取视频路径，用于传输
@@ -104,7 +104,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PhotoManager.shared.requestVideoURL(for: phAsset, options: options, completion: completion)
+        PickerManager.shared.requestVideoURL(for: phAsset, options: options, completion: completion)
     }
 }
 

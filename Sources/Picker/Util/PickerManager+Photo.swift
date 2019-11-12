@@ -1,5 +1,5 @@
 //
-//  PhotoManager+Photo.swift
+//  PickerManager+Photo.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -37,7 +37,7 @@ struct PhotoFetchOptions {
         case .resize(let width):
             return CGSize(width: width, height: width)
         case .preview:
-            let width = PhotoManager.shared.config.largePhotoMaxWidth
+            let width = PickerManager.shared.config.largePhotoMaxWidth
             return CGSize(width: width, height: width)
         case .original:
             return PHImageManagerMaximumSize
@@ -63,7 +63,7 @@ struct PhotoFetchResponse {
 typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
 typealias PhotoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Void
 
-extension PhotoManager {
+extension PickerManager {
     
     func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
         if let asset = config.orderByDate == .asc ? album.assets.last?.phAsset : album.assets.first?.phAsset {

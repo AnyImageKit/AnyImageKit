@@ -13,15 +13,15 @@ final class PhotoToolBar: UIView {
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = PhotoManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
+        view.contentView.backgroundColor = PickerManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
         return view
     }()
     
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitleColor(PhotoManager.shared.config.theme.textColor, for: .normal)
-        view.setTitleColor(PhotoManager.shared.config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
+        view.setTitleColor(PickerManager.shared.config.theme.textColor, for: .normal)
+        view.setTitleColor(PickerManager.shared.config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
@@ -35,8 +35,8 @@ final class PhotoToolBar: UIView {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
-        view.backgroundColor = PhotoManager.shared.config.theme.mainColor
-        let color = ColorHelper.createByStyle(light: .white, dark: PhotoManager.shared.config.theme.textColor)
+        view.backgroundColor = PickerManager.shared.config.theme.mainColor
+        let color = ColorHelper.createByStyle(light: .white, dark: PickerManager.shared.config.theme.textColor)
         let disableColor = ColorHelper.createByStyle(light: color.withAlphaComponent(0.7), dark: color.withAlphaComponent(0.3))
         view.setTitleColor(color, for: .normal)
         view.setTitleColor(disableColor, for: .disabled)
@@ -66,7 +66,7 @@ final class PhotoToolBar: UIView {
             }
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Preview"), for: .normal)
         case .preview:
-            backgroundColor = PhotoManager.shared.config.theme.toolBarColor
+            backgroundColor = PickerManager.shared.config.theme.toolBarColor
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Edit"), for: .normal)
         }
         
@@ -104,7 +104,7 @@ extension PhotoToolBar {
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
-        doneButton.backgroundColor = enable ? PhotoManager.shared.config.theme.mainColor : PhotoManager.shared.config.theme.buttonDisableColor
+        doneButton.backgroundColor = enable ? PickerManager.shared.config.theme.mainColor : PickerManager.shared.config.theme.buttonDisableColor
     }
 }
 

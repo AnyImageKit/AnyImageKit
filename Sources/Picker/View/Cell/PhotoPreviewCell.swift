@@ -58,7 +58,7 @@ extension PhotoPreviewCell {
     func requestPhoto() {
         if imageView.image == nil { // thumbnail
             let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
-            PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+            PickerManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
@@ -78,7 +78,7 @@ extension PhotoPreviewCell {
                 self.setDownloadingProgress(progress)
             }
         }
-        PhotoManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+        PickerManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):

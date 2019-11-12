@@ -11,7 +11,7 @@ import UIKit
 struct ColorHelper {
     
     static func createByStyle(light lightColor: UIColor, dark darkColor: UIColor) -> UIColor {
-        switch PhotoManager.shared.config.theme.style {
+        switch PickerManager.shared.config.theme.style {
         case .light:
             return lightColor
         case .dark:

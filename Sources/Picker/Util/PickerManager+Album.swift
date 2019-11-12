@@ -1,5 +1,5 @@
 //
-//  PhotoManager+Album.swift
+//  PickerManager+Album.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -8,7 +8,7 @@
 
 import Photos
 
-extension PhotoManager {
+extension PickerManager {
     
     func fetchCameraRollAlbum(completion: @escaping (Album) -> Void) {
         let options = PHFetchOptions()

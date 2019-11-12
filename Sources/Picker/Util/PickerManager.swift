@@ -1,5 +1,5 @@
 //
-//  PhotoManager.swift
+//  PickerManager.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
@@ -15,9 +15,9 @@ struct FetchRecord {
     var requestIDs: [PHImageRequestID]
 }
 
-final class PhotoManager {
+final class PickerManager {
     
-    static let shared: PhotoManager = PhotoManager()
+    static let shared: PickerManager = PickerManager()
     
     var config = ImagePickerController.Config()
     
@@ -41,7 +41,7 @@ final class PhotoManager {
     let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.PhotoManager")
 }
 
-extension PhotoManager {
+extension PickerManager {
     
     func clearAll() {
         useOriginalImage = false
@@ -52,7 +52,7 @@ extension PhotoManager {
 
 // MARK: - Fetch Queue
 
-extension PhotoManager {
+extension PickerManager {
     
     func enqueueFetch(for identifier: String, requestID: PHImageRequestID) {
         workQueue.async { [weak self] in
@@ -103,7 +103,7 @@ extension PhotoManager {
 
 // MARK: - Cache
 
-extension PhotoManager {
+extension PickerManager {
     
     func readCache(for identifier: String) -> UIImage? {
         return cache.object(forKey: identifier as NSString)
@@ -116,12 +116,12 @@ extension PhotoManager {
 
 // MARK: - Select
 
-extension PhotoManager {
+extension PickerManager {
     
     @discardableResult
     func addSelectedAsset(_ asset: Asset) -> Bool {
         if selectdAssets.contains(asset) { return false }
-        if selectdAssets.count == PhotoManager.shared.config.selectLimit { return false }
+        if selectdAssets.count == PickerManager.shared.config.selectLimit { return false }
         selectdAssets.append(asset)
         asset.isSelected = true
         asset.selectedNum = selectdAssets.count
@@ -131,7 +131,7 @@ extension PhotoManager {
     
     @discardableResult
     func removeSelectedAsset(_ asset: Asset) -> Bool {
-        guard let idx = PhotoManager.shared.selectdAssets.firstIndex(where: { $0 == asset }) else { return false }
+        guard let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0 == asset }) else { return false }
         for item in selectdAssets {
             if item.selectedNum > asset.selectedNum {
                 item.selectedNum -= 1

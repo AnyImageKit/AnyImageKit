@@ -70,8 +70,8 @@ final class PhotoPreviewController: UIViewController {
     }()
     private lazy var toolBar: PhotoToolBar = {
         let view = PhotoToolBar(style: .preview)
-        view.originalButton.isHidden = !PhotoManager.shared.config.allowUseOriginalImage
-        view.originalButton.isSelected = PhotoManager.shared.useOriginalImage
+        view.originalButton.isHidden = !PickerManager.shared.config.allowUseOriginalImage
+        view.originalButton.isSelected = PickerManager.shared.useOriginalImage
         view.leftButton.isHidden = true // Edit not finish
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
@@ -131,7 +131,7 @@ final class PhotoPreviewController: UIViewController {
     deinit {
         for cell in collectionView.visibleCells {
             if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+                PickerManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
             }
         }
     }
@@ -219,7 +219,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        if PhotoManager.shared.config.allowUseOriginalImage {
+        if PickerManager.shared.config.allowUseOriginalImage {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         indexView.currentIndex = currentIndex
@@ -267,8 +267,8 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if !data.asset.isSelected && PhotoManager.shared.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), PhotoManager.shared.config.selectLimit)
+        if !data.asset.isSelected && PickerManager.shared.isUpToLimit {
+            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), PickerManager.shared.config.selectLimit)
             let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -277,9 +277,9 @@ extension PhotoPreviewController {
         
         data.asset.isSelected = !sender.isSelected
         if data.asset.isSelected {
-            PhotoManager.shared.addSelectedAsset(data.asset)
+            PickerManager.shared.addSelectedAsset(data.asset)
         } else {
-            PhotoManager.shared.removeSelectedAsset(data.asset)
+            PickerManager.shared.removeSelectedAsset(data.asset)
         }
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         
@@ -302,7 +302,7 @@ extension PhotoPreviewController {
     
     /// ToolBar - Original
     @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
-        let manager = PhotoManager.shared
+        let manager = PickerManager.shared
         manager.useOriginalImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
@@ -361,14 +361,14 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
         switch cell {
         case let cell as PhotoPreviewCell:
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
+            if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
                 cell.requestPhoto()
             }
         case let cell as VideoPreviewCell:
-            if let originalImage = PhotoManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
+            if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
@@ -391,7 +391,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PreviewCell:
             cell.reset()
             if !cell.asset.isSelected {
-                PhotoManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+                PickerManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
             }
         default:
             break
