@@ -1,0 +1,48 @@
+//
+//  Palette.swift
+//  AnyImageKit
+//
+//  Created by 蒋惠 on 2019/11/6.
+//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//
+
+import UIKit
+
+public struct Palette {
+    
+    public static var main: UIColor {
+        return UIColor.color(hex: 0x56BF6A)
+    }
+    
+    public static var white: UIColor {
+        return UIColor.color(hex: 0xF2F2F2)
+    }
+    
+    public static var black: UIColor {
+        return UIColor.color(hex: 0x2B2B2B)
+    }
+
+    public static var red: UIColor {
+        return UIColor.color(hex: 0xFA5151)
+    }
+
+    public static var yellow: UIColor {
+        return UIColor.color(hex: 0xFFC300)
+    }
+
+    public static var green: UIColor {
+        return UIColor.color(hex: 0x07C160)
+    }
+
+    public static var blue: UIColor {
+        return UIColor.color(hex: 0x10AEFF)
+    }
+
+    public static var purple: UIColor {
+        return UIColor.color(hex: 0x6467EF)
+    }
+    
+    public static var all: [UIColor] {
+        return [Palette.white, Palette.black, Palette.red, Palette.yellow, Palette.green, Palette.blue, Palette.purple]
+    }
+}
