@@ -48,10 +48,6 @@ extension ImagePickerController {
         /// - DESC: 按时间倒序排列，自动滚动到顶部
         public var orderByDate: Sort
         
-        /// Enable Debug Log 启用调试日志
-        /// - Default: false
-        public var enableDebugLog: Bool
-        
         /// Capture Media Options 可拍摄类型
         /// - Default: []
         public var captureMediaOptions: CaptureMediaOptions
@@ -59,6 +55,19 @@ extension ImagePickerController {
         /// Video maximum duration 视频最大拍摄时间，单位秒
         /// - Default: 20 seconds
         public var videoMaximumDuration: TimeInterval
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        /// Editor Options 可编辑类型
+        /// - Default: [.photo]
+        public var editorOptions: EditorOptions = [.photo]
+        
+        /// Editor Photo Config 图片编辑配置项
+        public var editorPhotoConfig = ImageEditorController.PhotoConfig()
+        #endif
+        
+        /// Enable Debug Log 启用调试日志
+        /// - Default: false
+        public var enableDebugLog: Bool
         
         public init(theme: Theme = .init(style: .auto),
                     selectLimit: Int = 9,
@@ -68,9 +77,9 @@ extension ImagePickerController {
                     allowUseOriginalImage: Bool = true,
                     selectOptions: SelectOptions = [.photo],
                     orderByDate: Sort = .asc,
-                    enableDebugLog: Bool = false,
                     captureMediaOptions: CaptureMediaOptions = [],
-                    videoMaximumDuration: TimeInterval = 20) {
+                    videoMaximumDuration: TimeInterval = 20,
+                    enableDebugLog: Bool = false) {
             self.theme = theme
             self.selectLimit = selectLimit
             self.columnNumber = columnNumber
@@ -79,9 +88,9 @@ extension ImagePickerController {
             self.allowUseOriginalImage = allowUseOriginalImage
             self.selectOptions = selectOptions
             self.orderByDate = orderByDate
-            self.enableDebugLog = enableDebugLog
             self.captureMediaOptions = captureMediaOptions
             self.videoMaximumDuration = videoMaximumDuration
+            self.enableDebugLog = enableDebugLog
         }
     }
     
@@ -96,13 +105,13 @@ extension ImagePickerController {
     /// Select Options 可选择的类型
     public struct SelectOptions: OptionSet {
         /// Photo 照片
-        public static let photo: SelectOptions = SelectOptions(rawValue: 1 << 0)
+        public static let photo = SelectOptions(rawValue: 1 << 0)
         /// Video 视频
-        public static let video: SelectOptions = SelectOptions(rawValue: 1 << 1)
+        public static let video = SelectOptions(rawValue: 1 << 1)
         /// GIF 动图
-        public static let photoGIF: SelectOptions = SelectOptions(rawValue: 1 << 2)
+        public static let photoGIF = SelectOptions(rawValue: 1 << 2)
         /// Live photo 实况照片
-        public static let photoLive: SelectOptions = SelectOptions(rawValue: 1 << 3)
+        public static let photoLive = SelectOptions(rawValue: 1 << 3)
         
         public let rawValue: Int
         
@@ -122,11 +131,26 @@ extension ImagePickerController {
         }
     }
     
+    /// Capture Media Options 可拍摄类型
     public struct CaptureMediaOptions: OptionSet {
         /// Photo 照片
-        public static let photo: CaptureMediaOptions = CaptureMediaOptions(rawValue: 1 << 0)
+        public static let photo = CaptureMediaOptions(rawValue: 1 << 0)
         /// Video 视频
-        public static let video: CaptureMediaOptions = CaptureMediaOptions(rawValue: 1 << 1)
+        public static let video = CaptureMediaOptions(rawValue: 1 << 1)
+        
+        public let rawValue: Int
+        
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+    }
+    
+    /// Editor Options 可编辑类型
+    public struct EditorOptions: OptionSet {
+        /// Photo 照片
+        public static let photo = EditorOptions(rawValue: 1 << 0)
+//        /// Video 视频
+//        public static let video = CaptureMediaOptions(rawValue: 1 << 1)
         
         public let rawValue: Int
         

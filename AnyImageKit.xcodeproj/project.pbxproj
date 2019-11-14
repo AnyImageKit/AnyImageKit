@@ -119,6 +119,7 @@
 		A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */; };
 		A5DF1E8B237AA42800E3A32E /* EditorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E8A237AA42800E3A32E /* EditorManager.swift */; };
 		A5DFBCEF23559E1C00B0A58B /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */; };
+		A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -252,6 +253,7 @@
 		A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+UIBezierPath.swift"; sourceTree = "<group>"; };
 		A5DF1E8A237AA42800E3A32E /* EditorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorManager.swift; sourceTree = "<group>"; };
 		A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
+		A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoPreviewController+Editor.swift"; sourceTree = "<group>"; };
 		EFDDF6D07FE50B56C4A76362 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8C19DAC9CB1AC16AE3057 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		FDB9895288645C74A45D3C6D /* Pods-AnyImageKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImageKit.release.xcconfig"; path = "Target Support Files/Pods-AnyImageKit/Pods-AnyImageKit.release.xcconfig"; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
 				A0800412232F5B44006B4711 /* AssetPickerViewController.swift */,
 				A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */,
+				A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -899,6 +902,7 @@
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
+				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
 				A5783956235ED584002A0498 /* LivePhotoView.swift in Sources */,

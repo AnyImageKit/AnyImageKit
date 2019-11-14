@@ -113,8 +113,10 @@ final class PhotoPreviewController: UIViewController {
         let view = PickerToolBar(style: .preview)
         view.originalButton.isHidden = !PickerManager.shared.config.allowUseOriginalImage
         view.originalButton.isSelected = PickerManager.shared.useOriginalImage
-        view.leftButton.isHidden = true // Edit not finish
+        view.leftButton.isHidden = true
+        #if ANYIMAGEKIT_ENABLE_EDITOR
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
+        #endif
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -260,10 +262,21 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
+        indexView.currentIndex = currentIndex
+        
         if PickerManager.shared.config.allowUseOriginalImage {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
-        indexView.currentIndex = currentIndex
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if !PickerManager.shared.config.editorOptions.isEmpty {
+            switch PickerManager.shared.config.editorOptions {
+            case .photo:
+                toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
+            default:
+                break
+            }
+        }
+        #endif
     }
     
     /// 播放/暂停 GIF
@@ -330,15 +343,6 @@ extension PhotoPreviewController {
             delegate?.previewController(self, didDeselected: currentIndex)
         }
         indexView.didChangeSelectedAsset()
-    }
-    
-    /// ToolBar - Edit - not finish
-    @objc private func editButtonTapped(_ sender: UIButton) {
-//        guard let cell = collectionView.visibleCells.first as? PhotoPreviewCell else { return }
-//        let vc = PhotoEditViewController()
-//        vc.imageView.image = cell.imageView.image
-//        vc.modalPresentationStyle = .fullScreen
-//        present(vc, animated: false, completion: nil)
     }
     
     /// ToolBar - Original
