@@ -29,8 +29,8 @@ final class AssetPickerViewController: UIViewController {
     private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
     
-    private lazy var titleView: ArrowButton = {
-        let view = ArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
+    private lazy var titleView: PickerArrowButton = {
+        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
         view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -52,8 +52,8 @@ final class AssetPickerViewController: UIViewController {
         return view
     }()
     
-    private(set) lazy var toolBar: PhotoToolBar = {
-        let view = PhotoToolBar(style: .picker)
+    private(set) lazy var toolBar: PickerToolBar = {
+        let view = PickerToolBar(style: .picker)
         view.setEnable(false)
         view.originalButton.isHidden = !PickerManager.shared.config.allowUseOriginalImage
         view.originalButton.isSelected = PickerManager.shared.useOriginalImage
@@ -282,7 +282,7 @@ extension AssetPickerViewController {
         collectionView.reloadData()
     }
     
-    @objc private func titleViewTapped(_ sender: ArrowButton) {
+    @objc private func titleViewTapped(_ sender: PickerArrowButton) {
         let controller = AlbumPickerViewController()
         controller.album = album
         controller.albums = albums

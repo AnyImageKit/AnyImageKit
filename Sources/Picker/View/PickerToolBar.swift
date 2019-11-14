@@ -1,5 +1,5 @@
 //
-//  PhotoToolBar.swift
+//  PickerToolBar.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PhotoToolBar: UIView {
+final class PickerToolBar: UIView {
     
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
@@ -99,7 +99,7 @@ final class PhotoToolBar: UIView {
 }
 
 // MARK: - function
-extension PhotoToolBar {
+extension PickerToolBar {
     
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
@@ -108,7 +108,7 @@ extension PhotoToolBar {
     }
 }
 
-extension PhotoToolBar {
+extension PickerToolBar {
     
     enum Style {
         case picker

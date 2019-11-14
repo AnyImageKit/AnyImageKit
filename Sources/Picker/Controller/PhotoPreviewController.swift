@@ -9,6 +9,47 @@
 import UIKit
 import Photos
 
+protocol PhotoPreviewControllerDataSource: class {
+    
+    typealias PreviewData = (thumbnail: UIImage?, asset: Asset)
+    
+    /// 获取需要展示图片的数量
+    func numberOfPhotos(in controller: PhotoPreviewController) -> Int
+    
+    /// 获取索引对应的数据模型
+    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData
+    
+    /// 获取转场动画时的缩略图所在的 view
+    func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
+}
+
+protocol PhotoPreviewControllerDelegate: class {
+    
+    /// 选择一张图片，需要返回所选图片的序号
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int)
+    
+    /// 取消选择一张图片
+    func previewController(_ controller: PhotoPreviewController, didDeselected index: Int)
+    
+    /// 开启/关闭原图
+    func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool)
+    
+    /// 点击返回
+    func previewControllerDidClickBack(_ controller: PhotoPreviewController)
+    
+    /// 点击完成
+    func previewControllerDidClickDone(_ controller: PhotoPreviewController)
+}
+
+extension PhotoPreviewControllerDelegate {
+    func previewController(_ controller: PhotoPreviewController, didSelected index: Int) { }
+    func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) { }
+    func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) { }
+    func previewControllerDidClickBack(_ controller: PhotoPreviewController) { }
+    func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
+}
+
+
 final class PhotoPreviewController: UIViewController {
     
     weak var delegate: PhotoPreviewControllerDelegate? = nil
@@ -62,14 +103,14 @@ final class PhotoPreviewController: UIViewController {
         collectionView.isPrefetchingEnabled = false
         return collectionView
         }()
-    private lazy var navigationBar: PhotoPreviewNavigationBar = {
-        let view = PhotoPreviewNavigationBar()
+    private lazy var navigationBar: PickerPreviewNavigationBar = {
+        let view = PickerPreviewNavigationBar()
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var toolBar: PhotoToolBar = {
-        let view = PhotoToolBar(style: .preview)
+    private lazy var toolBar: PickerToolBar = {
+        let view = PickerToolBar(style: .preview)
         view.originalButton.isHidden = !PickerManager.shared.config.allowUseOriginalImage
         view.originalButton.isSelected = PickerManager.shared.useOriginalImage
         view.leftButton.isHidden = true // Edit not finish
@@ -78,8 +119,8 @@ final class PhotoPreviewController: UIViewController {
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var indexView: PhotoPreviewIndexView = {
-        let view = PhotoPreviewIndexView()
+    private lazy var indexView: PickerPreviewIndexView = {
+        let view = PickerPreviewIndexView()
         view.isHidden = true
         view.delegate = self
         return view
@@ -458,10 +499,10 @@ extension PhotoPreviewController: PreviewCellDelegate {
     }
 }
 
-// MARK: - PhotoPreviewIndexViewDelegate
-extension PhotoPreviewController: PhotoPreviewIndexViewDelegate {
+// MARK: - PickerPreviewIndexViewDelegate
+extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     
-    func photoPreviewSubView(_ view: PhotoPreviewIndexView, didSelect idx: Int) {
+    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int) {
         currentIndex = idx
         collectionView.scrollToItem(at: IndexPath(item: idx, section: 0), at: .left, animated: false)
     }

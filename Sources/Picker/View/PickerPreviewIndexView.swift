@@ -1,5 +1,5 @@
 //
-//  PhotoPreviewSubView.swift
+//  PickerPreviewIndexView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/20.
@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol PhotoPreviewIndexViewDelegate: class {
+protocol PickerPreviewIndexViewDelegate: class {
     
-    func photoPreviewSubView(_ view: PhotoPreviewIndexView, didSelect idx: Int)
+    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int)
 }
 
-final class PhotoPreviewIndexView: UIView {
+final class PickerPreviewIndexView: UIView {
     
-    weak var delegate: PhotoPreviewIndexViewDelegate? = nil
+    weak var delegate: PickerPreviewIndexViewDelegate? = nil
     
     var currentIndex: Int = 0 {
         didSet {
@@ -83,7 +83,7 @@ final class PhotoPreviewIndexView: UIView {
     }
 }
 
-extension PhotoPreviewIndexView {
+extension PickerPreviewIndexView {
     
     func didChangeSelectedAsset() {
         let assetList = PickerManager.shared.selectdAssets
@@ -113,7 +113,7 @@ extension PhotoPreviewIndexView {
     }
 }
 
-extension PhotoPreviewIndexView: UICollectionViewDataSource {
+extension PickerPreviewIndexView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return PickerManager.shared.selectdAssets.count
@@ -130,9 +130,9 @@ extension PhotoPreviewIndexView: UICollectionViewDataSource {
     
 }
 
-extension PhotoPreviewIndexView: UICollectionViewDelegate {
+extension PickerPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.photoPreviewSubView(self, didSelect: PickerManager.shared.selectdAssets[indexPath.item].idx)
+        delegate?.pickerPreviewIndexView(self, didSelect: PickerManager.shared.selectdAssets[indexPath.item].idx)
     }
 }

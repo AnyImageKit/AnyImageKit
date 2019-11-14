@@ -1,5 +1,5 @@
 //
-//  ArrowButton.swift
+//  PickerArrowButton.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ArrowButton: UIControl {
+final class PickerArrowButton: UIControl {
     
     private lazy var label: UILabel = {
         let view = UILabel()
@@ -94,7 +94,7 @@ final class ArrowButton: UIControl {
 }
 
 // MARK: - function
-extension ArrowButton {
+extension PickerArrowButton {
     
     func setTitle(_ title: String) {
         if isSelected {
@@ -108,7 +108,7 @@ extension ArrowButton {
 }
 
 // MARK: - Target
-extension ArrowButton {
+extension PickerArrowButton {
     
     @objc private func buttonTapped(_ sender: UIButton) {
         isSelected.toggle()
@@ -116,7 +116,7 @@ extension ArrowButton {
 }
 
 // MARK: - Private function
-extension ArrowButton {
+extension PickerArrowButton {
     
     private func getStyle() -> UIBlurEffect.Style {
         let style: UIBlurEffect.Style

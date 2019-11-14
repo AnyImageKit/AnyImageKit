@@ -1,5 +1,5 @@
 //
-//  PhotoPreviewNavigationBar.swift
+//  PickerPreviewNavigationBar.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PhotoPreviewNavigationBar: UIView {
+final class PickerPreviewNavigationBar: UIView {
     
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
