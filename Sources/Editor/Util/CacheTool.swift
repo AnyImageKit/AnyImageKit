@@ -16,8 +16,8 @@ class CacheTool {
     private let path: String
     private let queue = DispatchQueue(label: "AnyImageKit.CacheTool")
     
-    init(name: String) {
-        cache.countLimit = 3
+    init(name: String, limit: Int) {
+        cache.countLimit = limit
         let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
         path = "\(lib)/AnyImageKitCache/\(name)/"
         removeDirectory(path: path)

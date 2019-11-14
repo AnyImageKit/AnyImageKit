@@ -1,5 +1,5 @@
 //
-//  PhotoPenToolView.swift
+//  EditorPenToolView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
@@ -8,16 +8,16 @@
 
 import UIKit
 
-protocol PhotoPenToolViewDelegate: class {
+protocol EditorPenToolViewDelegate: class {
     
-    func penToolView(_ penToolView: PhotoPenToolView, colorDidChange idx: Int)
+    func penToolView(_ penToolView: EditorPenToolView, colorDidChange idx: Int)
     
-    func penToolViewUndoButtonTapped(_ penToolView: PhotoPenToolView)
+    func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView)
 }
 
-final class PhotoPenToolView: UIView {
+final class EditorPenToolView: UIView {
     
-    weak var delegate: PhotoPenToolViewDelegate?
+    weak var delegate: EditorPenToolViewDelegate?
     
     private(set) var currentIdx: Int
     
@@ -98,7 +98,7 @@ final class PhotoPenToolView: UIView {
 }
 
 // MARK: - ResponseTouch
-extension PhotoPenToolView: ResponseTouch {
+extension EditorPenToolView: ResponseTouch {
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {

@@ -59,17 +59,17 @@
 		A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DC237AA24200A894A9 /* BezierGenerator.swift */; };
 		A50B2109237AA24300A894A9 /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DD237AA24200A894A9 /* Brush.swift */; };
 		A50B210B237AA24300A894A9 /* CacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E0237AA24200A894A9 /* CacheTool.swift */; };
-		A50B2111237AA24300A894A9 /* PhotoCropToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E7237AA24200A894A9 /* PhotoCropToolView.swift */; };
+		A50B2111237AA24300A894A9 /* EditorCropToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */; };
 		A50B2112237AA24300A894A9 /* CropCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E9237AA24200A894A9 /* CropCornerView.swift */; };
 		A50B2113237AA24300A894A9 /* CropGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EA237AA24200A894A9 /* CropGridView.swift */; };
-		A50B2114237AA24300A894A9 /* PhotoPenToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EB237AA24200A894A9 /* PhotoPenToolView.swift */; };
+		A50B2114237AA24300A894A9 /* EditorPenToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EB237AA24200A894A9 /* EditorPenToolView.swift */; };
 		A50B2115237AA24300A894A9 /* PhotoContentView+Getter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EC237AA24200A894A9 /* PhotoContentView+Getter.swift */; };
-		A50B2116237AA24300A894A9 /* PhotoMosaicToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20ED237AA24200A894A9 /* PhotoMosaicToolView.swift */; };
+		A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */; };
 		A50B2117237AA24300A894A9 /* PhotoContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EE237AA24200A894A9 /* PhotoContentView.swift */; };
 		A50B2118237AA24300A894A9 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EF237AA24200A894A9 /* Canvas.swift */; };
 		A50B2119237AA24300A894A9 /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F0237AA24200A894A9 /* Mosaic.swift */; };
-		A50B211A237AA24300A894A9 /* PhotoToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F1237AA24200A894A9 /* PhotoToolView.swift */; };
-		A50B211B237AA24300A894A9 /* PhotoEditOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F2237AA24200A894A9 /* PhotoEditOptionsView.swift */; };
+		A50B211A237AA24300A894A9 /* EditorToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F1237AA24200A894A9 /* EditorToolView.swift */; };
+		A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */; };
 		A50B211C237AA24300A894A9 /* PhotoContentView+Pen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F3237AA24200A894A9 /* PhotoContentView+Pen.swift */; };
 		A50B211D237AA24300A894A9 /* PhotoContentView+Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F4237AA24200A894A9 /* PhotoContentView+Mosaic.swift */; };
 		A50B211E237AA24300A894A9 /* PhotoContentView+Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F5237AA24200A894A9 /* PhotoContentView+Crop.swift */; };
@@ -211,17 +211,17 @@
 		A50B20DC237AA24200A894A9 /* BezierGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierGenerator.swift; sourceTree = "<group>"; };
 		A50B20DD237AA24200A894A9 /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
 		A50B20E0237AA24200A894A9 /* CacheTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTool.swift; sourceTree = "<group>"; };
-		A50B20E7237AA24200A894A9 /* PhotoCropToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCropToolView.swift; sourceTree = "<group>"; };
+		A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorCropToolView.swift; sourceTree = "<group>"; };
 		A50B20E9237AA24200A894A9 /* CropCornerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropCornerView.swift; sourceTree = "<group>"; };
 		A50B20EA237AA24200A894A9 /* CropGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropGridView.swift; sourceTree = "<group>"; };
-		A50B20EB237AA24200A894A9 /* PhotoPenToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPenToolView.swift; sourceTree = "<group>"; };
+		A50B20EB237AA24200A894A9 /* EditorPenToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorPenToolView.swift; sourceTree = "<group>"; };
 		A50B20EC237AA24200A894A9 /* PhotoContentView+Getter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoContentView+Getter.swift"; sourceTree = "<group>"; };
-		A50B20ED237AA24200A894A9 /* PhotoMosaicToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoMosaicToolView.swift; sourceTree = "<group>"; };
+		A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorMosaicToolView.swift; sourceTree = "<group>"; };
 		A50B20EE237AA24200A894A9 /* PhotoContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoContentView.swift; sourceTree = "<group>"; };
 		A50B20EF237AA24200A894A9 /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		A50B20F0237AA24200A894A9 /* Mosaic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
-		A50B20F1237AA24200A894A9 /* PhotoToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoToolView.swift; sourceTree = "<group>"; };
-		A50B20F2237AA24200A894A9 /* PhotoEditOptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditOptionsView.swift; sourceTree = "<group>"; };
+		A50B20F1237AA24200A894A9 /* EditorToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorToolView.swift; sourceTree = "<group>"; };
+		A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorEditOptionsView.swift; sourceTree = "<group>"; };
 		A50B20F3237AA24200A894A9 /* PhotoContentView+Pen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoContentView+Pen.swift"; sourceTree = "<group>"; };
 		A50B20F4237AA24200A894A9 /* PhotoContentView+Mosaic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoContentView+Mosaic.swift"; sourceTree = "<group>"; };
 		A50B20F5237AA24200A894A9 /* PhotoContentView+Crop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoContentView+Crop.swift"; sourceTree = "<group>"; };
@@ -547,11 +547,11 @@
 				A50B20F5237AA24200A894A9 /* PhotoContentView+Crop.swift */,
 				A50B20EF237AA24200A894A9 /* Canvas.swift */,
 				A50B20F0237AA24200A894A9 /* Mosaic.swift */,
-				A50B20F1237AA24200A894A9 /* PhotoToolView.swift */,
-				A50B20F2237AA24200A894A9 /* PhotoEditOptionsView.swift */,
-				A50B20EB237AA24200A894A9 /* PhotoPenToolView.swift */,
-				A50B20ED237AA24200A894A9 /* PhotoMosaicToolView.swift */,
-				A50B20E7237AA24200A894A9 /* PhotoCropToolView.swift */,
+				A50B20F1237AA24200A894A9 /* EditorToolView.swift */,
+				A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */,
+				A50B20EB237AA24200A894A9 /* EditorPenToolView.swift */,
+				A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */,
+				A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */,
 				A50B20E8237AA24200A894A9 /* Kit */,
 			);
 			path = View;
@@ -926,7 +926,7 @@
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
 				A05C8DA1233DEBFC005B0F3C /* PickerManager+PhotoData.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
-				A50B2116237AA24300A894A9 /* PhotoMosaicToolView.swift in Sources */,
+				A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
@@ -944,9 +944,9 @@
 				A56A3C8323307F8A00EBFC48 /* VideoPreviewCell.swift in Sources */,
 				A50B2102237AA24200A894A9 /* ImageEditorController+Config.swift in Sources */,
 				A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */,
-				A50B2111237AA24300A894A9 /* PhotoCropToolView.swift in Sources */,
+				A50B2111237AA24300A894A9 /* EditorCropToolView.swift in Sources */,
 				A0F475422330736200BB117B /* Picker+PHAssetCollection.swift in Sources */,
-				A50B211A237AA24300A894A9 /* PhotoToolView.swift in Sources */,
+				A50B211A237AA24300A894A9 /* EditorToolView.swift in Sources */,
 				A0B22EAC237AA1B3001F6066 /* StatusBarHelper.swift in Sources */,
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */,
@@ -977,11 +977,11 @@
 				A09FFE6123404923000DEF87 /* PickerManager+Video.swift in Sources */,
 				A50B2113237AA24300A894A9 /* CropGridView.swift in Sources */,
 				A0B22EAD237AA1B3001F6066 /* ScreenHelper.swift in Sources */,
-				A50B211B237AA24300A894A9 /* PhotoEditOptionsView.swift in Sources */,
+				A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */,
 				A00869BD233C987600237651 /* AssociatedObject.swift in Sources */,
 				A05C8DA9233DFCD2005B0F3C /* ImagePickerError.swift in Sources */,
 				A50B2109237AA24300A894A9 /* Brush.swift in Sources */,
-				A50B2114237AA24300A894A9 /* PhotoPenToolView.swift in Sources */,
+				A50B2114237AA24300A894A9 /* EditorPenToolView.swift in Sources */,
 				A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */,
 				A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */,
 				A50B211E237AA24300A894A9 /* PhotoContentView+Crop.swift in Sources */,

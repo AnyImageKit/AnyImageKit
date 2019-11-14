@@ -110,9 +110,9 @@ final class PhotoContentView: UIView {
     internal var lastCropData: CropData = CropData()
     
     /// 存储画笔过程的图片
-    internal var penCache = CacheTool(name: "Pen")
+    internal var penCache = CacheTool(name: "Pen", limit: 3)
     /// 存储马赛克过程图片
-    internal var mosaicCache = CacheTool(name: "Mosaic")
+    internal var mosaicCache = CacheTool(name: "Mosaic", limit: 3)
     
     init(frame: CGRect, image: UIImage, config: ImageEditorController.PhotoConfig) {
         self.image = image

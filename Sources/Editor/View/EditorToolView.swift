@@ -1,5 +1,5 @@
 //
-//  PhotoToolView.swift
+//  EditorToolView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
@@ -8,25 +8,25 @@
 
 import UIKit
 
-protocol PhotoToolViewDelegate: class {
+protocol EditorToolViewDelegate: class {
     
-    func toolView(_ toolView: PhotoToolView, optionDidChange option: ImageEditorController.PhotoEditOption?)
+    func toolView(_ toolView: EditorToolView, optionDidChange option: ImageEditorController.PhotoEditOption?)
     
-    func toolView(_ toolView: PhotoToolView, colorDidChange idx: Int)
-    func toolView(_ toolView: PhotoToolView, mosaicDidChange idx: Int)
+    func toolView(_ toolView: EditorToolView, colorDidChange idx: Int)
+    func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int)
     
-    func toolViewUndoButtonTapped(_ toolView: PhotoToolView)
+    func toolViewUndoButtonTapped(_ toolView: EditorToolView)
     
-    func toolViewCropCancelButtonTapped(_ toolView: PhotoToolView)
-    func toolViewCropDoneButtonTapped(_ toolView: PhotoToolView)
-    func toolViewCropResetButtonTapped(_ toolView: PhotoToolView)
+    func toolViewCropCancelButtonTapped(_ toolView: EditorToolView)
+    func toolViewCropDoneButtonTapped(_ toolView: EditorToolView)
+    func toolViewCropResetButtonTapped(_ toolView: EditorToolView)
     
-    func toolViewDoneButtonTapped(_ toolView: PhotoToolView)
+    func toolViewDoneButtonTapped(_ toolView: EditorToolView)
 }
 
-final class PhotoToolView: UIView {
+final class EditorToolView: UIView {
     
-    weak var delegate: PhotoToolViewDelegate?
+    weak var delegate: EditorToolViewDelegate?
     
     var currentOption: ImageEditorController.PhotoEditOption? {
         editOptionsView.currentOption
@@ -63,25 +63,25 @@ final class PhotoToolView: UIView {
         return layer
     }()
     
-    private(set) lazy var editOptionsView: PhotoEditOptionsView = {
-        let view = PhotoEditOptionsView(frame: .zero, options: config.editOptions)
+    private(set) lazy var editOptionsView: EditorEditOptionsView = {
+        let view = EditorEditOptionsView(frame: .zero, options: config.editOptions)
         view.delegate = self
         return view
     }()
-    private(set) lazy var penToolView: PhotoPenToolView = {
-        let view = PhotoPenToolView(frame: .zero, colors: config.penColors, defaultIdx: config.defaultPenIdx)
-        view.delegate = self
-        view.isHidden = true
-        return view
-    }()
-    private(set) lazy var cropToolView: PhotoCropToolView = {
-        let view = PhotoCropToolView(frame: .zero)
+    private(set) lazy var penToolView: EditorPenToolView = {
+        let view = EditorPenToolView(frame: .zero, colors: config.penColors, defaultIdx: config.defaultPenIdx)
         view.delegate = self
         view.isHidden = true
         return view
     }()
-    private(set) lazy var mosaicToolView: PhotoMosaicToolView = {
-        let view = PhotoMosaicToolView(frame: .zero, mosaicOptions: config.mosaicOptions, defaultIdx: config.defaultMosaicIdx)
+    private(set) lazy var cropToolView: EditorCropToolView = {
+        let view = EditorCropToolView(frame: .zero)
+        view.delegate = self
+        view.isHidden = true
+        return view
+    }()
+    private(set) lazy var mosaicToolView: EditorMosaicToolView = {
+        let view = EditorMosaicToolView(frame: .zero, mosaicOptions: config.mosaicOptions, defaultIdx: config.defaultMosaicIdx)
         view.delegate = self
         view.isHidden = true
         return view
@@ -153,10 +153,10 @@ final class PhotoToolView: UIView {
     }
 }
 
-// MARK: - PhotoEditOptionsViewDelegate
-extension PhotoToolView: PhotoEditOptionsViewDelegate {
+// MARK: - EditorEditOptionsViewDelegate
+extension EditorToolView: EditorEditOptionsViewDelegate {
     
-    func editOptionsView(_ editOptionsView: PhotoEditOptionsView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
         delegate?.toolView(self, optionDidChange: option)
         
         guard let option = option else {
@@ -178,22 +178,22 @@ extension PhotoToolView: PhotoEditOptionsViewDelegate {
     }
 }
 
-// MARK: - PhotoPenToolViewDelegate
-extension PhotoToolView: PhotoPenToolViewDelegate {
+// MARK: - EditorPenToolViewDelegate
+extension EditorToolView: EditorPenToolViewDelegate {
     
-    func penToolView(_ penToolView: PhotoPenToolView, colorDidChange idx: Int) {
+    func penToolView(_ penToolView: EditorPenToolView, colorDidChange idx: Int) {
         delegate?.toolView(self, colorDidChange: idx)
     }
     
-    func penToolViewUndoButtonTapped(_ penToolView: PhotoPenToolView) {
+    func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView) {
         delegate?.toolViewUndoButtonTapped(self)
     }
 }
 
-// MARK: - PhotoCropToolViewDelegate
-extension PhotoToolView: PhotoCropToolViewDelegate {
+// MARK: - EditorCropToolViewDelegate
+extension EditorToolView: EditorCropToolViewDelegate {
     
-    func cropToolViewCancelButtonTapped(_ cropToolView: PhotoCropToolView) {
+    func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView) {
         delegate?.toolViewCropCancelButtonTapped(self)
         editOptionsView.isHidden = false
         topCoverLayer.isHidden = false
@@ -202,7 +202,7 @@ extension PhotoToolView: PhotoCropToolViewDelegate {
         editOptionsView.unSelectButtons()
     }
     
-    func cropToolViewDoneButtonTapped(_ cropToolView: PhotoCropToolView) {
+    func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView) {
         delegate?.toolViewCropDoneButtonTapped(self)
         editOptionsView.isHidden = false
         topCoverLayer.isHidden = false
@@ -211,25 +211,25 @@ extension PhotoToolView: PhotoCropToolViewDelegate {
         editOptionsView.unSelectButtons()
     }
     
-    func cropToolViewResetButtonTapped(_ cropToolView: PhotoCropToolView) {
+    func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView) {
         delegate?.toolViewCropResetButtonTapped(self)
     }
 }
 
-// MARK: - PhotoMosaicToolViewDelegate
-extension PhotoToolView: PhotoMosaicToolViewDelegate {
+// MARK: - EditorMosaicToolViewDelegate
+extension EditorToolView: EditorMosaicToolViewDelegate {
     
-    func mosaicToolView(_ mosaicToolView: PhotoMosaicToolView, mosaicDidChange idx: Int) {
+    func mosaicToolView(_ mosaicToolView: EditorMosaicToolView, mosaicDidChange idx: Int) {
         delegate?.toolView(self, mosaicDidChange: idx)
     }
     
-    func mosaicToolViewUndoButtonTapped(_ mosaicToolView: PhotoMosaicToolView) {
+    func mosaicToolViewUndoButtonTapped(_ mosaicToolView: EditorMosaicToolView) {
         delegate?.toolViewUndoButtonTapped(self)
     }
 }
 
 // MARK: - ResponseTouch
-extension PhotoToolView: ResponseTouch {
+extension EditorToolView: ResponseTouch {
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {

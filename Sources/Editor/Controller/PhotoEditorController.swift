@@ -18,8 +18,8 @@ final class PhotoEditorController: UIViewController {
         view.canvas.brush.color = manager.photoConfig.penColors[manager.photoConfig.defaultPenIdx]
         return view
     }()
-    private lazy var toolView: PhotoToolView = {
-        let view = PhotoToolView(frame: self.view.bounds, config: EditorManager.shared.photoConfig)
+    private lazy var toolView: EditorToolView = {
+        let view = EditorToolView(frame: self.view.bounds, config: EditorManager.shared.photoConfig)
         view.delegate = self
         return view
     }()
@@ -119,10 +119,10 @@ extension PhotoEditorController: PhotoContentViewDelegate {
     }
 }
 
-// MARK: - PhotoToolViewDelegate
-extension PhotoEditorController: PhotoToolViewDelegate {
+// MARK: - EditorToolViewDelegate
+extension PhotoEditorController: EditorToolViewDelegate {
     
-    func toolView(_ toolView: PhotoToolView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
+    func toolView(_ toolView: EditorToolView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
         contentView.canvas.isUserInteractionEnabled = false
         contentView.mosaic?.isUserInteractionEnabled = false
         contentView.scrollView.isScrollEnabled = option == nil
@@ -144,15 +144,15 @@ extension PhotoEditorController: PhotoToolViewDelegate {
         }
     }
     
-    func toolView(_ toolView: PhotoToolView, colorDidChange idx: Int) {
+    func toolView(_ toolView: EditorToolView, colorDidChange idx: Int) {
         contentView.canvas.brush.color = EditorManager.shared.photoConfig.penColors[idx]
     }
     
-    func toolView(_ toolView: PhotoToolView, mosaicDidChange idx: Int) {
+    func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int) {
         contentView.setMosaicImage(idx)
     }
     
-    func toolViewUndoButtonTapped(_ toolView: PhotoToolView) {
+    func toolViewUndoButtonTapped(_ toolView: EditorToolView) {
         guard let option = toolView.currentOption else { return }
         switch option {
         case .pen:
@@ -166,21 +166,21 @@ extension PhotoEditorController: PhotoToolViewDelegate {
         }
     }
     
-    func toolViewCropCancelButtonTapped(_ toolView: PhotoToolView) {
+    func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
         contentView.cropCancel()
     }
     
-    func toolViewCropDoneButtonTapped(_ toolView: PhotoToolView) {
+    func toolViewCropDoneButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
         contentView.cropDone()
     }
     
-    func toolViewCropResetButtonTapped(_ toolView: PhotoToolView) {
+    func toolViewCropResetButtonTapped(_ toolView: EditorToolView) {
         contentView.cropReset()
     }
     
-    func toolViewDoneButtonTapped(_ toolView: PhotoToolView) {
+    func toolViewDoneButtonTapped(_ toolView: EditorToolView) {
         guard let source = contentView.imageView.screenshot.cgImage else { return }
         let size = CGSize(width: source.width, height: source.height)
         let cropRect = contentView.cropRealRect

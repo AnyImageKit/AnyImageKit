@@ -1,5 +1,5 @@
 //
-//  PhotoCropToolView.swift
+//  EditorCropToolView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
@@ -8,16 +8,16 @@
 
 import UIKit
 
-protocol PhotoCropToolViewDelegate: class {
+protocol EditorCropToolViewDelegate: class {
     
-    func cropToolViewCancelButtonTapped(_ cropToolView: PhotoCropToolView)
-    func cropToolViewDoneButtonTapped(_ cropToolView: PhotoCropToolView)
-    func cropToolViewResetButtonTapped(_ cropToolView: PhotoCropToolView)
+    func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView)
+    func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView)
+    func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView)
 }
 
-final class PhotoCropToolView: UIView {
+final class EditorCropToolView: UIView {
     
-    weak var delegate: PhotoCropToolViewDelegate?
+    weak var delegate: EditorCropToolViewDelegate?
     
     private(set) lazy var cancelButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -86,7 +86,7 @@ final class PhotoCropToolView: UIView {
 }
 
 // MARK: - ResponseTouch
-extension PhotoCropToolView: ResponseTouch {
+extension EditorCropToolView: ResponseTouch {
     
     func responseTouch(_ point: CGPoint) -> Bool {
         for (idx, view) in [cancelButton, doneButton, resetbutton].enumerated() {

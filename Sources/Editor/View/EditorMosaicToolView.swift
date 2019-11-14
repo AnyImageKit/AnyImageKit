@@ -1,5 +1,5 @@
 //
-//  PhotoMosaicToolView.swift
+//  EditorMosaicToolView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/26.
@@ -8,16 +8,16 @@
 
 import UIKit
 
-protocol PhotoMosaicToolViewDelegate: class {
+protocol EditorMosaicToolViewDelegate: class {
     
-    func mosaicToolView(_ mosaicToolView: PhotoMosaicToolView, mosaicDidChange idx: Int)
+    func mosaicToolView(_ mosaicToolView: EditorMosaicToolView, mosaicDidChange idx: Int)
     
-    func mosaicToolViewUndoButtonTapped(_ mosaicToolView: PhotoMosaicToolView)
+    func mosaicToolViewUndoButtonTapped(_ mosaicToolView: EditorMosaicToolView)
 }
 
-final class PhotoMosaicToolView: UIView {
+final class EditorMosaicToolView: UIView {
     
-    weak var delegate: PhotoMosaicToolViewDelegate?
+    weak var delegate: EditorMosaicToolViewDelegate?
     
     private(set) var currentIdx: Int = 0
     
@@ -94,7 +94,7 @@ final class PhotoMosaicToolView: UIView {
 }
 
 // MARK: - Private function
-extension PhotoMosaicToolView {
+extension EditorMosaicToolView {
     
     private func updateState() {
         let option = mosaicOptions[currentIdx]
@@ -114,7 +114,7 @@ extension PhotoMosaicToolView {
 }
 
 // MARK: - ResponseTouch
-extension PhotoMosaicToolView: ResponseTouch {
+extension EditorMosaicToolView: ResponseTouch {
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {

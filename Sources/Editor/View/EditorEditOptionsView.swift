@@ -1,5 +1,5 @@
 //
-//  PhotoEditOptionsView.swift
+//  EditorEditOptionsView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
@@ -8,15 +8,14 @@
 
 import UIKit
 
-protocol PhotoEditOptionsViewDelegate: class {
+protocol EditorEditOptionsViewDelegate: class {
     
-    func editOptionsView(_ editOptionsView: PhotoEditOptionsView, optionDidChange option: ImageEditorController.PhotoEditOption?)
-    
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: ImageEditorController.PhotoEditOption?)
 }
 
-final class PhotoEditOptionsView: UIView {
+final class EditorEditOptionsView: UIView {
     
-    weak var delegate: PhotoEditOptionsViewDelegate?
+    weak var delegate: EditorEditOptionsViewDelegate?
     
     private(set) var currentOption: ImageEditorController.PhotoEditOption?
     
@@ -77,7 +76,7 @@ final class PhotoEditOptionsView: UIView {
 }
 
 // MARK: - Public function
-extension PhotoEditOptionsView {
+extension EditorEditOptionsView {
     
     func unSelectButtons() {
         self.currentOption = nil
@@ -89,7 +88,7 @@ extension PhotoEditOptionsView {
 }
 
 // MARK: - ResponseTouch
-extension PhotoEditOptionsView: ResponseTouch {
+extension EditorEditOptionsView: ResponseTouch {
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {
