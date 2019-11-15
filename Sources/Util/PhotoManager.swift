@@ -153,6 +153,9 @@ extension PhotoManager {
             // 勾选图片就开始加载
             if let image = readCache(for: asset.phAsset.localIdentifier) {
                 asset._image = image
+                if postNotification {
+                    NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+                }
             } else {
                 workQueue.async { [weak self] in
                     guard let self = self else { return }
