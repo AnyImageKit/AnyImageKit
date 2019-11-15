@@ -10,7 +10,7 @@ import UIKit
 
 class CacheTool {
     
-    private var cacheList: [String] = []
+    private(set) var cacheList: [String] = []
     private var cache = NSCache<NSString, UIImage>()
     
     private let path: String
@@ -19,9 +19,13 @@ class CacheTool {
     init(name: String, limit: Int) {
         cache.countLimit = limit
         let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-        path = "\(lib)/AnyImageKitCache/\(name)/"
-        removeDirectory(path: path)
+        path = "\(lib)/AnyImageKitCache/Editor/\(name)/"
+//        removeDirectory(path: path)
         createDirectory(path: path)
+    }
+    
+    deinit {
+        
     }
     
 }

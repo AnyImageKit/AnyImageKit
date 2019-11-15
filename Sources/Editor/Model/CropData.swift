@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CropData {
+final class CropData: Codable {
     
     var rect: CGRect = .zero
     var zoomScale: CGFloat = 1.0

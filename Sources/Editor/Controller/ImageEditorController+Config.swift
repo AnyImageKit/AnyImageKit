@@ -48,6 +48,10 @@ extension ImageEditorController {
         /// 默认：30
         public var mosaicLevel: Int
         
+        /// 缓存ID
+        /// 默认：""
+        public var cacheIdentifier: String
+        
         /// 启用调试日志
         /// 默认：false
         public var enableDebugLog: Bool
@@ -61,6 +65,7 @@ extension ImageEditorController {
                     defaultMosaicIdx: Int = 0,
                     mosaicLevel: Int = 30,
                     mosaicWidth: CGFloat = 15.0,
+                    cacheIdentifier: String = "",
                     enableDebugLog: Bool = false) {
             self.tintColor = tintColor
             self.editOptions = editOptions
@@ -71,6 +76,7 @@ extension ImageEditorController {
             self.defaultMosaicIdx = defaultMosaicIdx
             self.mosaicLevel = mosaicLevel
             self.mosaicWidth = mosaicWidth
+            self.cacheIdentifier = cacheIdentifier
             self.enableDebugLog = enableDebugLog
         }
     }
