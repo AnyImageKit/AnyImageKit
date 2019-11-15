@@ -152,12 +152,22 @@ extension PhotoContentView {
     }
     
     /// 布局裁剪结束
-    private func layouEndCrop() {
-        lastCropData.rect = cropRect
-        lastCropData.zoomScale = scrollView.zoomScale
-        lastCropData.contentSize = scrollView.contentSize
-        lastCropData.contentOffset = scrollView.contentOffset
-        lastCropData.imageViewFrame = imageView.frame
+    func layouEndCrop(_ fromCache: Bool = false) {
+        if fromCache {
+            didCrop = true
+            cropRect = lastCropData.rect
+            scrollView.zoomScale = lastCropData.zoomScale
+            scrollView.contentSize = lastCropData.contentSize
+            scrollView.contentOffset = lastCropData.contentOffset
+            imageView.frame = lastCropData.imageViewFrame
+            setCropRect(lastCropData.rect)
+        } else {
+            lastCropData.rect = cropRect
+            lastCropData.zoomScale = scrollView.zoomScale
+            lastCropData.contentSize = scrollView.contentSize
+            lastCropData.contentOffset = scrollView.contentOffset
+            lastCropData.imageViewFrame = imageView.frame
+        }
         
         let contentOffset = scrollView.contentOffset
         var contentSize: CGSize = .zero
@@ -176,7 +186,7 @@ extension PhotoContentView {
         // Set
         scrollView.minimumZoomScale = didCrop ? scrollView.zoomScale : 1.0
         scrollView.maximumZoomScale = didCrop ? scrollView.zoomScale : 3.0
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: fromCache ? 0 : 0.25, animations: {
             self.scrollView.frame = self.bounds
             self.scrollView.contentInset = .zero
             
@@ -196,7 +206,7 @@ extension PhotoContentView {
         let newCropPath = UIBezierPath(rect: bounds)
         let newRectPath = UIBezierPath(rect: CGRect(origin: CGPoint(x: x, y: y), size: contentSize))
         newCropPath.append(newRectPath)
-        let cropAnimation = CABasicAnimation.create(duration: 0.25, fromValue: cropLayer.path, toValue: newCropPath.cgPath)
+        let cropAnimation = CABasicAnimation.create(duration: fromCache ? 0 : 0.25, fromValue: cropLayer.path, toValue: newCropPath.cgPath)
         cropLayer.add(cropAnimation, forKey: "path")
         cropLayer.path = newCropPath.cgPath
         cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)

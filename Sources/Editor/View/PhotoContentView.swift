@@ -119,29 +119,37 @@ final class PhotoContentView: UIView {
         self.config = config
         super.init(frame: frame)
         backgroundColor = .black
-        loadCacheIfNeeded()
         setupView()
         setupMosaicView()
+        
+        let hasCache = loadCacheIfNeeded()
+        if hasCache {
+            layouEndCrop(true)
+        } else {
+            layout()
+        }
+        cropRealRect = imageView.frame
+        updateCanvasFrame()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func loadCacheIfNeeded() {
-        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return }
+    private func loadCacheIfNeeded() -> Bool {
+        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return false }
         lastCropData = cache.cropData
         penCache = CacheTool(name: "Pen", limit: 3, cacheList: cache.penCacheList)
         mosaicCache = CacheTool(name: "Mosaic", limit: 3, cacheList: cache.mosaicCacheList)
-        imageView.image = mosaicCache.read(delete: false)
+        imageView.image = mosaicCache.read(delete: false) ?? image
         canvas.lastPenImageView.image = penCache.read(delete: false)
+        return true
     }
     
     private func setupView() {
         addSubview(scrollView)
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
-        layout()
         cropSetupView()
     }
     
@@ -153,8 +161,6 @@ final class PhotoContentView: UIView {
         scrollView.contentInset = .zero
         imageView.frame = fitFrame
         scrollView.contentSize = imageView.bounds.size
-        cropRealRect = imageView.frame
-        updateCanvasFrame()
     }
 }
 
