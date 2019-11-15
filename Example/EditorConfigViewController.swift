@@ -25,6 +25,8 @@ final class EditorConfigViewController: UITableViewController {
     }
     
     @objc private func openPickerTapped() {
+        config.enableDebugLog = true
+        config.cacheIdentifier = "123"
         let image = UIImage(named: "EditorTestImage")!
         let controller = ImageEditorController(image: image, config: config, delegate: self)
         controller.modalPresentationStyle = .fullScreen

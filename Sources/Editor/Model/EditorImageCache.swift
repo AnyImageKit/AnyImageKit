@@ -51,7 +51,9 @@ extension EditorImageCache {
     
     static func getFileUrl(id: String) -> URL {
         let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-        let path = "\(lib)/AnyImageKitCache/Editor/ImageCache/\(id)"
-        return URL(fileURLWithPath: path)
+        let path = "\(lib)/AnyImageKitCache/Editor/ImageCache"
+        FileHelper.checkDirectory(path: path)
+        let file = "\(path)/\(id).json"
+        return URL(fileURLWithPath: file)
     }
 }

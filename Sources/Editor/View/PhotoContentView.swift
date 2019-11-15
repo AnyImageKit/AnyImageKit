@@ -119,12 +119,22 @@ final class PhotoContentView: UIView {
         self.config = config
         super.init(frame: frame)
         backgroundColor = .black
+        loadCacheIfNeeded()
         setupView()
         setupMosaicView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func loadCacheIfNeeded() {
+        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return }
+        lastCropData = cache.cropData
+        penCache = CacheTool(name: "Pen", limit: 3, cacheList: cache.penCacheList)
+        mosaicCache = CacheTool(name: "Mosaic", limit: 3, cacheList: cache.mosaicCacheList)
+        imageView.image = mosaicCache.read(delete: false)
+        canvas.lastPenImageView.image = penCache.read(delete: false)
     }
     
     private func setupView() {
