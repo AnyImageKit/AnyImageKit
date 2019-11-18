@@ -422,6 +422,7 @@
 				A0B22E9E237AA1B3001F6066 /* StatusBarHelper.swift */,
 				A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */,
 				A0B22EA0237AA1B3001F6066 /* DebugHelper.swift */,
+				A50B20E0237AA24200A894A9 /* CacheTool.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -511,7 +512,6 @@
 			isa = PBXGroup;
 			children = (
 				A5DF1E8A237AA42800E3A32E /* EditorManager.swift */,
-				A50B20E0237AA24200A894A9 /* CacheTool.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";

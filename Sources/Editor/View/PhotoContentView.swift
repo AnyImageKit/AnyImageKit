@@ -110,9 +110,9 @@ final class PhotoContentView: UIView {
     internal var lastCropData: CropData = CropData()
     
     /// 存储画笔过程的图片
-    internal var penCache = CacheTool(name: "Pen", limit: 3)
+    internal lazy var penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty))
     /// 存储马赛克过程图片
-    internal var mosaicCache = CacheTool(name: "Mosaic", limit: 3)
+    internal lazy var mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty))
     
     init(frame: CGRect, image: UIImage, config: ImageEditorController.PhotoConfig) {
         self.image = image
@@ -139,8 +139,8 @@ final class PhotoContentView: UIView {
     private func loadCacheIfNeeded() -> Bool {
         guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return false }
         lastCropData = cache.cropData
-        penCache = CacheTool(name: "Pen", limit: 3, cacheList: cache.penCacheList)
-        mosaicCache = CacheTool(name: "Mosaic", limit: 3, cacheList: cache.mosaicCacheList)
+        penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
+        mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
         imageView.image = mosaicCache.read(delete: false) ?? image
         canvas.lastPenImageView.image = penCache.read(delete: false)
         return true

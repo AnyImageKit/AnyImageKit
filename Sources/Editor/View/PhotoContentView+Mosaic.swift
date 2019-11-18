@@ -17,7 +17,7 @@ extension PhotoContentView {
     }
     
     func mosaicUndo() {
-        imageView.image = mosaicCache.read() ?? image
+        imageView.image = mosaicCache.read(delete: true) ?? image
         mosaic?.reset()
     }
     
