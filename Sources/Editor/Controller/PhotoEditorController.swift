@@ -194,6 +194,17 @@ extension PhotoEditorController: EditorToolViewDelegate {
         guard let cgImage = source.cropping(to: rect) else { return }
         let image = UIImage(cgImage: cgImage)
         delegate?.imageEditorDidFinishEdit(photo: image)
-        dismiss(animated: true, completion: nil)
+        saveEditPath()
+        dismiss(animated: false, completion: nil)
+    }
+}
+
+extension PhotoEditorController {
+    
+    private func saveEditPath() {
+        let config = manager.photoConfig
+        if config.cacheIdentifier.isEmpty { return }
+        let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.cacheList, mosaicCacheList: contentView.mosaicCache.cacheList)
+        cache.save()
     }
 }

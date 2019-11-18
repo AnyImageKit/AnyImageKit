@@ -10,18 +10,23 @@ import UIKit
 
 class CacheTool {
     
-    private var cacheList: [String] = []
+    private(set) var cacheList: [String] = []
     private var cache = NSCache<NSString, UIImage>()
     
     private let path: String
     private let queue = DispatchQueue(label: "AnyImageKit.CacheTool")
     
-    init(name: String, limit: Int) {
-        cache.countLimit = limit
+    init(name: String, limit: Int, cacheList: [String] = []) {
+        self.cacheList = cacheList
+        self.cache.countLimit = limit
+        
         let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-        path = "\(lib)/AnyImageKitCache/\(name)/"
-        removeDirectory(path: path)
-        createDirectory(path: path)
+        path = "\(lib)/AnyImageKitCache/Editor/\(name)/"
+        FileHelper.checkDirectory(path: path)
+    }
+    
+    deinit {
+        
     }
     
 }
@@ -58,15 +63,7 @@ extension CacheTool {
 
 // MARK: - Private
 extension CacheTool {
-    
-    private func createDirectory(path: String) {
-        do {
-            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            _print(error.localizedDescription)
-        }
-    }
-    
+
     private func removeDirectory(path: String) {
         let url = URL(fileURLWithPath: path)
         do {
