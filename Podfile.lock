@@ -1,29 +1,16 @@
 PODS:
-  - AnyImageKit/Core (0.4.0):
-    - SnapKit
-  - AnyImageKit/Editor (0.4.0):
-    - AnyImageKit/Core
-  - AnyImageKit/Picker (0.4.0):
-    - AnyImageKit/Core
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
-  - AnyImageKit/Editor (from `./`)
-  - AnyImageKit/Picker (from `./`)
   - SnapKit (~> 5.0)
 
 SPEC REPOS:
   trunk:
     - SnapKit
 
-EXTERNAL SOURCES:
-  AnyImageKit:
-    :path: "./"
-
 SPEC CHECKSUMS:
-  AnyImageKit: 7e5b96db6b6635238779d16f2bf0e863d839615d
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 8106e17be7481cf64b4a41c984bc580cf2bd53d9
+PODFILE CHECKSUM: 29d6a27563fb3bb65a4b9371cda59ae5c0aee7b7
 
 COCOAPODS: 1.8.4
