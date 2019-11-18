@@ -26,8 +26,21 @@ extension UIImage {
     }
     
     static func resize(from data: Data, limitSize: CGSize, isExact: Bool = false) -> UIImage? {
-        guard let image = UIImage(data: data) else { return nil }
-        return resize(from: image, limitSize: limitSize, isExact: isExact)
+        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else {
+            return nil
+        }
+        
+        let maxDimensionInPixels = max(limitSize.width, limitSize.height)
+        let downsampleOptions = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceShouldCacheImmediately: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
+        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else {
+            return nil
+        }
+        return UIImage(cgImage: downsampledImage, scale: 1.0, orientation: .up)
     }
     
     private static func calculate(from originalSize: CGSize, to limitSize: CGSize) -> CGSize {

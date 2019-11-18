@@ -125,7 +125,7 @@ extension PickerManager {
         selectdAssets.append(asset)
         asset.isSelected = true
         asset.selectedNum = selectdAssets.count
-        syncAsset(asset, postNotification: false)
+        syncAsset(asset)
         return true
     }
     
@@ -147,12 +147,13 @@ extension PickerManager {
         selectdAssets.removeAll()
     }
     
-    func syncAsset(_ asset: Asset, postNotification: Bool) {
+    func syncAsset(_ asset: Asset) {
         switch asset.mediaType {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载
             if let image = readCache(for: asset.phAsset.localIdentifier) {
                 asset._image = image
+                self.didLoadImage()
             } else {
                 workQueue.async { [weak self] in
                     guard let self = self else { return }
@@ -162,16 +163,12 @@ extension PickerManager {
                         case .success(let response):
                             if !response.isDegraded {
                                 asset._image = response.image
-                                if postNotification {
-                                    NotificationCenter.default.post(name: .didSyncAsset, object: nil)
-                                }
+                                self.didLoadImage()
                             }
                         case .failure(let error):
                             _print(error)
                             let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
-                            if postNotification {
-                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
-                            }
+                            NotificationCenter.default.post(name: .didSyncAsset, object: message)
                         }
                     }
                 }
@@ -194,20 +191,28 @@ extension PickerManager {
                             switch result {
                             case .success(_):
                                 asset.videoDidDownload = true
-                                if postNotification {
-                                    NotificationCenter.default.post(name: .didSyncAsset, object: nil)
-                                }
+                                self.didLoadImage()
                             case .failure(let error):
                                 _print(error)
                                 let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
-                                if postNotification {                                
-                                    NotificationCenter.default.post(name: .didSyncAsset, object: message)
-                                }
+                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
                             }
                         }
                     }
                 })
             }
+        }
+    }
+    
+}
+
+// MARK: - Private function
+extension PickerManager {
+    
+    private func didLoadImage() {
+        let isReady = selectdAssets.filter{ !$0.isReady }.isEmpty
+        if isReady {
+            NotificationCenter.default.post(name: .didSyncAsset, object: nil)
         }
     }
 }

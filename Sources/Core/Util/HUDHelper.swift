@@ -17,19 +17,24 @@ private var hud: HUDViewController? {
     return _hud
 }
 
-
 func showWaitHUD() {
-    createHUDWindowIfNeeded()
-    hud?.wait()
+    runInMainThread {
+        createHUDWindowIfNeeded()
+        hud?.wait()
+    }
 }
 
 func showMessageHUD(_ message: String) {
-    createHUDWindowIfNeeded()
-    hud?.show(message: message)
+    runInMainThread {
+        createHUDWindowIfNeeded()
+        hud?.show(message: message)
+    }
 }
 
 func hideHUD() {
-    hud?.hide()
+    runInMainThread {
+        hud?.hide()
+    }
 }
 
 private func createHUDWindowIfNeeded() {
@@ -44,5 +49,15 @@ private func createHUDWindowIfNeeded() {
             _hud = nil
         }
         hudWindow = window
+    }
+}
+
+private func runInMainThread(_ handle: @escaping () -> Void) {
+    if !Thread.isMainThread {
+        DispatchQueue.main.async {
+            handle()
+        }
+    } else {
+        handle()
     }
 }

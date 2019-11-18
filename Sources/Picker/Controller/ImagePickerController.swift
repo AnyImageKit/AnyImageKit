@@ -107,13 +107,7 @@ extension ImagePickerController {
             guard let self = self else { return }
             let manager = PickerManager.shared
             let assets = manager.selectdAssets
-            var isReady = true
-            for asset in assets {
-                if !asset.isReady {
-                    isReady = false
-                    PickerManager.shared.syncAsset(asset, postNotification: true)
-                }
-            }
+            let isReady = manager.selectdAssets.filter{ !$0.isReady }.isEmpty
             if !isReady { return }
             self.resizeImagesIfNeeded(assets)
             DispatchQueue.main.async { [weak self] in
@@ -188,10 +182,12 @@ extension ImagePickerController {
     }
     
     @objc private func didSyncAsset(notification: Notification) {
-        if let message = notification.object as? String {
-            showMessageHUD(message)
-        } else {
-            checkData()
+        if didFinishSelect {
+            if let message = notification.object as? String {
+                showMessageHUD(message)
+            } else {
+                checkData()
+            }
         }
     }
 }
