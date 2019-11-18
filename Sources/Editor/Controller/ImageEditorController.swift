@@ -36,6 +36,7 @@ open class ImageEditorController: UINavigationController {
         let rootViewController = PhotoEditorController()
         super.init(rootViewController: rootViewController)
         rootViewController.delegate = self
+        self.editorDelegate = delegate
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -45,6 +46,18 @@ open class ImageEditorController: UINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Public static function
+extension ImageEditorController {
+    
+    public static func deleteCache(id: String) {
+        EditorImageCache.delete(id: id)
+    }
+    
+    public static func deleteAllCache() {
+        EditorImageCache.deleteAll()
     }
 }
 

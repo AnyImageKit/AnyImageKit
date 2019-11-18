@@ -46,6 +46,11 @@ enum CacheModule {
             return subModule.rawValue
         }
     }
+    
+    var path: String {
+        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
+        return "\(lib)/AnyImageKitCache/\(title)/\(subTitle)/"
+    }
 }
 
 enum CacheModulePicker: String {
@@ -55,6 +60,7 @@ enum CacheModulePicker: String {
 enum CacheModuleEditor: String {
     case pen = "Pen"
     case mosaic = "Mosaic"
+    case history = "History"
 }
 
 final class CacheTool {
@@ -72,8 +78,7 @@ final class CacheTool {
         self.cache.countLimit = config.limit
         self.queue = DispatchQueue(label: "AnyImageKit.CacheTool.\(config.module.title).\(config.module.subTitle)")
         
-        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-        path = "\(lib)/AnyImageKitCache/\(config.module.title)/\(config.module.subTitle)/"
+        path = config.module.path
         FileHelper.checkDirectory(path: path)
     }
     
@@ -209,14 +214,11 @@ extension CacheTool {
     /// 删除磁盘图片
     /// - Parameter identifier: 标识符
     private func deleteDiskFile(identifier: String) {
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            let url = URL(fileURLWithPath: self.path + identifier)
-            do {
-                try FileManager.default.removeItem(at: url)
-            } catch {
-                _print(error.localizedDescription)
-            }
+        let url = URL(fileURLWithPath: self.path + identifier)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            _print(error.localizedDescription)
         }
     }
 }

@@ -50,10 +50,31 @@ extension EditorImageCache {
     }
     
     static func getFileUrl(id: String) -> URL {
-        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-        let path = "\(lib)/AnyImageKitCache/Editor/ImageCache"
+        let path = CacheModule.editor(.history).path
+        let file = "\(path)\(id).json"
         FileHelper.checkDirectory(path: path)
-        let file = "\(path)/\(id).json"
         return URL(fileURLWithPath: file)
+    }
+    
+    static func delete(id: String) {
+        guard let obj = EditorImageCache(id: id) else { return }
+        let obj1 = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
+        let obj2 = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.mosaicCacheList)
+        
+        let url = getFileUrl(id: id)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            _print(error.localizedDescription)
+        }
+    }
+    
+    static func deleteAll() {
+        print(111)
+        let path = CacheModule.editor(.history).path
+        let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
+        for item in list {
+            delete(id: item)
+        }
     }
 }
