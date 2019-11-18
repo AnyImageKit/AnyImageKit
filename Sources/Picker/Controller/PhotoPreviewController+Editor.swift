@@ -37,9 +37,9 @@ extension PhotoPreviewController {
     }
 }
 
-extension PhotoPreviewController: ImageEditorPhotoDelegate {
+extension PhotoPreviewController: ImageEditorControllerDelegate {
     
-    func imageEditorDidFinishEdit(photo: UIImage) {
+    func imageEditorDidFinishEdit(_ controller: ImageEditorController, photo: UIImage) {
         
     }
 }

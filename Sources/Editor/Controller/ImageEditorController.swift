@@ -9,12 +9,14 @@
 import UIKit
 import SnapKit
 
-public protocol ImageEditorPhotoDelegate: class {
+public protocol ImageEditorControllerDelegate: class {
     
-    func imageEditorDidFinishEdit(photo: UIImage)
+    func imageEditorDidFinishEdit(_ controller: ImageEditorController, photo: UIImage)
 }
 
 open class ImageEditorController: UINavigationController {
+    
+    open weak var editorDelegate: ImageEditorControllerDelegate?
     
     open override var prefersStatusBarHidden: Bool {
         return true
@@ -28,12 +30,12 @@ open class ImageEditorController: UINavigationController {
         return .portrait
     }
     
-    required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorPhotoDelegate) {
+    required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorControllerDelegate) {
         EditorManager.shared.image = image
         EditorManager.shared.photoConfig = config
         let rootViewController = PhotoEditorController()
-        rootViewController.delegate = delegate
         super.init(rootViewController: rootViewController)
+        rootViewController.delegate = self
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -43,5 +45,13 @@ open class ImageEditorController: UINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - PhotoEditorControllerDelegate
+extension ImageEditorController: PhotoEditorControllerDelegate {
+    
+    func photoEditorDidFinishEdit(_ controller: PhotoEditorController, photo: UIImage) {
+        editorDelegate?.imageEditorDidFinishEdit(self, photo: photo)
     }
 }

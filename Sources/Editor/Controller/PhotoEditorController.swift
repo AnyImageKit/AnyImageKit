@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol PhotoEditorControllerDelegate: class {
+    
+    func photoEditorDidFinishEdit(_ controller: PhotoEditorController, photo: UIImage)
+}
+
 final class PhotoEditorController: UIViewController {
     
-    weak var delegate: ImageEditorPhotoDelegate?
+    weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var contentView: PhotoContentView = {
         let view = PhotoContentView(frame: self.view.bounds, image: manager.image, config: manager.photoConfig)
@@ -193,7 +198,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         
         guard let cgImage = source.cropping(to: rect) else { return }
         let image = UIImage(cgImage: cgImage)
-        delegate?.imageEditorDidFinishEdit(photo: image)
+        delegate?.photoEditorDidFinishEdit(self, photo: image)
         saveEditPath()
         dismiss(animated: false, completion: nil)
     }

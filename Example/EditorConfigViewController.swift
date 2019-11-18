@@ -75,9 +75,9 @@ final class EditorConfigViewController: UITableViewController {
 }
 
 // MARK: - ImageEditorPhotoDelegate
-extension EditorConfigViewController: ImageEditorPhotoDelegate {
+extension EditorConfigViewController: ImageEditorControllerDelegate {
     
-    func imageEditorDidFinishEdit(photo: UIImage) {
+    func imageEditorDidFinishEdit(_ controller: ImageEditorController, photo: UIImage) {
         let controller = EditorResultViewController()
         controller.imageView.image = photo
         if let splitViewController = self.splitViewController {
