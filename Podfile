@@ -12,8 +12,7 @@ end
 target 'Example' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-
-  pod 'SnapKit', '~> 5.0'
-  pod 'AnyImageKit', :path => './', :subspecs => ['Picker', 'Editor']
+  
+  # pod 'AnyImageKit', :path => './', :subspecs => ['Picker', 'Editor']
 
 end
