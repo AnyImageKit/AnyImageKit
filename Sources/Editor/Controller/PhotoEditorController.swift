@@ -10,7 +10,7 @@ import UIKit
 
 protocol PhotoEditorControllerDelegate: class {
     
-    func photoEditorDidFinishEdit(_ controller: PhotoEditorController, photo: UIImage)
+    func photoEditorDidFinish(_ controller: PhotoEditorController, photo: UIImage, isEdited: Bool)
 }
 
 final class PhotoEditorController: UIViewController {
@@ -199,7 +199,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         guard let cgImage = source.cropping(to: rect) else { return }
         let image = UIImage(cgImage: cgImage)
         saveEditPath()
-        delegate?.photoEditorDidFinishEdit(self, photo: image)
+        delegate?.photoEditorDidFinish(self, photo: image, isEdited: contentView.isEdited)
         dismiss(animated: false, completion: nil)
     }
 }
