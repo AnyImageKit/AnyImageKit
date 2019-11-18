@@ -156,6 +156,7 @@ extension PhotoContentView {
         if fromCache {
             didCrop = true
             cropRect = lastCropData.rect
+            scrollView.frame = bounds
             scrollView.zoomScale = lastCropData.zoomScale
             scrollView.contentSize = lastCropData.contentSize
             scrollView.contentOffset = lastCropData.contentOffset
@@ -206,8 +207,10 @@ extension PhotoContentView {
         let newCropPath = UIBezierPath(rect: bounds)
         let newRectPath = UIBezierPath(rect: CGRect(origin: CGPoint(x: x, y: y), size: contentSize))
         newCropPath.append(newRectPath)
-        let cropAnimation = CABasicAnimation.create(duration: fromCache ? 0 : 0.25, fromValue: cropLayer.path, toValue: newCropPath.cgPath)
-        cropLayer.add(cropAnimation, forKey: "path")
+        if !fromCache {
+            let cropAnimation = CABasicAnimation.create(duration: 0.25, fromValue: cropLayer.path, toValue: newCropPath.cgPath)
+            cropLayer.add(cropAnimation, forKey: "path")
+        }
         cropLayer.path = newCropPath.cgPath
         cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)
     }

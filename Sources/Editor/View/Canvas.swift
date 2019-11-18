@@ -46,7 +46,8 @@ class Canvas: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        UIView.animate(withDuration: 0.25) {
+        let animated = lastPenImageView.frame != .zero
+        UIView.animate(withDuration: animated ? 0.25 : 0) {
             self.lastPenImageView.frame = self.bounds
         }
     }
