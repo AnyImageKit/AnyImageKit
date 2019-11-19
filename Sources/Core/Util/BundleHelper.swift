@@ -17,15 +17,15 @@ struct BundleHelper {
     
     static var languageBundle: Bundle? {
         if _languageBundle == nil {
-            var language = (Locale.preferredLanguages.first ?? "en") as NSString
+            var language = Locale.preferredLanguages.first ?? "en"
             if language.hasPrefix("zh") {
-                if language.range(of: "Hans").location != NSNotFound {
+                if language.contains("Hans") {
                     language = "zh-Hans"
                 } else {
                     language = "zh-Hant"
                 }
             }
-            _languageBundle = Bundle(path: bundle.path(forResource: language as String, ofType: "lproj") ?? "")
+            _languageBundle = Bundle(path: bundle.path(forResource: language, ofType: "lproj") ?? "")
         }
         return _languageBundle
     }
