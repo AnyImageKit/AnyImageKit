@@ -58,7 +58,7 @@ extension EditorImageCache {
         return URL(fileURLWithPath: file)
     }
     
-    static func delete(id: String) {
+    static func clearDiskCache(id: String) {
         guard let obj = EditorImageCache(id: id) else { return }
         _print("Delete editor cache: \(id)")
         let _ = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
@@ -72,12 +72,12 @@ extension EditorImageCache {
         }
     }
     
-    static func deleteAll() {
+    static func clearDiskCache() {
         _print("Delete all editor cache")
         let path = CacheModule.editor(.history).path
         let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
         for item in list {
-            delete(id: item)
+            clearDiskCache(id: item)
         }
     }
 }
