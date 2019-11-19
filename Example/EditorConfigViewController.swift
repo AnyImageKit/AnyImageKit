@@ -78,6 +78,7 @@ final class EditorConfigViewController: UITableViewController {
 extension EditorConfigViewController: ImageEditorControllerDelegate {
     
     func imageEditorDidFinish(_ controller: ImageEditorController, photo: UIImage, isEdited: Bool) {
+        controller.dismiss(animated: true, completion: nil)
         let controller = EditorResultViewController()
         controller.imageView.image = photo
         if let splitViewController = self.splitViewController {

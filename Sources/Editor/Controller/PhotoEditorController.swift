@@ -200,7 +200,6 @@ extension PhotoEditorController: EditorToolViewDelegate {
         let image = UIImage(cgImage: cgImage)
         saveEditPath()
         delegate?.photoEditorDidFinish(self, photo: image, isEdited: contentView.isEdited)
-        dismiss(animated: false, completion: nil)
     }
 }
 
