@@ -10,8 +10,8 @@ import UIKit
 
 protocol PhotoEditorControllerDelegate: class {
     
-    func photoEditorControllerDidCancel(_ editor: PhotoEditorController)
-    func photoEditorController(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
+    func photoEditorDidCancel(_ editor: PhotoEditorController)
+    func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
 }
 
 final class PhotoEditorController: UIViewController {
@@ -74,7 +74,7 @@ final class PhotoEditorController: UIViewController {
 extension PhotoEditorController {
     
     @objc private func backButtonTapped(_ sender: UIButton) {
-        delegate?.photoEditorControllerDidCancel(self)
+        delegate?.photoEditorDidCancel(self)
     }
     
     @objc private func onSingleTap(_ tap: UITapGestureRecognizer) {
@@ -201,7 +201,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         guard let cgImage = source.cropping(to: rect) else { return }
         let image = UIImage(cgImage: cgImage)
         saveEditPath()
-        delegate?.photoEditorController(self, didFinishEditing: image, isEdited: contentView.isEdited)
+        delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
     }
 }
 
