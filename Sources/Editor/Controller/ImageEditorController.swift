@@ -32,6 +32,7 @@ open class ImageEditorController: UINavigationController {
     }
     
     required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorControllerDelegate) {
+        assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         EditorManager.shared.image = image
         EditorManager.shared.photoConfig = config
         let rootViewController = PhotoEditorController()
