@@ -129,7 +129,7 @@ final class PhotoContentView: UIView {
         
         let hasCache = loadCacheIfNeeded()
         if hasCache {
-            layouEndCrop(true)
+            layoutEndCrop(true)
         } else {
             layout()
             cropRealRect = imageView.frame
@@ -155,7 +155,7 @@ final class PhotoContentView: UIView {
         addSubview(scrollView)
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
-        cropSetupView()
+        setupCropView()
     }
     
     internal func layout() {

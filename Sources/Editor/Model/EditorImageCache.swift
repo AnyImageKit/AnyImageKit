@@ -29,7 +29,7 @@ final class EditorImageCache: Codable {
     /// Load cache
     init?(id: String) {
         let url = EditorImageCache.getFileUrl(id: id)
-        if !FileManager.default.fileExists(atPath: url.absoluteString) { return nil }
+        if !FileManager.default.fileExists(atPath: url.path) { return nil }
         guard let data = try? Data(contentsOf: url) else { return nil }
         guard let obj = try? JSONDecoder().decode(EditorImageCache.self, from: data) else { return nil }
         

@@ -93,9 +93,8 @@ extension PhotoContentView {
     var cropFrame: CGRect {
         let maxSize = cropMaxSize
         let size = cropSize
-        let top = cropY
-        let x = (scrollView.bounds.width - size.width) > 0 ? (scrollView.bounds.width - size.width) * 0.5 : 0
-        let y = ((maxSize.height - size.height) > 0 ? (maxSize.height - size.height) * 0.5 : 0) + top
+        let x = ((maxSize.width - size.width) > 0 ? (maxSize.width - size.width) * 0.5 : 0) + cropX
+        let y = ((maxSize.height - size.height) > 0 ? (maxSize.height - size.height) * 0.5 : 0) + cropY
         return CGRect(origin: CGPoint(x: x, y: y), size: size)
     }
     /// 裁剪时最大的缩放比例

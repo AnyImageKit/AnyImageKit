@@ -40,7 +40,7 @@ extension PhotoContentView {
         }
         UIView.animate(withDuration: 0.25) {
             if self.didCrop {
-                self.layouEndCrop()
+                self.layoutEndCrop()
             } else {
                 self.layout()
             }
@@ -53,7 +53,7 @@ extension PhotoContentView {
         isCrop = false
         didCrop = cropRect.size != scrollView.contentSize
         setCropHidden(true, animated: false)
-        layouEndCrop()
+        layoutEndCrop()
         setupMosaicView()
         updateCanvasFrame()
     }
@@ -94,7 +94,7 @@ extension PhotoContentView {
 extension PhotoContentView {
     
     /// 设置裁剪相关控件
-    internal func cropSetupView() {
+    internal func setupCropView() {
         addSubview(gridView)
         addSubview(topLeftCorner)
         addSubview(topRightCorner)
@@ -111,12 +111,12 @@ extension PhotoContentView {
         scrollView.maximumZoomScale = cropMaximumZoomScale
         scrollView.zoomScale = 1.0
         
-        var cropFrame = self.cropFrame
+        let cropFrame = self.cropFrame
         imageView.frame = cropFrame
+        imageView.frame.origin.x -= cropX
         imageView.frame.origin.y -= top
         scrollView.contentSize = imageView.bounds.size
         
-        cropFrame.origin.x += scrollView.frame.origin.x
         setCropRect(cropFrame, animated: animated)
         
         setupContentInset()
@@ -152,15 +152,16 @@ extension PhotoContentView {
     }
     
     /// 布局裁剪结束
-    func layouEndCrop(_ fromCache: Bool = false) {
+    func layoutEndCrop(_ fromCache: Bool = false) {
         if fromCache {
             didCrop = true
-            cropRect = lastCropData.rect
-            scrollView.frame = bounds
+            let top = cropY
+            let bottom = cropBottomOffset
+            scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
             scrollView.zoomScale = lastCropData.zoomScale
             scrollView.contentSize = lastCropData.contentSize
-            scrollView.contentOffset = lastCropData.contentOffset
             imageView.frame = lastCropData.imageViewFrame
+            scrollView.contentOffset = lastCropData.contentOffset
             setCropRect(lastCropData.rect)
         } else {
             lastCropData.rect = cropRect
@@ -243,6 +244,19 @@ extension PhotoContentView {
         let rightInset = scrollView.bounds.width - cropRect.width + 0.1
         let bottomInset = scrollView.bounds.height - cropRect.height + 0.1
         scrollView.contentInset = UIEdgeInsets(top: 0.1, left: 0.1, bottom: bottomInset, right: rightInset)
+    }
+    
+    /// 设置lastCropData
+    func setupLastCropDataIfNeeded() {
+        if didCrop { return }
+        var cropFrame = self.cropFrame
+        lastCropData.rect = cropFrame
+        lastCropData.zoomScale = scrollView.zoomScale
+        cropFrame.origin.x -= cropX
+        cropFrame.origin.y -= cropY
+        lastCropData.contentSize = cropFrame.size
+        lastCropData.contentOffset = scrollView.contentOffset
+        lastCropData.imageViewFrame = cropFrame
     }
     
     // MARK: - Calculate
