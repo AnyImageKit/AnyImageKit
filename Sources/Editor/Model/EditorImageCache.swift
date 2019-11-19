@@ -60,8 +60,9 @@ extension EditorImageCache {
     
     static func delete(id: String) {
         guard let obj = EditorImageCache(id: id) else { return }
-        let obj1 = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
-        let obj2 = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.mosaicCacheList)
+        _print("Delete editor cache: \(id)")
+        let _ = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
+        let _ = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.mosaicCacheList)
         
         let url = getFileUrl(id: id)
         do {
@@ -72,7 +73,7 @@ extension EditorImageCache {
     }
     
     static func deleteAll() {
-        print(111)
+        _print("Delete all editor cache")
         let path = CacheModule.editor(.history).path
         let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
         for item in list {

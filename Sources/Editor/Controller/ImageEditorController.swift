@@ -11,7 +11,8 @@ import SnapKit
 
 public protocol ImageEditorControllerDelegate: class {
     
-    func imageEditorDidFinish(_ controller: ImageEditorController, photo: UIImage, isEdited: Bool)
+    func imageEditorControllerDidCancel(_ editor: ImageEditorController)
+    func imageEditorController(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
 }
 
 open class ImageEditorController: UINavigationController {
@@ -64,7 +65,11 @@ extension ImageEditorController {
 // MARK: - PhotoEditorControllerDelegate
 extension ImageEditorController: PhotoEditorControllerDelegate {
     
-    func photoEditorDidFinish(_ controller: PhotoEditorController, photo: UIImage, isEdited: Bool) {
-        editorDelegate?.imageEditorDidFinish(self, photo: photo, isEdited: isEdited)
+    func photoEditorControllerDidCancel(_ editor: PhotoEditorController) {
+        editorDelegate?.imageEditorControllerDidCancel(self)
+    }
+    
+    func photoEditorController(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
+        editorDelegate?.imageEditorController(self, didFinishEditing: photo, isEdited: isEdited)
     }
 }

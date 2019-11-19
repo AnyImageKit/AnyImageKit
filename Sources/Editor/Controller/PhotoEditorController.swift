@@ -10,7 +10,8 @@ import UIKit
 
 protocol PhotoEditorControllerDelegate: class {
     
-    func photoEditorDidFinish(_ controller: PhotoEditorController, photo: UIImage, isEdited: Bool)
+    func photoEditorControllerDidCancel(_ editor: PhotoEditorController)
+    func photoEditorController(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
 }
 
 final class PhotoEditorController: UIViewController {
@@ -30,6 +31,7 @@ final class PhotoEditorController: UIViewController {
     }()
     private lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
+        view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         view.setImage(BundleHelper.image(named: "ReturnBackButton"), for: .normal)
         view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -54,12 +56,12 @@ final class PhotoEditorController: UIViewController {
         
         backButton.snp.makeConstraints { (maker) in
             if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+                maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             } else {
-                maker.top.equalToSuperview().offset(40)
+                maker.top.equalToSuperview().offset(30)
             }
-            maker.left.equalToSuperview().offset(20)
-            maker.width.height.equalTo(30)
+            maker.left.equalToSuperview().offset(10)
+            maker.width.height.equalTo(50)
         }
     }
     
@@ -72,7 +74,7 @@ final class PhotoEditorController: UIViewController {
 extension PhotoEditorController {
     
     @objc private func backButtonTapped(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
+        delegate?.photoEditorControllerDidCancel(self)
     }
     
     @objc private func onSingleTap(_ tap: UITapGestureRecognizer) {
@@ -199,7 +201,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         guard let cgImage = source.cropping(to: rect) else { return }
         let image = UIImage(cgImage: cgImage)
         saveEditPath()
-        delegate?.photoEditorDidFinish(self, photo: image, isEdited: contentView.isEdited)
+        delegate?.photoEditorController(self, didFinishEditing: image, isEdited: contentView.isEdited)
     }
 }
 

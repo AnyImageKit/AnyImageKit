@@ -77,15 +77,19 @@ final class EditorConfigViewController: UITableViewController {
 // MARK: - ImageEditorPhotoDelegate
 extension EditorConfigViewController: ImageEditorControllerDelegate {
     
-    func imageEditorDidFinish(_ controller: ImageEditorController, photo: UIImage, isEdited: Bool) {
-        controller.dismiss(animated: true, completion: nil)
+    func imageEditorControllerDidCancel(_ editor: ImageEditorController) {
+        editor.dismiss(animated: true, completion: nil)
+    }
+    
+    func imageEditorController(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         let controller = EditorResultViewController()
         controller.imageView.image = photo
         if let splitViewController = self.splitViewController {
             splitViewController.showDetailViewController(controller, sender: nil)
         } else {
-            navigationController?.pushViewController(controller, animated: true)
+            navigationController?.pushViewController(controller, animated: false)
         }
+        editor.dismiss(animated: true, completion: nil)
     }
 }
 
