@@ -15,7 +15,8 @@ private let toolBarHeight: CGFloat = 56
 
 protocol AssetPickerViewControllerDelegate: class {
     
-    func assetPickerControllerDidClickDone(_ controller: AssetPickerViewController)
+    func assetPickerDidCancel(_ picker: AssetPickerViewController)
+    func assetPickerDidFinishPicking(_ picker: AssetPickerViewController)
 }
 
 final class AssetPickerViewController: UIViewController {
@@ -270,12 +271,12 @@ extension AssetPickerViewController {
     /// 拍照结束后，如果 limit=1 直接返回
     private func finishSelectedIfNeeded() {
         if PickerManager.shared.config.selectLimit == 1 {
-            delegate?.assetPickerControllerDidClickDone(self)
+            delegate?.assetPickerDidFinishPicking(self)
         }
     }
 }
 
-// MARK: - Action
+// MARK: - Target
 extension AssetPickerViewController {
     
     @objc private func containerSizeDidChange(_ sender: Notification) {
@@ -298,8 +299,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
-        PickerManager.shared.removeAllSelectedAsset()
+        delegate?.assetPickerDidCancel(self)
     }
     
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
@@ -340,7 +340,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        delegate?.assetPickerControllerDidClickDone(self)
+        delegate?.assetPickerDidFinishPicking(self)
     }
 }
 
@@ -468,7 +468,13 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
             let idx = controller.currentIndex + itemOffset
             PickerManager.shared.addSelectedAsset(album.assets[idx])
         }
-        delegate?.assetPickerControllerDidClickDone(self)
+        delegate?.assetPickerDidFinishPicking(self)
+    }
+    
+    func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
+        let idx = controller.currentIndex + itemOffset
+        let indexPath = IndexPath(item: idx, section: 0)
+        collectionView.reloadItems(at: [indexPath])
     }
 }
 

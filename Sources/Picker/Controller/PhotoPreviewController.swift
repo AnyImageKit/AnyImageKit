@@ -39,6 +39,9 @@ protocol PhotoPreviewControllerDelegate: class {
     
     /// 点击完成
     func previewControllerDidClickDone(_ controller: PhotoPreviewController)
+    
+    /// 即将消失
+    func previewControllerWillDisappear(_ controller: PhotoPreviewController)
 }
 
 extension PhotoPreviewControllerDelegate {
@@ -86,7 +89,7 @@ final class PhotoPreviewController: UIViewController {
         layout.scrollDirection = .horizontal
         return layout
     }()
-    private lazy var collectionView: UICollectionView = { [unowned self] in
+    private(set) lazy var collectionView: UICollectionView = { [unowned self] in
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = UIColor.clear
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
@@ -103,7 +106,7 @@ final class PhotoPreviewController: UIViewController {
         collectionView.isPrefetchingEnabled = false
         return collectionView
         }()
-    private lazy var navigationBar: PickerPreviewNavigationBar = {
+    private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
         let view = PickerPreviewNavigationBar()
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
@@ -314,12 +317,13 @@ extension PhotoPreviewController {
     
     /// NavigationBar - Back
     @objc private func backButtonTapped(_ sender: UIButton) {
+        delegate?.previewControllerWillDisappear(self)
         dismiss(animated: true, completion: nil)
         NotificationCenter.default.post(name: .setupStatusBarHidden, object: false)
     }
     
     /// NavigationBar - Select
-    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
+    @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if !data.asset.isSelected && PickerManager.shared.isUpToLimit {
             let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), PickerManager.shared.config.selectLimit)
@@ -362,6 +366,7 @@ extension PhotoPreviewController {
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
     }
 }
@@ -406,11 +411,15 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
         switch cell {
         case let cell as PhotoPreviewCell:
-            if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
-                cell.setImage(originalImage)
+            if data.asset._editedImage != nil {
+                cell.setImage(data.asset._editedImage)
             } else {
-                cell.setImage(data.thumbnail)
-                cell.requestPhoto()
+                if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
+                    cell.setImage(originalImage)
+                } else {
+                    cell.setImage(data.thumbnail)
+                    cell.requestPhoto()
+                }
             }
         case let cell as VideoPreviewCell:
             if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
@@ -475,6 +484,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
 extension PhotoPreviewController: PreviewCellDelegate {
     
     func previewCellDidBeginPan(_ cell: PreviewCell) {
+        delegate?.previewControllerWillDisappear(self)
         toolBarHiddenStateBeforePan = navigationBar.alpha == 0
     }
     

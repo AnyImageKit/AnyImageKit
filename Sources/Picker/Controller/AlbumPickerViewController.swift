@@ -69,7 +69,7 @@ final class AlbumPickerViewController: UIViewController {
     }
 }
 
-// MARK: - Action
+// MARK: - Target
 
 extension AlbumPickerViewController {
     

@@ -211,7 +211,7 @@ extension VideoPreviewCell {
     }
 }
 
-// MARK: - Action
+// MARK: - Target
 extension VideoPreviewCell {
     
     @objc private func didPlayOver() {

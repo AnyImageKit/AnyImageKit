@@ -172,9 +172,9 @@ extension PickerManager {
         enqueueFetch(for: asset.localIdentifier, requestID: requestID)
     }
     
-    func savePhoto(_ image: UIImage, metadata: [String: Any], completion: @escaping PhotoSaveCompletion) {
+    func savePhoto(_ image: UIImage, metadata: [String: Any] = [:], completion: PhotoSaveCompletion? = nil) {
         guard let imageData = image.jpegData(compressionQuality: 1.0) else {
-            completion(.failure(.savePhotoFail))
+            completion?(.failure(.savePhotoFail))
             return
         }
         let timestamp = Int(Date().timeIntervalSince1970*1000)
@@ -185,7 +185,7 @@ extension PickerManager {
         do {
             try imageData.write(to: url)
         } catch {
-            completion(.failure(.savePhotoFail))
+            completion?(.failure(.savePhotoFail))
         }
         
         // Write to library
@@ -198,13 +198,13 @@ extension PickerManager {
             DispatchQueue.main.async {
                 if isSuccess {
                     if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
-                        completion(.success(asset))
+                        completion?(.success(asset))
                     } else {
-                        completion(.failure(.savePhotoFail))
+                        completion?(.failure(.savePhotoFail))
                     }
                 } else if error != nil {
                     _print("Save photo error: \(error!.localizedDescription)")
-                    completion(.failure(.savePhotoFail))
+                    completion?(.failure(.savePhotoFail))
                 }
             }
         }

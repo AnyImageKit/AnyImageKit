@@ -26,7 +26,7 @@ final class PickerConfigViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
     }
     
-    // MARK: - Action
+    // MARK: - Target
     
     @IBAction func openPickerTapped() {
         config.enableDebugLog = true
@@ -124,15 +124,20 @@ final class PickerConfigViewController: UITableViewController {
 // MARK: - ImagePickerControllerDelegate
 extension PickerConfigViewController: ImagePickerControllerDelegate {
     
-    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], useOriginalImage: Bool) {
+    func imagePickerDidCancel(_ picker: ImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
         print(assets)
         let controller = PickerResultViewController()
         controller.assets = assets
         if let splitViewController = self.splitViewController {
             splitViewController.showDetailViewController(controller, sender: nil)
         } else {
-            navigationController?.pushViewController(controller, animated: true)
+            navigationController?.pushViewController(controller, animated: false)
         }
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 

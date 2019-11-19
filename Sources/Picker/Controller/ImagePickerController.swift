@@ -11,7 +11,8 @@ import SnapKit
 
 public protocol ImagePickerControllerDelegate: class {
     
-    func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], useOriginalImage: Bool)
+    func imagePickerDidCancel(_ picker: ImagePickerController)
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool)
 }
 
 open class ImagePickerController: UINavigationController {
@@ -92,8 +93,15 @@ open class ImagePickerController: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        presentingViewController?.dismiss(animated: flag, completion: completion)
+    }
+    
     deinit {
         endGeneratingDeviceOrientationNotifications()
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        PickerManager.shared.clearEditorCache()
+        #endif
         PickerManager.shared.clearAll()
     }
 }
@@ -123,8 +131,8 @@ extension ImagePickerController {
         if didFinishSelect {
             didFinishSelect = false
             let manager = PickerManager.shared
-            pickerDelegate?.imagePicker(self, didSelect: manager.selectdAssets, useOriginalImage: manager.useOriginalImage)
-            presentingViewController?.dismiss(animated: true, completion: nil)
+            pickerDelegate?.imagePicker(self, didFinishPicking: manager.selectdAssets, useOriginalImage: manager.useOriginalImage)
+            manager.selectdAssets.compactMap{ $0._editedImage }.forEach{ manager.savePhoto($0) }
         }
         lock.unlock()
     }
@@ -146,7 +154,11 @@ extension ImagePickerController {
 // MARK: - AssetPickerViewControllerDelegate
 extension ImagePickerController: AssetPickerViewControllerDelegate {
     
-    func assetPickerControllerDidClickDone(_ controller: AssetPickerViewController) {
+    func assetPickerDidCancel(_ picker: AssetPickerViewController) {
+        pickerDelegate?.imagePickerDidCancel(self)
+    }
+    
+    func assetPickerDidFinishPicking(_ controller: AssetPickerViewController) {
         didFinishSelect = true
         checkData()
     }

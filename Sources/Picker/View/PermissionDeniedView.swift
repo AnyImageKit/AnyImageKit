@@ -52,7 +52,7 @@ final class PermissionDeniedView: UIView {
     }
 }
 
-// MARK: - Action
+// MARK: - Target
 extension PermissionDeniedView {
     
     @objc private func buttonTapped(_ sender: UIButton) {

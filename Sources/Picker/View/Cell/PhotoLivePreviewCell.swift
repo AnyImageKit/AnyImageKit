@@ -127,7 +127,7 @@ extension PhotoLivePreviewCell {
     }
 }
 
-// MARK: - Action
+// MARK: - Target
 extension PhotoLivePreviewCell {
     
     /// 长按播放 live photo

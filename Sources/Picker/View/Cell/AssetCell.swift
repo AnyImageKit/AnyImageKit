@@ -26,6 +26,11 @@ final class AssetCell: UICollectionViewCell {
         view.isHidden = true
         return view
     }()
+    private lazy var editedView: EditedView = {
+        let view = EditedView()
+        view.isHidden = true
+        return view
+    }()
     private lazy var selectdCoverView: UIView = {
         let view = UIView()
         view.isHidden = true
@@ -55,6 +60,7 @@ final class AssetCell: UICollectionViewCell {
         selectdCoverView.isHidden = true
         gifView.isHidden = true
         videoView.isHidden = true
+        editedView.isHidden = true
         disableCoverView.isHidden = true
         boxCoverView.isHidden = true
     }
@@ -73,6 +79,7 @@ final class AssetCell: UICollectionViewCell {
         addSubview(selectdCoverView)
         addSubview(gifView)
         addSubview(videoView)
+        addSubview(editedView)
         addSubview(disableCoverView)
         addSubview(boxCoverView)
         addSubview(selectButton)
@@ -87,6 +94,9 @@ final class AssetCell: UICollectionViewCell {
             maker.edges.equalToSuperview()
         }
         videoView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
+        editedView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
         disableCoverView.snp.makeConstraints { maker in
@@ -117,7 +127,7 @@ extension AssetCell {
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                self.imageView.image = response.image
+                self.imageView.image = asset._editedImage ?? response.image
                 if asset.mediaType == .video && !isPreview {
                     self.videoView.setVideoTime(asset.videoDuration)
                 }
@@ -130,13 +140,17 @@ extension AssetCell {
     }
     
     func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
-        switch asset.mediaType {
-        case .photoGIF:
-            gifView.isHidden = false
-        case .video:
-            videoView.isHidden = false
-        default:
-            break
+        if asset._editedImage != nil {
+            editedView.isHidden = false
+        } else {
+            switch asset.mediaType {
+            case .photoGIF:
+                gifView.isHidden = false
+            case .video:
+                videoView.isHidden = false
+            default:
+                break
+            }
         }
         
         if !isPreview {
@@ -260,6 +274,51 @@ private class GIFView: UIView {
         gifLabel.snp.makeConstraints { maker in
             maker.left.bottom.equalToSuperview().inset(8)
             maker.height.equalTo(15)
+        }
+    }
+}
+
+// MARK: - Edited View
+private class EditedView: UIView {
+
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        view.image = BundleHelper.image(named: "PhotoEdited")
+        return view
+    }()
+    private lazy var coverLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        layer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        layer.colors = [
+            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0).cgColor]
+        layer.locations = [0, 1]
+        layer.startPoint = CGPoint(x: 0.5, y: 1)
+        layer.endPoint = CGPoint(x: 0.5, y: 0)
+        return layer
+    }()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupView() {
+        layer.addSublayer(coverLayer)
+        addSubview(imageView)
+        
+        imageView.snp.makeConstraints { maker in
+            maker.left.bottom.equalToSuperview().inset(6)
+            maker.width.height.equalTo(15)
         }
     }
 }

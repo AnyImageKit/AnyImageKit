@@ -16,10 +16,11 @@ public class Asset: Equatable {
     public let mediaType: MediaType
     /// 输出图像
     public var image: UIImage {
-        return _image ?? .init()
+        return ((_editedImage ?? _image) ?? .init())
     }
     
     var _image: UIImage?
+    var _editedImage: UIImage?
     var videoDidDownload: Bool = false
     
     var idx: Int
