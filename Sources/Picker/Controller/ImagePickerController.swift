@@ -136,7 +136,7 @@ extension ImagePickerController {
             didFinishSelect = false
             let manager = PickerManager.shared
             pickerDelegate?.imagePicker(self, didFinishPicking: manager.selectdAssets, useOriginalImage: manager.useOriginalImage)
-            manager.selectdAssets.compactMap{ $0._editedImage }.forEach{ manager.savePhoto($0) }
+            manager.selectdAssets.compactMap{ $0._images[.edited] }.forEach{ manager.savePhoto($0) }
         }
         lock.unlock()
     }
@@ -148,7 +148,7 @@ extension ImagePickerController {
             for asset in assets {
                 if let image = asset._image, image.size != .zero  {
                     let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
-                    asset._image = resizedImage
+                    asset._images[.output] = resizedImage
                 }
             }
         }

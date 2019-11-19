@@ -411,8 +411,8 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
         switch cell {
         case let cell as PhotoPreviewCell:
-            if data.asset._editedImage != nil {
-                cell.setImage(data.asset._editedImage)
+            if data.asset._image != nil {
+                cell.setImage(data.asset._image)
             } else {
                 if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
                     cell.setImage(originalImage)

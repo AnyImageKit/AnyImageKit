@@ -16,11 +16,13 @@ public class Asset: Equatable {
     public let mediaType: MediaType
     /// 输出图像
     public var image: UIImage {
-        return ((_editedImage ?? _image) ?? .init())
+        return _image ?? .init()
     }
     
-    var _image: UIImage?
-    var _editedImage: UIImage?
+    var _image: UIImage? {
+        return (_images[.output] ?? _images[.edited]) ?? _images[.initial]
+    }
+    var _images: [ImageKey:UIImage] = [:]
     var videoDidDownload: Bool = false
     
     var idx: Int
@@ -118,5 +120,14 @@ extension Asset {
         case .video:
             return videoDidDownload
         }
+    }
+}
+
+extension Asset {
+    
+    enum ImageKey: Hashable {
+        case initial
+        case edited
+        case output
     }
 }

@@ -145,7 +145,7 @@ extension PickerManager {
         }
         selectdAssets.remove(at: idx)
         asset.isSelected = false
-        asset._image = nil
+        asset._images[.initial] = nil
         return true
     }
     
@@ -158,7 +158,7 @@ extension PickerManager {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载
             if let image = readCache(for: asset.phAsset.localIdentifier) {
-                asset._image = image
+                asset._images[.initial] = image
                 self.didLoadImage()
             } else {
                 workQueue.async { [weak self] in
@@ -168,7 +168,7 @@ extension PickerManager {
                         switch result {
                         case .success(let response):
                             if !response.isDegraded {
-                                asset._image = response.image
+                                asset._images[.initial] = response.image
                                 self.didLoadImage()
                             }
                         case .failure(let error):
@@ -187,7 +187,7 @@ extension PickerManager {
                     guard let self = self else { return }
                     switch result {
                     case .success(let response):
-                        asset._image = response.image
+                        asset._images[.initial] = response.image
                     case .failure:
                         break
                     }

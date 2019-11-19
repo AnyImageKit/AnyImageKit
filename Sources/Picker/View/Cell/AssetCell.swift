@@ -127,7 +127,7 @@ extension AssetCell {
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                self.imageView.image = asset._editedImage ?? response.image
+                self.imageView.image = asset._image ?? response.image
                 if asset.mediaType == .video && !isPreview {
                     self.videoView.setVideoTime(asset.videoDuration)
                 }
@@ -140,7 +140,7 @@ extension AssetCell {
     }
     
     func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
-        if asset._editedImage != nil {
+        if asset._images[.edited] != nil {
             editedView.isHidden = false
         } else {
             switch asset.mediaType {

@@ -16,7 +16,7 @@ extension PhotoPreviewController {
     @objc func editButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if data.asset.phAsset.mediaType == .image {
-            if let image = data.asset._image {
+            if let image = data.asset._images[.initial] {
                 showEditor(image, identifier: data.asset.phAsset.localIdentifier)
             } else {
                 showWaitHUD()
@@ -61,7 +61,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         defer { editor.dismiss(animated: false, completion: nil) }
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PhotoPreviewCell else { return }
-        data.asset._editedImage = isEdited ? photo : nil
+        data.asset._images[.edited] = isEdited ? photo : nil
         cell.setImage(photo)
         
         // 选择当前照片
