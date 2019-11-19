@@ -13,11 +13,16 @@
     - [x] Live Photo
     - [x] Video
 - [x] 支持在选择时直接拍照
-- [ ] 编辑图片
+- [ ] 编辑图片 (技术预览版)
+    - [x] 涂鸦
+    - [ ] 表情
+    - [ ] 文字
+    - [x] 裁剪
+    - [x] 马赛克
 - [ ] 多平台支持
     - [x] iOS
-    - [x] iPadOS
-    - [x] Mac Catalyst (技术预览版)
+    - [x] iPadOS (暂不支持编辑)
+    - [x] Mac Catalyst (技术预览版，暂不支持编辑)
     - [ ] macOS
     - [ ] tvOS
 

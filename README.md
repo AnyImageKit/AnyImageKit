@@ -21,11 +21,16 @@
     - [x] Live Photo
     - [x] Video
 - [x] Camera
-- [ ] Edit image
+- [x] Edit image ( Technical Preview )
+    - [x] Drawing
+    - [ ] Emoji
+    - [ ] Input text
+    - [x] Cropping
+    - [x] Mosaic
 - [ ] Multiple platform support
     - [x] iOS
-    - [x] iPadOS
-    - [x] Mac Catalyst ( Technical Preview )
+    - [x] iPadOS ( Not support in editor )
+    - [x] Mac Catalyst ( Technical Preview, Not support in editor )
     - [ ] macOS
     - [ ] tvOS
 
