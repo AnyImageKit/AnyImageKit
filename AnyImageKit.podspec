@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImageKit'
-    s.version = '0.4.0'
+    s.version = '0.5.0'
     s.license = 'MIT'
-    s.summary = 'AnyImageKit is an image picker which support for multiple photos, GIFs or videos.'
+    s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
     s.homepage = 'https://github.com/AnyImageProject/AnyImageKit'
     s.authors = {
         'anotheren' => 'liudong.edward@gmail.com',
