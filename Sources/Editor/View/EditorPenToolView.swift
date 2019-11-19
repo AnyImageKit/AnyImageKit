@@ -48,6 +48,7 @@ final class EditorPenToolView: UIView {
         for (idx, colorView) in colorViews.enumerated() {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
+            colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
         }
     }
     
@@ -90,7 +91,7 @@ final class EditorPenToolView: UIView {
         view.backgroundColor = color
         view.clipsToBounds = true
         view.layer.cornerRadius = 11
-        view.layer.borderWidth = 2.5
+        view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.white.cgColor
         return view
     }
