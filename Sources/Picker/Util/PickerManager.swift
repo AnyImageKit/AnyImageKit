@@ -115,10 +115,7 @@ extension PickerManager {
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     func clearEditorCache() {
-        for asset in selectdAssets {
-            let id = asset.phAsset.localIdentifier.replacingOccurrences(of: "/", with: "-")
-            ImageEditorController.clearDiskCache(id: id)
-        }
+        ImageEditorController.clearDiskCache()
     }
     #endif
 }

@@ -72,6 +72,10 @@ open class ImagePickerController: UINavigationController {
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
         addNotification()
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        PickerManager.shared.clearEditorCache()
+        #endif
     }
     
     open override func viewDidLayoutSubviews() {
