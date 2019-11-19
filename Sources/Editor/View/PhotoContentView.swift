@@ -132,6 +132,8 @@ final class PhotoContentView: UIView {
             layoutEndCrop(true)
         } else {
             layout()
+        }
+        if cropRealRect == .zero {
             cropRealRect = imageView.frame
         }
         updateCanvasFrame()

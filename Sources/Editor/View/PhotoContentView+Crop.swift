@@ -154,7 +154,6 @@ extension PhotoContentView {
     /// 布局裁剪结束
     func layoutEndCrop(_ fromCache: Bool = false) {
         if fromCache {
-            didCrop = true
             let top = cropY
             let bottom = cropBottomOffset
             scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
@@ -163,6 +162,7 @@ extension PhotoContentView {
             imageView.frame = lastCropData.imageViewFrame
             scrollView.contentOffset = lastCropData.contentOffset
             setCropRect(lastCropData.rect)
+            didCrop = cropRect.size != scrollView.contentSize
         } else {
             lastCropData.rect = cropRect
             lastCropData.zoomScale = scrollView.zoomScale
@@ -251,11 +251,11 @@ extension PhotoContentView {
         if didCrop { return }
         var cropFrame = self.cropFrame
         lastCropData.rect = cropFrame
-        lastCropData.zoomScale = scrollView.zoomScale
+        lastCropData.zoomScale = 1.0
         cropFrame.origin.x -= cropX
         cropFrame.origin.y -= cropY
         lastCropData.contentSize = cropFrame.size
-        lastCropData.contentOffset = scrollView.contentOffset
+        lastCropData.contentOffset = .zero
         lastCropData.imageViewFrame = cropFrame
     }
     
