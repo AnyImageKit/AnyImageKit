@@ -1,6 +1,6 @@
 language: swift
 osx_image: xcode11.1
-xcode_project: AnyImagePicker.xcworkspace
+xcode_project: AnyImageKit.xcworkspace
 xcode_scheme: Example
 
 cache: cocoapods
@@ -13,7 +13,7 @@ before_install:
 
 script:
   - pod repo update
-  - xcodebuild -workspace AnyImagePicker.xcworkspace -scheme Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+  - xcodebuild -workspace AnyImageKit.xcworkspace -scheme Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 
 after_success:
   - sleep 3
