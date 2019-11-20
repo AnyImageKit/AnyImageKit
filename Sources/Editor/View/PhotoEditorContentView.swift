@@ -1,5 +1,5 @@
 //
-//  PhotoContentView.swift
+//  PhotoEditorContentView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
@@ -16,7 +16,7 @@ protocol PhotoContentViewDelegate: class {
     func mosaicDidCreated()
 }
 
-final class PhotoContentView: UIView {
+final class PhotoEditorContentView: UIView {
 
     weak var delegate: PhotoContentViewDelegate?
     
@@ -172,7 +172,7 @@ final class PhotoContentView: UIView {
 }
 
 // MARK: - UIScrollViewDelegate
-extension PhotoContentView: UIScrollViewDelegate {
+extension PhotoEditorContentView: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView

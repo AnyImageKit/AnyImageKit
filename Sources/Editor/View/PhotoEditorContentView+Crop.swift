@@ -1,5 +1,5 @@
 //
-//  PhotoContentView+Crop.swift
+//  PhotoEditorContentView+Crop.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: - Public function
-extension PhotoContentView {
+extension PhotoEditorContentView {
 
     /// 开始裁剪
     func cropStart() {
@@ -68,7 +68,7 @@ extension PhotoContentView {
 }
 
 // MARK: - Target
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     /// 白色裁剪框4个角的pan手势
     @objc func panCropCorner(_ gr: UIPanGestureRecognizer) {
@@ -91,7 +91,7 @@ extension PhotoContentView {
 }
 
 // MARK: - Private function
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     /// 设置裁剪相关控件
     internal func setupCropView() {

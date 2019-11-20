@@ -18,8 +18,8 @@ final class PhotoEditorController: UIViewController {
     
     weak var delegate: PhotoEditorControllerDelegate?
     
-    private lazy var contentView: PhotoContentView = {
-        let view = PhotoContentView(frame: self.view.bounds, image: manager.image, config: manager.photoConfig)
+    private lazy var contentView: PhotoEditorContentView = {
+        let view = PhotoEditorContentView(frame: self.view.bounds, image: manager.image, config: manager.photoConfig)
         view.delegate = self
         view.canvas.brush.color = manager.photoConfig.penColors[manager.photoConfig.defaultPenIdx]
         return view

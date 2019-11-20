@@ -1,5 +1,5 @@
 //
-//  PhotoContentView+Mosaic.swift
+//  PhotoEditorContentView+Mosaic.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: - Public function
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     func setMosaicImage(_ idx: Int) {
         mosaic?.setMosaicCoverImage(idx)
@@ -27,7 +27,7 @@ extension PhotoContentView {
 }
 
 // MARK: - Internal function
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     /// 在子线程创建马赛克图片
     internal func setupMosaicView() {
@@ -55,7 +55,7 @@ extension PhotoContentView {
 }
 
 // MARK: - MosaicDelegate
-extension PhotoContentView: MosaicDelegate {
+extension PhotoEditorContentView: MosaicDelegate {
     
     func mosaicDidBeginPen() {
         delegate?.photoDidBeginPen()
@@ -73,7 +73,7 @@ extension PhotoContentView: MosaicDelegate {
 }
 
 // MARK: - MosaicDataSource
-extension PhotoContentView: MosaicDataSource {
+extension PhotoEditorContentView: MosaicDataSource {
     
     func mosaicGetScale(_ mosaic: Mosaic) -> CGFloat {
         return scrollView.zoomScale

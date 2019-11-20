@@ -1,5 +1,5 @@
 //
-//  PhotoContentView+Getter.swift
+//  PhotoEditorContentView+Getter.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     /// 计算contentSize应处于的中心位置
     var centerOfContentSize: CGPoint {
@@ -52,7 +52,7 @@ extension PhotoContentView {
 }
 
 // MARK: - Crop
-extension PhotoContentView {
+extension PhotoEditorContentView {
     /// 裁剪 X 的偏移量
     var cropX: CGFloat {
         return 15

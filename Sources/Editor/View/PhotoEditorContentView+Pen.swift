@@ -1,5 +1,5 @@
 //
-//  PhotoContentView+Pen.swift
+//  PhotoEditorContentView+Pen.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: - Public function
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     func canvasUndo() {
         canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: true)
@@ -22,7 +22,7 @@ extension PhotoContentView {
 }
 
 // MARK: - Internal function
-extension PhotoContentView {
+extension PhotoEditorContentView {
     
     func updateCanvasFrame() {
         canvas.frame = CGRect(origin: .zero, size: imageView.bounds.size)
@@ -30,7 +30,7 @@ extension PhotoContentView {
 }
 
 // MARK: - CanvasDelegate
-extension PhotoContentView: CanvasDelegate {
+extension PhotoEditorContentView: CanvasDelegate {
     
     func canvasDidBeginPen() {
         delegate?.photoDidBeginPen()
@@ -47,7 +47,7 @@ extension PhotoContentView: CanvasDelegate {
 }
 
 // MARK: - CanvasDataSource
-extension PhotoContentView: CanvasDataSource {
+extension PhotoEditorContentView: CanvasDataSource {
     
     func canvasGetScale(_ canvas: Canvas) -> CGFloat {
         return scrollView.zoomScale
