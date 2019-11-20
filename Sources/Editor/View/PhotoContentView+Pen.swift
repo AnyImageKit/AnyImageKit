@@ -12,7 +12,7 @@ import UIKit
 extension PhotoContentView {
     
     func canvasUndo() {
-        canvas.lastPenImageView.image = penCache.read(delete: true)
+        canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: true)
         canvas.reset()
     }
     

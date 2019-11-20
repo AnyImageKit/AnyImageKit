@@ -110,16 +110,19 @@ extension CacheTool {
     /// 读取缓存
     /// - Parameters:
     ///   - identifier: 标识符
-    ///   - delete: 读取缓存后删除缓存
-    func read(identifier: String, delete: Bool) -> UIImage? {
+    /// - Parameter deleteMemoryStorage: 读取缓存后删除内存缓存
+    /// - Parameter deleteDiskStorage: 读取缓存后删除磁盘缓存
+    func read(identifier: String, deleteMemoryStorage: Bool, deleteDiskStorage: Bool = false) -> UIImage? {
         if cacheList.isEmpty { return nil }
-        if let idx = cacheList.firstIndex(of: identifier), delete {
+        if let idx = cacheList.firstIndex(of: identifier), deleteMemoryStorage {
             cacheList.remove(at: idx)
-            deleteDiskFile(identifier: identifier)
             loadDataFromFileIfNeeded()
         }
+        if deleteDiskStorage {
+            deleteDiskFile(identifier: identifier)
+        }
         if let image = cache.object(forKey: identifier as NSString) {
-            if delete {
+            if deleteMemoryStorage {
                 cache.removeObject(forKey: identifier as NSString)
             }
             return image
@@ -128,20 +131,26 @@ extension CacheTool {
     }
     
     /// 读取缓存
-    /// - Parameter delete: 读取缓存后删除缓存
-    func read(delete: Bool) -> UIImage? {
-        if !cacheList.isEmpty && delete {
-            let identifier = cacheList.removeLast()
-            cache.removeObject(forKey: identifier as NSString)
-            deleteDiskFile(identifier: identifier)
+    /// - Parameter deleteMemoryStorage: 读取缓存后删除内存缓存
+    /// - Parameter deleteDiskStorage: 读取缓存后删除磁盘缓存
+    func read(deleteMemoryStorage: Bool, deleteDiskStorage: Bool = false) -> UIImage? {
+        var _identifier: String = ""
+        if !cacheList.isEmpty && deleteMemoryStorage {
+            _identifier = cacheList.removeLast()
+            cache.removeObject(forKey: _identifier as NSString)
             loadDataFromFileIfNeeded()
         }
-        if cacheList.isEmpty { return nil }
-        let identifier = cacheList.last!
-        if let image = cache.object(forKey: identifier as NSString) {
-            return image
+        if deleteDiskStorage && !_identifier.isEmpty {
+            deleteDiskFile(identifier: _identifier)
         }
-        return readFromFile(identifier)
+        
+        if let identifier = cacheList.last {
+            if let image = cache.object(forKey: identifier as NSString) {
+                return image
+            }
+            return readFromFile(identifier)
+        }
+        return nil
     }
     
     /// 是否有缓存

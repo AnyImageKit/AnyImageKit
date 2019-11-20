@@ -148,8 +148,8 @@ final class PhotoContentView: UIView {
         lastCropData = cache.cropData
         penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
         mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
-        imageView.image = mosaicCache.read(delete: false) ?? image
-        canvas.lastPenImageView.image = penCache.read(delete: false)
+        imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
+        canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: false)
         return true
     }
     

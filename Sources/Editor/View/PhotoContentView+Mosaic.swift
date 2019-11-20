@@ -13,11 +13,11 @@ extension PhotoContentView {
     
     func setMosaicImage(_ idx: Int) {
         mosaic?.setMosaicCoverImage(idx)
-        imageView.image = mosaicCache.read(delete: false) ?? image
+        imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
     }
     
     func mosaicUndo() {
-        imageView.image = mosaicCache.read(delete: true) ?? image
+        imageView.image = mosaicCache.read(deleteMemoryStorage: true) ?? image
         mosaic?.reset()
     }
     
