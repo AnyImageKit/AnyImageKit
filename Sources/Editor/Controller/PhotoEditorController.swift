@@ -27,6 +27,8 @@ final class PhotoEditorController: UIViewController {
     private lazy var toolView: EditorToolView = {
         let view = EditorToolView(frame: self.view.bounds, config: EditorManager.shared.photoConfig)
         view.delegate = self
+        view.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
+        view.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
         return view
     }()
     private lazy var backButton: UIButton = {
