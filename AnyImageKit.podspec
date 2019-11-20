@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImageKit'
-    s.version = '0.5.0'
+    s.version = '0.5.1'
     s.license = 'MIT'
     s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
     s.homepage = 'https://github.com/AnyImageProject/AnyImageKit'
@@ -33,4 +33,4 @@ Pod::Spec.new do |s|
         editor.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS'  => 'ANYIMAGEKIT_ENABLE_EDITOR' }
     end
     
-  end
+end
