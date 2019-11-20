@@ -25,6 +25,12 @@ open class ImagePickerController: UINavigationController {
         return PickerManager.shared.config
     }
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    public var editorConfig: EditorConfig {
+        return PickerManager.shared.editorConfig
+    }
+    #endif
+    
     open override var prefersStatusBarHidden: Bool {
         return hiddenStatusBar
     }
@@ -72,11 +78,15 @@ open class ImagePickerController: UINavigationController {
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
         addNotification()
-        
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        PickerManager.shared.clearEditorCache()
-        #endif
     }
+    
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
+        PickerManager.shared.editorConfig = editorConfig
+        PickerManager.shared.clearEditorCache()
+        self.init(config: config, delegate: delegate)
+    }
+    #endif
     
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

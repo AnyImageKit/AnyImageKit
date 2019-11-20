@@ -55,16 +55,7 @@ extension ImagePickerController {
         /// Video maximum duration 视频最大拍摄时间，单位秒
         /// - Default: 20 seconds
         public var videoMaximumDuration: TimeInterval
-        
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        /// Editor Options 可编辑类型
-        /// - Default: [.photo]
-        public var editorOptions: EditorOptions = [.photo]
-        
-        /// Editor Photo Config 图片编辑配置项
-        public var editorPhotoConfig = ImageEditorController.PhotoConfig()
-        #endif
-        
+
         /// Enable Debug Log 启用调试日志
         /// - Default: false
         public var enableDebugLog: Bool
@@ -137,20 +128,6 @@ extension ImagePickerController {
         public static let photo = CaptureMediaOptions(rawValue: 1 << 0)
         /// Video 视频
         public static let video = CaptureMediaOptions(rawValue: 1 << 1)
-        
-        public let rawValue: Int
-        
-        public init(rawValue: Int) {
-            self.rawValue = rawValue
-        }
-    }
-    
-    /// Editor Options 可编辑类型
-    public struct EditorOptions: OptionSet {
-        /// Photo 照片
-        public static let photo = EditorOptions(rawValue: 1 << 0)
-//        /// Video 视频
-//        public static let video = CaptureMediaOptions(rawValue: 1 << 1)
         
         public let rawValue: Int
         

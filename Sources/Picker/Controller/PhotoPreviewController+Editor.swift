@@ -42,7 +42,7 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func showEditor(_ image: UIImage, identifier: String) {
-        var config = PickerManager.shared.config.editorPhotoConfig
+        var config = PickerManager.shared.editorConfig.photoConfig
         config.enableDebugLog = PickerManager.shared.config.enableDebugLog
         config.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
         let controller = ImageEditorController(image: image, config: config, delegate: self)

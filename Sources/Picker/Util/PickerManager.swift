@@ -21,6 +21,10 @@ final class PickerManager {
     
     var config = ImagePickerController.Config()
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    var editorConfig = ImagePickerController.EditorConfig()
+    #endif
+    
     var isUpToLimit: Bool {
         return selectdAssets.count == config.selectLimit
     }

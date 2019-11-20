@@ -271,13 +271,11 @@ extension PhotoPreviewController {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        if !PickerManager.shared.config.editorOptions.isEmpty {
-            switch PickerManager.shared.config.editorOptions {
-            case .photo:
-                toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
-            default:
-                break
-            }
+        switch PickerManager.shared.editorConfig.options {
+        case .photo:
+            toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
+        default:
+            break
         }
         #endif
     }
