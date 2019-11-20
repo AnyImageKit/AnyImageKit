@@ -1,4 +1,4 @@
-![AnyImageKit](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/Resources/TitleMap@2x.png)
+![AnyImageKit](./Resources/TitleMap@2x.png)
 
 `AnyImageKit` 是一个选取与编辑图片的工具套件，使用 Swift 编写。
 

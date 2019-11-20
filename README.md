@@ -1,4 +1,4 @@
-![AnyImageKit](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/Resources/TitleMap@2x.png)
+![AnyImageKit](./Resources/TitleMap@2x.png)
 
 [![Travis CI](https://api.travis-ci.org/AnyImageProject/AnyImageKit.svg?branch=master)](https://travis-ci.com/AnyImageProject/AnyImageKit)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImageKit.svg)](https://img.shields.io/cocoapods/v/AnyImageKit.svg)
