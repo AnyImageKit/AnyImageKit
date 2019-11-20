@@ -15,6 +15,13 @@ public protocol ImagePickerControllerDelegate: class {
     func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool)
 }
 
+extension ImagePickerControllerDelegate {
+    
+    public func imagePickerDidCancel(_ picker: ImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+}
+
 open class ImagePickerController: UINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?

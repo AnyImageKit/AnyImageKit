@@ -124,10 +124,6 @@ final class PickerConfigViewController: UITableViewController {
 // MARK: - ImagePickerControllerDelegate
 extension PickerConfigViewController: ImagePickerControllerDelegate {
     
-    func imagePickerDidCancel(_ picker: ImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
     func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
         print(assets)
         let controller = PickerResultViewController()

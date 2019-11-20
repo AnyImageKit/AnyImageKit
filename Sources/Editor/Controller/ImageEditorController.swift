@@ -15,6 +15,13 @@ public protocol ImageEditorControllerDelegate: class {
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
 }
 
+extension ImageEditorControllerDelegate {
+    
+    public func imageEditorDidCancel(_ editor: ImageEditorController) {
+        editor.dismiss(animated: true, completion: nil)
+    }
+}
+
 open class ImageEditorController: UINavigationController {
     
     open weak var editorDelegate: ImageEditorControllerDelegate?

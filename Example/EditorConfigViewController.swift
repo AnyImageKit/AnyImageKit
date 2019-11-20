@@ -77,10 +77,6 @@ final class EditorConfigViewController: UITableViewController {
 // MARK: - ImageEditorPhotoDelegate
 extension EditorConfigViewController: ImageEditorControllerDelegate {
     
-    func imageEditorDidCancel(_ editor: ImageEditorController) {
-        editor.dismiss(animated: true, completion: nil)
-    }
-    
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         let controller = EditorResultViewController()
         controller.imageView.image = photo
