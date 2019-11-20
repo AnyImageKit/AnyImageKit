@@ -93,11 +93,11 @@ extension EditorCropToolView: ResponseTouch {
             let frame = view.frame.bigger(.init(top: 10, left: 15, bottom: 30, right: 30))
             if frame.contains(point) {
                 switch idx {
-                case 0:
+                case 0: // 取消按钮
                     delegate?.cropToolViewCancelButtonTapped(self)
-                case 1:
+                case 1: // 完成按钮
                     delegate?.cropToolViewDoneButtonTapped(self)
-                case 2:
+                case 2: // 重置按钮
                     delegate?.cropToolViewResetButtonTapped(self)
                 default:
                     break

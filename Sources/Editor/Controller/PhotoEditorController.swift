@@ -75,10 +75,12 @@ final class PhotoEditorController: UIViewController {
 // MARK: - Target
 extension PhotoEditorController {
     
+    /// 返回按钮触发
     @objc private func backButtonTapped(_ sender: UIButton) {
         delegate?.photoEditorDidCancel(self)
     }
     
+    /// Tap手势触发，由于ToolView不能响应手势否则会干扰画板的手势，所以要手动完成ToolView的响应链
     @objc private func onSingleTap(_ tap: UITapGestureRecognizer) {
         let point = tap.location(in: toolView)
         let tapped = toolView.responseTouch(point)
@@ -95,6 +97,7 @@ extension PhotoEditorController {
 // MARK: - PhotoEditorContentViewDelegate
 extension PhotoEditorController: PhotoEditorContentViewDelegate {
     
+    /// 开始涂鸦
     func photoDidBeginPen() {
         UIView.animate(withDuration: 0.25) {
             self.toolView.alpha = 0
@@ -102,6 +105,7 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
         }
     }
     
+    /// 结束涂鸦
     func photoDidEndPen() {
         if let option = toolView.currentOption {
             switch option {
@@ -119,6 +123,7 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
         }
     }
     
+    /// 马赛克图层创建完成
     func mosaicDidCreated() {
         hideHUD()
         guard let option = toolView.currentOption else { return }
@@ -131,6 +136,7 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
 // MARK: - EditorToolViewDelegate
 extension PhotoEditorController: EditorToolViewDelegate {
     
+    /// 点击了功能按钮
     func toolView(_ toolView: EditorToolView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
         contentView.canvas.isUserInteractionEnabled = false
         contentView.mosaic?.isUserInteractionEnabled = false
@@ -153,14 +159,17 @@ extension PhotoEditorController: EditorToolViewDelegate {
         }
     }
     
+    /// 画笔切换颜色
     func toolView(_ toolView: EditorToolView, colorDidChange idx: Int) {
         contentView.canvas.brush.color = EditorManager.shared.photoConfig.penColors[idx]
     }
     
+    /// 马赛克切换类型
     func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int) {
         contentView.setMosaicImage(idx)
     }
     
+    /// 撤销 - 仅用于画笔和马赛克
     func toolViewUndoButtonTapped(_ toolView: EditorToolView) {
         guard let option = toolView.currentOption else { return }
         switch option {
@@ -175,20 +184,24 @@ extension PhotoEditorController: EditorToolViewDelegate {
         }
     }
     
+    /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
         contentView.cropCancel()
     }
     
+    /// 完成裁剪
     func toolViewCropDoneButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
         contentView.cropDone()
     }
     
+    /// 还原裁剪
     func toolViewCropResetButtonTapped(_ toolView: EditorToolView) {
         contentView.cropReset()
     }
     
+    /// 最终完成按钮
     func toolViewDoneButtonTapped(_ toolView: EditorToolView) {
         guard let source = contentView.imageView.screenshot.cgImage else { return }
         let size = CGSize(width: source.width, height: source.height)
@@ -210,6 +223,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
 
 extension PhotoEditorController {
     
+    /// 存储编辑记录
     private func saveEditPath() {
         let config = manager.photoConfig
         if config.cacheIdentifier.isEmpty { return }

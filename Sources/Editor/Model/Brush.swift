@@ -14,5 +14,4 @@ final class Brush {
     var name: String = ""
     var color: UIColor = .red
     var lineWidth: CGFloat = 5.0
-    
 }

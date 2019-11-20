@@ -34,7 +34,6 @@ extension BezierGenerator {
             return []
         }
         points.append(point)
-//        return points
         if points.count < 3 {
             return []
         }
