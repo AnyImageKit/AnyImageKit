@@ -145,7 +145,7 @@ final class PhotoPreviewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNotification()
+        addNotifications()
         setupViews()
     }
     
@@ -186,7 +186,7 @@ final class PhotoPreviewController: UIViewController {
 // MARK: - Private function
 extension PhotoPreviewController {
     
-    private func addNotification() {
+    private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
     }
     

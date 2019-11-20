@@ -226,9 +226,3 @@ extension PickerManager {
         }
     }
 }
-
-extension Notification.Name {
-    
-    static let didSyncAsset: Notification.Name = Notification.Name("org.AnyImageProject.AnyImageKit.didSyncAsset")
-    
-}

@@ -77,7 +77,7 @@ open class ImagePickerController: UINavigationController {
         
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
-        addNotification()
+        addNotifications()
     }
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
@@ -112,7 +112,7 @@ open class ImagePickerController: UINavigationController {
     }
     
     deinit {
-        endGeneratingDeviceOrientationNotifications()
+        removeNotifications()
         #if ANYIMAGEKIT_ENABLE_EDITOR
         PickerManager.shared.clearEditorCache()
         #endif
@@ -194,22 +194,27 @@ extension ImagePickerController {
         }
     }
     
-    private func addNotification() {
+    private func addNotifications() {
         beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(setupStatusBarHidden(notification:)), name: .setupStatusBarHidden, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(notification:)), name: .didSyncAsset, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setupStatusBarHidden(_:)), name: .setupStatusBarHidden, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
     }
     
-    @objc private func setupStatusBarHidden(notification: Notification) {
-        if let hidden = notification.object as? Bool {
+    private func removeNotifications() {
+        NotificationCenter.default.removeObserver(self)
+        endGeneratingDeviceOrientationNotifications()
+    }
+    
+    @objc private func setupStatusBarHidden(_ sender: Notification) {
+        if let hidden = sender.object as? Bool {
             hiddenStatusBar = hidden
             setNeedsStatusBarAppearanceUpdate()
         }
     }
     
-    @objc private func didSyncAsset(notification: Notification) {
+    @objc private func didSyncAsset(_ sender: Notification) {
         if didFinishSelect {
-            if let message = notification.object as? String {
+            if let message = sender.object as? String {
                 showMessageHUD(message)
             } else {
                 checkData()
@@ -218,10 +223,5 @@ extension ImagePickerController {
     }
 }
 
-extension Notification.Name {
-    
-    static let setupStatusBarHidden: Notification.Name = Notification.Name("org.AnyImageProject.AnyImageKit.setupStatusBar")
-    static let containerSizeDidChange: Notification.Name = Notification.Name("org.AnyImageProject.AnyImageKit.containerSizeDidChange")
-}
 
-let containerSizeKey: String = "org.AnyImageProject.AnyImageKit.containerSizeKey"
+

@@ -34,7 +34,7 @@ final class AlbumPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNotification()
+        addNotifications()
         updatePreferredContentSize(with: traitCollection)
         setupView()
     }
@@ -88,8 +88,8 @@ extension AlbumPickerViewController {
 
 extension AlbumPickerViewController {
     
-    private func addNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification), name: UIDevice.orientationDidChangeNotification, object: nil)
+    private func addNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     private func setupView() {

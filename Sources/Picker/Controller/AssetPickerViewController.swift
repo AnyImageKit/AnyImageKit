@@ -81,7 +81,7 @@ final class AssetPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNotification()
+        addNotifications()
         setupNavigation()
         setupView()
         check()
@@ -134,7 +134,7 @@ final class AssetPickerViewController: UIViewController {
 // MARK: - Private function
 extension AssetPickerViewController {
     
-    private func addNotification() {
+    private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
     }
     

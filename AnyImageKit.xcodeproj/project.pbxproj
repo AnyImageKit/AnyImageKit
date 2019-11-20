@@ -15,6 +15,7 @@
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
 		A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3922330B5D000D32ED8 /* AssetCell.swift */; };
 		A036C3982330E5F300D32ED8 /* Picker+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */; };
+		A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04EACCA2385250D004A9795 /* Core+Notification.swift */; };
 		A05C8DA1233DEBFC005B0F3C /* PickerManager+PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA0233DEBFC005B0F3C /* PickerManager+PhotoData.swift */; };
 		A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA2233DEFD7005B0F3C /* PickerManager+Photo.swift */; };
 		A05C8DA5233DFA28005B0F3C /* PickerManager+PhotoGIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA4233DFA28005B0F3C /* PickerManager+PhotoGIF.swift */; };
@@ -163,6 +164,7 @@
 		A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIImage.swift"; sourceTree = "<group>"; };
 		A03E9CAA236042F0003C6335 /* README_CN.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A04EACCA2385250D004A9795 /* Core+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+Notification.swift"; sourceTree = "<group>"; };
 		A0514F02235D455600D4AA0F /* AnyImageKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = AnyImageKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A05C8DA0233DEBFC005B0F3C /* PickerManager+PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+PhotoData.swift"; sourceTree = "<group>"; };
 		A05C8DA2233DEFD7005B0F3C /* PickerManager+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+Photo.swift"; sourceTree = "<group>"; };
@@ -439,6 +441,7 @@
 				A0B22E97237AA1B3001F6066 /* Core+UIDevice.swift */,
 				A0B22E98237AA1B3001F6066 /* Core+UIColor.swift */,
 				A0B22E99237AA1B3001F6066 /* Core+UITableView.swift */,
+				A04EACCA2385250D004A9795 /* Core+Notification.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -992,6 +995,7 @@
 				A00869BD233C987600237651 /* AssociatedObject.swift in Sources */,
 				A05C8DA9233DFCD2005B0F3C /* ImagePickerError.swift in Sources */,
 				A5FE415B237E4B3100D216CF /* EditorImageCache.swift in Sources */,
+				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
 				A50B2109237AA24300A894A9 /* Brush.swift in Sources */,
 				A50B2114237AA24300A894A9 /* EditorPenToolView.swift in Sources */,
 				A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */,
