@@ -90,8 +90,8 @@ extension PhotoEditorController {
     }
 }
 
-// MARK: - PhotoContentViewDelegate
-extension PhotoEditorController: PhotoContentViewDelegate {
+// MARK: - PhotoEditorContentViewDelegate
+extension PhotoEditorController: PhotoEditorContentViewDelegate {
     
     func photoDidBeginPen() {
         UIView.animate(withDuration: 0.25) {

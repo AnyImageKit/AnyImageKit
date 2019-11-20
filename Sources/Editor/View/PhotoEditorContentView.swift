@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PhotoContentViewDelegate: class {
+protocol PhotoEditorContentViewDelegate: class {
     
     func photoDidBeginPen()
     func photoDidEndPen()
@@ -18,7 +18,7 @@ protocol PhotoContentViewDelegate: class {
 
 final class PhotoEditorContentView: UIView {
 
-    weak var delegate: PhotoContentViewDelegate?
+    weak var delegate: PhotoEditorContentViewDelegate?
     
     private(set) lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
