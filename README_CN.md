@@ -1,6 +1,6 @@
 ![AnyImageKit](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/Resources/TitleMap@2x.png)
 
-`AnyImageKit` 是一个支持多选的图片选择器，支持选择照片、视频和 GIF。使用 Swift 编写。
+`AnyImageKit` 是一个选取与编辑图片的工具套件，使用 Swift 编写。
 
 ## 功能
 
@@ -63,9 +63,15 @@ let controller = ImagePickerController(delegate: self)
 present(controller, animated: true, completion: nil)
 
 /// ImagePickerControllerDelegate
-func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], useOriginalImage: Bool) {
-    let image = assets.image
-    // Your code
+func imagePickerDidCancel(_ picker: ImagePickerController) {
+    // 你的业务代码，处理取消(存在默认实现，如果需要额外行为请自行实现本方法)
+    picker.dismiss(animated: true, completion: nil)
+}
+    
+func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
+    // 你的业务代码，处理选中的资源
+    let images = assets.map { $0.image }
+    picker.dismiss(animated: true, completion: nil)
 }
 ```
 

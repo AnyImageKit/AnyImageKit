@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/AnyImageKit.svg?style=flat)](./)
 [![License](https://img.shields.io/cocoapods/l/AnyImageKit.svg?style=flat)](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/LICENSE)
 
-`AnyImageKit` is an image picker which support for multiple photos, GIFs or videos. It's written in Swift. 
+`AnyImageKit` is a toolbox for picking and editing photos. It's written in Swift. 
 
 > [中文说明](./README_CN.md)
 
@@ -71,9 +71,15 @@ let controller = ImagePickerController(delegate: self)
 present(controller, animated: true, completion: nil)
 
 /// ImagePickerControllerDelegate
-func imagePicker(_ picker: ImagePickerController, didSelect assets: [Asset], useOriginalImage: Bool) {
-    let image = assets.image
-    // Your code
+func imagePickerDidCancel(_ picker: ImagePickerController) {
+    // Your code, handle cancel
+    picker.dismiss(animated: true, completion: nil)
+}
+    
+func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
+    // Your code, handle select assets
+    let images = assets.map { $0.image }
+    picker.dismiss(animated: true, completion: nil)
 }
 ```
 
