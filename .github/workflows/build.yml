@@ -14,8 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Install Gems
-      run: bundle install --path vendor/bundle
     - name: Install CocoaPods
       run: sudo gem install cocoapods
     - name: Pod Install
