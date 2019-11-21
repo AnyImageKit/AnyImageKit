@@ -171,19 +171,19 @@ extension PhotoEditorContentView {
             lastCropData.imageViewFrame = imageView.frame
         }
         
-        let contentOffset = scrollView.contentOffset
         var contentSize: CGSize = .zero
         contentSize.width = bounds.width
         contentSize.height = bounds.width * cropRect.height / cropRect.width
         
         var imageSize: CGSize = .zero
-        imageSize.width = bounds.width * (imageView.bounds.width * scrollView.zoomScale) / cropRect.width
-        imageSize.height = contentSize.height * (imageView.bounds.height * scrollView.zoomScale) / cropRect.height
+        imageSize.width = contentSize.width * imageView.frame.width / cropRect.width
+        imageSize.height = contentSize.height * imageView.frame.height / cropRect.height
         
+        let contentOffset = scrollView.contentOffset
+        let offsetX = contentOffset.x * imageSize.width / imageView.frame.width
+        let offsetY = contentOffset.y * imageSize.height / imageView.frame.height
         let x = (bounds.width - contentSize.width) > 0 ? (bounds.width - contentSize.width) * 0.5 : 0
         let y = (bounds.height - contentSize.height) > 0 ? (bounds.height - contentSize.height) * 0.5 : 0
-        let offsetX = contentOffset.x * imageSize.width / (imageView.bounds.width * scrollView.zoomScale)
-        let offsetY = contentOffset.y * imageSize.height / (imageView.bounds.height * scrollView.zoomScale)
         
         // Set
         scrollView.minimumZoomScale = didCrop ? scrollView.zoomScale : 1.0
