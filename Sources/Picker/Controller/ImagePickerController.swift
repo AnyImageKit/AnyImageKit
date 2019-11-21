@@ -85,12 +85,15 @@ open class ImagePickerController: UINavigationController {
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
         addNotifications()
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        EditorImageCache.clearDiskCache()
+        #endif
     }
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
         PickerManager.shared.editorConfig = editorConfig
-        PickerManager.shared.clearEditorCache()
         self.init(config: config, delegate: delegate)
     }
     #endif
@@ -121,7 +124,7 @@ open class ImagePickerController: UINavigationController {
     deinit {
         removeNotifications()
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        PickerManager.shared.clearEditorCache()
+        EditorImageCache.clearDiskCache()
         #endif
         PickerManager.shared.clearAll()
     }

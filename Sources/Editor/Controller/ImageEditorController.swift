@@ -58,18 +58,6 @@ open class ImageEditorController: UINavigationController {
     }
 }
 
-// MARK: - Public static function
-extension ImageEditorController {
-    
-    public static func clearDiskCache(id: String) {
-        EditorImageCache.clearDiskCache(id: id)
-    }
-    
-    public static func clearDiskCache() {
-        EditorImageCache.clearDiskCache()
-    }
-}
-
 // MARK: - PhotoEditorControllerDelegate
 extension ImageEditorController: PhotoEditorControllerDelegate {
     

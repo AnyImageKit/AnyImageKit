@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class EditorImageCache: Codable {
+public final class EditorImageCache: Codable {
     
     let id: String
     let penCacheList: [String]
@@ -40,6 +40,37 @@ final class EditorImageCache: Codable {
     }
 }
 
+// MARK: - Public static function
+extension EditorImageCache {
+    
+    /// 删除磁盘缓存
+    /// - Parameter id: 缓存标识符
+    static func clearDiskCache(id: String) {
+        guard let obj = EditorImageCache(id: id) else { return }
+        _print("Delete editor cache: \(id)")
+        let _ = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
+        let _ = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.mosaicCacheList)
+        
+        let url = getFileUrl(id: id)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            _print(error.localizedDescription)
+        }
+    }
+    
+    /// 删除所有磁盘缓存
+    static func clearDiskCache() {
+        _print("Delete all editor cache")
+        let path = CacheModule.editor(.history).path
+        let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
+        for item in list {
+            clearDiskCache(id: item)
+        }
+    }
+}
+
+// MARK: - Internal function
 extension EditorImageCache {
     
     func save() {
@@ -56,28 +87,5 @@ extension EditorImageCache {
         let file = "\(path)\(id).json"
         FileHelper.checkDirectory(path: path)
         return URL(fileURLWithPath: file)
-    }
-    
-    static func clearDiskCache(id: String) {
-        guard let obj = EditorImageCache(id: id) else { return }
-        _print("Delete editor cache: \(id)")
-        let _ = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
-        let _ = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.mosaicCacheList)
-        
-        let url = getFileUrl(id: id)
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            _print(error.localizedDescription)
-        }
-    }
-    
-    static func clearDiskCache() {
-        _print("Delete all editor cache")
-        let path = CacheModule.editor(.history).path
-        let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
-        for item in list {
-            clearDiskCache(id: item)
-        }
     }
 }

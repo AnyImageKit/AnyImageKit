@@ -116,12 +116,6 @@ extension PickerManager {
     func writeCache(image: UIImage, for identifier: String) {
         cache.setObject(image, forKey: identifier as NSString)
     }
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    func clearEditorCache() {
-        ImageEditorController.clearDiskCache()
-    }
-    #endif
 }
 
 // MARK: - Select
