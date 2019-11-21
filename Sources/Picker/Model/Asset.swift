@@ -54,7 +54,7 @@ extension Asset {
         return idx == -1
     }
 }
-
+/*
 // MARK: - Original Photo
 extension Asset {
     
@@ -109,7 +109,7 @@ extension Asset {
         }
         PickerManager.shared.requestVideoURL(for: phAsset, options: options, completion: completion)
     }
-}
+}*/
 
 extension Asset {
     

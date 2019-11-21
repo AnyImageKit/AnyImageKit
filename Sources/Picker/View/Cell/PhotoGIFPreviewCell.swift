@@ -59,7 +59,7 @@ extension PhotoGIFPreviewCell {
                 self.setDownloadingProgress(progress)
             }
         }
-        PickerManager.shared.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
+        manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
             switch result {
             case .success(let response):
                 self?.setImage(response.image)

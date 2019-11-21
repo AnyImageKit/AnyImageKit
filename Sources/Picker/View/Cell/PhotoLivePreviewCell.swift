@@ -24,8 +24,8 @@ final class PhotoLivePreviewCell: PreviewCell {
         return gr
     }()
     
-    private lazy var livePhotoTipView: LivePhotoView = {
-        let view = LivePhotoView()
+    private lazy var livePhotoTipView: LivePhotoTipView = {
+        let view = LivePhotoTipView()
         return view
     }()
     
@@ -47,6 +47,11 @@ final class PhotoLivePreviewCell: PreviewCell {
     override func layout() {
         super.layout()
         livePhotoView.frame = CGRect(origin: .zero, size: fitSize)
+    }
+    
+    override func updateConfig(_ config: ImagePickerController.Config) {
+        super.updateConfig(config)
+        livePhotoTipView.updateConfig(config)
     }
     
     private func setupView() {
@@ -109,7 +114,7 @@ extension PhotoLivePreviewCell {
                     self.setDownloadingProgress(progress)
                 }
             }
-            PickerManager.shared.requestLivePhoto(for: self.asset.phAsset, options: options) { (result) in
+            self.manager.requestLivePhoto(for: self.asset.phAsset, options: options) { (result) in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in

@@ -1,5 +1,5 @@
 //
-//  LivePhotoView.swift
+//  LivePhotoTipView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/22.
@@ -8,19 +8,16 @@
 
 import UIKit
 
-final class LivePhotoView: UIView {
+final class LivePhotoTipView: UIView {
 
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "LivePhoto", style: PickerManager.shared.config.theme.style)
-        let view = UIImageView(image: image)
+        let view = UIImageView(frame: .zero)
         return view
     }()
     
     private lazy var label: UILabel = {
         let view = UILabel()
         view.text = BundleHelper.pickerLocalizedString(key: "Live photo")
-        let color = ColorHelper.createByStyle(light: UIColor.color(hex: 666666), dark: UIColor.color(hex: 0x999999))
-        view.textColor = color
         view.font = UIFont.systemFont(ofSize: 12)
         return view
     }()
@@ -28,7 +25,6 @@ final class LivePhotoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 4
-        backgroundColor = PickerManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
         setupView()
     }
     
@@ -49,6 +45,15 @@ final class LivePhotoView: UIView {
             maker.right.equalToSuperview().offset(-5)
             maker.centerY.equalToSuperview()
         }
+    }
+    
+    func updateConfig(_ config: ImagePickerController.Config) {
+        imageView.image = BundleHelper.image(named: "LivePhoto", style: config.theme.style)
+        let color = UIColor.create(style: config.theme.style,
+                                   light: UIColor.color(hex: 666666),
+                                   dark: UIColor.color(hex: 0x999999))
+        label.textColor = color
+        backgroundColor = config.theme.backgroundColor.withAlphaComponent(0.7)
     }
 
 }

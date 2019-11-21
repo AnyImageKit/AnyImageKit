@@ -13,21 +13,21 @@ final class PickerToolBar: UIView {
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = PickerManager.shared.config.theme.backgroundColor.withAlphaComponent(0.7)
+        view.contentView.backgroundColor = config.theme.backgroundColor.withAlphaComponent(0.7)
         return view
     }()
     
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitleColor(PickerManager.shared.config.theme.textColor, for: .normal)
-        view.setTitleColor(PickerManager.shared.config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
+        view.setTitleColor(config.theme.textColor, for: .normal)
+        view.setTitleColor(config.theme.textColor.withAlphaComponent(0.3), for: .disabled)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     
     private(set) lazy var originalButton: OriginalButton = {
-        let view = OriginalButton(frame: .zero)
+        let view = OriginalButton(frame: .zero, config: config)
         return view
     }()
     
@@ -35,9 +35,13 @@ final class PickerToolBar: UIView {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
-        view.backgroundColor = PickerManager.shared.config.theme.mainColor
-        let color = ColorHelper.createByStyle(light: .white, dark: PickerManager.shared.config.theme.textColor)
-        let disableColor = ColorHelper.createByStyle(light: color.withAlphaComponent(0.7), dark: color.withAlphaComponent(0.3))
+        view.backgroundColor = config.theme.mainColor
+        let color = UIColor.create(style: config.theme.style,
+                                   light: .white,
+                                   dark: config.theme.textColor)
+        let disableColor = UIColor.create(style: config.theme.style,
+                                          light: color.withAlphaComponent(0.7),
+                                          dark: color.withAlphaComponent(0.3))
         view.setTitleColor(color, for: .normal)
         view.setTitleColor(disableColor, for: .disabled)
         view.setTitle(BundleHelper.pickerLocalizedString(key: "Done"), for: .normal)
@@ -45,11 +49,13 @@ final class PickerToolBar: UIView {
         return view
     }()
     
-    private var style: Style = .picker
+    private let style: Style
+    private let config: ImagePickerController.Config
     
-    init(style: Style) {
-        super.init(frame: .zero)
+    init(style: Style, config: ImagePickerController.Config) {
         self.style = style
+        self.config = config
+        super.init(frame: .zero)
         setupView()
     }
     
@@ -66,7 +72,7 @@ final class PickerToolBar: UIView {
             }
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Preview"), for: .normal)
         case .preview:
-            backgroundColor = PickerManager.shared.config.theme.toolBarColor
+            backgroundColor = config.theme.toolBarColor
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Edit"), for: .normal)
         }
         
@@ -104,7 +110,7 @@ extension PickerToolBar {
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
-        doneButton.backgroundColor = enable ? PickerManager.shared.config.theme.mainColor : PickerManager.shared.config.theme.buttonDisableColor
+        doneButton.backgroundColor = enable ? config.theme.mainColor : config.theme.buttonDisableColor
     }
 }
 

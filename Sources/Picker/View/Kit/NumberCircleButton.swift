@@ -21,7 +21,6 @@ final class NumberCircleButton: UIControl {
         view.clipsToBounds = true
         view.textColor = UIColor.white
         view.textAlignment = .center
-        view.backgroundColor = PickerManager.shared.config.theme.mainColor
         return view
     }()
     private let style: Style
@@ -75,6 +74,11 @@ final class NumberCircleButton: UIControl {
 
 extension NumberCircleButton {
     
+    func setTheme(_ theme: ImagePickerController.Theme) {
+        numLabel.backgroundColor = theme.mainColor
+        circleView.setTheme(theme)
+    }
+    
     func setNum(_ num: Int, isSelected: Bool, animated: Bool) {
         self.isSelected = isSelected
         numLabel.text = num.description
@@ -96,8 +100,6 @@ extension NumberCircleButton {
         
         private lazy var imageView: UIImageView = {
             let view = UIImageView(frame: .zero)
-            let style = PickerManager.shared.config.theme.style
-            view.image = BundleHelper.image(named: "PickerCircle", style: style)
             return view
         }()
         
@@ -124,6 +126,11 @@ extension NumberCircleButton {
         override func layoutSubviews() {
             super.layoutSubviews()
             layer.cornerRadius = bounds.size.width/2
+        }
+        
+        func setTheme(_ theme: ImagePickerController.Theme) {
+            let image = BundleHelper.image(named: "PickerCircle", style: theme.style)
+            imageView.image = image
         }
     }
 }

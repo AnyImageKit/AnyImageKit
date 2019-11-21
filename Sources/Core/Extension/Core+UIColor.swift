@@ -39,3 +39,17 @@ extension UIColor {
         }
     }
 }
+
+extension UIColor {
+    
+    static func create(style: UserInterfaceStyle, light lightColor: UIColor, dark darkColor: UIColor) -> UIColor {
+        switch style {
+        case .light:
+            return lightColor
+        case .dark:
+            return darkColor
+        case .auto:
+            return UIColor.create(light: lightColor, dark: darkColor)
+        }
+    }
+}

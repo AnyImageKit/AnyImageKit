@@ -29,12 +29,12 @@ open class ImagePickerController: UINavigationController {
     open var tag: Int = 0
     
     public var config: Config {
-        return PickerManager.shared.config
+        return manager.config
     }
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     public var editorConfig: EditorConfig {
-        return PickerManager.shared.editorConfig
+        return manager.editorConfig
     }
     #endif
     
@@ -43,7 +43,7 @@ open class ImagePickerController: UINavigationController {
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch PickerManager.shared.config.theme.style {
+        switch manager.config.theme.style {
         case .light:
             if #available(iOS 13.0, *) {
                 return .darkContent
@@ -70,15 +70,17 @@ open class ImagePickerController: UINavigationController {
     }
     
     private var containerSize: CGSize = .zero
-    private var hasOverrideGeneratingDeviceOrientation = false
-    private var hiddenStatusBar = false
-    private var didFinishSelect = false
-    internal var lock: NSLock = NSLock()
+    private var hasOverrideGeneratingDeviceOrientation: Bool = false
+    private var hiddenStatusBar: Bool = false
+    private var didFinishSelect: Bool = false
+    private let lock: NSLock = .init()
+    
+    let manager: PickerManager = .init()
     
     required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
-        PickerManager.shared.config = config
         let rootViewController = AssetPickerViewController()
         super.init(rootViewController: rootViewController)
+        self.manager.config = config
         self.pickerDelegate = delegate
         rootViewController.delegate = self
         
@@ -89,9 +91,9 @@ open class ImagePickerController: UINavigationController {
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
-        PickerManager.shared.editorConfig = editorConfig
-        PickerManager.shared.clearEditorCache()
         self.init(config: config, delegate: delegate)
+        self.manager.editorConfig = editorConfig
+        self.manager.clearEditorCache()
     }
     #endif
     
@@ -121,9 +123,9 @@ open class ImagePickerController: UINavigationController {
     deinit {
         removeNotifications()
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        PickerManager.shared.clearEditorCache()
+        manager.clearEditorCache()
         #endif
-        PickerManager.shared.clearAll()
+        manager.clearAll()
     }
 }
 
@@ -134,9 +136,8 @@ extension ImagePickerController {
         showWaitHUD()
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            let manager = PickerManager.shared
-            let assets = manager.selectdAssets
-            let isReady = manager.selectdAssets.filter{ !$0.isReady }.isEmpty
+            let assets = self.manager.selectedAssets
+            let isReady = self.manager.selectedAssets.filter{ !$0.isReady }.isEmpty
             if !isReady { return }
             self.resizeImagesIfNeeded(assets)
             DispatchQueue.main.async { [weak self] in
@@ -151,17 +152,16 @@ extension ImagePickerController {
         lock.lock()
         if didFinishSelect {
             didFinishSelect = false
-            let manager = PickerManager.shared
-            pickerDelegate?.imagePicker(self, didFinishPicking: manager.selectdAssets, useOriginalImage: manager.useOriginalImage)
-            manager.selectdAssets.compactMap{ $0._images[.edited] }.forEach{ manager.savePhoto($0) }
+            pickerDelegate?.imagePicker(self, didFinishPicking: manager.selectedAssets, useOriginalImage: manager.useOriginalImage)
+            manager.selectedAssets.compactMap{ $0._images[.edited] }.forEach{ manager.savePhoto($0) }
         }
         lock.unlock()
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {
-        if !PickerManager.shared.useOriginalImage {
-            let limitSize = CGSize(width: PickerManager.shared.config.photoMaxWidth,
-                                   height: PickerManager.shared.config.photoMaxWidth)
+        if !manager.useOriginalImage {
+            let limitSize = CGSize(width: manager.config.photoMaxWidth,
+                                   height: manager.config.photoMaxWidth)
             for asset in assets {
                 if let image = asset._image, image.size != .zero  {
                     let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
@@ -229,6 +229,3 @@ extension ImagePickerController {
         }
     }
 }
-
-
-

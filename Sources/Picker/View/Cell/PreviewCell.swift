@@ -28,13 +28,20 @@ protocol PreviewCellDelegate: class {
 
 class PreviewCell: UICollectionViewCell {
     
-    weak var delegate: PreviewCellDelegate? = nil
+    weak var delegate: PreviewCellDelegate?
     
     var asset: Asset!
+    var manager: PickerManager! {
+        didSet {
+            if oldValue == nil {
+                updateConfig(manager.config)
+            }
+        }
+    }
     
-    /// 内嵌容器。本类不能继承UIScrollView。
-    /// 因为实测UIScrollView遵循了UIGestureRecognizerDelegate协议，而本类也需要遵循此协议，
-    /// 若继承UIScrollView则会覆盖UIScrollView的协议实现，故只内嵌而不继承。
+    /// 内嵌容器
+    /// 本类不能继承 UIScrollView，因为实测 UIScrollView 遵循了 UIGestureRecognizerDelegate 协议，而本类也需要遵循此协议
+    /// 若继承 UIScrollView 则会覆盖 UIScrollView 的协议实现，故只内嵌而不继承
     private(set) lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
@@ -120,6 +127,10 @@ class PreviewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         iCloudView.reset()
+    }
+    
+    internal func updateConfig(_ config: ImagePickerController.Config) {
+        
     }
     
     // MARK: - function

@@ -29,7 +29,7 @@ final class LoadingiCloudView: UIView {
     private lazy var tipLabel: UILabel = {
         let view = UILabel()
         view.text = BundleHelper.pickerLocalizedString(key: "Downloading from iCloud")
-        view.textColor = UIColor.white //PhotoManager.shared.config.theme.textColor
+        view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()
@@ -37,7 +37,7 @@ final class LoadingiCloudView: UIView {
     private lazy var progressLabel: UILabel = {
         let view = UILabel()
         view.text = "0%"
-        view.textColor = UIColor.white //PhotoManager.shared.config.theme.textColor
+        view.textColor = UIColor.white 
         view.font = UIFont.systemFont(ofSize: 11)
         return view
     }()

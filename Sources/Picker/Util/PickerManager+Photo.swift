@@ -37,7 +37,7 @@ struct PhotoFetchOptions {
         case .resize(let width):
             return CGSize(width: width, height: width)
         case .preview:
-            let width = PickerManager.shared.config.largePhotoMaxWidth
+            let width = 1200 //TODO: PickerManager.shared.config.largePhotoMaxWidth
             return CGSize(width: width, height: width)
         case .original:
             return PHImageManagerMaximumSize
