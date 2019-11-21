@@ -206,13 +206,20 @@ extension PhotoEditorController: EditorToolViewDelegate {
         guard let source = contentView.imageView.screenshot.cgImage else { return }
         let size = CGSize(width: source.width, height: source.height)
         let cropRect = contentView.cropRealRect
+        
+        // 获取原始imageFrame
+        let tmpScale = contentView.scrollView.zoomScale
+        let tmpOffset = contentView.scrollView.contentOffset
         contentView.scrollView.zoomScale = 1.0
-        let imageRect = contentView.imageView.frame
+        let imageFrame = contentView.imageView.frame
+        contentView.scrollView.zoomScale = tmpScale
+        contentView.scrollView.contentOffset = tmpOffset
+        
         var rect: CGRect = .zero
-        rect.origin.x = (cropRect.origin.x - imageRect.origin.x) / imageRect.width * size.width
-        rect.origin.y = (cropRect.origin.y - imageRect.origin.y) / imageRect.height * size.height
-        rect.size.width = size.width * cropRect.width / imageRect.width
-        rect.size.height = size.height * cropRect.height / imageRect.height
+        rect.origin.x = (cropRect.origin.x - imageFrame.origin.x) / imageFrame.width * size.width
+        rect.origin.y = (cropRect.origin.y - imageFrame.origin.y) / imageFrame.height * size.height
+        rect.size.width = size.width * cropRect.width / imageFrame.width
+        rect.size.height = size.height * cropRect.height / imageFrame.height
         
         guard let cgImage = source.cropping(to: rect) else { return }
         let image = UIImage(cgImage: cgImage)
