@@ -19,7 +19,7 @@ protocol AssetPickerViewControllerDelegate: class {
     func assetPickerDidFinishPicking(_ picker: AssetPickerViewController)
 }
 
-final class AssetPickerViewController: UIViewController {
+final class AssetPickerViewController: UIViewController, PickerBasedViewController {
     
     weak var delegate: AssetPickerViewControllerDelegate?
     
@@ -31,7 +31,7 @@ final class AssetPickerViewController: UIViewController {
     private var autoScrollToLatest: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
-        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
+        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), config: manager.config)
         view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -45,7 +45,7 @@ final class AssetPickerViewController: UIViewController {
                                          left: defaultAssetSpacing,
                                          bottom: toolBarHeight + defaultAssetSpacing,
                                          right: defaultAssetSpacing)
-        view.backgroundColor = PickerManager.shared.config.theme.backgroundColor
+        view.backgroundColor = manager.config.theme.backgroundColor
         view.registerCell(AssetCell.self)
         view.registerCell(CameraCell.self)
         view.dataSource = self
@@ -54,10 +54,10 @@ final class AssetPickerViewController: UIViewController {
     }()
     
     private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .picker)
+        let view = PickerToolBar(style: .picker, config: manager.config)
         view.setEnable(false)
-        view.originalButton.isHidden = !PickerManager.shared.config.allowUseOriginalImage
-        view.originalButton.isSelected = PickerManager.shared.useOriginalImage
+        view.originalButton.isHidden = !manager.config.allowUseOriginalImage
+        view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
@@ -65,19 +65,30 @@ final class AssetPickerViewController: UIViewController {
     }()
     
     private lazy var permissionView: PermissionDeniedView = {
-        let view = PermissionDeniedView()
+        let view = PermissionDeniedView(frame: .zero, config: manager.config)
         view.isHidden = true
         return view
     }()
     
     private lazy var itemOffset: Int = {
-        switch PickerManager.shared.config.orderByDate {
+        switch manager.config.orderByDate {
         case .asc:
             return 0
         case .desc:
             return 1
         }
     }()
+    
+    let manager: PickerManager
+    
+    init(manager: PickerManager) {
+        self.manager = manager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,7 +101,7 @@ final class AssetPickerViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if autoScrollToLatest {
-            if PickerManager.shared.config.orderByDate == .asc {
+            if manager.config.orderByDate == .asc {
                 collectionView.scrollToLast(at: .bottom, animated: false)
             } else {
                 collectionView.scrollToFirst(at: .top, animated: false)
@@ -157,7 +168,7 @@ extension AssetPickerViewController {
     
     private func loadDefaultAlbumIfNeeded() {
         guard album == nil else { return }
-        PickerManager.shared.fetchCameraRollAlbum { [weak self] album in
+        manager.fetchCameraRollAlbum { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
             self.autoScrollToLatest = true
@@ -165,7 +176,7 @@ extension AssetPickerViewController {
     }
     
     private func preLoadAlbums() {
-        PickerManager.shared.fetchAllAlbums { [weak self] albums in
+        manager.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
             self.setAlbums(albums)
         }
@@ -177,13 +188,13 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         addCameraAsset()
         collectionView.reloadData()
-        if PickerManager.shared.config.orderByDate == .asc {
+        if manager.config.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: false)
         } else {
             collectionView.scrollToFirst(at: .top, animated: false)
         }
-        PickerManager.shared.removeAllSelectedAsset()
-        PickerManager.shared.cancelAllFetch()
+        manager.removeAllSelectedAsset()
+        manager.cancelAllFetch()
     }
     
     private func setAlbums(_ albums: [Album]) {
@@ -198,7 +209,7 @@ extension AssetPickerViewController {
         guard let album = album else { return }
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                cell.updateState(album.assets[indexPath.item], animated: animatedItem == indexPath.item)
+                cell.updateState(album.assets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
             }
         }
     }
@@ -206,7 +217,7 @@ extension AssetPickerViewController {
     /// 弹出 UIImagePickerController
     private func showUIImagePicker() {
         #if !targetEnvironment(simulator)
-        let config = PickerManager.shared.config
+        let config = manager.config
         let controller = UIImagePickerController()
         controller.delegate = self
         controller.allowsEditing = false
@@ -231,7 +242,7 @@ extension AssetPickerViewController {
     /// 添加拍照 Item
     private func addCameraAsset() {
         guard let album = album, album.isCameraRoll else { return }
-        let config = PickerManager.shared.config
+        let config = manager.config
         let sortType = config.orderByDate
         if !config.captureMediaOptions.isEmpty {
             switch sortType {
@@ -246,7 +257,6 @@ extension AssetPickerViewController {
     /// 拍照结束后，插入 PHAsset
     private func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
-        let manager = PickerManager.shared
         let sortType = manager.config.orderByDate
         let addSuccess: Bool
         switch sortType {
@@ -270,7 +280,7 @@ extension AssetPickerViewController {
     
     /// 拍照结束后，如果 limit=1 直接返回
     private func finishSelectedIfNeeded() {
-        if PickerManager.shared.config.selectLimit == 1 {
+        if manager.config.selectLimit == 1 {
             delegate?.assetPickerDidFinishPicking(self)
         }
     }
@@ -284,7 +294,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func titleViewTapped(_ sender: PickerArrowButton) {
-        let controller = AlbumPickerViewController()
+        let controller = AlbumPickerViewController(manager: manager)
         controller.album = album
         controller.albums = albums
         controller.delegate = self
@@ -307,8 +317,8 @@ extension AssetPickerViewController {
         guard let cell = sender.superview as? AssetCell else { return }
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
         let asset = album.assets[idx]
-        if !asset.isSelected && PickerManager.shared.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), PickerManager.shared.config.selectLimit)
+        if !asset.isSelected && manager.isUpToLimit {
+            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.config.selectLimit)
             let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -317,18 +327,18 @@ extension AssetPickerViewController {
         
         asset.isSelected = !sender.isSelected
         if asset.isSelected {
-            PickerManager.shared.addSelectedAsset(asset)
+            manager.addSelectedAsset(asset)
             updateVisibleCellState(idx)
         } else {
-            PickerManager.shared.removeSelectedAsset(asset)
+            manager.removeSelectedAsset(asset)
             updateVisibleCellState(idx)
         }
-        toolBar.setEnable(!PickerManager.shared.selectdAssets.isEmpty)
+        toolBar.setEnable(!manager.selectedAssets.isEmpty)
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
-        guard let asset = PickerManager.shared.selectdAssets.first else { return }
-        let controller = PhotoPreviewController()
+        guard let asset = manager.selectedAssets.first else { return }
+        let controller = PhotoPreviewController(manager: manager)
         controller.currentIndex = asset.idx
         controller.dataSource = self
         controller.delegate = self
@@ -336,7 +346,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
-        PickerManager.shared.useOriginalImage = sender.isSelected
+        manager.useOriginalImage = sender.isSelected
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
@@ -363,7 +373,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         }
         
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        cell.setContent(asset)
+        cell.setContent(asset, manager: manager)
         cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         cell.backgroundColor = UIColor.white
         return cell
@@ -380,8 +390,8 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             return
         }
         
-        if !album.assets[indexPath.item].isSelected && PickerManager.shared.isUpToLimit { return }
-        let controller = PhotoPreviewController()
+        if !album.assets[indexPath.item].isSelected && manager.isUpToLimit { return }
+        let controller = PhotoPreviewController(manager: manager)
         controller.currentIndex = indexPath.item - itemOffset
         controller.dataSource = self
         controller.delegate = self
@@ -391,7 +401,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
         if let cell = cell as? AssetCell {
-            cell.updateState(asset, animated: false)
+            cell.updateState(asset, manager: manager, animated: false)
         }
     }
 }
@@ -401,7 +411,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
-        let columnNumber = CGFloat(PickerManager.shared.config.columnNumber)
+        let columnNumber = CGFloat(manager.config.columnNumber)
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
     }
@@ -425,7 +435,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
-        if album.isCameraRoll && !PickerManager.shared.config.captureMediaOptions.isEmpty {
+        if album.isCameraRoll && !manager.config.captureMediaOptions.isEmpty {
             return album.assets.count - 1
         }
         return album.assets.count
@@ -455,7 +465,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
         updateVisibleCellState()
-        toolBar.setEnable(!PickerManager.shared.selectdAssets.isEmpty)
+        toolBar.setEnable(!manager.selectedAssets.isEmpty)
     }
     
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) {
@@ -464,9 +474,9 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
         guard let album = album else { return }
-        if PickerManager.shared.selectdAssets.isEmpty {
+        if manager.selectedAssets.isEmpty {
             let idx = controller.currentIndex + itemOffset
-            PickerManager.shared.addSelectedAsset(album.assets[idx])
+            manager.addSelectedAsset(album.assets[idx])
         }
         delegate?.assetPickerDidFinishPicking(self)
     }
@@ -491,7 +501,7 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
         case mediaTypeImage:
             guard let image = info[.originalImage] as? UIImage else { return }
             guard let metadata = info[.mediaMetadata] as? [String:Any] else { return }
-            PickerManager.shared.savePhoto(image, metadata: metadata) { [weak self] (result) in
+            manager.savePhoto(image, metadata: metadata) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
                     self?.addPHAsset(asset)
@@ -502,7 +512,7 @@ extension AssetPickerViewController: UIImagePickerControllerDelegate {
             }
         case mediaTypeMovie:
             guard let videoUrl = info[.mediaURL] as? URL else { return }
-            PickerManager.shared.saveVideo(at: videoUrl) { [weak self] (result) in
+            manager.saveVideo(at: videoUrl) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
                     self?.addPHAsset(asset)

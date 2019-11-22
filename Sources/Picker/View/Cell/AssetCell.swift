@@ -47,7 +47,6 @@ final class AssetCell: UICollectionViewCell {
         let view = UIView()
         view.isHidden = true
         view.layer.borderWidth = 4
-        view.layer.borderColor = PickerManager.shared.config.theme.mainColor.cgColor
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
@@ -121,9 +120,15 @@ extension AssetCell {
 
 extension AssetCell {
     
-    func setContent(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
+    private func setConfig(_ config: ImagePickerController.Config) {
+        boxCoverView.layer.borderColor = config.theme.mainColor.cgColor
+        selectButton.setTheme(config.theme)
+    }
+    
+    func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+        setConfig(manager.config)
         let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
-        PickerManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+        manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):
@@ -136,10 +141,10 @@ extension AssetCell {
             }
         })
         
-        updateState(asset, animated: animated, isPreview: isPreview)
+        updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: Asset, animated: Bool = false, isPreview: Bool = false) {
+    func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         if asset._images[.edited] != nil {
             editedView.isHidden = false
         } else {
@@ -156,7 +161,7 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-            disableCoverView.isHidden = !(PickerManager.shared.isUpToLimit && !asset.isSelected)
+            disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
         }
     }
 }

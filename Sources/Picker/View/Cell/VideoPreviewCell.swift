@@ -131,7 +131,7 @@ extension VideoPreviewCell {
     func requestPhoto() {
         if imageView.image == nil { // thumbnail
             let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
-            PickerManager.shared.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+            manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
@@ -146,7 +146,7 @@ extension VideoPreviewCell {
         
         let id = asset.phAsset.localIdentifier
         let options = PhotoFetchOptions(sizeMode: .resize(500), needCache: true)
-        PickerManager.shared.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+        manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
             switch result {
             case .success(let response):
                 if !response.isDegraded && self?.asset.phAsset.localIdentifier == id {
@@ -170,7 +170,7 @@ extension VideoPreviewCell {
                     self.setDownloadingProgress(progress)
                 }
             }
-            PickerManager.shared.requestVideo(for: self.asset.phAsset, options: options) { result in
+            self.manager.requestVideo(for: self.asset.phAsset, options: options) { result in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in

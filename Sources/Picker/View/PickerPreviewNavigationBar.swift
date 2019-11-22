@@ -12,7 +12,7 @@ final class PickerPreviewNavigationBar: UIView {
     
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
-        let image = BundleHelper.image(named: "ReturnButton", style: PickerManager.shared.config.theme.style)
+        let image = BundleHelper.image(named: "ReturnButton", style: config.theme.style)
         view.setImage(image, for: .normal)
         view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
         return view
@@ -22,10 +22,15 @@ final class PickerPreviewNavigationBar: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
+    private let config: ImagePickerController.Config
+    
+    init(frame: CGRect, config: ImagePickerController.Config) {
+        self.config = config
         super.init(frame: frame)
-        let theme = PickerManager.shared.config.theme
-        backgroundColor = ColorHelper.createByStyle(light: theme.toolBarColor, dark: theme.backgroundColor).withAlphaComponent(0.95)
+        backgroundColor = UIColor.create(style: config.theme.style,
+                                         light: config.theme.toolBarColor,
+                                         dark: config.theme.backgroundColor)
+            .withAlphaComponent(0.95)
         setupView()
     }
     

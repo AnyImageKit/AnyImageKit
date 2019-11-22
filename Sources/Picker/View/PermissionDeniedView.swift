@@ -16,21 +16,23 @@ final class PermissionDeniedView: UIView {
         view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
-        view.textColor = PickerManager.shared.config.theme.textColor
+        view.textColor = config.theme.textColor
         return view
     }()
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
         view.setTitle(BundleHelper.pickerLocalizedString(key: "Go to Settings"), for: .normal)
-        view.setTitleColor(PickerManager.shared.config.theme.mainColor, for: .normal)
+        view.setTitleColor(config.theme.mainColor, for: .normal)
         view.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
-    override init(frame: CGRect) {
+    private let config: ImagePickerController.Config
+    
+    init(frame: CGRect, config: ImagePickerController.Config) {
+        self.config = config
         super.init(frame: frame)
-        backgroundColor = PickerManager.shared.config.theme.backgroundColor
         setupView()
     }
     
@@ -39,6 +41,7 @@ final class PermissionDeniedView: UIView {
     }
     
     private func setupView() {
+        backgroundColor = config.theme.backgroundColor
         addSubview(label)
         addSubview(button)
         label.snp.makeConstraints { maker in

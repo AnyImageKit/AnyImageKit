@@ -17,22 +17,22 @@ struct FetchRecord {
 
 final class PickerManager {
     
-    static let shared: PickerManager = PickerManager()
+//    static let shared: PickerManager = PickerManager()
     
-    var config = ImagePickerController.Config()
+    var config: ImagePickerController.Config = .init()
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
-    var editorConfig = ImagePickerController.EditorConfig()
+    var editorConfig: ImagePickerController.EditorConfig = .init()
     #endif
     
     var isUpToLimit: Bool {
-        return selectdAssets.count == config.selectLimit
+        return selectedAssets.count == config.selectLimit
     }
     
     var useOriginalImage: Bool = false
     
     /// 已选中的资源
-    private(set) var selectdAssets: [Asset] = []
+    private(set) var selectedAssets: [Asset] = []
     
     /// Running Fetch Requests
     private var fetchRecords = [FetchRecord]()
@@ -40,16 +40,16 @@ final class PickerManager {
     /// 缓存
     private var cache = NSCache<NSString, UIImage>()
     
-    private init() { }
+    init() { }
     
-    let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.PhotoManager")
+    let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.PickerManager")
 }
 
 extension PickerManager {
     
     func clearAll() {
         useOriginalImage = false
-        selectdAssets.removeAll()
+        selectedAssets.removeAll()
         cache.removeAllObjects()
     }
 }
@@ -124,31 +124,31 @@ extension PickerManager {
     
     @discardableResult
     func addSelectedAsset(_ asset: Asset) -> Bool {
-        if selectdAssets.contains(asset) { return false }
-        if selectdAssets.count == PickerManager.shared.config.selectLimit { return false }
-        selectdAssets.append(asset)
+        if selectedAssets.contains(asset) { return false }
+        if selectedAssets.count == config.selectLimit { return false }
+        selectedAssets.append(asset)
         asset.isSelected = true
-        asset.selectedNum = selectdAssets.count
+        asset.selectedNum = selectedAssets.count
         syncAsset(asset)
         return true
     }
     
     @discardableResult
     func removeSelectedAsset(_ asset: Asset) -> Bool {
-        guard let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0 == asset }) else { return false }
-        for item in selectdAssets {
+        guard let idx = selectedAssets.firstIndex(where: { $0 == asset }) else { return false }
+        for item in selectedAssets {
             if item.selectedNum > asset.selectedNum {
                 item.selectedNum -= 1
             }
         }
-        selectdAssets.remove(at: idx)
+        selectedAssets.remove(at: idx)
         asset.isSelected = false
         asset._images[.initial] = nil
         return true
     }
     
     func removeAllSelectedAsset() {
-        selectdAssets.removeAll()
+        selectedAssets.removeAll()
     }
     
     func syncAsset(_ asset: Asset) {
@@ -214,7 +214,7 @@ extension PickerManager {
 extension PickerManager {
     
     private func didLoadImage() {
-        let isReady = selectdAssets.filter{ !$0.isReady }.isEmpty
+        let isReady = selectedAssets.filter{ !$0.isReady }.isEmpty
         if isReady {
             NotificationCenter.default.post(name: .didSyncAsset, object: nil)
         }

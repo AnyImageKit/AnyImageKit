@@ -47,6 +47,7 @@
 		A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C192331D426005F742C /* Picker+UIColor.swift */; };
 		A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */; };
 		A0C101E82356BD81000DBBC6 /* PickerManager+PhotoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C101E72356BD81000DBBC6 /* PickerManager+PhotoURL.swift */; };
+		A0DAC16723866AAC000A4942 /* PickerBasedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DAC16623866AAC000A4942 /* PickerBasedViewController.swift */; };
 		A0DFAA0B235597520020690F /* PickerManager+VideoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DFAA0A235597520020690F /* PickerManager+VideoURL.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
@@ -100,7 +101,7 @@
 		A56A3C8C2330BCA100EBFC48 /* PickerPreviewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8B2330BCA100EBFC48 /* PickerPreviewNavigationBar.swift */; };
 		A56A3C8E2330BCB000EBFC48 /* PickerToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C8D2330BCB000EBFC48 /* PickerToolBar.swift */; };
 		A5783954235EAA88002A0498 /* PhotoLivePreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5783953235EAA88002A0498 /* PhotoLivePreviewCell.swift */; };
-		A5783956235ED584002A0498 /* LivePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5783955235ED584002A0498 /* LivePhotoView.swift */; };
+		A5783956235ED584002A0498 /* LivePhotoTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5783955235ED584002A0498 /* LivePhotoTipView.swift */; };
 		A59332602338ADBA003CE652 /* AnimatableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593325F2338ADBA003CE652 /* AnimatableImageView.swift */; };
 		A59332622338AED8003CE652 /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59332612338AED8003CE652 /* AnimatedImage.swift */; };
 		A5A141B12384DB6E00201A82 /* ImagePickerController+EditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A141B02384DB6E00201A82 /* ImagePickerController+EditorConfig.swift */; };
@@ -122,7 +123,6 @@
 		A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E82237AA32C00E3A32E /* Editor+UIImage.swift */; };
 		A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */; };
 		A5DF1E8B237AA42800E3A32E /* EditorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E8A237AA42800E3A32E /* EditorManager.swift */; };
-		A5DFBCEF23559E1C00B0A58B /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */; };
 		A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */; };
 		A5FE415B237E4B3100D216CF /* EditorImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FE415A237E4B3100D216CF /* EditorImageCache.swift */; };
 /* End PBXBuildFile section */
@@ -199,6 +199,7 @@
 		A0C03C192331D426005F742C /* Picker+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Picker+UIColor.swift"; sourceTree = "<group>"; };
 		A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDropDownPresentationController.swift; sourceTree = "<group>"; };
 		A0C101E72356BD81000DBBC6 /* PickerManager+PhotoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+PhotoURL.swift"; sourceTree = "<group>"; };
+		A0DAC16623866AAC000A4942 /* PickerBasedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerBasedViewController.swift; sourceTree = "<group>"; };
 		A0DBD4F12334A20700121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Picker.strings"; sourceTree = "<group>"; };
 		A0DFAA0A235597520020690F /* PickerManager+VideoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+VideoURL.swift"; sourceTree = "<group>"; };
 		A0F4753B232F7DE500BB117B /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
@@ -258,7 +259,7 @@
 		A56A3C8D2330BCB000EBFC48 /* PickerToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerToolBar.swift; sourceTree = "<group>"; };
 		A56A3C8F2330BCF700EBFC48 /* Ex+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIColor.swift"; sourceTree = "<group>"; };
 		A5783953235EAA88002A0498 /* PhotoLivePreviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoLivePreviewCell.swift; sourceTree = "<group>"; };
-		A5783955235ED584002A0498 /* LivePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhotoView.swift; sourceTree = "<group>"; };
+		A5783955235ED584002A0498 /* LivePhotoTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhotoTipView.swift; sourceTree = "<group>"; };
 		A57AB3E02330D5CE00EF344B /* Ex+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A593325F2338ADBA003CE652 /* AnimatableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableImageView.swift; sourceTree = "<group>"; };
 		A59332612338AED8003CE652 /* AnimatedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedImage.swift; sourceTree = "<group>"; };
@@ -283,7 +284,6 @@
 		A5DF1E82237AA32C00E3A32E /* Editor+UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+UIImage.swift"; sourceTree = "<group>"; };
 		A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+UIBezierPath.swift"; sourceTree = "<group>"; };
 		A5DF1E8A237AA42800E3A32E /* EditorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorManager.swift; sourceTree = "<group>"; };
-		A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 		A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoPreviewController+Editor.swift"; sourceTree = "<group>"; };
 		A5FE415A237E4B3100D216CF /* EditorImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorImageCache.swift; sourceTree = "<group>"; };
 		EFDDF6D07FE50B56C4A76362 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -366,7 +366,6 @@
 				71036185235E6BDB00669A7B /* PickerManager+LivePhoto.swift */,
 				A00869BC233C987600237651 /* AssociatedObject.swift */,
 				A59332612338AED8003CE652 /* AnimatedImage.swift */,
-				A5DFBCEE23559E1C00B0A58B /* ColorHelper.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -374,6 +373,7 @@
 		A0800418232F5F90006B4711 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A0DAC16623866AAC000A4942 /* PickerBasedViewController.swift */,
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
 				A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */,
 				A5A141B02384DB6E00201A82 /* ImagePickerController+EditorConfig.swift */,
@@ -623,7 +623,7 @@
 				A5A27BBC232F83DE00D966B8 /* OriginalButton.swift */,
 				A5325EA42331C14F00ADA116 /* PickerArrowButton.swift */,
 				A531105623544C0D00D457A8 /* LoadingiCloudView.swift */,
-				A5783955235ED584002A0498 /* LivePhotoView.swift */,
+				A5783955235ED584002A0498 /* LivePhotoTipView.swift */,
 			);
 			path = Kit;
 			sourceTree = "<group>";
@@ -932,7 +932,6 @@
 				A5CEB00D233DAF4700C67706 /* PhotoGIFPreviewCell.swift in Sources */,
 				A5CC86C123349D4B00BCB372 /* PickerPreviewIndexView.swift in Sources */,
 				A0B22EB0237AA1B3001F6066 /* UserInterfaceStyle.swift in Sources */,
-				A5DFBCEF23559E1C00B0A58B /* ColorHelper.swift in Sources */,
 				A56A3C8C2330BCA100EBFC48 /* PickerPreviewNavigationBar.swift in Sources */,
 				A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
@@ -944,7 +943,7 @@
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
-				A5783956235ED584002A0498 /* LivePhotoView.swift in Sources */,
+				A5783956235ED584002A0498 /* LivePhotoTipView.swift in Sources */,
 				A50B2118237AA24300A894A9 /* Canvas.swift in Sources */,
 				A50B211D237AA24300A894A9 /* PhotoEditorContentView+Mosaic.swift in Sources */,
 				A59332602338ADBA003CE652 /* AnimatableImageView.swift in Sources */,
@@ -959,6 +958,7 @@
 				A50B2102237AA24200A894A9 /* ImageEditorController+Config.swift in Sources */,
 				A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */,
 				A50B2111237AA24300A894A9 /* EditorCropToolView.swift in Sources */,
+				A0DAC16723866AAC000A4942 /* PickerBasedViewController.swift in Sources */,
 				A0F475422330736200BB117B /* Picker+PHAssetCollection.swift in Sources */,
 				A50B211A237AA24300A894A9 /* EditorToolView.swift in Sources */,
 				A0B22EAC237AA1B3001F6066 /* StatusBarHelper.swift in Sources */,

@@ -20,20 +20,17 @@ final class AlbumCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
-        view.textColor = PickerManager.shared.config.theme.textColor
         return view
     }()
     
     private lazy var subTitleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.preferredFont(forTextStyle: .body)
-        view.textColor = PickerManager.shared.config.theme.subTextColor
         return view
     }()
     
     private lazy var separatorLine: UIView = {
         let view = UIView(frame: .zero)
-        view.backgroundColor = PickerManager.shared.config.theme.separatorLineColor
         return view
     }()
     
@@ -47,13 +44,6 @@ final class AlbumCell: UITableViewCell {
     }
     
     private func setupView() {
-        tintColor = PickerManager.shared.config.theme.mainColor
-        // Background Color
-        backgroundColor = PickerManager.shared.config.theme.backgroundColor
-        // Selected Background Color
-        let view = UIView(frame: .zero)
-        view.backgroundColor = PickerManager.shared.config.theme.selectedCellColor
-        selectedBackgroundView = view
         // Subviews
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
@@ -80,10 +70,25 @@ final class AlbumCell: UITableViewCell {
 
 extension AlbumCell {
     
-    func setContent(_ album: Album) {
+    private func updateTheme(_ theme: ImagePickerController.Theme) {
+        tintColor = theme.mainColor
+        backgroundColor = theme.backgroundColor
+        let view = UIView(frame: .zero)
+        view.backgroundColor = theme.selectedCellColor
+        selectedBackgroundView = view
+        titleLabel.textColor = theme.textColor
+        subTitleLabel.textColor = theme.subTextColor
+        separatorLine.backgroundColor = theme.separatorLineColor
+    }
+}
+
+extension AlbumCell {
+    
+    func setContent(_ album: Album, manager: PickerManager) {
+        updateTheme(manager.config.theme)
         titleLabel.text = album.name
         subTitleLabel.text = "(\(album.count))"
-        PickerManager.shared.requestPhoto(for: album) { [weak self] result in
+        manager.requestPhoto(for: album) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):

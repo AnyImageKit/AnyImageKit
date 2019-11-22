@@ -15,7 +15,7 @@ protocol PickerPreviewIndexViewDelegate: class {
 
 final class PickerPreviewIndexView: UIView {
     
-    weak var delegate: PickerPreviewIndexViewDelegate? = nil
+    weak var delegate: PickerPreviewIndexViewDelegate?
     
     var currentIndex: Int = 0 {
         didSet {
@@ -36,7 +36,7 @@ final class PickerPreviewIndexView: UIView {
         layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        view.backgroundColor = PickerManager.shared.config.theme.toolBarColor
+        view.backgroundColor = config.theme.toolBarColor
         view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self
@@ -44,10 +44,14 @@ final class PickerPreviewIndexView: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
+    private let config: ImagePickerController.Config
+    
+    private var manager: PickerManager!
+    
+    init(frame: CGRect, config: ImagePickerController.Config) {
+        self.config = config
         super.init(frame: frame)
         setupView()
-        setupData()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -66,18 +70,19 @@ final class PickerPreviewIndexView: UIView {
         }
     }
     
-    private func setupData() {
-        lastAssetList = PickerManager.shared.selectdAssets
+    func setManager(_ manager: PickerManager) {
+        self.manager = manager
+        lastAssetList = manager.selectedAssets
     }
     
     private func didSetCurrentIndex() {
-        isHidden = PickerManager.shared.selectdAssets.isEmpty
-        if let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        isHidden = manager.selectedAssets.isEmpty
+        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
-        if let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0.idx == lastIdx }) {
+        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == lastIdx }) {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
         }
     }
@@ -86,7 +91,7 @@ final class PickerPreviewIndexView: UIView {
 extension PickerPreviewIndexView {
     
     func didChangeSelectedAsset() {
-        let assetList = PickerManager.shared.selectdAssets
+        let assetList = manager.selectedAssets
         self.isHidden = assetList.isEmpty
         if lastAssetList.count < assetList.count {
             collectionView.insertItems(at: [IndexPath(item: assetList.count-1, section: 0)])
@@ -105,7 +110,7 @@ extension PickerPreviewIndexView {
     private func selectItemAtFirstTime() {
         if !isFirst { return }
         isFirst = false
-        if let idx = PickerManager.shared.selectdAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
@@ -116,23 +121,22 @@ extension PickerPreviewIndexView {
 extension PickerPreviewIndexView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return PickerManager.shared.selectdAssets.count
+        return manager.selectedAssets.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        let asset = PickerManager.shared.selectdAssets[indexPath.item]
-        cell.setContent(asset, animated: false, isPreview: true)
+        let asset = manager.selectedAssets[indexPath.item]
+        cell.setContent(asset, manager: manager, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
         cell.boxCoverView.isHidden = asset.idx != currentIndex
         return cell
     }
-    
 }
 
 extension PickerPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.pickerPreviewIndexView(self, didSelect: PickerManager.shared.selectdAssets[indexPath.item].idx)
+        delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item].idx)
     }
 }

@@ -12,7 +12,7 @@ import UIKit
 
 // MARK: - Target
 extension PhotoPreviewController {
-    /// ToolBar - Edit - not finish
+    /// ToolBar - Edit
     @objc func editButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if data.asset.phAsset.mediaType == .image {
@@ -21,7 +21,7 @@ extension PhotoPreviewController {
             } else {
                 showWaitHUD()
                 let options = PhotoFetchOptions(sizeMode: .preview)
-                PickerManager.shared.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
+                manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
                     guard let self = self else { return }
                     hideHUD()
                     switch result {
@@ -42,8 +42,8 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func showEditor(_ image: UIImage, identifier: String) {
-        var config = PickerManager.shared.editorConfig.photoConfig
-        config.enableDebugLog = PickerManager.shared.config.enableDebugLog
+        var config = manager.editorConfig.photoConfig
+        config.enableDebugLog = manager.config.enableDebugLog
         config.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
         let controller = ImageEditorController(image: image, config: config, delegate: self)
         controller.modalPresentationStyle = .fullScreen
@@ -65,7 +65,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         cell.setImage(photo)
         
         // 选择当前照片
-        if !PickerManager.shared.isUpToLimit {
+        if !manager.isUpToLimit {
             if !data.asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)
             }

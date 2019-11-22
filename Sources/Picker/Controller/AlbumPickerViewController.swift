@@ -16,7 +16,7 @@ protocol AlbumPickerViewControllerDelegate: class {
     func albumPickerWillDisappear()
 }
 
-final class AlbumPickerViewController: UIViewController {
+final class AlbumPickerViewController: UIViewController, PickerBasedViewController {
     
     weak var delegate: AlbumPickerViewControllerDelegate?
     var album: Album?
@@ -25,12 +25,23 @@ final class AlbumPickerViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.registerCell(AlbumCell.self)
-        view.backgroundColor = PickerManager.shared.config.theme.backgroundColor
+        view.backgroundColor = manager.config.theme.backgroundColor
         view.separatorStyle = .none
         view.dataSource = self
         view.delegate = self
         return view
     }()
+    
+    let manager: PickerManager
+    
+    init(manager: PickerManager) {
+        self.manager = manager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +126,7 @@ extension AlbumPickerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
         let album = albums[indexPath.row]
-        cell.setContent(album)
+        cell.setContent(album, manager: manager)
         cell.accessoryType = self.album == album ? .checkmark : .none
         return cell
     }

@@ -52,8 +52,7 @@ extension PhotoPreviewControllerDelegate {
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
 }
 
-
-final class PhotoPreviewController: UIViewController {
+final class PhotoPreviewController: UIViewController, PickerBasedViewController {
     
     weak var delegate: PhotoPreviewControllerDelegate? = nil
     weak var dataSource: PhotoPreviewControllerDataSource? = nil
@@ -89,33 +88,33 @@ final class PhotoPreviewController: UIViewController {
         layout.scrollDirection = .horizontal
         return layout
     }()
-    private(set) lazy var collectionView: UICollectionView = { [unowned self] in
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = UIColor.clear
-        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.registerCell(PhotoPreviewCell.self)
-        collectionView.registerCell(PhotoGIFPreviewCell.self)
-        collectionView.registerCell(VideoPreviewCell.self)
-        collectionView.registerCell(PhotoLivePreviewCell.self)
-        collectionView.isPagingEnabled = true
-        collectionView.alwaysBounceHorizontal = false
-        collectionView.isPrefetchingEnabled = false
-        return collectionView
-        }()
+    private(set) lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = UIColor.clear
+        view.decelerationRate = UIScrollView.DecelerationRate.fast
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        view.delegate = self
+        view.dataSource = self
+        view.registerCell(PhotoPreviewCell.self)
+        view.registerCell(PhotoGIFPreviewCell.self)
+        view.registerCell(VideoPreviewCell.self)
+        view.registerCell(PhotoLivePreviewCell.self)
+        view.isPagingEnabled = true
+        view.alwaysBounceHorizontal = false
+        view.isPrefetchingEnabled = false
+        return view
+    }()
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
-        let view = PickerPreviewNavigationBar()
+        let view = PickerPreviewNavigationBar(frame: .zero, config: manager.config)
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .preview)
-        view.originalButton.isHidden = !PickerManager.shared.config.allowUseOriginalImage
-        view.originalButton.isSelected = PickerManager.shared.useOriginalImage
+        let view = PickerToolBar(style: .preview, config: manager.config)
+        view.originalButton.isHidden = !manager.config.allowUseOriginalImage
+        view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
@@ -125,13 +124,17 @@ final class PhotoPreviewController: UIViewController {
         return view
     }()
     private lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView()
+        let view = PickerPreviewIndexView(frame: .zero, config: manager.config)
+        view.setManager(manager)
         view.isHidden = true
         view.delegate = self
         return view
     }()
     
-    init() {
+    let manager: PickerManager
+    
+    init(manager: PickerManager) {
+        self.manager = manager
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
@@ -177,7 +180,7 @@ final class PhotoPreviewController: UIViewController {
     deinit {
         for cell in collectionView.visibleCells {
             if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                PickerManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+                manager.cancelFetch(for: cell.asset.phAsset.localIdentifier)
             }
         }
     }
@@ -245,7 +248,10 @@ extension PhotoPreviewController {
         if navigationBar.alpha == 1 && !hidden { return }
         if isNormal {
             NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
-            scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : ColorHelper.createByStyle(light: .white, dark: .black)
+            let color = UIColor.create(style: manager.config.theme.style,
+                                       light: .white,
+                                       dark: .black)
+            scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : color
         }
         
         if animated {
@@ -267,11 +273,11 @@ extension PhotoPreviewController {
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         indexView.currentIndex = currentIndex
         
-        if PickerManager.shared.config.allowUseOriginalImage {
+        if manager.config.allowUseOriginalImage {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        switch PickerManager.shared.editorConfig.options {
+        switch manager.editorConfig.options {
         case .photo:
             toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
         default:
@@ -323,8 +329,8 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if !data.asset.isSelected && PickerManager.shared.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), PickerManager.shared.config.selectLimit)
+        if !data.asset.isSelected && manager.isUpToLimit {
+            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.config.selectLimit)
             let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -333,9 +339,9 @@ extension PhotoPreviewController {
         
         data.asset.isSelected = !sender.isSelected
         if data.asset.isSelected {
-            PickerManager.shared.addSelectedAsset(data.asset)
+            manager.addSelectedAsset(data.asset)
         } else {
-            PickerManager.shared.removeSelectedAsset(data.asset)
+            manager.removeSelectedAsset(data.asset)
         }
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         
@@ -349,7 +355,6 @@ extension PhotoPreviewController {
     
     /// ToolBar - Original
     @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
-        let manager = PickerManager.shared
         manager.useOriginalImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
@@ -397,6 +402,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         }
         cell.delegate = self
         cell.asset = data.asset
+        cell.manager = manager
         return cell
     }
 }
@@ -412,7 +418,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
             if data.asset._image != nil {
                 cell.setImage(data.asset._image)
             } else {
-                if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
+                if let originalImage = manager.readCache(for: data.asset.phAsset.localIdentifier) {
                     cell.setImage(originalImage)
                 } else {
                     cell.setImage(data.thumbnail)
@@ -420,7 +426,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 }
             }
         case let cell as VideoPreviewCell:
-            if let originalImage = PickerManager.shared.readCache(for: data.asset.phAsset.localIdentifier) {
+            if let originalImage = manager.readCache(for: data.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
@@ -443,7 +449,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PreviewCell:
             cell.reset()
             if !cell.asset.isSelected {
-                PickerManager.shared.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+                manager.cancelFetch(for: cell.asset.phAsset.localIdentifier)
             }
         default:
             break
