@@ -13,14 +13,14 @@ import Foundation
 extension ImagePickerController {
     
     public struct EditorConfig {
-        /// Options 可编辑类型
-        /// - Default: [.photo]
+        /// Options 编辑类型
+        /// - Default: []
         public var options: EditorOptions
         
         /// Photo Config 图片编辑配置项
         public var photoConfig: ImageEditorController.PhotoConfig
         
-        public init(options: EditorOptions = [.photo],
+        public init(options: EditorOptions = [],
                     photoConfig: ImageEditorController.PhotoConfig = .init()) {
             self.options = options
             self.photoConfig = photoConfig
