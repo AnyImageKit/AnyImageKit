@@ -97,7 +97,6 @@ open class ImagePickerController: UINavigationController {
     convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
         self.init(config: config, delegate: delegate)
         self.manager.editorConfig = editorConfig
-        self.manager.clearEditorCache()
     }
     #endif
     
@@ -127,7 +126,7 @@ open class ImagePickerController: UINavigationController {
     deinit {
         removeNotifications()
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        manager.clearEditorCache()
+        EditorImageCache.clearDiskCache()
         #endif
         manager.clearAll()
     }
