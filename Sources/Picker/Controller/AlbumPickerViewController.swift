@@ -32,6 +32,17 @@ final class AlbumPickerViewController: UIViewController, PickerBasedViewControll
         return view
     }()
     
+    let manager: PickerManager
+    
+    init(manager: PickerManager) {
+        self.manager = manager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addNotifications()

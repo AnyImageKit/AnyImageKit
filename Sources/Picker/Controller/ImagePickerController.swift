@@ -78,7 +78,7 @@ open class ImagePickerController: UINavigationController {
     let manager: PickerManager = .init()
     
     required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
-        let rootViewController = AssetPickerViewController()
+        let rootViewController = AssetPickerViewController(manager: manager)
         super.init(rootViewController: rootViewController)
         self.manager.config = config
         self.pickerDelegate = delegate

@@ -12,17 +12,3 @@ protocol PickerBasedViewController: class {
     
     var manager: PickerManager { get }
 }
-
-extension PickerBasedViewController where Self: UIViewController {
-    
-    var manager: PickerManager {
-        var controller: UIViewController = self
-        if let presentingViewController = self.presentingViewController {
-            controller = presentingViewController
-        }
-        guard let navigationController = controller.navigationController as? ImagePickerController else {
-            fatalError("")
-        }
-        return navigationController.manager
-    }
-}

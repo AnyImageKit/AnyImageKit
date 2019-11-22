@@ -79,6 +79,17 @@ final class AssetPickerViewController: UIViewController, PickerBasedViewControll
         }
     }()
     
+    let manager: PickerManager
+    
+    init(manager: PickerManager) {
+        self.manager = manager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addNotifications()
@@ -283,7 +294,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func titleViewTapped(_ sender: PickerArrowButton) {
-        let controller = AlbumPickerViewController()
+        let controller = AlbumPickerViewController(manager: manager)
         controller.album = album
         controller.albums = albums
         controller.delegate = self
@@ -327,7 +338,7 @@ extension AssetPickerViewController {
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
         guard let asset = manager.selectedAssets.first else { return }
-        let controller = PhotoPreviewController()
+        let controller = PhotoPreviewController(manager: manager)
         controller.currentIndex = asset.idx
         controller.dataSource = self
         controller.delegate = self
@@ -380,7 +391,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         }
         
         if !album.assets[indexPath.item].isSelected && manager.isUpToLimit { return }
-        let controller = PhotoPreviewController()
+        let controller = PhotoPreviewController(manager: manager)
         controller.currentIndex = indexPath.item - itemOffset
         controller.dataSource = self
         controller.delegate = self

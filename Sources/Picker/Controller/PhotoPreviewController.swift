@@ -131,7 +131,10 @@ final class PhotoPreviewController: UIViewController, PickerBasedViewController 
         return view
     }()
     
-    init() {
+    let manager: PickerManager
+    
+    init(manager: PickerManager) {
+        self.manager = manager
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
