@@ -547,6 +547,10 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     /// 提供转场协调器
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
+        let color = UIColor.create(style: manager.config.theme.style,
+                                   light: .white,
+                                   dark: .black)
+        controller.maskView.backgroundColor = color
         scalePresentationController = controller
         return controller
     }
