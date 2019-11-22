@@ -434,6 +434,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
             }
             cell.requestVideo()
         case let cell as PhotoGIFPreviewCell:
+            cell.setImage(data.thumbnail)
             cell.requestGIF()
         case let cell as PhotoLivePreviewCell:
             cell.setImage(data.thumbnail)
