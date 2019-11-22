@@ -32,8 +32,6 @@ final class EditorToolView: UIView {
         editOptionsView.currentOption
     }
     
-    private let config: ImageEditorController.PhotoConfig
-    
     private lazy var topCoverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         let statusBarHeight = StatusBarHelper.height
@@ -64,12 +62,12 @@ final class EditorToolView: UIView {
     }()
     
     private(set) lazy var editOptionsView: EditorEditOptionsView = {
-        let view = EditorEditOptionsView(frame: .zero, options: config.editOptions)
+        let view = EditorEditOptionsView(frame: .zero, config: config)
         view.delegate = self
         return view
     }()
     private(set) lazy var penToolView: EditorPenToolView = {
-        let view = EditorPenToolView(frame: .zero, colors: config.penColors, defaultIdx: config.defaultPenIdx)
+        let view = EditorPenToolView(frame: .zero, config: config)
         view.delegate = self
         view.isHidden = true
         return view
@@ -81,7 +79,7 @@ final class EditorToolView: UIView {
         return view
     }()
     private(set) lazy var mosaicToolView: EditorMosaicToolView = {
-        let view = EditorMosaicToolView(frame: .zero, mosaicOptions: config.mosaicOptions, defaultIdx: config.defaultMosaicIdx)
+        let view = EditorMosaicToolView(frame: .zero, config: config)
         view.delegate = self
         view.isHidden = true
         return view
@@ -96,6 +94,8 @@ final class EditorToolView: UIView {
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
         return view
     }()
+    
+    private let config: ImageEditorController.PhotoConfig
     
     init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
         self.config = config

@@ -19,12 +19,12 @@ final class EditorEditOptionsView: UIView {
     
     private(set) var currentOption: ImageEditorController.PhotoEditOption?
     
-    private let options: [ImageEditorController.PhotoEditOption]
+    private let config: ImageEditorController.PhotoConfig
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    init(frame: CGRect, options: [ImageEditorController.PhotoEditOption]) {
-        self.options = options
+    init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
+        self.config = config
         super.init(frame: frame)
         setupView()
     }
@@ -34,7 +34,7 @@ final class EditorEditOptionsView: UIView {
     }
     
     private func setupView() {
-        for (idx, option) in options.enumerated() {
+        for (idx, option) in config.editOptions.enumerated() {
             let button = createButton(with: option)
             button.tag = idx
             buttons.append(button)
@@ -70,7 +70,7 @@ final class EditorEditOptionsView: UIView {
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
-            btn.imageView?.tintColor = isSelected ? EditorManager.shared.photoConfig.tintColor : .white
+            btn.imageView?.tintColor = isSelected ? config.tintColor : .white
         }
     }
 }
@@ -95,10 +95,10 @@ extension EditorEditOptionsView: ResponseTouch {
         for (idx, button) in buttons.enumerated() {
             let frame = button.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(point) { // inside
-                if let current = currentOption, options[idx] == current {
+                if let current = currentOption, config.editOptions[idx] == current {
                     unSelectButtons()
                 } else {
-                    self.currentOption = options[idx]
+                    self.currentOption = config.editOptions[idx]
                     selectButton(button)
                 }
                 delegate?.editOptionsView(self, optionDidChange: self.currentOption)

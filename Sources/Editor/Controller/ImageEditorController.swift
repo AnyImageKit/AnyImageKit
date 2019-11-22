@@ -26,23 +26,13 @@ open class ImageEditorController: UINavigationController {
     
     open weak var editorDelegate: ImageEditorControllerDelegate?
     
-    open override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
-    }
-    
-    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
-    }
+    private let manager: EditorManager = .init()
     
     required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorControllerDelegate) {
         assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        EditorManager.shared.image = image
-        EditorManager.shared.photoConfig = config
-        let rootViewController = PhotoEditorController()
+        manager.image = image
+        manager.photoConfig = config
+        let rootViewController = PhotoEditorController(manager: manager)
         super.init(rootViewController: rootViewController)
         rootViewController.delegate = self
         self.editorDelegate = delegate
@@ -55,6 +45,18 @@ open class ImageEditorController: UINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait]
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
     }
 }
 

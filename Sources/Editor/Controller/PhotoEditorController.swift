@@ -25,7 +25,7 @@ final class PhotoEditorController: UIViewController {
         return view
     }()
     private lazy var toolView: EditorToolView = {
-        let view = EditorToolView(frame: self.view.bounds, config: EditorManager.shared.photoConfig)
+        let view = EditorToolView(frame: self.view.bounds, config: manager.photoConfig)
         view.delegate = self
         view.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
         view.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
@@ -42,7 +42,16 @@ final class PhotoEditorController: UIViewController {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap(_:)))
     }()
     
-    private let manager = EditorManager.shared
+    private let manager: EditorManager
+    
+    init(manager: EditorManager) {
+        self.manager = manager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,7 +170,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 画笔切换颜色
     func toolView(_ toolView: EditorToolView, colorDidChange idx: Int) {
-        contentView.canvas.brush.color = EditorManager.shared.photoConfig.penColors[idx]
+        contentView.canvas.brush.color = manager.photoConfig.penColors[idx]
     }
     
     /// 马赛克切换类型

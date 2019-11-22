@@ -28,13 +28,13 @@ final class EditorMosaicToolView: UIView {
         return view
     }()
     
-    private let mosaicOptions: [ImageEditorController.PhotoMosaicOption]
+    private let config: ImageEditorController.PhotoConfig
     private var mosaicIcon: [UIImageView] = []
     private let spacing: CGFloat = 50
     
-    init(frame: CGRect, mosaicOptions: [ImageEditorController.PhotoMosaicOption], defaultIdx: Int) {
-        self.mosaicOptions = mosaicOptions
-        self.currentIdx = defaultIdx
+    init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
+        self.config = config
+        self.currentIdx = config.defaultMosaicIdx
         super.init(frame: frame)
         setupView()
     }
@@ -55,7 +55,7 @@ final class EditorMosaicToolView: UIView {
     }
     
     private func setupMosaicView() {
-        for option in mosaicOptions {
+        for option in config.mosaicOptions {
             let image: UIImage?
             switch option {
             case .default:
@@ -97,11 +97,11 @@ final class EditorMosaicToolView: UIView {
 extension EditorMosaicToolView {
     
     private func updateState() {
-        let option = mosaicOptions[currentIdx]
+        let option = config.mosaicOptions[currentIdx]
         switch option {
         case .default:
             for imageView in mosaicIcon {
-                imageView.tintColor = EditorManager.shared.photoConfig.tintColor
+                imageView.tintColor = config.tintColor
                 imageView.layer.borderWidth = 0
             }
         default:
