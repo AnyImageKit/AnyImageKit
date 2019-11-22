@@ -12,9 +12,10 @@
 "Theme" = "Theme (主题)";
 "SelectLimit" = "SelectLimit (最多可选择的资源)";
 "ColumnNumber" = "ColumnNumber (一行的列数)";
-"AllowUseOriginalImage" = "AllowUseOriginalImage (是否显示原图)";
+"UseOriginalImage" = "UseOriginalImage (是否使用原图)";
 "SelectOptions" = "SelectOptions (选择类型)";
 "OrderByDate" = "OrderByDate (排序方式)";
+"EditorOptions" = "EditorOptions (编辑类型)";
 "CaptureMediaOptions" = "CaptureMediaOptions (拍摄类型)";
 "FullScreen" = "FullScreen (是否全屏)";
 

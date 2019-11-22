@@ -26,7 +26,7 @@ extension AppDelegate {
         let windows = UIWindow(frame: UIScreen.main.bounds)
         let splitController = UISplitViewController()
         splitController.preferredDisplayMode = .allVisible
-        let homeController = HomeViewController(style: .plain)
+        let homeController = HomeViewController(style: .grouped)
         let navigationController = UINavigationController(rootViewController: homeController)
         splitController.viewControllers = [navigationController]
         windows.rootViewController = splitController

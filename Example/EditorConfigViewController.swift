@@ -15,8 +15,16 @@ final class EditorConfigViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "AnyImageEditor"
+        self.title = "Editor"
+        setupView()
         setupNavigation()
+    }
+    
+    private func setupView() {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.width * 500 / 1200))
+        imageView.image = UIImage(named: "TitleMapEditor")
+        tableView.tableHeaderView = imageView
+        tableView.tableFooterView = UIView()
     }
     
     private func setupNavigation() {
@@ -70,6 +78,10 @@ final class EditorConfigViewController: UITableViewController {
         case .mosaicLevel:
             mosaicLevelTapped()
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Config"
     }
 }
 

@@ -14,6 +14,7 @@ final class HomeViewController: UITableViewController {
         super.viewDidLoad()
         self.title = "AnyImageKit"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.tableFooterView = UIView()
     }
 
     // MARK: - Table view data source
@@ -40,11 +41,15 @@ final class HomeViewController: UITableViewController {
         let controller: UIViewController
         switch rowType {
         case .picker:
-            controller = PickerConfigViewController(style: .plain)
+            controller = PickerConfigViewController(style: .insetGrouped)
         case .editor:
-            controller = EditorConfigViewController(style: .plain)
+            controller = EditorConfigViewController(style: .insetGrouped)
         }
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Module"
     }
 }
 

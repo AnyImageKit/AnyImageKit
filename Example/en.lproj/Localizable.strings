@@ -12,9 +12,10 @@
 "Theme" = "Theme";
 "SelectLimit" = "SelectLimit";
 "ColumnNumber" = "ColumnNumber";
-"AllowUseOriginalImage" = "AllowUseOriginalImage";
+"UseOriginalImage" = "UseOriginalImage";
 "SelectOptions" = "SelectOptions";
 "OrderByDate" = "OrderByDate";
+"EditorOptions" = "EditorOptions";
 "CaptureMediaOptions" = "CaptureMediaOptions";
 "FullScreen" = "FullScreen";
 

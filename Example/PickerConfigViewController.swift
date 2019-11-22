@@ -10,15 +10,25 @@ import UIKit
 import AnyImageKit
 
 final class PickerConfigViewController: UITableViewController {
-
+    
     var config = ImagePickerController.Config()
+    
+    var editorConfig = ImagePickerController.EditorConfig()
     
     var isFullScreen = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "AnyImagePicker"
+        self.title = "Picker"
+        setupView()
         setupNavigation()
+    }
+    
+    private func setupView() {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.width * 500 / 1200))
+        imageView.image = UIImage(named: "TitleMapPicker")
+        tableView.tableHeaderView = imageView
+        tableView.tableFooterView = UIView()
     }
     
     private func setupNavigation() {
@@ -30,7 +40,7 @@ final class PickerConfigViewController: UITableViewController {
     
     @IBAction func openPickerTapped() {
         config.enableDebugLog = true
-        let controller = ImagePickerController(config: config, delegate: self)
+        let controller = ImagePickerController(config: config, editorConfig: editorConfig, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
         }
@@ -38,16 +48,20 @@ final class PickerConfigViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return ConfigRowType.allCases.count
         case 1:
+            return EditorConfigRowType.allCases.count
+        case 2:
+            return CaptureConfigRowType.allCases.count
+        case 3:
             return OtherConfigRowType.allCases.count
         default:
             return 0
@@ -67,6 +81,10 @@ final class PickerConfigViewController: UITableViewController {
         case 0:
             rowType = ConfigRowType.allCases[indexPath.row]
         case 1:
+            rowType = EditorConfigRowType.allCases[indexPath.row]
+        case 2:
+            rowType = CaptureConfigRowType.allCases[indexPath.row]
+        case 3:
             rowType = OtherConfigRowType.allCases[indexPath.row]
         default:
             fatalError()
@@ -95,10 +113,20 @@ final class PickerConfigViewController: UITableViewController {
                 selectOptionsTapped()
             case .orderByDate:
                 orderbyDateTapped()
+            }
+        case 1:
+            let rowType = EditorConfigRowType.allCases[indexPath.row]
+            switch rowType {
+            case .editorOptions:
+                editorOptionsTapped()
+            }
+        case 2:
+            let rowType = CaptureConfigRowType.allCases[indexPath.row]
+            switch rowType {
             case .captureMediaOptions:
                 captureMediaOptionsTapped()
             }
-        case 1:
+        case 3:
             let rowType = OtherConfigRowType.allCases[indexPath.row]
             switch rowType {
             case .fullScreen:
@@ -114,6 +142,10 @@ final class PickerConfigViewController: UITableViewController {
         case 0:
             return "Config"
         case 1:
+            return "Editor Config"
+        case 2:
+            return "Capture Config"
+        case 3:
             return "Other config"
         default:
             return nil
@@ -237,8 +269,23 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func editorOptionsTapped() {
+        let indexPath = EditorConfigRowType.editorOptions.indexPath
+        let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
+            self?.editorConfig.options = []
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
+        }))
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
+            self?.editorConfig.options = [.photo]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func captureMediaOptionsTapped() {
-        let indexPath = ConfigRowType.captureMediaOptions.indexPath
+        let indexPath = CaptureConfigRowType.captureMediaOptions.indexPath
         let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
             self?.config.captureMediaOptions = []
@@ -271,6 +318,8 @@ extension PickerConfigViewController {
 
 // MARK: - Enum
 extension PickerConfigViewController {
+    
+    // MARK: - Config
     enum ConfigRowType: Int, CaseIterable, RowTypeRule {
         case theme = 0
         case selectLimit
@@ -278,7 +327,6 @@ extension PickerConfigViewController {
         case allowUseOriginalImage
         case selectOptions
         case orderByDate
-        case captureMediaOptions
         
         var title: String {
             switch self {
@@ -289,13 +337,11 @@ extension PickerConfigViewController {
             case .columnNumber:
                 return "ColumnNumber"
             case .allowUseOriginalImage:
-                return "AllowUseOriginalImage"
+                return "UseOriginalImage"
             case .selectOptions:
                 return "SelectOptions"
             case .orderByDate:
                 return "OrderByDate"
-            case .captureMediaOptions:
-                return "CaptureMediaOptions"
             }
         }
         
@@ -313,8 +359,6 @@ extension PickerConfigViewController {
                 return "Photo"
             case .orderByDate:
                 return "ASC"
-            case .captureMediaOptions:
-                return "None"
             }
         }
         
@@ -323,6 +367,53 @@ extension PickerConfigViewController {
         }
     }
     
+    // MARK: - Editor Config
+    enum EditorConfigRowType: Int, CaseIterable, RowTypeRule {
+        case editorOptions = 0
+        
+        var title: String {
+            switch self {
+            case .editorOptions:
+                return "EditorOptions"
+            }
+        }
+        
+        var defaultValue: String {
+            switch self {
+            case .editorOptions:
+                return "None"
+            }
+        }
+        
+        var indexPath: IndexPath {
+            return IndexPath(row: rawValue, section: 1)
+        }
+    }
+    
+    // MARK: - Capture Config
+    enum CaptureConfigRowType: Int, CaseIterable, RowTypeRule {
+        case captureMediaOptions = 0
+        
+        var title: String {
+            switch self {
+            case .captureMediaOptions:
+                return "CaptureMediaOptions"
+            }
+        }
+        
+        var defaultValue: String {
+            switch self {
+            case .captureMediaOptions:
+                return "None"
+            }
+        }
+        
+        var indexPath: IndexPath {
+            return IndexPath(row: rawValue, section: 2)
+        }
+    }
+    
+    // MARK: - Other Config
     enum OtherConfigRowType: Int, CaseIterable, RowTypeRule {
         case fullScreen = 0
         
@@ -341,7 +432,7 @@ extension PickerConfigViewController {
         }
         
         var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 1)
+            return IndexPath(row: rawValue, section: 3)
         }
     }
 }
