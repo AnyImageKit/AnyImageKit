@@ -71,7 +71,7 @@ final class PhotoLivePreviewCell: PreviewCell {
     
     override func singleTapped() {
         super.singleTapped()
-        if let hidden = delegate?.previewCellGetToolBarHiddenState() {
+        if let hidden = delegate?.previewCellGetToolBarHiddenState(), iCloudView.isHidden {
             livePhotoTipView.isHidden = hidden
         }
     }
