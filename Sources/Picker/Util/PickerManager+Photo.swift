@@ -179,7 +179,7 @@ extension PickerManager {
         }
         let timestamp = Int(Date().timeIntervalSince1970*1000)
         let filePath = NSTemporaryDirectory().appending("PHOTO-SAVED-\(timestamp).jpg")
-        FileHelper.checkDirectory(path: NSTemporaryDirectory())
+        FileHelper.createDirectory(at: NSTemporaryDirectory())
         let url = URL(fileURLWithPath: filePath)
         // Write to file
         do {

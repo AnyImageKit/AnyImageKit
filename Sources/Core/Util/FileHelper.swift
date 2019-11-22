@@ -20,7 +20,7 @@ struct FileHelper {
         return fileExtension
     }
     
-    static func checkDirectory(path: String) {
+    static func createDirectory(at path: String) {
         var isDirectory: ObjCBool = true
         if !FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
             do {

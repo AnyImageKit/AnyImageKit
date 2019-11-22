@@ -79,7 +79,7 @@ final class CacheTool {
         self.queue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(config.module.title).\(config.module.subTitle)")
         
         path = config.module.path
-        FileHelper.checkDirectory(path: path)
+        FileHelper.createDirectory(at: path)
     }
     
     deinit {

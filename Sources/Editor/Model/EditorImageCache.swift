@@ -85,7 +85,7 @@ extension EditorImageCache {
     static func getFileUrl(id: String) -> URL {
         let path = CacheModule.editor(.history).path
         let file = "\(path)\(id).json"
-        FileHelper.checkDirectory(path: path)
+        FileHelper.createDirectory(at: path)
         return URL(fileURLWithPath: file)
     }
 }

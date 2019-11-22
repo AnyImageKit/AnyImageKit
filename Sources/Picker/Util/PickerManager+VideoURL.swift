@@ -157,7 +157,7 @@ extension PickerManager {
     
     private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping VideoURLFetchCompletion) {
         // Check Path
-        FileHelper.checkDirectory(path: options.preferredOutputPath)
+        FileHelper.createDirectory(at: options.preferredOutputPath)
         // Check File Type
         let supportedFileTypes = exportSession.supportedFileTypes
         guard supportedFileTypes.contains(.mp4) else {
