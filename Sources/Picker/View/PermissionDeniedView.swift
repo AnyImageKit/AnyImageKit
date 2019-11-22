@@ -11,8 +11,8 @@ import UIKit
 final class PermissionDeniedView: UIView {
     
     private lazy var label: UILabel = {
-        let view = UILabel()
-        let text = String(format: BundleHelper.pickerLocalizedString(key: "Allow %@ to access your album in \"Settings -> Privacy -> Photos\""), getAppName())
+        let view = UILabel(frame: .zero)
+        let text = String(format: BundleHelper.pickerLocalizedString(key: "Allow %@ to access your album in \"Settings -> Privacy -> Photos\""), loadAppName())
         view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
@@ -24,7 +24,7 @@ final class PermissionDeniedView: UIView {
         let view = UIButton(type: .custom)
         view.setTitle(BundleHelper.pickerLocalizedString(key: "Go to Settings"), for: .normal)
         view.setTitleColor(config.theme.mainColor, for: .normal)
-        view.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        view.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -58,7 +58,7 @@ final class PermissionDeniedView: UIView {
 // MARK: - Target
 extension PermissionDeniedView {
     
-    @objc private func buttonTapped(_ sender: UIButton) {
+    @objc private func settingsButtonTapped(_ sender: UIButton) {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
@@ -67,15 +67,15 @@ extension PermissionDeniedView {
 // MARK: - Private function
 extension PermissionDeniedView {
     
-    private func getAppName() -> String {
-        let info = getInfoPlist()
+    private func loadAppName() -> String {
+        let info = loadInfoPlist()
         if let appName = info["CFBundleDisplayName"] as? String { return appName }
         if let appName = info["CFBundleName"] as? String { return appName }
         if let appName = info["CFBundleExecutable"] as? String { return appName }
         return ""
     }
     
-    private func getInfoPlist() -> [String:Any] {
+    private func loadInfoPlist() -> [String: Any] {
         var info = Bundle.main.localizedInfoDictionary
         if info == nil || info?.count == 0 {
             info = Bundle.main.infoDictionary

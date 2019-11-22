@@ -158,7 +158,7 @@ class AnimatedImageView: UIImageView {
     
     // Dispatch queue used for preloading images.
     private lazy var preloadQueue: DispatchQueue = {
-        return DispatchQueue(label: "org.AnyImageProject.AnyImageKit.Animator")
+        return DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.Animator")
     }()
     
     // A flag to avoid invalidating the displayLink on deinit if it was never created, because displayLink is so lazy.

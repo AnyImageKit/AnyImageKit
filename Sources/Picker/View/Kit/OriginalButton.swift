@@ -22,7 +22,7 @@ final class OriginalButton: UIControl {
         return view
     }()
     private lazy var label: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.text = BundleHelper.pickerLocalizedString(key: "Original image")
         view.textColor = config.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16)

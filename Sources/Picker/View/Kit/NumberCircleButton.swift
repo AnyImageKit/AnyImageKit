@@ -16,7 +16,7 @@ final class NumberCircleButton: UIControl {
         return view
     }()
     private lazy var numLabel: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.isHidden = true
         view.clipsToBounds = true
         view.textColor = UIColor.white

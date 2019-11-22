@@ -38,7 +38,7 @@ final class HUDViewController: UIViewController {
         return view
     }()
     private lazy var label: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.textAlignment = .center
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 16)

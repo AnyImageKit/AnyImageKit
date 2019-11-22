@@ -176,7 +176,7 @@ private class VideoView: UIView {
         return view
     }()
     private lazy var videoLabel: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.isHidden = true
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 12)
@@ -240,7 +240,7 @@ extension VideoView {
 private class GIFView: UIView {
 
     private lazy var gifLabel: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.text = "GIF"
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
