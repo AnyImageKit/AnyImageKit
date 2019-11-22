@@ -45,7 +45,7 @@ extension PickerManager {
             switch result {
             case .success(let response):
                 // Check Path
-                FileHelper.checkDirectory(path: options.preferredOutputPath)
+                FileHelper.createDirectory(at: options.preferredOutputPath)
                 // Prepare Output URL
                 let timestamp = Int(Date().timeIntervalSince1970*1000)
                 let outputPath = options.preferredOutputPath.appending("PHOTO-EXPORT-\(timestamp)).\(FileHelper.fileExtension(from: response.dataUTI as CFString))")
