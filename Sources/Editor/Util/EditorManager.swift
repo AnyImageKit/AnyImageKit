@@ -10,11 +10,9 @@ import UIKit
 
 final class EditorManager {
     
-    static let shared: EditorManager = EditorManager()
-    
     var image = UIImage()
     var photoConfig = ImageEditorController.PhotoConfig()
 
-    private init() { }
+    init() { }
     
 }
