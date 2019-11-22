@@ -28,7 +28,7 @@ final class EditorConfigViewController: UITableViewController {
     }
     
     private func setupNavigation() {
-        let title = BundleHelper.localizedString(key: "Open picker")
+        let title = BundleHelper.localizedString(key: "Open editor")
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
     }
     

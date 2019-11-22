@@ -6,9 +6,8 @@
   Copyright © 2019 AnyImageProject.org. All rights reserved.
 */
 
-"Open picker" = "打开选择器";
-
 // Picker
+"Open picker" = "打开选择器";
 "Theme" = "Theme (主题)";
 "SelectLimit" = "SelectLimit (最多可选择的资源)";
 "ColumnNumber" = "ColumnNumber (一行的列数)";
@@ -20,6 +19,7 @@
 "FullScreen" = "FullScreen (是否全屏)";
 
 // Editor
+"Open editor" = "打开编辑器";
 "EditOptions" = "EditOptions (编辑功能)";
 "PenWidth" = "PenWidth (画笔宽度)";
 "MosaicOptions" = "MosaicOptions (马赛克种类)";

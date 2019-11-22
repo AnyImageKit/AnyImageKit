@@ -6,9 +6,8 @@
   Copyright © 2019 AnyImageProject.org. All rights reserved.
 */
 
-"Open picker" = "Open picker";
-
 // Picker
+"Open picker" = "Open picker";
 "Theme" = "Theme";
 "SelectLimit" = "SelectLimit";
 "ColumnNumber" = "ColumnNumber";
@@ -20,6 +19,7 @@
 "FullScreen" = "FullScreen";
 
 // Editor
+"Open editor" = "Open editor";
 "EditOptions" = "EditOptions";
 "PenWidth" = "PenWidth";
 "MosaicOptions" = "MosaicOptions";
