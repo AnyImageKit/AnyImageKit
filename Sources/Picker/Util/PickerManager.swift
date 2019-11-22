@@ -36,7 +36,7 @@ final class PickerManager {
     private var fetchRecords = [FetchRecord]()
     
     /// 缓存
-    private var cache = NSCache<NSString, UIImage>()
+    private var cache = CacheTool(config: .init(module: .picker(.default), memoryCountLimit: 10))
     
     init() { }
     
@@ -48,7 +48,7 @@ extension PickerManager {
     func clearAll() {
         useOriginalImage = false
         selectedAssets.removeAll()
-        cache.removeAllObjects()
+        cache.clearAll()
     }
 }
 
@@ -108,11 +108,11 @@ extension PickerManager {
 extension PickerManager {
     
     func readCache(for identifier: String) -> UIImage? {
-        return cache.object(forKey: identifier as NSString)
+        return cache.read(identifier: identifier, deleteMemoryStorage: false)
     }
     
     func writeCache(image: UIImage, for identifier: String) {
-        cache.setObject(image, forKey: identifier as NSString)
+        cache.write(image, identifier: identifier)
     }
 }
 

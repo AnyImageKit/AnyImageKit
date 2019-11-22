@@ -17,7 +17,7 @@ extension PhotoEditorContentView {
     }
     
     func canvasCanUndo() -> Bool {
-        return penCache.hasCache()
+        return penCache.hasDiskCache()
     }
 }
 

@@ -116,7 +116,7 @@ final class PhotoEditorContentView: UIView {
     
     /// 是否编辑
     internal var isEdited: Bool {
-        return didCrop || penCache.hasCache() || mosaicCache.hasCache()
+        return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache()
     }
     
     init(frame: CGRect, image: UIImage, config: ImageEditorController.PhotoConfig) {

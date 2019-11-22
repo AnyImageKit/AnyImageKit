@@ -22,7 +22,7 @@ extension PhotoEditorContentView {
     }
     
     func mosaicCanUndo() -> Bool {
-        return mosaicCache.hasCache()
+        return mosaicCache.hasDiskCache()
     }
 }
 

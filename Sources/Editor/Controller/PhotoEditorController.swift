@@ -235,7 +235,7 @@ extension PhotoEditorController {
         let config = manager.photoConfig
         if config.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
-        let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.cacheList, mosaicCacheList: contentView.mosaicCache.cacheList)
+        let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.diskCacheList, mosaicCacheList: contentView.mosaicCache.diskCacheList)
         cache.save()
     }
 }

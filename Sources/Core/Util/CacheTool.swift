@@ -10,16 +10,16 @@ import UIKit
 
 struct CacheConfig {
     var module: CacheModule
-    var limit: Int
+    var memoryCountLimit: Int
     var useDiskCache: Bool
     var autoRemoveDiskCache: Bool
     
     init(module: CacheModule,
-         limit: Int = 5,
+         memoryCountLimit: Int = 5,
          useDiskCache: Bool = false,
          autoRemoveDiskCache: Bool = false) {
         self.module = module
-        self.limit = limit
+        self.memoryCountLimit = memoryCountLimit
         self.useDiskCache = useDiskCache
         self.autoRemoveDiskCache = autoRemoveDiskCache
     }
@@ -48,7 +48,7 @@ enum CacheModule {
     }
     
     var path: String {
-        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
+        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? ""
         return "\(lib)/AnyImageKitCache/\(title)/\(subTitle)/"
     }
 }
@@ -65,8 +65,8 @@ enum CacheModuleEditor: String {
 
 final class CacheTool {
     
-    private(set) var cacheList: [String] = []
-    private var cache = NSCache<NSString, UIImage>()
+    private(set) var diskCacheList: [String] = []
+    private var memory = NSCache<NSString, UIImage>()
     
     private let config: CacheConfig
     private let path: String
@@ -74,9 +74,9 @@ final class CacheTool {
     
     init(config: CacheConfig, diskCacheList: [String] = []) {
         self.config = config
-        self.cacheList = diskCacheList
-        self.cache.countLimit = config.limit
-        self.queue = DispatchQueue(label: "AnyImageKit.CacheTool.\(config.module.title).\(config.module.subTitle)")
+        self.diskCacheList = diskCacheList
+        self.memory.countLimit = config.memoryCountLimit
+        self.queue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(config.module.title).\(config.module.subTitle)")
         
         path = config.module.path
         FileHelper.checkDirectory(path: path)
@@ -84,9 +84,7 @@ final class CacheTool {
     
     deinit {
         if config.autoRemoveDiskCache {
-            for name in cacheList {
-                deleteDiskFile(identifier: name)
-            }
+            diskCacheList.forEach { deleteDiskFile(identifier: $0 ) }
         }
     }
     
@@ -95,13 +93,23 @@ final class CacheTool {
 // MARK: - Public
 extension CacheTool {
     
+    func clearAll(memoryCache: Bool = true, diskCache: Bool = false) {
+        if memoryCache {
+            memory.removeAllObjects()
+        }
+        if diskCache {
+            diskCacheList.forEach { deleteDiskFile(identifier: $0 ) }
+            diskCacheList.removeAll()
+        }
+    }
+    
     /// 写入缓存
     /// - Parameters:
     ///   - image: 图片
     ///   - identifier: 标识符
     func write(_ image: UIImage, identifier: String = createIdentifier()) {
-        cacheList.append(identifier)
-        cache.setObject(image, forKey: identifier as NSString)
+        diskCacheList.append(identifier)
+        memory.setObject(image, forKey: identifier as NSString)
         if config.useDiskCache {
             writeToFile(image, identifier: identifier)
         }
@@ -113,17 +121,17 @@ extension CacheTool {
     /// - Parameter deleteMemoryStorage: 读取缓存后删除内存缓存
     /// - Parameter deleteDiskStorage: 读取缓存后删除磁盘缓存
     func read(identifier: String, deleteMemoryStorage: Bool, deleteDiskStorage: Bool = false) -> UIImage? {
-        if cacheList.isEmpty { return nil }
-        if let idx = cacheList.firstIndex(of: identifier), deleteMemoryStorage {
-            cacheList.remove(at: idx)
+        if diskCacheList.isEmpty { return nil }
+        if let idx = diskCacheList.firstIndex(of: identifier), deleteMemoryStorage {
+            diskCacheList.remove(at: idx)
             loadDataFromFileIfNeeded()
         }
         if deleteDiskStorage {
             deleteDiskFile(identifier: identifier)
         }
-        if let image = cache.object(forKey: identifier as NSString) {
+        if let image = memory.object(forKey: identifier as NSString) {
             if deleteMemoryStorage {
-                cache.removeObject(forKey: identifier as NSString)
+                memory.removeObject(forKey: identifier as NSString)
             }
             return image
         }
@@ -135,17 +143,17 @@ extension CacheTool {
     /// - Parameter deleteDiskStorage: 读取缓存后删除磁盘缓存
     func read(deleteMemoryStorage: Bool, deleteDiskStorage: Bool = false) -> UIImage? {
         var _identifier: String = ""
-        if !cacheList.isEmpty && deleteMemoryStorage {
-            _identifier = cacheList.removeLast()
-            cache.removeObject(forKey: _identifier as NSString)
+        if !diskCacheList.isEmpty && deleteMemoryStorage {
+            _identifier = diskCacheList.removeLast()
+            memory.removeObject(forKey: _identifier as NSString)
             loadDataFromFileIfNeeded()
         }
         if deleteDiskStorage && !_identifier.isEmpty {
             deleteDiskFile(identifier: _identifier)
         }
         
-        if let identifier = cacheList.last {
-            if let image = cache.object(forKey: identifier as NSString) {
+        if let identifier = diskCacheList.last {
+            if let image = memory.object(forKey: identifier as NSString) {
                 return image
             }
             return readFromFile(identifier)
@@ -153,9 +161,9 @@ extension CacheTool {
         return nil
     }
     
-    /// 是否有缓存
-    func hasCache() -> Bool {
-        return !cacheList.isEmpty
+    /// 是否有磁盘缓存
+    func hasDiskCache() -> Bool {
+        return !diskCacheList.isEmpty
     }
     
 }
@@ -205,18 +213,18 @@ extension CacheTool {
     /// 当内存缓存减少时，从磁盘中加载图片到内存
     private func loadDataFromFileIfNeeded() {
         if !config.useDiskCache { return }
-        guard cacheList.count - cache.countLimit + 1 >= 0 else { return }
+        guard diskCacheList.count - memory.countLimit + 1 >= 0 else { return }
         var identifier = ""
-        for i in 0..<cacheList.count {
-            let idx = cacheList.count-i-1
-            identifier = cacheList[idx]
-            if cache.object(forKey: identifier as NSString) != nil { continue }
+        for i in 0..<diskCacheList.count {
+            let idx = diskCacheList.count-i-1
+            identifier = diskCacheList[idx]
+            if memory.object(forKey: identifier as NSString) != nil { continue }
         }
-        if cache.object(forKey: identifier as NSString) != nil { return }
+        if memory.object(forKey: identifier as NSString) != nil { return }
         queue.async { [weak self] in
             guard let self = self else { return }
             guard let image = self.readFromFile(identifier) else { return }
-            self.cache.setObject(image, forKey: identifier as NSString)
+            self.memory.setObject(image, forKey: identifier as NSString)
         }
     }
     
