@@ -418,7 +418,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
             if data.asset._image != nil {
                 cell.setImage(data.asset._image)
             } else {
-                if let originalImage = manager.readCache(for: data.asset.phAsset.localIdentifier) {
+                if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
                     cell.setImage(originalImage)
                 } else {
                     cell.setImage(data.thumbnail)
@@ -426,7 +426,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 }
             }
         case let cell as VideoPreviewCell:
-            if let originalImage = manager.readCache(for: data.asset.phAsset.localIdentifier) {
+            if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)

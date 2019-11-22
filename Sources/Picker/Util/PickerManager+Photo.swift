@@ -66,8 +66,8 @@ extension PickerManager {
     
     func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
         if let asset = config.orderByDate == .asc ? album.assets.last?.phAsset : album.assets.first?.phAsset {
-            let sacle = UIScreen.main.nativeScale
-            let options = PhotoFetchOptions(sizeMode: .resize(100*sacle), needCache: false)
+            let scale = UIScreen.main.nativeScale
+            let options = PhotoFetchOptions(sizeMode: .resize(100*scale), needCache: false)
             requestPhoto(for: asset, options: options, completion: completion)
         }
     }
@@ -97,7 +97,7 @@ extension PickerManager {
                         guard let self = self else { return }
                         let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: true)
                         if !isDegraded && options.needCache {
-                            self.writeCache(image: image, for: asset.localIdentifier)
+                            self.cache.write(resizedImage, identifier: asset.localIdentifier)
                         }
                         DispatchQueue.main.async {
                             completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
@@ -106,7 +106,7 @@ extension PickerManager {
                 case .resize:
                     let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: false)
                     if !isDegraded && options.needCache {
-                        self.writeCache(image: resizedImage, for: asset.localIdentifier)
+                        self.cache.write(resizedImage, identifier: asset.localIdentifier)
                     }
                     completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                 }
@@ -135,25 +135,25 @@ extension PickerManager {
                                         completion(.success(.init(image: image, isDegraded: false)))
                                     }
                                 case .preview:
-                                    guard let image = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
+                                    guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
                                         return
                                     }
-                                    self.writeCache(image: image, for: asset.localIdentifier)
+                                    self.cache.write(resizedImage, identifier: asset.localIdentifier)
                                     DispatchQueue.main.async {
-                                        completion(.success(.init(image: image, isDegraded: false)))
+                                        completion(.success(.init(image: resizedImage, isDegraded: false)))
                                     }
                                 case .resize:
-                                    guard let image = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
+                                    guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
                                         return
                                     }
                                     DispatchQueue.main.async {
-                                        completion(.success(.init(image: image, isDegraded: false)))
+                                        completion(.success(.init(image: resizedImage, isDegraded: false)))
                                     }
                                 }
                             case .failure(let error):

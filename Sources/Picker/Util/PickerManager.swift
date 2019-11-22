@@ -36,7 +36,7 @@ final class PickerManager {
     private var fetchRecords = [FetchRecord]()
     
     /// 缓存
-    private var cache = CacheTool(config: .init(module: .picker(.default), memoryCountLimit: 10))
+    let cache = CacheTool(config: .init(module: .picker(.default), memoryCountLimit: 10))
     
     init() { }
     
@@ -103,19 +103,6 @@ extension PickerManager {
     }
 }
 
-// MARK: - Cache
-
-extension PickerManager {
-    
-    func readCache(for identifier: String) -> UIImage? {
-        return cache.read(identifier: identifier, deleteMemoryStorage: false)
-    }
-    
-    func writeCache(image: UIImage, for identifier: String) {
-        cache.write(image, identifier: identifier)
-    }
-}
-
 // MARK: - Select
 
 extension PickerManager {
@@ -153,7 +140,7 @@ extension PickerManager {
         switch asset.mediaType {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载
-            if let image = readCache(for: asset.phAsset.localIdentifier) {
+            if let image = cache.read(identifier: asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
                 asset._images[.initial] = image
                 self.didLoadImage()
             } else {
