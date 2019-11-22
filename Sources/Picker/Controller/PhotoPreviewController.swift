@@ -52,7 +52,7 @@ extension PhotoPreviewControllerDelegate {
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
 }
 
-final class PhotoPreviewController: UIViewController, PickerBasedViewController {
+final class PhotoPreviewController: UIViewController {
     
     weak var delegate: PhotoPreviewControllerDelegate? = nil
     weak var dataSource: PhotoPreviewControllerDataSource? = nil
