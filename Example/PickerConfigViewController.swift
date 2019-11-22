@@ -15,6 +15,8 @@ final class PickerConfigViewController: UITableViewController {
     
     var editorConfig = ImagePickerController.EditorConfig()
     
+    var captureConfig = ImagePickerController.CaptureConfig()
+    
     var isFullScreen = true
     
     override func viewDidLoad() {
@@ -40,7 +42,7 @@ final class PickerConfigViewController: UITableViewController {
     
     @IBAction func openPickerTapped() {
         config.enableDebugLog = true
-        let controller = ImagePickerController(config: config, editorConfig: editorConfig, delegate: self)
+        let controller = ImagePickerController(config: config, editorConfig: editorConfig, captureConfig: captureConfig, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
         }
@@ -288,19 +290,19 @@ extension PickerConfigViewController {
         let indexPath = CaptureConfigRowType.captureMediaOptions.indexPath
         let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
-            self?.config.captureMediaOptions = []
+            self?.captureConfig.captureMediaOptions = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
         }))
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
-            self?.config.captureMediaOptions = [.photo, .video]
+            self?.captureConfig.captureMediaOptions = [.photo, .video]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
-            self?.config.captureMediaOptions = [.photo]
+            self?.captureConfig.captureMediaOptions = [.photo]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
         }))
         alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
-            self?.config.captureMediaOptions = [.video]
+            self?.captureConfig.captureMediaOptions = [.video]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

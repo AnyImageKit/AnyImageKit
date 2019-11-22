@@ -38,6 +38,10 @@ open class ImagePickerController: UINavigationController {
     }
     #endif
     
+    public var captureConfig: CaptureConfig {
+        return manager.captureConfig
+    }
+    
     open override var prefersStatusBarHidden: Bool {
         return hiddenStatusBar
     }
@@ -97,6 +101,19 @@ open class ImagePickerController: UINavigationController {
     convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
         self.init(config: config, delegate: delegate)
         self.manager.editorConfig = editorConfig
+    }
+    #endif
+    
+    convenience public init(config: Config = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
+        self.init(config: config, delegate: delegate)
+        self.manager.captureConfig = captureConfig
+    }
+    
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
+        self.init(config: config, delegate: delegate)
+        self.manager.editorConfig = editorConfig
+        self.manager.captureConfig = captureConfig
     }
     #endif
     

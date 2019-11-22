@@ -23,6 +23,8 @@ final class PickerManager {
     var editorConfig: ImagePickerController.EditorConfig = .init()
     #endif
     
+    var captureConfig: ImagePickerController.CaptureConfig = .init()
+    
     var isUpToLimit: Bool {
         return selectedAssets.count == config.selectLimit
     }

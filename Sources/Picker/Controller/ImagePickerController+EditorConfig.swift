@@ -27,7 +27,7 @@ extension ImagePickerController {
         }
     }
     
-    /// Editor Options 可编辑类型
+    /// Editor Options 编辑类型
     public struct EditorOptions: OptionSet {
         /// Photo 照片
         public static let photo = EditorOptions(rawValue: 1 << 0)

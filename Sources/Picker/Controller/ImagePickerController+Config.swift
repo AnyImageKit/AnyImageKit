@@ -47,14 +47,6 @@ extension ImagePickerController {
         /// - ASC:  按时间升序排列，自动滚动到底部
         /// - DESC: 按时间倒序排列，自动滚动到顶部
         public var orderByDate: Sort
-        
-        /// Capture Media Options 可拍摄类型
-        /// - Default: []
-        public var captureMediaOptions: CaptureMediaOptions
-        
-        /// Video maximum duration 视频最大拍摄时间，单位秒
-        /// - Default: 20 seconds
-        public var videoMaximumDuration: TimeInterval
 
         /// Enable Debug Log 启用调试日志
         /// - Default: false
@@ -68,8 +60,6 @@ extension ImagePickerController {
                     allowUseOriginalImage: Bool = true,
                     selectOptions: SelectOptions = [.photo],
                     orderByDate: Sort = .asc,
-                    captureMediaOptions: CaptureMediaOptions = [],
-                    videoMaximumDuration: TimeInterval = 20,
                     enableDebugLog: Bool = false) {
             self.theme = theme
             self.selectLimit = selectLimit
@@ -79,8 +69,6 @@ extension ImagePickerController {
             self.allowUseOriginalImage = allowUseOriginalImage
             self.selectOptions = selectOptions
             self.orderByDate = orderByDate
-            self.captureMediaOptions = captureMediaOptions
-            self.videoMaximumDuration = videoMaximumDuration
             self.enableDebugLog = enableDebugLog
         }
     }
@@ -119,20 +107,6 @@ extension ImagePickerController {
                 result.append(.video)
             }
             return result
-        }
-    }
-    
-    /// Capture Media Options 可拍摄类型
-    public struct CaptureMediaOptions: OptionSet {
-        /// Photo 照片
-        public static let photo = CaptureMediaOptions(rawValue: 1 << 0)
-        /// Video 视频
-        public static let video = CaptureMediaOptions(rawValue: 1 << 1)
-        
-        public let rawValue: Int
-        
-        public init(rawValue: Int) {
-            self.rawValue = rawValue
         }
     }
     

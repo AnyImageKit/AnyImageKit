@@ -222,12 +222,12 @@ extension AssetPickerViewController {
         controller.delegate = self
         controller.allowsEditing = false
         controller.sourceType = .camera
-        controller.videoMaximumDuration = config.videoMaximumDuration
+        controller.videoMaximumDuration = manager.captureConfig.videoMaximumDuration
         var mediaTypes: [String] = []
-        if config.captureMediaOptions.contains(.photo) {
+        if manager.captureConfig.captureMediaOptions.contains(.photo) {
             mediaTypes.append(kUTTypeImage as String)
         }
-        if config.captureMediaOptions.contains(.video) {
+        if manager.captureConfig.captureMediaOptions.contains(.video) {
             mediaTypes.append(kUTTypeMovie as String)
         }
         controller.mediaTypes = mediaTypes
@@ -244,7 +244,7 @@ extension AssetPickerViewController {
         guard let album = album, album.isCameraRoll else { return }
         let config = manager.config
         let sortType = config.orderByDate
-        if !config.captureMediaOptions.isEmpty {
+        if !manager.captureConfig.captureMediaOptions.isEmpty {
             switch sortType {
             case .asc:
                 album.addAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), atLast: true)
@@ -435,7 +435,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
-        if album.isCameraRoll && !manager.config.captureMediaOptions.isEmpty {
+        if album.isCameraRoll && !manager.captureConfig.captureMediaOptions.isEmpty {
             return album.assets.count - 1
         }
         return album.assets.count
