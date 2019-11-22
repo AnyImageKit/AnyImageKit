@@ -49,7 +49,7 @@ enum PhotoSizeMode: Equatable {
     /// Custom Size
     case resize(CGFloat)
     /// Preview Size, based on your config
-    case preview
+    case preview(CGFloat)
     /// Original Size
     case original
 }

@@ -20,7 +20,7 @@ extension PhotoPreviewController {
                 showEditor(image, identifier: data.asset.phAsset.localIdentifier)
             } else {
                 showWaitHUD()
-                let options = PhotoFetchOptions(sizeMode: .preview)
+                let options = PhotoFetchOptions(sizeMode: .preview(manager.config.largePhotoMaxWidth))
                 manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
                     guard let self = self else { return }
                     hideHUD()
