@@ -26,7 +26,7 @@ final class PickerArrowButton: UIControl {
     }()
     
     private lazy var effectView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: getStyle())
+        let effect = UIBlurEffect(style: loadBlurEffectStyle())
         let view = UIVisualEffectView(effect: effect)
         let color = UIColor.create(style: config.theme.style,
                                    light: UIColor.black.withAlphaComponent(0.1),
@@ -91,7 +91,7 @@ final class PickerArrowButton: UIControl {
             guard config.theme.style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
             
-            effectView.effect = UIBlurEffect(style: getStyle())
+            effectView.effect = UIBlurEffect(style: loadBlurEffectStyle())
             let color = UIColor.create(style: config.theme.style,
                                        light: UIColor.black.withAlphaComponent(0.1),
                                        dark: UIColor.white.withAlphaComponent(0.9))
@@ -125,7 +125,7 @@ extension PickerArrowButton {
 // MARK: - Private function
 extension PickerArrowButton {
     
-    private func getStyle() -> UIBlurEffect.Style {
+    private func loadBlurEffectStyle() -> UIBlurEffect.Style {
         let style: UIBlurEffect.Style
         switch config.theme.style {
         case .auto:

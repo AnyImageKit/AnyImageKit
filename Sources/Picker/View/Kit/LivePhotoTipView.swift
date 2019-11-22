@@ -50,7 +50,7 @@ final class LivePhotoTipView: UIView {
     func updateConfig(_ config: ImagePickerController.Config) {
         imageView.image = BundleHelper.image(named: "LivePhoto", style: config.theme.style)
         let color = UIColor.create(style: config.theme.style,
-                                   light: UIColor.color(hex: 666666),
+                                   light: UIColor.color(hex: 0x666666),
                                    dark: UIColor.color(hex: 0x999999))
         label.textColor = color
         backgroundColor = config.theme.backgroundColor.withAlphaComponent(0.7)

@@ -36,14 +36,14 @@ final class PickerToolBar: UIView {
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
         view.backgroundColor = config.theme.mainColor
-        let color = UIColor.create(style: config.theme.style,
-                                   light: .white,
-                                   dark: config.theme.textColor)
-        let disableColor = UIColor.create(style: config.theme.style,
-                                          light: color.withAlphaComponent(0.7),
-                                          dark: color.withAlphaComponent(0.3))
-        view.setTitleColor(color, for: .normal)
-        view.setTitleColor(disableColor, for: .disabled)
+        let normal = UIColor.create(style: config.theme.style,
+                                    light: .white,
+                                    dark: config.theme.textColor)
+        let disabled = UIColor.create(style: config.theme.style,
+                                      light: normal.withAlphaComponent(0.7),
+                                      dark: normal.withAlphaComponent(0.3))
+        view.setTitleColor(normal, for: .normal)
+        view.setTitleColor(disabled, for: .disabled)
         view.setTitle(BundleHelper.pickerLocalizedString(key: "Done"), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
