@@ -37,7 +37,7 @@ final class EditorCropToolView: UIView {
         return view
     }()
     private lazy var line: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         return view
     }()

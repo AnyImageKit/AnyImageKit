@@ -73,14 +73,14 @@ fileprivate class CircleView: UIView {
     }
     
     private lazy var bigCircleView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.clipsToBounds = true
         view.layer.borderWidth = 1
         view.layer.borderColor = config.theme.textColor.cgColor
         return view
     }()
     private lazy var smallCircleView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.clipsToBounds = true
         view.backgroundColor = config.theme.mainColor

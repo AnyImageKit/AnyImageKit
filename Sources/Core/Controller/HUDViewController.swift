@@ -12,7 +12,7 @@ import SnapKit
 final class HUDViewController: UIViewController {
     
     private lazy var indicatorCoverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.alpha = 0
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
@@ -20,7 +20,7 @@ final class HUDViewController: UIViewController {
         return view
     }()
     private lazy var labelCoverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.alpha = 0
         view.clipsToBounds = true
         view.layer.cornerRadius = 5

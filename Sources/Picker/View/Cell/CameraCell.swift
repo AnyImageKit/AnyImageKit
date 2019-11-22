@@ -11,7 +11,7 @@ import UIKit
 final class CameraCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.image = BundleHelper.image(named: "Camera")
         view.contentMode = .scaleAspectFill
         return view

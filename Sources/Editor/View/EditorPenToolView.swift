@@ -86,7 +86,7 @@ final class EditorPenToolView: UIView {
     }
     
     private func createColorView(_ color: UIColor, idx: Int) -> UIView {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.tag = idx
         view.backgroundColor = color
         view.clipsToBounds = true

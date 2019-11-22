@@ -32,19 +32,19 @@ final class AssetCell: UICollectionViewCell {
         return view
     }()
     private lazy var selectdCoverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         return view
     }()
     private lazy var disableCoverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         return view
     }()
     private(set) lazy var boxCoverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.layer.borderWidth = 4
         return view
@@ -171,7 +171,7 @@ extension AssetCell {
 private class VideoView: UIView {
     
     private lazy var videoImageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.image = BundleHelper.image(named: "Video")
         return view
     }()
@@ -287,7 +287,7 @@ private class GIFView: UIView {
 private class EditedView: UIView {
 
     private lazy var imageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.image = BundleHelper.image(named: "PhotoEdited")
         return view
     }()

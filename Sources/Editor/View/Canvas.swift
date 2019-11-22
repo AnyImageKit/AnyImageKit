@@ -31,7 +31,7 @@ class Canvas: UIView {
     private var lastPoint: CGPoint = .zero
     
     private(set) lazy var lastPenImageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         return view
     }()
     

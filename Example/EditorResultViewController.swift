@@ -24,7 +24,7 @@ final class EditorResultViewController: UIViewController {
         return view
     }()
     private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         return view

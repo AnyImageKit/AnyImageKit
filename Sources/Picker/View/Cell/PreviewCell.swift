@@ -54,14 +54,14 @@ class PreviewCell: UICollectionViewCell {
     
     /// 显示图像
     lazy var imageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.clipsToBounds = true
         return view
     }()
     
     /// 下载进度
     private(set) lazy var iCloudView: LoadingiCloudView = {
-        let view = LoadingiCloudView()
+        let view = LoadingiCloudView(frame: .zero)
         view.isHidden = true
         return view
     }()
