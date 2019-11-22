@@ -25,6 +25,7 @@
 		A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0604E7023307ABD00D9AA01 /* Picker+PHFetchResult.swift */; };
 		A07D8794233CA257000108C7 /* Picker+CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07D8793233CA257000108C7 /* Picker+CGImagePropertyOrientation.swift */; };
 		A07D8796233DA2B8000108C7 /* Picker+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07D8795233DA2B8000108C7 /* Picker+PHAsset.swift */; };
+		A07E11EE2387D34C006F7208 /* BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D8D237AAF070002174A /* BundleHelper.swift */; };
 		A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800410232F4EE4006B4711 /* ImagePickerController.swift */; };
 		A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800412232F5B44006B4711 /* AssetPickerViewController.swift */; };
 		A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800414232F5F7A006B4711 /* PickerManager.swift */; };
@@ -82,7 +83,6 @@
 		A52E1D87237AAACC0002174A /* Editor+BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D86237AAACC0002174A /* Editor+BundleHelper.swift */; };
 		A52E1D89237AAD420002174A /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D88237AAD420002174A /* HomeViewController.swift */; };
 		A52E1D8B237AAEB40002174A /* PickerConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */; };
-		A52E1D8E237AAF070002174A /* BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D8D237AAF070002174A /* BundleHelper.swift */; };
 		A52E1D91237AAF360002174A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52E1D93237AAF360002174A /* Localizable.strings */; };
 		A52E1D97237AB01D0002174A /* RowTypeRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D96237AB01D0002174A /* RowTypeRule.swift */; };
 		A52E1D99237AB3F60002174A /* EditorConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D98237AB3F60002174A /* EditorConfigViewController.swift */; };
@@ -267,7 +267,7 @@
 		A59332612338AED8003CE652 /* AnimatedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedImage.swift; sourceTree = "<group>"; };
 		A5A141B02384DB6E00201A82 /* ImagePickerController+EditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+EditorConfig.swift"; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
-		A5A27BA6232F82AE00D966B8 /* Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Picker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5A27BA6232F82AE00D966B8 /* AIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5A27BB1232F82B000D966B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5A27BB6232F82B000D966B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -409,7 +409,7 @@
 			isa = PBXGroup;
 			children = (
 				A099CC60232F3BF70023CC3D /* AnyImageKit.framework */,
-				A5A27BA6232F82AE00D966B8 /* Picker.app */,
+				A5A27BA6232F82AE00D966B8 /* AIExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -778,7 +778,7 @@
 			);
 			name = Example;
 			productName = Example;
-			productReference = A5A27BA6232F82AE00D966B8 /* Picker.app */;
+			productReference = A5A27BA6232F82AE00D966B8 /* AIExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1019,6 +1019,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A52E1D8B237AAEB40002174A /* PickerConfigViewController.swift in Sources */,
+				A07E11EE2387D34C006F7208 /* BundleHelper.swift in Sources */,
 				A52E1DA0237AB6DA0002174A /* EditorResultViewController.swift in Sources */,
 				A52E1D97237AB01D0002174A /* RowTypeRule.swift in Sources */,
 				A52E1D9E237AB6980002174A /* PickerPreviewCell.swift in Sources */,
@@ -1026,7 +1027,6 @@
 				A52E1D9B237AB6430002174A /* PickerResultViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
 				A52E1D99237AB3F60002174A /* EditorConfigViewController.swift in Sources */,
-				A52E1D8E237AAF070002174A /* BundleHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1284,7 +1284,7 @@
 				);
 				MARKETING_VERSION = 0.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
-				PRODUCT_NAME = Picker;
+				PRODUCT_NAME = AIExample;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1309,7 +1309,7 @@
 				);
 				MARKETING_VERSION = 0.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
-				PRODUCT_NAME = Picker;
+				PRODUCT_NAME = AIExample;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_VERSION = 5.0;
