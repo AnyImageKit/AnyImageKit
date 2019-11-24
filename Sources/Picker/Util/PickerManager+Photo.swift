@@ -95,7 +95,9 @@ extension PickerManager {
                 case .preview:
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
-                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: true)
+                        self.resizeSemaphore.wait()
+                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                        self.resizeSemaphore.signal()
                         if !isDegraded && options.needCache {
                             self.cache.write(resizedImage, identifier: asset.localIdentifier)
                         }
@@ -104,7 +106,7 @@ extension PickerManager {
                         }
                     }
                 case .resize:
-                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: false)
+                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
                     if !isDegraded && options.needCache {
                         self.cache.write(resizedImage, identifier: asset.localIdentifier)
                     }
@@ -135,12 +137,15 @@ extension PickerManager {
                                         completion(.success(.init(image: image, isDegraded: false)))
                                     }
                                 case .preview:
+                                    self.resizeSemaphore.wait()
                                     guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
+                                        self.resizeSemaphore.signal()
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
                                         }
                                         return
                                     }
+                                    self.resizeSemaphore.signal()
                                     self.cache.write(resizedImage, identifier: asset.localIdentifier)
                                     DispatchQueue.main.async {
                                         completion(.success(.init(image: resizedImage, isDegraded: false)))

@@ -12,20 +12,16 @@ import ImageIO
 
 extension UIImage {
     
-    static func resize(from image: UIImage, limitSize: CGSize, isExact: Bool) -> UIImage {
-        if isExact {
-            if image.size.width <= limitSize.width && image.size.height <= limitSize.height { return image }
-        } else {
-            if image.size.width <= limitSize.width || image.size.height <= limitSize.height { return image }
-        }
+    static func resize(from image: UIImage, limitSize: CGSize) -> UIImage {
+        if image.size.width <= limitSize.width && image.size.height <= limitSize.height { return image }
         let size = calculate(from: image.size, to: limitSize)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
-            image.draw(in: CGRect(origin: .zero, size: size))
-        }
+        guard let pngData = image.pngData() else { return image }
+        
+        guard let resized = resize(from: pngData, limitSize: size) else { return image }
+        return resized
     }
     
-    static func resize(from data: Data, limitSize: CGSize, isExact: Bool = false) -> UIImage? {
+    static func resize(from data: Data, limitSize: CGSize) -> UIImage? {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else {
             return nil
