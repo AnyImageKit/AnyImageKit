@@ -125,7 +125,7 @@ extension Asset {
 
 extension Asset {
     
-    enum ImageKey: Hashable {
+    enum ImageKey: String, Hashable {
         case initial
         case edited
         case output
