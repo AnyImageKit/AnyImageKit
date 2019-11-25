@@ -20,7 +20,11 @@ final class PickerResultViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.register(PickerPreviewCell.self, forCellWithReuseIdentifier: "PreviewCell")
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        view.backgroundColor = .systemBackground
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+        } else {
+            view.backgroundColor = .white
+        }
         view.dataSource = self
         view.delegate = self
         return view

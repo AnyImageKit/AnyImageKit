@@ -12,7 +12,11 @@ final class EditorResultViewController: UIViewController {
 
     private(set) lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor = UIColor.systemBackground
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = UIColor.systemBackground
+        } else {
+            view.backgroundColor = UIColor.white
+        }
         view.delegate = self
         view.clipsToBounds = false
         view.showsVerticalScrollIndicator = false

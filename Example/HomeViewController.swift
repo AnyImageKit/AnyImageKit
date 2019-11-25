@@ -41,9 +41,17 @@ final class HomeViewController: UITableViewController {
         let controller: UIViewController
         switch rowType {
         case .picker:
-            controller = PickerConfigViewController(style: .insetGrouped)
+            if #available(iOS 13.0, *) {
+                controller = PickerConfigViewController(style: .insetGrouped)
+            } else {
+                controller = PickerConfigViewController(style: .grouped)
+            }
         case .editor:
-            controller = EditorConfigViewController(style: .insetGrouped)
+            if #available(iOS 13.0, *) {
+                controller = EditorConfigViewController(style: .insetGrouped)
+            } else {
+                controller = EditorConfigViewController(style: .grouped)
+            }
         }
         navigationController?.pushViewController(controller, animated: true)
     }

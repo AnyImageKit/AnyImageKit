@@ -12,8 +12,13 @@ final class PickerPreviewCell: UICollectionViewCell {
     
     private(set) lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.9)
-        view.textColor = .label
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.9)
+            view.textColor = .label
+        } else {
+            view.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+            view.textColor = .black
+        }
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
     }()
