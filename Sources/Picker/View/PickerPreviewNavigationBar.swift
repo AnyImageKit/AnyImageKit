@@ -32,6 +32,7 @@ final class PickerPreviewNavigationBar: UIView {
                                          dark: config.theme.backgroundColor)
             .withAlphaComponent(0.95)
         setupView()
+        selectButton.setTheme(config.theme)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,9 +54,9 @@ final class PickerPreviewNavigationBar: UIView {
             maker.width.height.equalTo(44)
         }
         selectButton.snp.makeConstraints { maker in
-            maker.right.equalToSuperview().offset(-8)
+            maker.right.equalToSuperview().offset(-4)
             maker.centerY.equalTo(contentView)
-            maker.width.height.equalTo(35)
+            maker.width.height.equalTo(45)
         }
     }
 }

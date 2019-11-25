@@ -39,10 +39,17 @@ final class NumberCircleButton: UIControl {
         addSubview(circleView)
         addSubview(numLabel)
         circleView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview().inset(4)
+            maker.edges.equalToSuperview().inset(9)
         }
         numLabel.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview().inset(3)
+            let inset: CGFloat
+            switch self.style {
+            case .default:
+                inset = 8
+            case .large:
+                inset = 9
+            }
+            maker.edges.equalToSuperview().inset(inset)
         }
         switch style {
         case .default:
@@ -100,6 +107,7 @@ extension NumberCircleButton {
         
         private lazy var imageView: UIImageView = {
             let view = UIImageView(frame: .zero)
+            view.contentMode = .scaleToFill
             return view
         }()
         

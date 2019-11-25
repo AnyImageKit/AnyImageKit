@@ -105,8 +105,8 @@ final class AssetCell: UICollectionViewCell {
             maker.edges.equalToSuperview()
         }
         selectButton.snp.makeConstraints { maker in
-            maker.top.right.equalToSuperview().inset(3)
-            maker.width.height.equalTo(30)
+            maker.top.right.equalToSuperview().inset(0)
+            maker.width.height.equalTo(40)
         }
     }
 }
