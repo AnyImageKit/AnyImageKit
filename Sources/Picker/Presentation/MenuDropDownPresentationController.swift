@@ -199,7 +199,7 @@ final class MenuDropDownPresentationController: UIPresentationController {
 extension MenuDropDownPresentationController {
     
     @objc private func dimmingViewTapped(_ sender: UITapGestureRecognizer) {
-        presentingViewController.dismiss(animated: true, completion: nil)
+        presentedViewController.dismiss(animated: true, completion: nil)
     }
 }
 
