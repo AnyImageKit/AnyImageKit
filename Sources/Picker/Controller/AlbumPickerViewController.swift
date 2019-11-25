@@ -16,7 +16,7 @@ protocol AlbumPickerViewControllerDelegate: class {
     func albumPickerWillDisappear()
 }
 
-final class AlbumPickerViewController: UIViewController, PickerBasedViewController {
+final class AlbumPickerViewController: UIViewController {
     
     weak var delegate: AlbumPickerViewControllerDelegate?
     var album: Album?

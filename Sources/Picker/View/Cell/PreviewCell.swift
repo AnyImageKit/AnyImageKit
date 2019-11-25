@@ -129,10 +129,6 @@ class PreviewCell: UICollectionViewCell {
         iCloudView.reset()
     }
     
-    internal func updateConfig(_ config: ImagePickerController.Config) {
-        
-    }
-    
     // MARK: - function
     
     /// 设置图片
@@ -182,6 +178,10 @@ class PreviewCell: UICollectionViewCell {
     
     func panEnded(_ exit: Bool) {
         delegate?.previewCell(self, didEndPanWithExit: exit)
+    }
+    
+    func updateConfig(_ config: ImagePickerController.Config) {
+        
     }
 }
 

@@ -19,7 +19,7 @@ protocol AssetPickerViewControllerDelegate: class {
     func assetPickerDidFinishPicking(_ picker: AssetPickerViewController)
 }
 
-final class AssetPickerViewController: UIViewController, PickerBasedViewController {
+final class AssetPickerViewController: UIViewController {
     
     weak var delegate: AssetPickerViewControllerDelegate?
     

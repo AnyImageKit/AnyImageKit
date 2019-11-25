@@ -52,7 +52,7 @@ extension PhotoPreviewControllerDelegate {
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
 }
 
-final class PhotoPreviewController: UIViewController, PickerBasedViewController {
+final class PhotoPreviewController: UIViewController {
     
     weak var delegate: PhotoPreviewControllerDelegate? = nil
     weak var dataSource: PhotoPreviewControllerDataSource? = nil
@@ -434,6 +434,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
             }
             cell.requestVideo()
         case let cell as PhotoGIFPreviewCell:
+            cell.setImage(data.thumbnail)
             cell.requestGIF()
         case let cell as PhotoLivePreviewCell:
             cell.setImage(data.thumbnail)
