@@ -70,7 +70,7 @@ extension PickerResultViewController: UICollectionViewDelegate {
 extension PickerResultViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 20 - 10*2)/3
+        let width = floor((collectionView.bounds.width - 20 - 10*2)/3)
         return CGSize(width: width, height: width)
     }
 }
