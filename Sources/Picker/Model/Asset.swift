@@ -30,6 +30,8 @@ public class Asset: Equatable {
     var isSelected: Bool = false
     var selectedNum: Int = 1
     
+    private lazy var _manager = PickerManager()
+    
     init(idx: Int, asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
         self.idx = idx
         self.phAsset = asset
@@ -54,7 +56,7 @@ extension Asset {
         return idx == -1
     }
 }
-/*
+
 // MARK: - Original Photo
 extension Asset {
     
@@ -67,7 +69,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PickerManager.shared.requestPhotoData(for: phAsset, options: options, completion: completion)
+        _manager.requestPhotoData(for: phAsset, options: options, completion: completion)
     }
     
     /// Fetch Photo URL 获取原图路径
@@ -79,7 +81,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PickerManager.shared.requestPhotoURL(for: phAsset, options: options, completion: completion)
+        _manager.requestPhotoURL(for: phAsset, options: options, completion: completion)
     }
 }
 
@@ -95,7 +97,7 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PickerManager.shared.requestVideo(for: phAsset, options: options, completion: completion)
+        _manager.requestVideo(for: phAsset, options: options, completion: completion)
     }
     
     /// Fetch Video URL 获取视频路径，用于传输
@@ -107,9 +109,9 @@ extension Asset {
             completion(.failure(.invalidMediaType))
             return
         }
-        PickerManager.shared.requestVideoURL(for: phAsset, options: options, completion: completion)
+        _manager.requestVideoURL(for: phAsset, options: options, completion: completion)
     }
-}*/
+}
 
 extension Asset {
     
