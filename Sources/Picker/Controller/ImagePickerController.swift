@@ -18,7 +18,7 @@ public protocol ImagePickerControllerDelegate: class {
 extension ImagePickerControllerDelegate {
     
     public func imagePickerDidCancel(_ picker: ImagePickerController) {
-        picker.dismiss(animated: true)
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -79,14 +79,18 @@ open class ImagePickerController: UINavigationController {
     private var didFinishSelect: Bool = false
     private let lock: NSLock = .init()
     
-    let manager: PickerManager = .init()
+    private let manager: PickerManager = .init()
     
-    required public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
-        let rootViewController = AssetPickerViewController(manager: manager)
-        super.init(rootViewController: rootViewController)
+    public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
+        // Note:
+        // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
+        super.init(nibName: nil, bundle: nil)
         self.manager.config = config
         self.pickerDelegate = delegate
+        
+        let rootViewController = AssetPickerViewController(manager: manager)
         rootViewController.delegate = self
+        self.viewControllers = [rootViewController]
         
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
@@ -127,17 +131,13 @@ open class ImagePickerController: UINavigationController {
         containerSize = newSize
     }
     
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        presentingViewController?.dismiss(animated: flag, completion: completion)
+    open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
+        super.dismiss(animated: flag, completion: completion)
     }
     
     deinit {

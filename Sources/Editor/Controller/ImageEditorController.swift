@@ -30,16 +30,14 @@ open class ImageEditorController: UINavigationController {
     
     required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorControllerDelegate) {
         assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        manager.image = image
-        manager.photoConfig = config
-        let rootViewController = PhotoEditorController(manager: manager)
-        super.init(rootViewController: rootViewController)
-        rootViewController.delegate = self
+        super.init(nibName: nil, bundle: nil)
+        self.manager.image = image
+        self.manager.photoConfig = config
         self.editorDelegate = delegate
-    }
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        
+        let rootViewController = PhotoEditorController(manager: manager)
+        rootViewController.delegate = self
+        self.viewControllers = [rootViewController]
     }
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")
