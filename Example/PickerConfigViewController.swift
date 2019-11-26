@@ -277,7 +277,7 @@ extension PickerConfigViewController {
     
     private func editorOptionsTapped() {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
-        let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "EditorConfigOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
             self?.editorConfig.options = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"

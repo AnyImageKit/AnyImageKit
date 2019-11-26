@@ -223,10 +223,10 @@ extension AssetPickerViewController {
         controller.sourceType = .camera
         controller.videoMaximumDuration = manager.captureConfig.videoMaximumDuration
         var mediaTypes: [String] = []
-        if manager.captureConfig.mediaOptions.contains(.photo) {
+        if manager.captureConfig.options.contains(.photo) {
             mediaTypes.append(kUTTypeImage as String)
         }
-        if manager.captureConfig.mediaOptions.contains(.video) {
+        if manager.captureConfig.options.contains(.video) {
             mediaTypes.append(kUTTypeMovie as String)
         }
         controller.mediaTypes = mediaTypes
