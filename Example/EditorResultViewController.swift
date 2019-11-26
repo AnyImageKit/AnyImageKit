@@ -58,6 +58,10 @@ final class EditorResultViewController: UIViewController {
         return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
     
+    deinit {
+        print("EditorResultViewController deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()

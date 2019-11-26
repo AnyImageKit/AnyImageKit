@@ -30,6 +30,10 @@ final class PickerResultViewController: UIViewController {
         return view
     }()
     
+    deinit {
+        print("PickerResultViewController deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()

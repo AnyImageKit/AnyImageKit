@@ -91,11 +91,7 @@ extension EditorConfigViewController: ImageEditorControllerDelegate {
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         let controller = EditorResultViewController()
         controller.imageView.image = photo
-        if let splitViewController = self.splitViewController {
-            splitViewController.showDetailViewController(controller, sender: nil)
-        } else {
-            navigationController?.pushViewController(controller, animated: false)
-        }
+        show(controller, sender: nil)
         editor.dismiss(animated: true, completion: nil)
     }
 }

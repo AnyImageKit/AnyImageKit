@@ -162,11 +162,7 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
         print(assets)
         let controller = PickerResultViewController()
         controller.assets = assets
-        if let splitViewController = self.splitViewController {
-            splitViewController.showDetailViewController(controller, sender: nil)
-        } else {
-            navigationController?.pushViewController(controller, animated: false)
-        }
+        show(controller, sender: nil)
         picker.dismiss(animated: true, completion: nil)
     }
 }
