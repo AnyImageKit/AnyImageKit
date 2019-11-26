@@ -29,8 +29,8 @@ open class ImageEditorController: UINavigationController {
     private let manager: EditorManager = .init()
     
     required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorControllerDelegate) {
-        assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         super.init(nibName: nil, bundle: nil)
+        check(config: config)
         self.manager.image = image
         self.manager.photoConfig = config
         self.editorDelegate = delegate
@@ -67,5 +67,15 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
     
     func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         editorDelegate?.imageEditor(self, didFinishEditing: photo, isEdited: isEdited)
+    }
+}
+
+// MARK: - Private function
+extension ImageEditorController {
+    
+    private func check(config: PhotoConfig) {
+        assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
+        assert(config.penColors.count <= 7, "Pen colors count can't bigger then 7")
+        assert(config.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
     }
 }
