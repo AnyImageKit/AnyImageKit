@@ -14,25 +14,25 @@ extension ImagePickerController {
         
         /// Capture Media Options 拍摄类型
         /// - Default: []
-        public var captureMediaOptions: CaptureMediaOptions
+        public var options: CaptureOptions
         
         /// Video maximum duration 视频最大拍摄时间，单位秒
         /// - Default: 20 seconds
         public var videoMaximumDuration: TimeInterval
         
-        public init(captureMediaOptions: CaptureMediaOptions = [],
+        public init(options: CaptureOptions = [],
                     videoMaximumDuration: TimeInterval = 20) {
-            self.captureMediaOptions = captureMediaOptions
+            self.options = options
             self.videoMaximumDuration = videoMaximumDuration
         }
     }
     
-    /// Capture Media Options 拍摄类型
-    public struct CaptureMediaOptions: OptionSet {
+    /// Capture Options 拍摄类型
+    public struct CaptureOptions: OptionSet {
         /// Photo 照片
-        public static let photo = CaptureMediaOptions(rawValue: 1 << 0)
+        public static let photo = CaptureOptions(rawValue: 1 << 0)
         /// Video 视频
-        public static let video = CaptureMediaOptions(rawValue: 1 << 1)
+        public static let video = CaptureOptions(rawValue: 1 << 1)
         
         public let rawValue: Int
         
