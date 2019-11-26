@@ -98,7 +98,9 @@ extension AlbumPickerViewController {
     
     @objc private func orientationDidChangeNotification(_ sender: Notification) {
         // TODO: Fix orientation change
-        dismiss(animated: true, completion: nil)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            dismiss(animated: true, completion: nil)
+        }
     }
 }
 
