@@ -30,7 +30,7 @@ final class EditorMosaicToolView: UIView {
     
     private let config: ImageEditorController.PhotoConfig
     private var mosaicIcon: [UIImageView] = []
-    private let spacing: CGFloat = 50
+    private let spacing: CGFloat = 40
     
     init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
         self.config = config
@@ -77,8 +77,8 @@ final class EditorMosaicToolView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
-        let width = 15 * CGFloat(mosaicIcon.count) + spacing * CGFloat(mosaicIcon.count-1)
-        let offset = (UIScreen.main.bounds.width - width - 50) / 2
+        let width = 20 * CGFloat(mosaicIcon.count) + spacing * CGFloat(mosaicIcon.count-1)
+        let offset = (UIScreen.main.bounds.width - width - 20*2 - 20) / 2
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview().offset(offset)
             maker.centerY.equalToSuperview()
