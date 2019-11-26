@@ -279,7 +279,9 @@ extension PhotoPreviewController {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         switch manager.editorConfig.options {
         case .photo:
-            toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
+            if UIDevice.current.userInterfaceIdiom == .phone { // Editor not support iPad yet
+                toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
+            }
         default:
             break
         }
