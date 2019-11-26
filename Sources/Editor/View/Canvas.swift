@@ -4,7 +4,7 @@
 //
 //  Created by Harley.xk on 2018/4/11.
 //
-//  The BezierGenerator is a modified version of
+//  The Canvas is a modified version of
 //  some classes from Harley's MaLiang project (https://github.com/Harley-xk/MaLiang)
 //
 //  MIT license
