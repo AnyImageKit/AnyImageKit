@@ -42,37 +42,6 @@ open class ImagePickerController: UINavigationController {
         return manager.captureConfig
     }
     
-    open override var prefersStatusBarHidden: Bool {
-        return hiddenStatusBar
-    }
-    
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch manager.config.theme.style {
-        case .light:
-            if #available(iOS 13.0, *) {
-                return .darkContent
-            } else {
-                return .default
-            }
-        case .dark:
-            return .lightContent
-        case .auto:
-            return .default
-        }
-    }
-    
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        return .fade
-    }
-    
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
-    }
-    
-    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
-    }
-    
     private var containerSize: CGSize = .zero
     private var hasOverrideGeneratingDeviceOrientation: Bool = false
     private var hiddenStatusBar: Bool = false
@@ -122,6 +91,19 @@ open class ImagePickerController: UINavigationController {
     }
     #endif
     
+    @available(*, deprecated, message: "init(coder:) has not been implemented")
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        removeNotifications()
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        EditorImageCache.clearDiskCache()
+        #endif
+        manager.clearAll()
+    }
+    
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let newSize = view.frame.size
@@ -132,21 +114,39 @@ open class ImagePickerController: UINavigationController {
         containerSize = newSize
     }
     
-    @available(*, deprecated, message: "init(coder:) has not been implemented")
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
         super.dismiss(animated: flag, completion: completion)
     }
     
-    deinit {
-        removeNotifications()
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        EditorImageCache.clearDiskCache()
-        #endif
-        manager.clearAll()
+    open override var prefersStatusBarHidden: Bool {
+        return hiddenStatusBar
+    }
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        switch manager.config.theme.style {
+        case .light:
+            if #available(iOS 13.0, *) {
+                return .darkContent
+            } else {
+                return .default
+            }
+        case .dark:
+            return .lightContent
+        case .auto:
+            return .default
+        }
+    }
+    
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait]
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
     }
 }
 

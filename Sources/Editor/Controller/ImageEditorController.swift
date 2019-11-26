@@ -26,9 +26,11 @@ open class ImageEditorController: UINavigationController {
     
     open weak var editorDelegate: ImageEditorControllerDelegate?
     
+    open var tag: Int = 0
+    
     private let manager: EditorManager = .init()
     
-    required public init(image: UIImage, config: PhotoConfig = PhotoConfig(), delegate: ImageEditorControllerDelegate) {
+    required public init(image: UIImage, config: PhotoConfig = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         check(config: config)

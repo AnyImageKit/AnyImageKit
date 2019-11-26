@@ -144,6 +144,14 @@ final class PhotoPreviewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? PreviewCell, !cell.asset.isSelected {
+                manager.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+            }
+        }
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -177,12 +185,12 @@ final class PhotoPreviewController: UIViewController {
         return true
     }
     
-    deinit {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.phAsset.localIdentifier)
-            }
-        }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait]
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
     }
 }
 

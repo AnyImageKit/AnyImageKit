@@ -78,6 +78,14 @@ final class AlbumPickerViewController: UIViewController {
     func reloadData() {
         tableView.reloadData()
     }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait]
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
 }
 
 // MARK: - Target
