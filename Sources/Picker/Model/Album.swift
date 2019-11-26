@@ -30,12 +30,12 @@ class Album: Equatable {
 
 extension Album {
     
-    public func insertAsset(_ asset: Asset, at: Int, sort: ImagePickerController.Sort) {
+    func insertAsset(_ asset: Asset, at: Int, sort: ImagePickerController.Sort) {
         assets.insert(asset, at: at)
         reloadIndex(sort: sort)
     }
     
-    public func addAsset(_ asset: Asset, atLast: Bool) {
+    func addAsset(_ asset: Asset, atLast: Bool) {
         if atLast {
             assets.append(asset)
         } else {
