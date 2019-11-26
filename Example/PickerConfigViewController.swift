@@ -294,19 +294,19 @@ extension PickerConfigViewController {
         let indexPath = CaptureConfigRowType.captureMediaOptions.indexPath
         let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.captureMediaOptions = []
+            self?.captureConfig.options = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
         }))
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.captureMediaOptions = [.photo, .video]
+            self?.captureConfig.options = [.photo, .video]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.captureMediaOptions = [.photo]
+            self?.captureConfig.options = [.photo]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
         }))
         alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.captureMediaOptions = [.video]
+            self?.captureConfig.options = [.video]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
