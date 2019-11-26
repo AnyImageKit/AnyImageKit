@@ -57,7 +57,7 @@ extension PhotoPreviewCell {
     /// 加载图片
     func requestPhoto() {
         if imageView.image == nil { // thumbnail
-            let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
+            let options = PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {

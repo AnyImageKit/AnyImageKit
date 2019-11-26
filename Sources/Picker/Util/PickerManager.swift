@@ -168,7 +168,7 @@ extension PickerManager {
         case .video:
             workQueue.async { [weak self] in
                 guard let self = self else { return }
-                let options = PhotoFetchOptions(sizeMode: .resize(100*UIScreen.main.nativeScale), needCache: false)
+                let options = PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
                 self.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                     guard let self = self else { return }
                     switch result {

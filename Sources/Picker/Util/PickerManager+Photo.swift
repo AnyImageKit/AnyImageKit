@@ -18,7 +18,7 @@ struct PhotoFetchOptions {
     let isNetworkAccessAllowed: Bool
     let progressHandler: PHAssetImageProgressHandler?
     
-    init(sizeMode: PhotoSizeMode = .resize(100),
+    init(sizeMode: PhotoSizeMode = .thumbnail(100),
          resizeMode: PHImageRequestOptionsResizeMode = .fast,
          version: PHImageRequestOptionsVersion = .current,
          needCache: Bool = true,
@@ -34,7 +34,7 @@ struct PhotoFetchOptions {
     
     var targetSize: CGSize {
         switch sizeMode {
-        case .resize(let width):
+        case .thumbnail(let width):
             return CGSize(width: width, height: width)
         case .preview(let width):
             return CGSize(width: width, height: width)
@@ -45,8 +45,8 @@ struct PhotoFetchOptions {
 }
 
 enum PhotoSizeMode: Equatable {
-    /// Custom Size
-    case resize(CGFloat)
+    /// Thumbnail Size
+    case thumbnail(CGFloat)
     /// Preview Size, based on your config
     case preview(CGFloat)
     /// Original Size
@@ -66,8 +66,7 @@ extension PickerManager {
     
     func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
         if let asset = config.orderByDate == .asc ? album.assets.last?.phAsset : album.assets.first?.phAsset {
-            let scale = UIScreen.main.nativeScale
-            let options = PhotoFetchOptions(sizeMode: .resize(100*scale), needCache: false)
+            let options = PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             requestPhoto(for: asset, options: options, completion: completion)
         }
     }
@@ -105,12 +104,11 @@ extension PickerManager {
                             completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
                         }
                     }
-                case .resize:
-                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: false)
+                case .thumbnail:
                     if !isDegraded && options.needCache {
-                        self.cache.write(resizedImage, identifier: asset.localIdentifier)
+                        self.cache.write(image, identifier: asset.localIdentifier)
                     }
-                    completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
+                    completion(.success(.init(image: image, isDegraded: isDegraded)))
                 }
             } else {
                 // Download image from iCloud
@@ -150,7 +148,7 @@ extension PickerManager {
                                     DispatchQueue.main.async {
                                         completion(.success(.init(image: resizedImage, isDegraded: false)))
                                     }
-                                case .resize:
+                                case .thumbnail:
                                     guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
                                         DispatchQueue.main.async {
                                             completion(.failure(.invalidData))
