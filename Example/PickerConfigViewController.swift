@@ -125,7 +125,7 @@ final class PickerConfigViewController: UITableViewController {
         case 2:
             let rowType = CaptureConfigRowType.allCases[indexPath.row]
             switch rowType {
-            case .captureMediaOptions:
+            case .captureOptions:
                 captureMediaOptionsTapped()
             }
         case 3:
@@ -277,7 +277,7 @@ extension PickerConfigViewController {
     
     private func editorOptionsTapped() {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
-        let alert = UIAlertController(title: "EditorConfigOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "EditorOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
             self?.editorConfig.options = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
@@ -291,8 +291,8 @@ extension PickerConfigViewController {
     }
     
     private func captureMediaOptionsTapped() {
-        let indexPath = CaptureConfigRowType.captureMediaOptions.indexPath
-        let alert = UIAlertController(title: "CaptureMediaOptions", message: nil, preferredStyle: .alert)
+        let indexPath = CaptureConfigRowType.captureOptions.indexPath
+        let alert = UIAlertController(title: "CaptureOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
             self?.captureConfig.options = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
@@ -398,18 +398,18 @@ extension PickerConfigViewController {
     
     // MARK: - Capture Config
     enum CaptureConfigRowType: Int, CaseIterable, RowTypeRule {
-        case captureMediaOptions = 0
+        case captureOptions = 0
         
         var title: String {
             switch self {
-            case .captureMediaOptions:
-                return "CaptureMediaOptions"
+            case .captureOptions:
+                return "CaptureOptions"
             }
         }
         
         var defaultValue: String {
             switch self {
-            case .captureMediaOptions:
+            case .captureOptions:
                 return "None"
             }
         }

@@ -15,7 +15,7 @@
 "SelectOptions" = "SelectOptions";
 "OrderByDate" = "OrderByDate";
 "EditorOptions" = "EditorOptions";
-"CaptureMediaOptions" = "CaptureMediaOptions";
+"CaptureOptions" = "CaptureOptions";
 "FullScreen" = "FullScreen";
 
 // Editor

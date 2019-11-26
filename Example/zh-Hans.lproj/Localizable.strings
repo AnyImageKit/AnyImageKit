@@ -15,7 +15,7 @@
 "SelectOptions" = "SelectOptions (选择类型)";
 "OrderByDate" = "OrderByDate (排序方式)";
 "EditorOptions" = "EditorOptions (编辑类型)";
-"CaptureMediaOptions" = "CaptureMediaOptions (拍摄类型)";
+"CaptureOptions" = "CaptureOptions (拍摄类型)";
 "FullScreen" = "FullScreen (是否全屏)";
 
 // Editor
