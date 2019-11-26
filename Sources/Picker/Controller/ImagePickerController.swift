@@ -82,6 +82,7 @@ open class ImagePickerController: UINavigationController {
     private let manager: PickerManager = .init()
     
     public init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
+        enableDebugLog = config.enableDebugLog
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
         super.init(nibName: nil, bundle: nil)
