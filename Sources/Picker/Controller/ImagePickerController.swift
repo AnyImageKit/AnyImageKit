@@ -115,7 +115,11 @@ open class ImagePickerController: UINavigationController {
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
-        super.dismiss(animated: flag, completion: completion)
+        if let presentingViewController = presentingViewController {
+            presentingViewController.dismiss(animated: flag, completion: completion)
+        } else {
+            super.dismiss(animated: flag, completion: completion)
+        }
     }
     
     open override var prefersStatusBarHidden: Bool {
