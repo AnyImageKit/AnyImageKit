@@ -202,6 +202,10 @@ extension PickerConfigViewController {
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(i)"
             }))
         }
+        alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (_) in
+            self?.config.selectLimit = 20
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "20"
+        }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
