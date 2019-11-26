@@ -184,7 +184,7 @@ extension ImagePickerController {
                                    height: manager.config.photoMaxWidth)
             assets.forEach {
                 if let image = $0._image, image.size != .zero  {
-                    let resizedImage = UIImage.resize(from: image, limitSize: limitSize)
+                    let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
                     $0._images[.output] = resizedImage
                     $0._images[.edited] = nil
                     $0._images[.initial] = nil

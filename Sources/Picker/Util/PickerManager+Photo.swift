@@ -96,7 +96,7 @@ extension PickerManager {
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
                         self.resizeSemaphore.wait()
-                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: true)
                         self.resizeSemaphore.signal()
                         if !isDegraded && options.needCache {
                             self.cache.write(resizedImage, identifier: asset.localIdentifier)
@@ -106,7 +106,7 @@ extension PickerManager {
                         }
                     }
                 case .resize:
-                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize)
+                    let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: false)
                     if !isDegraded && options.needCache {
                         self.cache.write(resizedImage, identifier: asset.localIdentifier)
                     }

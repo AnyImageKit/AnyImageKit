@@ -12,11 +12,14 @@ import ImageIO
 
 extension UIImage {
     
-    static func resize(from image: UIImage, limitSize: CGSize) -> UIImage {
-        if image.size.width <= limitSize.width && image.size.height <= limitSize.height { return image }
+    static func resize(from image: UIImage, limitSize: CGSize, isExact: Bool) -> UIImage {
+        if isExact {
+            if image.size.width <= limitSize.width && image.size.height <= limitSize.height { return image }
+        } else {
+            if image.size.width <= limitSize.width || image.size.height <= limitSize.height { return image }
+        }
         let size = calculate(from: image.size, to: limitSize)
         guard let pngData = image.pngData() else { return image }
-        
         guard let resized = resize(from: pngData, limitSize: size) else { return image }
         return resized
     }
