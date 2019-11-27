@@ -13,6 +13,7 @@
 "ColumnNumber" = "ColumnNumber (一行的列数)";
 "UseOriginalImage" = "UseOriginalImage (是否使用原图)";
 "SelectOptions" = "SelectOptions (选择类型)";
+"AlbumOptions" = "AlbumOptions (相册类型)";
 "OrderByDate" = "OrderByDate (排序方式)";
 "EditorOptions" = "EditorOptions (编辑类型)";
 "CaptureOptions" = "CaptureOptions (拍摄类型)";
