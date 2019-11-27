@@ -117,9 +117,9 @@ extension ImagePickerController {
     }
     
     public struct AlbumOptions: OptionSet {
-        /// Smart Album, managed by system
+        /// Smart Album, managed by system 智能相册
         public static let smart = AlbumOptions(rawValue: 1 << 0)
-        /// User Created Album
+        /// User Created Album 用户相册
         public static let userCreated = AlbumOptions(rawValue: 1 << 1)
         
         public let rawValue: Int

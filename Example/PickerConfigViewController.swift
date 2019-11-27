@@ -111,6 +111,8 @@ final class PickerConfigViewController: UITableViewController {
                 columnNumberTapped()
             case .allowUseOriginalImage:
                 allowUseOriginalImageTapped()
+            case .albumOptions:
+                albumOptionsTapped()
             case .selectOptions:
                 selectOptionsTapped()
             case .orderByDate:
@@ -225,6 +227,25 @@ extension PickerConfigViewController {
         tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(config.allowUseOriginalImage)"
     }
     
+    private func albumOptionsTapped() {
+        let indexPath = ConfigRowType.albumOptions.indexPath
+        let alert = UIAlertController(title: "AlbumOptions", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Smart", style: .default, handler: { [weak self] (_) in
+            self?.config.albumOptions = [.smart]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Smart"
+        }))
+        alert.addAction(UIAlertAction(title: "User Created", style: .default, handler: { [weak self] (_) in
+            self?.config.albumOptions = [.userCreated]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "User Created"
+        }))
+        alert.addAction(UIAlertAction(title: "Smart+User Created", style: .default, handler: { [weak self] (_) in
+            self?.config.albumOptions = [.smart, .userCreated]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Smart+User Created"
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func selectOptionsTapped() {
         let indexPath = ConfigRowType.selectOptions.indexPath
         let alert = UIAlertController(title: "SelectOptions", message: nil, preferredStyle: .alert)
@@ -327,6 +348,7 @@ extension PickerConfigViewController {
         case selectLimit
         case columnNumber
         case allowUseOriginalImage
+        case albumOptions
         case selectOptions
         case orderByDate
         
@@ -340,6 +362,8 @@ extension PickerConfigViewController {
                 return "ColumnNumber"
             case .allowUseOriginalImage:
                 return "UseOriginalImage"
+            case .albumOptions:
+                return "Album Options"
             case .selectOptions:
                 return "SelectOptions"
             case .orderByDate:
@@ -357,6 +381,8 @@ extension PickerConfigViewController {
                 return "4"
             case .allowUseOriginalImage:
                 return "true"
+            case .albumOptions:
+                return "Smart"
             case .selectOptions:
                 return "Photo"
             case .orderByDate:
