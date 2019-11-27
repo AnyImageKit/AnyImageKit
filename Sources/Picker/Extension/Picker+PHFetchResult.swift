@@ -19,6 +19,17 @@ extension PHFetchResult where ObjectType == PHAssetCollection {
     }
 }
 
+extension PHFetchResult where ObjectType == PHCollection {
+    
+    func objects() -> [PHCollection] {
+        var results = [PHCollection]()
+        self.enumerateObjects { (object, index, isAtEnd) in
+            results.append(object)
+        }
+        return results
+    }
+}
+
 extension PHFetchResult where ObjectType == PHAsset {
     
     func objects() -> [PHAsset] {

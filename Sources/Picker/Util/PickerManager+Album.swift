@@ -30,6 +30,7 @@ extension PickerManager {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
                 let result = Album(result: assetsfetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, selectOptions: config.selectOptions)
                 completion(result)
+                return
             }
         }
     }
@@ -50,10 +51,7 @@ extension PickerManager {
                 options.sortDescriptors = [sortDescriptor]
             }
             
-            let allAlbumSubTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream, .albumRegular, .albumSyncedAlbum, .albumCloudShared]
-            let assetCollectionsfetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
-            for assetCollectionsFetchResult in assetCollectionsfetchResults {
-                let assetCollections = assetCollectionsFetchResult.objects()
+            func load(assetCollections: [PHAssetCollection]) {
                 for assetCollection in assetCollections {
                     let isCameraRoll = assetCollection.isCameraRoll
                     
@@ -78,6 +76,28 @@ extension PickerManager {
                     }
                 }
             }
+            
+            // Load Smart Albums
+            if self.config.albumOptions.contains(.smart) {
+                let allAlbumSubTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream,
+                                                                    .albumRegular,
+                                                                    .albumSyncedAlbum,
+                                                                    .albumCloudShared]
+                let assetCollectionsfetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
+                for assetCollectionsFetchResult in assetCollectionsfetchResults {
+                    let smartCollections = assetCollectionsFetchResult.objects()
+                    load(assetCollections: smartCollections)
+                }
+            }
+            
+            // Load User Albums
+            if self.config.albumOptions.contains(.userCreated) {
+                let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+                let userCollections = topLevelUserCollections.objects().compactMap { $0 as? PHAssetCollection }
+                load(assetCollections: userCollections)
+            }
+            
+            // Export results
             DispatchQueue.main.async {
                 completion(results)
             }

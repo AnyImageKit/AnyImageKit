@@ -36,6 +36,10 @@ extension ImagePickerController {
         /// - Default: true
         public var allowUseOriginalImage: Bool
         
+        /// Album Options 相册类型
+        /// - Default: Smart album
+        public var albumOptions: AlbumOptions
+        
         /// Select Options 可选择的类型
         /// - Default: Photo
         /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
@@ -58,6 +62,7 @@ extension ImagePickerController {
                     photoMaxWidth: CGFloat = 800,
                     largePhotoMaxWidth: CGFloat = 1200,
                     allowUseOriginalImage: Bool = true,
+                    albumOptions: AlbumOptions = [.smart],
                     selectOptions: SelectOptions = [.photo],
                     orderByDate: Sort = .asc,
                     enableDebugLog: Bool = false) {
@@ -67,6 +72,7 @@ extension ImagePickerController {
             self.photoMaxWidth = photoMaxWidth
             self.largePhotoMaxWidth = largePhotoMaxWidth
             self.allowUseOriginalImage = allowUseOriginalImage
+            self.albumOptions = albumOptions
             self.selectOptions = selectOptions
             self.orderByDate = orderByDate
             self.enableDebugLog = enableDebugLog
@@ -107,6 +113,19 @@ extension ImagePickerController {
                 result.append(.video)
             }
             return result
+        }
+    }
+    
+    public struct AlbumOptions: OptionSet {
+        /// Smart Album, managed by system
+        public static let smart = AlbumOptions(rawValue: 1 << 0)
+        /// User Created Album
+        public static let userCreated = AlbumOptions(rawValue: 1 << 1)
+        
+        public let rawValue: Int
+        
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
         }
     }
     
