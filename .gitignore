@@ -21,7 +21,7 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
-AnyImagePicker.framework.zip
+AnyImageKit.framework.zip
 
 ## Obj-C/Swift specific
 *.hmap
