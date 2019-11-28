@@ -37,7 +37,7 @@ extension ImagePickerController {
         public var allowUseOriginalImage: Bool
         
         /// Album Options 相册类型
-        /// - Default: Smart album
+        /// - Default: smart album + user create album
         public var albumOptions: AlbumOptions
         
         /// Select Options 可选择的类型
