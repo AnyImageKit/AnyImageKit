@@ -89,6 +89,10 @@ asset.fetchVideoURL { (result) in
 }
 ```
 
+## 预览
+
+![](./Resources/QuickLook.gif)
+
 ## 版权协议
 
 AnyImageKit 基于 MIT 协议进行分发和使用，更多信息参见[协议文件](./LICENSE)。
