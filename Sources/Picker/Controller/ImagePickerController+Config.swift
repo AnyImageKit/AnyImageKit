@@ -62,7 +62,7 @@ extension ImagePickerController {
                     photoMaxWidth: CGFloat = 800,
                     largePhotoMaxWidth: CGFloat = 1200,
                     allowUseOriginalImage: Bool = true,
-                    albumOptions: AlbumOptions = [.smart],
+                    albumOptions: AlbumOptions = [.smart, .userCreated],
                     selectOptions: SelectOptions = [.photo],
                     orderByDate: Sort = .asc,
                     enableDebugLog: Bool = false) {

@@ -382,7 +382,7 @@ extension PickerConfigViewController {
             case .allowUseOriginalImage:
                 return "true"
             case .albumOptions:
-                return "Smart"
+                return "Smart+User Created"
             case .selectOptions:
                 return "Photo"
             case .orderByDate:
