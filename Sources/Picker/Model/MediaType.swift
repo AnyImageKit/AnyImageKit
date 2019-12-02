@@ -21,15 +21,21 @@ public enum MediaType: Equatable, CustomStringConvertible {
         
         switch asset.mediaType {
         case .image:
-            if selectPhotoLive && asset.mediaSubtypes == .photoLive {
-                self = .photoLive
-            } else {
-                if selectPhotoGIF && asset.isGIF {
+            
+            if #available(iOS 9.1, *) {
+                if selectPhotoLive && asset.mediaSubtypes == .photoLive {
+                    self = .photoLive
+                } else if selectPhotoGIF && asset.isGIF {
                     self = .photoGIF
                 } else {
                     self = .photo
                 }
+            } else if selectPhotoGIF && asset.isGIF {
+                self = .photoGIF
+            } else {
+                self = .photo
             }
+            
         case .video:
             self = .video
         default:

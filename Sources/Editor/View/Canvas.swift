@@ -81,7 +81,10 @@ class Canvas: UIView {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
+        var point = touch.location(in: self)
+        if #available(iOS 9.1, *) {
+            point = touch.preciseLocation(in: self)
+        }
         bezierGenerator.begin(with: point)
         pushPoint(point, to: bezierGenerator, state: .begin)
     }
@@ -89,7 +92,10 @@ class Canvas: UIView {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard bezierGenerator.points.count > 0 else { return }
         guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
+        var point = touch.location(in: self)
+        if #available(iOS 9.1, *) {
+            point = touch.preciseLocation(in: self)
+        }
         if lastPoint == point { return }
         lastPoint = point
         pushPoint(point, to: bezierGenerator, state: .move)
@@ -103,7 +109,10 @@ class Canvas: UIView {
         
         guard bezierGenerator.points.count > 0 else { return }
         guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
+        var point = touch.location(in: self)
+        if #available(iOS 9.1, *) {
+            point = touch.preciseLocation(in: self)
+        }
         pushPoint(point, to: bezierGenerator, state: .end)
     }
 }

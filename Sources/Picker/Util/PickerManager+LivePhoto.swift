@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+@available(iOS 9.1, *)
 struct LivePhotoFetchOptions {
 
     let targetSize: CGSize
@@ -28,18 +29,19 @@ struct LivePhotoFetchOptions {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
     }
-
 }
 
+@available(iOS 9.1, *)
 struct LivePhotoFetchResponse {
-    
     let livePhoto: PHLivePhoto
 }
 
+@available(iOS 9.1, *)
 typealias LivePhotoFetchCompletion = (Result<LivePhotoFetchResponse, ImagePickerError>) -> Void
 
 extension PickerManager {
     
+    @available(iOS 9.1, *)
     func requestLivePhoto(for asset: PHAsset, options: LivePhotoFetchOptions = .init(), completion: @escaping LivePhotoFetchCompletion) {
         let requestOptions = PHLivePhotoRequestOptions()
         requestOptions.version = options.version

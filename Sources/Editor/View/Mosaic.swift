@@ -77,28 +77,31 @@ final class Mosaic: UIView {
         setMosaicCoverImage(0)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    private func pushprecisePoint(_ touches: Set<UITouch>, state: TouchState) {
         guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
-        pushPoint(point, state: .begin)
+        if #available(iOS 9.1, *) {
+            let point = touch.preciseLocation(in: self)
+            pushPoint(point, state: state)
+        } else {
+            let point = touch.location(in: self)
+            pushPoint(point, state: state)
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        pushprecisePoint(touches, state: .begin)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
-        pushPoint(point, state: .move)
+        pushprecisePoint(touches, state: .move)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
-        pushPoint(point, state: .end)
+        pushprecisePoint(touches, state: .end)
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
-        pushPoint(point, state: .cancel)
+        pushprecisePoint(touches, state: .cancel)
     }
 }
 

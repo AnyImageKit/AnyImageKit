@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 public protocol ImageEditorControllerDelegate: class {
     

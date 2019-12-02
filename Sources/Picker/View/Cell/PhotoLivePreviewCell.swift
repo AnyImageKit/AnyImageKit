@@ -9,6 +9,7 @@
 import UIKit
 import PhotosUI
 
+@available(iOS 9.1, *)
 final class PhotoLivePreviewCell: PreviewCell {
     
     private lazy var livePhotoView: PHLivePhotoView = {
@@ -101,6 +102,7 @@ final class PhotoLivePreviewCell: PreviewCell {
     }
 }
 
+@available(iOS 9.1, *)
 extension PhotoLivePreviewCell {
     
     func requestLivePhoto() {
@@ -114,6 +116,7 @@ extension PhotoLivePreviewCell {
                     self.setDownloadingProgress(progress)
                 }
             }
+            
             self.manager.requestLivePhoto(for: self.asset.phAsset, options: options) { (result) in
                 switch result {
                 case .success(let response):
@@ -133,6 +136,7 @@ extension PhotoLivePreviewCell {
 }
 
 // MARK: - Target
+@available(iOS 9.1, *)
 extension PhotoLivePreviewCell {
     
     /// 长按播放 live photo
@@ -150,6 +154,7 @@ extension PhotoLivePreviewCell {
 }
 
 // MARK: - UIScrollViewDelegate
+@available(iOS 9.1, *)
 extension PhotoLivePreviewCell: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

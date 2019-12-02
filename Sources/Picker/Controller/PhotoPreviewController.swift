@@ -99,10 +99,14 @@ final class PhotoPreviewController: UIViewController {
         view.registerCell(PhotoPreviewCell.self)
         view.registerCell(PhotoGIFPreviewCell.self)
         view.registerCell(VideoPreviewCell.self)
-        view.registerCell(PhotoLivePreviewCell.self)
+        if #available(iOS 9.1, *) {
+            view.registerCell(PhotoLivePreviewCell.self)
+        }
         view.isPagingEnabled = true
         view.alwaysBounceHorizontal = false
-        view.isPrefetchingEnabled = false
+        if #available(iOS 10.0, *) {
+            view.isPrefetchingEnabled = false
+        }
         return view
     }()
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
@@ -394,25 +398,44 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
         let cell: PreviewCell
-        switch data.asset.mediaType {
-        case .photo:
-            let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
-            photoCell.imageView.contentMode = imageScaleMode
-            photoCell.imageMaximumZoomScale = imageMaximumZoomScale
-            photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-            cell = photoCell
-        case .video:
-            cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
-            cell.imageView.contentMode = imageScaleMode
-        case .photoGIF:
-            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
-        case .photoLive:
-            cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
-            cell.imageView.contentMode = imageScaleMode
+        if  #available(iOS 9.1, *) {
+            switch data.asset.mediaType {
+            case .photo:
+                let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
+                photoCell.imageView.contentMode = imageScaleMode
+                photoCell.imageMaximumZoomScale = imageMaximumZoomScale
+                photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+                cell = photoCell
+            case .video:
+                cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
+                cell.imageView.contentMode = imageScaleMode
+            case .photoGIF:
+                cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
+            case .photoLive:
+                cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
+                cell.imageView.contentMode = imageScaleMode
+            }
+            cell.delegate = self
+            cell.asset = data.asset
+            cell.manager = manager
+        }else {
+            switch data.asset.mediaType {
+            case .photo:
+                let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
+                photoCell.imageView.contentMode = imageScaleMode
+                photoCell.imageMaximumZoomScale = imageMaximumZoomScale
+                photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+                cell = photoCell
+            case .video:
+                cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
+                cell.imageView.contentMode = imageScaleMode
+            case .photoGIF, .photoLive:
+                cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
+            }
+            cell.delegate = self
+            cell.asset = data.asset
+            cell.manager = manager
         }
-        cell.delegate = self
-        cell.asset = data.asset
-        cell.manager = manager
         return cell
     }
 }
@@ -423,34 +446,64 @@ extension PhotoPreviewController: UICollectionViewDelegate {
     /// Cell 进入屏幕 - 请求数据
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
-        switch cell {
-        case let cell as PhotoPreviewCell:
-            if data.asset._image != nil {
-                cell.setImage(data.asset._image)
-            } else {
+        if #available(iOS 9.1, *) {
+            switch cell {
+            case let cell as PhotoPreviewCell:
+                if data.asset._image != nil {
+                    cell.setImage(data.asset._image)
+                } else {
+                    if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
+                        cell.setImage(originalImage)
+                    } else {
+                        cell.setImage(data.thumbnail)
+                        cell.requestPhoto()
+                    }
+                }
+            case let cell as VideoPreviewCell:
                 if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
                     cell.setImage(originalImage)
                 } else {
                     cell.setImage(data.thumbnail)
                     cell.requestPhoto()
                 }
-            }
-        case let cell as VideoPreviewCell:
-            if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
-                cell.setImage(originalImage)
-            } else {
+                cell.requestVideo()
+            case let cell as PhotoGIFPreviewCell:
                 cell.setImage(data.thumbnail)
-                cell.requestPhoto()
+                cell.requestGIF()
+            case let cell as PhotoLivePreviewCell:
+                cell.setImage(data.thumbnail)
+                cell.requestLivePhoto()
+            default:
+                break
             }
-            cell.requestVideo()
-        case let cell as PhotoGIFPreviewCell:
-            cell.setImage(data.thumbnail)
-            cell.requestGIF()
-        case let cell as PhotoLivePreviewCell:
-            cell.setImage(data.thumbnail)
-            cell.requestLivePhoto()
-        default:
-            break
+        } else {
+            // Fallback on earlier versions
+            switch cell {
+            case let cell as PhotoPreviewCell:
+                if data.asset._image != nil {
+                    cell.setImage(data.asset._image)
+                } else {
+                    if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
+                        cell.setImage(originalImage)
+                    } else {
+                        cell.setImage(data.thumbnail)
+                        cell.requestPhoto()
+                    }
+                }
+            case let cell as VideoPreviewCell:
+                if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
+                    cell.setImage(originalImage)
+                } else {
+                    cell.setImage(data.thumbnail)
+                    cell.requestPhoto()
+                }
+                cell.requestVideo()
+            case let cell as PhotoGIFPreviewCell:
+                cell.setImage(data.thumbnail)
+                cell.requestGIF()
+            default:
+                break
+            }
         }
     }
     
