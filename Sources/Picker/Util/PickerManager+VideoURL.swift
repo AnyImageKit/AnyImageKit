@@ -194,11 +194,14 @@ extension PickerManager {
         }
         DispatchQueue.main.async {
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                guard exportSession.status == .exporting else {
+                switch exportSession.status {
+                case .unknown, .waiting, .exporting:
+                    options.exportProgressHandler?(Double(exportSession.progress))
+                case .completed, .failed, .cancelled:
                     timer.invalidate()
-                    return
+                @unknown default:
+                    break
                 }
-                options.exportProgressHandler?(Double(exportSession.progress))
             }
         }
     }
