@@ -180,7 +180,7 @@ extension PickerManager {
                 case .waiting:
                     break
                 case .exporting:
-                    options.exportProgressHandler?(Double(exportSession.progress))
+                    break
                 case .completed:
                     completion(.success(VideoURLFetchResponse(url: outputURL)))
                 case .failed:
@@ -190,6 +190,15 @@ extension PickerManager {
                 @unknown default:
                     break
                 }
+            }
+        }
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                guard exportSession.status == .exporting else {
+                    timer.invalidate()
+                    return
+                }
+                options.exportProgressHandler?(Double(exportSession.progress))
             }
         }
     }
