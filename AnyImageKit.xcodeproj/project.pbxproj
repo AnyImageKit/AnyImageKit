@@ -124,6 +124,8 @@
 		A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */; };
 		A5DF1E8B237AA42800E3A32E /* EditorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E8A237AA42800E3A32E /* EditorManager.swift */; };
 		A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */; };
+		A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F7DFCC2394A6DD006E10ED /* InputTextViewController.swift */; };
+		A5F7DFCF2394D5CE006E10ED /* EditorTextToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */; };
 		A5FE415B237E4B3100D216CF /* EditorImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FE415A237E4B3100D216CF /* EditorImageCache.swift */; };
 /* End PBXBuildFile section */
 
@@ -285,6 +287,8 @@
 		A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+UIBezierPath.swift"; sourceTree = "<group>"; };
 		A5DF1E8A237AA42800E3A32E /* EditorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorManager.swift; sourceTree = "<group>"; };
 		A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoPreviewController+Editor.swift"; sourceTree = "<group>"; };
+		A5F7DFCC2394A6DD006E10ED /* InputTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewController.swift; sourceTree = "<group>"; };
+		A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextToolView.swift; sourceTree = "<group>"; };
 		A5FE415A237E4B3100D216CF /* EditorImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorImageCache.swift; sourceTree = "<group>"; };
 		EFDDF6D07FE50B56C4A76362 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8C19DAC9CB1AC16AE3057 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -524,6 +528,7 @@
 				A50B20D7237AA24200A894A9 /* ImageEditorController.swift */,
 				A50B20D5237AA24200A894A9 /* ImageEditorController+Config.swift */,
 				A50B20D6237AA24200A894A9 /* PhotoEditorController.swift */,
+				A5F7DFCC2394A6DD006E10ED /* InputTextViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -564,6 +569,7 @@
 				A50B20EB237AA24200A894A9 /* EditorPenToolView.swift */,
 				A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */,
 				A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */,
+				A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */,
 				A50B20E8237AA24200A894A9 /* Kit */,
 			);
 			path = View;
@@ -945,6 +951,7 @@
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
 				A5783956235ED584002A0498 /* LivePhotoTipView.swift in Sources */,
+				A5F7DFCF2394D5CE006E10ED /* EditorTextToolView.swift in Sources */,
 				A50B2118237AA24300A894A9 /* Canvas.swift in Sources */,
 				A50B211D237AA24300A894A9 /* PhotoEditorContentView+Mosaic.swift in Sources */,
 				A59332602338ADBA003CE652 /* AnimatableImageView.swift in Sources */,
@@ -984,6 +991,7 @@
 				A50B2115237AA24300A894A9 /* PhotoEditorContentView+Getter.swift in Sources */,
 				A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,
+				A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */,
 				A0B22EA7237AA1B3001F6066 /* Core+UIColor.swift in Sources */,
 				A59332622338AED8003CE652 /* AnimatedImage.swift in Sources */,
 				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,

@@ -95,7 +95,6 @@ final class EditorPenToolView: UIView {
         view.layer.borderColor = UIColor.white.cgColor
         return view
     }
-
 }
 
 // MARK: - ResponseTouch

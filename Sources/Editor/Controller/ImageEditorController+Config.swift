@@ -48,6 +48,10 @@ extension ImageEditorController {
         /// 默认：30
         public var mosaicLevel: Int
         
+        /// 文字颜色，会按顺序排布
+        /// 默认：[white, black, red, yellow, green, blue, purple]
+        public var textColors: [PhotoTextColor]
+        
         /// 缓存ID
         /// 默认：""
         public var cacheIdentifier: String
@@ -57,14 +61,15 @@ extension ImageEditorController {
         public var enableDebugLog: Bool
         
         public init(tintColor: UIColor = Palette.main,
-                    editOptions: [PhotoEditOption] = [.pen, .crop, .mosaic],
-                    penColors: [UIColor] = Palette.all,
+                    editOptions: [PhotoEditOption] = [.pen, .text, .crop, .mosaic],
+                    penColors: [UIColor] = Palette.penColors,
                     defaultPenIdx: Int = 2,
                     penWidth: CGFloat = 5.0,
                     mosaicOptions: [PhotoMosaicOption] = [.default, .colorful],
                     defaultMosaicIdx: Int = 0,
                     mosaicLevel: Int = 30,
                     mosaicWidth: CGFloat = 15.0,
+                    textColors: [PhotoTextColor] = Palette.textColors,
                     cacheIdentifier: String = "",
                     enableDebugLog: Bool = false) {
             self.tintColor = tintColor
@@ -76,6 +81,7 @@ extension ImageEditorController {
             self.defaultMosaicIdx = defaultMosaicIdx
             self.mosaicLevel = mosaicLevel
             self.mosaicWidth = mosaicWidth
+            self.textColors = textColors
             self.cacheIdentifier = cacheIdentifier
             self.enableDebugLog = enableDebugLog
         }
@@ -101,6 +107,12 @@ extension ImageEditorController {
         case custom(icon: UIImage, mosaic: UIImage)
     }
     
+    public struct PhotoTextColor {
+        /// 主色
+        let color: UIColor
+        /// 辅色
+        let subColor: UIColor
+    }
 }
 
 // MARK: - Extension

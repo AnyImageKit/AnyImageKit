@@ -155,7 +155,11 @@ extension PhotoEditorController: EditorToolViewDelegate {
         case .pen:
             contentView.canvas.isUserInteractionEnabled = true
         case .text:
-            break
+            backButton.isHidden = true
+            let coverImage = getResultImage()?.gaussianImage(blur: 8)
+            let controller = InputTextViewController(manager: manager, coverImage: coverImage, delegate: self)
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true, completion: nil)
         case .crop:
             backButton.isHidden = true
             contentView.scrollView.isScrollEnabled = true
@@ -212,7 +216,30 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 最终完成按钮
     func toolViewDoneButtonTapped(_ toolView: EditorToolView) {
-        guard let source = contentView.imageView.screenshot.cgImage else { return }
+        guard let image = getResultImage() else { return }
+        saveEditPath()
+        delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
+    }
+}
+
+// MARK: - InputTextViewControllerDelegate
+extension PhotoEditorController: InputTextViewControllerDelegate {
+    
+    func inputTextCancelButtonTapped(_ controller: InputTextViewController) {
+        backButton.isHidden = false
+        toolView.topCoverLayer.isHidden = false
+        toolView.bottomCoverLayer.isHidden = false
+        toolView.doneButton.isHidden = false
+        toolView.editOptionsView.isHidden = false
+    }
+}
+
+// MARK: - Private
+extension PhotoEditorController {
+    
+    /// 获取最终的图片
+    private func getResultImage() -> UIImage? {
+        guard let source = contentView.imageView.screenshot.cgImage else { return nil }
         let size = CGSize(width: source.width, height: source.height)
         let cropRect = contentView.cropRealRect
         
@@ -230,14 +257,9 @@ extension PhotoEditorController: EditorToolViewDelegate {
         rect.size.width = size.width * cropRect.width / imageFrame.width
         rect.size.height = size.height * cropRect.height / imageFrame.height
         
-        guard let cgImage = source.cropping(to: rect) else { return }
-        let image = UIImage(cgImage: cgImage)
-        saveEditPath()
-        delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
+        guard let cgImage = source.cropping(to: rect) else { return nil }
+        return UIImage(cgImage: cgImage)
     }
-}
-
-extension PhotoEditorController {
     
     /// 存储编辑记录
     private func saveEditPath() {
