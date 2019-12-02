@@ -192,6 +192,7 @@ extension PickerManager {
                 }
             }
         }
+        // Setup Export Progress
         DispatchQueue.main.async {
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
                 switch exportSession.status {
