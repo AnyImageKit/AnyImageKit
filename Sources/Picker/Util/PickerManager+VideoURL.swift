@@ -9,7 +9,7 @@
 import Photos
 import AVFoundation
 
-public enum VideoURLExportPreset: RawRepresentable, Equatable {
+public enum VideoPreset: RawRepresentable, Equatable {
     /// H.264/AVC 640x480
     case h264_640x480
     /// H.264/AVC 960x540
@@ -103,7 +103,7 @@ public struct VideoURLFetchOptions {
     public let deliveryMode: PHVideoRequestOptionsDeliveryMode
     public let fetchProgressHandler: PHAssetVideoProgressHandler?
     public let preferredOutputPath: String
-    public let exportPreset: VideoURLExportPreset
+    public let exportPreset: VideoPreset
     public let exportProgressHandler: VideoURLExportProgressHandler?
     
     public init(isNetworkAccessAllowed: Bool = true,
@@ -111,7 +111,7 @@ public struct VideoURLFetchOptions {
                 deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
                 fetchProgressHandler: PHAssetVideoProgressHandler? = nil,
                 preferredOutputPath: String = NSTemporaryDirectory(),
-                exportPreset: VideoURLExportPreset = .h264_1280x720,
+                exportPreset: VideoPreset = .h264_1280x720,
                 exportProgressHandler: VideoURLExportProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
@@ -166,7 +166,7 @@ extension PickerManager {
         }
         // Prepare Output URL
         let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let outputPath = options.preferredOutputPath.appending("VIDEO-EXPORT-\(timestamp)).mp4")
+        let outputPath = options.preferredOutputPath.appending("VIDEO-EXPORT-\(timestamp).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
         // Setup Export Session
         exportSession.shouldOptimizeForNetworkUse = true
@@ -180,13 +180,26 @@ extension PickerManager {
                 case .waiting:
                     break
                 case .exporting:
-                    options.exportProgressHandler?(Double(exportSession.progress))
+                    break
                 case .completed:
                     completion(.success(VideoURLFetchResponse(url: outputURL)))
                 case .failed:
                     completion(.failure(.exportFail))
                 case .cancelled:
                     completion(.failure(.exportCancel))
+                @unknown default:
+                    break
+                }
+            }
+        }
+        // Setup Export Progress
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                switch exportSession.status {
+                case .unknown, .waiting, .exporting:
+                    options.exportProgressHandler?(Double(exportSession.progress))
+                case .completed, .failed, .cancelled:
+                    timer.invalidate()
                 @unknown default:
                     break
                 }

@@ -69,9 +69,31 @@ extension PickerResultViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = assets[indexPath.item]
-        let alert = UIAlertController(title: "Detail", message: asset.description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
+        switch asset.mediaType {
+        case .video:
+            let alert = UIAlertController(title: "Processing", message: nil, preferredStyle: .alert)
+            let options = VideoURLFetchOptions(fetchProgressHandler: { (progress, _, _, _) in
+                alert.message = "Fetching \(String(format: "%0.1f %", progress*100))"
+            }, exportPreset: .h264_1280x720) { progress in
+                alert.message = "Exporting \(String(format: "%0.1f %", progress*100))"
+            }
+            present(alert, animated: true, completion: nil)
+            asset.fetchVideoURL(options: options) { result in
+                switch result {
+                case .success(let response):
+                    alert.title = "Result"
+                    alert.message = response.url.absoluteString
+                    alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        default:
+            let alert = UIAlertController(title: "Detail", message: asset.description, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
+        
     }
 }
 
