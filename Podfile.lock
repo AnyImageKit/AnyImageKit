@@ -1,16 +1,21 @@
 PODS:
-  - SnapKit (5.0.1)
+  - SnapKit (5.0.0)
 
 DEPENDENCIES:
-  - SnapKit (~> 5.0)
+  - SnapKit (from `https://github.com/Lionyy/SnapKit.git`)
 
-SPEC REPOS:
-  trunk:
-    - SnapKit
+EXTERNAL SOURCES:
+  SnapKit:
+    :git: https://github.com/Lionyy/SnapKit.git
+
+CHECKOUT OPTIONS:
+  SnapKit:
+    :commit: 4f129bc9b3afc4014c19cc3495e90f476c22723b
+    :git: https://github.com/Lionyy/SnapKit.git
 
 SPEC CHECKSUMS:
-  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SnapKit: b7ea5bdd665a542157fb4a6ccce91c5daffb1aa6
 
-PODFILE CHECKSUM: 29d6a27563fb3bb65a4b9371cda59ae5c0aee7b7
+PODFILE CHECKSUM: f1eb29e456f2b21b7e02a6c7610fc56edf144c96
 
 COCOAPODS: 1.8.4
