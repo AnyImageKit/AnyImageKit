@@ -416,7 +416,7 @@ extension AnimatedImageView {
         var contentMode = UIView.ContentMode.scaleToFill
         
         private lazy var preloadQueue: DispatchQueue = {
-            return DispatchQueue(label: "com.onevcat.Kingfisher.Animator.preloadQueue")
+            return DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.Animator")
         }()
         
         /// Creates an animator with image source reference.
