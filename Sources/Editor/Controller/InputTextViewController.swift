@@ -49,6 +49,13 @@ final class InputTextViewController: UIViewController {
         let view = EditorTextToolView(frame: .zero, config: manager.photoConfig)
         return view
     }()
+    private lazy var textView: UITextView = {
+        let view = UITextView()
+        view.textColor = .black
+        view.backgroundColor = .white
+        view.font = UIFont.systemFont(ofSize: 30)
+        return view
+    }()
     
     private weak var delegate: InputTextViewControllerDelegate?
     private let manager: EditorManager
@@ -65,10 +72,20 @@ final class InputTextViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        removeNotification()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupView()
+        addNotification()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        textView.becomeFirstResponder()
     }
     
     private func setupView() {
@@ -77,6 +94,7 @@ final class InputTextViewController: UIViewController {
         view.addSubview(cancelButton)
         view.addSubview(doneButton)
         view.addSubview(toolView)
+        view.addSubview(textView)
         
         coverImageView.snp.makeConstraints { (maker) in
             maker.left.right.equalToSuperview()
@@ -112,6 +130,11 @@ final class InputTextViewController: UIViewController {
             }
             maker.height.equalTo(30)
         }
+        textView.snp.makeConstraints { (maker) in
+            maker.top.equalTo(cancelButton.snp.bottom).offset(50)
+            maker.left.right.equalToSuperview().inset(20)
+            maker.bottom.equalTo(toolView.snp.top).offset(-50)
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -128,6 +151,38 @@ extension InputTextViewController {
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        
+        textView.resignFirstResponder()
+    }
+}
+
+// MARK: - Notification
+extension InputTextViewController {
+    
+    private func addNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeNotification() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardFrameChanged(_ notification: Notification) {
+        guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let offset = UIScreen.main.bounds.height - frame.origin.y
+        toolView.snp.remakeConstraints { (maker) in
+            maker.left.right.equalToSuperview().inset(20)
+            if offset == 0 {
+                if #available(iOS 11.0, *) {
+                    maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+                } else {
+                    maker.bottom.equalToSuperview().offset(-40)
+                }
+            } else {
+                maker.bottom.equalToSuperview().offset(-offset-20)
+            }
+            maker.height.equalTo(30)
+        }
+        view.layoutIfNeeded()
     }
 }
