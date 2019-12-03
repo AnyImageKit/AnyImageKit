@@ -22,11 +22,9 @@ extension ImagePickerControllerDelegate {
     }
 }
 
-open class ImagePickerController: UINavigationController {
+open class ImagePickerController: AINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
-    
-    open var tag: Int = 0
     
     public var config: Config {
         return manager.config
@@ -139,18 +137,6 @@ open class ImagePickerController: UINavigationController {
         case .auto:
             return .default
         }
-    }
-    
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        return .fade
-    }
-    
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
-    }
-    
-    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
     }
 }
 

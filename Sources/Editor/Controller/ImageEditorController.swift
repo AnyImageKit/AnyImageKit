@@ -22,11 +22,9 @@ extension ImageEditorControllerDelegate {
     }
 }
 
-open class ImageEditorController: UINavigationController {
+open class ImageEditorController: AINavigationController {
     
     open weak var editorDelegate: ImageEditorControllerDelegate?
-    
-    open var tag: Int = 0
     
     private let manager: EditorManager = .init()
     
@@ -46,18 +44,6 @@ open class ImageEditorController: UINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    open override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
-    }
-    
-    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
     }
 }
 
