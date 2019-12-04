@@ -57,6 +57,10 @@ extension Capture {
     func connect(to previewView: CapturePreviewView) {
         previewView.connect(to: session)
     }
+    
+    func disconnect(from previewView: CapturePreviewView) {
+        previewView.disconnect(from: session)
+    }
 }
 
 // MARK: - AudioCaptureDelegate

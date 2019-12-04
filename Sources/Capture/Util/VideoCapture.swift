@@ -19,7 +19,8 @@ final class VideoCapture: NSObject {
     
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
-    private var output: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
+    private lazy var photoOutput: AVCapturePhotoOutput = AVCapturePhotoOutput()
+    private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
     init(session: AVCaptureSession) {
@@ -40,27 +41,57 @@ final class VideoCapture: NSObject {
             } else {
                 _print("Can't add video device input")
             }
-            output.videoSettings = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA] as [String : Any]
-            output.setSampleBufferDelegate(self, queue: workQueue)
-            if session.canAddOutput(output) {
-                session.addOutput(output)
-            } else {
-                _print("Can't add video device output")
-            }
-            if let connection = output.connection(with: .video) {
-                // Set video orientation
-                if connection.isVideoOrientationSupported {
-                    connection.videoOrientation = .portrait
-                }
-                // Set video stabilization
-                if connection.isVideoStabilizationSupported {
-                    connection.preferredVideoStabilizationMode = .cinematic
-                }
-            }
+            
+            // Add photo output, if needed
+            setupPhotoOutput(session: session)
+            
+            // Add video output, if needed
+            setupVideoOutput(session: session)
+            
         } catch {
             _print(error)
         }
     }
+    
+    private func setupPhotoOutput(session: AVCaptureSession) {
+        guard session.canAddOutput(photoOutput) else {
+            _print("Can't add photo output")
+            return
+        }
+        print(photoOutput.preparedPhotoSettingsArray)
+        let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG])
+        photoOutput.capturePhoto(with: settings, delegate: self)
+        session.addOutput(photoOutput)
+        
+        // setup connection
+        // TODO
+    }
+    
+    private func setupVideoOutput(session: AVCaptureSession) {
+        guard session.canAddOutput(videoOutput) else {
+            _print("Can't add video output")
+            return
+        }
+        videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
+        videoOutput.setSampleBufferDelegate(self, queue: workQueue)
+        session.addOutput(videoOutput)
+        
+        // setup connection
+        if let connection = videoOutput.connection(with: .video) {
+            // Set video orientation
+            if connection.isVideoOrientationSupported {
+                connection.videoOrientation = .portrait
+            }
+            // Set video stabilization
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .cinematic
+            }
+        }
+    }
+}
+
+// MARK: - Running
+extension VideoCapture {
     
     func startRunning() {
         
@@ -75,6 +106,33 @@ final class VideoCapture: NSObject {
 extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        delegate?.captureOutput(video: self.output, didOutput: sampleBuffer)
+        delegate?.captureOutput(video: self.videoOutput, didOutput: sampleBuffer)
+    }
+}
+
+// MARK: - AVCapturePhotoCaptureDelegate
+extension VideoCapture: AVCapturePhotoCaptureDelegate {
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        print("willBeginCaptureFor")
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        print("willCapturePhotoFor")
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        print("didCapturePhotoFor")
+    }
+    
+    // for iOS 11+
+    @available(iOS 11.0, *)
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        print("didFinishProcessingPhoto, photo=\(photo)")
+    }
+    
+    // for iOS 10
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        print("didFinishProcessingPhoto, buffer=\(String(describing: photoSampleBuffer))")
     }
 }

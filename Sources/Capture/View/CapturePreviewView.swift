@@ -19,7 +19,6 @@ final class CapturePreviewView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -31,6 +30,10 @@ final class CapturePreviewView: UIView {
         super.layoutSubviews()
         previewLayer?.frame = bounds
     }
+}
+
+// MARK: - Connect
+extension CapturePreviewView {
     
     func connect(to session: AVCaptureSession) {
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
@@ -40,7 +43,11 @@ final class CapturePreviewView: UIView {
         previewLayer.frame = bounds
     }
     
-    func disconnect() {
+    func disconnect(from session: AVCaptureSession) {
+        guard previewLayer?.session == session else {
+            return
+        }
         previewLayer?.removeFromSuperlayer()
+        previewLayer = nil
     }
 }

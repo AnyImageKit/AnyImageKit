@@ -46,7 +46,11 @@ final class AudioCapture: NSObject {
             _print(error)
         }
     }
-    
+}
+
+// MARK: - Running
+extension AudioCapture {
+
     func startRunning() {
         let session = AVAudioSession.sharedInstance()
         do {
@@ -55,7 +59,6 @@ final class AudioCapture: NSObject {
         } catch {
             _print(error)
         }
-        
     }
     
     func stopRunning() {
