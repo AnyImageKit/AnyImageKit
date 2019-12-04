@@ -1,31 +1,23 @@
 ---
-name: 提交Bug
-about: 如何复现你找到的问题
+name: Report a bug
+about: How to reproduce your problem
 ---
 
+### What did you do?
 
+[Please replace this with what you did.]
 
-### 你做了什么?
+### What did you expect to happen?
 
+[Please replace this with what you expected to happen.]
 
+### What happened instead?
 
+[Please replace this with of what happened instead.]
 
-### 你的预期是什么?
+### Environment
 
-
-
-
-### 实际发生了什么?
-
-
-
-
-### 环境
-
-AnyImageKit 版本：
-
-Xcode 版本：
-
-Swift 版本：
-
-iOS/iPadOS/macOS 版本：
+AnyImageKit version:
+Xcode version:
+Swift version:
+iOS/iPadOS/macOS version:
