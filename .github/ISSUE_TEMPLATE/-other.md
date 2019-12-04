@@ -1,4 +1,4 @@
 ---
-name: Other question / 其他问题
-about: 
+name: Other question
+about: Anything you want know
 ---

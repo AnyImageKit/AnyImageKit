@@ -1,6 +1,6 @@
 ---
 name: 提交Bug
-about: 
+about: 如何复现你找到的问题
 ---
 
 
