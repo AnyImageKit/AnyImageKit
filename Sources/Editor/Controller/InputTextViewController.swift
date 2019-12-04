@@ -49,13 +49,27 @@ final class InputTextViewController: UIViewController {
         let view = EditorTextToolView(frame: .zero, config: manager.photoConfig)
         return view
     }()
-    private lazy var textView: UITextView = {
-        let view = UITextView()
-        view.textColor = .black
+    private lazy var textCoverView: UIView = {
+        let view = UIView()
         view.backgroundColor = .white
-        view.font = UIFont.systemFont(ofSize: 30)
         return view
     }()
+    private lazy var textView: UITextView = {
+        let view = UITextView()
+        view.delegate = self
+        view.textColor = .black
+        view.font = UIFont.systemFont(ofSize: 32)
+        return view
+    }()
+    /// 仅用于计算TextView最后一行的文本
+    private lazy var calculatelabel: UILabel = {
+        let view = UILabel()
+        view.isHidden = true
+        view.font = UIFont.systemFont(ofSize: 32)
+        return view
+    }()
+    
+    private let lineHeight: CGFloat = 36
     
     private weak var delegate: InputTextViewControllerDelegate?
     private let manager: EditorManager
@@ -94,7 +108,9 @@ final class InputTextViewController: UIViewController {
         view.addSubview(cancelButton)
         view.addSubview(doneButton)
         view.addSubview(toolView)
-        view.addSubview(textView)
+        view.addSubview(textCoverView)
+        textCoverView.addSubview(textView)
+        view.addSubview(calculatelabel)
         
         coverImageView.snp.makeConstraints { (maker) in
             maker.left.right.equalToSuperview()
@@ -130,10 +146,20 @@ final class InputTextViewController: UIViewController {
             }
             maker.height.equalTo(30)
         }
-        textView.snp.makeConstraints { (maker) in
+        textCoverView.snp.makeConstraints { (maker) in
             maker.top.equalTo(cancelButton.snp.bottom).offset(50)
-            maker.left.right.equalToSuperview().inset(20)
-            maker.bottom.equalTo(toolView.snp.top).offset(-50)
+            maker.left.right.equalToSuperview().inset(10)
+            maker.height.equalTo(lineHeight+10*2)
+        }
+        textView.snp.makeConstraints { (maker) in
+            maker.top.bottom.equalToSuperview()
+            maker.left.right.equalToSuperview().inset(10)
+        }
+        calculatelabel.snp.makeConstraints { (maker) in
+            maker.top.equalTo(cancelButton.snp.bottom).offset(200)
+            maker.left.equalToSuperview().offset(25)
+            maker.right.equalToSuperview().offset(-40)
+            maker.height.equalTo(55)
         }
     }
     
@@ -152,6 +178,58 @@ extension InputTextViewController {
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         textView.resignFirstResponder()
+    }
+}
+
+// MARK: - Private
+extension InputTextViewController {
+
+    private func getLinesArrayOfString(in label: UILabel) -> [String] {
+        var linesArray = [String]()
+        guard let text = label.text, let font = label.font else { return linesArray }
+        let rect = label.frame
+        let fontName: String
+        if #available(iOS 13.0, *) {
+            fontName = "TimesNewRomanPSMT" // iOS 13 下 fontName 会警告
+        } else {
+            fontName = font.fontName
+        }
+        let myFont: CTFont = CTFontCreateWithName(fontName as CFString, font.pointSize, nil)
+        let attStr = NSMutableAttributedString(string: text)
+        attStr.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: myFont, range: NSRange(location: 0, length: attStr.length))
+        
+        let frameSetter: CTFramesetter = CTFramesetterCreateWithAttributedString(attStr as CFAttributedString)
+        let path: CGMutablePath = CGMutablePath()
+        path.addRect(CGRect(x: 0, y: 0, width: rect.size.width, height: 100000), transform: .identity)
+        
+        let frame: CTFrame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, nil)
+        guard let lines = CTFrameGetLines(frame) as? [Any] else {return linesArray}
+        
+        for line in lines {
+            let lineRef = line as! CTLine
+            let lineRange: CFRange = CTLineGetStringRange(lineRef)
+            let range = NSRange(location: lineRange.location, length: lineRange.length)
+            let lineString: String = (text as NSString).substring(with: range)
+            linesArray.append(lineString)
+        }
+        return linesArray
+    }
+}
+
+// MARK: - UITextViewDelegate
+extension InputTextViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let line = CGFloat(Int(textView.contentSize.height / lineHeight))
+        let height: CGFloat = max(lineHeight * line + 10 * 2, textView.contentSize.height)
+        textCoverView.snp.updateConstraints { (maker) in
+            maker.height.equalTo(height)
+        }
+        
+        calculatelabel.text = textView.text
+        let arr = getLinesArrayOfString(in: calculatelabel)
+        // mask
+        print(arr)
     }
 }
 
