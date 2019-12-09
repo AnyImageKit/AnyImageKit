@@ -49,9 +49,10 @@ final class InputTextViewController: UIViewController {
         let view = EditorTextToolView(frame: .zero, config: manager.photoConfig)
         return view
     }()
+    private var textLayer: CAShapeLayer?
     private lazy var textCoverView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+//        view.backgroundColor = .white
         return view
     }()
     private lazy var textView: UITextView = {
@@ -59,6 +60,7 @@ final class InputTextViewController: UIViewController {
         view.delegate = self
         view.textColor = .black
         view.font = UIFont.systemFont(ofSize: 32)
+        view.backgroundColor = .clear
         return view
     }()
     /// 仅用于计算TextView最后一行的文本
@@ -157,8 +159,7 @@ final class InputTextViewController: UIViewController {
         }
         calculatelabel.snp.makeConstraints { (maker) in
             maker.top.equalTo(cancelButton.snp.bottom).offset(200)
-            maker.left.equalToSuperview().offset(25)
-            maker.right.equalToSuperview().offset(-40)
+            maker.left.right.equalToSuperview().inset(25)
             maker.height.equalTo(55)
         }
     }
@@ -183,22 +184,15 @@ extension InputTextViewController {
 
 // MARK: - Private
 extension InputTextViewController {
-
+    
+    /// 计算行数
     private func getLinesArrayOfString(in label: UILabel) -> [String] {
         var linesArray = [String]()
-        guard let text = label.text, let font = label.font else { return linesArray }
         let rect = label.frame
-        let fontName: String
-        if #available(iOS 13.0, *) {
-            fontName = "TimesNewRomanPSMT" // iOS 13 下 fontName 会警告
-        } else {
-            fontName = font.fontName
-        }
-        let myFont: CTFont = CTFontCreateWithName(fontName as CFString, font.pointSize, nil)
-        let attStr = NSMutableAttributedString(string: text)
-        attStr.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: myFont, range: NSRange(location: 0, length: attStr.length))
-        
-        let frameSetter: CTFramesetter = CTFramesetterCreateWithAttributedString(attStr as CFAttributedString)
+        guard let text = label.text, let font = label.font else { return linesArray }
+        let attr = NSMutableAttributedString(string: text)
+        attr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attr.length))
+        let frameSetter: CTFramesetter = CTFramesetterCreateWithAttributedString(attr)
         let path: CGMutablePath = CGMutablePath()
         path.addRect(CGRect(x: 0, y: 0, width: rect.size.width, height: 100000), transform: .identity)
         
@@ -214,6 +208,55 @@ extension InputTextViewController {
         }
         return linesArray
     }
+    
+    /// 创建蒙层
+    private func setupMaskLayer(_ size: CGSize, lastLineWidth: CGFloat, hasMultiLine: Bool) {
+        let radius: CGFloat = 12
+        let lastLineWidth = lastLineWidth < size.width ? lastLineWidth : size.width
+        let width: CGFloat = !hasMultiLine ? lastLineWidth : size.width
+        let height: CGFloat = size.height
+        let lastLineHeight: CGFloat = lineHeight + 2
+        
+        let bezier: UIBezierPath
+        if hasMultiLine && width - lastLineWidth > 20 { // 一半的情况
+            bezier = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: width, height: height), byRoundingCorners: [.topLeft, .topRight, .bottomLeft], cornerRadii: CGSize(width: radius, height: radius))
+            let cropBezier1 = UIBezierPath(roundedRect: CGRect(x: lastLineWidth, y: height-lastLineHeight, width: width-lastLineWidth, height: lastLineHeight), byRoundingCorners: .topLeft, cornerRadii: CGSize(width: radius, height: radius))
+            bezier.append(cropBezier1)
+            let cropBezier2 = createReversePath(CGPoint(x: lastLineWidth-radius, y: height-radius), radius: radius)
+            bezier.append(cropBezier2)
+            let cropBezier3 = createReversePath(CGPoint(x: width-radius, y: height-lastLineHeight-radius), radius: radius)
+            bezier.append(cropBezier3)
+        } else {
+            bezier = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: width, height: height), cornerRadius: radius)
+        }
+        
+        let layer = CAShapeLayer()
+        layer.frame = CGRect(origin: .zero, size: size)
+        layer.path = bezier.cgPath
+        layer.fillRule = .evenOdd
+        layer.cornerRadius = radius
+        layer.fillColor = UIColor.white.cgColor
+        
+        textLayer = layer
+        textCoverView.layer.insertSublayer(layer, at: 0)
+    }
+    
+    /// 创建反向扇形图形
+    private func createReversePath(_ origin: CGPoint, radius: CGFloat) -> UIBezierPath {
+        let rect = CGRect(origin: origin, size: CGSize(width: radius, height: radius))
+        let cropBezier = UIBezierPath(rect: rect)
+        cropBezier.move(to: origin)
+        cropBezier.addArc(withCenter: origin, radius: radius, startAngle: CGFloat(Double.pi/2), endAngle: 0, clockwise: false)
+        return cropBezier.reversing()
+    }
+    
+    /// 计算文本宽度
+    private func string(text: String, font: UIFont, widthOfHeight height: CGFloat) -> CGFloat {
+        let attr = NSMutableAttributedString(string: text)
+        attr.addAttribute(.font, value: font, range: NSRange(location: 0, length: text.count))
+        let constraintRect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: height)
+        return attr.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil).integral.width
+    }
 }
 
 // MARK: - UITextViewDelegate
@@ -227,9 +270,12 @@ extension InputTextViewController: UITextViewDelegate {
         }
         
         calculatelabel.text = textView.text
-        let arr = getLinesArrayOfString(in: calculatelabel)
-        // mask
-        print(arr)
+        textLayer?.removeFromSuperlayer()
+        let array = getLinesArrayOfString(in: calculatelabel)
+        if array.isEmpty { return }
+        print(array)
+        let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 40
+        setupMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
     }
 }
 
