@@ -53,12 +53,12 @@ public struct Palette {
     }
     
     public static var textColors: [ImageEditorController.PhotoTextColor] {
-        return [.init(color: Palette.white, subColor: Palette.black),
-                .init(color: Palette.black, subColor: Palette.white),
-                .init(color: Palette.red, subColor: Palette.white),
-                .init(color: Palette.yellow, subColor: Palette.white),
-                .init(color: Palette.green, subColor: Palette.white),
-                .init(color: Palette.blue, subColor: Palette.white),
-                .init(color: Palette.purple, subColor: Palette.white)]
+        return [.init(color: Palette.white,  subColor: Palette.black),
+                .init(color: Palette.black,  subColor: UIColor.white),
+                .init(color: Palette.red,    subColor: UIColor.white),
+                .init(color: Palette.yellow, subColor: UIColor.white),
+                .init(color: Palette.green,  subColor: UIColor.white),
+                .init(color: Palette.blue,   subColor: UIColor.white),
+                .init(color: Palette.purple, subColor: UIColor.white)]
     }
 }

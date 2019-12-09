@@ -109,9 +109,9 @@ extension ImageEditorController {
     
     public struct PhotoTextColor {
         /// 主色
-        let color: UIColor
+        public let color: UIColor
         /// 辅色
-        let subColor: UIColor
+        public let subColor: UIColor
     }
 }
 

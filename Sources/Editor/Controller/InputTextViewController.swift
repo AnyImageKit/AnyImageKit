@@ -47,20 +47,21 @@ final class InputTextViewController: UIViewController {
     }()
     private lazy var toolView: EditorTextToolView = {
         let view = EditorTextToolView(frame: .zero, config: manager.photoConfig)
+        view.delegate = self
         return view
     }()
     private var textLayer: CAShapeLayer?
     private lazy var textCoverView: UIView = {
         let view = UIView()
-//        view.backgroundColor = .white
         return view
     }()
     private lazy var textView: UITextView = {
         let view = UITextView()
         view.delegate = self
-        view.textColor = .black
-        view.font = UIFont.systemFont(ofSize: 32)
         view.backgroundColor = .clear
+        view.font = UIFont.systemFont(ofSize: 32)
+        view.tintColor = manager.photoConfig.tintColor
+        view.textColor = manager.photoConfig.textColors[penIdx].subColor
         return view
     }()
     /// 仅用于计算TextView最后一行的文本
@@ -72,6 +73,8 @@ final class InputTextViewController: UIViewController {
     }()
     
     private let lineHeight: CGFloat = 36
+    private var isTextSelected: Bool = true
+    private var penIdx: Int = 0
     
     private weak var delegate: InputTextViewControllerDelegate?
     private let manager: EditorManager
@@ -185,6 +188,17 @@ extension InputTextViewController {
 // MARK: - Private
 extension InputTextViewController {
     
+    /// 设置蒙层
+    private func setupMaskLayer(_ height: CGFloat = 0) {
+        let height = height == 0 ? textCoverView.bounds.height : height
+        textLayer?.removeFromSuperlayer()
+        let array = getLinesArrayOfString(in: calculatelabel)
+        if array.isEmpty { return }
+        let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 40
+        textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
+        textCoverView.layer.insertSublayer(textLayer!, at: 0)
+    }
+    
     /// 计算行数
     private func getLinesArrayOfString(in label: UILabel) -> [String] {
         var linesArray = [String]()
@@ -210,7 +224,7 @@ extension InputTextViewController {
     }
     
     /// 创建蒙层
-    private func setupMaskLayer(_ size: CGSize, lastLineWidth: CGFloat, hasMultiLine: Bool) {
+    private func createMaskLayer(_ size: CGSize, lastLineWidth: CGFloat, hasMultiLine: Bool) -> CAShapeLayer {
         let radius: CGFloat = 12
         let lastLineWidth = lastLineWidth < size.width ? lastLineWidth : size.width
         let width: CGFloat = !hasMultiLine ? lastLineWidth : size.width
@@ -235,10 +249,9 @@ extension InputTextViewController {
         layer.path = bezier.cgPath
         layer.fillRule = .evenOdd
         layer.cornerRadius = radius
-        layer.fillColor = UIColor.white.cgColor
-        
-        textLayer = layer
-        textCoverView.layer.insertSublayer(layer, at: 0)
+        let color = manager.photoConfig.textColors[penIdx]
+        layer.fillColor = isTextSelected ? color.color.cgColor : nil
+        return layer
     }
     
     /// 创建反向扇形图形
@@ -270,12 +283,27 @@ extension InputTextViewController: UITextViewDelegate {
         }
         
         calculatelabel.text = textView.text
-        textLayer?.removeFromSuperlayer()
-        let array = getLinesArrayOfString(in: calculatelabel)
-        if array.isEmpty { return }
-        print(array)
-        let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 40
-        setupMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
+        setupMaskLayer(height)
+    }
+}
+
+// MARK: - EditorTextToolViewDelegate
+extension InputTextViewController: EditorTextToolViewDelegate {
+    
+    func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool) {
+        isTextSelected = isSelected
+        let color = manager.photoConfig.textColors[penIdx]
+        textView.textColor = isTextSelected ? color.subColor : color.color
+        setupMaskLayer()
+    }
+    
+    func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
+        penIdx = idx
+        let color = manager.photoConfig.textColors[penIdx]
+        textView.textColor = isTextSelected ? color.subColor : color.color
+        if isTextSelected {
+            setupMaskLayer()
+        }
     }
 }
 
