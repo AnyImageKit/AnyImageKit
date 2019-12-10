@@ -62,6 +62,7 @@ final class InputTextViewController: UIViewController {
         view.font = UIFont.systemFont(ofSize: 32)
         view.tintColor = manager.photoConfig.tintColor
         view.textColor = manager.photoConfig.textColors[penIdx].subColor
+        view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
         return view
     }()
     /// 仅用于计算TextView最后一行的文本
@@ -72,17 +73,20 @@ final class InputTextViewController: UIViewController {
         return view
     }()
     
-    private let lineHeight: CGFloat = 36
-    private var isTextSelected: Bool = true
-    private var penIdx: Int = 0
-    
     private weak var delegate: InputTextViewControllerDelegate?
     private let manager: EditorManager
     private let coverImage: UIImage?
+    private let text: String
     
-    init(manager: EditorManager, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
+    private let lineHeight: CGFloat = 36
+    private var isTextSelected: Bool = true
+    private var penIdx: Int = 0
+    private var isBegin: Bool = true
+    
+    init(manager: EditorManager, text: String, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
         self.delegate = delegate
         self.manager = manager
+        self.text = text
         self.coverImage = coverImage
         super.init(nibName: nil, bundle: nil)
     }
@@ -102,9 +106,16 @@ final class InputTextViewController: UIViewController {
         addNotification()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        textView.becomeFirstResponder()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if isBegin {
+            isBegin = false
+            if !text.isEmpty {
+                textView.text = text
+                textViewDidChange(textView)
+            }
+            textView.becomeFirstResponder()
+        }
     }
     
     private func setupView() {
@@ -259,7 +270,7 @@ extension InputTextViewController {
         let rect = CGRect(origin: origin, size: CGSize(width: radius, height: radius))
         let cropBezier = UIBezierPath(rect: rect)
         cropBezier.move(to: origin)
-        cropBezier.addArc(withCenter: origin, radius: radius, startAngle: CGFloat(Double.pi/2), endAngle: 0, clockwise: false)
+        cropBezier.addArc(withCenter: origin, radius: radius, startAngle: CGFloat.pi/2, endAngle: 0, clockwise: false)
         return cropBezier.reversing()
     }
     
@@ -276,13 +287,13 @@ extension InputTextViewController {
 extension InputTextViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        let line = CGFloat(Int(textView.contentSize.height / lineHeight))
+        calculatelabel.text = textView.text
+        let line = CGFloat(getLinesArrayOfString(in: calculatelabel).count)
         let height: CGFloat = max(lineHeight * line + 10 * 2, textView.contentSize.height)
         textCoverView.snp.updateConstraints { (maker) in
             maker.height.equalTo(height)
         }
         
-        calculatelabel.text = textView.text
         setupMaskLayer(height)
     }
 }

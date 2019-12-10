@@ -157,7 +157,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         case .text:
             backButton.isHidden = true
             let coverImage = getResultImage()?.gaussianImage(blur: 8)
-            let controller = InputTextViewController(manager: manager, coverImage: coverImage, delegate: self)
+            let controller = InputTextViewController(manager: manager, text: "", coverImage: coverImage, delegate: self)
             controller.modalPresentationStyle = .fullScreen
             present(controller, animated: true, completion: nil)
         case .crop:
