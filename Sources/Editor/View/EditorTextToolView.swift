@@ -30,9 +30,7 @@ final class EditorTextToolView: UIView {
     }()
     
     private let colors: [ImageEditorController.PhotoTextColor]
-    private var colorViews: [UIButton] = []
-    private let spacing: CGFloat = 22
-    
+    private var colorButtons: [ColorButton] = []
     
     init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
         self.colors = config.textColors
@@ -46,10 +44,10 @@ final class EditorTextToolView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        for (idx, colorView) in colorViews.enumerated() {
+        for (idx, colorButton) in colorButtons.enumerated() {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
-            colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
-            colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+            colorButton.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
+            colorButton.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
         }
     }
     
@@ -66,9 +64,11 @@ final class EditorTextToolView: UIView {
     
     private func setupColorView() {
         for (idx, color) in colors.enumerated() {
-            colorViews.append(createColorView(color.color, idx: idx))
+            colorButtons.append(createColorView(color.color, idx: idx))
         }
-        let stackView = UIStackView(arrangedSubviews: colorViews)
+        let colorWidth: CGFloat = 30
+        let spacing = (UIScreen.main.bounds.width - 40 - 50 - CGFloat(colors.count) * colorWidth) / (CGFloat(colors.count) - 1)
+        let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
@@ -76,24 +76,18 @@ final class EditorTextToolView: UIView {
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalTo(textButton.snp.right).offset(25)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(22)
+            maker.height.equalTo(colorWidth)
         }
         
-        for colorView in colorViews {
+        for colorView in colorButtons {
             colorView.snp.makeConstraints { (maker) in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }
     }
     
-    private func createColorView(_ color: UIColor, idx: Int) -> UIButton {
-        let view = UIButton(type: .custom)
-        view.tag = idx
-        view.backgroundColor = color
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 11
-        view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.white.cgColor
+    private func createColorView(_ color: UIColor, idx: Int) -> ColorButton {
+        let view = ColorButton(tag: idx, size: 22, color: color, borderWidth: 2, borderColor: UIColor.white)
         view.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
         return view
     }
