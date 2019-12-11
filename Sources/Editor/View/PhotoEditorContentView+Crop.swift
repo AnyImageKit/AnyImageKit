@@ -22,6 +22,7 @@ extension PhotoEditorContentView {
                 self.layoutStartCroped()
             }
             self.updateCanvasFrame()
+            self.updateTextFrame(true)
         }) { (_) in
             self.setCropHidden(false, animated: true)
         }
@@ -45,6 +46,7 @@ extension PhotoEditorContentView {
                 self.layout()
             }
             self.updateCanvasFrame()
+            self.updateTextFrame(false)
         }
     }
     
@@ -55,7 +57,10 @@ extension PhotoEditorContentView {
         setCropHidden(true, animated: false)
         layoutEndCrop()
         setupMosaicView()
-        updateCanvasFrame()
+        UIView.animate(withDuration: 0.25) {
+            self.updateCanvasFrame()
+            self.updateTextFrame(false)
+        }
     }
     
     /// 重置裁剪

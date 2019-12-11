@@ -10,8 +10,8 @@ import UIKit
 
 protocol InputTextViewControllerDelegate: class {
     
-    func inputTextCancelButtonTapped(_ controller: InputTextViewController)
-    
+    func inputTextDidCancel(_ controller: InputTextViewController)
+    func inputText(_ controller: InputTextViewController, didFinishInput text: String, display image: UIImage)
 }
 
 final class InputTextViewController: UIViewController {
@@ -164,7 +164,8 @@ final class InputTextViewController: UIViewController {
         }
         textCoverView.snp.makeConstraints { (maker) in
             maker.top.equalTo(cancelButton.snp.bottom).offset(50)
-            maker.left.right.equalToSuperview().inset(10)
+            maker.left.equalToSuperview().offset(10)
+            maker.right.equalToSuperview().offset(-10)
             maker.height.equalTo(lineHeight+10*2)
         }
         textView.snp.makeConstraints { (maker) in
@@ -187,12 +188,15 @@ final class InputTextViewController: UIViewController {
 extension InputTextViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIButton) {
-        delegate?.inputTextCancelButtonTapped(self)
+        delegate?.inputTextDidCancel(self)
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        updateTextCoverView()
         textView.resignFirstResponder()
+        delegate?.inputText(self, didFinishInput: textView.text, display: textCoverView.screenshot)
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -205,7 +209,7 @@ extension InputTextViewController {
         textLayer?.removeFromSuperlayer()
         let array = getLinesArrayOfString(in: calculatelabel)
         if array.isEmpty { return }
-        let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 40
+        let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 30
         textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
         textCoverView.layer.insertSublayer(textLayer!, at: 0)
     }
@@ -280,6 +284,18 @@ extension InputTextViewController {
         attr.addAttribute(.font, value: font, range: NSRange(location: 0, length: text.count))
         let constraintRect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: height)
         return attr.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil).integral.width
+    }
+    
+    /// 更新宽度
+    private func updateTextCoverView() {
+        let array = getLinesArrayOfString(in: calculatelabel)
+        if array.count == 1 {
+            let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 30
+            let offset = textCoverView.bounds.width - lastLineWidth + 10
+            textCoverView.snp.updateConstraints { (maker) in
+                maker.right.equalToSuperview().offset(-offset)
+            }
+        }
     }
 }
 

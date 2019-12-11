@@ -225,12 +225,13 @@ extension PhotoEditorController: EditorToolViewDelegate {
 // MARK: - InputTextViewControllerDelegate
 extension PhotoEditorController: InputTextViewControllerDelegate {
     
-    func inputTextCancelButtonTapped(_ controller: InputTextViewController) {
-        backButton.isHidden = false
-        toolView.topCoverLayer.isHidden = false
-        toolView.bottomCoverLayer.isHidden = false
-        toolView.doneButton.isHidden = false
-        toolView.editOptionsView.isHidden = false
+    func inputTextDidCancel(_ controller: InputTextViewController) {
+        didEndInputing()
+    }
+    
+    func inputText(_ controller: InputTextViewController, didFinishInput text: String, display image: UIImage) {
+        didEndInputing()
+        contentView.addText(text, image: image)
     }
 }
 
@@ -268,5 +269,14 @@ extension PhotoEditorController {
         contentView.setupLastCropDataIfNeeded()
         let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.diskCacheList, mosaicCacheList: contentView.mosaicCache.diskCacheList)
         cache.save()
+    }
+    
+    /// 结束输入文本
+    private func didEndInputing() {
+        backButton.isHidden = false
+        toolView.topCoverLayer.isHidden = false
+        toolView.bottomCoverLayer.isHidden = false
+        toolView.doneButton.isHidden = false
+        toolView.editOptionsView.isHidden = false
     }
 }
