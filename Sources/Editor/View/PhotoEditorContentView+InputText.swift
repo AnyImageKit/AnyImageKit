@@ -19,13 +19,22 @@ extension PhotoEditorContentView {
         var x: CGFloat
         var y: CGFloat
         if !didCrop {
-            x = 0
+            x = (imageView.frame.width - size.width) / 2
             y = (imageView.frame.height - size.height) / 2
         } else { // TODO: 竖图有问题
-            x = lastCropData.contentOffset.x / scrollView.zoomScale
-            x = x + (cropRealRect.width / scrollView.zoomScale - size.width) / 2
-            y = lastCropData.contentOffset.y / scrollView.zoomScale
-            y = y + (cropRealRect.height / scrollView.zoomScale - size.height) / 2
+            let width = cropRealRect.width * imageView.bounds.width / imageView.frame.width
+//            let height = width * imageView.bounds.height / imageView.bounds.width
+            var height = cropRealRect.height * imageView.bounds.height / imageView.frame.height
+            height = height > UIScreen.main.bounds.height ? UIScreen.main.bounds.height : height
+            x = abs(imageView.frame.origin.x) / scale
+            x = x + (width - size.width) / 2
+            
+            y = lastCropData.contentOffset.y / scale
+            y = y + scrollView.contentOffset.y / scale
+            y = y + (height - size.height) / 2
+            
+//            y = y + (cropRealRect.height / scrollView.zoomScale - size.height) / 2
+//            print(scrollView.contentOffset)
         }
         let frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
         let textView = TextImageView(frame: frame, text: text, image: image)
@@ -36,13 +45,8 @@ extension PhotoEditorContentView {
     }
     
     func updateTextFrame(_ startCrop: Bool) {
-        let scale: CGFloat
-        if startCrop {
-            scale = (UIScreen.main.bounds.width - cropX * 2) / UIScreen.main.bounds.width
-        } else {
-            scale = UIScreen.main.bounds.width / (UIScreen.main.bounds.width - cropX * 2)
-        }
-        // TODO: 竖图有问题
+        // 用当前的宽除之前的宽就是缩放比例
+        let scale: CGFloat = imageView.bounds.width / lastImageViewBounds.width
         for textView in textImages {
             var frame = textView.frame
             frame.origin.x *= scale
