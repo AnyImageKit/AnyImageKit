@@ -21,20 +21,17 @@ extension PhotoEditorContentView {
         if !didCrop {
             x = (imageView.frame.width - size.width) / 2
             y = (imageView.frame.height - size.height) / 2
-        } else { // TODO: 竖图有问题
+        } else {
             let width = cropRealRect.width * imageView.bounds.width / imageView.frame.width
-//            let height = width * imageView.bounds.height / imageView.bounds.width
-            var height = cropRealRect.height * imageView.bounds.height / imageView.frame.height
-            height = height > UIScreen.main.bounds.height ? UIScreen.main.bounds.height : height
             x = abs(imageView.frame.origin.x) / scale
             x = x + (width - size.width) / 2
             
+            var height = cropRealRect.height * imageView.bounds.height / imageView.frame.height
+            let screenHeight = UIScreen.main.bounds.height / scale
+            height = height > screenHeight ? screenHeight : height
             y = lastCropData.contentOffset.y / scale
             y = y + scrollView.contentOffset.y / scale
             y = y + (height - size.height) / 2
-            
-//            y = y + (cropRealRect.height / scrollView.zoomScale - size.height) / 2
-//            print(scrollView.contentOffset)
         }
         let frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
         let textView = TextImageView(frame: frame, text: text, image: image)
