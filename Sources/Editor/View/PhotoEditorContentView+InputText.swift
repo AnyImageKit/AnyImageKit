@@ -113,7 +113,6 @@ extension PhotoEditorContentView {
     @objc private func onTextPan(_ pan: UIPanGestureRecognizer) {
         guard let textView = pan.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
-        textView.updateGesture(.pan, state: pan.state)
         
         let point = pan.translation(in: self)
         textView.point = CGPoint(x: textView.point.x + point.x, y: textView.point.y + point.y)
@@ -124,7 +123,6 @@ extension PhotoEditorContentView {
     @objc private func onTextPinch(_ pinch: UIPinchGestureRecognizer) {
         guard let textView = pinch.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
-        textView.updateGesture(.pinch, state: pinch.state)
         
         let scale = textView.scale + (pinch.scale - 1.0)
         if 0.5 <= scale && scale <= 2.0 {
@@ -137,7 +135,6 @@ extension PhotoEditorContentView {
     @objc private func onTextRotation(_ rotation: UIRotationGestureRecognizer) {
         guard let textView = rotation.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { print(1); return }
-        textView.updateGesture(.rotation, state: rotation.state)
         
         textView.rotation += rotation.rotation
         textView.transform = textView.calculateTransform()

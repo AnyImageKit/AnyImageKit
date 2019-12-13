@@ -18,13 +18,16 @@ final class TextImageView: UIView {
     var rotation: CGFloat = 0.0
     
     var isGestureEnded: Bool {
-        return gestureState[.pan] != .changed && gestureState[.pinch] != .changed && gestureState[.rotation] != .changed
+        for gesture in gestureRecognizers ?? [] {
+            if gesture.state == .changed {
+                return false
+            }
+        }
+        return true
     }
     
     /// 激活
     private(set) var isActive: Bool = false
-    /// 手势状态
-    private(set) var gestureState: [Gesture:GestureState] = [.pan:.ended, .pinch:.ended, .rotation:.ended]
     
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
@@ -63,33 +66,5 @@ extension TextImageView {
         self.isActive = isActive
         layer.borderWidth = isActive ? 0.5 : 0.0
         layer.borderColor = UIColor.white.cgColor
-    }
-    
-    public func updateGesture(_ gesture: Gesture, state: UIGestureRecognizer.State) {
-        let _state: GestureState
-        switch state {
-        case .began:
-            _state = .began
-        case .changed:
-            _state = .changed
-        default:
-            _state = .ended
-        }
-        gestureState[gesture] = _state
-    }
-}
-
-extension TextImageView {
-    
-    enum Gesture: Hashable {
-        case pan
-        case pinch
-        case rotation
-    }
-    
-    enum GestureState {
-        case began
-        case changed
-        case ended
     }
 }
