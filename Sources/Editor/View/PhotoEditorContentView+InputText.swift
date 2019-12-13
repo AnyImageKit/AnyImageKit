@@ -37,14 +37,14 @@ extension PhotoEditorContentView {
         let textView = TextImageView(frame: frame, text: text, image: image)
         textView.contentMode = .center
         imageView.addSubview(textView)
-        textImages.append(textView)
+        textImageViews.append(textView)
         addTextGestureRecognizer(textView)
     }
     
     func updateTextFrame(_ startCrop: Bool) {
         // 用当前的宽除之前的宽就是缩放比例
         let scale: CGFloat = imageView.bounds.width / lastImageViewBounds.width
-        for textView in textImages {
+        for textView in textImageViews {
             var frame = textView.frame
             frame.origin.x *= scale
             frame.origin.y *= scale
@@ -63,9 +63,37 @@ extension PhotoEditorContentView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTextSingleTap(_:)))
         let pen = UIPanGestureRecognizer(target: self, action: #selector(onTextPan(_:)))
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(onTextPinch(_:)))
+        let rotation = UIRotationGestureRecognizer(target: self, action: #selector(onTextRotation(_:)))
+        tap.delegate = self
+        pen.delegate = self
+        pinch.delegate = self
+        rotation.delegate = self
         textView.addGestureRecognizer(tap)
         textView.addGestureRecognizer(pen)
         textView.addGestureRecognizer(pinch)
+        textView.addGestureRecognizer(rotation)
+    }
+    
+    private func shouldBeginGesture(in textView: TextImageView) -> Bool {
+        if textView.isActive { return true }
+        for view in textImageViews {
+            if !view.isGestureEnded {
+                return false
+            }
+        }
+        return true
+    }
+    
+    @discardableResult
+    private func activeTextViewIfPossible(_ textView: TextImageView) -> Bool {
+        if !shouldBeginGesture(in: textView) { return false }
+        for view in textImageViews {
+            view.setActive(view == textView)
+            if view == textView {
+                imageView.bringSubviewToFront(textView)
+            }
+        }
+        return true
     }
 }
 
@@ -74,14 +102,57 @@ extension PhotoEditorContentView {
     
     @objc private func onTextSingleTap(_ tap: UITapGestureRecognizer) {
         guard let textView = tap.view as? TextImageView else { return }
-        textView.setSelected(!textView.isSelected)
+        if !shouldBeginGesture(in: textView) { return }
+        if !textView.isActive {
+            activeTextViewIfPossible(textView)
+        } else {
+            textView.setActive(false)
+        }
     }
     
     @objc private func onTextPan(_ pan: UIPanGestureRecognizer) {
+        guard let textView = pan.view as? TextImageView else { return }
+        guard activeTextViewIfPossible(textView) else { return }
+        textView.updateGesture(.pan, state: pan.state)
         
+        let point = pan.translation(in: self)
+        textView.point = CGPoint(x: textView.point.x + point.x, y: textView.point.y + point.y)
+        textView.transform = textView.calculateTransform()
+        pan.setTranslation(.zero, in: self)
     }
     
     @objc private func onTextPinch(_ pinch: UIPinchGestureRecognizer) {
+        guard let textView = pinch.view as? TextImageView else { return }
+        guard activeTextViewIfPossible(textView) else { return }
+        textView.updateGesture(.pinch, state: pinch.state)
         
+        let scale = textView.scale + (pinch.scale - 1.0)
+        if 0.5 <= scale && scale <= 2.0 {
+            textView.scale = scale
+            textView.transform = textView.calculateTransform()
+        }
+        pinch.scale = 1.0
+    }
+    
+    @objc private func onTextRotation(_ rotation: UIRotationGestureRecognizer) {
+        guard let textView = rotation.view as? TextImageView else { return }
+        guard activeTextViewIfPossible(textView) else { print(1); return }
+        textView.updateGesture(.rotation, state: rotation.state)
+        
+        textView.rotation += rotation.rotation
+        textView.transform = textView.calculateTransform()
+        rotation.rotation = 0.0
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension PhotoEditorContentView: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let view = gestureRecognizer.view as? TextImageView,
+            let otherView = otherGestureRecognizer.view as? TextImageView
+            else { return false }
+        guard view == otherView, view.isActive else { return false }
+        return true
     }
 }

@@ -13,12 +13,23 @@ final class TextImageView: UIView {
     let text: String
     let image: UIImage
     
+    var point: CGPoint = .zero
+    var scale: CGFloat = 1.0
+    var rotation: CGFloat = 0.0
+    
+    var isGestureEnded: Bool {
+        return gestureState[.pan] != .changed && gestureState[.pinch] != .changed && gestureState[.rotation] != .changed
+    }
+    
+    /// 激活
+    private(set) var isActive: Bool = false
+    /// 手势状态
+    private(set) var gestureState: [Gesture:GestureState] = [.pan:.ended, .pinch:.ended, .rotation:.ended]
+    
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
         return view
     }()
-    
-    private(set) var isSelected: Bool = false
     
     init(frame: CGRect, text: String, image: UIImage) {
         self.text = text
@@ -37,13 +48,48 @@ final class TextImageView: UIView {
             maker.edges.equalToSuperview().inset(10)
         }
     }
+    
+    func calculateTransform() -> CGAffineTransform {
+        return CGAffineTransform.identity
+            .translatedBy(x: point.x, y: point.y)
+            .scaledBy(x: scale, y: scale)
+            .rotated(by: rotation)
+    }
 }
 
 extension TextImageView {
     
-    public func setSelected(_ selected: Bool) {
-        isSelected = selected
-        layer.borderWidth = selected ? 0.5 : 0.0
+    public func setActive(_ isActive: Bool) {
+        self.isActive = isActive
+        layer.borderWidth = isActive ? 0.5 : 0.0
         layer.borderColor = UIColor.white.cgColor
+    }
+    
+    public func updateGesture(_ gesture: Gesture, state: UIGestureRecognizer.State) {
+        let _state: GestureState
+        switch state {
+        case .began:
+            _state = .began
+        case .changed:
+            _state = .changed
+        default:
+            _state = .ended
+        }
+        gestureState[gesture] = _state
+    }
+}
+
+extension TextImageView {
+    
+    enum Gesture: Hashable {
+        case pan
+        case pinch
+        case rotation
+    }
+    
+    enum GestureState {
+        case began
+        case changed
+        case ended
     }
 }

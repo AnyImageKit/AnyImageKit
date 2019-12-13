@@ -114,7 +114,7 @@ final class PhotoEditorContentView: UIView {
     /// 存储马赛克过程图片
     internal lazy var mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty))
     
-    internal var textImages: [TextImageView] = []
+    internal var textImageViews: [TextImageView] = []
     internal var lastImageViewBounds: CGRect = .zero
     
     /// 是否编辑
