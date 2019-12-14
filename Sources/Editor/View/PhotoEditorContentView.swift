@@ -14,6 +14,8 @@ protocol PhotoEditorContentViewDelegate: class {
     func photoDidEndPen()
     
     func mosaicDidCreated()
+    
+    func inputTextWillBeginEdit(_ text: String, colorIdx: Int)
 }
 
 final class PhotoEditorContentView: UIView {

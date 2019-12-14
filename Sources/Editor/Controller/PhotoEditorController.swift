@@ -140,6 +140,11 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
             contentView.mosaic?.isUserInteractionEnabled = true
         }
     }
+    
+    /// 开始编辑文本
+    func inputTextWillBeginEdit(_ text: String, colorIdx: Int) {
+        openInputController(text, colorIdx: colorIdx)
+    }
 }
 
 // MARK: - EditorToolViewDelegate
@@ -155,11 +160,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         case .pen:
             contentView.canvas.isUserInteractionEnabled = true
         case .text:
-            backButton.isHidden = true
-            let coverImage = getResultImage()?.gaussianImage(blur: 8)
-            let controller = InputTextViewController(manager: manager, text: "", coverImage: coverImage, delegate: self)
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: true, completion: nil)
+            openInputController()
         case .crop:
             backButton.isHidden = true
             contentView.scrollView.isScrollEnabled = true
@@ -225,13 +226,17 @@ extension PhotoEditorController: EditorToolViewDelegate {
 // MARK: - InputTextViewControllerDelegate
 extension PhotoEditorController: InputTextViewControllerDelegate {
     
+    /// 取消输入
     func inputTextDidCancel(_ controller: InputTextViewController) {
         didEndInputing()
+        contentView.restoreHiddenTextView()
     }
     
-    func inputText(_ controller: InputTextViewController, didFinishInput text: String, display image: UIImage) {
+    /// 完成输入
+    func inputText(_ controller: InputTextViewController, didFinishInput text: String, colorIdx: Int, display image: UIImage) {
         didEndInputing()
-        contentView.addText(text, image: image)
+        contentView.removeHiddenTextView()
+        contentView.addText(text, colorIdx: colorIdx, image: image)
     }
 }
 
@@ -269,6 +274,29 @@ extension PhotoEditorController {
         contentView.setupLastCropDataIfNeeded()
         let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.diskCacheList, mosaicCacheList: contentView.mosaicCache.diskCacheList)
         cache.save()
+    }
+}
+
+// MARK: - InputText
+extension PhotoEditorController {
+    
+    /// 打开文本编辑器
+    private func openInputController(_ text: String = "", colorIdx: Int = 0) {
+        willBeginInput()
+        let coverImage = getResultImage()?.gaussianImage(blur: 8)
+        let controller = InputTextViewController(manager: manager, text: text, colorIdx: colorIdx, coverImage: coverImage, delegate: self)
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true, completion: nil)
+    }
+    
+    /// 开始输入文本
+    private func willBeginInput() {
+        backButton.isHidden = true
+        toolView.topCoverLayer.isHidden = true
+        toolView.bottomCoverLayer.isHidden = true
+        toolView.doneButton.isHidden = true
+        toolView.editOptionsView.isHidden = true
+        toolView.editOptionsView.unselectButtons()
     }
     
     /// 结束输入文本

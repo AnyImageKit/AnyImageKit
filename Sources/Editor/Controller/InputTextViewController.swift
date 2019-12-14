@@ -11,7 +11,7 @@ import UIKit
 protocol InputTextViewControllerDelegate: class {
     
     func inputTextDidCancel(_ controller: InputTextViewController)
-    func inputText(_ controller: InputTextViewController, didFinishInput text: String, display image: UIImage)
+    func inputText(_ controller: InputTextViewController, didFinishInput text: String, colorIdx: Int, display image: UIImage)
 }
 
 final class InputTextViewController: UIViewController {
@@ -83,11 +83,12 @@ final class InputTextViewController: UIViewController {
     private var penIdx: Int = 0
     private var isBegin: Bool = true
     
-    init(manager: EditorManager, text: String, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
+    init(manager: EditorManager, text: String, colorIdx: Int, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
         self.delegate = delegate
         self.manager = manager
         self.text = text
         self.coverImage = coverImage
+        self.penIdx = colorIdx
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -195,7 +196,7 @@ extension InputTextViewController {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         updateTextCoverView()
         textView.resignFirstResponder()
-        delegate?.inputText(self, didFinishInput: textView.text, display: textCoverView.screenshot)
+        delegate?.inputText(self, didFinishInput: textView.text, colorIdx: penIdx, display: textCoverView.screenshot)
         dismiss(animated: true, completion: nil)
     }
 }

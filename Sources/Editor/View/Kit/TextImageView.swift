@@ -11,6 +11,7 @@ import UIKit
 final class TextImageView: UIView {
     
     let text: String
+    let colorIdx: Int
     let image: UIImage
     
     var point: CGPoint = .zero
@@ -34,8 +35,9 @@ final class TextImageView: UIView {
         return view
     }()
     
-    init(frame: CGRect, text: String, image: UIImage) {
+    init(frame: CGRect, text: String, colorIdx: Int, image: UIImage) {
         self.text = text
+        self.colorIdx = colorIdx
         self.image = image
         super.init(frame: frame)
         setupView()

@@ -171,12 +171,6 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         mosaicToolView.isHidden = option != .mosaic
         
         switch option {
-        case .text:
-            topCoverLayer.isHidden = true
-            bottomCoverLayer.isHidden = true
-            doneButton.isHidden = true
-            editOptionsView.isHidden = true
-            editOptionsView.unselectButtons()
         case .crop:
             editOptionsView.isHidden = true
             topCoverLayer.isHidden = true

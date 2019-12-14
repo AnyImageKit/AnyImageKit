@@ -11,7 +11,8 @@ import UIKit
 // MARK: - Internal
 extension PhotoEditorContentView {
     
-    func addText(_ text: String, image: UIImage) {
+    /// 添加一个TextView
+    func addText(_ text: String, colorIdx: Int, image: UIImage) {
         let scale = scrollView.zoomScale
         let offset: CGFloat = 20 // TODO: 内部也需要offset
         let size = CGSize(width: (image.size.width) / scale + offset, height: (image.size.height) / scale + offset)
@@ -34,13 +35,14 @@ extension PhotoEditorContentView {
             y = y + (height - size.height) / 2
         }
         let frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
-        let textView = TextImageView(frame: frame, text: text, image: image)
+        let textView = TextImageView(frame: frame, text: text, colorIdx: colorIdx, image: image)
         textView.contentMode = .center
         imageView.addSubview(textView)
         textImageViews.append(textView)
         addTextGestureRecognizer(textView)
     }
     
+    /// 更新TextView的布局
     func updateTextFrame(_ startCrop: Bool) {
         // 用当前的宽除之前的宽就是缩放比例
         let scale: CGFloat = imageView.bounds.width / lastImageViewBounds.width
@@ -52,6 +54,27 @@ extension PhotoEditorContentView {
             frame.size.height *= scale
             textView.frame = frame
             textView.layoutIfNeeded()
+        }
+    }
+    
+    /// 删除隐藏的视图
+    func removeHiddenTextView() {
+        for (idx, textView) in textImageViews.enumerated() {
+            if textView.tag == -1 {
+                textImageViews.remove(at: idx)
+                return
+            }
+        }
+    }
+    
+    /// 恢复删除的视图
+    func restoreHiddenTextView() {
+        for textView in textImageViews {
+            if textView.tag == -1 {
+                textView.tag = 0
+                textView.isHidden = false
+                return
+            }
         }
     }
 }
@@ -74,6 +97,7 @@ extension PhotoEditorContentView {
         textView.addGestureRecognizer(rotation)
     }
     
+    /// 允许开始响应手势
     private func shouldBeginGesture(in textView: TextImageView) -> Bool {
         if textView.isActive { return true }
         for view in textImageViews {
@@ -84,6 +108,7 @@ extension PhotoEditorContentView {
         return true
     }
     
+    /// 激活视图
     @discardableResult
     private func activeTextViewIfPossible(_ textView: TextImageView) -> Bool {
         if !shouldBeginGesture(in: textView) { return false }
@@ -100,16 +125,21 @@ extension PhotoEditorContentView {
 // MARK: - Target
 extension PhotoEditorContentView {
     
+    /// 单击手势
     @objc private func onTextSingleTap(_ tap: UITapGestureRecognizer) {
         guard let textView = tap.view as? TextImageView else { return }
         if !shouldBeginGesture(in: textView) { return }
         if !textView.isActive {
             activeTextViewIfPossible(textView)
         } else {
-            textView.setActive(false)
+            // 隐藏当前TextView，进入编辑页面
+            textView.tag = -1
+            textView.isHidden = true
+            delegate?.inputTextWillBeginEdit(textView.text, colorIdx: textView.colorIdx)
         }
     }
     
+    /// 拖拽手势
     @objc private func onTextPan(_ pan: UIPanGestureRecognizer) {
         guard let textView = pan.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
@@ -120,6 +150,7 @@ extension PhotoEditorContentView {
         pan.setTranslation(.zero, in: self)
     }
     
+    /// 捏合手势
     @objc private func onTextPinch(_ pinch: UIPinchGestureRecognizer) {
         guard let textView = pinch.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
@@ -132,6 +163,7 @@ extension PhotoEditorContentView {
         pinch.scale = 1.0
     }
     
+    /// 旋转手势
     @objc private func onTextRotation(_ rotation: UIRotationGestureRecognizer) {
         guard let textView = rotation.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { print(1); return }
@@ -145,6 +177,7 @@ extension PhotoEditorContentView {
 // MARK: - UIGestureRecognizerDelegate
 extension PhotoEditorContentView: UIGestureRecognizerDelegate {
     
+    /// 允许多个手势同时响应
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let view = gestureRecognizer.view as? TextImageView,
             let otherView = otherGestureRecognizer.view as? TextImageView
