@@ -199,6 +199,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
+        backButton.isHidden = false
         contentView.cropCancel { [weak self] (_) in
             self?.didEndCroping()
         }
@@ -206,6 +207,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 完成裁剪
     func toolViewCropDoneButtonTapped(_ toolView: EditorToolView) {
+        backButton.isHidden = false
         contentView.cropDone { [weak self] (_) in
             self?.didEndCroping()
         }
@@ -295,7 +297,6 @@ extension PhotoEditorController {
     
     /// 已经结束裁剪
     private func didEndCroping() {
-        backButton.isHidden = false
         contentView.canvas.isHidden = false
         contentView.restoreHiddenTextView()
         contentView.imageView.image = contentView.imageBeforeCrop

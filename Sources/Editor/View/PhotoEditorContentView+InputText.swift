@@ -15,8 +15,8 @@ extension PhotoEditorContentView {
     func addText(_ text: String, colorIdx: Int, image: UIImage) {
         if text.isEmpty { return }
         let scale = scrollView.zoomScale
-        let offset: CGFloat = 20 // TODO: 内部也需要offset
-        let size = CGSize(width: (image.size.width) / scale + offset, height: (image.size.height) / scale + offset)
+        let inset: CGFloat = 10
+        let size = CGSize(width: (image.size.width + inset * 2) / scale, height: (image.size.height + inset * 2) / scale)
         
         var x: CGFloat
         var y: CGFloat
@@ -36,7 +36,7 @@ extension PhotoEditorContentView {
             y = y + (height - size.height) / 2
         }
         let frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
-        let textView = TextImageView(frame: frame, text: text, colorIdx: colorIdx, image: image)
+        let textView = TextImageView(frame: frame, text: text, colorIdx: colorIdx, image: image, inset: inset / scale)
         textView.contentMode = .center
         imageView.addSubview(textView)
         textImageViews.append(textView)
@@ -132,8 +132,9 @@ extension PhotoEditorContentView {
         guard let textView = pan.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
         
+        let scale = scrollView.zoomScale
         let point = pan.translation(in: self)
-        textView.point = CGPoint(x: textView.point.x + point.x, y: textView.point.y + point.y)
+        textView.point = CGPoint(x: textView.point.x + point.x / scale, y: textView.point.y + point.y / scale)
         textView.transform = textView.calculateTransform()
         pan.setTranslation(.zero, in: self)
     }

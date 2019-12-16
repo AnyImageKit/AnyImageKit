@@ -13,6 +13,7 @@ final class TextImageView: UIView {
     let text: String
     let colorIdx: Int
     let image: UIImage
+    let inset: CGFloat
     
     var point: CGPoint = .zero
     var scale: CGFloat = 1.0
@@ -35,10 +36,11 @@ final class TextImageView: UIView {
         return view
     }()
     
-    init(frame: CGRect, text: String, colorIdx: Int, image: UIImage) {
+    init(frame: CGRect, text: String, colorIdx: Int, image: UIImage, inset: CGFloat) {
         self.text = text
         self.colorIdx = colorIdx
         self.image = image
+        self.inset = inset
         super.init(frame: frame)
         setupView()
     }
@@ -50,7 +52,7 @@ final class TextImageView: UIView {
     private func setupView() {
         addSubview(imageView)
         imageView.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview().inset(10)
+            maker.edges.equalToSuperview().inset(inset)
         }
     }
     
