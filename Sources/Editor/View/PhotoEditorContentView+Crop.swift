@@ -32,7 +32,6 @@ extension PhotoEditorContentView {
     func cropCancel(completion: ((Bool) -> Void)? = nil) {
         isCrop = false
         setCropHidden(true, animated: false)
-        lastImageViewBounds = imageView.bounds
         if didCrop {
             scrollView.zoomScale = lastCropData.zoomScale
             scrollView.contentSize = lastCropData.contentSize
@@ -47,6 +46,7 @@ extension PhotoEditorContentView {
                 self.layout()
             }
             self.updateCanvasFrame()
+            self.updateTextFrameWhenCropEnd()
         }, completion: completion)
     }
     
@@ -54,12 +54,12 @@ extension PhotoEditorContentView {
     func cropDone(completion: ((Bool) -> Void)? = nil) {
         isCrop = false
         didCrop = cropRect.size != scrollView.contentSize
-        lastImageViewBounds = imageView.bounds
         setCropHidden(true, animated: false)
         layoutEndCrop()
         setupMosaicView()
         UIView.animate(withDuration: 0.25, animations: {
             self.updateCanvasFrame()
+            self.updateTextFrameWhenCropEnd()
         }, completion: completion)
     }
     

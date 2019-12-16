@@ -43,6 +43,33 @@ extension PhotoEditorContentView {
         addTextGestureRecognizer(textView)
     }
     
+    /// 裁剪结束时更新UI
+    func updateTextFrameWhenCropEnd() {
+        let scale = imageView.bounds.width / lastImageViewBounds.width
+        for textView in textImageViews {
+            let tmp1 = textView.point
+            let tmp2 = textView.scale
+            let tmp3 = textView.rotation
+            textView.point = .zero
+            textView.scale = 1.0
+            textView.rotation = 0.0
+            textView.transform = textView.calculateTransform()
+            
+            var frame = textView.frame
+            frame.origin.x *= scale
+            frame.origin.y *= scale
+            frame.size.width *= scale
+            frame.size.height *= scale
+            textView.frame = frame
+            textView.layoutIfNeeded()
+            
+            textView.point = CGPoint(x: tmp1.x * scale, y: tmp1.y * scale)
+            textView.scale = tmp2
+            textView.rotation = tmp3
+            textView.transform = textView.calculateTransform()
+        }
+    }
+    
     /// 删除隐藏的TextView
     func removeHiddenTextView() {
         for (idx, textView) in textImageViews.enumerated() {
