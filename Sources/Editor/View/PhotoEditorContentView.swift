@@ -110,6 +110,8 @@ final class PhotoEditorContentView: UIView {
     internal var cropRealRect: CGRect = .zero
     /// 上次裁剪的数据，用于再次进入裁剪
     internal var lastCropData: CropData = CropData()
+    /// 裁剪前的图片
+    internal var imageBeforeCrop: UIImage?
     
     /// 存储画笔过程的图片
     internal lazy var penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty))

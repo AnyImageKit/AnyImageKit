@@ -162,8 +162,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
         case .text:
             openInputController()
         case .crop:
-            backButton.isHidden = true
-            contentView.scrollView.isScrollEnabled = true
+            willBeginCrop()
             contentView.cropStart()
         case .mosaic:
             if contentView.mosaic == nil {
@@ -200,14 +199,16 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
-        backButton.isHidden = false
-        contentView.cropCancel()
+        contentView.cropCancel { [weak self] (_) in
+            self?.didEndCroping()
+        }
     }
     
     /// 完成裁剪
     func toolViewCropDoneButtonTapped(_ toolView: EditorToolView) {
-        backButton.isHidden = false
-        contentView.cropDone()
+        contentView.cropDone { [weak self] (_) in
+            self?.didEndCroping()
+        }
     }
     
     /// 还原裁剪
@@ -277,6 +278,30 @@ extension PhotoEditorController {
     }
 }
 
+// MARK: - Crop
+extension PhotoEditorController {
+    
+    /// 准备开始裁剪
+    private func willBeginCrop() {
+        backButton.isHidden = true
+        contentView.scrollView.isScrollEnabled = true
+        contentView.deactivateAllTextView()
+        let image = contentView.imageView.screenshot
+        contentView.canvas.isHidden = true
+        contentView.hiddenAllTextView()
+        contentView.imageBeforeCrop = contentView.imageView.image
+        contentView.imageView.image = image
+    }
+    
+    /// 已经结束裁剪
+    private func didEndCroping() {
+        backButton.isHidden = false
+        contentView.canvas.isHidden = false
+        contentView.restoreHiddenTextView()
+        contentView.imageView.image = contentView.imageBeforeCrop
+    }
+}
+
 // MARK: - InputText
 extension PhotoEditorController {
     
@@ -289,7 +314,7 @@ extension PhotoEditorController {
         present(controller, animated: true, completion: nil)
     }
     
-    /// 开始输入文本
+    /// 准备开始输入文本
     private func willBeginInput() {
         backButton.isHidden = true
         toolView.topCoverLayer.isHidden = true
@@ -299,7 +324,7 @@ extension PhotoEditorController {
         toolView.editOptionsView.unselectButtons()
     }
     
-    /// 结束输入文本
+    /// 已经结束输入文本
     private func didEndInputing() {
         backButton.isHidden = false
         toolView.topCoverLayer.isHidden = false

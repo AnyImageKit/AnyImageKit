@@ -59,7 +59,7 @@ final class InputTextViewController: UIViewController {
         let view = UITextView()
         view.delegate = self
         view.backgroundColor = .clear
-        view.font = UIFont.systemFont(ofSize: 32)
+        view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         view.tintColor = manager.photoConfig.tintColor
         view.textColor = manager.photoConfig.textColors[penIdx].subColor
         view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
@@ -266,7 +266,7 @@ extension InputTextViewController {
         layer.fillRule = .evenOdd
         layer.cornerRadius = radius
         let color = manager.photoConfig.textColors[penIdx]
-        layer.fillColor = isTextSelected ? color.color.cgColor : nil
+        layer.fillColor = isTextSelected ? color.color.withAlphaComponent(0.95).cgColor : nil
         return layer
     }
     

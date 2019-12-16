@@ -13,6 +13,7 @@ extension PhotoEditorContentView {
     
     /// 添加一个TextView
     func addText(_ text: String, colorIdx: Int, image: UIImage) {
+        if text.isEmpty { return }
         let scale = scrollView.zoomScale
         let offset: CGFloat = 20 // TODO: 内部也需要offset
         let size = CGSize(width: (image.size.width) / scale + offset, height: (image.size.height) / scale + offset)
@@ -42,40 +43,28 @@ extension PhotoEditorContentView {
         addTextGestureRecognizer(textView)
     }
     
-    /// 更新TextView的布局
-    func updateTextFrame(_ startCrop: Bool) {
-        // 用当前的宽除之前的宽就是缩放比例
-        let scale: CGFloat = imageView.bounds.width / lastImageViewBounds.width
-        for textView in textImageViews {
-            var frame = textView.frame
-            frame.origin.x *= scale
-            frame.origin.y *= scale
-            frame.size.width *= scale
-            frame.size.height *= scale
-            textView.frame = frame
-            textView.layoutIfNeeded()
-        }
-    }
-    
-    /// 删除隐藏的视图
+    /// 删除隐藏的TextView
     func removeHiddenTextView() {
         for (idx, textView) in textImageViews.enumerated() {
-            if textView.tag == -1 {
+            if textView.isHidden {
                 textImageViews.remove(at: idx)
-                return
             }
         }
     }
     
-    /// 恢复删除的视图
+    /// 显示所有TextView
     func restoreHiddenTextView() {
-        for textView in textImageViews {
-            if textView.tag == -1 {
-                textView.tag = 0
-                textView.isHidden = false
-                return
-            }
-        }
+        textImageViews.forEach{ $0.isHidden = false }
+    }
+    
+    /// 隐藏所有TextView
+    func hiddenAllTextView() {
+        textImageViews.forEach{ $0.isHidden = true }
+    }
+    
+    /// 取消激活所有TextView
+    func deactivateAllTextView() {
+        textImageViews.forEach{ $0.setActive(false) }
     }
 }
 
@@ -133,7 +122,6 @@ extension PhotoEditorContentView {
             activeTextViewIfPossible(textView)
         } else {
             // 隐藏当前TextView，进入编辑页面
-            textView.tag = -1
             textView.isHidden = true
             delegate?.inputTextWillBeginEdit(textView.text, colorIdx: textView.colorIdx)
         }
@@ -156,7 +144,7 @@ extension PhotoEditorContentView {
         guard activeTextViewIfPossible(textView) else { return }
         
         let scale = textView.scale + (pinch.scale - 1.0)
-        if 0.5 <= scale && scale <= 2.0 {
+        if scale < textView.scale || textView.frame.width < imageView.bounds.width*2.0 {
             textView.scale = scale
             textView.transform = textView.calculateTransform()
         }
