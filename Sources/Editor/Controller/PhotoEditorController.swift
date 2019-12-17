@@ -309,10 +309,24 @@ extension PhotoEditorController {
     /// 打开文本编辑器
     private func openInputController(_ data: TextData = TextData()) {
         willBeginInput()
-        let coverImage = getResultImage()?.gaussianImage(blur: 8)
+        let coverImage = getInputCoverImage()
         let controller = InputTextViewController(manager: manager, data: data, coverImage: coverImage, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
+    }
+    
+    /// 获取输入界面的占位图
+    private func getInputCoverImage() -> UIImage? {
+        guard let image = getResultImage()?.gaussianImage(blur: 8) else { return nil }
+        guard let cgImage = image.cgImage else { return image }
+        let size = image.size
+        let scale = size.width / UIScreen.main.bounds.width
+        if size.height / scale > UIScreen.main.bounds.height { // 超出屏幕高，截取超出部分
+            let rect = CGRect(x: 0, y: contentView.scrollView.contentOffset.y * scale, width: size.width, height: UIScreen.main.bounds.height * scale)
+            guard let cropImage = cgImage.cropping(to: rect) else { return nil }
+            return UIImage(cgImage: cropImage)
+        }
+        return image
     }
     
     /// 准备开始输入文本
