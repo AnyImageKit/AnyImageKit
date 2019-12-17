@@ -60,11 +60,11 @@ final class TextImageView: UIView {
         addSubview(deleteButton)
         addSubview(imageView)
         rectView.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview().inset(12)
+            maker.edges.equalToSuperview().inset(data.inset*0.6)
         }
         deleteButton.snp.makeConstraints { (maker) in
             maker.top.right.equalToSuperview()
-            maker.width.height.equalTo(25)
+            maker.width.height.equalTo(data.inset*1.25)
         }
         imageView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview().inset(data.inset)

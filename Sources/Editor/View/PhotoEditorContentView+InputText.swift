@@ -74,6 +74,7 @@ extension PhotoEditorContentView {
     }
 }
 
+// MARK: - Private
 extension PhotoEditorContentView {
     
     /// 计算视图位置
