@@ -31,6 +31,19 @@ final class TextImageView: UIView {
     /// 激活
     private(set) var isActive: Bool = false
     
+    private lazy var rectView: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.white.cgColor
+        return view
+    }()
+    private(set) lazy var deleteButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.isHidden = true
+        view.setImage(BundleHelper.image(named: "Delete"), for: .normal)
+        return view
+    }()
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
         return view
@@ -50,7 +63,16 @@ final class TextImageView: UIView {
     }
     
     private func setupView() {
+        addSubview(rectView)
+        addSubview(deleteButton)
         addSubview(imageView)
+        rectView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview().inset(12)
+        }
+        deleteButton.snp.makeConstraints { (maker) in
+            maker.top.right.equalToSuperview()
+            maker.width.height.equalTo(25)
+        }
         imageView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview().inset(inset)
         }
@@ -68,7 +90,7 @@ extension TextImageView {
     
     public func setActive(_ isActive: Bool) {
         self.isActive = isActive
-        layer.borderWidth = isActive ? 0.5 : 0.0
-        layer.borderColor = UIColor.white.cgColor
+        rectView.isHidden = !isActive
+        deleteButton.isHidden = !isActive
     }
 }

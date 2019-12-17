@@ -15,7 +15,7 @@ extension PhotoEditorContentView {
     func addText(_ text: String, colorIdx: Int, image: UIImage) {
         if text.isEmpty { return }
         let scale = scrollView.zoomScale
-        let inset: CGFloat = 10
+        let inset: CGFloat = 20
         let size = CGSize(width: (image.size.width + inset * 2) / scale, height: (image.size.height + inset * 2) / scale)
         
         var x: CGFloat
@@ -37,7 +37,7 @@ extension PhotoEditorContentView {
         }
         let frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
         let textView = TextImageView(frame: frame, text: text, colorIdx: colorIdx, image: image, inset: inset / scale)
-        textView.contentMode = .center
+        textView.deleteButton.addTarget(self, action: #selector(textDeletebuttonTapped(_:)), for: .touchUpInside)
         imageView.addSubview(textView)
         textImageViews.append(textView)
         addTextGestureRecognizer(textView)
@@ -187,6 +187,13 @@ extension PhotoEditorContentView {
         textView.rotation += rotation.rotation
         textView.transform = textView.calculateTransform()
         rotation.rotation = 0.0
+    }
+    
+    /// 删除文本
+    @objc private func textDeletebuttonTapped(_ sender: UIButton) {
+        guard let idx = textImageViews.firstIndex(where: { $0.deleteButton == sender }) else { return }
+        textImageViews[idx].removeFromSuperview()
+        textImageViews.remove(at: idx)
     }
 }
 
