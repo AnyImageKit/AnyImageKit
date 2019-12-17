@@ -102,21 +102,25 @@ extension EditorConfigViewController {
     private func editOptionsTapped() {
         let indexPath = RowType.editOptions.indexPath
         let alert = UIAlertController(title: "EditOptions", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Pen+Crop+Mosaic", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Pen+Text+Crop+Mosaic", style: .default, handler: { [weak self] (action) in
             self?.config.editOptions = [.pen, .crop, .mosaic]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Pen+Crop+Mosaic"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Pen", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Pen", style: .default, handler: { [weak self] (action) in
             self?.config.editOptions = [.pen]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Pen"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Crop", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Text", style: .default, handler: { [weak self] (action) in
+            self?.config.editOptions = [.text]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Crop", style: .default, handler: { [weak self] (action) in
             self?.config.editOptions = [.crop]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Crop"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Mosaic", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Mosaic", style: .default, handler: { [weak self] (action) in
             self?.config.editOptions = [.mosaic]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Mosaic"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -125,21 +129,21 @@ extension EditorConfigViewController {
     private func penWidthTapped() {
         let indexPath = RowType.penWidth.indexPath
         let alert = UIAlertController(title: "PenWidth", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "2.5", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "2.5", style: .default, handler: { [weak self] (action) in
             self?.config.penWidth = 2.5
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "2.5"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "5.0", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "5.0", style: .default, handler: { [weak self] (action) in
             self?.config.penWidth = 5.0
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "5.0"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "7.5", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "7.5", style: .default, handler: { [weak self] (action) in
             self?.config.penWidth = 7.5
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "7.5"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "10.0", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "10.0", style: .default, handler: { [weak self] (action) in
             self?.config.penWidth = 10.0
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "10.0"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -148,17 +152,17 @@ extension EditorConfigViewController {
     private func mosaicOptionsTapped() {
         let indexPath = RowType.mosaicOptions.indexPath
         let alert = UIAlertController(title: "MosaicOptions", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Default+Colorful", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Default+Colorful", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicOptions = [.default, .colorful]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Default+Colorful"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Default", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Default", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicOptions = [.default]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Default"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Colorful", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Colorful", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicOptions = [.colorful]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Colorful"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -167,21 +171,21 @@ extension EditorConfigViewController {
     private func mosaicWidthTapped() {
         let indexPath = RowType.mosaicWidth.indexPath
         let alert = UIAlertController(title: "MosaicWidth", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "15.0", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "15.0", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicWidth = 15.0
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "15.0"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "20.0", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "20.0", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicWidth = 20.0
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "20.0"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "25.0", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "25.0", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicWidth = 25.0
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "25.0"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "30.0", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "30.0", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicWidth = 30.0
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "30.0"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -190,21 +194,21 @@ extension EditorConfigViewController {
     private func mosaicLevelTapped() {
         let indexPath = RowType.mosaicLevel.indexPath
         let alert = UIAlertController(title: "MosaicLevel", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicLevel = 20
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "20"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "30", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "30", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicLevel = 30
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "30"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "40", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "40", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicLevel = 40
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "40"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "50", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "50", style: .default, handler: { [weak self] (action) in
             self?.config.mosaicLevel = 50
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "50"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -239,7 +243,7 @@ extension EditorConfigViewController {
         var defaultValue: String {
             switch self {
             case .editOptions:
-                return "Pen+Crop+Mosaic"
+                return "Pen+Text+Crop+Mosaic"
             case .penWidth:
                 return "5.0"
             case .mosaicOptions:

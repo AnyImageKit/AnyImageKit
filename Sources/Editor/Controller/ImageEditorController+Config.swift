@@ -17,7 +17,7 @@ extension ImageEditorController {
         public var tintColor: UIColor
         
         /// 编辑功能，会按顺序排布
-        /// 默认：[.pen, .crop, .mosaic]
+        /// 默认：[.pen, .text, .crop, .mosaic]
         public var editOptions: [PhotoEditOption]
         
         /// 画笔颜色，会按顺序排布
