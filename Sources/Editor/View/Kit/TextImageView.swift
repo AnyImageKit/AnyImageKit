@@ -49,6 +49,9 @@ final class TextImageView: UIView {
         return view
     }()
     
+    private var timer: Timer?
+    private var checkCount: Int = 0
+    
     init(frame: CGRect, text: String, colorIdx: Int, image: UIImage, inset: CGFloat) {
         self.text = text
         self.colorIdx = colorIdx
@@ -92,5 +95,27 @@ extension TextImageView {
         self.isActive = isActive
         rectView.isHidden = !isActive
         deleteButton.isHidden = !isActive
+        if isActive && timer == nil {
+            checkCount = 0
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkActive(_:)), userInfo: nil, repeats: true)
+        }
+    }
+}
+ 
+// MARK: - Target
+extension TextImageView {
+    
+    @objc private func checkActive(_ timer: Timer) {
+        if self.timer == nil || !self.isActive {
+            timer.invalidate()
+            self.timer = nil
+            return
+        }
+        checkCount = !isGestureEnded ? 0 : checkCount + 1
+        if checkCount >= 4 {
+            setActive(false)
+            timer.invalidate()
+            self.timer = nil
+        }
     }
 }
