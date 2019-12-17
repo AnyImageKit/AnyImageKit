@@ -103,6 +103,7 @@ extension PhotoEditorContentView {
         let pen = UIPanGestureRecognizer(target: self, action: #selector(onTextPan(_:)))
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(onTextPinch(_:)))
         let rotation = UIRotationGestureRecognizer(target: self, action: #selector(onTextRotation(_:)))
+        tap.require(toFail: pen)
         tap.delegate = self
         pen.delegate = self
         pinch.delegate = self
