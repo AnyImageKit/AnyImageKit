@@ -220,6 +220,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 最终完成按钮
     func toolViewDoneButtonTapped(_ toolView: EditorToolView) {
+        contentView.deactivateAllTextView()
         guard let image = getResultImage() else { return }
         saveEditPath()
         delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
@@ -277,8 +278,12 @@ extension PhotoEditorController {
         let config = manager.photoConfig
         if config.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
-        let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.diskCacheList, mosaicCacheList: contentView.mosaicCache.diskCacheList)
-        cache.save()
+        let textDataList = contentView.textImageViews.map{ $0.data }
+        EditorImageCache(id: config.cacheIdentifier,
+                         cropData: contentView.lastCropData,
+                         textDataList: textDataList,
+                         penCacheList: contentView.penCache.diskCacheList,
+                         mosaicCacheList: contentView.mosaicCache.diskCacheList).save()
     }
 }
 

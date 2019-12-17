@@ -11,17 +11,21 @@ import Foundation
 public final class EditorImageCache: Codable {
     
     let id: String
+    let cropData: CropData
+    let textDataList: [TextData]
     let penCacheList: [String]
     let mosaicCacheList: [String]
-    let cropData: CropData
+    
     
     /// Create cache
     init(id: String,
          cropData: CropData,
+         textDataList: [TextData],
          penCacheList: [String],
          mosaicCacheList: [String]) {
         self.id = id
         self.cropData = cropData
+        self.textDataList = textDataList
         self.penCacheList = penCacheList
         self.mosaicCacheList = mosaicCacheList
     }
@@ -35,6 +39,7 @@ public final class EditorImageCache: Codable {
         
         self.id = id
         self.cropData = obj.cropData
+        self.textDataList = obj.textDataList
         self.penCacheList = obj.penCacheList
         self.mosaicCacheList = obj.mosaicCacheList
     }

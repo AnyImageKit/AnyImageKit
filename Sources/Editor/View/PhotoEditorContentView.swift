@@ -123,7 +123,7 @@ final class PhotoEditorContentView: UIView {
     
     /// 是否编辑
     internal var isEdited: Bool {
-        return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache()
+        return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache() || !textImageViews.isEmpty
     }
     
     init(frame: CGRect, image: UIImage, config: ImageEditorController.PhotoConfig) {
@@ -134,9 +134,12 @@ final class PhotoEditorContentView: UIView {
         setupView()
         setupMosaicView()
         
-        let hasCache = loadCacheIfNeeded()
-        if hasCache {
+        let cache = loadCacheIfNeeded()
+        if let cache = cache {
             layoutEndCrop(true)
+            cache.textDataList.forEach {
+                self.addText(data: $0)
+            }
         } else {
             layout()
         }
@@ -150,14 +153,14 @@ final class PhotoEditorContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func loadCacheIfNeeded() -> Bool {
-        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return false }
+    private func loadCacheIfNeeded() -> EditorImageCache? {
+        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return nil }
         lastCropData = cache.cropData
         penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
         mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
         imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
         canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: false)
-        return true
+        return cache
     }
     
     private func setupView() {
