@@ -11,33 +11,12 @@ import UIKit
 // MARK: - Internal
 extension PhotoEditorContentView {
     
-    /// 添加一个TextView
-    func addText(_ text: String, colorIdx: Int, image: UIImage) {
-        if text.isEmpty { return }
-        let scale = scrollView.zoomScale
-        let inset: CGFloat = 20
-        let size = CGSize(width: (image.size.width + inset * 2) / scale, height: (image.size.height + inset * 2) / scale)
-        
-        var x: CGFloat
-        var y: CGFloat
-        if !didCrop {
-            x = (imageView.frame.width - size.width) / 2
-            y = (imageView.frame.height - size.height) / 2
-        } else {
-            let width = cropRealRect.width * imageView.bounds.width / imageView.frame.width
-            x = abs(imageView.frame.origin.x) / scale
-            x = x + (width - size.width) / 2
-            
-            var height = cropRealRect.height * imageView.bounds.height / imageView.frame.height
-            let screenHeight = UIScreen.main.bounds.height / scale
-            height = height > screenHeight ? screenHeight : height
-            y = lastCropData.contentOffset.y / scale
-            y = y + scrollView.contentOffset.y / scale
-            y = y + (height - size.height) / 2
-        }
-        let frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
-        let textView = TextImageView(frame: frame, text: text, colorIdx: colorIdx, image: image, inset: inset / scale)
+    func addText(data: TextData) {
+        if data.text.isEmpty { return }
+        calculateTextFrame(data: data)
+        let textView = TextImageView(data: data)
         textView.deleteButton.addTarget(self, action: #selector(textDeletebuttonTapped(_:)), for: .touchUpInside)
+        textView.transform = textView.calculateTransform()
         imageView.addSubview(textView)
         textImageViews.append(textView)
         addTextGestureRecognizer(textView)
@@ -47,12 +26,12 @@ extension PhotoEditorContentView {
     func updateTextFrameWhenCropEnd() {
         let scale = imageView.bounds.width / lastImageViewBounds.width
         for textView in textImageViews {
-            let tmp1 = textView.point
-            let tmp2 = textView.scale
-            let tmp3 = textView.rotation
-            textView.point = .zero
-            textView.scale = 1.0
-            textView.rotation = 0.0
+            let originPoint = textView.data.point
+            let originScale = textView.data.scale
+            let originRotation = textView.data.rotation
+            textView.data.point = .zero
+            textView.data.scale = 1.0
+            textView.data.rotation = 0.0
             textView.transform = textView.calculateTransform()
             
             var frame = textView.frame
@@ -63,9 +42,9 @@ extension PhotoEditorContentView {
             textView.frame = frame
             textView.layoutIfNeeded()
             
-            textView.point = CGPoint(x: tmp1.x * scale, y: tmp1.y * scale)
-            textView.scale = tmp2
-            textView.rotation = tmp3
+            textView.data.point = CGPoint(x: originPoint.x * scale, y: originPoint.y * scale)
+            textView.data.scale = originScale
+            textView.data.rotation = originRotation
             textView.transform = textView.calculateTransform()
         }
     }
@@ -96,6 +75,34 @@ extension PhotoEditorContentView {
 }
 
 extension PhotoEditorContentView {
+    
+    /// 计算视图位置
+    private func calculateTextFrame(data: TextData) {
+        let image = data.image
+        let scale = scrollView.zoomScale
+        let inset: CGFloat = 20
+        let size = CGSize(width: (image.size.width + inset * 2) / scale, height: (image.size.height + inset * 2) / scale)
+        
+        var x: CGFloat
+        var y: CGFloat
+        if !didCrop {
+            x = (imageView.frame.width - size.width) / 2
+            y = (imageView.frame.height - size.height) / 2
+        } else {
+            let width = cropRealRect.width * imageView.bounds.width / imageView.frame.width
+            x = abs(imageView.frame.origin.x) / scale
+            x = x + (width - size.width) / 2
+            
+            var height = cropRealRect.height * imageView.bounds.height / imageView.frame.height
+            let screenHeight = UIScreen.main.bounds.height / scale
+            height = height > screenHeight ? screenHeight : height
+            y = lastCropData.contentOffset.y / scale
+            y = y + scrollView.contentOffset.y / scale
+            y = y + (height - size.height) / 2
+        }
+        data.frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
+        data.inset = inset / scale
+    }
     
     /// 添加手势
     private func addTextGestureRecognizer(_ textView: TextImageView) {
@@ -151,7 +158,8 @@ extension PhotoEditorContentView {
         } else {
             // 隐藏当前TextView，进入编辑页面
             textView.isHidden = true
-            delegate?.inputTextWillBeginEdit(textView.text, colorIdx: textView.colorIdx)
+            deactivateAllTextView()
+            delegate?.inputTextWillBeginEdit(textView.data)
         }
     }
     
@@ -161,8 +169,9 @@ extension PhotoEditorContentView {
         guard activeTextViewIfPossible(textView) else { return }
         
         let scale = scrollView.zoomScale
-        let point = pan.translation(in: self)
-        textView.point = CGPoint(x: textView.point.x + point.x / scale, y: textView.point.y + point.y / scale)
+        let point = textView.data.point
+        let newPoint = pan.translation(in: self)
+        textView.data.point = CGPoint(x: point.x + newPoint.x / scale, y: point.y + newPoint.y / scale)
         textView.transform = textView.calculateTransform()
         pan.setTranslation(.zero, in: self)
     }
@@ -172,9 +181,9 @@ extension PhotoEditorContentView {
         guard let textView = pinch.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
         
-        let scale = textView.scale + (pinch.scale - 1.0)
-        if scale < textView.scale || textView.frame.width < imageView.bounds.width*2.0 {
-            textView.scale = scale
+        let scale = textView.data.scale + (pinch.scale - 1.0)
+        if scale < textView.data.scale || textView.frame.width < imageView.bounds.width*2.0 {
+            textView.data.scale = scale
             textView.transform = textView.calculateTransform()
         }
         pinch.scale = 1.0
@@ -185,7 +194,7 @@ extension PhotoEditorContentView {
         guard let textView = rotation.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { print(1); return }
         
-        textView.rotation += rotation.rotation
+        textView.data.rotation += rotation.rotation
         textView.transform = textView.calculateTransform()
         rotation.rotation = 0.0
     }

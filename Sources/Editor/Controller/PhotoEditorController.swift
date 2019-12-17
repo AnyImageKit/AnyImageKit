@@ -142,8 +142,8 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
     }
     
     /// 开始编辑文本
-    func inputTextWillBeginEdit(_ text: String, colorIdx: Int) {
-        openInputController(text, colorIdx: colorIdx)
+    func inputTextWillBeginEdit(_ data: TextData) {
+        openInputController(data)
     }
 }
 
@@ -236,10 +236,10 @@ extension PhotoEditorController: InputTextViewControllerDelegate {
     }
     
     /// 完成输入
-    func inputText(_ controller: InputTextViewController, didFinishInput text: String, colorIdx: Int, display image: UIImage) {
+    func inputText(_ controller: InputTextViewController, didFinishInput data: TextData) {
         didEndInputing()
         contentView.removeHiddenTextView()
-        contentView.addText(text, colorIdx: colorIdx, image: image)
+        contentView.addText(data: data)
     }
 }
 
@@ -307,10 +307,10 @@ extension PhotoEditorController {
 extension PhotoEditorController {
     
     /// 打开文本编辑器
-    private func openInputController(_ text: String = "", colorIdx: Int = 0) {
+    private func openInputController(_ data: TextData = TextData()) {
         willBeginInput()
         let coverImage = getResultImage()?.gaussianImage(blur: 8)
-        let controller = InputTextViewController(manager: manager, text: text, colorIdx: colorIdx, coverImage: coverImage, delegate: self)
+        let controller = InputTextViewController(manager: manager, data: data, coverImage: coverImage, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

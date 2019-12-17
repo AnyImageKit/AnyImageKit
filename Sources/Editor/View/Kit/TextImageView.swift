@@ -10,14 +10,7 @@ import UIKit
 
 final class TextImageView: UIView {
     
-    let text: String
-    let colorIdx: Int
-    let image: UIImage
-    let inset: CGFloat
-    
-    var point: CGPoint = .zero
-    var scale: CGFloat = 1.0
-    var rotation: CGFloat = 0.0
+    let data: TextData
     
     var isGestureEnded: Bool {
         for gesture in gestureRecognizers ?? [] {
@@ -45,19 +38,16 @@ final class TextImageView: UIView {
         return view
     }()
     private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView(image: image)
+        let view = UIImageView(image: data.image)
         return view
     }()
     
     private var timer: Timer?
     private var checkCount: Int = 0
     
-    init(frame: CGRect, text: String, colorIdx: Int, image: UIImage, inset: CGFloat) {
-        self.text = text
-        self.colorIdx = colorIdx
-        self.image = image
-        self.inset = inset
-        super.init(frame: frame)
+    init(data: TextData) {
+        self.data = data
+        super.init(frame: data.frame)
         setupView()
     }
     
@@ -77,15 +67,15 @@ final class TextImageView: UIView {
             maker.width.height.equalTo(25)
         }
         imageView.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview().inset(inset)
+            maker.edges.equalToSuperview().inset(data.inset)
         }
     }
     
     func calculateTransform() -> CGAffineTransform {
         return CGAffineTransform.identity
-            .translatedBy(x: point.x, y: point.y)
-            .scaledBy(x: scale, y: scale)
-            .rotated(by: rotation)
+            .translatedBy(x: data.point.x, y: data.point.y)
+            .scaledBy(x: data.scale, y: data.scale)
+            .rotated(by: data.rotation)
     }
 }
 

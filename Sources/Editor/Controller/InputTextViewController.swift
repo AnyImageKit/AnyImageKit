@@ -11,7 +11,7 @@ import UIKit
 protocol InputTextViewControllerDelegate: class {
     
     func inputTextDidCancel(_ controller: InputTextViewController)
-    func inputText(_ controller: InputTextViewController, didFinishInput text: String, colorIdx: Int, display image: UIImage)
+    func inputText(_ controller: InputTextViewController, didFinishInput data: TextData)
 }
 
 final class InputTextViewController: UIViewController {
@@ -46,7 +46,7 @@ final class InputTextViewController: UIViewController {
         return view
     }()
     private lazy var toolView: EditorTextToolView = {
-        let view = EditorTextToolView(frame: .zero, config: manager.photoConfig)
+        let view = EditorTextToolView(frame: .zero, config: manager.photoConfig, idx: data.colorIdx, isTextSelected: data.isTextSelected)
         view.delegate = self
         return view
     }()
@@ -61,7 +61,8 @@ final class InputTextViewController: UIViewController {
         view.backgroundColor = .clear
         view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         view.tintColor = manager.photoConfig.tintColor
-        view.textColor = manager.photoConfig.textColors[penIdx].subColor
+        let color = manager.photoConfig.textColors[data.colorIdx]
+        view.textColor = data.isTextSelected ? color.subColor : color.color
         view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
         return view
     }()
@@ -76,19 +77,16 @@ final class InputTextViewController: UIViewController {
     private weak var delegate: InputTextViewControllerDelegate?
     private let manager: EditorManager
     private let coverImage: UIImage?
-    private let text: String
+    private let data: TextData
     
     private let lineHeight: CGFloat = 36
-    private var isTextSelected: Bool = true
-    private var penIdx: Int = 0
     private var isBegin: Bool = true
     
-    init(manager: EditorManager, text: String, colorIdx: Int, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
+    init(manager: EditorManager, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
         self.delegate = delegate
         self.manager = manager
-        self.text = text
         self.coverImage = coverImage
-        self.penIdx = colorIdx
+        self.data = data
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -111,8 +109,8 @@ final class InputTextViewController: UIViewController {
         super.viewDidLayoutSubviews()
         if isBegin {
             isBegin = false
-            if !text.isEmpty {
-                textView.text = text
+            if !data.text.isEmpty {
+                textView.text = data.text
                 textViewDidChange(textView)
             }
             textView.becomeFirstResponder()
@@ -196,7 +194,9 @@ extension InputTextViewController {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         updateTextCoverView()
         textView.resignFirstResponder()
-        delegate?.inputText(self, didFinishInput: textView.text, colorIdx: penIdx, display: textCoverView.screenshot)
+        data.text = textView.text
+        data.imageData = textCoverView.screenshot.pngData() ?? Data()
+        delegate?.inputText(self, didFinishInput: data)
         dismiss(animated: true, completion: nil)
     }
 }
@@ -265,8 +265,8 @@ extension InputTextViewController {
         layer.path = bezier.cgPath
         layer.fillRule = .evenOdd
         layer.cornerRadius = radius
-        let color = manager.photoConfig.textColors[penIdx]
-        layer.fillColor = isTextSelected ? color.color.withAlphaComponent(0.95).cgColor : nil
+        let color = manager.photoConfig.textColors[data.colorIdx]
+        layer.fillColor = data.isTextSelected ? color.color.withAlphaComponent(0.95).cgColor : nil
         return layer
     }
     
@@ -319,17 +319,17 @@ extension InputTextViewController: UITextViewDelegate {
 extension InputTextViewController: EditorTextToolViewDelegate {
     
     func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool) {
-        isTextSelected = isSelected
-        let color = manager.photoConfig.textColors[penIdx]
-        textView.textColor = isTextSelected ? color.subColor : color.color
+        data.isTextSelected = isSelected
+        let color = manager.photoConfig.textColors[data.colorIdx]
+        textView.textColor = data.isTextSelected ? color.subColor : color.color
         setupMaskLayer()
     }
     
     func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
-        penIdx = idx
-        let color = manager.photoConfig.textColors[penIdx]
-        textView.textColor = isTextSelected ? color.subColor : color.color
-        if isTextSelected {
+        data.colorIdx = idx
+        let color = manager.photoConfig.textColors[data.colorIdx]
+        textView.textColor = data.isTextSelected ? color.subColor : color.color
+        if data.isTextSelected {
             setupMaskLayer()
         }
     }

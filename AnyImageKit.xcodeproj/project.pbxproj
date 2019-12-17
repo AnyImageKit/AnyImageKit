@@ -104,6 +104,7 @@
 		A57F63422387CF0800D5AF97 /* ImagePickerController+CaptureConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F63412387CF0800D5AF97 /* ImagePickerController+CaptureConfig.swift */; };
 		A59332602338ADBA003CE652 /* AnimatableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593325F2338ADBA003CE652 /* AnimatableImageView.swift */; };
 		A59332622338AED8003CE652 /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59332612338AED8003CE652 /* AnimatedImage.swift */; };
+		A596FE5B23A8A86F005C8AFA /* TextData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596FE5A23A8A86F005C8AFA /* TextData.swift */; };
 		A5A141B12384DB6E00201A82 /* ImagePickerController+EditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A141B02384DB6E00201A82 /* ImagePickerController+EditorConfig.swift */; };
 		A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */; };
 		A5A27BB2232F82B000D966B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A27BB1232F82B000D966B8 /* Assets.xcassets */; };
@@ -268,6 +269,7 @@
 		A57F63412387CF0800D5AF97 /* ImagePickerController+CaptureConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+CaptureConfig.swift"; sourceTree = "<group>"; };
 		A593325F2338ADBA003CE652 /* AnimatableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableImageView.swift; sourceTree = "<group>"; };
 		A59332612338AED8003CE652 /* AnimatedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedImage.swift; sourceTree = "<group>"; };
+		A596FE5A23A8A86F005C8AFA /* TextData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextData.swift; sourceTree = "<group>"; };
 		A5A141B02384DB6E00201A82 /* ImagePickerController+EditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+EditorConfig.swift"; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		A5A27BA6232F82AE00D966B8 /* AIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -547,6 +549,7 @@
 				A50B20DC237AA24200A894A9 /* BezierGenerator.swift */,
 				A50B20D9237AA24200A894A9 /* TouchState.swift */,
 				A50B20DB237AA24200A894A9 /* CropData.swift */,
+				A596FE5A23A8A86F005C8AFA /* TextData.swift */,
 				A5FE415A237E4B3100D216CF /* EditorImageCache.swift */,
 			);
 			path = Model;
@@ -1016,6 +1019,7 @@
 				A05C8DA9233DFCD2005B0F3C /* ImagePickerError.swift in Sources */,
 				A5FE415B237E4B3100D216CF /* EditorImageCache.swift in Sources */,
 				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
+				A596FE5B23A8A86F005C8AFA /* TextData.swift in Sources */,
 				A50B2109237AA24300A894A9 /* Brush.swift in Sources */,
 				A50B2114237AA24300A894A9 /* EditorPenToolView.swift in Sources */,
 				A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */,

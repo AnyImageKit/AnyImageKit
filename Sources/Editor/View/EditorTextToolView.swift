@@ -18,7 +18,7 @@ final class EditorTextToolView: UIView {
     
     weak var delegate: EditorTextToolViewDelegate?
     
-    private(set) var currentIdx: Int = 0
+    private var currentIdx: Int = 0
     
     private lazy var textButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -32,10 +32,12 @@ final class EditorTextToolView: UIView {
     private let colors: [ImageEditorController.PhotoTextColor]
     private var colorButtons: [ColorButton] = []
     
-    init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
+    init(frame: CGRect, config: ImageEditorController.PhotoConfig, idx: Int, isTextSelected: Bool) {
         self.colors = config.textColors
+        self.currentIdx = idx
         super.init(frame: frame)
         setupView()
+        self.textButton.isSelected = isTextSelected
     }
     
     required init?(coder aDecoder: NSCoder) {
