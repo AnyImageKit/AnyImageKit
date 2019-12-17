@@ -255,10 +255,12 @@ extension PhotoEditorController {
         // 获取原始imageFrame
         let tmpScale = contentView.scrollView.zoomScale
         let tmpOffset = contentView.scrollView.contentOffset
+        let tmpContentSize = contentView.scrollView.contentSize
         contentView.scrollView.zoomScale = 1.0
         let imageFrame = contentView.imageView.frame
         contentView.scrollView.zoomScale = tmpScale
         contentView.scrollView.contentOffset = tmpOffset
+        contentView.scrollView.contentSize = tmpContentSize
         
         var rect: CGRect = .zero
         rect.origin.x = (cropRect.origin.x - imageFrame.origin.x) / imageFrame.width * size.width
@@ -346,5 +348,6 @@ extension PhotoEditorController {
         toolView.bottomCoverLayer.isHidden = false
         toolView.doneButton.isHidden = false
         toolView.editOptionsView.isHidden = false
+        contentView.scrollView.isScrollEnabled = true
     }
 }
