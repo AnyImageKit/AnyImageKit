@@ -140,6 +140,11 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
             contentView.mosaic?.isUserInteractionEnabled = true
         }
     }
+    
+    /// 开始编辑文本
+    func inputTextWillBeginEdit(_ data: TextData) {
+        openInputController(data)
+    }
 }
 
 // MARK: - EditorToolViewDelegate
@@ -155,10 +160,9 @@ extension PhotoEditorController: EditorToolViewDelegate {
         case .pen:
             contentView.canvas.isUserInteractionEnabled = true
         case .text:
-            break
+            openInputController()
         case .crop:
-            backButton.isHidden = true
-            contentView.scrollView.isScrollEnabled = true
+            willBeginCrop()
             contentView.cropStart()
         case .mosaic:
             if contentView.mosaic == nil {
@@ -196,13 +200,17 @@ extension PhotoEditorController: EditorToolViewDelegate {
     /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
-        contentView.cropCancel()
+        contentView.cropCancel { [weak self] (_) in
+            self?.didEndCroping()
+        }
     }
     
     /// 完成裁剪
     func toolViewCropDoneButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
-        contentView.cropDone()
+        contentView.cropDone { [weak self] (_) in
+            self?.didEndCroping()
+        }
     }
     
     /// 还原裁剪
@@ -212,17 +220,48 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 最终完成按钮
     func toolViewDoneButtonTapped(_ toolView: EditorToolView) {
-        guard let source = contentView.imageView.screenshot.cgImage else { return }
+        contentView.deactivateAllTextView()
+        guard let image = getResultImage() else { return }
+        saveEditPath()
+        delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
+    }
+}
+
+// MARK: - InputTextViewControllerDelegate
+extension PhotoEditorController: InputTextViewControllerDelegate {
+    
+    /// 取消输入
+    func inputTextDidCancel(_ controller: InputTextViewController) {
+        didEndInputing()
+        contentView.restoreHiddenTextView()
+    }
+    
+    /// 完成输入
+    func inputText(_ controller: InputTextViewController, didFinishInput data: TextData) {
+        didEndInputing()
+        contentView.removeHiddenTextView()
+        contentView.addText(data: data)
+    }
+}
+
+// MARK: - Private
+extension PhotoEditorController {
+    
+    /// 获取最终的图片
+    private func getResultImage() -> UIImage? {
+        guard let source = contentView.imageView.screenshot.cgImage else { return nil }
         let size = CGSize(width: source.width, height: source.height)
         let cropRect = contentView.cropRealRect
         
         // 获取原始imageFrame
         let tmpScale = contentView.scrollView.zoomScale
         let tmpOffset = contentView.scrollView.contentOffset
+        let tmpContentSize = contentView.scrollView.contentSize
         contentView.scrollView.zoomScale = 1.0
         let imageFrame = contentView.imageView.frame
         contentView.scrollView.zoomScale = tmpScale
         contentView.scrollView.contentOffset = tmpOffset
+        contentView.scrollView.contentSize = tmpContentSize
         
         var rect: CGRect = .zero
         rect.origin.x = (cropRect.origin.x - imageFrame.origin.x) / imageFrame.width * size.width
@@ -230,21 +269,90 @@ extension PhotoEditorController: EditorToolViewDelegate {
         rect.size.width = size.width * cropRect.width / imageFrame.width
         rect.size.height = size.height * cropRect.height / imageFrame.height
         
-        guard let cgImage = source.cropping(to: rect) else { return }
-        let image = UIImage(cgImage: cgImage)
-        saveEditPath()
-        delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
+        guard let cgImage = source.cropping(to: rect) else { return nil }
+        return UIImage(cgImage: cgImage)
     }
-}
-
-extension PhotoEditorController {
     
     /// 存储编辑记录
     private func saveEditPath() {
         let config = manager.photoConfig
         if config.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
-        let cache = EditorImageCache(id: config.cacheIdentifier, cropData: contentView.lastCropData, penCacheList: contentView.penCache.diskCacheList, mosaicCacheList: contentView.mosaicCache.diskCacheList)
-        cache.save()
+        let textDataList = contentView.textImageViews.map{ $0.data }
+        EditorImageCache(id: config.cacheIdentifier,
+                         cropData: contentView.lastCropData,
+                         textDataList: textDataList,
+                         penCacheList: contentView.penCache.diskCacheList,
+                         mosaicCacheList: contentView.mosaicCache.diskCacheList).save()
+    }
+}
+
+// MARK: - Crop
+extension PhotoEditorController {
+    
+    /// 准备开始裁剪
+    private func willBeginCrop() {
+        backButton.isHidden = true
+        contentView.scrollView.isScrollEnabled = true
+        contentView.deactivateAllTextView()
+        let image = contentView.imageView.screenshot
+        contentView.canvas.isHidden = true
+        contentView.hiddenAllTextView()
+        contentView.imageBeforeCrop = contentView.imageView.image
+        contentView.imageView.image = image
+    }
+    
+    /// 已经结束裁剪
+    private func didEndCroping() {
+        contentView.canvas.isHidden = false
+        contentView.restoreHiddenTextView()
+        contentView.imageView.image = contentView.imageBeforeCrop
+    }
+}
+
+// MARK: - InputText
+extension PhotoEditorController {
+    
+    /// 打开文本编辑器
+    private func openInputController(_ data: TextData = TextData()) {
+        willBeginInput()
+        let coverImage = getInputCoverImage()
+        let controller = InputTextViewController(manager: manager, data: data, coverImage: coverImage, delegate: self)
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true, completion: nil)
+    }
+    
+    /// 获取输入界面的占位图
+    private func getInputCoverImage() -> UIImage? {
+        guard let image = getResultImage()?.gaussianImage(blur: 8) else { return nil }
+        guard let cgImage = image.cgImage else { return image }
+        let size = image.size
+        let scale = size.width / UIScreen.main.bounds.width
+        if size.height / scale > UIScreen.main.bounds.height { // 超出屏幕高，截取超出部分
+            let rect = CGRect(x: 0, y: contentView.scrollView.contentOffset.y * scale, width: size.width, height: UIScreen.main.bounds.height * scale)
+            guard let cropImage = cgImage.cropping(to: rect) else { return nil }
+            return UIImage(cgImage: cropImage)
+        }
+        return image
+    }
+    
+    /// 准备开始输入文本
+    private func willBeginInput() {
+        backButton.isHidden = true
+        toolView.topCoverLayer.isHidden = true
+        toolView.bottomCoverLayer.isHidden = true
+        toolView.doneButton.isHidden = true
+        toolView.editOptionsView.isHidden = true
+        toolView.editOptionsView.unselectButtons()
+    }
+    
+    /// 已经结束输入文本
+    private func didEndInputing() {
+        backButton.isHidden = false
+        toolView.topCoverLayer.isHidden = false
+        toolView.bottomCoverLayer.isHidden = false
+        toolView.doneButton.isHidden = false
+        toolView.editOptionsView.isHidden = false
+        contentView.scrollView.isScrollEnabled = true
     }
 }

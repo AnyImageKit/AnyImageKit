@@ -78,7 +78,7 @@ final class EditorEditOptionsView: UIView {
 // MARK: - Public function
 extension EditorEditOptionsView {
     
-    func unSelectButtons() {
+    func unselectButtons() {
         self.currentOption = nil
         for button in buttons {
             button.isSelected = false
@@ -96,7 +96,7 @@ extension EditorEditOptionsView: ResponseTouch {
             let frame = button.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(point) { // inside
                 if let current = currentOption, config.editOptions[idx] == current {
-                    unSelectButtons()
+                    unselectButtons()
                 } else {
                     self.currentOption = config.editOptions[idx]
                     selectButton(button)

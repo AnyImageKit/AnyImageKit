@@ -35,7 +35,7 @@ extension PhotoEditorContentView {
         mosaic = nil
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            guard let mosaicImage = UIImage.createMosaicImage(from: self.image, level: self.config.mosaicLevel) else { return }
+            guard let mosaicImage = self.image.mosaicImage(level: self.config.mosaicLevel) else { return }
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 _print("Mosaic created")

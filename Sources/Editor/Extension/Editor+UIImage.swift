@@ -7,19 +7,19 @@
 //
 
 import UIKit
+import CoreImage
 
 extension UIImage {
     
     /// 生成马赛克图片
     /// 在 DEBUG 模式下耗时 1-3 秒左右，RELEASE 模式下耗时 0.02 秒左右
-    /// - Parameter originImage: 原图
     /// - Parameter level: 一个点转为多少 level*level 的正方形
-    static func createMosaicImage(from originImage: UIImage, level: Int) -> UIImage? {
+    func mosaicImage(level: Int) -> UIImage? {
         // 获取 BitmapData
         let pixelChannelCount = 4
         let bitsPerComponent = 8
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        guard let imgRef = originImage.cgImage else { return nil }
+        guard let imgRef = self.cgImage else { return nil }
         let width = imgRef.width
         let height = imgRef.height
         let context = CGContext(data: nil,
@@ -84,4 +84,17 @@ extension UIImage {
         return resultImage
     }
     
+    /// 高斯模糊图像
+    /// - Parameter blur: 模糊度
+    func gaussianImage(blur: CGFloat) -> UIImage? {
+        let context = CIContext()
+        guard let cgImage = self.cgImage else { return nil }
+        let ciImage = CIImage(cgImage: cgImage)
+        guard let filter = CIFilter(name: "CIGaussianBlur") else { return nil }
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(blur, forKey: "inputRadius")
+        guard let result = filter.value(forKey: kCIOutputImageKey) as? CIImage else { return nil }
+        guard let outputImage = context.createCGImage(result, from: ciImage.extent) else { return nil }
+        return UIImage(cgImage: outputImage)
+    }
 }

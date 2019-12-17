@@ -42,7 +42,23 @@ public struct Palette {
         return UIColor.color(hex: 0x6467EF)
     }
     
-    public static var all: [UIColor] {
-        return [Palette.white, Palette.black, Palette.red, Palette.yellow, Palette.green, Palette.blue, Palette.purple]
+    public static var penColors: [UIColor] {
+        return [Palette.white,
+                Palette.black,
+                Palette.red,
+                Palette.yellow,
+                Palette.green,
+                Palette.blue,
+                Palette.purple]
+    }
+    
+    public static var textColors: [ImageEditorController.PhotoTextColor] {
+        return [.init(color: Palette.white,  subColor: Palette.black),
+                .init(color: Palette.black,  subColor: UIColor.white),
+                .init(color: Palette.red,    subColor: UIColor.white),
+                .init(color: Palette.yellow, subColor: UIColor.white),
+                .init(color: Palette.green,  subColor: UIColor.white),
+                .init(color: Palette.blue,   subColor: UIColor.white),
+                .init(color: Palette.purple, subColor: UIColor.white)]
     }
 }

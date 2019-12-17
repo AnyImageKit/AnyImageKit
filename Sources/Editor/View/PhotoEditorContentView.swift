@@ -14,6 +14,8 @@ protocol PhotoEditorContentViewDelegate: class {
     func photoDidEndPen()
     
     func mosaicDidCreated()
+    
+    func inputTextWillBeginEdit(_ data: TextData)
 }
 
 final class PhotoEditorContentView: UIView {
@@ -108,15 +110,20 @@ final class PhotoEditorContentView: UIView {
     internal var cropRealRect: CGRect = .zero
     /// 上次裁剪的数据，用于再次进入裁剪
     internal var lastCropData: CropData = CropData()
+    /// 裁剪前的图片
+    internal var imageBeforeCrop: UIImage?
     
     /// 存储画笔过程的图片
     internal lazy var penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty))
     /// 存储马赛克过程图片
     internal lazy var mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty))
     
+    internal var textImageViews: [TextImageView] = []
+    internal var lastImageViewBounds: CGRect = .zero
+    
     /// 是否编辑
     internal var isEdited: Bool {
-        return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache()
+        return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache() || !textImageViews.isEmpty
     }
     
     init(frame: CGRect, image: UIImage, config: ImageEditorController.PhotoConfig) {
@@ -127,9 +134,12 @@ final class PhotoEditorContentView: UIView {
         setupView()
         setupMosaicView()
         
-        let hasCache = loadCacheIfNeeded()
-        if hasCache {
+        let cache = loadCacheIfNeeded()
+        if let cache = cache {
             layoutEndCrop(true)
+            cache.textDataList.forEach {
+                self.addText(data: $0)
+            }
         } else {
             layout()
         }
@@ -143,14 +153,14 @@ final class PhotoEditorContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func loadCacheIfNeeded() -> Bool {
-        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return false }
+    private func loadCacheIfNeeded() -> EditorImageCache? {
+        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return nil }
         lastCropData = cache.cropData
         penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
         mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
         imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
         canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: false)
-        return true
+        return cache
     }
     
     private func setupView() {

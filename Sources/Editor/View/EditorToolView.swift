@@ -32,7 +32,7 @@ final class EditorToolView: UIView {
         editOptionsView.currentOption
     }
     
-    private lazy var topCoverLayer: CAGradientLayer = {
+    private(set) lazy var topCoverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         let statusBarHeight = StatusBarHelper.height
         layer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight + 120)
@@ -46,7 +46,7 @@ final class EditorToolView: UIView {
         layer.endPoint = CGPoint(x: 0.5, y: 1)
         return layer
     }()
-    private lazy var bottomCoverLayer: CAGradientLayer = {
+    private(set) lazy var bottomCoverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         let height: CGFloat = 100 + (UIDevice.isMordenPhone ? 34 : 0)
         layer.frame = CGRect(x: 0, y: bounds.height-height, width: UIScreen.main.bounds.width, height: height)
@@ -170,10 +170,13 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         cropToolView.isHidden = option != .crop
         mosaicToolView.isHidden = option != .mosaic
         
-        if option == .crop {
+        switch option {
+        case .crop:
             editOptionsView.isHidden = true
             topCoverLayer.isHidden = true
             doneButton.isHidden = true
+        default:
+            break
         }
     }
 }
@@ -199,7 +202,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
         topCoverLayer.isHidden = false
         doneButton.isHidden = false
         cropToolView.isHidden = true
-        editOptionsView.unSelectButtons()
+        editOptionsView.unselectButtons()
     }
     
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView) {
@@ -208,7 +211,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
         topCoverLayer.isHidden = false
         doneButton.isHidden = false
         cropToolView.isHidden = true
-        editOptionsView.unSelectButtons()
+        editOptionsView.unselectButtons()
     }
     
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView) {

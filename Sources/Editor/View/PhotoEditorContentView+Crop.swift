@@ -15,6 +15,7 @@ extension PhotoEditorContentView {
     func cropStart() {
         isCrop = true
         cropLayer.removeFromSuperlayer()
+        lastImageViewBounds = imageView.bounds
         UIView.animate(withDuration: 0.25, animations: {
             if !self.didCrop {
                 self.layoutStartCrop()
@@ -28,7 +29,7 @@ extension PhotoEditorContentView {
     }
     
     /// 取消裁剪
-    func cropCancel() {
+    func cropCancel(completion: ((Bool) -> Void)? = nil) {
         isCrop = false
         setCropHidden(true, animated: false)
         if didCrop {
@@ -38,24 +39,28 @@ extension PhotoEditorContentView {
             scrollView.contentOffset = lastCropData.contentOffset
             setCropRect(lastCropData.rect, animated: true)
         }
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25, animations: {
             if self.didCrop {
                 self.layoutEndCrop()
             } else {
                 self.layout()
             }
             self.updateCanvasFrame()
-        }
+            self.updateTextFrameWhenCropEnd()
+        }, completion: completion)
     }
     
     /// 裁剪完成
-    func cropDone() {
+    func cropDone(completion: ((Bool) -> Void)? = nil) {
         isCrop = false
         didCrop = cropRect.size != scrollView.contentSize
         setCropHidden(true, animated: false)
         layoutEndCrop()
         setupMosaicView()
-        updateCanvasFrame()
+        UIView.animate(withDuration: 0.25, animations: {
+            self.updateCanvasFrame()
+            self.updateTextFrameWhenCropEnd()
+        }, completion: completion)
     }
     
     /// 重置裁剪
