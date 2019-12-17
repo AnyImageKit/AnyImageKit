@@ -11,6 +11,17 @@ import AVFoundation
 
 final class CapturePreviewView: UIView {
     
+    private lazy var previewContentView: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    private lazy var previewMaskView: CapturePreviewMaskView = {
+        let view = CapturePreviewMaskView(frame: .zero)
+        return view
+    }()
+    
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
     override init(frame: CGRect) {
@@ -23,7 +34,14 @@ final class CapturePreviewView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .black
+        addSubview(previewContentView)
+        addSubview(previewMaskView)
+        previewContentView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
+        previewMaskView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
     }
     
     override func layoutSubviews() {
@@ -38,7 +56,7 @@ extension CapturePreviewView {
     func connect(to session: AVCaptureSession) {
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspectFill
-        layer.addSublayer(previewLayer)
+        previewContentView.layer.addSublayer(previewLayer)
         self.previewLayer = previewLayer
         previewLayer.frame = bounds
     }
@@ -49,5 +67,31 @@ extension CapturePreviewView {
         }
         previewLayer?.removeFromSuperlayer()
         previewLayer = nil
+    }
+}
+
+// MARK: - Animation
+extension CapturePreviewView {
+    
+    func hideMask(animated: Bool) {
+        let duration = animated ? 0.25 : 0
+        let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
+        animator.addAnimations {
+            self.previewMaskView.topMaskView.alpha = 0
+            self.previewMaskView.bottomMaskView.alpha = 0
+        }
+        animator.startAnimation()
+    }
+    
+    func showMask(animated: Bool) {
+        let duration = animated ? 0.25 : 0
+        let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
+        animator.addAnimations {
+            self.previewMaskView.topMaskView.alpha = 1.0
+            self.previewMaskView.bottomMaskView.alpha = 1.0
+        }
+        animator.startAnimation()
     }
 }

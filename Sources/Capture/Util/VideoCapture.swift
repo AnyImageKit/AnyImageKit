@@ -58,13 +58,21 @@ final class VideoCapture: NSObject {
             _print("Can't add photo output")
             return
         }
-        print(photoOutput.preparedPhotoSettingsArray)
-        let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG])
-        photoOutput.capturePhoto(with: settings, delegate: self)
+        photoOutput.isHighResolutionCaptureEnabled = true
         session.addOutput(photoOutput)
         
         // setup connection
-        // TODO
+        if let connection = photoOutput.connection(with: .video) {
+            print(connection)
+            // Set video orientation
+            if connection.isVideoOrientationSupported {
+                connection.videoOrientation = .portrait
+            }
+            // Set video stabilization
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .cinematic
+            }
+        }
     }
     
     private func setupVideoOutput(session: AVCaptureSession) {
@@ -78,6 +86,7 @@ final class VideoCapture: NSObject {
         
         // setup connection
         if let connection = videoOutput.connection(with: .video) {
+            print(connection)
             // Set video orientation
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = .portrait
@@ -99,6 +108,15 @@ extension VideoCapture {
     
     func stopRunning() {
         
+    }
+}
+
+// MARK: - Photo
+extension VideoCapture {
+    
+    func capturePhoto() {
+        let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecJPEG])
+        photoOutput.capturePhoto(with: settings, delegate: self)
     }
 }
 

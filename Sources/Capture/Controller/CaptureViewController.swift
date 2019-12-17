@@ -11,7 +11,7 @@ import AVFoundation
 
 protocol CaptureViewControllerDelegate: class {
     
-    
+    func captureDidCancel(_ capture: CaptureViewController)
 }
 
 final class CaptureViewController: UIViewController {
@@ -20,6 +20,14 @@ final class CaptureViewController: UIViewController {
     
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero)
+        return view
+    }()
+    
+    private lazy var toolView: CaptureToolView = {
+        let view = CaptureToolView(frame: .zero)
+        view.cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
+        view.switchButton.addTarget(self, action: #selector(switchButtonTapped(_:)), for: .touchUpInside)
+        view.captureButton.delegate = self
         return view
     }()
     
@@ -33,18 +41,8 @@ final class CaptureViewController: UIViewController {
         super.viewDidLoad()
         setupNavigation()
         setupView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         capture.connect(to: previewView)
         capture.startRunning()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        capture.disconnect(from: previewView)
-        capture.stopRunning()
     }
     
     private func setupNavigation() {
@@ -52,12 +50,19 @@ final class CaptureViewController: UIViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         view.addSubview(previewView)
+        view.addSubview(toolView)
         previewView.snp.makeConstraints { maker in
             maker.leading.trailing.equalToSuperview()
             maker.center.equalToSuperview()
             maker.width.equalTo(previewView.snp.height).multipliedBy(9.0/16.0)
+        }
+        toolView.snp.makeConstraints { maker in
+            maker.left.equalTo(previewView.snp.left)
+            maker.right.equalTo(previewView.snp.right)
+            maker.bottom.equalTo(previewView.snp.bottom)
+            maker.height.equalTo(88)
         }
     }
 }
@@ -65,8 +70,42 @@ final class CaptureViewController: UIViewController {
 // MARK: - Target
 extension CaptureViewController {
     
+    @objc private func cancelButtonTapped(_ sender: UIButton) {
+        delegate?.captureDidCancel(self)
+    }
     
+    @objc private func switchButtonTapped(_ sender: UIButton) {
+        
+    }
+}
+
+// MARK: - CaptureButtonDelegate
+extension CaptureViewController: CaptureButtonDelegate {
     
+    func captureButtonDidTapped(_ button: CaptureButton) {
+        button.startProcessing()
+        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
+            button.stopProcessing()
+        }
+    }
+    
+    func captureButtonDidBeganLongPress(_ button: CaptureButton) {
+        toolView.hideButtons(animated: true)
+        previewView.hideMask(animated: true)
+        // TODO: start recoder
+    }
+    
+    func captureButtonDidEndedLongPress(_ button: CaptureButton) {
+        // TODO: stop recoder
+        
+        button.startProcessing()
+        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
+            button.stopProcessing()
+            
+            self.toolView.showButtons(animated: true)
+            self.previewView.showMask(animated: true)
+        }
+    }
 }
 
 // MARK: - CaptureDelegate

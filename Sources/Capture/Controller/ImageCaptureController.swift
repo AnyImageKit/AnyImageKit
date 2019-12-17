@@ -16,7 +16,7 @@ public protocol ImageCaptureControllerDelegate: class {
 
 extension ImageCaptureControllerDelegate {
     
-    func imageCaptureDidCancel(_ capture: ImageCaptureController) {
+    public func imageCaptureDidCancel(_ capture: ImageCaptureController) {
         capture.dismiss(animated: true, completion: nil)
     }
 }
@@ -28,8 +28,7 @@ open class ImageCaptureController: AINavigationController {
     required public init(config: Config = .init(), delegate: ImageCaptureControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        
-        
+        self.captureDelegate = delegate
         
         let rootViewController = CaptureViewController()
         rootViewController.delegate = self
@@ -41,10 +40,15 @@ open class ImageCaptureController: AINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    open override var prefersStatusBarHidden: Bool {
+        return true
+    }
 }
 
 extension ImageCaptureController: CaptureViewControllerDelegate {
     
-    
+    func captureDidCancel(_ capture: CaptureViewController) {
+        capture.dismiss(animated: true, completion: nil)
+//        captureDelegate?.imageCaptureDidCancel(self)
+    }
 }

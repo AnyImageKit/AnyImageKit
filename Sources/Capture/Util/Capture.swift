@@ -22,10 +22,15 @@ final class Capture {
     private let audioCapture: AudioCapture
     private let videoCapture: VideoCapture
     
+    private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.Capture")
+    
     init() {
         session = AVCaptureSession()
+        session.beginConfiguration()
+        session.sessionPreset = .photo
         audioCapture = AudioCapture(session: session)
         videoCapture = VideoCapture(session: session)
+        session.commitConfiguration()
         audioCapture.delegate = self
         videoCapture.delegate = self
     }
@@ -36,18 +41,42 @@ extension Capture {
     
     func startRunning() {
         #if !targetEnvironment(simulator)
-        audioCapture.startRunning()
-        videoCapture.startRunning()
-        session.startRunning()
+        workQueue.async {
+            self.audioCapture.startRunning()
+            self.videoCapture.startRunning()
+            self.session.startRunning()
+        }
         #endif
     }
     
     func stopRunning() {
         #if !targetEnvironment(simulator)
-        audioCapture.stopRunning()
-        videoCapture.stopRunning()
-        session.stopRunning()
+        workQueue.async {
+            self.session.stopRunning()
+            self.audioCapture.stopRunning()
+            self.videoCapture.stopRunning()
+        }
         #endif
+    }
+}
+
+// MARK: - Photo
+extension Capture {
+    
+    func capturePhoto() {
+        videoCapture.capturePhoto()
+    }
+}
+
+// MARK: - Video
+extension Capture {
+    
+    func startCaptureVideo() {
+        
+    }
+    
+    func stopCaptureVideo() {
+        
     }
 }
 
