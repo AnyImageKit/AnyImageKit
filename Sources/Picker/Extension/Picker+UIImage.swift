@@ -57,6 +57,14 @@ extension UIImage {
 
 extension UIImage {
     
+    func cropping(to rect: CGRect) -> UIImage? {
+        guard let cgImage = self.cgImage?.cropping(to: rect) else { return nil }
+        return UIImage(cgImage: cgImage, scale: 1.0, orientation: imageOrientation)
+    }
+}
+
+extension UIImage {
+    
     private struct AssociatedKey {
         
         static var _animatedImageDataKey: UInt8 = 0

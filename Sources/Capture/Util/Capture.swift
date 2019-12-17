@@ -7,9 +7,11 @@
 //
 
 import AVFoundation
+import UIKit
 
 protocol CaptureDelegate: class {
     
+    func captureOutput(photo image: UIImage)
     func captureOutput(audio sampleBuffer: CMSampleBuffer)
     func captureOutput(video sampleBuffer: CMSampleBuffer)
 }
@@ -102,6 +104,10 @@ extension Capture: AudioCaptureDelegate {
 
 // MARK: - VideoCaptureDelegate
 extension Capture: VideoCaptureDelegate {
+    
+    func captureOutput(photo image: UIImage) {
+        delegate?.captureOutput(photo: image)
+    }
     
     func captureOutput(video output: AVCaptureVideoDataOutput, didOutput sampleBuffer: CMSampleBuffer) {
         delegate?.captureOutput(video: sampleBuffer)

@@ -11,8 +11,6 @@ import AnyImageKit
 
 final class CaptureConfigViewController: UIViewController {
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
@@ -41,4 +39,10 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
         capture.dismiss(animated: true, completion: nil)
     }
     
+    func imageCaptureDidOutput(_ capture: ImageCaptureController, photo image: UIImage) {
+        let controller = EditorResultViewController()
+        controller.imageView.image = image
+        show(controller, sender: nil)
+        capture.dismiss(animated: true, completion: nil)
+    }
 }

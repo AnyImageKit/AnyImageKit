@@ -12,6 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
+    func captureDidOutput(_ capture: CaptureViewController, photo image: UIImage)
 }
 
 final class CaptureViewController: UIViewController {
@@ -84,9 +85,7 @@ extension CaptureViewController: CaptureButtonDelegate {
     
     func captureButtonDidTapped(_ button: CaptureButton) {
         button.startProcessing()
-        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
-            button.stopProcessing()
-        }
+        capture.capturePhoto()
     }
     
     func captureButtonDidBeganLongPress(_ button: CaptureButton) {
@@ -111,11 +110,36 @@ extension CaptureViewController: CaptureButtonDelegate {
 // MARK: - CaptureDelegate
 extension CaptureViewController: CaptureDelegate {
     
+    func captureOutput(photo image: UIImage) {
+        let editor = ImageEditorController(image: image, config: .init(), delegate: self)
+        editor.modalPresentationStyle = .fullScreen
+        present(editor, animated: false) { [weak self] in
+            guard let self = self else { return }
+            self.toolView.captureButton.stopProcessing()
+            self.capture.stopRunning()
+        }
+    }
+    
     func captureOutput(audio sampleBuffer: CMSampleBuffer) {
         
     }
     
     func captureOutput(video sampleBuffer: CMSampleBuffer) {
         
+    }
+}
+
+// MARK: - ImageEditorControllerDelegate
+extension CaptureViewController: ImageEditorControllerDelegate {
+    
+    func imageEditorDidCancel(_ editor: ImageEditorController) {
+        editor.dismiss(animated: true, completion: nil)
+        capture.startRunning()
+        capture.connect(to: previewView)
+    }
+    
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
+        print(photo)
+        delegate?.captureDidOutput(self, photo: photo)
     }
 }

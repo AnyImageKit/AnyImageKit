@@ -12,6 +12,7 @@ import SnapKit
 public protocol ImageCaptureControllerDelegate: class {
     
     func imageCaptureDidCancel(_ capture: ImageCaptureController)
+    func imageCaptureDidOutput(_ capture: ImageCaptureController, photo image: UIImage)
 }
 
 extension ImageCaptureControllerDelegate {
@@ -40,6 +41,14 @@ open class ImageCaptureController: AINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
+        if let _ = presentedViewController as? ImageEditorController {
+            presentingViewController?.dismiss(animated: flag, completion: completion)
+        } else {
+            super.dismiss(animated: flag, completion: completion)
+        }
+    }
+    
     open override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -48,7 +57,11 @@ open class ImageCaptureController: AINavigationController {
 extension ImageCaptureController: CaptureViewControllerDelegate {
     
     func captureDidCancel(_ capture: CaptureViewController) {
-        capture.dismiss(animated: true, completion: nil)
-//        captureDelegate?.imageCaptureDidCancel(self)
+        captureDelegate?.imageCaptureDidCancel(self)
+    }
+    
+    func captureDidOutput(_ capture: CaptureViewController, photo image: UIImage) {
+        captureDelegate?.imageCaptureDidOutput(self, photo: image)
+        dismiss(animated: true, completion: nil)
     }
 }

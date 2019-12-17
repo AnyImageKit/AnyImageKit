@@ -7,9 +7,11 @@
 //
 
 import AVFoundation
+import UIKit
 
 protocol VideoCaptureDelegate: class {
     
+    func captureOutput(photo image: UIImage)
     func captureOutput(video output: AVCaptureVideoDataOutput, didOutput sampleBuffer: CMSampleBuffer)
 }
 
@@ -59,6 +61,8 @@ final class VideoCapture: NSObject {
             return
         }
         photoOutput.isHighResolutionCaptureEnabled = true
+        // TODO: add live photo support
+        photoOutput.isLivePhotoCaptureEnabled = false //photoOutput.isLivePhotoCaptureSupported
         session.addOutput(photoOutput)
         
         // setup connection
@@ -115,7 +119,20 @@ extension VideoCapture {
 extension VideoCapture {
     
     func capturePhoto() {
-        let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecJPEG])
+        let settings: AVCapturePhotoSettings
+//        if #available(iOS 11.0, *) {
+//            if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+//                settings = AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.hevc])
+//            } else {
+//                settings = AVCapturePhotoSettings()
+//            }
+//        } else {
+            settings = AVCapturePhotoSettings()
+//        }
+        
+        settings.flashMode = .off
+        settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
+        
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
 }
@@ -147,10 +164,29 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
     @available(iOS 11.0, *)
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         print("didFinishProcessingPhoto, photo=\(photo)")
+        guard let photoData = photo.fileDataRepresentation() else { return }
+        photoOutput(photoData: photoData)
     }
     
     // for iOS 10
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        print("didFinishProcessingPhoto, buffer=\(String(describing: photoSampleBuffer))")
+        guard let photoSampleBuffer: CMSampleBuffer = photoSampleBuffer else { return }
+        guard let photoData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) else { return }
+        photoOutput(photoData: photoData)
+    }
+    
+    private func photoOutput(photoData: Data) {
+        guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }
+        guard let metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
+
+        guard let orientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
+        
+        guard let ciImage = CIImage(data: photoData)?.oriented(forExifOrientation: orientation) else { return }
+        let size = ciImage.extent.size
+        let rect = CGRect(x: size.width/8, y: size.height/8, width: size.width/4*3, height: size.height/4*3)
+        let outputImage = ciImage.cropped(to: rect)
+        let image = UIImage(ciImage: outputImage)
+   
+        delegate?.captureOutput(photo: image)
     }
 }
