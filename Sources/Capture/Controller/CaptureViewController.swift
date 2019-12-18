@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func captureDidOutput(_ capture: CaptureViewController, photo image: UIImage)
+    func capture(_ capture: CaptureViewController, didOutput photo: UIImage)
 }
 
 final class CaptureViewController: UIViewController {
@@ -136,6 +136,6 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         print(photo)
-        delegate?.captureDidOutput(self, photo: photo)
+        delegate?.capture(self, didOutput: photo)
     }
 }

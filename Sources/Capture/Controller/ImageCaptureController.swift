@@ -12,7 +12,8 @@ import SnapKit
 public protocol ImageCaptureControllerDelegate: class {
     
     func imageCaptureDidCancel(_ capture: ImageCaptureController)
-    func imageCaptureDidOutput(_ capture: ImageCaptureController, photo image: UIImage)
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage)
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL)
 }
 
 extension ImageCaptureControllerDelegate {
@@ -20,6 +21,8 @@ extension ImageCaptureControllerDelegate {
     public func imageCaptureDidCancel(_ capture: ImageCaptureController) {
         capture.dismiss(animated: true, completion: nil)
     }
+    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage) { }
+    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL) { }
 }
 
 open class ImageCaptureController: AINavigationController {
@@ -60,8 +63,8 @@ extension ImageCaptureController: CaptureViewControllerDelegate {
         captureDelegate?.imageCaptureDidCancel(self)
     }
     
-    func captureDidOutput(_ capture: CaptureViewController, photo image: UIImage) {
-        captureDelegate?.imageCaptureDidOutput(self, photo: image)
+    func capture(_ capture: CaptureViewController, didOutput photo: UIImage) {
+        captureDelegate?.imageCapture(self, didFinishCapturing: photo)
         dismiss(animated: true, completion: nil)
     }
 }
