@@ -91,6 +91,7 @@
 		A52EF7892339B7E700AEE4F7 /* ImagePickerController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */; };
 		A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531105623544C0D00D457A8 /* LoadingiCloudView.swift */; };
 		A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5325EA42331C14F00ADA116 /* PickerArrowButton.swift */; };
+		A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2323A9FC6300C93874 /* ExportTool.swift */; };
 		A557BF9B235D5B820029CCDB /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A557BF9A235D5B820029CCDB /* CameraCell.swift */; };
 		A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */; };
 		A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */; };
@@ -253,6 +254,7 @@
 		A52EF7882339B7E700AEE4F7 /* ImagePickerController+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+Config.swift"; sourceTree = "<group>"; };
 		A531105623544C0D00D457A8 /* LoadingiCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingiCloudView.swift; sourceTree = "<group>"; };
 		A5325EA42331C14F00ADA116 /* PickerArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerArrowButton.swift; sourceTree = "<group>"; };
+		A5347D2323A9FC6300C93874 /* ExportTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTool.swift; sourceTree = "<group>"; };
 		A557BF9A235D5B820029CCDB /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
 		A5601D4F233B0FE500D0E95E /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
@@ -461,13 +463,8 @@
 		A0B22E9A237AA1B3001F6066 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				A0B22E9D237AA1B3001F6066 /* BundleHelper.swift */,
-				A0B22E9B237AA1B3001F6066 /* FileHelper.swift */,
-				A0B22E9C237AA1B3001F6066 /* HUDHelper.swift */,
-				A0B22E9E237AA1B3001F6066 /* StatusBarHelper.swift */,
-				A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */,
-				A0B22EA0237AA1B3001F6066 /* DebugHelper.swift */,
-				A50B20E0237AA24200A894A9 /* CacheTool.swift */,
+				A5347D2123A9FC2900C93874 /* Export */,
+				A5347D2223A9FC4900C93874 /* Common */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -644,6 +641,28 @@
 				A5783955235ED584002A0498 /* LivePhotoTipView.swift */,
 			);
 			path = Kit;
+			sourceTree = "<group>";
+		};
+		A5347D2123A9FC2900C93874 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				A5347D2323A9FC6300C93874 /* ExportTool.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
+		A5347D2223A9FC4900C93874 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				A0B22E9D237AA1B3001F6066 /* BundleHelper.swift */,
+				A0B22E9B237AA1B3001F6066 /* FileHelper.swift */,
+				A0B22E9C237AA1B3001F6066 /* HUDHelper.swift */,
+				A0B22E9E237AA1B3001F6066 /* StatusBarHelper.swift */,
+				A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */,
+				A0B22EA0237AA1B3001F6066 /* DebugHelper.swift */,
+				A50B20E0237AA24200A894A9 /* CacheTool.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		A56A3C792330746A00EBFC48 /* Presentation */ = {
@@ -955,6 +974,7 @@
 				A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
+				A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */,
 				A05C8DA1233DEBFC005B0F3C /* PickerManager+PhotoData.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */,
