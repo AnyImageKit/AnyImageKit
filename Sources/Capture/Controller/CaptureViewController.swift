@@ -110,8 +110,8 @@ extension CaptureViewController: CaptureButtonDelegate {
 // MARK: - CaptureDelegate
 extension CaptureViewController: CaptureDelegate {
     
-    func captureOutput(photo image: UIImage) {
-        let editor = ImageEditorController(image: image, config: .init(), delegate: self)
+    func capture(_ capture: Capture, didOutput photo: UIImage) {
+        let editor = ImageEditorController(image: photo, config: .init(), delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
@@ -120,11 +120,7 @@ extension CaptureViewController: CaptureDelegate {
         }
     }
     
-    func captureOutput(audio sampleBuffer: CMSampleBuffer) {
-        
-    }
-    
-    func captureOutput(video sampleBuffer: CMSampleBuffer) {
+    func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: Capture.BufferType) {
         
     }
 }

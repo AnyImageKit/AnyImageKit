@@ -11,9 +11,8 @@ import UIKit
 
 protocol CaptureDelegate: class {
     
-    func captureOutput(photo image: UIImage)
-    func captureOutput(audio sampleBuffer: CMSampleBuffer)
-    func captureOutput(video sampleBuffer: CMSampleBuffer)
+    func capture(_ capture: Capture, didOutput photo: UIImage)
+    func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: Capture.BufferType)
 }
 
 final class Capture {
@@ -44,8 +43,6 @@ extension Capture {
     func startRunning() {
         #if !targetEnvironment(simulator)
         workQueue.async {
-            self.audioCapture.startRunning()
-            self.videoCapture.startRunning()
             self.session.startRunning()
         }
         #endif
@@ -55,8 +52,6 @@ extension Capture {
         #if !targetEnvironment(simulator)
         workQueue.async {
             self.session.stopRunning()
-            self.audioCapture.stopRunning()
-            self.videoCapture.stopRunning()
         }
         #endif
     }
@@ -74,11 +69,11 @@ extension Capture {
 extension Capture {
     
     func startCaptureVideo() {
-        
+        audioCapture.startAudioSession()
     }
     
     func stopCaptureVideo() {
-        
+        audioCapture.stopAudioSession()
     }
 }
 
@@ -97,19 +92,27 @@ extension Capture {
 // MARK: - AudioCaptureDelegate
 extension Capture: AudioCaptureDelegate {
     
-    func captureOutput(audio output: AVCaptureAudioDataOutput, didOutput sampleBuffer: CMSampleBuffer) {
-        delegate?.captureOutput(audio: sampleBuffer)
+    func audioCapture(_ capture: AudioCapture, didOutput sampleBuffer: CMSampleBuffer) {
+        delegate?.capture(self, didOutput: sampleBuffer, type: .audio)
     }
 }
 
 // MARK: - VideoCaptureDelegate
 extension Capture: VideoCaptureDelegate {
     
-    func captureOutput(photo image: UIImage) {
-        delegate?.captureOutput(photo: image)
+    func videoCapture(_ capture: VideoCapture, didOutput photo: UIImage) {
+        delegate?.capture(self, didOutput: photo)
     }
     
-    func captureOutput(video output: AVCaptureVideoDataOutput, didOutput sampleBuffer: CMSampleBuffer) {
-        delegate?.captureOutput(video: sampleBuffer)
+    func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer) {
+        delegate?.capture(self, didOutput: sampleBuffer, type: .video)
+    }
+}
+
+extension Capture {
+    
+    enum BufferType {
+        case audio
+        case video
     }
 }

@@ -8,11 +8,13 @@
 
 import AVFoundation
 import UIKit
+import Metal
+import MobileCoreServices
 
 protocol VideoCaptureDelegate: class {
     
-    func captureOutput(photo image: UIImage)
-    func captureOutput(video output: AVCaptureVideoDataOutput, didOutput sampleBuffer: CMSampleBuffer)
+    func videoCapture(_ capture: VideoCapture, didOutput photo: UIImage)
+    func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer)
 }
 
 final class VideoCapture: NSObject {
@@ -21,6 +23,14 @@ final class VideoCapture: NSObject {
     
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
+    
+    private lazy var photoContext: CIContext = {
+        if let mtlDevice = MTLCreateSystemDefaultDevice() {
+            return CIContext(mtlDevice: mtlDevice)
+        } else {
+            return CIContext()
+        }
+    }()
     private lazy var photoOutput: AVCapturePhotoOutput = AVCapturePhotoOutput()
     private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
@@ -103,36 +113,18 @@ final class VideoCapture: NSObject {
     }
 }
 
-// MARK: - Running
-extension VideoCapture {
-    
-    func startRunning() {
-        
-    }
-    
-    func stopRunning() {
-        
-    }
-}
-
 // MARK: - Photo
 extension VideoCapture {
     
     func capturePhoto() {
         let settings: AVCapturePhotoSettings
-//        if #available(iOS 11.0, *) {
-//            if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
-//                settings = AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.hevc])
-//            } else {
-//                settings = AVCapturePhotoSettings()
-//            }
-//        } else {
+        if #available(iOS 11.0, *), photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+            settings = AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.hevc])
+        } else {
             settings = AVCapturePhotoSettings()
-//        }
-        
+        }
         settings.flashMode = .off
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
-        
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
 }
@@ -141,7 +133,7 @@ extension VideoCapture {
 extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        delegate?.captureOutput(video: self.videoOutput, didOutput: sampleBuffer)
+        delegate?.videoCapture(self, didOutput: sampleBuffer)
     }
 }
 
@@ -178,15 +170,13 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
     private func photoOutput(photoData: Data) {
         guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }
         guard let metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
-
         guard let orientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
-        
-        guard let ciImage = CIImage(data: photoData)?.oriented(forExifOrientation: orientation) else { return }
-        let size = ciImage.extent.size
+        guard let orientedImage: CIImage = CIImage(data: photoData)?.oriented(forExifOrientation: orientation) else { return }
+        let size = orientedImage.extent.size
         let rect = CGRect(x: size.width/8, y: size.height/8, width: size.width/4*3, height: size.height/4*3)
-        let outputImage = ciImage.cropped(to: rect)
-        let image = UIImage(ciImage: outputImage)
-   
-        delegate?.captureOutput(photo: image)
+        let croppedImage: CIImage = orientedImage.cropped(to: rect)
+        guard let cgImage: CGImage = photoContext.createCGImage(croppedImage, from: rect) else { return }
+        let photo = UIImage(cgImage: cgImage)
+        delegate?.videoCapture(self, didOutput: photo)
     }
 }

@@ -10,7 +10,7 @@ import AVFoundation
 
 protocol AudioCaptureDelegate: class {
     
-    func captureOutput(audio output: AVCaptureAudioDataOutput, didOutput sampleBuffer: CMSampleBuffer)
+    func audioCapture(_ capture: AudioCapture, didOutput sampleBuffer: CMSampleBuffer)
 }
 
 final class AudioCapture: NSObject {
@@ -51,7 +51,7 @@ final class AudioCapture: NSObject {
 // MARK: - Running
 extension AudioCapture {
 
-    func startRunning() {
+    func startAudioSession() {
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setCategory(.record, mode: .default, options: [.duckOthers])
@@ -61,7 +61,7 @@ extension AudioCapture {
         }
     }
     
-    func stopRunning() {
+    func stopAudioSession() {
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setActive(false, options: .notifyOthersOnDeactivation)
@@ -75,6 +75,6 @@ extension AudioCapture {
 extension AudioCapture: AVCaptureAudioDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        delegate?.captureOutput(audio: self.output, didOutput: sampleBuffer)
+        delegate?.audioCapture(self, didOutput: sampleBuffer)
     }
 }
