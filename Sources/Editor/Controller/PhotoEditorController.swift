@@ -16,16 +16,14 @@ protocol PhotoEditorControllerDelegate: class {
 
 final class PhotoEditorController: UIViewController {
     
-    weak var delegate: PhotoEditorControllerDelegate?
-    
     private lazy var contentView: PhotoEditorContentView = {
-        let view = PhotoEditorContentView(frame: self.view.bounds, image: manager.image, config: manager.photoConfig)
+        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, config: config)
         view.delegate = self
-        view.canvas.brush.color = manager.photoConfig.penColors[manager.photoConfig.defaultPenIdx]
+        view.canvas.brush.color = config.penColors[config.defaultPenIdx]
         return view
     }()
     private lazy var toolView: EditorToolView = {
-        let view = EditorToolView(frame: self.view.bounds, config: manager.photoConfig)
+        let view = EditorToolView(frame: self.view.bounds, config: config)
         view.delegate = self
         view.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
         view.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
@@ -42,11 +40,16 @@ final class PhotoEditorController: UIViewController {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap(_:)))
     }()
     
-    private let manager: EditorManager
+    private let image: UIImage
+    private let config: ImageEditorController.PhotoConfig
+    private weak var delegate: PhotoEditorControllerDelegate?
+    
     private lazy var context = CIContext()
     
-    init(manager: EditorManager) {
-        self.manager = manager
+    init(image: UIImage, config: ImageEditorController.PhotoConfig, delegate: PhotoEditorControllerDelegate) {
+        self.image = image
+        self.config = config
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -175,7 +178,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 画笔切换颜色
     func toolView(_ toolView: EditorToolView, colorDidChange idx: Int) {
-        contentView.canvas.brush.color = manager.photoConfig.penColors[idx]
+        contentView.canvas.brush.color = config.penColors[idx]
     }
     
     /// 马赛克切换类型
@@ -276,7 +279,6 @@ extension PhotoEditorController {
     
     /// 存储编辑记录
     private func saveEditPath() {
-        let config = manager.photoConfig
         if config.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
         let textDataList = contentView.textImageViews.map{ $0.data }
@@ -318,7 +320,7 @@ extension PhotoEditorController {
     private func openInputController(_ data: TextData = TextData()) {
         willBeginInput()
         let coverImage = getInputCoverImage()
-        let controller = InputTextViewController(manager: manager, data: data, coverImage: coverImage, delegate: self)
+        let controller = InputTextViewController(config: config, data: data, coverImage: coverImage, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

@@ -31,19 +31,13 @@ open class ImageEditorController: UINavigationController {
     
     open var tag: Int = 0
     
-    private let manager: EditorManager = .init()
-    
     /// Init image editor
     required public init(image: UIImage, config: PhotoConfig = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         check(config: config)
-        self.manager.image = image
-        self.manager.photoConfig = config
         self.editorDelegate = delegate
-        
-        let rootViewController = PhotoEditorController(manager: manager)
-        rootViewController.delegate = self
+        let rootViewController = PhotoEditorController(image: image, config: config, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
@@ -51,13 +45,8 @@ open class ImageEditorController: UINavigationController {
     required public init(video resource: VideoResource, config: VideoConfig = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        
-        self.manager.videoResource = resource
-        self.manager.videoConfig = config
         self.editorDelegate = delegate
-
-        let rootViewController = VideoEditorController(manager: manager)
-        rootViewController.delegate = self
+        let rootViewController = VideoEditorController(resource: resource, config: config, delegate: self)
         self.viewControllers = [rootViewController]
     }
     

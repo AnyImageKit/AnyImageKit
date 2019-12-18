@@ -129,7 +129,6 @@
 		A5DF1E87237AA32C00E3A32E /* Editor+CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E81237AA32C00E3A32E /* Editor+CGRect.swift */; };
 		A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E82237AA32C00E3A32E /* Editor+UIImage.swift */; };
 		A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */; };
-		A5DF1E8B237AA42800E3A32E /* EditorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF1E8A237AA42800E3A32E /* EditorManager.swift */; };
 		A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */; };
 		A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F7DFCC2394A6DD006E10ED /* InputTextViewController.swift */; };
 		A5F7DFCF2394D5CE006E10ED /* EditorTextToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */; };
@@ -261,6 +260,7 @@
 		A5347D1923A9D4DD00C93874 /* ImageEditorError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditorError.swift; sourceTree = "<group>"; };
 		A5347D1B23A9EB2700C93874 /* ImageEditorController+VideoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEditorController+VideoConfig.swift"; sourceTree = "<group>"; };
 		A5347D1D23A9EC3D00C93874 /* VideoEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorController.swift; sourceTree = "<group>"; };
+		A5347D1F23A9F03D00C93874 /* ReplaceMe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceMe.swift; sourceTree = "<group>"; };
 		A557BF9A235D5B820029CCDB /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
 		A5601D4F233B0FE500D0E95E /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
@@ -300,7 +300,6 @@
 		A5DF1E81237AA32C00E3A32E /* Editor+CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+CGRect.swift"; sourceTree = "<group>"; };
 		A5DF1E82237AA32C00E3A32E /* Editor+UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+UIImage.swift"; sourceTree = "<group>"; };
 		A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Editor+UIBezierPath.swift"; sourceTree = "<group>"; };
-		A5DF1E8A237AA42800E3A32E /* EditorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorManager.swift; sourceTree = "<group>"; };
 		A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoPreviewController+Editor.swift"; sourceTree = "<group>"; };
 		A5F7DFCC2394A6DD006E10ED /* InputTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewController.swift; sourceTree = "<group>"; };
 		A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextToolView.swift; sourceTree = "<group>"; };
@@ -570,7 +569,7 @@
 		A50B20DE237AA24200A894A9 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				A5DF1E8A237AA42800E3A32E /* EditorManager.swift */,
+				A5347D1F23A9F03D00C93874 /* ReplaceMe.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1045,7 +1044,6 @@
 				A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */,
 				A0B22EAB237AA1B3001F6066 /* BundleHelper.swift in Sources */,
 				A0DFAA0B235597520020690F /* PickerManager+VideoURL.swift in Sources */,
-				A5DF1E8B237AA42800E3A32E /* EditorManager.swift in Sources */,
 				A56A3C8E2330BCB000EBFC48 /* PickerToolBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -37,7 +37,7 @@ final class InputTextViewController: UIViewController {
     private lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 4
-        view.backgroundColor = manager.photoConfig.tintColor
+        view.backgroundColor = config.tintColor
         view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -46,7 +46,7 @@ final class InputTextViewController: UIViewController {
         return view
     }()
     private lazy var toolView: EditorTextToolView = {
-        let view = EditorTextToolView(frame: .zero, config: manager.photoConfig, idx: data.colorIdx, isTextSelected: data.isTextSelected)
+        let view = EditorTextToolView(frame: .zero, config: config, idx: data.colorIdx, isTextSelected: data.isTextSelected)
         view.delegate = self
         return view
     }()
@@ -60,8 +60,8 @@ final class InputTextViewController: UIViewController {
         view.delegate = self
         view.backgroundColor = .clear
         view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        view.tintColor = manager.photoConfig.tintColor
-        let color = manager.photoConfig.textColors[data.colorIdx]
+        view.tintColor = config.tintColor
+        let color = config.textColors[data.colorIdx]
         view.textColor = data.isTextSelected ? color.subColor : color.color
         view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
         return view
@@ -75,16 +75,16 @@ final class InputTextViewController: UIViewController {
     }()
     
     private weak var delegate: InputTextViewControllerDelegate?
-    private let manager: EditorManager
+    private let config: ImageEditorController.PhotoConfig
     private let coverImage: UIImage?
     private let data: TextData
     
     private let lineHeight: CGFloat = 36
     private var isBegin: Bool = true
     
-    init(manager: EditorManager, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
+    init(config: ImageEditorController.PhotoConfig, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
         self.delegate = delegate
-        self.manager = manager
+        self.config = config
         self.coverImage = coverImage
         self.data = data
         super.init(nibName: nil, bundle: nil)
@@ -265,7 +265,7 @@ extension InputTextViewController {
         layer.path = bezier.cgPath
         layer.fillRule = .evenOdd
         layer.cornerRadius = radius
-        let color = manager.photoConfig.textColors[data.colorIdx]
+        let color = config.textColors[data.colorIdx]
         layer.fillColor = data.isTextSelected ? color.color.withAlphaComponent(0.95).cgColor : nil
         return layer
     }
@@ -320,14 +320,14 @@ extension InputTextViewController: EditorTextToolViewDelegate {
     
     func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool) {
         data.isTextSelected = isSelected
-        let color = manager.photoConfig.textColors[data.colorIdx]
+        let color = config.textColors[data.colorIdx]
         textView.textColor = data.isTextSelected ? color.subColor : color.color
         setupMaskLayer()
     }
     
     func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
         data.colorIdx = idx
-        let color = manager.photoConfig.textColors[data.colorIdx]
+        let color = config.textColors[data.colorIdx]
         textView.textColor = data.isTextSelected ? color.subColor : color.color
         if data.isTextSelected {
             setupMaskLayer()

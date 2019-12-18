@@ -16,12 +16,14 @@ protocol VideoEditorControllerDelegate: class {
 
 final class VideoEditorController: UIViewController {
     
-    weak var delegate: VideoEditorControllerDelegate?
+    private let resource: VideoResource
+    private let config: ImageEditorController.VideoConfig
+    private weak var delegate: VideoEditorControllerDelegate?
     
-    private let manager: EditorManager
-    
-    init(manager: EditorManager) {
-        self.manager = manager
+    init(resource: VideoResource, config: ImageEditorController.VideoConfig, delegate: VideoEditorControllerDelegate) {
+        self.resource = resource
+        self.config = config
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
