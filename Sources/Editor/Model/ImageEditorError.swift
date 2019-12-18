@@ -10,5 +10,6 @@ import Foundation
 
 public enum ImageEditorError: Error {
     
+    case invalidMediaType
     case fetchVideoUrlFailed
 }

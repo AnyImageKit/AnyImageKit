@@ -17,11 +17,13 @@ protocol VideoEditorControllerDelegate: class {
 final class VideoEditorController: UIViewController {
     
     private let resource: VideoResource
+    private let placeholdImage: UIImage?
     private let config: ImageEditorController.VideoConfig
     private weak var delegate: VideoEditorControllerDelegate?
     
-    init(resource: VideoResource, config: ImageEditorController.VideoConfig, delegate: VideoEditorControllerDelegate) {
+    init(resource: VideoResource, placeholdImage: UIImage?, config: ImageEditorController.VideoConfig, delegate: VideoEditorControllerDelegate) {
         self.resource = resource
+        self.placeholdImage = placeholdImage
         self.config = config
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -35,5 +37,5 @@ final class VideoEditorController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
     }
-
+    
 }

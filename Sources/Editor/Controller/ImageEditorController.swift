@@ -42,11 +42,11 @@ open class ImageEditorController: UINavigationController {
     }
     
     /// Init video editor
-    required public init(video resource: VideoResource, config: VideoConfig = .init(), delegate: ImageEditorControllerDelegate) {
+    required public init(video resource: VideoResource, placeholdImage: UIImage?, config: VideoConfig = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         self.editorDelegate = delegate
-        let rootViewController = VideoEditorController(resource: resource, config: config, delegate: self)
+        let rootViewController = VideoEditorController(resource: resource, placeholdImage: placeholdImage, config: config, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
