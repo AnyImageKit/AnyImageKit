@@ -85,9 +85,9 @@ extension UIImage {
     }
     
     /// 高斯模糊图像
+    /// - Parameter context: 上下文
     /// - Parameter blur: 模糊度
-    func gaussianImage(blur: CGFloat) -> UIImage? {
-        let context = CIContext()
+    func gaussianImage(context: CIContext, blur: CGFloat) -> UIImage? {
         guard let cgImage = self.cgImage else { return nil }
         let ciImage = CIImage(cgImage: cgImage)
         guard let filter = CIFilter(name: "CIGaussianBlur") else { return nil }

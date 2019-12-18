@@ -43,6 +43,7 @@ final class PhotoEditorController: UIViewController {
     }()
     
     private let manager: EditorManager
+    private lazy var context = CIContext()
     
     init(manager: EditorManager) {
         self.manager = manager
@@ -324,7 +325,7 @@ extension PhotoEditorController {
     
     /// 获取输入界面的占位图
     private func getInputCoverImage() -> UIImage? {
-        guard let image = getResultImage()?.gaussianImage(blur: 8) else { return nil }
+        guard let image = getResultImage()?.gaussianImage(context: context, blur: 8) else { return nil }
         guard let cgImage = image.cgImage else { return image }
         let size = image.size
         let scale = size.width / UIScreen.main.bounds.width
@@ -344,6 +345,7 @@ extension PhotoEditorController {
         toolView.doneButton.isHidden = true
         toolView.editOptionsView.isHidden = true
         toolView.editOptionsView.unselectButtons()
+        contentView.deactivateAllTextView()
     }
     
     /// 已经结束输入文本

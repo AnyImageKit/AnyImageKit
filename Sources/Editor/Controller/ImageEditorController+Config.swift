@@ -90,7 +90,7 @@ extension ImageEditorController {
     public enum PhotoEditOption {
         /// 画笔
         case pen
-        /// 文字 未完成
+        /// 文字
         case text
         /// 裁剪
         case crop
