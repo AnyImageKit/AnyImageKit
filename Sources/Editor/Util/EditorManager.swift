@@ -12,7 +12,10 @@ final class EditorManager {
     
     var image = UIImage()
     var photoConfig = ImageEditorController.PhotoConfig()
-
+    
+    var videoResource: VideoResource!
+    var videoConfig = ImageEditorController.VideoConfig()
+    
     init() { }
     
 }

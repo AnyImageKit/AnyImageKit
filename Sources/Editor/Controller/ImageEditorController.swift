@@ -13,6 +13,7 @@ public protocol ImageEditorControllerDelegate: class {
     
     func imageEditorDidCancel(_ editor: ImageEditorController)
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool)
 }
 
 extension ImageEditorControllerDelegate {
@@ -20,6 +21,8 @@ extension ImageEditorControllerDelegate {
     public func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: true, completion: nil)
     }
+    public func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) { }
+    public func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) { }
 }
 
 open class ImageEditorController: UINavigationController {
@@ -30,6 +33,7 @@ open class ImageEditorController: UINavigationController {
     
     private let manager: EditorManager = .init()
     
+    /// Init image editor
     required public init(image: UIImage, config: PhotoConfig = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
@@ -39,6 +43,20 @@ open class ImageEditorController: UINavigationController {
         self.editorDelegate = delegate
         
         let rootViewController = PhotoEditorController(manager: manager)
+        rootViewController.delegate = self
+        self.viewControllers = [rootViewController]
+    }
+    
+    /// Init video editor
+    required public init(video resource: VideoResource, config: VideoConfig = .init(), delegate: ImageEditorControllerDelegate) {
+        enableDebugLog = config.enableDebugLog
+        super.init(nibName: nil, bundle: nil)
+        
+        self.manager.videoResource = resource
+        self.manager.videoConfig = config
+        self.editorDelegate = delegate
+
+        let rootViewController = VideoEditorController(manager: manager)
         rootViewController.delegate = self
         self.viewControllers = [rootViewController]
     }
@@ -61,6 +79,16 @@ open class ImageEditorController: UINavigationController {
     }
 }
 
+// MARK: - Private function
+extension ImageEditorController {
+    
+    private func check(config: PhotoConfig) {
+        assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
+        assert(config.penColors.count <= 7, "Pen colors count can't bigger then 7")
+        assert(config.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
+    }
+}
+
 // MARK: - PhotoEditorControllerDelegate
 extension ImageEditorController: PhotoEditorControllerDelegate {
     
@@ -73,12 +101,14 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
     }
 }
 
-// MARK: - Private function
-extension ImageEditorController {
+// MARK: - VideoEditorControllerDelegate
+extension ImageEditorController: VideoEditorControllerDelegate {
     
-    private func check(config: PhotoConfig) {
-        assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        assert(config.penColors.count <= 7, "Pen colors count can't bigger then 7")
-        assert(config.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
+    func videoEditorDidCancel(_ editor: VideoEditorController) {
+        
+    }
+    
+    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool) {
+        
     }
 }
