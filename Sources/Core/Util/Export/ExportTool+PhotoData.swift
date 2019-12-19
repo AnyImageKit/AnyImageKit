@@ -36,7 +36,7 @@ public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, Imag
 extension ExportTool {
     
     @discardableResult
-    static func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) -> PHImageRequestID {
+    public static func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) -> PHImageRequestID {
         let requestOptions = PHImageRequestOptions()
         requestOptions.version = options.version
         requestOptions.progressHandler = options.progressHandler
