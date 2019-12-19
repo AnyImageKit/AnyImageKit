@@ -30,7 +30,7 @@ public struct PhotoDataFetchResponse {
     public let orientation: CGImagePropertyOrientation
 }
 
-public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>, PHImageRequestID) -> Void
+public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImageKitError>, PHImageRequestID) -> Void
 
 
 extension ExportTool {

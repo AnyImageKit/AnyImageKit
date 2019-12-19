@@ -53,10 +53,10 @@ enum PhotoSizeMode: Equatable {
     case original
 }
 
-typealias _PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
-typealias _PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
-typealias _PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImagePickerError>) -> Void
-typealias _PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, ImagePickerError>) -> Void
+typealias _PhotoFetchCompletion = (Result<PhotoFetchResponse, ImageKitError>) -> Void
+typealias _PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImageKitError>) -> Void
+typealias _PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImageKitError>) -> Void
+typealias _PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, ImageKitError>) -> Void
 
 extension PickerManager {
     

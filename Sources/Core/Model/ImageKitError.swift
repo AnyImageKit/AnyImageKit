@@ -1,5 +1,5 @@
 //
-//  ImagePickerError.swift
+//  ImageKitError.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ImagePickerError: Error {
+public enum ImageKitError: Error {
     
     case invalidMediaType
     case invalidInfo

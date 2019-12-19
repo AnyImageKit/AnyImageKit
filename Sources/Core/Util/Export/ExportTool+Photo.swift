@@ -36,8 +36,8 @@ public struct PhotoFetchResponse {
     public let isDegraded: Bool
 }
 
-public typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>, PHImageRequestID) -> Void
-public typealias PhotoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Void
+public typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImageKitError>, PHImageRequestID) -> Void
+public typealias PhotoSaveCompletion = (Result<PHAsset, ImageKitError>) -> Void
 
 extension ExportTool {
     
@@ -66,9 +66,9 @@ extension ExportTool {
             } else {
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud {
-                    completion(.failure(ImagePickerError.cannotFindInLocal), requestID)
+                    completion(.failure(ImageKitError.cannotFindInLocal), requestID)
                 } else {
-                    completion(.failure(ImagePickerError.invalidData), requestID)
+                    completion(.failure(ImageKitError.invalidData), requestID)
                 }
             }
         }
