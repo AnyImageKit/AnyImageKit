@@ -9,7 +9,7 @@
 import Photos
 import UIKit
 
-struct PhotoFetchOptions {
+struct _PhotoFetchOptions {
     
     let sizeMode: PhotoSizeMode
     let resizeMode: PHImageRequestOptionsResizeMode
@@ -53,162 +53,152 @@ enum PhotoSizeMode: Equatable {
     case original
 }
 
-struct PhotoFetchResponse {
-    
-    let image: UIImage
-    let isDegraded: Bool
-}
-
-typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, ImagePickerError>) -> Void
-typealias PhotoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Void
+typealias _PhotoFetchCompletion = (Result<PhotoFetchResponse, ImageKitError>) -> Void
+typealias _PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImageKitError>) -> Void
+typealias _PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImageKitError>) -> Void
+typealias _PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, ImageKitError>) -> Void
 
 extension PickerManager {
     
-    func requestPhoto(for album: Album, completion: @escaping PhotoFetchCompletion) {
+    func requestPhoto(for album: Album, completion: @escaping _PhotoFetchCompletion) {
         if let asset = config.orderByDate == .asc ? album.assets.last?.phAsset : album.assets.first?.phAsset {
-            let options = PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
+            let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             requestPhoto(for: asset, options: options, completion: completion)
         }
     }
     
-    func requestPhoto(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) {
-        let requestOptions = PHImageRequestOptions()
-        requestOptions.version = options.version
-        requestOptions.resizeMode = options.resizeMode
-        requestOptions.isSynchronous = false
-        
-        let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.targetSize, contentMode: .aspectFill, options: requestOptions) { [weak self] (image, info) in
-            guard let self = self else { return }
-            guard let info = info else {
-                completion(.failure(.invalidInfo))
-                return
-            }
-            let isCancelled = info[PHImageCancelledKey] as? Bool ?? false
-            let error = info[PHImageErrorKey] as? Error
-            let isDegraded = info[PHImageResultIsDegradedKey] as? Bool ?? false
-            let isDownload = !isCancelled && error == nil
-            if isDownload, let image = image {
+    func savePhoto(_ image: UIImage, metadata: [String: Any] = [:], completion: PhotoSaveCompletion? = nil) {
+        ExportTool.savePhoto(image, metadata: metadata, completion: completion)
+    }
+}
+
+// MARK: - Request photo
+extension PickerManager {
+    
+    func requestPhoto(for asset: PHAsset, options: _PhotoFetchOptions = .init(), completion: @escaping _PhotoFetchCompletion) {
+        let fetchOptions = PhotoFetchOptions(size: options.targetSize, resizeMode: options.resizeMode, version: options.version, isNetworkAccessAllowed: options.isNetworkAccessAllowed, progressHandler: options.progressHandler)
+        let requestID = ExportTool.requestPhoto(for: asset, options: fetchOptions) { (result, requestID) in
+            switch result {
+            case .success(let response):
                 switch options.sizeMode {
                 case .original:
-                    completion(.success(.init(image: image, isDegraded: isDegraded)))
+                    completion(.success(.init(image: response.image, isDegraded: response.isDegraded)))
                 case .preview:
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
                         self.resizeSemaphore.wait()
-                        let resizedImage = UIImage.resize(from: image, limitSize: options.targetSize, isExact: true)
+                        let resizedImage = UIImage.resize(from: response.image, limitSize: options.targetSize, isExact: true)
                         self.resizeSemaphore.signal()
-                        if !isDegraded && options.needCache {
+                        if !response.isDegraded && options.needCache {
                             self.cache.write(resizedImage, identifier: asset.localIdentifier)
                         }
                         DispatchQueue.main.async {
-                            completion(.success(.init(image: resizedImage, isDegraded: isDegraded)))
+                            completion(.success(.init(image: resizedImage, isDegraded: response.isDegraded)))
                         }
                     }
                 case .thumbnail:
-                    if !isDegraded && options.needCache {
-                        self.cache.write(image, identifier: asset.localIdentifier)
+                    if !response.isDegraded && options.needCache {
+                        self.cache.write(response.image, identifier: asset.localIdentifier)
                     }
-                    completion(.success(.init(image: image, isDegraded: isDegraded)))
+                    completion(.success(.init(image: response.image, isDegraded: response.isDegraded)))
                 }
-            } else {
+            case .failure(let error):
+                guard error == .cannotFindInLocal && options.isNetworkAccessAllowed else {
+                    completion(.failure(error))
+                    return
+                }
                 // Download image from iCloud
-                let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
-                if isInCloud && image == nil && options.isNetworkAccessAllowed {
-                    let photoDataOptions = PhotoDataFetchOptions(version: options.version,
-                                                                 isNetworkAccessAllowed: options.isNetworkAccessAllowed,
-                                                                 progressHandler: options.progressHandler)
-                    self.workQueue.async { [weak self] in
+                let photoDataOptions = PhotoDataFetchOptions(version: options.version,
+                                                             isNetworkAccessAllowed: options.isNetworkAccessAllowed,
+                                                             progressHandler: options.progressHandler)
+                self.workQueue.async { [weak self] in
+                    guard let self = self else { return }
+                    self.requestPhotoData(for: asset, options: photoDataOptions) { [weak self] result in
                         guard let self = self else { return }
-                        self.requestPhotoData(for: asset, options: photoDataOptions) { [weak self] result in
-                            guard let self = self else { return }
-                            switch result {
-                            case .success(let response):
-                                switch options.sizeMode {
-                                case .original:
-                                    guard let image = UIImage(data: response.data) else {
-                                        DispatchQueue.main.async {
-                                            completion(.failure(.invalidData))
-                                        }
-                                        return
-                                    }
+                        switch result {
+                        case .success(let response):
+                            switch options.sizeMode {
+                            case .original:
+                                guard let image = UIImage(data: response.data) else {
                                     DispatchQueue.main.async {
-                                        completion(.success(.init(image: image, isDegraded: false)))
+                                        completion(.failure(.invalidData))
                                     }
-                                case .preview:
-                                    self.resizeSemaphore.wait()
-                                    guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
-                                        self.resizeSemaphore.signal()
-                                        DispatchQueue.main.async {
-                                            completion(.failure(.invalidData))
-                                        }
-                                        return
-                                    }
-                                    self.resizeSemaphore.signal()
-                                    self.cache.write(resizedImage, identifier: asset.localIdentifier)
-                                    DispatchQueue.main.async {
-                                        completion(.success(.init(image: resizedImage, isDegraded: false)))
-                                    }
-                                case .thumbnail:
-                                    guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
-                                        DispatchQueue.main.async {
-                                            completion(.failure(.invalidData))
-                                        }
-                                        return
-                                    }
-                                    DispatchQueue.main.async {
-                                        completion(.success(.init(image: resizedImage, isDegraded: false)))
-                                    }
+                                    return
                                 }
-                            case .failure(let error):
                                 DispatchQueue.main.async {
-                                    completion(.failure(error))
+                                    completion(.success(.init(image: image, isDegraded: false)))
                                 }
+                            case .preview:
+                                self.resizeSemaphore.wait()
+                                guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
+                                    self.resizeSemaphore.signal()
+                                    DispatchQueue.main.async {
+                                        completion(.failure(.invalidData))
+                                    }
+                                    return
+                                }
+                                self.resizeSemaphore.signal()
+                                self.cache.write(resizedImage, identifier: asset.localIdentifier)
+                                DispatchQueue.main.async {
+                                    completion(.success(.init(image: resizedImage, isDegraded: false)))
+                                }
+                            case .thumbnail:
+                                guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
+                                    DispatchQueue.main.async {
+                                        completion(.failure(.invalidData))
+                                    }
+                                    return
+                                }
+                                DispatchQueue.main.async {
+                                    completion(.success(.init(image: resizedImage, isDegraded: false)))
+                                }
+                            }
+                        case .failure(let error):
+                            DispatchQueue.main.async {
+                                completion(.failure(error))
                             }
                         }
                     }
                 }
             }
-            let requestID = info[PHImageResultRequestIDKey] as? PHImageRequestID
             self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
         enqueueFetch(for: asset.localIdentifier, requestID: requestID)
     }
+}
+
+// MARK: - Request photo data
+extension PickerManager {
     
-    func savePhoto(_ image: UIImage, metadata: [String: Any] = [:], completion: PhotoSaveCompletion? = nil) {
-        guard let imageData = image.jpegData(compressionQuality: 1.0) else {
-            completion?(.failure(.savePhotoFail))
-            return
+    func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping (_PhotoDataFetchCompletion)) {
+        let requestID = ExportTool.requestPhotoData(for: asset, options: options) { (result, requestID) in
+            completion(result)
+            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
-        let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let filePath = NSTemporaryDirectory().appending("PHOTO-SAVED-\(timestamp).jpg")
-        FileHelper.createDirectory(at: NSTemporaryDirectory())
-        let url = URL(fileURLWithPath: filePath)
-        // Write to file
-        do {
-            try imageData.write(to: url)
-        } catch {
-            completion?(.failure(.savePhotoFail))
+        enqueueFetch(for: asset.localIdentifier, requestID: requestID)
+    }
+}
+
+// MARK: - Request photo gif
+extension PickerManager {
+    
+    func requsetPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping _PhotoGIFFetchCompletion) {
+        let requestID = ExportTool.requsetPhotoGIF(for: asset, options: options) { (result, requestID) in
+            completion(result)
+            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
-        
-        // Write to library
-        var localIdentifier: String = ""
-        PHPhotoLibrary.shared().performChanges({
-            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
-            localIdentifier = request?.placeholderForCreatedAsset?.localIdentifier ?? ""
-        }) { (isSuccess, error) in
-            try? FileManager.default.removeItem(atPath: filePath)
-            DispatchQueue.main.async {
-                if isSuccess {
-                    if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
-                        completion?(.success(asset))
-                    } else {
-                        completion?(.failure(.savePhotoFail))
-                    }
-                } else if error != nil {
-                    _print("Save photo error: \(error!.localizedDescription)")
-                    completion?(.failure(.savePhotoFail))
-                }
-            }
+        enqueueFetch(for: asset.localIdentifier, requestID: requestID)
+    }
+}
+
+// MARK: - Request photo live
+extension PickerManager {
+    
+    func requestPhotoLive(for asset: PHAsset, options: PhotoLiveFetchOptions = .init(), completion: @escaping _PhotoLiveFetchCompletion) {
+        let requestID = ExportTool.requestPhotoLive(for: asset, options: options) { (result, requestID) in
+            completion(result)
+            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
         }
+        enqueueFetch(for: asset.localIdentifier, requestID: requestID)
     }
 }

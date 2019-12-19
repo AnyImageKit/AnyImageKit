@@ -1,5 +1,5 @@
 //
-//  PickerManager+PhotoData.swift
+//  ExportTool+PhotoData.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -9,11 +9,11 @@
 import Photos
 
 public struct PhotoDataFetchOptions {
-    
+
     public let version: PHImageRequestOptionsVersion
     public let isNetworkAccessAllowed: Bool
     public let progressHandler: PHAssetImageProgressHandler?
-    
+
     public init(version: PHImageRequestOptionsVersion = .current,
                 isNetworkAccessAllowed: Bool = true,
                 progressHandler: PHAssetImageProgressHandler? = nil) {
@@ -24,17 +24,19 @@ public struct PhotoDataFetchOptions {
 }
 
 public struct PhotoDataFetchResponse {
-    
+
     public let data: Data
     public let dataUTI: String
     public let orientation: CGImagePropertyOrientation
 }
 
-public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImagePickerError>) -> Void
+public typealias PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, ImageKitError>, PHImageRequestID) -> Void
 
-extension PickerManager {
+
+extension ExportTool {
     
-    func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
+    @discardableResult
+    public static func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) -> PHImageRequestID {
         let requestOptions = PHImageRequestOptions()
         requestOptions.version = options.version
         requestOptions.progressHandler = options.progressHandler
@@ -42,29 +44,26 @@ extension PickerManager {
         requestOptions.isSynchronous = false
         
         func handle(data: Data?, dataUTI: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable: Any]?, completion: @escaping PhotoDataFetchCompletion) {
+            let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             guard let data = data else {
-                completion(.failure(.invalidData))
+                completion(.failure(.invalidData), requestID)
                 return
             }
             guard let dataUTI = dataUTI else {
-                completion(.failure(.invalidDataUTI))
+                completion(.failure(.invalidDataUTI), requestID)
                 return
             }
-            completion(.success(.init(data: data, dataUTI: dataUTI, orientation: orientation)))
-            let requestID = info?[PHImageResultRequestIDKey] as? PHImageRequestID
-            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
+            completion(.success(.init(data: data, dataUTI: dataUTI, orientation: orientation)), requestID)
         }
         
         if #available(iOS 13, *) {
-            let requestID = PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
+            return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
             }
-            enqueueFetch(for: asset.localIdentifier, requestID: requestID)
         } else {
-            let requestID = PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, uiOrientation, info) in
+            return PHImageManager.default().requestImageData(for: asset, options: requestOptions) { (data, dataUTI, uiOrientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: .init(uiOrientation), info: info, completion: completion)
             }
-            enqueueFetch(for: asset.localIdentifier, requestID: requestID)
         }
     }
 }

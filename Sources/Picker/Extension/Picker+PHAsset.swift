@@ -7,7 +7,6 @@
 //
 
 import Photos
-import MobileCoreServices
 
 extension PHAsset {
     
@@ -25,12 +24,5 @@ extension PHAsset {
         let min = time / 60
         let sec = time % 60
         return String(format: "%02ld:%02ld", min, sec)
-    }
-}
-
-extension PHAsset {
-    
-    var pixelSize: CGSize {
-        return CGSize(width: pixelWidth, height: pixelHeight)
     }
 }

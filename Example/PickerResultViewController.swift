@@ -78,7 +78,7 @@ extension PickerResultViewController: UICollectionViewDelegate {
                 alert.message = "Exporting \(String(format: "%0.1f %", progress*100))"
             }
             present(alert, animated: true, completion: nil)
-            asset.fetchVideoURL(options: options) { result in
+            asset.fetchVideoURL(options: options) { result, _ in
                 switch result {
                 case .success(let response):
                     alert.title = "Result"

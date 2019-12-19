@@ -149,7 +149,7 @@ extension PickerManager {
             } else {
                 workQueue.async { [weak self] in
                     guard let self = self else { return }
-                    let options = PhotoFetchOptions(sizeMode: .preview(self.config.largePhotoMaxWidth))
+                    let options = _PhotoFetchOptions(sizeMode: .preview(self.config.largePhotoMaxWidth))
                     self.requestPhoto(for: asset.phAsset, options: options) { result in
                         switch result {
                         case .success(let response):
@@ -168,7 +168,7 @@ extension PickerManager {
         case .video:
             workQueue.async { [weak self] in
                 guard let self = self else { return }
-                let options = PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
+                let options = _PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
                 self.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                     guard let self = self else { return }
                     switch result {

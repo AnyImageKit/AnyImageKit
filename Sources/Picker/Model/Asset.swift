@@ -64,24 +64,26 @@ extension Asset {
     /// - Note: Only for `MediaType` Photo, GIF, LivePhoto 仅用于媒体类型为照片、GIF、实况
     /// - Parameter options: Photo Data Fetch Options 原图获取选项
     /// - Parameter completion: Photo Data Fetch Completion 原图获取结果回调
-    public func fetchPhotoData(options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) {
+    @discardableResult
+    public func fetchPhotoData(options: PhotoDataFetchOptions = .init(), completion: @escaping PhotoDataFetchCompletion) -> PHImageRequestID {
         guard phAsset.mediaType == .image else {
-            completion(.failure(.invalidMediaType))
-            return
+            completion(.failure(.invalidMediaType), 0)
+            return 0
         }
-        _manager.requestPhotoData(for: phAsset, options: options, completion: completion)
+        return ExportTool.requestPhotoData(for: phAsset, options: options, completion: completion)
     }
     
     /// Fetch Photo URL 获取原图路径
     /// - Note: Only for `MediaType` Photo, PhotoGIF 仅用于媒体类型为照片、GIF
     /// - Parameter options: Photo URL Fetch Options 原图路径获取选项
     /// - Parameter completion: Photo URL Fetch Completion 原图路径获取结果回调
-    public func fetchPhotoURL(options: PhotoURLFetchOptions = .init(), completion: @escaping PhotoURLFetchCompletion) {
+    @discardableResult
+    public func fetchPhotoURL(options: PhotoURLFetchOptions = .init(), completion: @escaping PhotoURLFetchCompletion) -> PHImageRequestID {
         guard phAsset.mediaType == .image else {
-            completion(.failure(.invalidMediaType))
-            return
+            completion(.failure(.invalidMediaType), 0)
+            return 0
         }
-        _manager.requestPhotoURL(for: phAsset, options: options, completion: completion)
+        return ExportTool.requestPhotoURL(for: phAsset, options: options, completion: completion)
     }
 }
 
@@ -92,24 +94,26 @@ extension Asset {
     /// - Note: Only for `MediaType` Video 仅用于媒体类型为视频
     /// - Parameter options: Video Fetch Options 视频获取选项
     /// - Parameter completion: Video Fetch Completion 视频获取结果回调
-    public func fetchVideo(options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) {
+    @discardableResult
+    public func fetchVideo(options: VideoFetchOptions = .init(), completion: @escaping VideoFetchCompletion) -> PHImageRequestID {
         guard phAsset.mediaType == .video else {
-            completion(.failure(.invalidMediaType))
-            return
+            completion(.failure(.invalidMediaType), 0)
+            return 0
         }
-        _manager.requestVideo(for: phAsset, options: options, completion: completion)
+        return ExportTool.requestVideo(for: phAsset, options: options, completion: completion)
     }
     
     /// Fetch Video URL 获取视频路径，用于传输
     /// - Note: Only for `MediaType` Video 仅用于媒体类型为视频
     /// - Parameter options: Video URL Fetch Options 视频路径获取选项
     /// - Parameter completion: Video URL Fetch Completion 视频路径获取结果回调
-    public func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) {
+    @discardableResult
+    public func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) -> PHImageRequestID {
         guard phAsset.mediaType == .video else {
-            completion(.failure(.invalidMediaType))
-            return
+            completion(.failure(.invalidMediaType), 0)
+            return 0
         }
-        _manager.requestVideoURL(for: phAsset, options: options, completion: completion)
+        return ExportTool.requestVideoURL(for: phAsset, options: options, completion: completion)
     }
 }
 
