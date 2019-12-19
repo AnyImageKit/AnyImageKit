@@ -1,8 +1,8 @@
 //
-//  PickerManager+VideoURL.swift
+//  ExportTool+VideoURL.swift
 //  AnyImageKit
 //
-//  Created by 刘栋 on 2019/10/15.
+//  Created by 刘栋 on 2019/9/29.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
@@ -128,15 +128,17 @@ public struct VideoURLFetchResponse {
     public let url: URL
 }
 
-public typealias VideoURLFetchCompletion = (Result<VideoURLFetchResponse, ImagePickerError>) -> Void
+public typealias VideoURLFetchCompletion = (Result<VideoURLFetchResponse, ImagePickerError>, PHImageRequestID) -> Void
 
-extension PickerManager {
+
+extension ExportTool {
     
-    func requestVideoURL(for asset: PHAsset, options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) {
+    @discardableResult
+    public static func requestVideoURL(for asset: PHAsset, options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion) -> PHImageRequestID {
         let supportPresets = AVAssetExportSession.allExportPresets()
         guard supportPresets.contains(options.exportPreset.rawValue) else {
-            completion(.failure(.invalidExportPreset))
-            return
+            completion(.failure(.invalidExportPreset), 0)
+            return 0
         }
         
         let requestOptions = PHVideoRequestOptions()
@@ -145,17 +147,24 @@ extension PickerManager {
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.fetchProgressHandler
         
-        PHImageManager.default().requestExportSession(forVideo: asset, options: requestOptions, exportPreset: options.exportPreset.rawValue) { [weak self] (exportSession, info) in
-            guard let self = self else { return }
+        return PHImageManager.default().requestExportSession(forVideo: asset, options: requestOptions, exportPreset: options.exportPreset.rawValue) { (exportSession, info) in
+            let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             if let exportSession = exportSession {
-                self.exportVideoData(for: exportSession, options: options, completion: completion)
+                ExportTool.exportVideoData(for: exportSession, options: options) { (result) in
+                    switch result {
+                    case .success(let response):
+                        completion(.success(response), requestID)
+                    case .failure(let error):
+                        completion(.failure(error), requestID)
+                    }
+                }
             } else {
-                completion(.failure(.invalidExportSession))
+                completion(.failure(.invalidExportSession), requestID)
             }
         }
     }
     
-    private func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping VideoURLFetchCompletion) {
+    private static  func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping (Result<VideoURLFetchResponse, ImagePickerError>) -> Void) {
         // Check Path
         FileHelper.createDirectory(at: options.preferredOutputPath)
         // Check File Type
@@ -207,3 +216,4 @@ extension PickerManager {
         }
     }
 }
+

@@ -25,6 +25,8 @@ public enum ImagePickerError: Error {
     case exportFail
     case exportCancel
     
+    case cannotFindInLocal
+    
     case savePhotoFail
     case saveVideoFail
 }

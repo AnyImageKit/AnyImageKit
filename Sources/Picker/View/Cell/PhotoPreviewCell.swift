@@ -57,7 +57,7 @@ extension PhotoPreviewCell {
     /// 加载图片
     func requestPhoto() {
         if imageView.image == nil { // thumbnail
-            let options = PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
+            let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -71,7 +71,7 @@ extension PhotoPreviewCell {
             })
         }
         
-        let options = PhotoFetchOptions(sizeMode: .preview(manager.config.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
+        let options = _PhotoFetchOptions(sizeMode: .preview(manager.config.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 _print("Download photo from iCloud: \(progress)")

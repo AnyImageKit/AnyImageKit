@@ -1,8 +1,8 @@
 //
-//  PickerManager+PhotoURL.swift
+//  ExportTool+PhotoURL.swift
 //  AnyImageKit
 //
-//  Created by 刘栋 on 2019/10/16.
+//  Created by 刘栋 on 2019/9/27.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
@@ -33,15 +33,17 @@ public struct PhotoURLFetchResponse {
     public let orientation: CGImagePropertyOrientation
 }
 
-public typealias PhotoURLFetchCompletion = (Result<PhotoURLFetchResponse, ImagePickerError>) -> Void
+public typealias PhotoURLFetchCompletion = (Result<PhotoURLFetchResponse, ImagePickerError>, PHImageRequestID) -> Void
 
-extension PickerManager {
+
+extension ExportTool {
     
-    func requestPhotoURL(for asset: PHAsset, options: PhotoURLFetchOptions = .init(), completion: @escaping PhotoURLFetchCompletion) {
+    @discardableResult
+    public static func requestPhotoURL(for asset: PHAsset, options: PhotoURLFetchOptions = .init(), completion: @escaping PhotoURLFetchCompletion) -> PHImageRequestID {
         let photoDataOptions = PhotoDataFetchOptions(version: options.version,
                                                      isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                      progressHandler: options.progressHandler)
-        requestPhotoData(for: asset, options: photoDataOptions) { result in
+        return ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { result, requestID in
             switch result {
             case .success(let response):
                 // Check Path
@@ -54,13 +56,14 @@ extension PickerManager {
                 do {
                     try response.data.write(to: outputURL)
                 } catch {
-                    completion(.failure(.exportFail))
-                    return 
+                    completion(.failure(.exportFail), requestID)
+                    return
                 }
-                completion(.success(.init(url: outputURL, dataUTI: response.dataUTI, orientation: response.orientation)))
+                completion(.success(.init(url: outputURL, dataUTI: response.dataUTI, orientation: response.orientation)), requestID)
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(error), requestID)
             }
         }
     }
 }
+

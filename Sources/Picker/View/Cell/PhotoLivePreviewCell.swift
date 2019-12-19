@@ -107,14 +107,14 @@ extension PhotoLivePreviewCell {
         let id = asset.phAsset.localIdentifier
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            let options = LivePhotoFetchOptions(targetSize: PHImageManagerMaximumSize)  { (progress, error, isAtEnd, info) in
+            let options = PhotoLiveFetchOptions(targetSize: PHImageManagerMaximumSize)  { (progress, error, isAtEnd, info) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     _print("Download live photo from iCloud: \(progress)")
                     self.setDownloadingProgress(progress)
                 }
             }
-            self.manager.requestLivePhoto(for: self.asset.phAsset, options: options) { (result) in
+            self.manager.requestPhotoLive(for: self.asset.phAsset, options: options) { (result) in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in
