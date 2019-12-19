@@ -14,6 +14,7 @@
 		A005F8EB23974852006BE028 /* ImageCaptureController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005F8EA23974852006BE028 /* ImageCaptureController+Config.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
 		A01866F1239F8740002E623D /* CapturePreviewMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */; };
+		A0226A4023AB69F1000AFC87 /* Capture+AVCaptureDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */; };
 		A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026C99E23978DF400931028 /* CaptureConfigViewController.swift */; };
 		A029D04F2330856C00BC6720 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753B232F7DE500BB117B /* Album.swift */; };
 		A035830323A20ED800F6B424 /* CaptureToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035830223A20ED800F6B424 /* CaptureToolView.swift */; };
@@ -58,6 +59,8 @@
 		A0B22EAE237AA1B3001F6066 /* DebugHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22EA0237AA1B3001F6066 /* DebugHelper.swift */; };
 		A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */; };
 		A0B22EB0237AA1B3001F6066 /* UserInterfaceStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22EA4237AA1B3001F6066 /* UserInterfaceStyle.swift */; };
+		A0B50C3623A9EDDC002C9799 /* Capture+CGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */; };
+		A0B50C3823AA0AD2002C9799 /* PreviewContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B50C3723AA0AD2002C9799 /* PreviewContentView.swift */; };
 		A0B577D42382999D000879F7 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
 		A0B577D52382999D000879F7 /* AnyImageKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C192331D426005F742C /* Picker+UIColor.swift */; };
@@ -175,6 +178,7 @@
 		A005F8EA23974852006BE028 /* ImageCaptureController+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCaptureController+Config.swift"; sourceTree = "<group>"; };
 		A00869BC233C987600237651 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 		A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewMaskView.swift; sourceTree = "<group>"; };
+		A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AVCaptureDevice.swift"; sourceTree = "<group>"; };
 		A026C99E23978DF400931028 /* CaptureConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureConfigViewController.swift; sourceTree = "<group>"; };
 		A029D04E233084B600BC6720 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		A035830223A20ED800F6B424 /* CaptureToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureToolView.swift; sourceTree = "<group>"; };
@@ -226,6 +230,8 @@
 		A0B22EA0237AA1B3001F6066 /* DebugHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugHelper.swift; sourceTree = "<group>"; };
 		A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDViewController.swift; sourceTree = "<group>"; };
 		A0B22EA4237AA1B3001F6066 /* UserInterfaceStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInterfaceStyle.swift; sourceTree = "<group>"; };
+		A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+CGImage.swift"; sourceTree = "<group>"; };
+		A0B50C3723AA0AD2002C9799 /* PreviewContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContentView.swift; sourceTree = "<group>"; };
 		A0C03C192331D426005F742C /* Picker+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Picker+UIColor.swift"; sourceTree = "<group>"; };
 		A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDropDownPresentationController.swift; sourceTree = "<group>"; };
 		A0C101E72356BD81000DBBC6 /* PickerManager+PhotoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+PhotoURL.swift"; sourceTree = "<group>"; };
@@ -374,6 +380,7 @@
 				A076999823963D3B0006AC9B /* Controller */,
 				A07699A123963F560006AC9B /* View */,
 				A07699A223963F5E0006AC9B /* Util */,
+				A0B50C3423A9EDC4002C9799 /* Extension */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -392,6 +399,7 @@
 			isa = PBXGroup;
 			children = (
 				A076999C23963F270006AC9B /* CapturePreviewView.swift */,
+				A0B50C3723AA0AD2002C9799 /* PreviewContentView.swift */,
 				A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */,
 				A035830223A20ED800F6B424 /* CaptureToolView.swift */,
 				A09D15A2239E0FEF00F3FE77 /* CaptureButton.swift */,
@@ -550,6 +558,15 @@
 				A0B22EA4237AA1B3001F6066 /* UserInterfaceStyle.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		A0B50C3423A9EDC4002C9799 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */,
+				A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		A0F4753A232F7DDB00BB117B /* Model */ = {
@@ -1026,6 +1043,7 @@
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */,
+				A0B50C3823AA0AD2002C9799 /* PreviewContentView.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
 				A5783956235ED584002A0498 /* LivePhotoTipView.swift in Sources */,
 				A50B2118237AA24300A894A9 /* Canvas.swift in Sources */,
@@ -1060,6 +1078,7 @@
 				A50B2112237AA24300A894A9 /* CropCornerView.swift in Sources */,
 				A07D8796233DA2B8000108C7 /* Picker+PHAsset.swift in Sources */,
 				A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */,
+				A0226A4023AB69F1000AFC87 /* Capture+AVCaptureDevice.swift in Sources */,
 				A50B2106237AA24200A894A9 /* Palette.swift in Sources */,
 				A0B22EA6237AA1B3001F6066 /* Core+UIDevice.swift in Sources */,
 				A0C101E82356BD81000DBBC6 /* PickerManager+PhotoURL.swift in Sources */,
@@ -1079,6 +1098,7 @@
 				A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */,
 				A50B2113237AA24300A894A9 /* CropGridView.swift in Sources */,
 				A0B22EAD237AA1B3001F6066 /* ScreenHelper.swift in Sources */,
+				A0B50C3623A9EDDC002C9799 /* Capture+CGImage.swift in Sources */,
 				A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */,
 				A00869BD233C987600237651 /* AssociatedObject.swift in Sources */,
 				A05C8DA9233DFCD2005B0F3C /* ImagePickerError.swift in Sources */,

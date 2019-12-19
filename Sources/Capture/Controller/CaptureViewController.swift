@@ -19,6 +19,8 @@ final class CaptureViewController: UIViewController {
     
     weak var delegate: CaptureViewControllerDelegate?
     
+    private var isPreviewing: Bool = true
+    
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero)
         return view
@@ -42,7 +44,6 @@ final class CaptureViewController: UIViewController {
         super.viewDidLoad()
         setupNavigation()
         setupView()
-        capture.connect(to: previewView)
         capture.startRunning()
     }
     
@@ -110,7 +111,12 @@ extension CaptureViewController: CaptureButtonDelegate {
 // MARK: - CaptureDelegate
 extension CaptureViewController: CaptureDelegate {
     
-    func capture(_ capture: Capture, didOutput photo: UIImage) {
+    func captureWillOutputPhoto(_ capture: Capture) {
+        isPreviewing = false
+    }
+    
+    func capture(_ capture: Capture, didOutput photoData: Data) {
+        guard let photo = UIImage(data: photoData) else { return }
         let editor = ImageEditorController(image: photo, config: .init(), delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
@@ -121,7 +127,14 @@ extension CaptureViewController: CaptureDelegate {
     }
     
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: Capture.BufferType) {
-        
+        switch type {
+        case .audio:
+            break
+        case .video:
+            if isPreviewing {
+                previewView.draw(sampleBuffer)
+            }
+        }
     }
 }
 
@@ -129,13 +142,12 @@ extension CaptureViewController: CaptureDelegate {
 extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
-        editor.dismiss(animated: true, completion: nil)
         capture.startRunning()
-        capture.connect(to: previewView)
+        isPreviewing = true
+        editor.dismiss(animated: false, completion: nil)
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        print(photo)
         delegate?.capture(self, didOutput: photo)
     }
 }

@@ -7,13 +7,13 @@
 //
 
 import AVFoundation
-import UIKit
+import CoreImage
 import Metal
-import MobileCoreServices
 
 protocol VideoCaptureDelegate: class {
     
-    func videoCapture(_ capture: VideoCapture, didOutput photo: UIImage)
+    func videoCaptureWillOutputPhoto(_ capture: VideoCapture)
+    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data)
     func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer)
 }
 
@@ -23,6 +23,8 @@ final class VideoCapture: NSObject {
     
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
+    
+    var position: AVCaptureDevice.Position = .back
     
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
@@ -38,30 +40,50 @@ final class VideoCapture: NSObject {
     init(session: AVCaptureSession) {
         super.init()
         do {
-            let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
-                                                                    mediaType: .video,
-                                                                    position: .back)
-            guard let camera = discoverySession.devices.first else {
-                _print("Can't find the specified video device")
-                return
-            }
-            self.device = camera
-            let input = try AVCaptureDeviceInput(device: camera)
-            if session.canAddInput(input) {
-                session.addInput(input)
-                self.input = input
-            } else {
-                _print("Can't add video device input")
-            }
+            // Add device input
+            try setupInput(session: session)
             
             // Add photo output, if needed
             setupPhotoOutput(session: session)
             
             // Add video output, if needed
             setupVideoOutput(session: session)
-            
         } catch {
             _print(error)
+        }
+    }
+    
+    private func setupInput(session: AVCaptureSession) throws {
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
+                                                                mediaType: .video,
+                                                                position: position)
+        let preferredDevices = discoverySession.devices
+        guard let camera = preferredDevices.first else {
+            _print("Can't find the specified video device")
+            return
+        }
+        self.device = camera
+        
+        let formats = camera.preferredFormats(for: AVCaptureDevice.Preset.preferred)
+        guard let format = formats.last else {
+            _print("Can't find any available format")
+            return
+        }
+        try camera.lockForConfiguration()
+        camera.activeFormat = format
+        camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: 60)
+        camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: 60)
+        camera.unlockForConfiguration()
+        if let oldInput = self.input {
+            session.removeInput(oldInput)
+            self.input = nil
+        }
+        let input = try AVCaptureDeviceInput(device: camera)
+        if session.canAddInput(input) {
+            session.addInput(input)
+            self.input = input
+        } else {
+            _print("Can't add video device input")
         }
     }
     
@@ -77,14 +99,17 @@ final class VideoCapture: NSObject {
         
         // setup connection
         if let connection = photoOutput.connection(with: .video) {
-            print(connection)
             // Set video orientation
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = .portrait
             }
             // Set video stabilization
             if connection.isVideoStabilizationSupported {
-                connection.preferredVideoStabilizationMode = .cinematic
+                if #available(iOS 13.0, *) {
+                    connection.preferredVideoStabilizationMode = .cinematicExtended
+                } else {
+                    connection.preferredVideoStabilizationMode = .cinematic
+                }
             }
         }
     }
@@ -100,14 +125,17 @@ final class VideoCapture: NSObject {
         
         // setup connection
         if let connection = videoOutput.connection(with: .video) {
-            print(connection)
             // Set video orientation
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = .portrait
             }
             // Set video stabilization
             if connection.isVideoStabilizationSupported {
-                connection.preferredVideoStabilizationMode = .cinematic
+                if #available(iOS 13.0, *) {
+                    connection.preferredVideoStabilizationMode = .cinematicExtended
+                } else {
+                    connection.preferredVideoStabilizationMode = .cinematic
+                }
             }
         }
     }
@@ -117,12 +145,7 @@ final class VideoCapture: NSObject {
 extension VideoCapture {
     
     func capturePhoto() {
-        let settings: AVCapturePhotoSettings
-        if #available(iOS 11.0, *), photoOutput.availablePhotoCodecTypes.contains(.hevc) {
-            settings = AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.hevc])
-        } else {
-            settings = AVCapturePhotoSettings()
-        }
+        let settings = AVCapturePhotoSettings()
         settings.flashMode = .off
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
         photoOutput.capturePhoto(with: settings, delegate: self)
@@ -140,43 +163,39 @@ extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
 // MARK: - AVCapturePhotoCaptureDelegate
 extension VideoCapture: AVCapturePhotoCaptureDelegate {
     
-    func photoOutput(_ output: AVCapturePhotoOutput, willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        print("willBeginCaptureFor")
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        print("willCapturePhotoFor")
-    }
-    
     func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        print("didCapturePhotoFor")
+        delegate?.videoCaptureWillOutputPhoto(self)
     }
     
     // for iOS 11+
     @available(iOS 11.0, *)
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        print("didFinishProcessingPhoto, photo=\(photo)")
         guard let photoData = photo.fileDataRepresentation() else { return }
-        photoOutput(photoData: photoData)
+        export(photoData: photoData)
     }
     
     // for iOS 10
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         guard let photoSampleBuffer: CMSampleBuffer = photoSampleBuffer else { return }
         guard let photoData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) else { return }
-        photoOutput(photoData: photoData)
+        export(photoData: photoData)
     }
     
-    private func photoOutput(photoData: Data) {
+    private func export(photoData: Data) {
         guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }
-        guard let metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
+        guard var metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
+        // Orient to UP
         guard let orientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
         guard let orientedImage: CIImage = CIImage(data: photoData)?.oriented(forExifOrientation: orientation) else { return }
+        // Crop to expected aspect ratio
         let size = orientedImage.extent.size
-        let rect = CGRect(x: size.width/8, y: size.height/8, width: size.width/4*3, height: size.height/4*3)
+        let rect = CGRect(x: 0, y: size.height/8, width: size.width, height: size.height/4*3)
         let croppedImage: CIImage = orientedImage.cropped(to: rect)
         guard let cgImage: CGImage = photoContext.createCGImage(croppedImage, from: rect) else { return }
-        let photo = UIImage(cgImage: cgImage)
-        delegate?.videoCapture(self, didOutput: photo)
+        // Update metadata
+        metadata[kCGImagePropertyOrientation as String] = CGImagePropertyOrientation.up.rawValue
+        // Export to data
+        guard let data = cgImage.jpegData(with: metadata) else { return }
+        delegate?.videoCapture(self, didOutput: data)
     }
 }

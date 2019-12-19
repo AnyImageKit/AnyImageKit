@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import AVFoundation
+import CoreMedia
+import MetalKit
 
 final class CapturePreviewView: UIView {
     
-    private lazy var previewContentView: UIView = {
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .black
+    private lazy var previewContentView: PreviewContentView = {
+        let view = PreviewContentView(frame: .zero)
         return view
     }()
     
@@ -21,8 +21,6 @@ final class CapturePreviewView: UIView {
         let view = CapturePreviewMaskView(frame: .zero)
         return view
     }()
-    
-    private var previewLayer: AVCaptureVideoPreviewLayer?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,30 +41,16 @@ final class CapturePreviewView: UIView {
             maker.edges.equalToSuperview()
         }
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        previewLayer?.frame = bounds
-    }
 }
 
-// MARK: - Connect
+// MARK: - Preview Buffer
 extension CapturePreviewView {
     
-    func connect(to session: AVCaptureSession) {
-        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.videoGravity = .resizeAspectFill
-        previewContentView.layer.addSublayer(previewLayer)
-        self.previewLayer = previewLayer
-        previewLayer.frame = bounds
-    }
-    
-    func disconnect(from session: AVCaptureSession) {
-        guard previewLayer?.session == session else {
-            return
+    func draw(_ sampleBuffer: CMSampleBuffer) {
+        if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            let image = CIImage(cvImageBuffer: imageBuffer)
+            previewContentView.draw(image: image)
         }
-        previewLayer?.removeFromSuperlayer()
-        previewLayer = nil
     }
 }
 
