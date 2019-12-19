@@ -41,6 +41,9 @@ public typealias PhotoSaveCompletion = (Result<PHAsset, ImagePickerError>) -> Vo
 
 extension ExportTool {
     
+    /// Fetch local photo 获取本地图片资源
+    /// - Note: Fetch local photo only. If you want to fetch iCloud photo, please use `requestPhotoData` instead.
+    /// - Note: 该方法仅用于获取本地图片资源，若要获取iCloud图片，请使用`requestPhotoData`方法。
     @discardableResult
     public static func requestPhoto(for asset: PHAsset, options: PhotoFetchOptions = .init(), completion: @escaping PhotoFetchCompletion) -> PHImageRequestID {
         let requestOptions = PHImageRequestOptions()
@@ -110,4 +113,3 @@ extension ExportTool {
         }
     }
 }
-
