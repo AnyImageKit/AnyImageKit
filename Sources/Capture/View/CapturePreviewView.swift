@@ -25,7 +25,7 @@ final class CapturePreviewView: UIView {
     private lazy var flipMaskView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = .white
+//        view.contentView.backgroundColor = .white
         view.isHidden = true
         return view
     }()
@@ -92,51 +92,33 @@ extension CapturePreviewView {
     }
     
     func flip(isIn: Bool) {
-//        let animation1Duration = 0.2
-        let animation2Duration = 0.35
-//        let animation3Duration = 0.2
-        
-//        let animation1 = CABasicAnimation(keyPath: "transform.scale")
-//        animation1.duration = animation1Duration
-//        animation1.fromValue = 1.0
-//        animation1.toValue = 0.9
-//        animation1.isRemovedOnCompletion = false
-//        animation1.timingFunction = CAMediaTimingFunction(name: .linear)
-        
-        let animation2 = CATransition()
-        animation2.duration = animation2Duration
-//        animation2.beginTime = animation1Duration
-        animation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        animation2.type = CATransitionType(rawValue: "oglFlip")
-        animation2.subtype = isIn ? .fromLeft : .fromRight
-        animation2.delegate = self
-        
-//        let animation3 = CABasicAnimation(keyPath: "transform.scale")
-//        animation3.duration = animation3Duration
-//        animation3.beginTime = animation1Duration + animation2Duration
-//        animation3.fromValue = 0.9
-//        animation3.toValue = 1.0
-//        animation3.isRemovedOnCompletion = false
-//        animation3.timingFunction = CAMediaTimingFunction(name: .linear)
-//
-//        let animationGroup = CAAnimationGroup()
-//        animationGroup.animations = [animation1]
-//        animationGroup.duration = animation1Duration + animation3Duration
-//        animationGroup.fillMode = .forwards
-//        animationGroup.isRemovedOnCompletion = false
-//        animationGroup.delegate = self
-        
-        layer.add(animation2, forKey: "flip")
+        let flip = CATransition()
+        flip.duration = 0.35
+        flip.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        flip.type = CATransitionType(rawValue: "oglFlip")
+        flip.subtype = isIn ? .fromLeft : .fromRight
+        flip.delegate = self
+        layer.add(flip, forKey: "flip")
     }
 }
 
 extension CapturePreviewView: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
+        flipMaskView.alpha = 1
         flipMaskView.isHidden = false
+        UIView.animate(withDuration: 0.25) {
+            self.flipMaskView.alpha = 0
+        }
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        flipMaskView.isHidden = true
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.75) {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.flipMaskView.alpha = 1
+            }) { _ in
+                self.flipMaskView.isHidden = true
+            }
+        }
     }
 }

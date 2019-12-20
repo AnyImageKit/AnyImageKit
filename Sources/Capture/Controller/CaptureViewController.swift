@@ -78,12 +78,8 @@ extension CaptureViewController {
     
     @objc private func switchButtonTapped(_ sender: UIButton) {
         previewView.flip(isIn: sender.isSelected)
-        
         sender.isSelected.toggle()
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.55, execute: {
-            self.capture.switchCamera()
-            
-        })
+        self.capture.switchCamera()
     }
 }
 
