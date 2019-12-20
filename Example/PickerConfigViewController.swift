@@ -42,6 +42,7 @@ final class PickerConfigViewController: UITableViewController {
     
     @IBAction func openPickerTapped() {
         config.enableDebugLog = true
+        // TODO: Remove
         config.selectOptions = [.video]
         editorConfig.options = [.photo, .video]
         let controller = ImagePickerController(config: config, editorConfig: editorConfig, captureConfig: captureConfig, delegate: self)

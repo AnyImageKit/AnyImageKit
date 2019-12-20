@@ -22,6 +22,12 @@ final class VideoEditorCropProgressView: UIView {
         view.setImage(BundleHelper.image(named: "VideoCropRightBlack"), for: .selected)
         return view
     }()
+    private lazy var progressView: ProgressView = {
+        let view = ProgressView(frame: .zero)
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(progressViewPan(_:)))
+        view.addGestureRecognizer(pan)
+        return view
+    }()
     
     private(set) var left: CGFloat = 0
     private(set) var right: CGFloat = 1
@@ -44,6 +50,7 @@ final class VideoEditorCropProgressView: UIView {
     }
     
     private func setupView() {
+        addSubview(progressView)
         addSubview(leftButton)
         addSubview(rightButton)
         
@@ -56,6 +63,11 @@ final class VideoEditorCropProgressView: UIView {
             maker.top.bottom.equalToSuperview()
             maker.right.equalToSuperview()
             maker.width.equalTo(20)
+        }
+        progressView.snp.makeConstraints { (maker) in
+            maker.top.bottom.equalToSuperview().inset(3)
+            maker.width.equalTo(20)
+            maker.left.equalToSuperview().offset(20-7.5)
         }
     }
     
@@ -79,7 +91,7 @@ extension VideoEditorCropProgressView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        addSubview(stackView)
+        insertSubview(stackView, at: 0)
         stackView.snp.makeConstraints { (maker) in
             maker.top.bottom.equalToSuperview().inset(5)
             maker.left.right.equalToSuperview().inset(20)
@@ -92,8 +104,49 @@ extension VideoEditorCropProgressView {
     }
 }
 
-// MARK: - Private
+// MARK: - Target
 extension VideoEditorCropProgressView {
     
+    @objc private func progressViewPan(_ pan: UIPanGestureRecognizer) {
+        pan.location(in: <#T##UIView?#>)
+        let newPoint = pan.translation(in: self)
+        pan.setTranslation(.zero, in: self)
+        let offset = progressView.frame.origin.x + newPoint.x
+        if offset < 20-7.5 || offset > bounds.width-40+7.5 {
+            return
+        }
+        progressView.snp.updateConstraints { (maker) in
+            maker.left.equalToSuperview().offset(offset)
+        }
+    }
+}
+
+
+// MARK: - ProgressView
+private final class ProgressView: UIView {
     
+    private(set) lazy var whiteView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 2.5
+        view.backgroundColor = UIColor.white
+        return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupView() {
+        addSubview(whiteView)
+        whiteView.snp.makeConstraints { (maker) in
+            maker.top.bottom.equalToSuperview()
+            maker.width.equalTo(5)
+            maker.centerX.equalToSuperview()
+        }
+    }
 }
