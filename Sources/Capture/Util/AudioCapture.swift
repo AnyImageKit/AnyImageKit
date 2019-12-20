@@ -17,7 +17,7 @@ final class AudioCapture: NSObject {
     
     weak var delegate: AudioCaptureDelegate?
     
-    private let output = AVCaptureAudioDataOutput()
+    private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
     
     init(session: AVCaptureSession) {
@@ -36,15 +36,22 @@ final class AudioCapture: NSObject {
             } else {
                 _print("Can't add audio device input")
             }
-            output.setSampleBufferDelegate(self, queue: workQueue)
-            if session.canAddOutput(output) {
-                session.addOutput(output)
+            audioOutput.setSampleBufferDelegate(self, queue: workQueue)
+            if session.canAddOutput(audioOutput) {
+                session.addOutput(audioOutput)
             } else {
                 _print("Can't add audio device output")
             }
         } catch {
             _print(error)
         }
+    }
+}
+
+extension AudioCapture {
+    
+    var recommendedWriterSettings: [String: Any]? {
+        return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4) as? [String : Any]
     }
 }
 

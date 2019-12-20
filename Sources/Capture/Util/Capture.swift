@@ -51,6 +51,16 @@ extension Capture {
     }
 }
 
+// MARK: - Camera
+extension Capture {
+    
+    func switchCamera() {
+        session.beginConfiguration()
+        videoCapture.switchCamera(session: session)
+        session.commitConfiguration()
+    }
+}
+
 // MARK: - Photo
 extension Capture {
     
@@ -68,6 +78,18 @@ extension Capture {
     
     func stopCaptureVideo() {
         audioCapture.stopAudioSession()
+    }
+}
+
+// MARK: - Asset Writer Settings
+extension Capture {
+    
+    var recommendedAudioSetting: [String: Any]? {
+        return audioCapture.recommendedWriterSettings
+    }
+    
+    var recommendedVideoSetting: [String: Any]? {
+        return videoCapture.recommendedWriterSettings
     }
 }
 
@@ -92,17 +114,6 @@ extension Capture: VideoCaptureDelegate {
     
     func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer) {
         delegate?.capture(self, didOutput: sampleBuffer, type: .video)
-    }
-}
-
-extension Capture {
-    
-    struct AudioConfig {
-        
-    }
-    
-    struct VideoConfig {
-        
     }
 }
 

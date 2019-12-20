@@ -97,8 +97,28 @@ final class VideoCapture: NSObject {
         photoOutput.isLivePhotoCaptureEnabled = false //photoOutput.isLivePhotoCaptureSupported
         session.addOutput(photoOutput)
         
+        setupOutputConnection(photoOutput)
+    }
+    
+    private func setupVideoOutput(session: AVCaptureSession) {
+        guard session.canAddOutput(videoOutput) else {
+            _print("Can't add video output")
+            return
+        }
+        videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
+        videoOutput.setSampleBufferDelegate(self, queue: workQueue)
+        session.addOutput(videoOutput)
+        
+        setupOutputConnection(videoOutput)
+    }
+    
+    private func setupOutputConnection(_ output: AVCaptureOutput) {
         // setup connection
-        if let connection = photoOutput.connection(with: .video) {
+        if let connection = output.connection(with: .video) {
+            // Set video mirrored
+            if connection.isVideoMirroringSupported {
+                connection.isVideoMirrored = position == .front
+            }
             // Set video orientation
             if connection.isVideoOrientationSupported {
                 connection.videoOrientation = .portrait
@@ -113,30 +133,37 @@ final class VideoCapture: NSObject {
             }
         }
     }
+}
+
+extension VideoCapture {
     
-    private func setupVideoOutput(session: AVCaptureSession) {
-        guard session.canAddOutput(videoOutput) else {
-            _print("Can't add video output")
-            return
+    var recommendedWriterSettings: [String: Any]? {
+        if #available(iOS 11.0, *) {
+            return videoOutput.recommendedVideoSettings(forVideoCodecType: .h264, assetWriterOutputFileType: .mp4) as? [String: Any]
+        } else {
+            return videoOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
         }
-        videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
-        videoOutput.setSampleBufferDelegate(self, queue: workQueue)
-        session.addOutput(videoOutput)
-        
-        // setup connection
-        if let connection = videoOutput.connection(with: .video) {
-            // Set video orientation
-            if connection.isVideoOrientationSupported {
-                connection.videoOrientation = .portrait
-            }
-            // Set video stabilization
-            if connection.isVideoStabilizationSupported {
-                if #available(iOS 13.0, *) {
-                    connection.preferredVideoStabilizationMode = .cinematicExtended
-                } else {
-                    connection.preferredVideoStabilizationMode = .cinematic
-                }
-            }
+    }
+}
+
+// MARK: - Camera Setup
+extension VideoCapture {
+    
+    func switchCamera(session: AVCaptureSession) {
+        switch position {
+        case .back:
+            position = .front
+        case .front:
+            position = .back
+        default:
+            break
+        }
+        do {
+            try setupInput(session: session)
+            setupOutputConnection(photoOutput)
+            setupOutputConnection(videoOutput)
+        } catch {
+            _print(error)
         }
     }
 }

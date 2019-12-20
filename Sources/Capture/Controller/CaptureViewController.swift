@@ -77,7 +77,13 @@ extension CaptureViewController {
     }
     
     @objc private func switchButtonTapped(_ sender: UIButton) {
+        previewView.flip(isIn: sender.isSelected)
         
+        sender.isSelected.toggle()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.55, execute: {
+            self.capture.switchCamera()
+            
+        })
     }
 }
 
@@ -91,7 +97,7 @@ extension CaptureViewController: CaptureButtonDelegate {
     
     func captureButtonDidBeganLongPress(_ button: CaptureButton) {
         toolView.hideButtons(animated: true)
-        previewView.hideMask(animated: true)
+        previewView.hideToolMask(animated: true)
         // TODO: start recoder
     }
     
@@ -103,7 +109,7 @@ extension CaptureViewController: CaptureButtonDelegate {
             button.stopProcessing()
             
             self.toolView.showButtons(animated: true)
-            self.previewView.showMask(animated: true)
+            self.previewView.showToolMask(animated: true)
         }
     }
 }
