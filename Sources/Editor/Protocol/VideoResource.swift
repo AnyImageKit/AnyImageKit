@@ -10,57 +10,46 @@ import UIKit
 import Photos
 
 public protocol VideoResource {
-    func loadURL(handler: @escaping (Result<URL, Error>) -> Void)
+    func loadURL(completion: @escaping (Result<URL, ImageKitError>) -> Void)
 }
 
 extension URL: VideoResource {
     
-    public func loadURL(handler: @escaping (Result<URL, Error>) -> Void) {
-        handler(.success(self))
+    public func loadURL(completion: @escaping (Result<URL, ImageKitError>) -> Void) {
+        completion(.success(self))
     }
 }
 
 extension PHAsset: VideoResource {
     
-    public func loadURL(handler: @escaping (Result<URL, Error>) -> Void) {
+    public func loadURL(completion: @escaping (Result<URL, ImageKitError>) -> Void) {
         guard mediaType == .video || mediaSubtypes == .photoLive else {
-            handler(.failure(ImageEditorError.invalidMediaType))
+            completion(.failure(.invalidMediaType))
             return
         }
         // Load from current device
-        PHCachingImageManager().requestAVAsset(forVideo: self, options: nil) { (asset, audioMix, info) in
+        PHCachingImageManager().requestAVAsset(forVideo: self, options: nil) { [weak self] (asset, audioMix, info) in
             if let avAsset = asset as? AVURLAsset {
-                handler(.success(avAsset.url))
-            } else {
-                self.loadURLFromNetwork(handler: handler)
+                completion(.success(avAsset.url))
+            } else { // Load from network
+                completion(.failure(.cannotFindInLocal))
+                self?.loadURLFromNetwork(completion: completion)
             }
         }
     }
     
-    private func loadURLFromNetwork(handler: @escaping (Result<URL, Error>) -> Void) {
-        let options = PHVideoRequestOptions()
-        options.version = .current
-        options.deliveryMode = .automatic
-        PHImageManager.default().requestExportSession(forVideo: self, options: options, exportPreset: AVAssetExportPresetMediumQuality) { (exportSession, info) in
-            
+    private func loadURLFromNetwork(completion: @escaping (Result<URL, ImageKitError>) -> Void) {
+        let options = VideoURLFetchOptions(isNetworkAccessAllowed: true, version: .current, deliveryMode: .highQualityFormat, fetchProgressHandler: { (progress, _, _, _) in
+            _print("Download video from iCloud: \(progress)")
+        })
+        
+        ExportTool.requestVideoURL(for: self, options: options) { (result, _) in
+            switch result {
+            case .success(let response):
+                completion(.success(response.url))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
-        
-        
-        
-//        let assetResources = PHAssetResource.assetResources(for: self)
-//        guard let resource = (assetResources.filter{ $0.type == .video || $0.type == .pairedVideo }.first) else {
-//            handler(.failure(ImageEditorError.fetchVideoUrlFailed))
-//            return
-//        }
-//
-//        let fileName = resource.originalFilename
-//        PHAssetResourceManager.default().writeData(for: resource, toFile: URL(fileURLWithPath: ""), options: nil) { (error) in
-//            if let error = error {
-//                _print("Load asset failed: \(error.localizedDescription)")
-//                handler(.failure(ImageEditorError.fetchVideoUrlFailed))
-//            } else {
-//                handler(.success(<#T##URL#>))
-//            }
-//        }
     }
 }

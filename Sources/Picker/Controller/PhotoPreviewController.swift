@@ -285,13 +285,14 @@ extension PhotoPreviewController {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        switch manager.editorConfig.options {
-        case .photo:
-            if UIDevice.current.userInterfaceIdiom == .phone { // Editor not support iPad yet
-                toolBar.leftButton.isHidden = data.asset.phAsset.mediaType != .image
+        if UIDevice.current.userInterfaceIdiom == .phone { // Editor not support iPad yet
+            if data.asset.phAsset.mediaType == .image && manager.editorConfig.options.contains(.photo) {
+                toolBar.leftButton.isHidden = false
+            } else if data.asset.phAsset.mediaType == .video && manager.editorConfig.options.contains(.video) {
+                toolBar.leftButton.isHidden = false
+            } else {
+                toolBar.leftButton.isHidden = true
             }
-        default:
-            break
         }
         #endif
     }

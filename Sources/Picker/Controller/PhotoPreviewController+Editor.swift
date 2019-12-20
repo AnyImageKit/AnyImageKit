@@ -34,6 +34,15 @@ extension PhotoPreviewController {
                     }
                 }
             }
+        } else if data.asset.phAsset.mediaType == .video {
+            manager.cancelFetch(for: data.asset.phAsset.localIdentifier)
+            var config = manager.editorConfig.videoConfig
+            config.enableDebugLog = manager.config.enableDebugLog
+            let image = data.asset._images[.initial] ?? data.thumbnail
+            let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, config: config, delegate: self)
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: false, completion: nil)
+            // TODO: 编辑页面加载完成后回来要重新加载一遍
         }
     }
 }

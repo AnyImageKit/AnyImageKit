@@ -20,10 +20,15 @@ extension ImagePickerController {
         /// Photo Config 图片编辑配置项
         public var photoConfig: ImageEditorController.PhotoConfig
         
+        /// Video Config 视频编辑配置项
+        public var videoConfig: ImageEditorController.VideoConfig
+        
         public init(options: EditorOptions = [],
-                    photoConfig: ImageEditorController.PhotoConfig = .init()) {
+                    photoConfig: ImageEditorController.PhotoConfig = .init(),
+                    videoConfig: ImageEditorController.VideoConfig = .init()) {
             self.options = options
             self.photoConfig = photoConfig
+            self.videoConfig = videoConfig
         }
     }
     
@@ -31,6 +36,8 @@ extension ImagePickerController {
     public struct EditorOptions: OptionSet {
         /// Photo 照片
         public static let photo = EditorOptions(rawValue: 1 << 0)
+        /// Video 视频
+        public static let video = EditorOptions(rawValue: 1 << 1)
         
         public let rawValue: Int
         

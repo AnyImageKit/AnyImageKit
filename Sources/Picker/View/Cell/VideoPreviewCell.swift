@@ -196,7 +196,7 @@ extension VideoPreviewCell {
         playerLayer = AVPlayerLayer(player: player)
         imageView.layer.addSublayer(playerLayer!)
         playerLayer?.frame = imageView.bounds
-        NotificationCenter.default.addObserver(self, selector: #selector(didPlayOver(_:)), name: .AVPlayerItemDidPlayToEndTime, object: item)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEndTime(_:)), name: .AVPlayerItemDidPlayToEndTime, object: item)
     }
     
     /// 设置播放按钮的展示状态
@@ -214,7 +214,7 @@ extension VideoPreviewCell {
 // MARK: - Target
 extension VideoPreviewCell {
     
-    @objc private func didPlayOver(_ sender: Notification) {
+    @objc private func playerDidPlayToEndTime(_ sender: Notification) {
         super.singleTapped()
         setPlayButton(hidden: false)
         player?.pause()

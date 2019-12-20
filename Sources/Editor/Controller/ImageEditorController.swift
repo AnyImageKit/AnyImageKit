@@ -94,7 +94,7 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
 extension ImageEditorController: VideoEditorControllerDelegate {
     
     func videoEditorDidCancel(_ editor: VideoEditorController) {
-        
+        editorDelegate?.imageEditorDidCancel(self)
     }
     
     func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool) {
