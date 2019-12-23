@@ -77,9 +77,20 @@ extension CaptureViewController {
     }
     
     @objc private func switchButtonTapped(_ sender: UIButton) {
-        previewView.flip(isIn: sender.isSelected)
+        toolView.hideButtons(animated: true)
+        previewView.hideToolMask(animated: true)
+        previewView.transitionFlip(isIn: sender.isSelected, stopPreview: { [weak self] in
+            guard let self = self else { return }
+            self.capture.startSwitchCamera()
+        }, startPreview: {
+            
+            self.capture.stopSwitchCamera()
+        }) { [weak self] in
+            guard let self = self else { return }
+            self.toolView.showButtons(animated: true)
+            self.previewView.showToolMask(animated: true)
+        }
         sender.isSelected.toggle()
-        self.capture.switchCamera()
     }
 }
 

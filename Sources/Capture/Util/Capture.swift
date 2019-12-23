@@ -54,10 +54,15 @@ extension Capture {
 // MARK: - Camera
 extension Capture {
     
-    func switchCamera() {
+    func startSwitchCamera() {
+        videoCapture.isSwitchingCamera = true
         session.beginConfiguration()
         videoCapture.switchCamera(session: session)
         session.commitConfiguration()
+    }
+    
+    func stopSwitchCamera() {
+        videoCapture.isSwitchingCamera = false
     }
 }
 

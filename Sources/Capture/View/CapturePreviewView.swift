@@ -22,11 +22,10 @@ final class CapturePreviewView: UIView {
         return view
     }()
     
-    private lazy var flipMaskView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .light)
+    private lazy var blurView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .dark)
         let view = UIVisualEffectView(effect: effect)
-//        view.contentView.backgroundColor = .white
-        view.isHidden = true
+        view.alpha = 0
         return view
     }()
     
@@ -41,15 +40,15 @@ final class CapturePreviewView: UIView {
     
     private func setupView() {
         addSubview(previewContentView)
+        previewContentView.addSubview(blurView)
         addSubview(previewMaskView)
-        addSubview(flipMaskView)
         previewContentView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        previewMaskView.snp.makeConstraints { maker in
+        blurView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        flipMaskView.snp.makeConstraints { maker in
+        previewMaskView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
     }
@@ -57,6 +56,11 @@ final class CapturePreviewView: UIView {
 
 // MARK: - Preview Buffer
 extension CapturePreviewView {
+    
+    func clear() {
+        let image = CIImage.createBlackImage(with: previewContentView.drawableSize)
+        previewContentView.draw(image: image)
+    }
     
     func draw(_ sampleBuffer: CMSampleBuffer) {
         if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
@@ -91,33 +95,38 @@ extension CapturePreviewView {
         animator.startAnimation()
     }
     
-    func flip(isIn: Bool) {
-        let flip = CATransition()
-        flip.duration = 0.35
-        flip.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        flip.type = CATransitionType(rawValue: "oglFlip")
-        flip.subtype = isIn ? .fromLeft : .fromRight
-        flip.delegate = self
-        layer.add(flip, forKey: "flip")
-    }
-}
-
-extension CapturePreviewView: CAAnimationDelegate {
-    
-    func animationDidStart(_ anim: CAAnimation) {
-        flipMaskView.alpha = 1
-        flipMaskView.isHidden = false
-        UIView.animate(withDuration: 0.25) {
-            self.flipMaskView.alpha = 0
+    func transitionFlip(isIn: Bool, stopPreview: @escaping () -> Void, startPreview: @escaping () -> Void, completion: @escaping () -> Void) {
+        let transform = previewContentView.transform
+        UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut, animations: {
+            self.previewContentView.transform = transform.scaledBy(x: 0.85, y: 0.85)
+        }) { _ in
+            self.blurView.alpha = 1
         }
-    }
-    
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.75) {
-            UIView.animate(withDuration: 0.25, animations: {
-                self.flipMaskView.alpha = 1
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
+            let options: UIView.AnimationOptions = isIn ? .transitionFlipFromLeft : .transitionFlipFromRight
+            UIView.transition(with: self.previewContentView, duration: 0.25, options: options, animations: nil, completion: nil)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+            UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut, animations: {
+                self.previewContentView.transform = transform
             }) { _ in
-                self.flipMaskView.isHidden = true
+                DispatchQueue.global().async {
+                    stopPreview()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                    UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
+                        self.previewContentView.alpha = 0
+                    }) { (_) in
+                        self.clear()
+                        self.blurView.alpha = 0
+                        startPreview()
+                        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
+                            self.previewContentView.alpha = 1
+                        }) { (_) in
+                            completion()
+                        }
+                    }
+                }
             }
         }
     }
