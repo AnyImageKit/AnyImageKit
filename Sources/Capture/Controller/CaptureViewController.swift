@@ -67,6 +67,12 @@ final class CaptureViewController: UIViewController {
             maker.height.equalTo(88)
         }
     }
+    
+    private func impactFeedback() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
+    }
 }
 
 // MARK: - Target
@@ -77,6 +83,7 @@ extension CaptureViewController {
     }
     
     @objc private func switchButtonTapped(_ sender: UIButton) {
+        impactFeedback()
         toolView.hideButtons(animated: true)
         previewView.hideToolMask(animated: true)
         previewView.transitionFlip(isIn: sender.isSelected, stopPreview: { [weak self] in
@@ -98,11 +105,14 @@ extension CaptureViewController {
 extension CaptureViewController: CaptureButtonDelegate {
     
     func captureButtonDidTapped(_ button: CaptureButton) {
+        guard !capture.isSwitchingCamera else { return }
+        impactFeedback()
         button.startProcessing()
         capture.capturePhoto()
     }
     
     func captureButtonDidBeganLongPress(_ button: CaptureButton) {
+        impactFeedback()
         toolView.hideButtons(animated: true)
         previewView.hideToolMask(animated: true)
         // TODO: start recoder

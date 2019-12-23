@@ -22,6 +22,9 @@ final class AudioCapture: NSObject {
     
     init(session: AVCaptureSession) {
         super.init()
+    }
+    
+    func addMicrophone(session: AVCaptureSession) {
         do {
             let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInMicrophone],
                                                                     mediaType: .audio,
@@ -45,6 +48,11 @@ final class AudioCapture: NSObject {
         } catch {
             _print(error)
         }
+    }
+    
+    func removeMicrophone(session: AVCaptureSession) {
+        audioOutput.setSampleBufferDelegate(nil, queue: nil)
+        session.removeOutput(audioOutput)
     }
 }
 

@@ -24,6 +24,8 @@ final class Capture {
     private let audioCapture: AudioCapture
     private let videoCapture: VideoCapture
     
+    var isSwitchingCamera = false
+    
     init() {
         session = AVCaptureSession()
         session.beginConfiguration()
@@ -55,14 +57,14 @@ extension Capture {
 extension Capture {
     
     func startSwitchCamera() {
-        videoCapture.isSwitchingCamera = true
+        isSwitchingCamera = true
         session.beginConfiguration()
         videoCapture.switchCamera(session: session)
         session.commitConfiguration()
     }
     
     func stopSwitchCamera() {
-        videoCapture.isSwitchingCamera = false
+        isSwitchingCamera = false
     }
 }
 
@@ -79,10 +81,12 @@ extension Capture {
     
     func startCaptureVideo() {
         audioCapture.startAudioSession()
+        audioCapture.addMicrophone(session: session)
     }
     
     func stopCaptureVideo() {
         audioCapture.stopAudioSession()
+        audioCapture.removeMicrophone(session: session)
     }
 }
 
@@ -118,6 +122,7 @@ extension Capture: VideoCaptureDelegate {
     }
     
     func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer) {
+        guard !isSwitchingCamera else { return }
         delegate?.capture(self, didOutput: sampleBuffer, type: .video)
     }
 }

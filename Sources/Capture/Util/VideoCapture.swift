@@ -26,8 +26,6 @@ final class VideoCapture: NSObject {
     
     var position: AVCaptureDevice.Position = .back
     
-    var isSwitchingCamera = false
-    
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
             return CIContext(mtlDevice: mtlDevice)
@@ -185,7 +183,6 @@ extension VideoCapture {
 extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard !isSwitchingCamera else { return }
         delegate?.videoCapture(self, didOutput: sampleBuffer)
     }
 }
