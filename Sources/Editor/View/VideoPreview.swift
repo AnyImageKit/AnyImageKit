@@ -31,7 +31,7 @@ final class VideoPreview: UIView {
         view.clipsToBounds = true
         return view
     }()
-    private var player: AVPlayer?
+    private(set) var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
     
     private let image: UIImage?
@@ -62,6 +62,7 @@ extension VideoPreview {
     
     public func setupPlayer(url: URL) {
         player = AVPlayer(url: url)
+        player?.seek(to: .zero)
         playerLayer = AVPlayerLayer(player: player)
         layer.addSublayer(playerLayer!)
         playerLayer?.frame = imageView.frame
@@ -76,6 +77,14 @@ extension VideoPreview {
             player?.play()
             imageView.isHidden = true
         }
+    }
+    
+    public func setProgress(_ progress: CGFloat) {
+        if player == nil { return }
+        guard let duration = player?.currentItem?.duration else { return }
+        imageView.isHidden = true
+        let time = CMTime(seconds: duration.seconds * Double(progress), preferredTimescale: duration.timescale)
+        player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
     }
 }
 

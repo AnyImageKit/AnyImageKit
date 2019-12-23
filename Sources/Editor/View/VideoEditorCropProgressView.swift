@@ -8,8 +8,14 @@
 
 import UIKit
 
+protocol VideoEditorCropProgressViewDelegate: class {
+    func cropProgress(_ view: VideoEditorCropProgressView, didUpdate progress: CGFloat)
+}
+
 final class VideoEditorCropProgressView: UIView {
 
+    public weak var delegate: VideoEditorCropProgressViewDelegate?
+    
     private lazy var contentView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 5
@@ -62,6 +68,11 @@ final class VideoEditorCropProgressView: UIView {
     private(set) var left: CGFloat = 0
     private(set) var right: CGFloat = 1
     
+    public var progress: CGFloat {
+        let x = contentView.frame.origin.x + progressView.frame.origin.x
+        return x / (bounds.width - 20)
+    }
+    
     /// 预览图
     private var previews: [UIImageView] = []
     private var previewStackView: UIStackView?
@@ -83,12 +94,13 @@ final class VideoEditorCropProgressView: UIView {
     
     private func setupView() {
         layer.addSublayer(darkLayer)
-        addSubview(contentView)
-        contentView.addSubview(progressContentView)
         contentView.layer.addSublayer(contentLayer)
-        progressContentView.addSubview(progressView)
+        
+        addSubview(contentView)
+        addSubview(progressContentView)
         contentView.addSubview(leftButton)
         contentView.addSubview(rightButton)
+        progressContentView.addSubview(progressView)
         
         contentView.snp.makeConstraints { (maker) in
             maker.top.bottom.equalToSuperview()
@@ -125,9 +137,7 @@ final class VideoEditorCropProgressView: UIView {
         
         contentView.snp.updateConstraints { (maker) in
             maker.left.equalToSuperview().offset(left*bounds.width)
-        }
-        contentView.snp.updateConstraints { (maker) in
-            maker.right.equalToSuperview().offset(-(1-right)*bounds.width)
+            maker.right.equalToSuperview().offset(-((1-right)*(bounds.width-45)))
         }
         progressView.snp.updateConstraints { (maker) in
             maker.left.equalToSuperview()
@@ -179,21 +189,30 @@ extension VideoEditorCropProgressView {
         guard idx < previews.count else { return }
         self.previews[idx].setImage(image, animated: true)
     }
+    
+    public func setProgress(_ progress: CGFloat) {
+        print(progress)
+        let progress2 = progress < 0 ? 0 : (progress > 1 ? 1 : progress)
+        let progress3 = progress2 < left ? left : (progress2 > right ? right : progress2)
+        let x = progress3 * (bounds.width)
+        let offset = x - contentView.frame.origin.x
+        progressView.snp.updateConstraints { (maker) in
+            maker.left.equalToSuperview().offset(offset)
+        }
+    }
 }
 
 // MARK: - Target
 extension VideoEditorCropProgressView {
     
     @objc private func progressViewPan(_ pan: UIPanGestureRecognizer) {
-        guard let stackView = previewStackView else { return }
-        let point = pan.location(in: stackView)
-        if point.x < contentView.frame.origin.x + 20 || point.x > contentView.frame.maxX - 20 {
+        let point = pan.location(in: self)
+        let progress = (point.x - 20) / (bounds.width - 40 - 5)
+        setProgress(progress)
+        if progress < left || progress > right {
             return
         }
-        let offset = point.x - contentView.frame.origin.x - 20
-        progressView.snp.updateConstraints { (maker) in
-            maker.left.equalToSuperview().offset(offset)
-        }
+        delegate?.cropProgress(self, didUpdate: progress)
     }
     
     @objc private func leftButtonPan(_ pan: UIPanGestureRecognizer) {
@@ -205,6 +224,7 @@ extension VideoEditorCropProgressView {
         }
         left = tmpLeft
         layout()
+        delegate?.cropProgress(self, didUpdate: left)
     }
     
     @objc private func rightButtonPan(_ pan: UIPanGestureRecognizer) {
@@ -216,5 +236,6 @@ extension VideoEditorCropProgressView {
         }
         right = tmpRight
         layout()
+        delegate?.cropProgress(self, didUpdate: right)
     }
 }

@@ -22,6 +22,8 @@ final class VideoEditorController: UIViewController {
     private let config: ImageEditorController.VideoConfig
     private weak var delegate: VideoEditorControllerDelegate?
     
+    private var didAddPlayerObserver = false
+    
     private lazy var videoPreview: VideoPreview = {
         let view = VideoPreview(frame: .zero, image: placeholdImage)
         return view
@@ -58,6 +60,10 @@ final class VideoEditorController: UIViewController {
         setupView()
         loadData()
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     private func setupView() {
@@ -144,6 +150,15 @@ extension VideoEditorController: VideoEditorCropToolViewDelegate {
     func cropTool(_ view: VideoEditorCropToolView, playButtonTapped button: UIButton) {
         videoPreview.playOrPause()
         button.isSelected = videoPreview.isPlaying
+        addPlayerObserver()
+    }
+    
+    func cropTool(_ view: VideoEditorCropToolView, didUpdate progress: CGFloat) {
+        if videoPreview.isPlaying {
+            videoPreview.playOrPause()
+            view.playButton.isSelected = videoPreview.isPlaying
+        }
+        videoPreview.setProgress(progress)
     }
 }
 
@@ -186,6 +201,27 @@ extension VideoEditorController {
                     completion(i, UIImage(cgImage: image))
                 }
             }
+        }
+    }
+    
+    private func addPlayerObserver() {
+        if videoPreview.player != nil && !didAddPlayerObserver {
+            didAddPlayerObserver = true
+            videoPreview.player?.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 60), queue: nil, using: { [weak self] (time) in
+                guard let self = self else { return }
+                guard self.videoPreview.isPlaying else { return }
+                guard let current = self.videoPreview.player?.currentItem?.currentTime() else { return }
+                guard let totle = self.videoPreview.player?.currentItem?.duration else { return }
+                let progress = CGFloat(current.seconds / totle.seconds)
+                let progressView = self.cropToolView.progressView
+                self.cropToolView.progressView.setProgress(progress)
+                if progress > progressView.right {
+                    self.videoPreview.player?.pause()
+                    self.cropToolView.playButton.isSelected = self.videoPreview.isPlaying
+                    self.cropToolView.progressView.setProgress(self.cropToolView.progressView.left)
+                    self.videoPreview.setProgress(self.cropToolView.progressView.left)
+                }
+            })
         }
     }
 }
