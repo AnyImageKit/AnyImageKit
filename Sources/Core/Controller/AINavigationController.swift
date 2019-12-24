@@ -11,6 +11,8 @@ import SnapKit
 
 open class AINavigationController: UINavigationController {
     
+    private var hasOverrideGeneratingDeviceOrientation = false
+    
     open var tag: Int = 0
     
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
@@ -23,5 +25,22 @@ open class AINavigationController: UINavigationController {
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
+    }
+}
+
+extension AINavigationController {
+    
+    func beginGeneratingDeviceOrientationNotifications() {
+        if !UIDevice.current.isGeneratingDeviceOrientationNotifications {
+            hasOverrideGeneratingDeviceOrientation = true
+            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        }
+    }
+    
+    func endGeneratingDeviceOrientationNotifications() {
+        if UIDevice.current.isGeneratingDeviceOrientationNotifications && hasOverrideGeneratingDeviceOrientation {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+            hasOverrideGeneratingDeviceOrientation = false
+        }
     }
 }

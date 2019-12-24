@@ -41,7 +41,6 @@ open class ImagePickerController: AINavigationController {
     }
     
     private var containerSize: CGSize = .zero
-    private var hasOverrideGeneratingDeviceOrientation: Bool = false
     private var hiddenStatusBar: Bool = false
     private var didFinishSelect: Bool = false
     private let lock: NSLock = .init()
@@ -206,19 +205,6 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
 
 // MARK: - Notification
 extension ImagePickerController {
-    
-    private func beginGeneratingDeviceOrientationNotifications() {
-        if !UIDevice.current.isGeneratingDeviceOrientationNotifications {
-            hasOverrideGeneratingDeviceOrientation = true
-            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        }
-    }
-    
-    private func endGeneratingDeviceOrientationNotifications() {
-        if UIDevice.current.isGeneratingDeviceOrientationNotifications && hasOverrideGeneratingDeviceOrientation {
-            UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        }
-    }
     
     private func addNotifications() {
         beginGeneratingDeviceOrientationNotifications()
