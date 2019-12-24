@@ -282,7 +282,7 @@ extension PhotoEditorController {
         if config.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
         let textDataList = contentView.textImageViews.map{ $0.data }
-        EditorImageCache(id: config.cacheIdentifier,
+        ImageEditorCache(id: config.cacheIdentifier,
                          cropData: contentView.lastCropData,
                          textDataList: textDataList,
                          penCacheList: contentView.penCache.diskCacheList,

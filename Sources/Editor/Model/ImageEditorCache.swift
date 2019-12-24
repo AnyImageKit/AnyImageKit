@@ -1,5 +1,5 @@
 //
-//  EditorImageCache.swift
+//  ImageEditorCache.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/11/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class EditorImageCache: Codable {
+public final class ImageEditorCache: Codable {
     
     let id: String
     let cropData: CropData
@@ -32,10 +32,10 @@ public final class EditorImageCache: Codable {
     
     /// Load cache
     init?(id: String) {
-        let url = EditorImageCache.getFileUrl(id: id)
+        let url = ImageEditorCache.getFileUrl(id: id)
         if !FileManager.default.fileExists(atPath: url.path) { return nil }
         guard let data = try? Data(contentsOf: url) else { return nil }
-        guard let obj = try? JSONDecoder().decode(EditorImageCache.self, from: data) else { return nil }
+        guard let obj = try? JSONDecoder().decode(ImageEditorCache.self, from: data) else { return nil }
         
         self.id = id
         self.cropData = obj.cropData
@@ -46,12 +46,12 @@ public final class EditorImageCache: Codable {
 }
 
 // MARK: - Public static function
-extension EditorImageCache {
+extension ImageEditorCache {
     
     /// 删除磁盘缓存
     /// - Parameter id: 缓存标识符
-    static func clearDiskCache(id: String) {
-        guard let obj = EditorImageCache(id: id) else { return }
+    public static func clearDiskCache(id: String) {
+        guard let obj = ImageEditorCache(id: id) else { return }
         _print("Delete editor cache: \(id)")
         let _ = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.penCacheList)
         let _ = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: obj.mosaicCacheList)
@@ -65,23 +65,42 @@ extension EditorImageCache {
     }
     
     /// 删除所有磁盘缓存
-    static func clearDiskCache() {
+    public static func clearDiskCache() {
         _print("Delete all editor cache")
+        clearImageEditorCache()
+        clearVideoEditorCache()
+    }
+    
+    /// 删除图片编辑的磁盘缓存
+    public static func clearImageEditorCache() {
         let path = CacheModule.editor(.history).path
         let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
         for item in list {
             clearDiskCache(id: item)
         }
     }
+    
+    /// 删除视频编辑的磁盘缓存
+    public static func clearVideoEditorCache() {
+        let path = CacheModule.editor(.videoOutput).path
+        let list = (try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []
+        for item in list {
+            do {
+                try FileManager.default.removeItem(atPath: path+item)
+            } catch {
+                _print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 // MARK: - Internal function
-extension EditorImageCache {
+extension ImageEditorCache {
     
     func save() {
         do {
             let data = try JSONEncoder().encode(self)
-            try data.write(to: EditorImageCache.getFileUrl(id: id))
+            try data.write(to: ImageEditorCache.getFileUrl(id: id))
         } catch {
             _print(error.localizedDescription)
         }

@@ -67,7 +67,7 @@ open class ImagePickerController: UINavigationController {
         addNotifications()
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        EditorImageCache.clearDiskCache()
+        ImageEditorCache.clearDiskCache()
         #endif
     }
     
@@ -99,7 +99,7 @@ open class ImagePickerController: UINavigationController {
     deinit {
         removeNotifications()
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        EditorImageCache.clearDiskCache()
+        ImageEditorCache.clearDiskCache()
         #endif
         manager.clearAll()
     }

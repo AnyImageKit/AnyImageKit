@@ -153,8 +153,8 @@ final class PhotoEditorContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func loadCacheIfNeeded() -> EditorImageCache? {
-        guard let cache = EditorImageCache(id: config.cacheIdentifier) else { return nil }
+    private func loadCacheIfNeeded() -> ImageEditorCache? {
+        guard let cache = ImageEditorCache(id: config.cacheIdentifier) else { return nil }
         lastCropData = cache.cropData
         penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
         mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: config.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
