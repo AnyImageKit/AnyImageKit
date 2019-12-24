@@ -17,15 +17,17 @@ final class CaptureToolView: UIView {
     
     private(set) lazy var cancelButton: UIButton = {
         let view = UIButton(frame: .zero)
-        view.setTitle("Cancel", for: .normal)
-        view.contentEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        let title = BundleHelper.captureLocalizedString(key: "Cancel")
+        view.setTitle(title, for: .normal)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        view.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         return view
     }()
     
     private(set) lazy var switchButton: UIButton = {
         let view = UIButton(frame: .zero)
-        view.setTitle("Switch", for: .normal)
-        view.contentEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        let image = BundleHelper.image(named: "CameraSwitch")
+        view.setImage(image, for: .normal)
         return view
     }()
     
@@ -68,11 +70,12 @@ final class CaptureToolView: UIView {
         
         cancelButton.snp.makeConstraints { maker in
             maker.centerY.equalTo(layoutGuide1.snp.centerY)
-            maker.left.equalTo(layoutGuide1.snp.left).offset(8)
+            maker.left.equalTo(layoutGuide1.snp.left).offset(16)
         }
         switchButton.snp.makeConstraints { maker in
             maker.centerY.equalTo(layoutGuide2.snp.centerY)
-            maker.right.equalTo(layoutGuide2.snp.right).offset(-8)
+            maker.right.equalTo(layoutGuide2.snp.right).offset(-16)
+            maker.size.equalTo(CGSize(width: 48, height: 48))
         }
     }
 }

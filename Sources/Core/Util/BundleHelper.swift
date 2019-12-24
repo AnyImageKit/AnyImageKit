@@ -29,6 +29,10 @@ struct BundleHelper {
         }
         return _languageBundle
     }
+}
+
+// MARK: - Styled Image
+extension BundleHelper {
     
     static func image(named: String) -> UIImage? {
         return UIImage(named: named, in: bundle, compatibleWith: nil)
@@ -46,6 +50,10 @@ struct BundleHelper {
         }
         return UIImage(named: imageName, in: bundle, compatibleWith: nil)
     }
+}
+
+// MARK: - Localized String
+extension BundleHelper {
     
     static func localizedString(key: String) -> String {
         return localizedString(key: key, value: nil, table: nil)
@@ -56,4 +64,31 @@ struct BundleHelper {
         value = languageBundle?.localizedString(forKey: key, value: value, table: table)
         return Bundle.main.localizedString(forKey: key, value: value, table: table)
     }
+    
+    static func localizedString(key: String, value: String?, table: Table) -> String {
+        if let result = languageBundle?.localizedString(forKey: key, value: value, table: table.rawValue), result != key {
+            return result
+        } else if table != .default, let result = languageBundle?.localizedString(forKey: key, value: value, table: Table.default.rawValue), result != key {
+            return result
+        }
+        return Bundle.main.localizedString(forKey: key, value: value, table: nil)
+    }
+}
+
+// MARK: - Localized String Table
+extension BundleHelper {
+    
+    struct Table: RawRepresentable {
+        
+        let rawValue: String
+        
+        init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+    }
+}
+
+extension BundleHelper.Table {
+    
+    static let `default` = BundleHelper.Table(rawValue: "Localizable")
 }
