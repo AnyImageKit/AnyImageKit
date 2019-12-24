@@ -423,7 +423,7 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
         setAlbum(album)
     }
     
-    func albumPickerWillDisappear() {
+    func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {
         titleView.isSelected = false
         albumsPicker = nil
     }

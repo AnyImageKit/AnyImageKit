@@ -13,7 +13,7 @@ private let rowHeight: CGFloat = 55
 protocol AlbumPickerViewControllerDelegate: class {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album)
-    func albumPickerWillDisappear()
+    func albumPickerWillDisappear(_ picker: AlbumPickerViewController)
 }
 
 final class AlbumPickerViewController: UIViewController {
@@ -43,6 +43,10 @@ final class AlbumPickerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        removeNotifications()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addNotifications()
@@ -52,27 +56,12 @@ final class AlbumPickerViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        delegate?.albumPickerWillDisappear()
+        delegate?.albumPickerWillDisappear(self)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         updatePreferredContentSize(with: newCollection)
-    }
-    
-    private func updatePreferredContentSize(with traitCollection: UITraitCollection) {
-        let screenSize = ScreenHelper.mainBounds.size
-        let preferredMinHeight = rowHeight * 5
-        let preferredMaxHeight = floor(screenSize.height*(2.0/3.0))
-        let presentingViewController = (self.presentingViewController as? ImagePickerController)?.topViewController
-        let preferredWidth = presentingViewController?.view.bounds.size.width ?? screenSize.width
-        if albums.isEmpty {
-            preferredContentSize = CGSize(width: preferredWidth, height: preferredMaxHeight)
-        } else {
-            let height = CGFloat(albums.count) * rowHeight
-            let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
-            preferredContentSize = CGSize(width: preferredWidth, height: preferredHeight)
-        }
     }
     
     func reloadData() {
@@ -89,7 +78,6 @@ final class AlbumPickerViewController: UIViewController {
 }
 
 // MARK: - Target
-
 extension AlbumPickerViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
@@ -104,13 +92,15 @@ extension AlbumPickerViewController {
     }
 }
 
-
 // MARK: - Private
-
 extension AlbumPickerViewController {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    private func removeNotifications() {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func setupView() {
@@ -119,10 +109,24 @@ extension AlbumPickerViewController {
             maker.edges.equalTo(view.snp.edges)
         }
     }
+    
+    private func updatePreferredContentSize(with traitCollection: UITraitCollection) {
+        let screenSize = ScreenHelper.mainBounds.size
+        let preferredMinHeight = rowHeight * 5
+        let preferredMaxHeight = floor(screenSize.height*(2.0/3.0))
+        let presentingViewController = (self.presentingViewController as? ImagePickerController)?.topViewController
+        let preferredWidth = presentingViewController?.view.bounds.size.width ?? screenSize.width
+        if albums.isEmpty {
+            preferredContentSize = CGSize(width: preferredWidth, height: preferredMaxHeight)
+        } else {
+            let height = CGFloat(albums.count) * rowHeight
+            let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
+            preferredContentSize = CGSize(width: preferredWidth, height: preferredHeight)
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
-
 extension AlbumPickerViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -143,7 +147,6 @@ extension AlbumPickerViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-
 extension AlbumPickerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

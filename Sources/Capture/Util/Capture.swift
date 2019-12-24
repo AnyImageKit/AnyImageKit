@@ -13,7 +13,7 @@ protocol CaptureDelegate: class {
     
     func captureWillOutputPhoto(_ capture: Capture)
     func capture(_ capture: Capture, didOutput photo: Data)
-    func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: Capture.BufferType)
+    func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType)
 }
 
 final class Capture {
@@ -24,6 +24,7 @@ final class Capture {
     private let audioCapture: AudioCapture
     private let videoCapture: VideoCapture
     
+    var orientation: CaptureOrientation = .portrait
     var isSwitchingCamera = false
     
     init() {
@@ -72,7 +73,7 @@ extension Capture {
 extension Capture {
     
     func capturePhoto() {
-        videoCapture.capturePhoto()
+        videoCapture.capturePhoto(orientation: orientation)
     }
 }
 
@@ -129,8 +130,7 @@ extension Capture: VideoCaptureDelegate {
 
 extension Capture {
     
-    enum BufferType: Equatable {
-        case audio
-        case video
-    }
+    
+    
+    
 }

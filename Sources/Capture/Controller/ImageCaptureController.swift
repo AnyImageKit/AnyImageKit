@@ -32,6 +32,7 @@ open class ImageCaptureController: AINavigationController {
     required public init(config: Config = .init(), delegate: ImageCaptureControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
+        self.addNotifications()
         self.captureDelegate = delegate
         
         let rootViewController = CaptureViewController()
@@ -42,6 +43,10 @@ open class ImageCaptureController: AINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        removeNotifications()
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
@@ -57,6 +62,19 @@ open class ImageCaptureController: AINavigationController {
     }
 }
 
+// MARK: - Notifications
+extension ImageCaptureController {
+    
+    private func addNotifications() {
+        beginGeneratingDeviceOrientationNotifications()
+    }
+    
+    private func removeNotifications() {
+        endGeneratingDeviceOrientationNotifications()
+    }
+}
+ 
+// MARK: - CaptureViewControllerDelegate
 extension ImageCaptureController: CaptureViewControllerDelegate {
     
     func captureDidCancel(_ capture: CaptureViewController) {

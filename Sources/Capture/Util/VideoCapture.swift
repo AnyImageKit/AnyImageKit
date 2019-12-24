@@ -24,7 +24,8 @@ final class VideoCapture: NSObject {
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
     
-    var position: AVCaptureDevice.Position = .back
+    private var captureOrientation: CaptureOrientation = .portrait
+    private var position: AVCaptureDevice.Position = .back
     
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
@@ -171,7 +172,8 @@ extension VideoCapture {
 // MARK: - Photo
 extension VideoCapture {
     
-    func capturePhoto() {
+    func capturePhoto(orientation: CaptureOrientation) {
+        self.captureOrientation = orientation
         let settings = AVCapturePhotoSettings()
         settings.flashMode = .off
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
@@ -214,10 +216,18 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         // Orient to UP
         guard let orientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
         guard let orientedImage: CIImage = CIImage(data: photoData)?.oriented(forExifOrientation: orientation) else { return }
+        // fixed capture orientation
+        let fixedImage = orientedImage.oriented(forExifOrientation: captureOrientation.exifOrientation)
         // Crop to expected aspect ratio
-        let size = orientedImage.extent.size
-        let rect = CGRect(x: 0, y: size.height/8, width: size.width, height: size.height/4*3)
-        let croppedImage: CIImage = orientedImage.cropped(to: rect)
+        let size = fixedImage.extent.size
+        let rect: CGRect
+        switch captureOrientation {
+        case .portrait, .portraitUpsideDown:
+            rect = CGRect(x: 0, y: size.height/8, width: size.width, height: size.height/4*3)
+        case .landscapeLeft, .landscapeRight:
+            rect = CGRect(x: size.width/8, y: 0, width: size.width/4*3, height: size.height)
+        }
+        let croppedImage: CIImage = fixedImage.cropped(to: rect)
         guard let cgImage: CGImage = photoContext.createCGImage(croppedImage, from: rect) else { return }
         // Update metadata
         metadata[kCGImagePropertyOrientation as String] = CGImagePropertyOrientation.up.rawValue

@@ -40,8 +40,13 @@ final class CaptureViewController: UIViewController {
         return capture
     }()
     
+    deinit {
+        removeNotifications()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        addNotifications()
         setupNavigation()
         setupView()
         capture.startRunning()
@@ -67,11 +72,23 @@ final class CaptureViewController: UIViewController {
             maker.height.equalTo(88)
         }
     }
+}
+
+// MARK: - Notifications
+extension CaptureViewController {
     
-    private func impactFeedback() {
-        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-        impactFeedback.prepare()
-        impactFeedback.impactOccurred()
+    private func addNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    private func removeNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func orientationDidChangeNotification(_ sender: Notification) {
+        guard let orientation =  CaptureOrientation(uiDevice: UIDevice.current.orientation) else { return }
+        capture.orientation = orientation
+        toolView.rotate(to: orientation, animated: true)
     }
 }
 
@@ -89,8 +106,8 @@ extension CaptureViewController {
         previewView.transitionFlip(isIn: sender.isSelected, stopPreview: { [weak self] in
             guard let self = self else { return }
             self.capture.startSwitchCamera()
-        }, startPreview: {
-            
+        }, startPreview: { [weak self] in
+            guard let self = self else { return }
             self.capture.stopSwitchCamera()
         }) { [weak self] in
             guard let self = self else { return }
@@ -98,6 +115,16 @@ extension CaptureViewController {
             self.previewView.showToolMask(animated: true)
         }
         sender.isSelected.toggle()
+    }
+}
+
+// MARK: - Impact Feedback
+extension CaptureViewController {
+    
+    private func impactFeedback() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
     }
 }
 
@@ -149,7 +176,7 @@ extension CaptureViewController: CaptureDelegate {
         }
     }
     
-    func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: Capture.BufferType) {
+    func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType) {
         switch type {
         case .audio:
             break

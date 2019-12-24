@@ -52,6 +52,7 @@ open class ImagePickerController: AINavigationController {
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
         super.init(nibName: nil, bundle: nil)
+        self.addNotifications()
         self.manager.config = config
         self.pickerDelegate = delegate
         
@@ -61,7 +62,6 @@ open class ImagePickerController: AINavigationController {
         
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
-        addNotifications()
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         EditorImageCache.clearDiskCache()
@@ -203,7 +203,7 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
     }
 }
 
-// MARK: - Notification
+// MARK: - Notifications
 extension ImagePickerController {
     
     private func addNotifications() {

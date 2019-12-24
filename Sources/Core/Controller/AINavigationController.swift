@@ -15,6 +15,10 @@ open class AINavigationController: UINavigationController {
     
     open var tag: Int = 0
     
+    open override var shouldAutorotate: Bool {
+        return false
+    }
+    
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return .fade
     }
