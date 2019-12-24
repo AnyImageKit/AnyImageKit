@@ -177,6 +177,7 @@ extension VideoPreviewCell {
                         guard let self = self else { return }
                         if self.asset.phAsset.localIdentifier == id {
                             self.setPlayerItem(response.playerItem)
+                            self.setDownloadingProgress(1.0)
                         }
                     }
                 case .failure(let error):

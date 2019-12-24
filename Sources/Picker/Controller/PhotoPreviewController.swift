@@ -111,7 +111,7 @@ final class PhotoPreviewController: UIViewController {
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var toolBar: PickerToolBar = {
+    private(set) lazy var toolBar: PickerToolBar = {
         let view = PickerToolBar(style: .preview, config: manager.config)
         view.originalButton.isHidden = !manager.config.allowUseOriginalImage
         view.originalButton.isSelected = manager.useOriginalImage
@@ -199,6 +199,9 @@ extension PhotoPreviewController {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        NotificationCenter.default.addObserver(self, selector: #selector(previewCellDidDownloadResource(_:)), name: .previewCellDidDownloadResource, object: nil)
+        #endif
     }
     
     /// 添加视图
@@ -275,28 +278,6 @@ extension PhotoPreviewController {
         }
     }
     
-    private func didSetCurrentIdx() {
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        navigationBar.selectButton.isEnabled = true
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        indexView.currentIndex = currentIndex
-        
-        if manager.config.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
-        }
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        if UIDevice.current.userInterfaceIdiom == .phone { // Editor not support iPad yet
-            if data.asset.phAsset.mediaType == .image && manager.editorConfig.options.contains(.photo) {
-                toolBar.leftButton.isHidden = false
-            } else if data.asset.phAsset.mediaType == .video && manager.editorConfig.options.contains(.video) {
-                toolBar.leftButton.isHidden = false
-            } else {
-                toolBar.leftButton.isHidden = true
-            }
-        }
-        #endif
-    }
-    
     /// 播放/暂停 GIF
     /// - Parameter animated: true-播放；false-暂停
     private func setGIF(animated: Bool) {
@@ -318,6 +299,20 @@ extension PhotoPreviewController {
                 cell.pause()
             }
         }
+    }
+    
+    private func didSetCurrentIdx() {
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        navigationBar.selectButton.isEnabled = true
+        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
+        indexView.currentIndex = currentIndex
+        
+        if manager.config.allowUseOriginalImage {
+            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
+        }
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        autoSetEditorButtonHidden()
+        #endif
     }
 }
 

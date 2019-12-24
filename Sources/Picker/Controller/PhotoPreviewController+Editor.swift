@@ -45,6 +45,31 @@ extension PhotoPreviewController {
             // TODO: 编辑页面加载完成后回来要重新加载一遍
         }
     }
+    
+    @objc func previewCellDidDownloadResource(_ notification: Notification) {
+        guard let asset = notification.object as? Asset else { return }
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        guard asset == data.asset else { return }
+        autoSetEditorButtonHidden()
+    }
+}
+
+// MARK: - Internal function
+extension PhotoPreviewController {
+    
+    internal func autoSetEditorButtonHidden() {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return } // Editor not support iPad yet
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
+        
+        if data.asset.phAsset.mediaType == .image && manager.editorConfig.options.contains(.photo) {
+            toolBar.leftButton.isHidden = false
+        } else if data.asset.phAsset.mediaType == .video && manager.editorConfig.options.contains(.video) {
+            toolBar.leftButton.isHidden = false
+        } else {
+            toolBar.leftButton.isHidden = true
+        }
+    }
 }
 
 // MARK: - Private function
@@ -60,6 +85,7 @@ extension PhotoPreviewController {
     }
 }
 
+// MARK: - ImageEditorControllerDelegate
 extension PhotoPreviewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {

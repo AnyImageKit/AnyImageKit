@@ -39,6 +39,8 @@ class PreviewCell: UICollectionViewCell {
         }
     }
     
+    var isDownloaded: Bool = false
+    
     /// 内嵌容器
     /// 本类不能继承 UIScrollView，因为实测 UIScrollView 遵循了 UIGestureRecognizerDelegate 协议，而本类也需要遵循此协议
     /// 若继承 UIScrollView 则会覆盖 UIScrollView 的协议实现，故只内嵌而不继承
@@ -156,8 +158,12 @@ class PreviewCell: UICollectionViewCell {
     
     /// 设置 iCloud 下载进度
     internal func setDownloadingProgress(_ progress: Double) {
+        isDownloaded = progress == 1
         iCloudView.isHidden = progress == 1
         iCloudView.setProgress(progress)
+        if progress == 1 {
+            NotificationCenter.default.post(name: .previewCellDidDownloadResource, object: asset)
+        }
     }
     
     // MARK: - Override
@@ -319,4 +325,9 @@ extension PreviewCell: UIGestureRecognizerDelegate {
         // 响应允许范围内的下滑手势
         return true
     }
+}
+
+extension Notification.Name {
+    
+    static let previewCellDidDownloadResource = Notification.Name("org.AnyImageProject.AnyImageKit.Notification.Name.Picker.PreviewCellDidDownloadResource")
 }
