@@ -151,14 +151,7 @@ extension VideoCapture {
 extension VideoCapture {
     
     func switchCamera(session: AVCaptureSession) {
-        switch position {
-        case .back:
-            position = .front
-        case .front:
-            position = .back
-        default:
-            break
-        }
+        position.toggle()
         do {
             try setupInput(session: session)
             setupOutputConnection(photoOutput)
