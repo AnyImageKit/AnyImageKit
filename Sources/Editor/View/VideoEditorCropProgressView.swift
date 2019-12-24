@@ -10,12 +10,23 @@ import UIKit
 
 protocol VideoEditorCropProgressViewDelegate: class {
     func cropProgress(_ view: VideoEditorCropProgressView, didUpdate progress: CGFloat)
+    func cropProgressDurationOfVideo(_ view: VideoEditorCropProgressView) -> CGFloat
 }
 
 final class VideoEditorCropProgressView: UIView {
 
     public weak var delegate: VideoEditorCropProgressViewDelegate?
     private let config: ImageEditorController.VideoConfig
+    
+    private(set) var left: CGFloat = 0
+    private(set) var right: CGFloat = 1
+    
+    public var progress: CGFloat {
+        let x = contentView.frame.origin.x + progressView.frame.origin.x
+        return x / (bounds.width - 20)
+    }
+    
+    private var videoDuration: CGFloat = 0
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -34,14 +45,14 @@ final class VideoEditorCropProgressView: UIView {
         view.backgroundColor = UIColor.white
         return view
     }()
-    private(set) lazy var leftButton: UIButton = {
+    private lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(BundleHelper.image(named: "VideoCropLeft"), for: .normal)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(leftButtonPan(_:)))
         view.addGestureRecognizer(pan)
         return view
     }()
-    private(set) lazy var rightButton: UIButton = {
+    private lazy var rightButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(BundleHelper.image(named: "VideoCropRight"), for: .normal)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(rightButtonPan(_:)))
@@ -63,14 +74,19 @@ final class VideoEditorCropProgressView: UIView {
         layer.fillColor = UIColor.black.withAlphaComponent(0.6).cgColor
         return layer
     }()
-    
-    private(set) var left: CGFloat = 0
-    private(set) var right: CGFloat = 1
-    
-    public var progress: CGFloat {
-        let x = contentView.frame.origin.x + progressView.frame.origin.x
-        return x / (bounds.width - 20)
-    }
+    private lazy var timeline: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.backgroundColor = UIColor.white
+        return view
+    }()
+    private lazy var timelineLabel: UILabel = {
+        let view = UILabel()
+        view.isHidden = true
+        view.textColor = UIColor.white
+        view.font = UIFont.systemFont(ofSize: 12)
+        return view
+    }()
     
     /// 预览图
     private var previews: [UIImageView] = []
@@ -88,7 +104,7 @@ final class VideoEditorCropProgressView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        layout()
+        layout(updateProgress: false)
     }
     
     private func setupView() {
@@ -100,6 +116,8 @@ final class VideoEditorCropProgressView: UIView {
         contentView.addSubview(leftButton)
         contentView.addSubview(rightButton)
         progressContentView.addSubview(progressView)
+        progressContentView.addSubview(timeline)
+        progressContentView.addSubview(timelineLabel)
         
         contentView.snp.makeConstraints { (maker) in
             maker.top.bottom.equalToSuperview()
@@ -126,9 +144,19 @@ final class VideoEditorCropProgressView: UIView {
             maker.width.equalTo(5)
             maker.left.equalToSuperview()
         }
+        timeline.snp.makeConstraints { (maker) in
+            maker.bottom.equalTo(progressView.snp.top).offset(-8)
+            maker.centerX.equalTo(progressView)
+            maker.width.equalTo(1)
+            maker.height.equalTo(15)
+        }
+        timelineLabel.snp.makeConstraints { (maker) in
+            maker.bottom.equalTo(timeline.snp.top).offset(-8)
+            maker.centerX.equalTo(timeline)
+        }
     }
     
-    private func layout() {
+    private func layout(updateProgress: Bool) {
         let isSelected = right - left != 1
         leftButton.isSelected = isSelected
         rightButton.isSelected = isSelected
@@ -138,8 +166,10 @@ final class VideoEditorCropProgressView: UIView {
             maker.left.equalToSuperview().offset(left*bounds.width)
             maker.right.equalToSuperview().offset(-((1-right)*(bounds.width)))
         }
-        progressView.snp.updateConstraints { (maker) in
-            maker.left.equalToSuperview()
+        if updateProgress {
+            progressView.snp.updateConstraints { (maker) in
+                maker.left.equalToSuperview()
+            }
         }
         contentLayer.frame = contentView.bounds
         updateContentLayer()
@@ -195,6 +225,17 @@ extension VideoEditorCropProgressView {
         progressView.snp.updateConstraints { (maker) in
             maker.left.equalToSuperview().offset(offset)
         }
+        
+        // Label
+        if videoDuration == 0 {
+            videoDuration = delegate?.cropProgressDurationOfVideo(self) ?? 0.0
+        }
+        if videoDuration != 0 && !timeline.isHidden {
+            let time = Int(videoDuration*progress)
+            let min = time / 60
+            let sec = time % 60
+            timelineLabel.text = String(format: "%02ld:%02ld", min, sec)
+        }
     }
 }
 
@@ -209,6 +250,7 @@ extension VideoEditorCropProgressView {
             return
         }
         delegate?.cropProgress(self, didUpdate: progress)
+        setTimeline(hidden: pan.state != .changed)
     }
     
     @objc private func leftButtonPan(_ pan: UIPanGestureRecognizer) {
@@ -219,8 +261,10 @@ extension VideoEditorCropProgressView {
             return
         }
         left = tmpLeft
-        layout()
+        setProgress(left)
+        layout(updateProgress: false)
         delegate?.cropProgress(self, didUpdate: left)
+        setTimeline(hidden: pan.state != .changed)
     }
     
     @objc private func rightButtonPan(_ pan: UIPanGestureRecognizer) {
@@ -231,7 +275,22 @@ extension VideoEditorCropProgressView {
             return
         }
         right = tmpRight
-        layout()
+        setProgress(right)
+        layout(updateProgress: false)
         delegate?.cropProgress(self, didUpdate: right)
+        setTimeline(hidden: pan.state != .changed)
+        if pan.state == .ended || pan.state == .cancelled {
+            setProgress(left)
+            delegate?.cropProgress(self, didUpdate: left)
+        }
+    }
+}
+
+// MARK: - Private
+extension VideoEditorCropProgressView {
+    
+    private func setTimeline(hidden: Bool) {
+        timeline.isHidden = hidden
+        timelineLabel.isHidden = hidden
     }
 }

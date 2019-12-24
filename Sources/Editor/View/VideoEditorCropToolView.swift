@@ -11,6 +11,7 @@ import UIKit
 protocol VideoEditorCropToolViewDelegate: class {
     func cropTool(_ view: VideoEditorCropToolView, playButtonTapped button: UIButton)
     func cropTool(_ view: VideoEditorCropToolView, didUpdate progress: CGFloat)
+    func cropToolDurationOfVideo(_ view: VideoEditorCropToolView) -> CGFloat
 }
 
 final class VideoEditorCropToolView: UIView {
@@ -80,5 +81,9 @@ extension VideoEditorCropToolView: VideoEditorCropProgressViewDelegate {
     
     func cropProgress(_ view: VideoEditorCropProgressView, didUpdate progress: CGFloat) {
         delegate?.cropTool(self, didUpdate: progress)
+    }
+    
+    func cropProgressDurationOfVideo(_ view: VideoEditorCropProgressView) -> CGFloat {
+        return delegate?.cropToolDurationOfVideo(self) ?? 0.0
     }
 }

@@ -160,6 +160,10 @@ extension VideoEditorController: VideoEditorCropToolViewDelegate {
         }
         videoPreview.setProgress(progress)
     }
+    
+    func cropToolDurationOfVideo(_ view: VideoEditorCropToolView) -> CGFloat {
+        return CGFloat(videoPreview.player?.currentItem?.duration.seconds ?? 0)
+    }
 }
 
 // MARK: - Private
@@ -215,7 +219,7 @@ extension VideoEditorController {
                 let progress = CGFloat(current.seconds / totle.seconds)
                 let progressView = self.cropToolView.progressView
                 self.cropToolView.progressView.setProgress(progress)
-                if progress > progressView.right {
+                if progress >= progressView.right {
                     self.videoPreview.player?.pause()
                     self.cropToolView.playButton.isSelected = self.videoPreview.isPlaying
                     self.cropToolView.progressView.setProgress(self.cropToolView.progressView.left)
