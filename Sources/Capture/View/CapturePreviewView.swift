@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreMedia
-import MetalKit
 
 final class CapturePreviewView: UIView {
     
@@ -58,7 +57,8 @@ final class CapturePreviewView: UIView {
 extension CapturePreviewView {
     
     func clear() {
-        let image = CIImage.createBlackImage(with: previewContentView.drawableSize)
+        let size = previewContentView.drawableSize
+        let image = CIImage.image(size: size, backgroundColor: .black) ?? .empty()
         previewContentView.draw(image: image)
     }
     
@@ -116,13 +116,13 @@ extension CapturePreviewView {
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
                     UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
                         self.previewContentView.alpha = 0
-                    }) { (_) in
+                    }) { _ in
                         self.clear()
                         self.blurView.alpha = 0
                         startPreview()
                         UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
                             self.previewContentView.alpha = 1
-                        }) { (_) in
+                        }) { _ in
                             completion()
                         }
                     }

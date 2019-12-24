@@ -11,16 +11,8 @@ import UIKit
 
 extension CIImage {
     
-    static func createBlackImage(with size: CGSize) -> CIImage {        
-        UIGraphicsBeginImageContextWithOptions(size, true, 1.0)
-        defer {
-            UIGraphicsEndImageContext()
-        }
-        guard let context = UIGraphicsGetCurrentContext() else { return .empty() }
-        UIColor.black.setFill()
-        context.fill(CGRect(origin: .zero, size: size))
-        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return .empty() }
-        guard let ciImage = CIImage(image: image) else { return .empty() }
-        return ciImage
+    static func image(size: CGSize, backgroundColor: UIColor) -> CIImage? {
+        guard let image = UIImage.image(size: size, backgroundColor: backgroundColor) else { return nil }
+        return CIImage(image: image)
     }
 }

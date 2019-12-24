@@ -65,6 +65,21 @@ extension UIImage {
 
 extension UIImage {
     
+    static func image(size: CGSize, backgroundColor: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, true, 1.0)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        backgroundColor.setFill()
+        context.fill(CGRect(origin: .zero, size: size))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        return image
+    }
+}
+
+extension UIImage {
+    
     private struct AssociatedKey {
         
         static var _animatedImageDataKey: UInt8 = 0
