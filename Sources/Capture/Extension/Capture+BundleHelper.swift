@@ -15,7 +15,7 @@ extension BundleHelper {
     }
 }
 
-extension BundleHelper.Table {
+extension BundleHelper.LocalizedTable {
     
-    static let capture = BundleHelper.Table(rawValue: "Capture")
+    static let capture = BundleHelper.LocalizedTable(rawValue: "Capture")
 }
