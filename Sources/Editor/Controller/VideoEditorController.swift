@@ -22,6 +22,7 @@ final class VideoEditorController: UIViewController {
     private let config: ImageEditorController.VideoConfig
     private weak var delegate: VideoEditorControllerDelegate?
     
+    private var url: URL?
     private var didAddPlayerObserver = false
     
     private lazy var videoPreview: VideoPreview = {
@@ -104,6 +105,7 @@ final class VideoEditorController: UIViewController {
                 hideHUD()
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
+                    self.url = url
                     self.videoPreview.setupPlayer(url: url)
                     self.setupProgressImage(url)
                 }
@@ -128,7 +130,20 @@ extension VideoEditorController {
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        
+        guard let url = url else { return }
+        let start = cropToolView.progressView.left
+        let end = cropToolView.progressView.right
+        let isEdited = end - start != 1
+        captureVideo(url: url, start: start, end: end) { [weak self] (result) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let url):
+                _print("Export video at \(url)")
+                self.delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+            case .failure(let error):
+                _print(error.localizedDescription)
+            }
+        }
     }
     
     @objc private func cropButtonTapped(_ sender: UIButton) {
@@ -169,6 +184,7 @@ extension VideoEditorController: VideoEditorCropToolViewDelegate {
 // MARK: - Private
 extension VideoEditorController {
     
+    /// 设置缩略图
     private func setupProgressImage(_ url: URL) {
         // TODO: 没有占位图取第一帧
         let margin: CGFloat = 15 * 2.0
@@ -189,6 +205,7 @@ extension VideoEditorController {
         }
     }
     
+    /// 获取缩略图
     private func getVideoThumbnailImage(url: URL, count: Int, completion: @escaping (Int, UIImage) -> Void) {
         let asset = AVAsset(url: url)
         asset.loadValuesAsynchronously(forKeys: ["duration"]) {
@@ -208,6 +225,7 @@ extension VideoEditorController {
         }
     }
     
+    /// 监听播放过程，实时更新进度条
     private func addPlayerObserver() {
         if videoPreview.player != nil && !didAddPlayerObserver {
             didAddPlayerObserver = true
@@ -226,6 +244,86 @@ extension VideoEditorController {
                     self.videoPreview.setProgress(self.cropToolView.progressView.left)
                 }
             })
+        }
+    }
+
+    private func captureVideo(url: URL, start: CGFloat, end: CGFloat, completion: @escaping (Result<URL, Error>) -> Void) {
+        guard let duration = videoPreview.player?.currentItem?.duration else { return }
+        let asset = AVURLAsset(url: url)
+        let startTime = CMTime(seconds: duration.seconds * Double(start), preferredTimescale: duration.timescale)
+        let captureDuration = CMTime(seconds: duration.seconds * Double(end - start), preferredTimescale: duration.timescale)
+        let timeRange = CMTimeRange(start: startTime, duration: captureDuration)
+        
+        let composition = AVMutableComposition()
+        let videoComposition = addVideoComposition(composition, timeRange: timeRange, asset: asset)
+        addAudioComposition(composition, timeRange: timeRange, asset: asset)
+        exportVideo(composition, videoComposition: videoComposition, metadata: asset.metadata, completion: completion)
+    }
+    
+    private func addVideoComposition(_ composition: AVMutableComposition, timeRange: CMTimeRange, asset: AVURLAsset) -> AVVideoComposition? {
+        guard let compositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            return nil
+        }
+        guard let assetVideoTrack = asset.tracks(withMediaType: .video).first else {
+            return nil
+        }
+        do {
+            try compositionTrack.insertTimeRange(timeRange, of: assetVideoTrack, at: .zero)
+        } catch {
+            _print(error)
+            return nil
+        }
+        compositionTrack.preferredTransform = assetVideoTrack.preferredTransform
+        
+        let videolayerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionTrack)
+        videolayerInstruction.setOpacity(0.0, at: asset.duration)
+        
+        let videoCompositionInstrution = AVMutableVideoCompositionInstruction()
+        videoCompositionInstrution.timeRange = CMTimeRange(start: .zero, duration: compositionTrack.asset!.duration)
+        videoCompositionInstrution.layerInstructions = [videolayerInstruction]
+        
+        let videoComposition = AVMutableVideoComposition()
+        videoComposition.renderSize = compositionTrack.naturalSize
+        videoComposition.frameDuration = CMTime(seconds: 1, preferredTimescale: 30)
+        videoComposition.instructions = [videoCompositionInstrution]
+        return videoComposition
+    }
+    
+    private func addAudioComposition(_ composition: AVMutableComposition, timeRange: CMTimeRange, asset: AVURLAsset) {
+        let audioAssetTracks = asset.tracks(withMediaType: .audio)
+        guard let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
+        for track in audioAssetTracks {
+            do {
+                try audioTrack.insertTimeRange(timeRange, of: track, at: .zero)
+            } catch {
+                _print(error)
+            }
+        }
+    }
+    
+    private func exportVideo(_ composition: AVMutableComposition, videoComposition: AVVideoComposition?, metadata: [AVMetadataItem], completion: @escaping (Result<URL, Error>) -> Void) {
+        let outputRoot = CacheModule.editor(.videoOutput).path
+        let uuid = UUID().uuidString
+        let outputURL = URL(fileURLWithPath: outputRoot + "\(uuid).mp4")
+        FileHelper.createDirectory(at: outputRoot)
+        
+        guard let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough) else { return }
+        exportSession.metadata = metadata
+        exportSession.outputURL = outputURL
+        exportSession.outputFileType = .mp4
+        exportSession.shouldOptimizeForNetworkUse = true
+        if videoComposition != nil {
+            exportSession.videoComposition = videoComposition
+        }
+        
+        exportSession.exportAsynchronously {
+            DispatchQueue.main.async {
+                if let error = exportSession.error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(outputURL))
+                }
+            }
         }
     }
 }

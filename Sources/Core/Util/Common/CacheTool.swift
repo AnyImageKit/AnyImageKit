@@ -61,6 +61,7 @@ enum CacheModuleEditor: String {
     case pen = "Pen"
     case mosaic = "Mosaic"
     case history = "History"
+    case videoOutput = "VideoOutput"
 }
 
 final class CacheTool {
