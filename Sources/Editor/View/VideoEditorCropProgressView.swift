@@ -15,6 +15,7 @@ protocol VideoEditorCropProgressViewDelegate: class {
 final class VideoEditorCropProgressView: UIView {
 
     public weak var delegate: VideoEditorCropProgressViewDelegate?
+    private let config: ImageEditorController.VideoConfig
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -54,7 +55,7 @@ final class VideoEditorCropProgressView: UIView {
         layer.isHidden = true
         layer.frame = bounds
         layer.fillRule = .evenOdd
-        layer.fillColor = UIColor.yellow.cgColor
+        layer.fillColor = config.tintColor.cgColor
         return layer
     }()
     private lazy var darkLayer: CAShapeLayer = {
@@ -75,9 +76,9 @@ final class VideoEditorCropProgressView: UIView {
     
     /// 预览图
     private var previews: [UIImageView] = []
-    private var previewStackView: UIStackView?
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, config: ImageEditorController.VideoConfig) {
+        self.config = config
         super.init(frame: frame)
         layer.cornerRadius = 5
         setupView()
@@ -137,7 +138,7 @@ final class VideoEditorCropProgressView: UIView {
         
         contentView.snp.updateConstraints { (maker) in
             maker.left.equalToSuperview().offset(left*bounds.width)
-            maker.right.equalToSuperview().offset(-((1-right)*(bounds.width-45)))
+            maker.right.equalToSuperview().offset(-((1-right)*(bounds.width)))
         }
         progressView.snp.updateConstraints { (maker) in
             maker.left.equalToSuperview()
@@ -177,7 +178,6 @@ extension VideoEditorCropProgressView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        previewStackView = stackView
         insertSubview(stackView, at: 0)
         stackView.snp.makeConstraints { (maker) in
             maker.top.bottom.equalToSuperview().inset(5)
@@ -191,11 +191,9 @@ extension VideoEditorCropProgressView {
     }
     
     public func setProgress(_ progress: CGFloat) {
-        print(progress)
-        let progress2 = progress < 0 ? 0 : (progress > 1 ? 1 : progress)
-        let progress3 = progress2 < left ? left : (progress2 > right ? right : progress2)
-        let x = progress3 * (bounds.width)
-        let offset = x - contentView.frame.origin.x
+        var progress = progress < 0 ? 0 : (progress > 1 ? 1 : progress)
+        progress = progress < left ? left : (progress > right ? right : progress)
+        let offset = (progress - left) / (right - left) * (progressContentView.frame.width - progressView.frame.width)
         progressView.snp.updateConstraints { (maker) in
             maker.left.equalToSuperview().offset(offset)
         }
@@ -207,7 +205,7 @@ extension VideoEditorCropProgressView {
     
     @objc private func progressViewPan(_ pan: UIPanGestureRecognizer) {
         let point = pan.location(in: self)
-        let progress = (point.x - 20) / (bounds.width - 40 - 5)
+        let progress = point.x / bounds.width
         setProgress(progress)
         if progress < left || progress > right {
             return

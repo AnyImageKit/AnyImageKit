@@ -15,7 +15,8 @@ protocol VideoEditorCropToolViewDelegate: class {
 
 final class VideoEditorCropToolView: UIView {
     
-    weak var delegate: VideoEditorCropToolViewDelegate?
+    public weak var delegate: VideoEditorCropToolViewDelegate?
+    private let config: ImageEditorController.VideoConfig
     
     private(set) lazy var playButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -30,12 +31,13 @@ final class VideoEditorCropToolView: UIView {
         return view
     }()
     private(set) lazy var progressView: VideoEditorCropProgressView = {
-        let view = VideoEditorCropProgressView(frame: .zero)
+        let view = VideoEditorCropProgressView(frame: .zero, config: config)
         view.delegate = self
         return view
     }()
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, config: ImageEditorController.VideoConfig) {
+        self.config = config
         super.init(frame: frame)
         setupView()
     }

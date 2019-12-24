@@ -36,7 +36,7 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     private lazy var cropToolView: VideoEditorCropToolView = {
-        let view = VideoEditorCropToolView(frame: .zero)
+        let view = VideoEditorCropToolView(frame: .zero, config: config)
         view.delegate = self
         view.layer.cornerRadius = 5
         view.backgroundColor = UIColor.color(hex: 0x1F1E1F)
