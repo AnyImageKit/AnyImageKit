@@ -35,8 +35,7 @@ final class EditorEditOptionsView: UIView {
     
     private func setupView() {
         for (idx, option) in config.editOptions.enumerated() {
-            let button = createButton(with: option)
-            button.tag = idx
+            let button = createButton(tag: idx, option: option)
             buttons.append(button)
         }
         
@@ -50,23 +49,24 @@ final class EditorEditOptionsView: UIView {
             maker.centerY.equalToSuperview()
             maker.height.equalTo(25)
         }
-        
-        for button in buttons {
-            button.snp.makeConstraints { (maker) in
+        buttons.forEach {
+            $0.snp.makeConstraints { (maker) in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }
     }
     
-    private func createButton(with option: ImageEditorController.PhotoEditOption) -> UIButton {
+    private func createButton(tag: Int, option: ImageEditorController.PhotoEditOption) -> UIButton {
         let button = UIButton(type: .custom)
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
+        button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white
         return button
     }
     
     private func selectButton(_ button: UIButton) {
+        currentOption = config.editOptions[button.tag]
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
@@ -98,7 +98,6 @@ extension EditorEditOptionsView: ResponseTouch {
                 if let current = currentOption, config.editOptions[idx] == current {
                     unselectButtons()
                 } else {
-                    self.currentOption = config.editOptions[idx]
                     selectButton(button)
                 }
                 delegate?.editOptionsView(self, optionDidChange: self.currentOption)

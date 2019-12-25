@@ -42,7 +42,6 @@ extension PhotoPreviewController {
             let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, config: config, delegate: self)
             controller.modalPresentationStyle = .fullScreen
             present(controller, animated: false, completion: nil)
-            // TODO: 编辑页面加载完成后回来要重新加载一遍
         }
     }
     

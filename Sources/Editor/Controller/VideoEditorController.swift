@@ -25,20 +25,28 @@ final class VideoEditorController: UIViewController {
     private var url: URL?
     private var didAddPlayerObserver = false
     
+    private lazy var backButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        view.setImage(BundleHelper.image(named: "ReturnBackButton"), for: .normal)
+        view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        return view
+    }()
     private lazy var videoPreview: VideoPreview = {
         let view = VideoPreview(frame: .zero, image: placeholdImage)
         return view
     }()
     private lazy var toolView: VideoEditorToolView = {
         let view = VideoEditorToolView(frame: .zero, config: config)
-        view.cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
+        view.delegate = self
+        view.isHidden = true
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
-        view.cropButton.addTarget(self, action: #selector(cropButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private lazy var cropToolView: VideoEditorCropToolView = {
         let view = VideoEditorCropToolView(frame: .zero, config: config)
         view.delegate = self
+        view.isHidden = true
         view.layer.cornerRadius = 5
         view.backgroundColor = UIColor.color(hex: 0x1F1E1F)
         return view
@@ -70,6 +78,7 @@ final class VideoEditorController: UIViewController {
     private func setupView() {
         view.backgroundColor = .black
         view.addSubview(videoPreview)
+        view.addSubview(backButton)
         view.addSubview(toolView)
         view.addSubview(cropToolView)
         
@@ -81,6 +90,15 @@ final class VideoEditorController: UIViewController {
             }
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(cropToolView.snp.top).offset(-30)
+        }
+        backButton.snp.makeConstraints { (maker) in
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            } else {
+                maker.top.equalToSuperview().offset(30)
+            }
+            maker.left.equalToSuperview().offset(10)
+            maker.width.height.equalTo(50)
         }
         toolView.snp.makeConstraints { (maker) in
             if #available(iOS 11, *) {
@@ -106,8 +124,14 @@ final class VideoEditorController: UIViewController {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.url = url
+                    self.toolView.isHidden = false
+                    if self.toolView.selectOption(.crop) {
+                        self.cropToolView.isHidden = false
+                    }
                     self.videoPreview.setupPlayer(url: url)
-                    self.setupProgressImage(url)
+                    self.getProgressImage(url: url) { [weak self] (image) in
+                        self?.setupProgressImage(url: url, image: image)
+                    }
                 }
             case .failure(let error):
                 if error == .cannotFindInLocal {
@@ -125,7 +149,7 @@ final class VideoEditorController: UIViewController {
 // MARK: - Target
 extension VideoEditorController {
     
-    @objc private func cancelButtonTapped(_ sender: UIButton) {
+    @objc private func backButtonTapped(_ sender: UIButton) {
         delegate?.videoEditorDidCancel(self)
     }
     
@@ -134,7 +158,7 @@ extension VideoEditorController {
         let start = cropToolView.progressView.left
         let end = cropToolView.progressView.right
         let isEdited = end - start != 1
-        captureVideo(url: url, start: start, end: end) { [weak self] (result) in
+        clipVideo(url: url, start: start, end: end) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let url):
@@ -145,10 +169,6 @@ extension VideoEditorController {
             }
         }
     }
-    
-    @objc private func cropButtonTapped(_ sender: UIButton) {
-        
-    }
 }
 
 // MARK: - VideoPreviewDelegate
@@ -156,6 +176,18 @@ extension VideoEditorController: VideoPreviewDelegate {
     
     func previewPlayerDidPlayToEndTime(_ view: VideoPreview) {
         cropToolView.playButton.isSelected = view.isPlaying
+    }
+}
+
+// MARK: - VideoEditorToolViewDelegate
+extension VideoEditorController: VideoEditorToolViewDelegate {
+    
+    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: ImageEditorController.VideoEditOption?) {
+        guard let option = option else {
+            cropToolView.isHidden = true
+            return
+        }
+        cropToolView.isHidden = option != .crop
     }
 }
 
@@ -184,18 +216,30 @@ extension VideoEditorController: VideoEditorCropToolViewDelegate {
 // MARK: - Private
 extension VideoEditorController {
     
-    /// 设置缩略图
-    private func setupProgressImage(_ url: URL) {
-        // TODO: 没有占位图取第一帧
+    /// 获取进度条上第一张缩略图
+    private func getProgressImage(url: URL, completion: @escaping (UIImage) -> Void) {
+        if let image = placeholdImage {
+            completion(image)
+            return
+        }
+        getVideoThumbnailImage(url: url, count: 1) { (_, image) in
+            DispatchQueue.main.async {
+                completion(image)
+            }
+        }
+    }
+    
+    /// 设置进度条上的缩略图
+    private func setupProgressImage(url: URL, image: UIImage) {
         let margin: CGFloat = 15 * 2.0
         let playButtonWidth: CGFloat = 45 + 2
         let progressButtonWidth: CGFloat = 20 * 2.0
-        let imageSize = placeholdImage!.size
+        let imageSize = image.size
         let itemSize = CGSize(width: imageSize.width * 40 / imageSize.height, height: 40)
         let progressWidth = view.bounds.width - margin - playButtonWidth - progressButtonWidth
         let count = Int(round(progressWidth / itemSize.width))
         
-        cropToolView.progressView.setupProgressImages(count, image: placeholdImage)
+        cropToolView.progressView.setupProgressImages(count, image: image)
         getVideoThumbnailImage(url: url, count: count) { (idx, image) in
             let scale = UIScreen.main.scale
             let resizedImage = UIImage.resize(from: image, limitSize: CGSize(width: itemSize.width * scale, height: itemSize.height * scale), isExact: true)
@@ -246,8 +290,9 @@ extension VideoEditorController {
             })
         }
     }
-
-    private func captureVideo(url: URL, start: CGFloat, end: CGFloat, completion: @escaping (Result<URL, Error>) -> Void) {
+    
+    /// 剪辑视频
+    private func clipVideo(url: URL, start: CGFloat, end: CGFloat, completion: @escaping (Result<URL, Error>) -> Void) {
         guard let duration = videoPreview.player?.currentItem?.duration else { return }
         let asset = AVURLAsset(url: url)
         let startTime = CMTime(seconds: duration.seconds * Double(start), preferredTimescale: duration.timescale)
@@ -260,6 +305,7 @@ extension VideoEditorController {
         exportVideo(composition, videoComposition: videoComposition, metadata: asset.metadata, completion: completion)
     }
     
+    /// 增加视频轨道
     private func addVideoComposition(_ composition: AVMutableComposition, timeRange: CMTimeRange, asset: AVURLAsset) -> AVVideoComposition? {
         guard let compositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
             return nil
@@ -289,6 +335,7 @@ extension VideoEditorController {
         return videoComposition
     }
     
+    /// 增加音频轨道
     private func addAudioComposition(_ composition: AVMutableComposition, timeRange: CMTimeRange, asset: AVURLAsset) {
         let audioAssetTracks = asset.tracks(withMediaType: .audio)
         guard let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
@@ -301,6 +348,7 @@ extension VideoEditorController {
         }
     }
     
+    /// 导出视频
     private func exportVideo(_ composition: AVMutableComposition, videoComposition: AVVideoComposition?, metadata: [AVMetadataItem], completion: @escaping (Result<URL, Error>) -> Void) {
         let outputRoot = CacheModule.editor(.videoOutput).path
         let uuid = UUID().uuidString

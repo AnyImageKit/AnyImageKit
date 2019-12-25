@@ -38,3 +38,13 @@ extension ImageEditorController {
         case crop
     }
 }
+
+// MARK: - Extension
+extension ImageEditorController.VideoEditOption {
+    var imageName: String {
+        switch self {
+        case .crop:
+            return "VideoToolVideo"
+        }
+    }
+}
