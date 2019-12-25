@@ -17,10 +17,13 @@ final class AudioCapture: NSObject {
     
     weak var delegate: AudioCaptureDelegate?
     
+    let config: ImageCaptureController.Config
+    
     private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
     
-    init(session: AVCaptureSession) {
+    init(session: AVCaptureSession, config: ImageCaptureController.Config) {
+        self.config = config
         super.init()
     }
     
@@ -56,6 +59,7 @@ final class AudioCapture: NSObject {
     }
 }
 
+// MARK: - Writer Settings
 extension AudioCapture {
     
     var recommendedWriterSettings: [String: Any]? {
@@ -63,7 +67,7 @@ extension AudioCapture {
     }
 }
 
-// MARK: - Running
+// MARK: - Audio Session
 extension AudioCapture {
 
     func startAudioSession() {

@@ -21,10 +21,12 @@ final class VideoCapture: NSObject {
     
     weak var delegate: VideoCaptureDelegate?
     
+    private let config: ImageCaptureController.Config
+    
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
     
-    private var captureOrientation: CaptureOrientation = .portrait
+    private var orientation: CaptureOrientation = .portrait
     private var position: AVCaptureDevice.Position = .back
     
     private lazy var photoContext: CIContext = {
@@ -38,7 +40,8 @@ final class VideoCapture: NSObject {
     private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
-    init(session: AVCaptureSession) {
+    init(session: AVCaptureSession, config: ImageCaptureController.Config) {
+        self.config = config
         super.init()
         do {
             // Add device input
@@ -136,6 +139,7 @@ final class VideoCapture: NSObject {
     }
 }
 
+// MARK: - Writer Settings
 extension VideoCapture {
     
     var recommendedWriterSettings: [String: Any]? {
@@ -166,7 +170,7 @@ extension VideoCapture {
 extension VideoCapture {
     
     func capturePhoto(orientation: CaptureOrientation) {
-        self.captureOrientation = orientation
+        self.orientation = orientation
         let settings = AVCapturePhotoSettings()
         settings.flashMode = .off
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
@@ -207,18 +211,19 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }
         guard var metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
         // Orient to UP
-        guard let orientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
-        guard let orientedImage: CIImage = CIImage(data: photoData)?.oriented(forExifOrientation: orientation) else { return }
+        guard let cgOrientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
+        guard let orientedImage: CIImage = CIImage(data: photoData)?.oriented(forExifOrientation: cgOrientation) else { return }
         // fixed capture orientation
-        let fixedImage = orientedImage.oriented(forExifOrientation: captureOrientation.exifOrientation)
+        let fixedImage = orientedImage.oriented(forExifOrientation: orientation.exifOrientation)
         // Crop to expected aspect ratio
         let size = fixedImage.extent.size
+        let aspectRatio = CGFloat(config.photoAspectRatio.value)
         let rect: CGRect
-        switch captureOrientation {
+        switch orientation {
         case .portrait, .portraitUpsideDown:
-            rect = CGRect(x: 0, y: size.height/8, width: size.width, height: size.height/4*3)
+            rect = CGRect(x: 0, y: size.height*(1-aspectRatio)/2, width: size.width, height: size.height*aspectRatio)
         case .landscapeLeft, .landscapeRight:
-            rect = CGRect(x: size.width/8, y: 0, width: size.width/4*3, height: size.height)
+            rect = CGRect(x: size.width*(1-aspectRatio)/2, y: 0, width: size.width*aspectRatio, height: size.height)
         }
         let croppedImage: CIImage = fixedImage.cropped(to: rect)
         guard let cgImage: CGImage = photoContext.createCGImage(croppedImage, from: rect) else { return }

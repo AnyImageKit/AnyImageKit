@@ -32,8 +32,8 @@ final class Capture {
         self.config = config
         self.session = AVCaptureSession()
         self.session.beginConfiguration()
-        self.audioCapture = AudioCapture(session: session)
-        self.videoCapture = VideoCapture(session: session)
+        self.audioCapture = AudioCapture(session: session, config: config)
+        self.videoCapture = VideoCapture(session: session, config: config)
         self.session.commitConfiguration()
         self.audioCapture.delegate = self
         self.videoCapture.delegate = self
