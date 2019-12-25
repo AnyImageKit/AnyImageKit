@@ -8,7 +8,6 @@
 
 import AVFoundation
 import CoreImage
-import Metal
 
 protocol VideoCaptureDelegate: class {
     
