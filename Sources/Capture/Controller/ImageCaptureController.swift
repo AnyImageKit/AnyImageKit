@@ -29,13 +29,16 @@ open class ImageCaptureController: AINavigationController {
     
     open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
     
+    public let config: Config
+    
     required public init(config: Config = .init(), delegate: ImageCaptureControllerDelegate) {
         enableDebugLog = config.enableDebugLog
+        self.config = config
         super.init(nibName: nil, bundle: nil)
         self.addNotifications()
         self.captureDelegate = delegate
         
-        let rootViewController = CaptureViewController()
+        let rootViewController = CaptureViewController(config: config)
         rootViewController.delegate = self
         self.viewControllers = [rootViewController]
     }

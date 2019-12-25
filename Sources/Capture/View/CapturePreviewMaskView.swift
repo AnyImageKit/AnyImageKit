@@ -31,7 +31,10 @@ final class CapturePreviewMaskView: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
+    private let config: ImageCaptureController.Config
+    
+    init(frame: CGRect, config: ImageCaptureController.Config) {
+        self.config = config
         super.init(frame: frame)
         setupView()
     }
@@ -53,7 +56,7 @@ final class CapturePreviewMaskView: UIView {
             maker.top.equalTo(topMaskView.snp.bottom)
             maker.left.equalTo(snp.left)
             maker.right.equalTo(snp.right)
-            maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(3.0/4.0)
+            maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(config.photoAspectRatio.value)
         }
         bottomMaskView.snp.makeConstraints { maker in
             maker.top.equalTo(centerLayoutGuide.snp.bottom)

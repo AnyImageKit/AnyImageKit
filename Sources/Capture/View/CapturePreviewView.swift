@@ -17,7 +17,7 @@ final class CapturePreviewView: UIView {
     }()
     
     private lazy var previewMaskView: CapturePreviewMaskView = {
-        let view = CapturePreviewMaskView(frame: .zero)
+        let view = CapturePreviewMaskView(frame: .zero, config: config)
         return view
     }()
     
@@ -28,7 +28,10 @@ final class CapturePreviewView: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
+    let config: ImageCaptureController.Config
+    
+    init(frame: CGRect, config: ImageCaptureController.Config) {
+        self.config = config
         super.init(frame: frame)
         setupView()
     }

@@ -22,7 +22,7 @@ final class CaptureViewController: UIViewController {
     private var isPreviewing: Bool = true
     
     private lazy var previewView: CapturePreviewView = {
-        let view = CapturePreviewView(frame: .zero)
+        let view = CapturePreviewView(frame: .zero, config: config)
         return view
     }()
     
@@ -35,7 +35,7 @@ final class CaptureViewController: UIViewController {
     }()
     
     private lazy var capture: Capture = {
-        let capture = Capture()
+        let capture = Capture(config: config)
         capture.delegate = self
         return capture
     }()
@@ -45,6 +45,17 @@ final class CaptureViewController: UIViewController {
         util.delegate = self
         return util
     }()
+    
+    let config: ImageCaptureController.Config
+    
+    init(config: ImageCaptureController.Config) {
+        self.config = config
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,17 +71,27 @@ final class CaptureViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .black
+        let layoutGuide = UILayoutGuide()
+        view.addLayoutGuide(layoutGuide)
         view.addSubview(previewView)
         view.addSubview(toolView)
+        var aspectRatio: Double = config.photoAspectRatio.value
+        if config.mediaOptions.contains(.video) {
+            aspectRatio = 9.0/16.0
+        }
         previewView.snp.makeConstraints { maker in
-            maker.leading.trailing.equalToSuperview()
+            maker.left.right.equalToSuperview()
             maker.center.equalToSuperview()
-            maker.width.equalTo(previewView.snp.height).multipliedBy(9.0/16.0)
+            maker.width.equalTo(previewView.snp.height).multipliedBy(aspectRatio)
+        }
+        layoutGuide.snp.makeConstraints { maker in
+            maker.left.right.equalToSuperview()
+            maker.center.equalToSuperview()
+            maker.width.equalTo(layoutGuide.snp.height).multipliedBy(9.0/16.0)
         }
         toolView.snp.makeConstraints { maker in
-            maker.left.equalTo(previewView.snp.left)
-            maker.right.equalTo(previewView.snp.right)
-            maker.bottom.equalTo(previewView.snp.bottom)
+            maker.left.right.equalToSuperview()
+            maker.bottom.equalTo(layoutGuide.snp.bottom)
             maker.height.equalTo(88)
         }
     }
