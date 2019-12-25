@@ -117,7 +117,8 @@ final class VideoEditorController: UIViewController {
     }
     
     private func loadData() {
-        resource.loadURL { (result) in
+        resource.loadURL { [weak self] (result) in
+            guard let self = self else { return }
             switch result {
             case .success(let url):
                 hideHUD()
@@ -139,8 +140,8 @@ final class VideoEditorController: UIViewController {
                 } else {
                     hideHUD()
                 }
-                // TODO:
-                _print(error)
+                _print("Fetch URL failed: \(error.localizedDescription)")
+                self.delegate?.videoEditorDidCancel(self)
             }
         }
     }
