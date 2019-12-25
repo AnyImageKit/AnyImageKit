@@ -310,25 +310,25 @@ extension PickerConfigViewController {
     
     private func captureMediaOptionsTapped() {
         let indexPath = CaptureConfigRowType.captureOptions.indexPath
-//        let alert = UIAlertController(title: "CaptureOptions", message: nil, preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
-//            self?.captureConfig.options = []
-//            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
-//        }))
-//        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
-//            self?.captureConfig.options = [.photo, .video]
-//            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
-//        }))
-//        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
-//            self?.captureConfig.options = [.photo]
-//            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
-//        }))
-//        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
-//            self?.captureConfig.options = [.video]
-//            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
-//        }))
-//        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-//        present(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: "CaptureOptions", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
+            self?.captureConfig.mediaOptions = []
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
+        }))
+        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
+            self?.captureConfig.mediaOptions = [.photo, .video]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
+        }))
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
+            self?.captureConfig.mediaOptions = [.photo]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
+        }))
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
+            self?.captureConfig.mediaOptions = [.video]
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - Other Config

@@ -12,7 +12,7 @@ import SnapKit
 public protocol ImageCaptureControllerDelegate: class {
     
     func imageCaptureDidCancel(_ capture: ImageCaptureController)
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage)
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage, matedata: [String: Any])
     func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL)
 }
 
@@ -21,8 +21,14 @@ extension ImageCaptureControllerDelegate {
     public func imageCaptureDidCancel(_ capture: ImageCaptureController) {
         capture.dismiss(animated: true, completion: nil)
     }
-    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage) { }
-    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL) { }
+    
+    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage) {
+        capture.dismiss(animated: true, completion: nil)
+    }
+    
+    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL) {
+        capture.dismiss(animated: true, completion: nil)
+    }
 }
 
 open class ImageCaptureController: AINavigationController {
@@ -35,7 +41,6 @@ open class ImageCaptureController: AINavigationController {
         enableDebugLog = config.enableDebugLog
         self.config = config
         super.init(nibName: nil, bundle: nil)
-        self.addNotifications()
         self.captureDelegate = delegate
         
         let rootViewController = CaptureViewController(config: config)
@@ -46,10 +51,6 @@ open class ImageCaptureController: AINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        removeNotifications()
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
@@ -64,18 +65,6 @@ open class ImageCaptureController: AINavigationController {
         return true
     }
 }
-
-// MARK: - Notifications
-extension ImageCaptureController {
-    
-    private func addNotifications() {
-        beginGeneratingDeviceOrientationNotifications()
-    }
-    
-    private func removeNotifications() {
-        endGeneratingDeviceOrientationNotifications()
-    }
-}
  
 // MARK: - CaptureViewControllerDelegate
 extension ImageCaptureController: CaptureViewControllerDelegate {
@@ -84,8 +73,7 @@ extension ImageCaptureController: CaptureViewControllerDelegate {
         captureDelegate?.imageCaptureDidCancel(self)
     }
     
-    func capture(_ capture: CaptureViewController, didOutput photo: UIImage) {
-        captureDelegate?.imageCapture(self, didFinishCapturing: photo)
-        dismiss(animated: true, completion: nil)
+    func capture(_ capture: CaptureViewController, didOutput photo: UIImage, matedata: [String: Any]) {
+        captureDelegate?.imageCapture(self, didFinishCapturing: photo, matedata: matedata)
     }
 }

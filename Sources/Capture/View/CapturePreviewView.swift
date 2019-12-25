@@ -28,7 +28,7 @@ final class CapturePreviewView: UIView {
         return view
     }()
     
-    let config: ImageCaptureController.Config
+    private let config: ImageCaptureController.Config
     
     init(frame: CGRect, config: ImageCaptureController.Config) {
         self.config = config

@@ -213,76 +213,6 @@ extension AssetPickerViewController {
             }
         }
     }
-    
-    /// 弹出 UIImagePickerController
-    private func showUIImagePicker() {
-        #if !targetEnvironment(simulator)
-//        let controller = UIImagePickerController()
-//        controller.delegate = self
-//        controller.allowsEditing = false
-//        controller.sourceType = .camera
-////        controller.videoMaximumDuration = manager.captureConfig.videoMaximumDuration
-//        var mediaTypes: [String] = []
-//        if manager.captureConfig.options.contains(.photo) {
-//            mediaTypes.append(kUTTypeImage as String)
-//        }
-//        if manager.captureConfig.options.contains(.video) {
-//            mediaTypes.append(kUTTypeMovie as String)
-//        }
-//        controller.mediaTypes = mediaTypes
-//        present(controller, animated: true, completion: nil)
-        #else
-        let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
-        #endif
-    }
-    
-    /// 添加拍照 Item
-    private func addCameraAsset() {
-        guard let album = album, album.isCameraRoll else { return }
-        let config = manager.config
-        let sortType = config.orderByDate
-//        if !manager.captureConfig.options.isEmpty {
-//            switch sortType {
-//            case .asc:
-//                album.addAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), atLast: true)
-//            case .desc:
-//                album.insertAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), at: 0, sort: config.orderByDate)
-//            }
-//        }
-    }
-    
-    /// 拍照结束后，插入 PHAsset
-    private func addPHAsset(_ phAsset: PHAsset) {
-        guard let album = album else { return }
-        let sortType = manager.config.orderByDate
-        let addSuccess: Bool
-        switch sortType {
-        case .asc:
-            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.config.selectOptions)
-            album.addAsset(asset, atLast: false)
-            addSuccess = manager.addSelectedAsset(asset)
-            collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
-        case .desc:
-            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.config.selectOptions)
-            album.insertAsset(asset, at: 1, sort: manager.config.orderByDate)
-            addSuccess = manager.addSelectedAsset(asset)
-            collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
-        }
-        updateVisibleCellState()
-        toolBar.setEnable(true)
-        if addSuccess {
-            finishSelectedIfNeeded()
-        }
-    }
-    
-    /// 拍照结束后，如果 limit=1 直接返回
-    private func finishSelectedIfNeeded() {
-        if manager.config.selectLimit == 1 {
-            delegate?.assetPickerDidFinishPicking(self)
-        }
-    }
 }
 
 // MARK: - Target
@@ -389,7 +319,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let album = album else { return }
         if album.assets[indexPath.item].isCamera { // 点击拍照 Item
-            showUIImagePicker()
+            showCapture()
             return
         }
         
@@ -438,9 +368,11 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
-//        if album.isCameraRoll && !manager.captureConfig.options.isEmpty {
-//            return album.assets.count - 1
-//        }
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        if album.isCameraRoll && !manager.captureConfig.mediaOptions.isEmpty {
+            return album.assets.count - 1
+        }
+        #endif
         return album.assets.count
     }
     
@@ -491,45 +423,96 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
 }
 
-// MARK: - UIImagePickerControllerDelegate
-extension AssetPickerViewController: UIImagePickerControllerDelegate {
+#if ANYIMAGEKIT_ENABLE_CAPTURE
+
+// MARK: - Capture
+extension AssetPickerViewController {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        guard let mediaType = info[.mediaType] as? String else { return }
-        let mediaTypeImage = kUTTypeImage as String
-        let mediaTypeMovie = kUTTypeMovie as String
-        showWaitHUD()
-        switch mediaType {
-        case mediaTypeImage:
-            guard let image = info[.originalImage] as? UIImage else { return }
-            guard let metadata = info[.mediaMetadata] as? [String:Any] else { return }
-            manager.savePhoto(image, metadata: metadata) { [weak self] (result) in
-                switch result {
-                case .success(let asset):
-                    self?.addPHAsset(asset)
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                }
-                hideHUD()
+    private func showCapture() {
+        #if !targetEnvironment(simulator)
+        let controller = ImageCaptureController(config: manager.captureConfig, delegate: self)
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true, completion: nil)
+        #else
+        let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+        #endif
+    }
+    
+    /// 添加拍照 Item
+    private func addCameraAsset() {
+        guard let album = album, album.isCameraRoll else { return }
+        let config = manager.config
+        let sortType = config.orderByDate
+        if !manager.captureConfig.mediaOptions.isEmpty {
+            switch sortType {
+            case .asc:
+                album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: config.selectOptions), atLast: true)
+            case .desc:
+                album.insertAsset(Asset(idx: -1, asset: .init(), selectOptions: config.selectOptions), at: 0, sort: config.orderByDate)
             }
-        case mediaTypeMovie:
-            guard let videoUrl = info[.mediaURL] as? URL else { return }
-            manager.saveVideo(at: videoUrl) { [weak self] (result) in
-                switch result {
-                case .success(let asset):
-                    self?.addPHAsset(asset)
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                }
-                hideHUD()
+        }
+    }
+    
+    /// 拍照结束后，插入 PHAsset
+    private func addPHAsset(_ phAsset: PHAsset) {
+        guard let album = album else { return }
+        let sortType = manager.config.orderByDate
+        let addSuccess: Bool
+        switch sortType {
+        case .asc:
+            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.config.selectOptions)
+            album.addAsset(asset, atLast: false)
+            addSuccess = manager.addSelectedAsset(asset)
+            collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+        case .desc:
+            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.config.selectOptions)
+            album.insertAsset(asset, at: 1, sort: manager.config.orderByDate)
+            addSuccess = manager.addSelectedAsset(asset)
+            collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
+        }
+        updateVisibleCellState()
+        toolBar.setEnable(true)
+        if addSuccess {
+            /// 拍照结束后，如果 limit=1 直接返回
+            if manager.config.selectLimit == 1 {
+                delegate?.assetPickerDidFinishPicking(self)
             }
-        default:
-            break
         }
     }
 }
 
-extension AssetPickerViewController: UINavigationControllerDelegate {
+// MARK: - ImageCaptureControllerDelegate
+extension AssetPickerViewController: ImageCaptureControllerDelegate {
     
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage, matedata: [String: Any]) {
+        capture.dismiss(animated: true, completion: nil)
+        showWaitHUD()
+        manager.savePhoto(photo, metadata: matedata) { [weak self] (result) in
+            switch result {
+            case .success(let asset):
+                self?.addPHAsset(asset)
+            case .failure(let error):
+                _print(error.localizedDescription)
+            }
+            hideHUD()
+        }
+    }
+    
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL) {
+        capture.dismiss(animated: true, completion: nil)
+        showWaitHUD()
+        manager.saveVideo(at: video) { [weak self] (result) in
+            switch result {
+            case .success(let asset):
+                self?.addPHAsset(asset)
+            case .failure(let error):
+                _print(error.localizedDescription)
+            }
+            hideHUD()
+        }
+    }
 }
+
+#endif
