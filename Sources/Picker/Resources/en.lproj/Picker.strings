@@ -7,8 +7,11 @@
 */
 
 "Photo" = "Photo";
+"Video" = "Video";
 "Live photo" = "Live photo";
 "Original image" = "Original image";
+"Select photo" = "Select photo";
+"Unselect photo" = "Unselect photo";
 
 "Select a maximum of %zd photos" = "Select a maximum of %zd photos";
 "Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "Allow %@ to access your album in \"Settings > Privacy > Photos\"";

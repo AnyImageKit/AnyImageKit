@@ -7,8 +7,11 @@
 */
 
 "Photo" = "照片";
+"Video" = "视频";
 "Live photo" = "实况";
 "Original image" = "原图";
+"Select photo" = "选中图片";
+"Unselect photo" = "未选中图片";
 
 "Select a maximum of %zd photos" = "你最多只能选择 %zd 张照片";
 "Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "请在iPhone的\"设置-隐私-照片\"选项中，\n允许%@访问你的手机相册。";
