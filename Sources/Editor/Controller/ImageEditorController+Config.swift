@@ -116,7 +116,7 @@ extension ImageEditorController {
 }
 
 // MARK: - Extension
-extension ImageEditorController.PhotoEditOption {
+extension ImageEditorController.PhotoEditOption: CustomStringConvertible {
     var imageName: String {
         switch self {
         case .pen:
@@ -127,6 +127,19 @@ extension ImageEditorController.PhotoEditOption {
             return "PhotoToolCrop"
         case .mosaic:
             return "PhotoToolMosaic"
+        }
+    }
+    
+    public var description: String {
+        switch self {
+        case .pen:
+            return "Pen"
+        case .text:
+            return "Input text"
+        case .crop:
+            return "Crop"
+        case .mosaic:
+            return "Mosaic"
         }
     }
 }

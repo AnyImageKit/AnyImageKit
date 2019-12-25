@@ -25,6 +25,7 @@ final class EditorMosaicToolView: UIView {
         let view = UIButton(type: .custom)
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo"), for: .normal)
+        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Undo")
         return view
     }()
     

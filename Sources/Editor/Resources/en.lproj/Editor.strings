@@ -6,5 +6,11 @@
   Copyright © 2019 AnyImageProject.org. All rights reserved.
 */
 
+"Undo" = "Undo";
 "Reset" = "Reset";
 "Downloading" = "Downloading";
+
+"Pen" = "Pen";
+"Crop" = "Crop";
+"Mosaic" = "Mosaic";
+"Input text" = "Input text";

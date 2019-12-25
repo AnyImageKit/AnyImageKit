@@ -22,11 +22,13 @@ final class EditorCropToolView: UIView {
     private(set) lazy var cancelButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(BundleHelper.image(named: "XMark"), for: .normal)
+        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Cancel")
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(BundleHelper.image(named: "CheckMark"), for: .normal)
+        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Done")
         return view
     }()
     private(set) lazy var resetbutton: UIButton = {
