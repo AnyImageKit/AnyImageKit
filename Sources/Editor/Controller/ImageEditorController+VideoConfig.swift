@@ -40,11 +40,18 @@ extension ImageEditorController {
 }
 
 // MARK: - Extension
-extension ImageEditorController.VideoEditOption {
+extension ImageEditorController.VideoEditOption: CustomStringConvertible {
     var imageName: String {
         switch self {
         case .crop:
             return "VideoToolVideo"
+        }
+    }
+    
+    public var description: String {
+        switch self {
+        case .crop:
+            return "Crop"
         }
     }
 }

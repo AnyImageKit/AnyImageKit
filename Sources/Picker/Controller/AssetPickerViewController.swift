@@ -375,6 +375,10 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         cell.setContent(asset, manager: manager)
         cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         cell.backgroundColor = UIColor.white
+        cell.isAccessibilityElement = true
+        cell.accessibilityTraits = .button
+        let accessibilityLabel = BundleHelper.pickerLocalizedString(key: asset.mediaType == .video ? "Video" : "Photo")
+        cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         return cell
     }
 }

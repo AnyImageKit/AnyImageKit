@@ -62,6 +62,7 @@ final class EditorEditOptionsView: UIView {
         button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white
+        button.accessibilityLabel = BundleHelper.editorLocalizedString(key: option.description)
         return button
     }
     

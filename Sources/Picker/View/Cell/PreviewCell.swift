@@ -120,6 +120,8 @@ class PreviewCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
         setupView()
+        isAccessibilityElement = true
+        accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Photo")
     }
     
     required init?(coder aDecoder: NSCoder) {

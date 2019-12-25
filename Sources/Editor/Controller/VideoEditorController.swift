@@ -30,6 +30,7 @@ final class VideoEditorController: UIViewController {
         view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         view.setImage(BundleHelper.image(named: "ReturnBackButton"), for: .normal)
         view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Back")
         return view
     }()
     private lazy var videoPreview: VideoPreview = {

@@ -6,5 +6,13 @@
   Copyright © 2019 AnyImageProject.org. All rights reserved.
 */
 
+"Undo" = "撤销";
+"Play" = "播放";
+"Pause" = "暂停";
 "Reset" = "还原";
 "Downloading" = "正在下载";
+
+"Pen" = "画笔";
+"Crop" = "裁剪";
+"Mosaic" = "马赛克";
+"Input text" = "输入文本";
