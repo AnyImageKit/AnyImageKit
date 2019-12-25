@@ -13,10 +13,11 @@ Pod::Spec.new do |s|
     s.swift_versions = ['5.0', '5.1']
     s.frameworks = 'Foundation'
     
-    s.default_subspecs = 'Core', 'Picker', 'Editor'
+    s.default_subspecs = 'Core', 'Picker', 'Editor', 'Capture'
     
     s.subspec 'Core' do |core|
         core.source_files = 'Sources/Core/**/*'
+        picker.resources = 'Sources/Core/Resources/**/*'
         core.dependency 'SnapKit'
     end
     
@@ -30,7 +31,14 @@ Pod::Spec.new do |s|
         editor.source_files = 'Sources/Editor/**/*.swift'
         editor.resources = 'Sources/Editor/Resources/**/*'
         editor.dependency 'AnyImageKit/Core'
-        editor.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS'  => 'ANYIMAGEKIT_ENABLE_EDITOR' }
+        editor.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_EDITOR' }
+    end
+    
+    s.subspec 'Capture' do |capture|
+        capture.source_files = 'Sources/Capture/**/*.swift'
+        capture.resources = 'Sources/Capture/Resources/**/*'
+        capture.dependency 'AnyImageKit/Core'
+        capture.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_CAPTURE' }
     end
     
 end

@@ -52,6 +52,8 @@ final class HomeViewController: UITableViewController {
             } else {
                 controller = EditorConfigViewController(style: .grouped)
             }
+        case .capture:
+            controller = CaptureConfigViewController()
         }
         navigationController?.pushViewController(controller, animated: true)
     }
@@ -66,6 +68,7 @@ extension HomeViewController {
     enum RowType: CaseIterable {
         case picker
         case editor
+        case capture
         
         var title: String {
             switch self {
@@ -73,6 +76,8 @@ extension HomeViewController {
                 return "Picker"
             case .editor:
                 return "Editor"
+            case .capture:
+                return "Capture"
             }
         }
     }

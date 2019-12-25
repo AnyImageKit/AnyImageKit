@@ -25,11 +25,9 @@ extension ImageEditorControllerDelegate {
     public func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) { }
 }
 
-open class ImageEditorController: UINavigationController {
+open class ImageEditorController: AINavigationController {
     
     open weak var editorDelegate: ImageEditorControllerDelegate?
-    
-    open var tag: Int = 0
     
     /// Init image editor
     required public init(image: UIImage, config: PhotoConfig = .init(), delegate: ImageEditorControllerDelegate) {
@@ -53,18 +51,6 @@ open class ImageEditorController: UINavigationController {
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    open override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
-    }
-    
-    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
     }
 }
 

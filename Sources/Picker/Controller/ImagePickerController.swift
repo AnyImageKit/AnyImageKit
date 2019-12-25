@@ -22,11 +22,9 @@ extension ImagePickerControllerDelegate {
     }
 }
 
-open class ImagePickerController: UINavigationController {
+open class ImagePickerController: AINavigationController {
     
     open weak var pickerDelegate: ImagePickerControllerDelegate?
-    
-    open var tag: Int = 0
     
     public var config: Config {
         return manager.config
@@ -43,7 +41,6 @@ open class ImagePickerController: UINavigationController {
     }
     
     private var containerSize: CGSize = .zero
-    private var hasOverrideGeneratingDeviceOrientation: Bool = false
     private var hiddenStatusBar: Bool = false
     private var didFinishSelect: Bool = false
     private let lock: NSLock = .init()
@@ -55,6 +52,7 @@ open class ImagePickerController: UINavigationController {
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
         super.init(nibName: nil, bundle: nil)
+        self.addNotifications()
         self.manager.config = config
         self.pickerDelegate = delegate
         
@@ -64,7 +62,6 @@ open class ImagePickerController: UINavigationController {
         
         navigationBar.barTintColor = config.theme.backgroundColor
         navigationBar.tintColor = config.theme.textColor
-        addNotifications()
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
@@ -140,18 +137,6 @@ open class ImagePickerController: UINavigationController {
             return .default
         }
     }
-    
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        return .fade
-    }
-    
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
-    }
-    
-    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
-    }
 }
 
 // MARK: - Private function
@@ -218,21 +203,8 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
     }
 }
 
-// MARK: - Notification
+// MARK: - Notifications
 extension ImagePickerController {
-    
-    private func beginGeneratingDeviceOrientationNotifications() {
-        if !UIDevice.current.isGeneratingDeviceOrientationNotifications {
-            hasOverrideGeneratingDeviceOrientation = true
-            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        }
-    }
-    
-    private func endGeneratingDeviceOrientationNotifications() {
-        if UIDevice.current.isGeneratingDeviceOrientationNotifications && hasOverrideGeneratingDeviceOrientation {
-            UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        }
-    }
     
     private func addNotifications() {
         beginGeneratingDeviceOrientationNotifications()

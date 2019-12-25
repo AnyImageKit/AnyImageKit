@@ -71,13 +71,13 @@ final class CacheTool {
     
     private let config: CacheConfig
     private let path: String
-    private let queue: DispatchQueue
+    private let workQueue: DispatchQueue
     
     init(config: CacheConfig, diskCacheList: [String] = []) {
         self.config = config
         self.diskCacheList = diskCacheList
         self.memory.countLimit = config.memoryCountLimit
-        self.queue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(config.module.title).\(config.module.subTitle)")
+        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(config.module.title).\(config.module.subTitle)")
         
         path = config.module.path
         FileHelper.createDirectory(at: path)
@@ -185,7 +185,7 @@ extension CacheTool {
     ///   - identifier: 标识符
     private func writeToFile(_ image: UIImage, identifier: String) {
         if !config.useDiskCache { return }
-        queue.async { [weak self] in
+        workQueue.async { [weak self] in
             guard let self = self else { return }
             guard let data = image.pngData() else { return }
             let url = URL(fileURLWithPath: self.path + identifier)
@@ -222,7 +222,7 @@ extension CacheTool {
             if memory.object(forKey: identifier as NSString) != nil { continue }
         }
         if memory.object(forKey: identifier as NSString) != nil { return }
-        queue.async { [weak self] in
+        workQueue.async { [weak self] in
             guard let self = self else { return }
             guard let image = self.readFromFile(identifier) else { return }
             self.memory.setObject(image, forKey: identifier as NSString)

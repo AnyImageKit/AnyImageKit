@@ -217,20 +217,20 @@ extension AssetPickerViewController {
     /// 弹出 UIImagePickerController
     private func showUIImagePicker() {
         #if !targetEnvironment(simulator)
-        let controller = UIImagePickerController()
-        controller.delegate = self
-        controller.allowsEditing = false
-        controller.sourceType = .camera
-        controller.videoMaximumDuration = manager.captureConfig.videoMaximumDuration
-        var mediaTypes: [String] = []
-        if manager.captureConfig.options.contains(.photo) {
-            mediaTypes.append(kUTTypeImage as String)
-        }
-        if manager.captureConfig.options.contains(.video) {
-            mediaTypes.append(kUTTypeMovie as String)
-        }
-        controller.mediaTypes = mediaTypes
-        present(controller, animated: true, completion: nil)
+//        let controller = UIImagePickerController()
+//        controller.delegate = self
+//        controller.allowsEditing = false
+//        controller.sourceType = .camera
+////        controller.videoMaximumDuration = manager.captureConfig.videoMaximumDuration
+//        var mediaTypes: [String] = []
+//        if manager.captureConfig.options.contains(.photo) {
+//            mediaTypes.append(kUTTypeImage as String)
+//        }
+//        if manager.captureConfig.options.contains(.video) {
+//            mediaTypes.append(kUTTypeMovie as String)
+//        }
+//        controller.mediaTypes = mediaTypes
+//        present(controller, animated: true, completion: nil)
         #else
         let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -243,14 +243,14 @@ extension AssetPickerViewController {
         guard let album = album, album.isCameraRoll else { return }
         let config = manager.config
         let sortType = config.orderByDate
-        if !manager.captureConfig.options.isEmpty {
-            switch sortType {
-            case .asc:
-                album.addAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), atLast: true)
-            case .desc:
-                album.insertAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), at: 0, sort: config.orderByDate)
-            }
-        }
+//        if !manager.captureConfig.options.isEmpty {
+//            switch sortType {
+//            case .asc:
+//                album.addAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), atLast: true)
+//            case .desc:
+//                album.insertAsset(Asset(idx: -1, asset: PHAsset(), selectOptions: config.selectOptions), at: 0, sort: config.orderByDate)
+//            }
+//        }
     }
     
     /// 拍照结束后，插入 PHAsset
@@ -423,7 +423,7 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
         setAlbum(album)
     }
     
-    func albumPickerWillDisappear() {
+    func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {
         titleView.isSelected = false
         albumsPicker = nil
     }
@@ -434,9 +434,9 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
-        if album.isCameraRoll && !manager.captureConfig.options.isEmpty {
-            return album.assets.count - 1
-        }
+//        if album.isCameraRoll && !manager.captureConfig.options.isEmpty {
+//            return album.assets.count - 1
+//        }
         return album.assets.count
     }
     
