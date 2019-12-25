@@ -6,17 +6,12 @@
   Copyright © 2019 AnyImageProject.org. All rights reserved.
 */
 
-"Original image" = "Original image";
-"Done" = "Done";
-"Edit" = "Edit";
-"Preview" = "Preview";
-"Cancel" = "Cancel";
-"Alert" = "Alert";
-"OK" = "OK";
 "Photo" = "Photo";
+"Live photo" = "Live photo";
+"Original image" = "Original image";
+
 "Select a maximum of %zd photos" = "Select a maximum of %zd photos";
 "Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "Allow %@ to access your album in \"Settings > Privacy > Photos\"";
 "Go to Settings" = "Go to Settings";
 "Downloading from iCloud" = "Downloading from iCloud";
 "Fetch failed, please retry" = "Fetch failed, please retry";
-"Live photo" = "Live photo";

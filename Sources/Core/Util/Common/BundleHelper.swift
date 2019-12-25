@@ -55,16 +55,6 @@ extension BundleHelper {
 // MARK: - Localized String
 extension BundleHelper {
     
-    static func localizedString(key: String) -> String {
-        return localizedString(key: key, value: nil, table: nil)
-    }
-    
-    static func localizedString(key: String, value: String?, table: String?) -> String {
-        var value = value
-        value = languageBundle?.localizedString(forKey: key, value: value, table: table)
-        return Bundle.main.localizedString(forKey: key, value: value, table: table)
-    }
-    
     static func localizedString(key: String, value: String?, table: LocalizedTable) -> String {
         if let result = languageBundle?.localizedString(forKey: key, value: value, table: table.rawValue), result != key {
             return result

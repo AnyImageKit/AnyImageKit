@@ -11,6 +11,11 @@ import Foundation
 extension BundleHelper {
     
     static func pickerLocalizedString(key: String) -> String {
-        return localizedString(key: key, value: nil, table: "Picker")
+        return localizedString(key: key, value: nil, table: .picker)
     }
+}
+
+extension BundleHelper.LocalizedTable {
+    
+    static let picker = BundleHelper.LocalizedTable(rawValue: "Picker")
 }

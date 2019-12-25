@@ -6,4 +6,9 @@
   Copyright © 2019 AnyImageProject.org. All rights reserved.
 */
 
+"OK" = "好的";
+"Done" = "完成";
+"Edit" = "编辑";
+"Alert" = "提示";
 "Cancel" = "取消";
+"Preview" = "预览";

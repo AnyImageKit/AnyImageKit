@@ -11,6 +11,11 @@ import Foundation
 extension BundleHelper {
     
     static func editorLocalizedString(key: String) -> String {
-        return localizedString(key: key, value: nil, table: "Editor")
+        return localizedString(key: key, value: nil, table: .editor)
     }
+}
+
+extension BundleHelper.LocalizedTable {
+    
+    static let editor = BundleHelper.LocalizedTable(rawValue: "Editor")
 }
