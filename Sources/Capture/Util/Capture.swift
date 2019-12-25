@@ -128,9 +128,3 @@ extension Capture: VideoCaptureDelegate {
     }
 }
 
-extension Capture {
-    
-    
-    
-    
-}

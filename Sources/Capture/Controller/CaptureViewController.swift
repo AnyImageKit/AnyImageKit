@@ -40,16 +40,18 @@ final class CaptureViewController: UIViewController {
         return capture
     }()
     
-    deinit {
-        removeNotifications()
-    }
+    private lazy var orientationUtil: DeviceOrientationUtil = {
+        let util = DeviceOrientationUtil()
+        util.delegate = self
+        return util
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNotifications()
         setupNavigation()
         setupView()
         capture.startRunning()
+        orientationUtil.startRunning()
     }
     
     private func setupNavigation() {
@@ -71,24 +73,6 @@ final class CaptureViewController: UIViewController {
             maker.bottom.equalTo(previewView.snp.bottom)
             maker.height.equalTo(88)
         }
-    }
-}
-
-// MARK: - Notifications
-extension CaptureViewController {
-    
-    private func addNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
-    }
-    
-    private func removeNotifications() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc private func orientationDidChangeNotification(_ sender: Notification) {
-        guard let orientation =  CaptureOrientation(uiDevice: UIDevice.current.orientation) else { return }
-        capture.orientation = orientation
-        toolView.rotate(to: orientation, animated: true)
     }
 }
 
@@ -173,6 +157,7 @@ extension CaptureViewController: CaptureDelegate {
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
             self.capture.stopRunning()
+            self.orientationUtil.stopRunning()
         }
     }
     
@@ -188,11 +173,21 @@ extension CaptureViewController: CaptureDelegate {
     }
 }
 
+// MARK: - DeviceOrientationUtilDelegate
+extension CaptureViewController: DeviceOrientationUtilDelegate {
+    
+    func device(_ util: DeviceOrientationUtil, didUpdate orientation: CaptureOrientation) {
+        capture.orientation = orientation
+        toolView.rotate(to: orientation, animated: true)
+    }
+}
+
 // MARK: - ImageEditorControllerDelegate
 extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         capture.startRunning()
+        orientationUtil.startRunning()
         isPreviewing = true
         editor.dismiss(animated: false, completion: nil)
     }

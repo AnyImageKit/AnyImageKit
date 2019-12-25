@@ -15,6 +15,8 @@ extension ImageCaptureController {
         
         public var mediaOptions: MediaOptions
         
+        public var photoAspectRatio: AspectRatio
+        
         public var preferredPositions: [AVCaptureDevice.Position]
         
         public var flashMode: AVCaptureDevice.FlashMode
@@ -26,11 +28,13 @@ extension ImageCaptureController {
         public var enableDebugLog: Bool
         
         public init(mediaOptions: MediaOptions = [.photo, .video],
+                    photoAspectRatio: AspectRatio = .ratio4x3,
                     preferredPositions: [AVCaptureDevice.Position] = [.back, .front],
                     flashMode: AVCaptureDevice.FlashMode = .auto,
                     videoMaximumDuration: TimeInterval = 30,
                     enableDebugLog: Bool = false) {
             self.mediaOptions = mediaOptions
+            self.photoAspectRatio = photoAspectRatio
             self.preferredPositions = preferredPositions
             self.flashMode = flashMode
             self.videoMaximumDuration = videoMaximumDuration
@@ -49,5 +53,13 @@ extension ImageCaptureController {
         public static let photo = MediaOptions(rawValue: 1 << 0)
         
         public static let video = MediaOptions(rawValue: 1 << 1)
+    }
+    
+    public enum AspectRatio: Equatable {
+        
+        case ratio1x1
+        case ratio3x2
+        case ratio4x3
+        case ratio16x9
     }
 }

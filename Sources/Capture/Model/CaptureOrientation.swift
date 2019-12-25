@@ -19,24 +19,6 @@ enum CaptureOrientation: Equatable {
 
 extension CaptureOrientation {
     
-    init?(uiDevice orientation: UIDeviceOrientation) {
-        switch orientation {
-        case .portrait:
-            self = .portrait
-        case .portraitUpsideDown:
-            self = .portraitUpsideDown
-        case .landscapeLeft:
-            self = .landscapeLeft
-        case .landscapeRight:
-            self = .landscapeRight
-        default:
-            return nil
-        }
-    }
-}
-
-extension CaptureOrientation {
-    
     var exifOrientation: Int32 {
         return Int32(cgImagePropertyOrientation.rawValue)
     }
