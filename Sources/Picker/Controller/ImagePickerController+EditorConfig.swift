@@ -36,8 +36,8 @@ extension ImagePickerController {
     public struct EditorOptions: OptionSet {
         /// Photo 照片
         public static let photo = EditorOptions(rawValue: 1 << 0)
-        /// Video 视频
-        public static let video = EditorOptions(rawValue: 1 << 1)
+        /// Video not finish 视频 未完成
+        static let video = EditorOptions(rawValue: 1 << 1)
         
         public let rawValue: Int
         
