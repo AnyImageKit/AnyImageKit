@@ -27,7 +27,7 @@ extension ImageEditorControllerDelegate {
 
 open class ImageEditorController: AINavigationController {
     
-    open weak var editorDelegate: ImageEditorControllerDelegate?
+    open private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
     /// Init image editor
     required public init(image: UIImage, config: PhotoConfig = .init(), delegate: ImageEditorControllerDelegate) {

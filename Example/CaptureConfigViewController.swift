@@ -39,7 +39,7 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
         capture.dismiss(animated: true, completion: nil)
     }
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage) {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage, matedata: [String: Any]) {
         let controller = EditorResultViewController()
         controller.imageView.image = photo
         show(controller, sender: nil)

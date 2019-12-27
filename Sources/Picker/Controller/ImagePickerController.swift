@@ -24,7 +24,7 @@ extension ImagePickerControllerDelegate {
 
 open class ImagePickerController: AINavigationController {
     
-    open weak var pickerDelegate: ImagePickerControllerDelegate?
+    open private(set) weak var pickerDelegate: ImagePickerControllerDelegate?
     
     public var config: Config {
         return manager.config
@@ -75,12 +75,14 @@ open class ImagePickerController: AINavigationController {
     }
     #endif
     
+    #if ANYIMAGEKIT_ENABLE_CAPTURE
     convenience public init(config: Config = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
         self.init(config: config, delegate: delegate)
         self.manager.captureConfig = captureConfig
     }
+    #endif
     
-    #if ANYIMAGEKIT_ENABLE_EDITOR
+    #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
     convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
         self.init(config: config, delegate: delegate)
         self.manager.editorConfig = editorConfig

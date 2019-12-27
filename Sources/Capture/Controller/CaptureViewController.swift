@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func capture(_ capture: CaptureViewController, didOutput photo: UIImage)
+    func capture(_ capture: CaptureViewController, didOutput photo: UIImage, matedata: [String: Any])
 }
 
 final class CaptureViewController: UIViewController {
@@ -20,6 +20,7 @@ final class CaptureViewController: UIViewController {
     weak var delegate: CaptureViewControllerDelegate?
     
     private var isPreviewing: Bool = true
+    private var matedata: [String: Any] = [:]
     
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero, config: config)
@@ -46,7 +47,7 @@ final class CaptureViewController: UIViewController {
         return util
     }()
     
-    let config: ImageCaptureController.Config
+    private let config: ImageCaptureController.Config
     
     init(config: ImageCaptureController.Config) {
         self.config = config
@@ -170,8 +171,9 @@ extension CaptureViewController: CaptureDelegate {
         isPreviewing = false
     }
     
-    func capture(_ capture: Capture, didOutput photoData: Data) {
-        guard let photo = UIImage(data: photoData) else { return }
+    func capture(_ capture: Capture, didOutput photo: UIImage, matedata: [String: Any]) {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        self.matedata = matedata
         let editor = ImageEditorController(image: photo, config: .init(), delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
@@ -180,6 +182,9 @@ extension CaptureViewController: CaptureDelegate {
             self.capture.stopRunning()
             self.orientationUtil.stopRunning()
         }
+        #else
+        delegate?.capture(self, didOutput: photo, matedata: matedata)
+        #endif
     }
     
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType) {
@@ -203,6 +208,8 @@ extension CaptureViewController: DeviceOrientationUtilDelegate {
     }
 }
 
+#if ANYIMAGEKIT_ENABLE_EDITOR
+
 // MARK: - ImageEditorControllerDelegate
 extension CaptureViewController: ImageEditorControllerDelegate {
     
@@ -214,6 +221,8 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        delegate?.capture(self, didOutput: photo)
+        delegate?.capture(self, didOutput: photo, matedata: matedata)
     }
 }
+
+#endif
