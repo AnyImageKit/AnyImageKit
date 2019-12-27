@@ -32,7 +32,7 @@ public class Asset: Equatable {
     
     private lazy var _manager = PickerManager()
     
-    init(idx: Int, asset: PHAsset, selectOptions: ImagePickerController.SelectOptions) {
+    init(idx: Int, asset: PHAsset, selectOptions: AnyImagePickerSelectOptions) {
         self.idx = idx
         self.phAsset = asset
         self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)

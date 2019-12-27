@@ -123,7 +123,7 @@ extension AssetCell {
 
 extension AssetCell {
     
-    private func setConfig(_ config: ImagePickerController.Config) {
+    private func setConfig(_ config: AnyImagePickerOptionsInfo) {
         boxCoverView.layer.borderColor = config.theme.mainColor.cgColor
         selectButton.setTheme(config.theme)
     }

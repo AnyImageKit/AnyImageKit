@@ -84,7 +84,7 @@ final class NumberCircleButton: UIControl {
 
 extension NumberCircleButton {
     
-    func setTheme(_ theme: ImagePickerController.Theme) {
+    func setTheme(_ theme: AnyImagePickerTheme) {
         numLabel.backgroundColor = theme.mainColor
         circleView.setTheme(theme)
     }
@@ -140,7 +140,7 @@ extension NumberCircleButton {
             layer.cornerRadius = bounds.size.width/2
         }
         
-        func setTheme(_ theme: ImagePickerController.Theme) {
+        func setTheme(_ theme: AnyImagePickerTheme) {
             let image = BundleHelper.image(named: "PickerCircle", style: theme.style)
             imageView.image = image
         }

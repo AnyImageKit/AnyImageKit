@@ -16,7 +16,7 @@ class Album: Equatable {
     let isCameraRoll: Bool
     private(set) var assets: [Asset] = []
     
-    init(result: PHFetchResult<PHAsset>, id: String, name: String?, isCameraRoll: Bool, selectOptions: ImagePickerController.SelectOptions) {
+    init(result: PHFetchResult<PHAsset>, id: String, name: String?, isCameraRoll: Bool, selectOptions: AnyImagePickerSelectOptions) {
         self.id = id
         self.name = name ?? ""
         self.isCameraRoll = isCameraRoll
@@ -30,7 +30,7 @@ class Album: Equatable {
 
 extension Album {
     
-    func insertAsset(_ asset: Asset, at: Int, sort: ImagePickerController.Sort) {
+    func insertAsset(_ asset: Asset, at: Int, sort: AnyImageSort) {
         assets.insert(asset, at: at)
         reloadIndex(sort: sort)
     }
@@ -46,7 +46,7 @@ extension Album {
 
 extension Album {
     
-    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: ImagePickerController.SelectOptions) {
+    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: AnyImagePickerSelectOptions) {
         var array: [Asset] = []
         let selectPhoto = selectOptions.contains(.photo)
         let selectVideo = selectOptions.contains(.video)
@@ -77,7 +77,7 @@ extension Album {
         assets = array
     }
     
-    private func reloadIndex(sort: ImagePickerController.Sort) {
+    private func reloadIndex(sort: AnyImageSort) {
         var idx = 0
         let array: [Asset]
         switch sort {

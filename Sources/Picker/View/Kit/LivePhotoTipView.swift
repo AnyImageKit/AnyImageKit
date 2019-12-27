@@ -47,7 +47,7 @@ final class LivePhotoTipView: UIView {
         }
     }
     
-    func updateConfig(_ config: ImagePickerController.Config) {
+    func updateConfig(_ config: AnyImagePickerOptionsInfo) {
         imageView.image = BundleHelper.image(named: "LivePhoto", style: config.theme.style)
         let color = UIColor.create(style: config.theme.style,
                                    light: UIColor.color(hex: 0x666666),

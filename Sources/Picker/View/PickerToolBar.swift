@@ -50,9 +50,9 @@ final class PickerToolBar: UIView {
     }()
     
     private let style: Style
-    private let config: ImagePickerController.Config
+    private let config: AnyImagePickerOptionsInfo
     
-    init(style: Style, config: ImagePickerController.Config) {
+    init(style: Style, config: AnyImagePickerOptionsInfo) {
         self.style = style
         self.config = config
         super.init(frame: .zero)

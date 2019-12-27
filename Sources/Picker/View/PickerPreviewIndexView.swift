@@ -44,11 +44,11 @@ final class PickerPreviewIndexView: UIView {
         return view
     }()
     
-    private let config: ImagePickerController.Config
+    private let config: AnyImagePickerOptionsInfo
     
     private var manager: PickerManager!
     
-    init(frame: CGRect, config: ImagePickerController.Config) {
+    init(frame: CGRect, config: AnyImagePickerOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         setupView()

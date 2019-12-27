@@ -17,7 +17,7 @@ struct FetchRecord {
 
 final class PickerManager {
     
-    var config: ImagePickerController.Config = .init()
+    var config: AnyImagePickerOptionsInfo = .init()
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     var editorConfig: ImagePickerController.EditorConfig = .init()

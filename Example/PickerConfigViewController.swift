@@ -11,7 +11,7 @@ import AnyImageKit
 
 final class PickerConfigViewController: UITableViewController {
     
-    var config = ImagePickerController.Config()
+    var config = AnyImagePickerOptionsInfo()
     
     var editorConfig = ImagePickerController.EditorConfig()
     
@@ -41,12 +41,13 @@ final class PickerConfigViewController: UITableViewController {
     // MARK: - Target
     
     @IBAction func openPickerTapped() {
-        config.enableDebugLog = true
-        let controller = ImagePickerController(config: config, editorConfig: editorConfig, captureConfig: captureConfig, delegate: self)
-        if #available(iOS 13.0, *) {
-            controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
-        }
-        present(controller, animated: true, completion: nil)
+        // TODO:
+//        config.enableDebugLog = true
+//        let controller = ImagePickerController(config: config, editorConfig: editorConfig, captureConfig: captureConfig, delegate: self)
+//        if #available(iOS 13.0, *) {
+//            controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
+//        }
+//        present(controller, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source

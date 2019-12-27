@@ -100,7 +100,7 @@ final class CaptureViewController: UIViewController {
 // MARK: - Private
 extension CaptureViewController {
     
-    private func output(photoData: Data, fileType: FileType) {
+    private func output(photoData: Data, fileType: AnyImageFileType) {
         let timestamp = Int(Date().timeIntervalSince1970*1000)
         let tmpPath = NSTemporaryDirectory()
         let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
@@ -189,7 +189,7 @@ extension CaptureViewController: CaptureDelegate {
         isPreviewing = false
     }
     
-    func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
+    func capture(_ capture: Capture, didOutput photoData: Data, fileType: AnyImageFileType) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
         let editor = ImageEditorController(image: image, config: .init(), delegate: self)

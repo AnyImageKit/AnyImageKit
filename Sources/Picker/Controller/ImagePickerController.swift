@@ -26,7 +26,7 @@ open class ImagePickerController: AnyImageNavigationController {
     
     open private(set) weak var pickerDelegate: ImagePickerControllerDelegate?
     
-    public var config: Config {
+    public var config: AnyImagePickerOptionsInfo {
         return manager.config
     }
     
@@ -47,7 +47,7 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
-    public required init(config: Config = .init(), delegate: ImagePickerControllerDelegate) {
+    public required init(config: AnyImagePickerOptionsInfo = .init(), delegate: ImagePickerControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
@@ -68,27 +68,29 @@ open class ImagePickerController: AnyImageNavigationController {
         #endif
     }
     
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
-        self.init(config: config, delegate: delegate)
-        self.manager.editorConfig = editorConfig
-    }
-    #endif
+    // TODO:
     
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    convenience public init(config: Config = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
-        self.init(config: config, delegate: delegate)
-        self.manager.captureConfig = captureConfig
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
-    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
-        self.init(config: config, delegate: delegate)
-        self.manager.editorConfig = editorConfig
-        self.manager.captureConfig = captureConfig
-    }
-    #endif
+//    #if ANYIMAGEKIT_ENABLE_EDITOR
+//    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
+//        self.init(config: config, delegate: delegate)
+//        self.manager.editorConfig = editorConfig
+//    }
+//    #endif
+//    
+//    #if ANYIMAGEKIT_ENABLE_CAPTURE
+//    convenience public init(config: Config = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
+//        self.init(config: config, delegate: delegate)
+//        self.manager.captureConfig = captureConfig
+//    }
+//    #endif
+//    
+//    #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
+//    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
+//        self.init(config: config, delegate: delegate)
+//        self.manager.editorConfig = editorConfig
+//        self.manager.captureConfig = captureConfig
+//    }
+//    #endif
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {

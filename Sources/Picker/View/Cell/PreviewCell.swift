@@ -188,7 +188,7 @@ class PreviewCell: UICollectionViewCell {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
     
-    func updateConfig(_ config: ImagePickerController.Config) {
+    func updateConfig(_ config: AnyImagePickerOptionsInfo) {
         
     }
 }

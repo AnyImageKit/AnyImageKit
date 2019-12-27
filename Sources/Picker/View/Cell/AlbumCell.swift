@@ -70,7 +70,7 @@ final class AlbumCell: UITableViewCell {
 
 extension AlbumCell {
     
-    private func updateTheme(_ theme: ImagePickerController.Theme) {
+    private func updateTheme(_ theme: AnyImagePickerTheme) {
         tintColor = theme.mainColor
         backgroundColor = theme.backgroundColor
         let view = UIView(frame: .zero)

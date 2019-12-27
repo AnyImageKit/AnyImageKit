@@ -12,7 +12,7 @@ import UIKit
 protocol CaptureDelegate: class {
     
     func captureWillOutputPhoto(_ capture: Capture)
-    func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType)
+    func capture(_ capture: Capture, didOutput photoData: Data, fileType: AnyImageFileType)
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType)
 }
 
@@ -120,7 +120,7 @@ extension Capture: VideoCaptureDelegate {
         delegate?.captureWillOutputPhoto(self)
     }
     
-    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: FileType) {
+    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: AnyImageFileType) {
         delegate?.capture(self, didOutput: photoData, fileType: fileType)
     }
     

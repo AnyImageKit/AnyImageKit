@@ -28,9 +28,9 @@ final class PermissionDeniedView: UIView {
         return view
     }()
     
-    private let config: ImagePickerController.Config
+    private let config: AnyImagePickerOptionsInfo
     
-    init(frame: CGRect, config: ImagePickerController.Config) {
+    init(frame: CGRect, config: AnyImagePickerOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         setupView()

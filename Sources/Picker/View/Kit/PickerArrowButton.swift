@@ -37,7 +37,7 @@ final class PickerArrowButton: UIControl {
         return view
     }()
     
-    let config: ImagePickerController.Config
+    let config: AnyImagePickerOptionsInfo
     
     override var isSelected: Bool {
         didSet {
@@ -48,7 +48,7 @@ final class PickerArrowButton: UIControl {
         }
     }
     
-    init(frame: CGRect, config: ImagePickerController.Config) {
+    init(frame: CGRect, config: AnyImagePickerOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         setupView()
