@@ -67,8 +67,12 @@ extension PickerManager {
         }
     }
     
-    func savePhoto(_ image: UIImage, metadata: [String: Any] = [:], completion: PhotoSaveCompletion? = nil) {
-        ExportTool.savePhoto(image, metadata: metadata, completion: completion)
+    func savePhoto(image: UIImage, completion: PhotoSaveCompletion? = nil) {
+        ExportTool.savePhoto(image: image, completion: completion)
+    }
+    
+    func savePhoto(url: URL, completion: PhotoSaveCompletion? = nil) {
+        ExportTool.savePhoto(url: url, completion: completion)
     }
 }
 

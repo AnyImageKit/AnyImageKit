@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func capture(_ capture: CaptureViewController, didOutput photo: UIImage, matedata: [String: Any])
+    func capture(_ capture: CaptureViewController, didOutput media: URL, type: CaptureMediaType)
 }
 
 final class CaptureViewController: UIViewController {
@@ -20,7 +20,6 @@ final class CaptureViewController: UIViewController {
     weak var delegate: CaptureViewControllerDelegate?
     
     private var isPreviewing: Bool = true
-    private var matedata: [String: Any] = [:]
     
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero, config: config)
@@ -98,6 +97,25 @@ final class CaptureViewController: UIViewController {
     }
 }
 
+// MARK: - Private
+extension CaptureViewController {
+    
+    private func output(photoData: Data, fileType: FileType) {
+        let timestamp = Int(Date().timeIntervalSince1970*1000)
+        let tmpPath = NSTemporaryDirectory()
+        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
+        FileHelper.createDirectory(at: tmpPath)
+        let url = URL(fileURLWithPath: filePath)
+        // Write to file
+        do {
+            try photoData.write(to: url)
+            delegate?.capture(self, didOutput: url, type: .photo)
+        } catch {
+            _print(error.localizedDescription)
+        }
+    }
+}
+
 // MARK: - Target
 extension CaptureViewController {
     
@@ -171,10 +189,10 @@ extension CaptureViewController: CaptureDelegate {
         isPreviewing = false
     }
     
-    func capture(_ capture: Capture, didOutput photo: UIImage, matedata: [String: Any]) {
+    func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        self.matedata = matedata
-        let editor = ImageEditorController(image: photo, config: .init(), delegate: self)
+        guard let image = UIImage(data: photoData) else { return }
+        let editor = ImageEditorController(image: image, config: .init(), delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
@@ -183,7 +201,7 @@ extension CaptureViewController: CaptureDelegate {
             self.orientationUtil.stopRunning()
         }
         #else
-        delegate?.capture(self, didOutput: photo, matedata: matedata)
+        output(photoData: photoData, fileType: fileType)
         #endif
     }
     
@@ -221,7 +239,8 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        delegate?.capture(self, didOutput: photo, matedata: matedata)
+        guard let photoData = photo.jpegData(compressionQuality: 1.0) else { return }
+        output(photoData: photoData, fileType: .jpeg)
     }
 }
 

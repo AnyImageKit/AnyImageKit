@@ -55,7 +55,7 @@ extension ExportTool {
         }
     }
     
-    public static func saveVideo(at url: URL, completion: @escaping VideoSaveCompletion) {
+    public static func saveVideo(_ url: URL, completion: @escaping VideoSaveCompletion) {
         var localIdentifier: String = ""
         PHPhotoLibrary.shared().performChanges({
             let request = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)

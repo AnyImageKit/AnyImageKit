@@ -75,29 +75,13 @@ extension ExportTool {
         return requestID
     }
 
-    public static func savePhoto(_ image: UIImage, metadata: [String: Any] = [:], completion: PhotoSaveCompletion? = nil) {
-        guard let imageData = image.jpegData(compressionQuality: 1.0) else {
-            completion?(.failure(.savePhotoFail))
-            return
-        }
-        let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let filePath = NSTemporaryDirectory().appending("PHOTO-SAVED-\(timestamp).jpg")
-        FileHelper.createDirectory(at: NSTemporaryDirectory())
-        let url = URL(fileURLWithPath: filePath)
-        // Write to file
-        do {
-            try imageData.write(to: url)
-        } catch {
-            completion?(.failure(.savePhotoFail))
-        }
-
+    public static func savePhoto(image: UIImage, completion: PhotoSaveCompletion? = nil) {
         // Write to album library
         var localIdentifier: String = ""
         PHPhotoLibrary.shared().performChanges({
-            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
-            localIdentifier = request?.placeholderForCreatedAsset?.localIdentifier ?? ""
+            let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+            localIdentifier = request.placeholderForCreatedAsset?.localIdentifier ?? ""
         }) { (isSuccess, error) in
-            try? FileManager.default.removeItem(atPath: filePath)
             DispatchQueue.main.async {
                 if isSuccess {
                     if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
@@ -105,8 +89,29 @@ extension ExportTool {
                     } else {
                         completion?(.failure(.savePhotoFail))
                     }
-                } else if error != nil {
-                    _print("Save photo error: \(error!.localizedDescription)")
+                } else if let error = error {
+                    _print("Save photo error: \(error.localizedDescription)")
+                    completion?(.failure(.savePhotoFail))
+                }
+            }
+        }
+    }
+    
+    public static func savePhoto(url: URL, completion: PhotoSaveCompletion? = nil) {
+        var localIdentifier: String = ""
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+            localIdentifier = request?.placeholderForCreatedAsset?.localIdentifier ?? ""
+        }) { (isSuccess, error) in
+            DispatchQueue.main.async {
+                if isSuccess {
+                    if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
+                        completion?(.success(asset))
+                    } else {
+                        completion?(.failure(.savePhotoFail))
+                    }
+                } else if let error = error {
+                    _print("Save photo error: \(error.localizedDescription)")
                     completion?(.failure(.savePhotoFail))
                 }
             }

@@ -12,21 +12,12 @@ import SnapKit
 public protocol ImageCaptureControllerDelegate: class {
     
     func imageCaptureDidCancel(_ capture: ImageCaptureController)
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage, matedata: [String: Any])
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL)
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: CaptureMediaType)
 }
 
 extension ImageCaptureControllerDelegate {
     
     public func imageCaptureDidCancel(_ capture: ImageCaptureController) {
-        capture.dismiss(animated: true, completion: nil)
-    }
-    
-    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage) {
-        capture.dismiss(animated: true, completion: nil)
-    }
-    
-    public func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL) {
         capture.dismiss(animated: true, completion: nil)
     }
 }
@@ -73,7 +64,7 @@ extension ImageCaptureController: CaptureViewControllerDelegate {
         captureDelegate?.imageCaptureDidCancel(self)
     }
     
-    func capture(_ capture: CaptureViewController, didOutput photo: UIImage, matedata: [String: Any]) {
-        captureDelegate?.imageCapture(self, didFinishCapturing: photo, matedata: matedata)
+    func capture(_ capture: CaptureViewController, didOutput media: URL, type: CaptureMediaType) {
+        captureDelegate?.imageCapture(self, didFinishCapturing: media, type: type)
     }
 }

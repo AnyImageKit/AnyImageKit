@@ -13,7 +13,7 @@ import CoreImage
 protocol VideoCaptureDelegate: class {
     
     func videoCaptureWillOutputPhoto(_ capture: VideoCapture)
-    func videoCapture(_ capture: VideoCapture, didOutput photo: UIImage, matadata: [String: Any])
+    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: FileType)
     func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer)
 }
 
@@ -209,7 +209,7 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
     
     private func export(photoData: Data) {
         guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }
-        guard var metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
+        guard let metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return }
         // Orient to up
         guard let cgOrientation = metadata[kCGImagePropertyOrientation as String] as? Int32 else { return }
         guard let orientedImage: CIImage = CIImage(data: photoData)?.oriented(forExifOrientation: cgOrientation) else { return }
@@ -227,10 +227,8 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         }
         let croppedImage: CIImage = fixedImage.cropped(to: rect)
         guard let cgImage: CGImage = photoContext.createCGImage(croppedImage, from: rect) else { return }
-        // Update metadata
-        metadata[kCGImagePropertyOrientation as String] = CGImagePropertyOrientation.up.rawValue
         // Output
-        let photo = UIImage(cgImage: cgImage)
-        delegate?.videoCapture(self, didOutput: photo, matadata: metadata)
+        guard let photoData = cgImage.jpegData(compressionQuality: 1.0) else { return }
+        delegate?.videoCapture(self, didOutput: photoData, fileType: .jpeg)
     }
 }

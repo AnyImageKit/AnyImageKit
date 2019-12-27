@@ -165,7 +165,7 @@ extension ImagePickerController {
         if didFinishSelect {
             didFinishSelect = false
             pickerDelegate?.imagePicker(self, didFinishPicking: manager.selectedAssets, useOriginalImage: manager.useOriginalImage)
-            manager.selectedAssets.compactMap{ $0._images[.edited] }.forEach{ manager.savePhoto($0) }
+            manager.selectedAssets.compactMap{ $0._images[.edited] }.forEach{ manager.savePhoto(image: $0) }
         }
         lock.unlock()
     }

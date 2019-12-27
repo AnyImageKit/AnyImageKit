@@ -486,31 +486,30 @@ extension AssetPickerViewController {
 // MARK: - ImageCaptureControllerDelegate
 extension AssetPickerViewController: ImageCaptureControllerDelegate {
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing photo: UIImage, matedata: [String: Any]) {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: CaptureMediaType) {
         capture.dismiss(animated: true, completion: nil)
         showWaitHUD()
-        manager.savePhoto(photo, metadata: matedata) { [weak self] (result) in
-            switch result {
-            case .success(let asset):
-                self?.addPHAsset(asset)
-            case .failure(let error):
-                _print(error.localizedDescription)
+        switch type {
+        case .photo:
+            manager.savePhoto(url: media) { [weak self] (result) in
+                switch result {
+                case .success(let asset):
+                    self?.addPHAsset(asset)
+                case .failure(let error):
+                    _print(error.localizedDescription)
+                }
+                hideHUD()
             }
-            hideHUD()
-        }
-    }
-    
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing video: URL) {
-        capture.dismiss(animated: true, completion: nil)
-        showWaitHUD()
-        manager.saveVideo(at: video) { [weak self] (result) in
-            switch result {
-            case .success(let asset):
-                self?.addPHAsset(asset)
-            case .failure(let error):
-                _print(error.localizedDescription)
+        case .video:
+            manager.saveVideo(url: media) { [weak self] (result) in
+                switch result {
+                case .success(let asset):
+                    self?.addPHAsset(asset)
+                case .failure(let error):
+                    _print(error.localizedDescription)
+                }
+                hideHUD()
             }
-            hideHUD()
         }
     }
 }
