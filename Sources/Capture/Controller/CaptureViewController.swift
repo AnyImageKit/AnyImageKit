@@ -40,6 +40,12 @@ final class CaptureViewController: UIViewController {
         return capture
     }()
     
+    private lazy var recorder: Recorder = {
+        let recorder = Recorder()
+        recorder.delegate = self
+        return recorder
+    }()
+    
     private lazy var orientationUtil: DeviceOrientationUtil = {
         let util = DeviceOrientationUtil()
         util.delegate = self
@@ -114,6 +120,10 @@ extension CaptureViewController {
             _print(error.localizedDescription)
         }
     }
+    
+    private func output(video url: URL) {
+        delegate?.capture(self, didOutput: url, type: .video)
+    }
 }
 
 // MARK: - Target
@@ -166,19 +176,12 @@ extension CaptureViewController: CaptureButtonDelegate {
         impactFeedback()
         toolView.hideButtons(animated: true)
         previewView.hideToolMask(animated: true)
-        // TODO: start recoder
+        recorder.startRunning()
     }
     
     func captureButtonDidEndedLongPress(_ button: CaptureButton) {
-        // TODO: stop recoder
-        
+        recorder.stopRunning()
         button.startProcessing()
-        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
-            button.stopProcessing()
-            
-            self.toolView.showButtons(animated: true)
-            self.previewView.showToolMask(animated: true)
-        }
     }
 }
 
@@ -208,12 +211,29 @@ extension CaptureViewController: CaptureDelegate {
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType) {
         switch type {
         case .audio:
-            break
+            recorder.append(sampleBuffer: sampleBuffer, mediaType: .audio)
         case .video:
+            recorder.append(sampleBuffer: sampleBuffer, mediaType: .video)
             if isPreviewing {
                 previewView.draw(sampleBuffer)
             }
         }
+    }
+}
+
+// MARK: - RecorderDelegate
+extension CaptureViewController: RecorderDelegate {
+    
+    func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL) {
+        toolView.captureButton.stopProcessing()
+        toolView.showButtons(animated: true)
+        previewView.showToolMask(animated: true)
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        
+        #else
+        output(video: url)
+        #endif
     }
 }
 

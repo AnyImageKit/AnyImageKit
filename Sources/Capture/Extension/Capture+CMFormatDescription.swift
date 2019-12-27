@@ -1,0 +1,16 @@
+//
+//  Capture+CMFormatDescription.swift
+//  AnyImageKit
+//
+//  Created by 刘栋 on 2019/12/27.
+//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//
+
+import CoreMedia
+
+extension CMAudioFormatDescription {
+    
+    var streamBasicDescription: AudioStreamBasicDescription? {
+        return CMAudioFormatDescriptionGetStreamBasicDescription(self)?.pointee
+    }
+}
