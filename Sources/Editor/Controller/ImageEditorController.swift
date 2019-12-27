@@ -25,7 +25,7 @@ extension ImageEditorControllerDelegate {
     public func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) { }
 }
 
-open class ImageEditorController: AINavigationController {
+open class ImageEditorController: AnyImageNavigationController {
     
     open private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     

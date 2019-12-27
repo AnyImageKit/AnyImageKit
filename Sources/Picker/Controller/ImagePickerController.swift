@@ -22,7 +22,7 @@ extension ImagePickerControllerDelegate {
     }
 }
 
-open class ImagePickerController: AINavigationController {
+open class ImagePickerController: AnyImageNavigationController {
     
     open private(set) weak var pickerDelegate: ImagePickerControllerDelegate?
     

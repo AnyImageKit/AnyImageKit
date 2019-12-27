@@ -22,7 +22,7 @@ extension ImageCaptureControllerDelegate {
     }
 }
 
-open class ImageCaptureController: AINavigationController {
+open class ImageCaptureController: AnyImageNavigationController {
     
     open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
     

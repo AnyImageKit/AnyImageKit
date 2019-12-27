@@ -34,7 +34,7 @@
 		A068533523B596C00042A031 /* FileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A068533423B596C00042A031 /* FileType.swift */; };
 		A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */; };
 		A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0769994239638630006AC9B /* ImageCaptureController.swift */; };
-		A076999723963A360006AC9B /* AINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999623963A360006AC9B /* AINavigationController.swift */; };
+		A076999723963A360006AC9B /* AnyImageNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999623963A360006AC9B /* AnyImageNavigationController.swift */; };
 		A076999D23963F270006AC9B /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999923963F270006AC9B /* VideoCapture.swift */; };
 		A076999E23963F270006AC9B /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999A23963F270006AC9B /* Capture.swift */; };
 		A076999F23963F270006AC9B /* AudioCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999B23963F270006AC9B /* AudioCapture.swift */; };
@@ -236,7 +236,7 @@
 		A068533423B596C00042A031 /* FileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileType.swift; sourceTree = "<group>"; };
 		A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureProgressView.swift; sourceTree = "<group>"; };
 		A0769994239638630006AC9B /* ImageCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureController.swift; sourceTree = "<group>"; };
-		A076999623963A360006AC9B /* AINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AINavigationController.swift; sourceTree = "<group>"; };
+		A076999623963A360006AC9B /* AnyImageNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageNavigationController.swift; sourceTree = "<group>"; };
 		A076999923963F270006AC9B /* VideoCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		A076999A23963F270006AC9B /* Capture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
 		A076999B23963F270006AC9B /* AudioCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioCapture.swift; sourceTree = "<group>"; };
@@ -357,7 +357,7 @@
 		A596FE5A23A8A86F005C8AFA /* TextData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextData.swift; sourceTree = "<group>"; };
 		A5A141B02384DB6E00201A82 /* ImagePickerController+EditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePickerController+EditorConfig.swift"; sourceTree = "<group>"; };
 		A5A27B9E232F81CF00D966B8 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
-		A5A27BA6232F82AE00D966B8 /* AIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5A27BA6232F82AE00D966B8 /* AnyImageKit .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AnyImageKit .app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5A27BB1232F82B000D966B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5A27BB6232F82B000D966B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -572,7 +572,7 @@
 			isa = PBXGroup;
 			children = (
 				A099CC60232F3BF70023CC3D /* AnyImageKit.framework */,
-				A5A27BA6232F82AE00D966B8 /* AIExample.app */,
+				A5A27BA6232F82AE00D966B8 /* AnyImageKit .app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -628,7 +628,7 @@
 		A0B22EA1237AA1B3001F6066 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A076999623963A360006AC9B /* AINavigationController.swift */,
+				A076999623963A360006AC9B /* AnyImageNavigationController.swift */,
 				A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */,
 			);
 			path = Controller;
@@ -997,7 +997,7 @@
 			);
 			name = Example;
 			productName = Example;
-			productReference = A5A27BA6232F82AE00D966B8 /* AIExample.app */;
+			productReference = A5A27BA6232F82AE00D966B8 /* AnyImageKit .app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1258,7 +1258,7 @@
 				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
 				A596FE5B23A8A86F005C8AFA /* TextData.swift in Sources */,
 				A50B2109237AA24300A894A9 /* Brush.swift in Sources */,
-				A076999723963A360006AC9B /* AINavigationController.swift in Sources */,
+				A076999723963A360006AC9B /* AnyImageNavigationController.swift in Sources */,
 				A08DF7C723B332E8002B92EE /* Capture+UIImage.swift in Sources */,
 				A50B2114237AA24300A894A9 /* EditorPenToolView.swift in Sources */,
 				A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */,
@@ -1566,7 +1566,7 @@
 				);
 				MARKETING_VERSION = 0.6.4;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
-				PRODUCT_NAME = AIExample;
+				PRODUCT_NAME = "AnyImageKit ";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1591,7 +1591,7 @@
 				);
 				MARKETING_VERSION = 0.6.4;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
-				PRODUCT_NAME = AIExample;
+				PRODUCT_NAME = "AnyImageKit ";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_VERSION = 5.0;

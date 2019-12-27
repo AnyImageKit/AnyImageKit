@@ -1,5 +1,5 @@
 //
-//  AINavigationController.swift
+//  AnyImageNavigationController.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/3.
@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-open class AINavigationController: UINavigationController {
+open class AnyImageNavigationController: UINavigationController {
     
     private var hasOverrideGeneratingDeviceOrientation = false
     
@@ -32,7 +32,7 @@ open class AINavigationController: UINavigationController {
     }
 }
 
-extension AINavigationController {
+extension AnyImageNavigationController {
     
     func beginGeneratingDeviceOrientationNotifications() {
         if !UIDevice.current.isGeneratingDeviceOrientationNotifications {
