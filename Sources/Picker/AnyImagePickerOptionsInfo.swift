@@ -223,7 +223,19 @@ public struct AnyImagePickerTheme {
 }
 
 // MARK: - Extension
+extension AnyImagePickerOptionsInfoItem: AnyImageOptionsInfoItem {
+    
+    public static func ~== (lhs: AnyImagePickerOptionsInfoItem, rhs: AnyImagePickerOptionsInfoItem) -> Bool {
+        switch (lhs, rhs) {
+        case (.theme, .theme): return true
+            // TODO:
+        default: return false
+        }
+    }
+}
+
 extension AnyImagePickerSelectOptions {
+    
     var mediaTypes: [PHAssetMediaType] {
         var result: [PHAssetMediaType] = []
         if contains(.photo) || contains(.photoGIF) || contains(.photoLive) {
@@ -235,4 +247,3 @@ extension AnyImagePickerSelectOptions {
         return result
     }
 }
-
