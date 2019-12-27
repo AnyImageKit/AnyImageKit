@@ -368,7 +368,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if album.isCameraRoll && !manager.captureConfig.mediaOptions.isEmpty {
+        if album.isCameraRoll && !manager.config.captureOptions.mediaOptions.isEmpty {
             return album.assets.count - 1
         }
         #endif
@@ -429,7 +429,7 @@ extension AssetPickerViewController {
     
     private func showCapture() {
         #if !targetEnvironment(simulator)
-        let controller = ImageCaptureController(config: manager.captureConfig, delegate: self)
+        let controller = ImageCaptureController(config: manager.config.captureOptions, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
         #else
@@ -444,7 +444,7 @@ extension AssetPickerViewController {
         guard let album = album, album.isCameraRoll else { return }
         let config = manager.config
         let sortType = config.orderByDate
-        if !manager.captureConfig.mediaOptions.isEmpty {
+        if !manager.config.captureOptions.mediaOptions.isEmpty {
             switch sortType {
             case .asc:
                 album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: config.selectOptions), atLast: true)

@@ -19,10 +19,6 @@ final class PickerManager {
     
     var config: AnyImagePickerOptionsInfo = .init()
     
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    var captureConfig: AnyImageCaptureOptionsInfo = .init()
-    #endif
-    
     var isUpToLimit: Bool {
         return selectedAssets.count == config.selectLimit
     }

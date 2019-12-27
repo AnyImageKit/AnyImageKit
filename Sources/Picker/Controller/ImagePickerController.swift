@@ -30,10 +30,6 @@ open class ImagePickerController: AnyImageNavigationController {
         return manager.config
     }
     
-    public var captureConfig: AnyImageCaptureOptionsInfo {
-        return manager.captureConfig
-    }
-    
     private var containerSize: CGSize = .zero
     private var hiddenStatusBar: Bool = false
     private var didFinishSelect: Bool = false
