@@ -21,7 +21,7 @@ final class VideoCapture: NSObject {
     
     weak var delegate: VideoCaptureDelegate?
     
-    private let config: ImageCaptureController.Config
+    private let config: AnyImageCaptureOptionsInfo
     
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
@@ -40,7 +40,7 @@ final class VideoCapture: NSObject {
     private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
-    init(session: AVCaptureSession, config: ImageCaptureController.Config) {
+    init(session: AVCaptureSession, config: AnyImageCaptureOptionsInfo) {
         self.config = config
         super.init()
         do {

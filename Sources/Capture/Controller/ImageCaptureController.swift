@@ -26,9 +26,9 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
     
-    public let config: Config
+    public let config: AnyImageCaptureOptionsInfo
     
-    required public init(config: Config = .init(), delegate: ImageCaptureControllerDelegate) {
+    required public init(config: AnyImageCaptureOptionsInfo = .init(), delegate: ImageCaptureControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         self.config = config
         super.init(nibName: nil, bundle: nil)

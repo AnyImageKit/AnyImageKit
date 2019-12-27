@@ -46,9 +46,9 @@ final class CaptureViewController: UIViewController {
         return util
     }()
     
-    private let config: ImageCaptureController.Config
+    private let config: AnyImageCaptureOptionsInfo
     
-    init(config: ImageCaptureController.Config) {
+    init(config: AnyImageCaptureOptionsInfo) {
         self.config = config
         super.init(nibName: nil, bundle: nil)
     }

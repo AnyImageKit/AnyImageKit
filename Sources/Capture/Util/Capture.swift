@@ -20,7 +20,7 @@ final class Capture {
     
     weak var delegate: CaptureDelegate?
     
-    private let config: ImageCaptureController.Config
+    private let config: AnyImageCaptureOptionsInfo
     private let session: AVCaptureSession
     private let audioCapture: AudioCapture
     private let videoCapture: VideoCapture
@@ -28,7 +28,7 @@ final class Capture {
     var orientation: CaptureOrientation = .portrait
     var isSwitchingCamera = false
     
-    init(config: ImageCaptureController.Config) {
+    init(config: AnyImageCaptureOptionsInfo) {
         self.config = config
         self.session = AVCaptureSession()
         self.session.beginConfiguration()

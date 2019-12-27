@@ -12,7 +12,7 @@ import AVKit
 
 final class CaptureConfigViewController: UITableViewController {
     
-    var config = ImageCaptureController.Config()
+    var config = AnyImageCaptureOptionsInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()

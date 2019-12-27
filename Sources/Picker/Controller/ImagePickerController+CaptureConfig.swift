@@ -11,8 +11,8 @@ import UIKit
 #if ANYIMAGEKIT_ENABLE_CAPTURE
 
 extension ImagePickerController {
-    
-    public typealias CaptureConfig = ImageCaptureController.Config
+
+    public typealias CaptureConfig = AnyImageCaptureOptionsInfo
 }
 
 #endif
