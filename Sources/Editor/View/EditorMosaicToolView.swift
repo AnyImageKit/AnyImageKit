@@ -29,13 +29,13 @@ final class EditorMosaicToolView: UIView {
         return view
     }()
     
-    private let config: ImageEditorController.PhotoConfig
+    private let config: AnyImageEditorPhotoOptionsInfo
     private var mosaicIcon: [UIImageView] = []
     private let spacing: CGFloat = 40
     
-    init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
+    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo) {
         self.config = config
-        self.currentIdx = config.defaultMosaicIdx
+        self.currentIdx = config.defaultMosaicIndex
         super.init(frame: frame)
         setupView()
     }

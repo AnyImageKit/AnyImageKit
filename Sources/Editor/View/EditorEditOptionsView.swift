@@ -10,20 +10,20 @@ import UIKit
 
 protocol EditorEditOptionsViewDelegate: class {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: ImageEditorController.PhotoEditOption?)
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: AnyImageEditorPhotoOptions?)
 }
 
 final class EditorEditOptionsView: UIView {
     
     weak var delegate: EditorEditOptionsViewDelegate?
     
-    private(set) var currentOption: ImageEditorController.PhotoEditOption?
+    private(set) var currentOption: AnyImageEditorPhotoOptions?
     
-    private let config: ImageEditorController.PhotoConfig
+    private let config: AnyImageEditorPhotoOptionsInfo
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
+    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         setupView()
@@ -56,7 +56,7 @@ final class EditorEditOptionsView: UIView {
         }
     }
     
-    private func createButton(tag: Int, option: ImageEditorController.PhotoEditOption) -> UIButton {
+    private func createButton(tag: Int, option: AnyImageEditorPhotoOptions) -> UIButton {
         let button = UIButton(type: .custom)
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag

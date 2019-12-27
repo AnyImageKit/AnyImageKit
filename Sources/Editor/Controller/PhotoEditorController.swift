@@ -19,7 +19,7 @@ final class PhotoEditorController: UIViewController {
     private lazy var contentView: PhotoEditorContentView = {
         let view = PhotoEditorContentView(frame: self.view.bounds, image: image, config: config)
         view.delegate = self
-        view.canvas.brush.color = config.penColors[config.defaultPenIdx]
+        view.canvas.brush.color = config.penColors[config.defaultPenIndex]
         return view
     }()
     private lazy var toolView: EditorToolView = {
@@ -42,12 +42,12 @@ final class PhotoEditorController: UIViewController {
     }()
     
     private let image: UIImage
-    private let config: ImageEditorController.PhotoConfig
+    private let config: AnyImageEditorPhotoOptionsInfo
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var context = CIContext()
     
-    init(image: UIImage, config: ImageEditorController.PhotoConfig, delegate: PhotoEditorControllerDelegate) {
+    init(image: UIImage, config: AnyImageEditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
         self.image = image
         self.config = config
         self.delegate = delegate
@@ -156,7 +156,7 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
 extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 点击了功能按钮
-    func toolView(_ toolView: EditorToolView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
+    func toolView(_ toolView: EditorToolView, optionDidChange option: AnyImageEditorPhotoOptions?) {
         contentView.canvas.isUserInteractionEnabled = false
         contentView.mosaic?.isUserInteractionEnabled = false
         contentView.scrollView.isScrollEnabled = option == nil

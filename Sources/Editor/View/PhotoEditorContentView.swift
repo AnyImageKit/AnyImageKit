@@ -96,7 +96,7 @@ final class PhotoEditorContentView: UIView {
     /// 原始图片
     internal let image: UIImage
     /// 配置项
-    internal let config: ImageEditorController.PhotoConfig
+    internal let config: AnyImageEditorPhotoOptionsInfo
     
     /// 正在裁剪
     internal var isCrop: Bool = false
@@ -126,7 +126,7 @@ final class PhotoEditorContentView: UIView {
         return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache() || !textImageViews.isEmpty
     }
     
-    init(frame: CGRect, image: UIImage, config: ImageEditorController.PhotoConfig) {
+    init(frame: CGRect, image: UIImage, config: AnyImageEditorPhotoOptionsInfo) {
         self.image = image
         self.config = config
         super.init(frame: frame)

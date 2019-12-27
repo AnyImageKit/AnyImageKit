@@ -30,7 +30,7 @@ open class ImageEditorController: AnyImageNavigationController {
     open private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
     /// Init image editor
-    required public init(image: UIImage, config: PhotoConfig = .init(), delegate: ImageEditorControllerDelegate) {
+    required public init(image: UIImage, config: AnyImageEditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         check(config: config)
@@ -40,7 +40,7 @@ open class ImageEditorController: AnyImageNavigationController {
     }
     
     /// Init video editor
-    required public init(video resource: VideoResource, placeholdImage: UIImage?, config: VideoConfig = .init(), delegate: ImageEditorControllerDelegate) {
+    required public init(video resource: VideoResource, placeholdImage: UIImage?, config: AnyImageEditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = config.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         self.editorDelegate = delegate
@@ -57,7 +57,7 @@ open class ImageEditorController: AnyImageNavigationController {
 // MARK: - Private function
 extension ImageEditorController {
     
-    private func check(config: PhotoConfig) {
+    private func check(config: AnyImageEditorPhotoOptionsInfo) {
         assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         assert(config.penColors.count <= 7, "Pen colors count can't bigger then 7")
         assert(config.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")

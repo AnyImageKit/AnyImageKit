@@ -16,7 +16,7 @@ protocol VideoEditorCropProgressViewDelegate: class {
 final class VideoEditorCropProgressView: UIView {
 
     public weak var delegate: VideoEditorCropProgressViewDelegate?
-    private let config: ImageEditorController.VideoConfig
+    private let config: AnyImageEditorVideoOptionsInfo
     
     private(set) var left: CGFloat = 0
     private(set) var right: CGFloat = 1
@@ -91,7 +91,7 @@ final class VideoEditorCropProgressView: UIView {
     /// 预览图
     private var previews: [UIImageView] = []
     
-    init(frame: CGRect, config: ImageEditorController.VideoConfig) {
+    init(frame: CGRect, config: AnyImageEditorVideoOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         layer.cornerRadius = 5

@@ -75,14 +75,14 @@ final class InputTextViewController: UIViewController {
     }()
     
     private weak var delegate: InputTextViewControllerDelegate?
-    private let config: ImageEditorController.PhotoConfig
+    private let config: AnyImageEditorPhotoOptionsInfo
     private let coverImage: UIImage?
     private let data: TextData
     
     private let lineHeight: CGFloat = 36
     private var isBegin: Bool = true
     
-    init(config: ImageEditorController.PhotoConfig, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
+    init(config: AnyImageEditorPhotoOptionsInfo, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
         self.delegate = delegate
         self.config = config
         self.coverImage = coverImage

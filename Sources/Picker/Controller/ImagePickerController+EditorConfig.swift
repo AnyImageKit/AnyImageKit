@@ -18,14 +18,14 @@ extension ImagePickerController {
         public var options: EditorOptions
         
         /// Photo Config 图片编辑配置项
-        public var photoConfig: ImageEditorController.PhotoConfig
+        public var photoConfig: AnyImageEditorPhotoOptionsInfo
         
         /// Video Config 视频编辑配置项
-        public var videoConfig: ImageEditorController.VideoConfig
+        public var videoConfig: AnyImageEditorVideoOptionsInfo
         
         public init(options: EditorOptions = [],
-                    photoConfig: ImageEditorController.PhotoConfig = .init(),
-                    videoConfig: ImageEditorController.VideoConfig = .init()) {
+                    photoConfig: AnyImageEditorPhotoOptionsInfo = .init(),
+                    videoConfig: AnyImageEditorVideoOptionsInfo = .init()) {
             self.options = options
             self.photoConfig = photoConfig
             self.videoConfig = videoConfig

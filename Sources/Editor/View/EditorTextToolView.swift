@@ -29,10 +29,10 @@ final class EditorTextToolView: UIView {
         return view
     }()
     
-    private let colors: [ImageEditorController.PhotoTextColor]
+    private let colors: [AnyImageEditorPhotoTextColor]
     private var colorButtons: [ColorButton] = []
     
-    init(frame: CGRect, config: ImageEditorController.PhotoConfig, idx: Int, isTextSelected: Bool) {
+    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
         self.colors = config.textColors
         self.currentIdx = idx
         super.init(frame: frame)

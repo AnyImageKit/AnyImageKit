@@ -9,13 +9,13 @@
 import UIKit
 
 protocol VideoEditorToolViewDelegate: class {
-    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: ImageEditorController.VideoEditOption?)
+    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: AnyImageEditorVideoEditOption?)
 }
 
 final class VideoEditorToolView: UIView {
 
     public weak var delegate: VideoEditorToolViewDelegate?
-    private(set) var currentOption: ImageEditorController.VideoEditOption?
+    private(set) var currentOption: AnyImageEditorVideoEditOption?
     
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -30,9 +30,9 @@ final class VideoEditorToolView: UIView {
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    private let config: ImageEditorController.VideoConfig
+    private let config: AnyImageEditorVideoOptionsInfo
     
-    init(frame: CGRect, config: ImageEditorController.VideoConfig) {
+    init(frame: CGRect, config: AnyImageEditorVideoOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         setupView()
@@ -71,7 +71,7 @@ final class VideoEditorToolView: UIView {
         }
     }
     
-    private func createButton(tag: Int, option: ImageEditorController.VideoEditOption) -> UIButton {
+    private func createButton(tag: Int, option: AnyImageEditorVideoEditOption) -> UIButton {
         let button = UIButton(type: .custom)
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
@@ -95,7 +95,7 @@ final class VideoEditorToolView: UIView {
 // MARK: - Public
 extension VideoEditorToolView {
     
-    func selectOption(_ option: ImageEditorController.VideoEditOption) -> Bool {
+    func selectOption(_ option: AnyImageEditorVideoEditOption) -> Bool {
         guard let idx = config.editOptions.firstIndex(of: option) else { return false }
         selectButton(buttons[idx])
         return true

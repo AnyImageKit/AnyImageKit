@@ -68,9 +68,9 @@ public struct AnyImagePickerOptionsInfo {
     public var orderByDate: AnyImageSort = .asc
     public var enableDebugLog: Bool = false
     
-    public init(_ items: [AnyImagePickerOptionsInfoItem] = []) {
-        for item in items {
-            switch item {
+    public init(_ info: [AnyImagePickerOptionsInfoItem] = []) {
+        for option in info {
+            switch option {
             case .theme(let value): theme = value
             case .selectLimit(let value): selectLimit = value
             case .columnNumber(let value): columnNumber = value

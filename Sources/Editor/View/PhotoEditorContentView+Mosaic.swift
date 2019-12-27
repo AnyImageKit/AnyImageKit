@@ -31,7 +31,7 @@ extension PhotoEditorContentView {
     
     /// 在子线程创建马赛克图片
     internal func setupMosaicView() {
-        let idx = mosaic?.currentIdx ?? config.defaultMosaicIdx
+        let idx = mosaic?.currentIdx ?? config.defaultMosaicIndex
         mosaic = nil
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }

@@ -10,7 +10,7 @@ import UIKit
 
 protocol EditorToolViewDelegate: class {
     
-    func toolView(_ toolView: EditorToolView, optionDidChange option: ImageEditorController.PhotoEditOption?)
+    func toolView(_ toolView: EditorToolView, optionDidChange option: AnyImageEditorPhotoOptions?)
     
     func toolView(_ toolView: EditorToolView, colorDidChange idx: Int)
     func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int)
@@ -28,7 +28,7 @@ final class EditorToolView: UIView {
     
     weak var delegate: EditorToolViewDelegate?
     
-    var currentOption: ImageEditorController.PhotoEditOption? {
+    var currentOption: AnyImageEditorPhotoOptions? {
         editOptionsView.currentOption
     }
     
@@ -95,9 +95,9 @@ final class EditorToolView: UIView {
         return view
     }()
     
-    private let config: ImageEditorController.PhotoConfig
+    private let config: AnyImageEditorPhotoOptionsInfo
     
-    init(frame: CGRect, config: ImageEditorController.PhotoConfig) {
+    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo) {
         self.config = config
         super.init(frame: frame)
         isUserInteractionEnabled = false
@@ -156,7 +156,7 @@ final class EditorToolView: UIView {
 // MARK: - EditorEditOptionsViewDelegate
 extension EditorToolView: EditorEditOptionsViewDelegate {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: ImageEditorController.PhotoEditOption?) {
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: AnyImageEditorPhotoOptions?) {
         delegate?.toolView(self, optionDidChange: option)
         
         guard let option = option else {
