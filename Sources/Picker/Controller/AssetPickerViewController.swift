@@ -8,7 +8,6 @@
 
 import UIKit
 import Photos
-import MobileCoreServices
 
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
