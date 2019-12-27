@@ -8,8 +8,8 @@
 
 import Photos
 
-typealias _VideoFetchCompletion = (Result<VideoFetchResponse, ImageKitError>) -> Void
-typealias _VideoURLFetchCompletion = (Result<VideoURLFetchResponse, ImageKitError>) -> Void
+typealias _VideoFetchCompletion = (Result<VideoFetchResponse, AnyImageError>) -> Void
+typealias _VideoURLFetchCompletion = (Result<VideoURLFetchResponse, AnyImageError>) -> Void
 
 extension PickerManager {
     

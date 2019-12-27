@@ -31,8 +31,8 @@ public struct VideoFetchResponse {
     public let playerItem: AVPlayerItem
 }
 
-public typealias VideoFetchCompletion = (Result<VideoFetchResponse, ImageKitError>, PHImageRequestID) -> Void
-public typealias VideoSaveCompletion = (Result<PHAsset, ImageKitError>) -> Void
+public typealias VideoFetchCompletion = (Result<VideoFetchResponse, AnyImageError>, PHImageRequestID) -> Void
+public typealias VideoSaveCompletion = (Result<PHAsset, AnyImageError>) -> Void
 
 
 extension ExportTool {

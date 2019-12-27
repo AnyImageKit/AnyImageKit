@@ -128,7 +128,7 @@ public struct VideoURLFetchResponse {
     public let url: URL
 }
 
-public typealias VideoURLFetchCompletion = (Result<VideoURLFetchResponse, ImageKitError>, PHImageRequestID) -> Void
+public typealias VideoURLFetchCompletion = (Result<VideoURLFetchResponse, AnyImageError>, PHImageRequestID) -> Void
 
 
 extension ExportTool {
@@ -164,7 +164,7 @@ extension ExportTool {
         }
     }
     
-    private static  func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping (Result<VideoURLFetchResponse, ImageKitError>) -> Void) {
+    private static  func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping (Result<VideoURLFetchResponse, AnyImageError>) -> Void) {
         // Check Path
         FileHelper.createDirectory(at: options.preferredOutputPath)
         // Check File Type

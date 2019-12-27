@@ -10,19 +10,19 @@ import UIKit
 import Photos
 
 public protocol VideoResource {
-    func loadURL(completion: @escaping (Result<URL, ImageKitError>) -> Void)
+    func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void)
 }
 
 extension URL: VideoResource {
     
-    public func loadURL(completion: @escaping (Result<URL, ImageKitError>) -> Void) {
+    public func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
         completion(.success(self))
     }
 }
 
 extension PHAsset: VideoResource {
     
-    public func loadURL(completion: @escaping (Result<URL, ImageKitError>) -> Void) {
+    public func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
         guard mediaType == .video || mediaSubtypes == .photoLive else {
             completion(.failure(.invalidMediaType))
             return
@@ -38,7 +38,7 @@ extension PHAsset: VideoResource {
         }
     }
     
-    private func loadURLFromNetwork(completion: @escaping (Result<URL, ImageKitError>) -> Void) {
+    private func loadURLFromNetwork(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
         let options = VideoURLFetchOptions(isNetworkAccessAllowed: true, version: .current, deliveryMode: .highQualityFormat, fetchProgressHandler: { (progress, _, _, _) in
             _print("Download video from iCloud: \(progress)")
         })

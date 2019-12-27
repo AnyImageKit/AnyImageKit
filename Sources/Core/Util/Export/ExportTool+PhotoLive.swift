@@ -36,7 +36,7 @@ public struct PhotoLiveFetchResponse {
     public let livePhoto: PHLivePhoto
 }
 
-public typealias PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, ImageKitError>, PHImageRequestID) -> Void
+public typealias PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, AnyImageError>, PHImageRequestID) -> Void
 
 
 extension ExportTool {

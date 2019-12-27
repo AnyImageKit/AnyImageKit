@@ -30,7 +30,7 @@ public struct PhotoGIFFetchResponse {
     public let image: UIImage
 }
 
-public typealias PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, ImageKitError>, PHImageRequestID) -> Void
+public typealias PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, AnyImageError>, PHImageRequestID) -> Void
 
 extension ExportTool {
     
