@@ -39,21 +39,19 @@ final class HomeViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let rowType = RowType.allCases[indexPath.row]
         let controller: UIViewController
+        let style: UITableView.Style
+        if #available(iOS 13.0, *) {
+            style = .insetGrouped
+        } else {
+            style = .grouped
+        }
         switch rowType {
         case .picker:
-            if #available(iOS 13.0, *) {
-                controller = PickerConfigViewController(style: .insetGrouped)
-            } else {
-                controller = PickerConfigViewController(style: .grouped)
-            }
+            controller = PickerConfigViewController(style: style)
         case .editor:
-            if #available(iOS 13.0, *) {
-                controller = EditorConfigViewController(style: .insetGrouped)
-            } else {
-                controller = EditorConfigViewController(style: .grouped)
-            }
+            controller = EditorConfigViewController(style: style)
         case .capture:
-            controller = CaptureConfigViewController()
+            controller = CaptureConfigViewController(style: style)
         }
         navigationController?.pushViewController(controller, animated: true)
     }

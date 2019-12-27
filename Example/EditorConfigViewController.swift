@@ -29,10 +29,10 @@ final class EditorConfigViewController: UITableViewController {
     
     private func setupNavigation() {
         let title = BundleHelper.localizedString(key: "Open editor")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openEditorTapped))
     }
     
-    @objc private func openPickerTapped() {
+    @objc private func openEditorTapped() {
         config.enableDebugLog = true
         let image = UIImage(named: "EditorTestImage")!
         let controller = ImageEditorController(image: image, config: config, delegate: self)

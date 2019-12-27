@@ -39,6 +39,19 @@ open class ImageCaptureController: AINavigationController {
         self.viewControllers = [rootViewController]
     }
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    required public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImageCaptureControllerDelegate) {
+        enableDebugLog = config.enableDebugLog
+        self.config = config
+        super.init(nibName: nil, bundle: nil)
+        self.captureDelegate = delegate
+        
+        let rootViewController = CaptureViewController(config: config)
+        rootViewController.delegate = self
+        self.viewControllers = [rootViewController]
+    }
+    #endif
+    
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
