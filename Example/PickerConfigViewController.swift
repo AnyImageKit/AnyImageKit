@@ -13,9 +13,7 @@ final class PickerConfigViewController: UITableViewController {
     
     var config = AnyImagePickerOptionsInfo()
     
-    var editorConfig = ImagePickerController.EditorConfig()
-    
-    var captureConfig = ImagePickerController.CaptureConfig()
+    var captureConfig = AnyImageCaptureOptionsInfo()
     
     var isFullScreen = true
     
@@ -41,13 +39,12 @@ final class PickerConfigViewController: UITableViewController {
     // MARK: - Target
     
     @IBAction func openPickerTapped() {
-        // TODO:
-//        config.enableDebugLog = true
-//        let controller = ImagePickerController(config: config, editorConfig: editorConfig, captureConfig: captureConfig, delegate: self)
-//        if #available(iOS 13.0, *) {
-//            controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
-//        }
-//        present(controller, animated: true, completion: nil)
+        config.enableDebugLog = true
+        let controller = ImagePickerController(config: config, delegate: self)
+        if #available(iOS 13.0, *) {
+            controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
+        }
+        present(controller, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
@@ -297,11 +294,11 @@ extension PickerConfigViewController {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
         let alert = UIAlertController(title: "EditorOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
-            self?.editorConfig.options = []
+            self?.config.editorOptions.options = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
-            self?.editorConfig.options = [.photo]
+            self?.config.editorOptions.options = [.photo]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

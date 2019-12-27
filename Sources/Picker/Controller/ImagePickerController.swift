@@ -30,13 +30,7 @@ open class ImagePickerController: AnyImageNavigationController {
         return manager.config
     }
     
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    public var editorConfig: EditorConfig {
-        return manager.editorConfig
-    }
-    #endif
-    
-    public var captureConfig: CaptureConfig {
+    public var captureConfig: AnyImageCaptureOptionsInfo {
         return manager.captureConfig
     }
     
@@ -46,6 +40,10 @@ open class ImagePickerController: AnyImageNavigationController {
     private let lock: NSLock = .init()
     
     private let manager: PickerManager = .init()
+    
+    public convenience init(options: [AnyImagePickerOptionsInfoItem], delegate: ImagePickerControllerDelegate) {
+        self.init(config: .init(options), delegate: delegate)
+    }
     
     public required init(config: AnyImagePickerOptionsInfo = .init(), delegate: ImagePickerControllerDelegate) {
         enableDebugLog = config.enableDebugLog
@@ -67,30 +65,6 @@ open class ImagePickerController: AnyImageNavigationController {
         ImageEditorCache.clearDiskCache()
         #endif
     }
-    
-    // TODO:
-    
-//    #if ANYIMAGEKIT_ENABLE_EDITOR
-//    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), delegate: ImagePickerControllerDelegate) {
-//        self.init(config: config, delegate: delegate)
-//        self.manager.editorConfig = editorConfig
-//    }
-//    #endif
-//    
-//    #if ANYIMAGEKIT_ENABLE_CAPTURE
-//    convenience public init(config: Config = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
-//        self.init(config: config, delegate: delegate)
-//        self.manager.captureConfig = captureConfig
-//    }
-//    #endif
-//    
-//    #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
-//    convenience public init(config: Config = .init(), editorConfig: EditorConfig = .init(), captureConfig: CaptureConfig = .init(), delegate: ImagePickerControllerDelegate) {
-//        self.init(config: config, delegate: delegate)
-//        self.manager.editorConfig = editorConfig
-//        self.manager.captureConfig = captureConfig
-//    }
-//    #endif
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")
     required public init?(coder aDecoder: NSCoder) {

@@ -50,6 +50,14 @@ public enum AnyImagePickerOptionsInfoItem {
     /// - DESC: 按时间倒序排列，自动滚动到顶部
     case orderByDate(AnyImageSort)
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    case editorOptions(AnyImageEditorOptionsInfo)
+    #endif
+    
+    #if ANYIMAGEKIT_ENABLE_CAPTURE
+    case captureOptionInfoItems([AnyImageCaptureOptionsInfoItem])
+    #endif
+    
     /// Enable Debug Log 启用调试日志
     /// - Default: false
     case enableDebugLog
@@ -68,6 +76,18 @@ public struct AnyImagePickerOptionsInfo {
     public var orderByDate: AnyImageSort = .asc
     public var enableDebugLog: Bool = false
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    public var editorOptions: AnyImageEditorOptionsInfo = .init()
+    #endif
+    #if ANYIMAGEKIT_ENABLE_CAPTURE
+    public var captureOptionInfoItems: [AnyImageCaptureOptionsInfoItem] = [] {
+        didSet {
+            captureOptions = .init(captureOptionInfoItems)
+        }
+    }
+    var captureOptions: AnyImageCaptureOptionsInfo = .init()
+    #endif
+    
     public init(_ info: [AnyImagePickerOptionsInfoItem] = []) {
         for option in info {
             switch option {
@@ -81,6 +101,13 @@ public struct AnyImagePickerOptionsInfo {
             case .selectOptions(let value): selectOptions = value
             case .orderByDate(let value): orderByDate = value
             case .enableDebugLog: enableDebugLog = true
+                
+            #if ANYIMAGEKIT_ENABLE_EDITOR
+            case .editorOptions(let value): editorOptions = value
+            #endif
+            #if ANYIMAGEKIT_ENABLE_CAPTURE
+            case .captureOptionInfoItems(let value): captureOptionInfoItems = value
+            #endif
             }
         }
     }

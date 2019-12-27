@@ -14,24 +14,35 @@ public enum AnyImageEditorOptionsInfoItem {
     case options(AnyImageEditorOptions)
     
     /// Photo Config 图片编辑配置项
-    case photoOptionsInfo(AnyImageEditorPhotoOptionsInfo)
+    case photoOptionInfoItems([AnyImageEditorPhotoOptionsInfoItem])
     
     /// Video Config 视频编辑配置项
-    case videoOptionsInfo(AnyImageEditorVideoOptionsInfo)
+    case videoOptionInfoItems([AnyImageEditorVideoOptionsInfoItem])
 }
 
 public struct AnyImageEditorOptionsInfo {
 
     public var options: AnyImageEditorOptions = []
-    public var photoOptionsInfo: AnyImageEditorPhotoOptionsInfo = .init()
-    public var videoOptionsInfo: AnyImageEditorVideoOptionsInfo = .init()
+    public var photoOptionInfoItems: [AnyImageEditorPhotoOptionsInfoItem] = [] {
+        didSet {
+            photoOptions = .init(photoOptionInfoItems)
+        }
+    }
+    public var videoOptionInfoItems: [AnyImageEditorVideoOptionsInfoItem] = [] {
+        didSet {
+            videoOptions = .init(videoOptionInfoItems)
+        }
+    }
+    
+    var photoOptions: AnyImageEditorPhotoOptionsInfo = .init()
+    var videoOptions: AnyImageEditorVideoOptionsInfo = .init()
     
     public init(_ info: [AnyImageEditorOptionsInfoItem] = []) {
         for option in info {
             switch option {
             case .options(let value): options = value
-            case .photoOptionsInfo(let value): photoOptionsInfo = value
-            case .videoOptionsInfo(let value): videoOptionsInfo = value
+            case .photoOptionInfoItems(let value): photoOptionInfoItems = value
+            case .videoOptionInfoItems(let value): videoOptionInfoItems = value
             }
         }
     }

@@ -36,7 +36,7 @@ extension PhotoPreviewController {
             }
         } else if data.asset.phAsset.mediaType == .video {
             manager.cancelFetch(for: data.asset.phAsset.localIdentifier)
-            var config = manager.editorConfig.videoConfig
+            var config = manager.config.editorOptions.videoOptions
             config.enableDebugLog = manager.config.enableDebugLog
             let image = data.asset._images[.initial] ?? data.thumbnail
             let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, config: config, delegate: self)
@@ -61,9 +61,9 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
         
-        if data.asset.phAsset.mediaType == .image && manager.editorConfig.options.contains(.photo) {
+        if data.asset.phAsset.mediaType == .image && manager.config.editorOptions.options.contains(.photo) {
             toolBar.leftButton.isHidden = false
-        } else if data.asset.phAsset.mediaType == .video && manager.editorConfig.options.contains(.video) {
+        } else if data.asset.phAsset.mediaType == .video && manager.config.editorOptions.options.contains(.video) {
             toolBar.leftButton.isHidden = false
         } else {
             toolBar.leftButton.isHidden = true
@@ -75,7 +75,7 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func showEditor(_ image: UIImage, identifier: String) {
-        var config = manager.editorConfig.photoConfig
+        var config = manager.config.editorOptions.photoOptions
         config.enableDebugLog = manager.config.enableDebugLog
         config.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
         let controller = ImageEditorController(image: image, config: config, delegate: self)
