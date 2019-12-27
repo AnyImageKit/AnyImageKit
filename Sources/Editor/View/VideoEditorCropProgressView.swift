@@ -16,7 +16,7 @@ protocol VideoEditorCropProgressViewDelegate: class {
 final class VideoEditorCropProgressView: UIView {
 
     public weak var delegate: VideoEditorCropProgressViewDelegate?
-    private let config: AnyImageEditorVideoOptionsInfo
+    private let options: AnyImageEditorVideoOptionsInfo
     
     private(set) var left: CGFloat = 0
     private(set) var right: CGFloat = 1
@@ -64,7 +64,7 @@ final class VideoEditorCropProgressView: UIView {
         layer.isHidden = true
         layer.frame = bounds
         layer.fillRule = .evenOdd
-        layer.fillColor = config.tintColor.cgColor
+        layer.fillColor = options.tintColor.cgColor
         return layer
     }()
     private lazy var darkLayer: CAShapeLayer = {
@@ -91,8 +91,8 @@ final class VideoEditorCropProgressView: UIView {
     /// 预览图
     private var previews: [UIImageView] = []
     
-    init(frame: CGRect, config: AnyImageEditorVideoOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImageEditorVideoOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         layer.cornerRadius = 5
         setupView()

@@ -30,7 +30,7 @@ final class AssetPickerViewController: UIViewController {
     private var autoScrollToLatest: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
-        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), config: manager.config)
+        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
         view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -44,7 +44,7 @@ final class AssetPickerViewController: UIViewController {
                                          left: defaultAssetSpacing,
                                          bottom: toolBarHeight + defaultAssetSpacing,
                                          right: defaultAssetSpacing)
-        view.backgroundColor = manager.config.theme.backgroundColor
+        view.backgroundColor = manager.options.theme.backgroundColor
         view.registerCell(AssetCell.self)
         view.registerCell(CameraCell.self)
         view.dataSource = self
@@ -53,9 +53,9 @@ final class AssetPickerViewController: UIViewController {
     }()
     
     private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .picker, config: manager.config)
+        let view = PickerToolBar(style: .picker, options: manager.options)
         view.setEnable(false)
-        view.originalButton.isHidden = !manager.config.allowUseOriginalImage
+        view.originalButton.isHidden = !manager.options.allowUseOriginalImage
         view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
@@ -64,13 +64,13 @@ final class AssetPickerViewController: UIViewController {
     }()
     
     private lazy var permissionView: PermissionDeniedView = {
-        let view = PermissionDeniedView(frame: .zero, config: manager.config)
+        let view = PermissionDeniedView(frame: .zero, options: manager.options)
         view.isHidden = true
         return view
     }()
     
     private lazy var itemOffset: Int = {
-        switch manager.config.orderByDate {
+        switch manager.options.orderByDate {
         case .asc:
             return 0
         case .desc:
@@ -100,7 +100,7 @@ final class AssetPickerViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if autoScrollToLatest {
-            if manager.config.orderByDate == .asc {
+            if manager.options.orderByDate == .asc {
                 collectionView.scrollToLast(at: .bottom, animated: false)
             } else {
                 collectionView.scrollToFirst(at: .top, animated: false)
@@ -187,7 +187,7 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         addCameraAsset()
         collectionView.reloadData()
-        if manager.config.orderByDate == .asc {
+        if manager.options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: false)
         } else {
             collectionView.scrollToFirst(at: .top, animated: false)
@@ -246,7 +246,7 @@ extension AssetPickerViewController {
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
         let asset = album.assets[idx]
         if !asset.isSelected && manager.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.config.selectLimit)
+            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.options.selectLimit)
             let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -343,7 +343,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
-        let columnNumber = CGFloat(manager.config.columnNumber)
+        let columnNumber = CGFloat(manager.options.columnNumber)
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
     }
@@ -368,7 +368,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if album.isCameraRoll && !manager.config.captureOptions.mediaOptions.isEmpty {
+        if album.isCameraRoll && !manager.options.captureOptions.mediaOptions.isEmpty {
             return album.assets.count - 1
         }
         #endif
@@ -429,7 +429,7 @@ extension AssetPickerViewController {
     
     private func showCapture() {
         #if !targetEnvironment(simulator)
-        let controller = ImageCaptureController(config: manager.config.captureOptions, delegate: self)
+        let controller = ImageCaptureController(options: manager.options.captureOptions, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
         #else
@@ -442,14 +442,14 @@ extension AssetPickerViewController {
     /// 添加拍照 Item
     private func addCameraAsset() {
         guard let album = album, album.isCameraRoll else { return }
-        let config = manager.config
-        let sortType = config.orderByDate
-        if !manager.config.captureOptions.mediaOptions.isEmpty {
+        let options = manager.options
+        let sortType = options.orderByDate
+        if !options.captureOptions.mediaOptions.isEmpty {
             switch sortType {
             case .asc:
-                album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: config.selectOptions), atLast: true)
+                album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), atLast: true)
             case .desc:
-                album.insertAsset(Asset(idx: -1, asset: .init(), selectOptions: config.selectOptions), at: 0, sort: config.orderByDate)
+                album.insertAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
             }
         }
     }
@@ -457,17 +457,17 @@ extension AssetPickerViewController {
     /// 拍照结束后，插入 PHAsset
     private func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
-        let sortType = manager.config.orderByDate
+        let sortType = manager.options.orderByDate
         let addSuccess: Bool
         switch sortType {
         case .asc:
-            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.config.selectOptions)
+            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.addAsset(asset, atLast: false)
             addSuccess = manager.addSelectedAsset(asset)
             collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
         case .desc:
-            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.config.selectOptions)
-            album.insertAsset(asset, at: 1, sort: manager.config.orderByDate)
+            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
+            album.insertAsset(asset, at: 1, sort: manager.options.orderByDate)
             addSuccess = manager.addSelectedAsset(asset)
             collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
         }
@@ -475,7 +475,7 @@ extension AssetPickerViewController {
         toolBar.setEnable(true)
         if addSuccess {
             /// 拍照结束后，如果 limit=1 直接返回
-            if manager.config.selectLimit == 1 {
+            if manager.options.selectLimit == 1 {
                 delegate?.assetPickerDidFinishPicking(self)
             }
         }

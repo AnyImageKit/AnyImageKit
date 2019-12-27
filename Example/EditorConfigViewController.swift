@@ -35,7 +35,7 @@ final class EditorConfigViewController: UITableViewController {
     @objc private func openEditorTapped() {
         config.enableDebugLog = true
         let image = UIImage(named: "EditorTestImage")!
-        let controller = ImageEditorController(image: image, config: config, delegate: self)
+        let controller = ImageEditorController(image: image, options: config, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

@@ -20,7 +20,7 @@ extension PhotoPreviewController {
                 showEditor(image, identifier: data.asset.phAsset.localIdentifier)
             } else {
                 showWaitHUD()
-                let options = _PhotoFetchOptions(sizeMode: .preview(manager.config.largePhotoMaxWidth))
+                let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth))
                 manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
                     guard let self = self else { return }
                     hideHUD()
@@ -36,10 +36,10 @@ extension PhotoPreviewController {
             }
         } else if data.asset.phAsset.mediaType == .video {
             manager.cancelFetch(for: data.asset.phAsset.localIdentifier)
-            var config = manager.config.editorOptions.videoOptions
-            config.enableDebugLog = manager.config.enableDebugLog
+            var videoOptions = manager.options.editorOptions.videoOptions
+            videoOptions.enableDebugLog = manager.options.enableDebugLog
             let image = data.asset._images[.initial] ?? data.thumbnail
-            let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, config: config, delegate: self)
+            let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, options: videoOptions, delegate: self)
             controller.modalPresentationStyle = .fullScreen
             present(controller, animated: false, completion: nil)
         }
@@ -61,9 +61,9 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
         
-        if data.asset.phAsset.mediaType == .image && manager.config.editorOptions.options.contains(.photo) {
+        if data.asset.phAsset.mediaType == .image && manager.options.editorOptions.options.contains(.photo) {
             toolBar.leftButton.isHidden = false
-        } else if data.asset.phAsset.mediaType == .video && manager.config.editorOptions.options.contains(.video) {
+        } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.options.contains(.video) {
             toolBar.leftButton.isHidden = false
         } else {
             toolBar.leftButton.isHidden = true
@@ -75,10 +75,10 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func showEditor(_ image: UIImage, identifier: String) {
-        var config = manager.config.editorOptions.photoOptions
-        config.enableDebugLog = manager.config.enableDebugLog
-        config.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
-        let controller = ImageEditorController(image: image, config: config, delegate: self)
+        var options = manager.options.editorOptions.photoOptions
+        options.enableDebugLog = manager.options.enableDebugLog
+        options.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
+        let controller = ImageEditorController(image: image, options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false, completion: nil)
     }

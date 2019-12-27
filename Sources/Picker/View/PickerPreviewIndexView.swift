@@ -36,7 +36,7 @@ final class PickerPreviewIndexView: UIView {
         layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        view.backgroundColor = config.theme.toolBarColor
+        view.backgroundColor = options.theme.toolBarColor
         view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self
@@ -44,12 +44,12 @@ final class PickerPreviewIndexView: UIView {
         return view
     }()
     
-    private let config: AnyImagePickerOptionsInfo
+    private let options: AnyImagePickerOptionsInfo
     
     private var manager: PickerManager!
     
-    init(frame: CGRect, config: AnyImagePickerOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImagePickerOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }

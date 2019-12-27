@@ -20,7 +20,7 @@ final class VideoEditorToolView: UIView {
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
-        view.backgroundColor = config.tintColor
+        view.backgroundColor = options.tintColor
         view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -30,10 +30,10 @@ final class VideoEditorToolView: UIView {
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    private let config: AnyImageEditorVideoOptionsInfo
+    private let options: AnyImageEditorVideoOptionsInfo
     
-    init(frame: CGRect, config: AnyImageEditorVideoOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImageEditorVideoOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -50,7 +50,7 @@ final class VideoEditorToolView: UIView {
         }
         
         
-        for (idx, option) in config.editOptions.enumerated() {
+        for (idx, option) in options.editOptions.enumerated() {
             let button = createButton(tag: idx, option: option)
             buttons.append(button)
         }
@@ -83,11 +83,11 @@ final class VideoEditorToolView: UIView {
     }
     
     private func selectButton(_ button: UIButton) {
-        currentOption = config.editOptions[button.tag]
+        currentOption = options.editOptions[button.tag]
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
-            btn.imageView?.tintColor = isSelected ? config.tintColor : .white
+            btn.imageView?.tintColor = isSelected ? options.tintColor : .white
         }
     }
 }
@@ -96,7 +96,7 @@ final class VideoEditorToolView: UIView {
 extension VideoEditorToolView {
     
     func selectOption(_ option: AnyImageEditorVideoEditOption) -> Bool {
-        guard let idx = config.editOptions.firstIndex(of: option) else { return false }
+        guard let idx = options.editOptions.firstIndex(of: option) else { return false }
         selectButton(buttons[idx])
         return true
     }
@@ -114,7 +114,7 @@ extension VideoEditorToolView {
 extension VideoEditorToolView {
     
     @objc private func optionButtonTapped(_ sender: UIButton) {
-        if let current = currentOption, config.editOptions[sender.tag] == current {
+        if let current = currentOption, options.editOptions[sender.tag] == current {
             unselectButtons()
         } else {
             selectButton(sender)

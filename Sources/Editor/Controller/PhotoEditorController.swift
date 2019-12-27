@@ -17,13 +17,13 @@ protocol PhotoEditorControllerDelegate: class {
 final class PhotoEditorController: UIViewController {
     
     private lazy var contentView: PhotoEditorContentView = {
-        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, config: config)
+        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, options: options)
         view.delegate = self
-        view.canvas.brush.color = config.penColors[config.defaultPenIndex]
+        view.canvas.brush.color = options.penColors[options.defaultPenIndex]
         return view
     }()
     private lazy var toolView: EditorToolView = {
-        let view = EditorToolView(frame: self.view.bounds, config: config)
+        let view = EditorToolView(frame: self.view.bounds, options: options)
         view.delegate = self
         view.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
         view.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
@@ -42,14 +42,14 @@ final class PhotoEditorController: UIViewController {
     }()
     
     private let image: UIImage
-    private let config: AnyImageEditorPhotoOptionsInfo
+    private let options: AnyImageEditorPhotoOptionsInfo
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var context = CIContext()
     
-    init(image: UIImage, config: AnyImageEditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
+    init(image: UIImage, options: AnyImageEditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
         self.image = image
-        self.config = config
+        self.options = options
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -179,7 +179,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 画笔切换颜色
     func toolView(_ toolView: EditorToolView, colorDidChange idx: Int) {
-        contentView.canvas.brush.color = config.penColors[idx]
+        contentView.canvas.brush.color = options.penColors[idx]
     }
     
     /// 马赛克切换类型
@@ -280,10 +280,10 @@ extension PhotoEditorController {
     
     /// 存储编辑记录
     private func saveEditPath() {
-        if config.cacheIdentifier.isEmpty { return }
+        if options.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
         let textDataList = contentView.textImageViews.map{ $0.data }
-        ImageEditorCache(id: config.cacheIdentifier,
+        ImageEditorCache(id: options.cacheIdentifier,
                          cropData: contentView.lastCropData,
                          textDataList: textDataList,
                          penCacheList: contentView.penCache.diskCacheList,
@@ -321,7 +321,7 @@ extension PhotoEditorController {
     private func openInputController(_ data: TextData = TextData()) {
         willBeginInput()
         let coverImage = getInputCoverImage()
-        let controller = InputTextViewController(config: config, data: data, coverImage: coverImage, delegate: self)
+        let controller = InputTextViewController(options: options, data: data, coverImage: coverImage, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

@@ -17,22 +17,22 @@ final class OriginalButton: UIControl {
     }
     
     private lazy var circleView: CircleView = {
-        let view = CircleView(frame: .zero, config: config)
+        let view = CircleView(frame: .zero, options: options)
         view.isUserInteractionEnabled = false
         return view
     }()
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
         view.text = BundleHelper.pickerLocalizedString(key: "Original image")
-        view.textColor = config.theme.textColor
+        view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     
-    private let config: AnyImagePickerOptionsInfo
+    private let options: AnyImagePickerOptionsInfo
     
-    init(frame: CGRect, config: AnyImagePickerOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImagePickerOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
         addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
@@ -76,14 +76,14 @@ fileprivate class CircleView: UIView {
         let view = UIView(frame: .zero)
         view.clipsToBounds = true
         view.layer.borderWidth = 1
-        view.layer.borderColor = config.theme.textColor.cgColor
+        view.layer.borderColor = options.theme.textColor.cgColor
         return view
     }()
     private lazy var smallCircleView: UIView = {
         let view = UIView(frame: .zero)
         view.isHidden = true
         view.clipsToBounds = true
-        view.backgroundColor = config.theme.mainColor
+        view.backgroundColor = options.theme.mainColor
         return view
     }()
     
@@ -93,10 +93,10 @@ fileprivate class CircleView: UIView {
         smallCircleView.layer.cornerRadius = bounds.width * 0.5 - 3
     }
     
-    private let config: AnyImagePickerOptionsInfo
+    private let options: AnyImagePickerOptionsInfo
     
-    init(frame: CGRect, config: AnyImagePickerOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImagePickerOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -119,9 +119,9 @@ fileprivate class CircleView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13, *) {
-            guard config.theme.style == .auto else { return }
+            guard options.theme.style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
-            bigCircleView.layer.borderColor = config.theme.textColor.cgColor
+            bigCircleView.layer.borderColor = options.theme.textColor.cgColor
         }
     }
     

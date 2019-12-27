@@ -71,7 +71,7 @@ extension PhotoPreviewCell {
             })
         }
         
-        let options = _PhotoFetchOptions(sizeMode: .preview(manager.config.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
+        let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 _print("Download photo from iCloud: \(progress)")

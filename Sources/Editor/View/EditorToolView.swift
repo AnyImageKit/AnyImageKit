@@ -62,12 +62,12 @@ final class EditorToolView: UIView {
     }()
     
     private(set) lazy var editOptionsView: EditorEditOptionsView = {
-        let view = EditorEditOptionsView(frame: .zero, config: config)
+        let view = EditorEditOptionsView(frame: .zero, options: options)
         view.delegate = self
         return view
     }()
     private(set) lazy var penToolView: EditorPenToolView = {
-        let view = EditorPenToolView(frame: .zero, config: config)
+        let view = EditorPenToolView(frame: .zero, options: options)
         view.delegate = self
         view.isHidden = true
         return view
@@ -79,7 +79,7 @@ final class EditorToolView: UIView {
         return view
     }()
     private(set) lazy var mosaicToolView: EditorMosaicToolView = {
-        let view = EditorMosaicToolView(frame: .zero, config: config)
+        let view = EditorMosaicToolView(frame: .zero, options: options)
         view.delegate = self
         view.isHidden = true
         return view
@@ -87,7 +87,7 @@ final class EditorToolView: UIView {
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
-        view.backgroundColor = config.tintColor
+        view.backgroundColor = options.tintColor
         view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -95,10 +95,10 @@ final class EditorToolView: UIView {
         return view
     }()
     
-    private let config: AnyImageEditorPhotoOptionsInfo
+    private let options: AnyImageEditorPhotoOptionsInfo
     
-    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImageEditorPhotoOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         isUserInteractionEnabled = false
         setupView()

@@ -19,7 +19,7 @@ final class VideoEditorController: UIViewController {
     
     private let resource: VideoResource
     private let placeholdImage: UIImage?
-    private let config: AnyImageEditorVideoOptionsInfo
+    private let options: AnyImageEditorVideoOptionsInfo
     private weak var delegate: VideoEditorControllerDelegate?
     
     private var url: URL?
@@ -38,14 +38,14 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     private lazy var toolView: VideoEditorToolView = {
-        let view = VideoEditorToolView(frame: .zero, config: config)
+        let view = VideoEditorToolView(frame: .zero, options: options)
         view.delegate = self
         view.isHidden = true
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private lazy var cropToolView: VideoEditorCropToolView = {
-        let view = VideoEditorCropToolView(frame: .zero, config: config)
+        let view = VideoEditorCropToolView(frame: .zero, options: options)
         view.delegate = self
         view.isHidden = true
         view.layer.cornerRadius = 5
@@ -53,10 +53,10 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     
-    init(resource: VideoResource, placeholdImage: UIImage?, config: AnyImageEditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
+    init(resource: VideoResource, placeholdImage: UIImage?, options: AnyImageEditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
         self.resource = resource
         self.placeholdImage = placeholdImage
-        self.config = config
+        self.options = options
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }

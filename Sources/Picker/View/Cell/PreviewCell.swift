@@ -34,7 +34,7 @@ class PreviewCell: UICollectionViewCell {
     var manager: PickerManager! {
         didSet {
             if oldValue == nil {
-                updateConfig(manager.config)
+                updateOptions(manager.options)
             }
         }
     }
@@ -188,7 +188,7 @@ class PreviewCell: UICollectionViewCell {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
     
-    func updateConfig(_ config: AnyImagePickerOptionsInfo) {
+    func updateOptions(_ options: AnyImagePickerOptionsInfo) {
         
     }
 }

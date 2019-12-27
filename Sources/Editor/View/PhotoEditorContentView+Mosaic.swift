@@ -31,18 +31,18 @@ extension PhotoEditorContentView {
     
     /// 在子线程创建马赛克图片
     internal func setupMosaicView() {
-        let idx = mosaic?.currentIdx ?? config.defaultMosaicIndex
+        let idx = mosaic?.currentIdx ?? options.defaultMosaicIndex
         mosaic = nil
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            guard let mosaicImage = self.image.mosaicImage(level: self.config.mosaicLevel) else { return }
+            guard let mosaicImage = self.image.mosaicImage(level: self.options.mosaicLevel) else { return }
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 _print("Mosaic created")
                 self.mosaic = Mosaic(frame: CGRect(origin: .zero, size: self.imageView.bounds.size),
                                      originalMosaicImage: mosaicImage,
-                                     mosaicOptions: self.config.mosaicOptions,
-                                     lineWidth: self.config.mosaicWidth)
+                                     mosaicOptions: self.options.mosaicOptions,
+                                     lineWidth: self.options.mosaicWidth)
                 self.mosaic?.setMosaicCoverImage(idx)
                 self.mosaic?.delegate = self
                 self.mosaic?.dataSource = self

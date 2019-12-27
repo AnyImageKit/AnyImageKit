@@ -32,7 +32,7 @@ final class CaptureConfigViewController: UITableViewController {
     
     @IBAction func openCaptureTapped() {
         config.enableDebugLog = true
-        let controller = ImageCaptureController(config: config, delegate: self)
+        let controller = ImageCaptureController(options: config, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

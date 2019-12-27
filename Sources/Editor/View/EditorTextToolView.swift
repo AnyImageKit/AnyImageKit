@@ -32,8 +32,8 @@ final class EditorTextToolView: UIView {
     private let colors: [AnyImageEditorPhotoTextColor]
     private var colorButtons: [ColorButton] = []
     
-    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
-        self.colors = config.textColors
+    init(frame: CGRect, options: AnyImageEditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
+        self.colors = options.textColors
         self.currentIdx = idx
         super.init(frame: frame)
         setupView()

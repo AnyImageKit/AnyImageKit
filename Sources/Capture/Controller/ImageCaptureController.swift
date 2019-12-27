@@ -26,15 +26,16 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
     
-    public let config: AnyImageCaptureOptionsInfo
+    public convenience init(options: [AnyImageCaptureOptionsInfoItem] = [], delegate: ImageCaptureControllerDelegate) {
+        self.init(options: .init(options), delegate: delegate)
+    }
     
-    required public init(config: AnyImageCaptureOptionsInfo = .init(), delegate: ImageCaptureControllerDelegate) {
-        enableDebugLog = config.enableDebugLog
-        self.config = config
+    public required init(options: AnyImageCaptureOptionsInfo = .init(), delegate: ImageCaptureControllerDelegate) {
+        enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         self.captureDelegate = delegate
         
-        let rootViewController = CaptureViewController(config: config)
+        let rootViewController = CaptureViewController(options: options)
         rootViewController.delegate = self
         self.viewControllers = [rootViewController]
     }

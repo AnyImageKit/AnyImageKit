@@ -19,12 +19,12 @@ final class EditorEditOptionsView: UIView {
     
     private(set) var currentOption: AnyImageEditorPhotoOptions?
     
-    private let config: AnyImageEditorPhotoOptionsInfo
+    private let options: AnyImageEditorPhotoOptionsInfo
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    init(frame: CGRect, config: AnyImageEditorPhotoOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImageEditorPhotoOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -34,7 +34,7 @@ final class EditorEditOptionsView: UIView {
     }
     
     private func setupView() {
-        for (idx, option) in config.editOptions.enumerated() {
+        for (idx, option) in options.editOptions.enumerated() {
             let button = createButton(tag: idx, option: option)
             buttons.append(button)
         }
@@ -67,11 +67,11 @@ final class EditorEditOptionsView: UIView {
     }
     
     private func selectButton(_ button: UIButton) {
-        currentOption = config.editOptions[button.tag]
+        currentOption = options.editOptions[button.tag]
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
-            btn.imageView?.tintColor = isSelected ? config.tintColor : .white
+            btn.imageView?.tintColor = isSelected ? options.tintColor : .white
         }
     }
 }
@@ -96,7 +96,7 @@ extension EditorEditOptionsView: ResponseTouch {
         for (idx, button) in buttons.enumerated() {
             let frame = button.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(point) { // inside
-                if let current = currentOption, config.editOptions[idx] == current {
+                if let current = currentOption, options.editOptions[idx] == current {
                     unselectButtons()
                 } else {
                     selectButton(button)

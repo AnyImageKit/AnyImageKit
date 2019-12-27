@@ -40,7 +40,7 @@ final class PickerConfigViewController: UITableViewController {
     
     @IBAction func openPickerTapped() {
         config.enableDebugLog = true
-        let controller = ImagePickerController(config: config, delegate: self)
+        let controller = ImagePickerController(options: config, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
         }

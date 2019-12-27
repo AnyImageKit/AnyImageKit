@@ -24,11 +24,7 @@ extension ImagePickerControllerDelegate {
 
 open class ImagePickerController: AnyImageNavigationController {
     
-    open private(set) weak var pickerDelegate: ImagePickerControllerDelegate?
-    
-    public var config: AnyImagePickerOptionsInfo {
-        return manager.config
-    }
+    public private(set) weak var pickerDelegate: ImagePickerControllerDelegate?
     
     private var containerSize: CGSize = .zero
     private var hiddenStatusBar: Bool = false
@@ -37,25 +33,25 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
-    public convenience init(options: [AnyImagePickerOptionsInfoItem], delegate: ImagePickerControllerDelegate) {
-        self.init(config: .init(options), delegate: delegate)
+    public convenience init(options: [AnyImagePickerOptionsInfoItem] = [], delegate: ImagePickerControllerDelegate) {
+        self.init(options: .init(options), delegate: delegate)
     }
     
-    public required init(config: AnyImagePickerOptionsInfo = .init(), delegate: ImagePickerControllerDelegate) {
-        enableDebugLog = config.enableDebugLog
+    public required init(options: AnyImagePickerOptionsInfo = .init(), delegate: ImagePickerControllerDelegate) {
+        enableDebugLog = options.enableDebugLog
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
         super.init(nibName: nil, bundle: nil)
         self.addNotifications()
-        self.manager.config = config
+        self.manager.options = options
         self.pickerDelegate = delegate
         
         let rootViewController = AssetPickerViewController(manager: manager)
         rootViewController.delegate = self
         self.viewControllers = [rootViewController]
         
-        navigationBar.barTintColor = config.theme.backgroundColor
-        navigationBar.tintColor = config.theme.textColor
+        navigationBar.barTintColor = options.theme.backgroundColor
+        navigationBar.tintColor = options.theme.textColor
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
@@ -98,7 +94,7 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch manager.config.theme.style {
+        switch manager.options.theme.style {
         case .light:
             if #available(iOS 13.0, *) {
                 return .darkContent
@@ -144,8 +140,8 @@ extension ImagePickerController {
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {
         if !manager.useOriginalImage {
-            let limitSize = CGSize(width: manager.config.photoMaxWidth,
-                                   height: manager.config.photoMaxWidth)
+            let limitSize = CGSize(width: manager.options.photoMaxWidth,
+                                   height: manager.options.photoMaxWidth)
             assets.forEach {
                 if let image = $0._image, image.size != .zero  {
                     let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)

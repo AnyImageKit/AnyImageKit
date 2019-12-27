@@ -17,10 +17,10 @@ struct FetchRecord {
 
 final class PickerManager {
     
-    var config: AnyImagePickerOptionsInfo = .init()
+    var options: AnyImagePickerOptionsInfo = .init()
     
     var isUpToLimit: Bool {
-        return selectedAssets.count == config.selectLimit
+        return selectedAssets.count == options.selectLimit
     }
     
     var useOriginalImage: Bool = false
@@ -107,7 +107,7 @@ extension PickerManager {
     @discardableResult
     func addSelectedAsset(_ asset: Asset) -> Bool {
         if selectedAssets.contains(asset) { return false }
-        if selectedAssets.count == config.selectLimit { return false }
+        if selectedAssets.count == options.selectLimit { return false }
         selectedAssets.append(asset)
         asset.isSelected = true
         asset.selectedNum = selectedAssets.count
@@ -143,7 +143,7 @@ extension PickerManager {
             } else {
                 workQueue.async { [weak self] in
                     guard let self = self else { return }
-                    let options = _PhotoFetchOptions(sizeMode: .preview(self.config.largePhotoMaxWidth))
+                    let options = _PhotoFetchOptions(sizeMode: .preview(self.options.largePhotoMaxWidth))
                     self.requestPhoto(for: asset.phAsset, options: options) { result in
                         switch result {
                         case .success(let response):

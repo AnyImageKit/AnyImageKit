@@ -106,14 +106,14 @@ final class PhotoPreviewController: UIViewController {
         return view
     }()
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
-        let view = PickerPreviewNavigationBar(frame: .zero, config: manager.config)
+        let view = PickerPreviewNavigationBar(frame: .zero, options: manager.options)
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .preview, config: manager.config)
-        view.originalButton.isHidden = !manager.config.allowUseOriginalImage
+        let view = PickerToolBar(style: .preview, options: manager.options)
+        view.originalButton.isHidden = !manager.options.allowUseOriginalImage
         view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
@@ -124,7 +124,7 @@ final class PhotoPreviewController: UIViewController {
         return view
     }()
     private lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView(frame: .zero, config: manager.config)
+        let view = PickerPreviewIndexView(frame: .zero, options: manager.options)
         view.setManager(manager)
         view.isHidden = true
         view.delegate = self
@@ -259,7 +259,7 @@ extension PhotoPreviewController {
         if navigationBar.alpha == 1 && !hidden { return }
         if isNormal {
             NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
-            let color = UIColor.create(style: manager.config.theme.style,
+            let color = UIColor.create(style: manager.options.theme.style,
                                        light: .white,
                                        dark: .black)
             scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : color
@@ -307,7 +307,7 @@ extension PhotoPreviewController {
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         indexView.currentIndex = currentIndex
         
-        if manager.config.allowUseOriginalImage {
+        if manager.options.allowUseOriginalImage {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
@@ -336,7 +336,7 @@ extension PhotoPreviewController {
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if !data.asset.isSelected && manager.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.config.selectLimit)
+            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.options.selectLimit)
             let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -554,7 +554,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     /// 提供转场协调器
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
-        let color = UIColor.create(style: manager.config.theme.style,
+        let color = UIColor.create(style: manager.options.theme.style,
                                    light: .white,
                                    dark: .black)
         controller.maskView.backgroundColor = color

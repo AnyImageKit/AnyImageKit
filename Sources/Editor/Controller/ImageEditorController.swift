@@ -27,24 +27,34 @@ extension ImageEditorControllerDelegate {
 
 open class ImageEditorController: AnyImageNavigationController {
     
-    open private(set) weak var editorDelegate: ImageEditorControllerDelegate?
+    public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
     /// Init image editor
-    required public init(image: UIImage, config: AnyImageEditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
-        enableDebugLog = config.enableDebugLog
+    public convenience init(image: UIImage, options: [AnyImageEditorPhotoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
+        self.init(image: image, options: .init(options), delegate: delegate)
+    }
+    
+    /// Init image editor
+    public required init(image: UIImage, options: AnyImageEditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
+        enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        check(config: config)
+        check(options: options)
         self.editorDelegate = delegate
-        let rootViewController = PhotoEditorController(image: image, config: config, delegate: self)
+        let rootViewController = PhotoEditorController(image: image, options: options, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
     /// Init video editor
-    required public init(video resource: VideoResource, placeholdImage: UIImage?, config: AnyImageEditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
-        enableDebugLog = config.enableDebugLog
+    public convenience init(video resource: VideoResource, placeholdImage: UIImage?, options: [AnyImageEditorVideoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
+        self.init(video: resource, placeholdImage: placeholdImage, options: .init(options), delegate: delegate)
+    }
+    
+    /// Init video editor
+    public required init(video resource: VideoResource, placeholdImage: UIImage?, options: AnyImageEditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
+        enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         self.editorDelegate = delegate
-        let rootViewController = VideoEditorController(resource: resource, placeholdImage: placeholdImage, config: config, delegate: self)
+        let rootViewController = VideoEditorController(resource: resource, placeholdImage: placeholdImage, options: options, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
@@ -57,10 +67,10 @@ open class ImageEditorController: AnyImageNavigationController {
 // MARK: - Private function
 extension ImageEditorController {
     
-    private func check(config: AnyImageEditorPhotoOptionsInfo) {
-        assert(config.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        assert(config.penColors.count <= 7, "Pen colors count can't bigger then 7")
-        assert(config.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
+    private func check(options: AnyImageEditorPhotoOptionsInfo) {
+        assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
+        assert(options.penColors.count <= 7, "Pen colors count can't bigger then 7")
+        assert(options.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
     }
 }
 

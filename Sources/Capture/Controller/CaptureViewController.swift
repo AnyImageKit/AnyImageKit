@@ -48,8 +48,8 @@ final class CaptureViewController: UIViewController {
     
     private let config: AnyImageCaptureOptionsInfo
     
-    init(config: AnyImageCaptureOptionsInfo) {
-        self.config = config
+    init(options: AnyImageCaptureOptionsInfo) {
+        self.config = options
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -192,7 +192,7 @@ extension CaptureViewController: CaptureDelegate {
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: AnyImageFileType) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
-        let editor = ImageEditorController(image: image, config: .init(), delegate: self)
+        let editor = ImageEditorController(image: image, options: .init(), delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
