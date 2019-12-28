@@ -13,9 +13,6 @@ final class PickerConfigViewController: UITableViewController {
     
     var options = AnyImagePickerOptionsInfo()
     
-    // TODO:
-    var captureConfig = AnyImageCaptureOptionsInfo()
-    
     var isFullScreen = true
     
     override func viewDidLoad() {
