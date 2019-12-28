@@ -8,7 +8,7 @@
 
 import UIKit
 
-public enum AnyImageEditorVideoOptionsInfoItem {
+public enum AnyImageEditorVideoOptionsInfoItem: AnyImageOptionsInfoItem {
     /// 主题色
     /// 默认：green
     case tintColor(UIColor)
@@ -22,7 +22,7 @@ public enum AnyImageEditorVideoOptionsInfoItem {
     case enableDebugLog
 }
 
-public struct AnyImageEditorVideoOptionsInfo {
+public struct AnyImageEditorVideoOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
     public var editOptions: [AnyImageEditorVideoEditOption] = [.crop]

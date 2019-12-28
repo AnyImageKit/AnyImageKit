@@ -8,12 +8,7 @@
 
 import Foundation
 
-infix operator ~== : LogicalConjunctionPrecedence
-
-public protocol AnyImageOptionsInfoItem {
-    
-    static func ~== (lhs: Self, rhs: Self) -> Bool
-}
+public protocol AnyImageOptionsInfoItem: EnumCaseEquatable { }
 
 extension Array where Element: AnyImageOptionsInfoItem {
     

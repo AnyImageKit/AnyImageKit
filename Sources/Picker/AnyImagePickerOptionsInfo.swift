@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public enum AnyImagePickerOptionsInfoItem {
+public enum AnyImagePickerOptionsInfoItem: AnyImageOptionsInfoItem {
     /// Theme 主题
     /// - Default: Auto
     case theme(AnyImagePickerTheme)
@@ -63,7 +63,7 @@ public enum AnyImagePickerOptionsInfoItem {
     case enableDebugLog
 }
 
-public struct AnyImagePickerOptionsInfo {
+public struct AnyImagePickerOptionsInfo: Equatable {
     
     public var theme: AnyImagePickerTheme = .init(style: .auto)
     public var selectLimit: Int = 9
@@ -146,7 +146,7 @@ public struct AnyImagePickerAlbumOptions: OptionSet {
 }
 
 /// UI Theme 主题
-public struct AnyImagePickerTheme {
+public struct AnyImagePickerTheme: Equatable {
     /// User Interface Style 界面风格
     public let style: AnyImageUserInterfaceStyle
     /// Main Color 主题色调
@@ -223,17 +223,6 @@ public struct AnyImagePickerTheme {
 }
 
 // MARK: - Extension
-extension AnyImagePickerOptionsInfoItem: AnyImageOptionsInfoItem {
-    
-    public static func ~== (lhs: AnyImagePickerOptionsInfoItem, rhs: AnyImagePickerOptionsInfoItem) -> Bool {
-        switch (lhs, rhs) {
-        case (.theme, .theme): return true
-            // TODO:
-        default: return false
-        }
-    }
-}
-
 extension AnyImagePickerSelectOptions {
     
     var mediaTypes: [PHAssetMediaType] {

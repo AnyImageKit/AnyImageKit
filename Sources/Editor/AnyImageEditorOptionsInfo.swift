@@ -8,7 +8,7 @@
 
 import UIKit
 
-public enum AnyImageEditorOptionsInfoItem {
+public enum AnyImageEditorOptionsInfoItem: AnyImageOptionsInfoItem {
     /// Options 编辑类型
     /// - Default: []
     case options(AnyImageEditorOptions)
@@ -20,7 +20,7 @@ public enum AnyImageEditorOptionsInfoItem {
     case videoOptionInfoItems([AnyImageEditorVideoOptionsInfoItem])
 }
 
-public struct AnyImageEditorOptionsInfo {
+public struct AnyImageEditorOptionsInfo: Equatable {
 
     public var options: AnyImageEditorOptions = []
     public var photoOptionInfoItems: [AnyImageEditorPhotoOptionsInfoItem] = [] {

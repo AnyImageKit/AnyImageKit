@@ -8,7 +8,7 @@
 
 import UIKit
 
-public enum AnyImageEditorPhotoOptionsInfoItem {
+public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
     /// 主题色
     /// 默认：green
     case tintColor(UIColor)
@@ -58,7 +58,7 @@ public enum AnyImageEditorPhotoOptionsInfoItem {
     case enableDebugLog
 }
 
-public struct AnyImageEditorPhotoOptionsInfo {
+public struct AnyImageEditorPhotoOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
     public var editOptions: [AnyImageEditorPhotoOptions] = [.pen, .text, .crop, .mosaic]
@@ -94,7 +94,7 @@ public struct AnyImageEditorPhotoOptionsInfo {
 }
 
 /// 图片编辑功能
-public enum AnyImageEditorPhotoOptions {
+public enum AnyImageEditorPhotoOptions: Equatable {
     /// 画笔
     case pen
     /// 文字
@@ -106,7 +106,7 @@ public enum AnyImageEditorPhotoOptions {
 }
 
 /// 马赛克样式
-public enum AnyImageEditorPhotoMosaicOption {
+public enum AnyImageEditorPhotoMosaicOption: Equatable {
     /// 默认马赛克
     case `default`
     /// 彩色图片马赛克
@@ -116,7 +116,7 @@ public enum AnyImageEditorPhotoMosaicOption {
 }
 
 /// 输入文本颜色
-public struct AnyImageEditorPhotoTextColor {
+public struct AnyImageEditorPhotoTextColor: Equatable {
     /// 主色
     public let color: UIColor
     /// 辅色

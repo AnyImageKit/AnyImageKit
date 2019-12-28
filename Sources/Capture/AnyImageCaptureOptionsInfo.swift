@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-public enum AnyImageCaptureOptionsInfoItem {
+public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
     case mediaOptions(AnyImageCaptureMediaOptions)
     case photoAspectRatio(AnyImageCaptureAspectRatio)
     case preferredPositions([AVCaptureDevice.Position])
@@ -21,7 +21,7 @@ public enum AnyImageCaptureOptionsInfoItem {
     case enableDebugLog
 }
 
-public struct AnyImageCaptureOptionsInfo {
+public struct AnyImageCaptureOptionsInfo: Equatable {
     
     public var mediaOptions: AnyImageCaptureMediaOptions = [.photo, .video]
     public var photoAspectRatio: AnyImageCaptureAspectRatio = .ratio4x3
