@@ -174,17 +174,17 @@ extension PickerConfigViewController {
     private func themeTapped() {
         let indexPath = ConfigRowType.theme.indexPath
         let alert = UIAlertController(title: "Theme", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (action) in
             self?.options.theme = .init(style: .auto)
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Auto"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Light", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Light", style: .default, handler: { [weak self] (action) in
             self?.options.theme = .init(style: .light)
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Light"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Dark", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Dark", style: .default, handler: { [weak self] (action) in
             self?.options.theme = .init(style: .dark)
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Dark"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -194,14 +194,14 @@ extension PickerConfigViewController {
         let indexPath = ConfigRowType.selectLimit.indexPath
         let alert = UIAlertController(title: "SelectLimit", message: nil, preferredStyle: .alert)
         for i in 1...9 {
-            alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (_) in
+            alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
                 self?.options.selectLimit = i
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(i)"
             }))
         }
-        alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (action) in
             self?.options.selectLimit = 20
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "20"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -211,7 +211,7 @@ extension PickerConfigViewController {
         let indexPath = ConfigRowType.columnNumber.indexPath
         let alert = UIAlertController(title: "ColumnNumber", message: nil, preferredStyle: .alert)
         for i in 3...5 {
-            alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (_) in
+            alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
                 self?.options.columnNumber = i
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "\(i)"
             }))
@@ -229,17 +229,17 @@ extension PickerConfigViewController {
     private func albumOptionsTapped() {
         let indexPath = ConfigRowType.albumOptions.indexPath
         let alert = UIAlertController(title: "AlbumOptions", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Smart", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Smart", style: .default, handler: { [weak self] (action) in
             self?.options.albumOptions = [.smart]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Smart"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "User Created", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "User Created", style: .default, handler: { [weak self] (action) in
             self?.options.albumOptions = [.userCreated]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "User Created"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Smart+User Created", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Smart+User Created", style: .default, handler: { [weak self] (action) in
             self?.options.albumOptions = [.smart, .userCreated]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Smart+User Created"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -248,29 +248,29 @@ extension PickerConfigViewController {
     private func selectOptionsTapped() {
         let indexPath = ConfigRowType.selectOptions.indexPath
         let alert = UIAlertController(title: "SelectOptions", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photo, .video]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Photo+GIF+LivePhoto", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Photo+GIF+LivePhoto", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photo, .photoGIF, .photoLive]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+GIF+LivePhoto"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photo]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.video]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "GIF", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "GIF", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photoGIF]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "GIF"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "LivePhoto", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "LivePhoto", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photoLive]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "LivePhoto"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -279,13 +279,13 @@ extension PickerConfigViewController {
     private func orderbyDateTapped() {
         let indexPath = ConfigRowType.orderByDate.indexPath
         let alert = UIAlertController(title: "OrderbyDate", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ASC", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "ASC", style: .default, handler: { [weak self] (action) in
             self?.options.orderByDate = .asc
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "ASC"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "DESC", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "DESC", style: .default, handler: { [weak self] (action) in
             self?.options.orderByDate = .desc
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "DESC"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -294,37 +294,36 @@ extension PickerConfigViewController {
     private func editorOptionsTapped() {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
         let alert = UIAlertController(title: "EditorOptions", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
             self?.options.editorOptions.options = []
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
             self?.options.editorOptions.options = [.photo]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
     private func captureMediaOptionsTapped() {
-        // TODO:
         let indexPath = CaptureConfigRowType.captureOptions.indexPath
         let alert = UIAlertController(title: "CaptureOptions", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.mediaOptions = []
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "None"
+        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
+            self?.options.captureOptionInfoItems.update(.mediaOptions([]))
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.mediaOptions = [.photo, .video]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo+Video"
+        alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
+            self?.options.captureOptionInfoItems.update(.mediaOptions([.photo, .video]))
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.mediaOptions = [.photo]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Photo"
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
+            self?.options.captureOptionInfoItems.update(.mediaOptions([.photo]))
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (_) in
-            self?.captureConfig.mediaOptions = [.video]
-            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = "Video"
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (action) in
+            self?.options.captureOptionInfoItems.update(.mediaOptions([.video]))
+            self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
