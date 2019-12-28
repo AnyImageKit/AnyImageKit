@@ -13,9 +13,13 @@ public protocol AnyImageOptionsInfoItem: EnumCaseEquatable { }
 extension Array where Element: AnyImageOptionsInfoItem {
     
     public mutating func update(_ element: Element) {
+        self.remove(element)
+        self.append(element)
+    }
+    
+    public mutating func remove(_ element: Element) {
         if let idx = (self.firstIndex{ $0 ~== element }) {
             self.remove(at: idx)
         }
-        self.append(element)
     }
 }
