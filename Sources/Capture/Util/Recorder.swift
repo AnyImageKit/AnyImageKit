@@ -7,11 +7,11 @@
 //
 
 import AVFoundation
-import CoreMedia
+import UIKit
 
 protocol RecorderDelegate: class {
     
-    func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL)
+    func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL, thumbnail: UIImage?)
 }
 
 final class Recorder {
@@ -101,9 +101,12 @@ extension Recorder {
             self.writer = nil
             self.writerInputs.removeAll()
         }
+        
+        let outputURL = writer.outputURL
+        let thumbnail = createThumbnail(at: outputURL)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.delegate?.recorder(self, didCreateMovieFileAt: writer.outputURL)
+            self.delegate?.recorder(self, didCreateMovieFileAt: outputURL, thumbnail: thumbnail)
         }
     }
     
@@ -152,6 +155,20 @@ extension Recorder {
             return try AVAssetWriter(outputURL: url, fileType: .mp4)
         } catch {
             _print("Fail to create AVAssetWriter, error=\(error)")
+        }
+        return nil
+    }
+    
+    private func createThumbnail(at url: URL) -> UIImage? {
+        let asset = AVURLAsset(url: url)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        let time = CMTime(seconds: 0.1, preferredTimescale: 1000_000_000)
+        do {
+            let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+            return UIImage(cgImage: cgImage)
+        } catch {
+            _print("Fail to create Thumbnail at url = \(url), error = \(error)")
         }
         return nil
     }

@@ -106,7 +106,7 @@ final class CaptureViewController: UIViewController {
 // MARK: - Private
 extension CaptureViewController {
     
-    private func output(photoData: Data, fileType: FileType) {
+    private func output(photo: Data, fileType: FileType) {
         let timestamp = Int(Date().timeIntervalSince1970*1000)
         let tmpPath = NSTemporaryDirectory()
         let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
@@ -114,7 +114,7 @@ extension CaptureViewController {
         let url = URL(fileURLWithPath: filePath)
         // Write to file
         do {
-            try photoData.write(to: url)
+            try photo.write(to: url)
             delegate?.capture(self, didOutput: url, type: .photo)
         } catch {
             _print(error.localizedDescription)
@@ -176,11 +176,15 @@ extension CaptureViewController: CaptureButtonDelegate {
         impactFeedback()
         toolView.hideButtons(animated: true)
         previewView.hideToolMask(animated: true)
+        capture.startCaptureVideo()
+        recorder.preferredAudioSettings = capture.recommendedAudioSetting
+        recorder.preferredVideoSettings = capture.recommendedVideoSetting
         recorder.startRunning()
     }
     
     func captureButtonDidEndedLongPress(_ button: CaptureButton) {
         recorder.stopRunning()
+        capture.stopCaptureVideo()
         button.startProcessing()
     }
 }
@@ -224,13 +228,19 @@ extension CaptureViewController: CaptureDelegate {
 // MARK: - RecorderDelegate
 extension CaptureViewController: RecorderDelegate {
     
-    func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL) {
-        toolView.captureButton.stopProcessing()
+    func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL, thumbnail: UIImage?) {
         toolView.showButtons(animated: true)
         previewView.showToolMask(animated: true)
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        
+        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, config: .init(), delegate: self)
+        editor.modalPresentationStyle = .fullScreen
+        present(editor, animated: false) { [weak self] in
+            guard let self = self else { return }
+            self.toolView.captureButton.stopProcessing()
+            self.capture.stopRunning()
+            self.orientationUtil.stopRunning()
+        }
         #else
         output(video: url)
         #endif
@@ -260,7 +270,11 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         guard let photoData = photo.jpegData(compressionQuality: 1.0) else { return }
-        output(photoData: photoData, fileType: .jpeg)
+        output(photo: photoData, fileType: .jpeg)
+    }
+    
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) {
+        output(video: video)
     }
 }
 
