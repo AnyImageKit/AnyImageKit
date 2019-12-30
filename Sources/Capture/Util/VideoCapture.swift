@@ -21,7 +21,7 @@ final class VideoCapture: NSObject {
     
     weak var delegate: VideoCaptureDelegate?
     
-    private let config: AnyImageCaptureOptionsInfo
+    private let options: AnyImageCaptureOptionsInfo
     
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
@@ -40,8 +40,8 @@ final class VideoCapture: NSObject {
     private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
-    init(session: AVCaptureSession, config: AnyImageCaptureOptionsInfo) {
-        self.config = config
+    init(session: AVCaptureSession, options: AnyImageCaptureOptionsInfo) {
+        self.options = options
         super.init()
         do {
             // Add device input
@@ -217,7 +217,7 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         let fixedImage = orientedImage.oriented(forExifOrientation: orientation.exifOrientation)
         // Crop to expected aspect ratio
         let size = fixedImage.extent.size
-        let aspectRatio = CGFloat(config.photoAspectRatio.value)
+        let aspectRatio = CGFloat(options.photoAspectRatio.value)
         let rect: CGRect
         switch orientation {
         case .portrait, .portraitUpsideDown:

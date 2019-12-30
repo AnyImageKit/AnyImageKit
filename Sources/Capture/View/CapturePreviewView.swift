@@ -17,7 +17,7 @@ final class CapturePreviewView: UIView {
     }()
     
     private lazy var previewMaskView: CapturePreviewMaskView = {
-        let view = CapturePreviewMaskView(frame: .zero, config: config)
+        let view = CapturePreviewMaskView(frame: .zero, options: options)
         return view
     }()
     
@@ -28,10 +28,10 @@ final class CapturePreviewView: UIView {
         return view
     }()
     
-    private let config: AnyImageCaptureOptionsInfo
+    private let options: AnyImageCaptureOptionsInfo
     
-    init(frame: CGRect, config: AnyImageCaptureOptionsInfo) {
-        self.config = config
+    init(frame: CGRect, options: AnyImageCaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }

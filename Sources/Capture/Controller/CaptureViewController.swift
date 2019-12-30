@@ -22,7 +22,7 @@ final class CaptureViewController: UIViewController {
     private var isPreviewing: Bool = true
     
     private lazy var previewView: CapturePreviewView = {
-        let view = CapturePreviewView(frame: .zero, config: config)
+        let view = CapturePreviewView(frame: .zero, options: options)
         return view
     }()
     
@@ -35,7 +35,7 @@ final class CaptureViewController: UIViewController {
     }()
     
     private lazy var capture: Capture = {
-        let capture = Capture(config: config)
+        let capture = Capture(options: options)
         capture.delegate = self
         return capture
     }()
@@ -52,10 +52,10 @@ final class CaptureViewController: UIViewController {
         return util
     }()
     
-    private let config: AnyImageCaptureOptionsInfo
+    private let options: AnyImageCaptureOptionsInfo
     
     init(options: AnyImageCaptureOptionsInfo) {
-        self.config = options
+        self.options = options
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -81,8 +81,8 @@ final class CaptureViewController: UIViewController {
         view.addLayoutGuide(layoutGuide)
         view.addSubview(previewView)
         view.addSubview(toolView)
-        var aspectRatio: Double = config.photoAspectRatio.value
-        if config.mediaOptions.contains(.video) {
+        var aspectRatio: Double = options.photoAspectRatio.value
+        if options.mediaOptions.contains(.video) {
             aspectRatio = 9.0/16.0
         }
         previewView.snp.makeConstraints { maker in
@@ -233,7 +233,7 @@ extension CaptureViewController: RecorderDelegate {
         previewView.showToolMask(animated: true)
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, config: .init(), delegate: self)
+        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, options: .init(), delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
