@@ -40,6 +40,12 @@ final class CaptureViewController: UIViewController {
         return capture
     }()
     
+    private lazy var recorder: Recorder = {
+        let recorder = Recorder()
+        recorder.delegate = self
+        return recorder
+    }()
+    
     private lazy var orientationUtil: DeviceOrientationUtil = {
         let util = DeviceOrientationUtil()
         util.delegate = self
@@ -100,7 +106,7 @@ final class CaptureViewController: UIViewController {
 // MARK: - Private
 extension CaptureViewController {
     
-    private func output(photoData: Data, fileType: AnyImageFileType) {
+    private func output(photo: Data, fileType: AnyImageFileType) {
         let timestamp = Int(Date().timeIntervalSince1970*1000)
         let tmpPath = NSTemporaryDirectory()
         let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
@@ -108,11 +114,15 @@ extension CaptureViewController {
         let url = URL(fileURLWithPath: filePath)
         // Write to file
         do {
-            try photoData.write(to: url)
+            try photo.write(to: url)
             delegate?.capture(self, didOutput: url, type: .photo)
         } catch {
             _print(error.localizedDescription)
         }
+    }
+    
+    private func output(video url: URL) {
+        delegate?.capture(self, didOutput: url, type: .video)
     }
 }
 
@@ -166,19 +176,16 @@ extension CaptureViewController: CaptureButtonDelegate {
         impactFeedback()
         toolView.hideButtons(animated: true)
         previewView.hideToolMask(animated: true)
-        // TODO: start recoder
+        capture.startCaptureVideo()
+        recorder.preferredAudioSettings = capture.recommendedAudioSetting
+        recorder.preferredVideoSettings = capture.recommendedVideoSetting
+        recorder.startRunning()
     }
     
     func captureButtonDidEndedLongPress(_ button: CaptureButton) {
-        // TODO: stop recoder
-        
+        recorder.stopRunning()
+        capture.stopCaptureVideo()
         button.startProcessing()
-        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
-            button.stopProcessing()
-            
-            self.toolView.showButtons(animated: true)
-            self.previewView.showToolMask(animated: true)
-        }
     }
 }
 
@@ -208,12 +215,35 @@ extension CaptureViewController: CaptureDelegate {
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType) {
         switch type {
         case .audio:
-            break
+            recorder.append(sampleBuffer: sampleBuffer, mediaType: .audio)
         case .video:
+            recorder.append(sampleBuffer: sampleBuffer, mediaType: .video)
             if isPreviewing {
                 previewView.draw(sampleBuffer)
             }
         }
+    }
+}
+
+// MARK: - RecorderDelegate
+extension CaptureViewController: RecorderDelegate {
+    
+    func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL, thumbnail: UIImage?) {
+        toolView.showButtons(animated: true)
+        previewView.showToolMask(animated: true)
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, config: .init(), delegate: self)
+        editor.modalPresentationStyle = .fullScreen
+        present(editor, animated: false) { [weak self] in
+            guard let self = self else { return }
+            self.toolView.captureButton.stopProcessing()
+            self.capture.stopRunning()
+            self.orientationUtil.stopRunning()
+        }
+        #else
+        output(video: url)
+        #endif
     }
 }
 
@@ -240,7 +270,11 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
         guard let photoData = photo.jpegData(compressionQuality: 1.0) else { return }
-        output(photoData: photoData, fileType: .jpeg)
+        output(photo: photoData, fileType: .jpeg)
+    }
+    
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) {
+        output(video: video)
     }
 }
 

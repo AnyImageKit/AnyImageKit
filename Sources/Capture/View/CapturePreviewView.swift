@@ -66,7 +66,7 @@ extension CapturePreviewView {
     }
     
     func draw(_ sampleBuffer: CMSampleBuffer) {
-        if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+        if let imageBuffer = sampleBuffer.imageBuffer {
             let image = CIImage(cvImageBuffer: imageBuffer)
             previewContentView.draw(image: image)
         }

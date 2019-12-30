@@ -88,8 +88,8 @@ extension Capture {
     }
     
     func stopCaptureVideo() {
-        audioCapture.stopAudioSession()
         audioCapture.removeMicrophone(session: session)
+        audioCapture.stopAudioSession()
     }
 }
 

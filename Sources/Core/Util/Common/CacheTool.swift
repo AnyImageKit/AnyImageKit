@@ -28,13 +28,16 @@ struct CacheConfig {
 enum CacheModule {
     case picker(CacheModulePicker)
     case editor(CacheModuleEditor)
+    case capture(CacheModuleCapture)
     
     var title: String {
         switch self {
-        case .picker(_):
+        case .picker:
             return "Picker"
-        case .editor(_):
+        case .editor:
             return "Editor"
+        case .capture:
+            return "Capture"
         }
     }
     
@@ -43,6 +46,8 @@ enum CacheModule {
         case .picker(let subModule):
             return subModule.rawValue
         case .editor(let subModule):
+            return subModule.rawValue
+        case .capture(let subModule):
             return subModule.rawValue
         }
     }
@@ -64,14 +69,17 @@ enum CacheModuleEditor: String {
     case videoOutput = "VideoOutput"
 }
 
+enum CacheModuleCapture: String {
+    case recorder = "Recorder"
+}
+
 final class CacheTool {
     
     private(set) var diskCacheList: [String] = []
-    private var memory = NSCache<NSString, UIImage>()
-    
+    private let memory = NSCache<NSString, UIImage>()
     private let config: CacheConfig
-    private let path: String
     private let workQueue: DispatchQueue
+    let path: String
     
     init(config: CacheConfig, diskCacheList: [String] = []) {
         self.config = config
