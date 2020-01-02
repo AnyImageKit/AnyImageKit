@@ -61,11 +61,13 @@ extension PhotoGIFPreviewCell {
             }
         }
         manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
+            guard let self = self else { return }
             switch result {
             case .success(let response):
-                if self?.asset.phAsset.localIdentifier == id {
-                    self?.setImage(response.image)
-                    self?.setDownloadingProgress(1.0)
+                if self.asset.phAsset.localIdentifier == id {
+                    self.imageView.image = response.image
+                    self.imageView.frame = self.fitFrame
+                    self.setDownloadingProgress(1.0)
                 }
             case .failure(let error):
                 _print(error)

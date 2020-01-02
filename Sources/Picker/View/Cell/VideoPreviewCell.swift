@@ -148,10 +148,12 @@ extension VideoPreviewCell {
         
         let options = _PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
         manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let response):
-                if !response.isDegraded && self?.asset.phAsset.localIdentifier == id {
-                    self?.setImage(response.image)
+                if !response.isDegraded && self.asset.phAsset.localIdentifier == id {
+                    self.imageView.image = response.image
+                    self.imageView.frame = self.fitFrame
                 }
             case .failure(let error):
                 _print(error)
