@@ -34,7 +34,7 @@ final class VideoPreview: UIView {
     private(set) var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
     
-    private let image: UIImage?
+    private var image: UIImage?
     
     init(frame: CGRect, image: UIImage?) {
         self.image = image
@@ -79,6 +79,11 @@ extension VideoPreview {
         }
     }
     
+    public func setThumbnail(_ image: UIImage) {
+        self.image = image
+        layoutSubviews()
+    }
+    
     public func setProgress(_ progress: CGFloat) {
         if player == nil { return }
         guard let duration = player?.currentItem?.duration else { return }
@@ -110,7 +115,7 @@ extension VideoPreview {
 // MARK: - Getter
 extension VideoPreview {
     var fitSize: CGSize {
-        guard let image = imageView.image else { return CGSize.zero }
+        guard let image = image else { return CGSize.zero }
         let screenSize = self.bounds.size
         let scale = image.size.height / image.size.width
         var size = CGSize(width: screenSize.width, height: scale * screenSize.width)

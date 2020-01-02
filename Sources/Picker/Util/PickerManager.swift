@@ -80,23 +80,17 @@ extension PickerManager {
     }
     
     func cancelFetch(for identifier: String) {
-        workQueue.async { [weak self] in
-            guard let self = self else { return }
-            if let index = self.fetchRecords.firstIndex(where: { $0.identifier == identifier }) {
-                let fetchRecord = self.fetchRecords.remove(at: index)
-                fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
-            }
+        if let index = self.fetchRecords.firstIndex(where: { $0.identifier == identifier }) {
+            let fetchRecord = self.fetchRecords.remove(at: index)
+            fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
         }
     }
     
     func cancelAllFetch() {
-        workQueue.async { [weak self] in
-            guard let self = self else { return }
-            for fetchRecord in self.fetchRecords {
-                fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
-            }
-            self.fetchRecords.removeAll()
+        for fetchRecord in self.fetchRecords {
+            fetchRecord.requestIDs.forEach { PHImageManager.default().cancelImageRequest($0) }
         }
+        self.fetchRecords.removeAll()
     }
 }
 

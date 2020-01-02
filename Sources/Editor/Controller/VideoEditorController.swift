@@ -130,16 +130,16 @@ final class VideoEditorController: UIViewController {
                     if self.toolView.selectOption(.crop) {
                         self.cropToolView.isHidden = false
                     }
-                    self.videoPreview.setupPlayer(url: url)
                     self.getProgressImage(url: url) { [weak self] (image) in
+                        self?.videoPreview.setThumbnail(image)
+                        self?.videoPreview.setupPlayer(url: url)
                         self?.setupProgressImage(url: url, image: image)
                     }
                 }
             case .failure(let error):
                 if error == .cannotFindInLocal {
                     showWaitHUD()
-                } else {
-                    hideHUD()
+                    return
                 }
                 _print("Fetch URL failed: \(error.localizedDescription)")
                 self.delegate?.videoEditorDidCancel(self)
@@ -260,7 +260,7 @@ extension VideoEditorController {
             generator.requestedTimeToleranceAfter = .zero
             generator.requestedTimeToleranceBefore = .zero
             let seconds = asset.duration.seconds
-            let array = (0..<count).map{ NSValue(time: CMTime(seconds: Double($0)*(seconds/Double(count)), preferredTimescale: 1000)) }
+            let array = (1...count).map{ NSValue(time: CMTime(seconds: Double($0)*(seconds/Double(count)), preferredTimescale: 1000)) }
             var i = 0
             generator.generateCGImagesAsynchronously(forTimes: array) { (requestedTime, cgImage, actualTime, result, error) in
                 i += 1
