@@ -52,6 +52,7 @@ extension PhotoGIFPreviewCell {
     
     /// 加载 GIF
     func requestGIF() {
+        let id = asset.phAsset.localIdentifier
         let options = PhotoGIFFetchOptions() { (progress, error, isAtEnd, info) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -62,8 +63,10 @@ extension PhotoGIFPreviewCell {
         manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
             switch result {
             case .success(let response):
-                self?.setImage(response.image)
-                self?.setDownloadingProgress(1.0)
+                if self?.asset.phAsset.localIdentifier == id {
+                    self?.setImage(response.image)
+                    self?.setDownloadingProgress(1.0)
+                }
             case .failure(let error):
                 _print(error)
             }

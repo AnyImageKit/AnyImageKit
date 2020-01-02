@@ -56,13 +56,14 @@ extension PhotoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
+        let id = asset.phAsset.localIdentifier
         if imageView.image == nil { // thumbnail
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
-                    if self.imageView.image == nil {
+                    if self.imageView.image == nil && self.asset.phAsset.localIdentifier == id  {
                         self.setImage(response.image)
                     }
                 case .failure(let error):
@@ -82,7 +83,7 @@ extension PhotoPreviewCell {
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                if !response.isDegraded {
+                if !response.isDegraded && self.asset.phAsset.localIdentifier == id {
                     self.setImage(response.image)
                     self.setDownloadingProgress(1.0)
                 }
