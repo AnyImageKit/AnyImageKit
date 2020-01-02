@@ -57,6 +57,7 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     internal func autoSetEditorButtonHidden() {
+        toolBar.leftButton.isHidden = true
         guard UIDevice.current.userInterfaceIdiom == .phone else { return } // Editor not support iPad yet
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
@@ -65,8 +66,6 @@ extension PhotoPreviewController {
             toolBar.leftButton.isHidden = false
         } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.options.contains(.video) {
             toolBar.leftButton.isHidden = false
-        } else {
-            toolBar.leftButton.isHidden = true
         }
     }
 }
