@@ -36,6 +36,9 @@ final class OriginalButton: UIControl {
         super.init(frame: frame)
         setupView()
         addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Original image")
     }
     
     required init?(coder aDecoder: NSCoder) {
