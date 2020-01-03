@@ -125,7 +125,6 @@
 		A5347D2623A9FD2700C93874 /* ExportTool+Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2523A9FD2700C93874 /* ExportTool+Photo.swift */; };
 		A5347D2823A9FF2900C93874 /* ExportTool+PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2723A9FF2900C93874 /* ExportTool+PhotoData.swift */; };
 		A5347D2A23AA1B9A00C93874 /* ExportTool+PhotoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2923AA1B9A00C93874 /* ExportTool+PhotoURL.swift */; };
-		A5347D2C23AA1D4B00C93874 /* ExportTool+PhotoGIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2B23AA1D4B00C93874 /* ExportTool+PhotoGIF.swift */; };
 		A5347D2E23AA1EC000C93874 /* ExportTool+PhotoLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2D23AA1EC000C93874 /* ExportTool+PhotoLive.swift */; };
 		A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D2F23AA1FD400C93874 /* ExportTool+Video.swift */; };
 		A5347D3223AA210A00C93874 /* ExportTool+VideoURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5347D3123AA210A00C93874 /* ExportTool+VideoURL.swift */; };
@@ -347,7 +346,6 @@
 		A5347D2523A9FD2700C93874 /* ExportTool+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+Photo.swift"; sourceTree = "<group>"; };
 		A5347D2723A9FF2900C93874 /* ExportTool+PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+PhotoData.swift"; sourceTree = "<group>"; };
 		A5347D2923AA1B9A00C93874 /* ExportTool+PhotoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+PhotoURL.swift"; sourceTree = "<group>"; };
-		A5347D2B23AA1D4B00C93874 /* ExportTool+PhotoGIF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+PhotoGIF.swift"; sourceTree = "<group>"; };
 		A5347D2D23AA1EC000C93874 /* ExportTool+PhotoLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+PhotoLive.swift"; sourceTree = "<group>"; };
 		A5347D2F23AA1FD400C93874 /* ExportTool+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+Video.swift"; sourceTree = "<group>"; };
 		A5347D3123AA210A00C93874 /* ExportTool+VideoURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+VideoURL.swift"; sourceTree = "<group>"; };
@@ -869,7 +867,6 @@
 				A5347D2523A9FD2700C93874 /* ExportTool+Photo.swift */,
 				A5347D2723A9FF2900C93874 /* ExportTool+PhotoData.swift */,
 				A5347D2923AA1B9A00C93874 /* ExportTool+PhotoURL.swift */,
-				A5347D2B23AA1D4B00C93874 /* ExportTool+PhotoGIF.swift */,
 				A5347D2D23AA1EC000C93874 /* ExportTool+PhotoLive.swift */,
 				A5347D2F23AA1FD400C93874 /* ExportTool+Video.swift */,
 				A5347D3123AA210A00C93874 /* ExportTool+VideoURL.swift */,
@@ -1309,7 +1306,6 @@
 				A544372023AB61C9003C65F9 /* VideoEditorCropToolView.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,
 				A561239B23B5EDA90071C3E8 /* AnyImageUserInterfaceStyle.swift in Sources */,
-				A5347D2C23AA1D4B00C93874 /* ExportTool+PhotoGIF.swift in Sources */,
 				A5DF1E86237AA32C00E3A32E /* Editor+CABasicAnimation.swift in Sources */,
 				A561239923B5E8550071C3E8 /* AnyImageSort.swift in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
