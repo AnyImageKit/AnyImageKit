@@ -1,5 +1,5 @@
 //
-//  Picker+CGImagePropertyOrientation.swift
+//  Core+CGImagePropertyOrientation.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/26.

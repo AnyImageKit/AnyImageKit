@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
     s.default_subspecs = 'Core', 'Picker', 'Editor', 'Capture'
     
     s.subspec 'Core' do |core|
-        core.source_files = 'Sources/Core/**/*'
-        picker.resources = 'Sources/Core/Resources/**/*'
+        core.source_files = 'Sources/Core/**/*.swift'
+        core.resources = 'Sources/Core/Resources/**/*'
         core.dependency 'SnapKit'
     end
     

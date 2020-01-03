@@ -58,7 +58,7 @@ extension BundleHelper {
     static func localizedString(key: String, value: String?, table: LocalizedTable) -> String {
         if let result = languageBundle?.localizedString(forKey: key, value: value, table: table.rawValue), result != key {
             return result
-        } else if table != .default, let result = languageBundle?.localizedString(forKey: key, value: value, table: LocalizedTable.default.rawValue), result != key {
+        } else if table != .core, let result = languageBundle?.localizedString(forKey: key, value: value, table: LocalizedTable.core.rawValue), result != key {
             return result
         }
         return Bundle.main.localizedString(forKey: key, value: value, table: nil)
@@ -80,5 +80,5 @@ extension BundleHelper {
 
 extension BundleHelper.LocalizedTable {
     
-    static let `default` = BundleHelper.LocalizedTable(rawValue: "Localizable")
+    static let core = BundleHelper.LocalizedTable(rawValue: "Core")
 }
