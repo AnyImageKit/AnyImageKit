@@ -94,6 +94,6 @@ extension ImageEditorController: VideoEditorControllerDelegate {
     }
     
     func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool) {
-        
+        editorDelegate?.imageEditor(self, didFinishEditing: video, isEdited: isEdited)
     }
 }
