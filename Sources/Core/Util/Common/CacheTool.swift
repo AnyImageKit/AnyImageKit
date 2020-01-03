@@ -53,7 +53,12 @@ enum CacheModule {
     }
     
     var path: String {
-        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? ""
+        #if DEBUG
+        let directory: FileManager.SearchPathDirectory = .documentDirectory
+        #else
+        let directory: FileManager.SearchPathDirectory = .libraryDirectory
+        #endif
+        let lib = NSSearchPathForDirectoriesInDomains(directory, .userDomainMask, true).first ?? ""
         return "\(lib)/AnyImageKitCache/\(title)/\(subTitle)/"
     }
 }
