@@ -21,6 +21,8 @@ final class Recorder {
     var preferredAudioSettings: [String: Any]?
     var preferredVideoSettings: [String: Any]?
     
+    var orientation: CaptureOrientation = .portrait
+    
     private(set) var isRunning: Bool = false
     
     private let cacheTool = CacheTool(config: .init(module: .capture(.recorder)))
@@ -127,6 +129,7 @@ extension Recorder {
             }
             let input = AVAssetWriterInput(mediaType: mediaType, outputSettings: outputSettings, sourceFormatHint: format)
             input.expectsMediaDataInRealTime = true
+            input.transform = orientation.transform
             if let writer = writer, writer.canAdd(input) {
                 writerInputs[mediaType] = input
                 writer.add(input)
