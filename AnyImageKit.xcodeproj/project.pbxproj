@@ -24,6 +24,7 @@
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
 		A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3922330B5D000D32ED8 /* AssetCell.swift */; };
 		A036C3982330E5F300D32ED8 /* Picker+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */; };
+		A03806B423BF2DF2002873A9 /* AssetPickerViewController+Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03806B323BF2DF2002873A9 /* AssetPickerViewController+Capture.swift */; };
 		A04B044323B1A4FE00DA4D47 /* Capture+BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04B044223B1A4FE00DA4D47 /* Capture+BundleHelper.swift */; };
 		A04B044723B1A54F00DA4D47 /* Capture.strings in Resources */ = {isa = PBXBuildFile; fileRef = A04B044923B1A54F00DA4D47 /* Capture.strings */; };
 		A04B044E23B1AB7400DA4D47 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A04B045023B1AB7400DA4D47 /* Localizable.strings */; };
@@ -235,6 +236,7 @@
 		A036C3922330B5D000D32ED8 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		A036C3952330B5EE00D32ED8 /* Ex+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIImage.swift"; sourceTree = "<group>"; };
+		A03806B323BF2DF2002873A9 /* AssetPickerViewController+Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssetPickerViewController+Capture.swift"; sourceTree = "<group>"; };
 		A03E9CAA236042F0003C6335 /* README_CN.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A04B044223B1A4FE00DA4D47 /* Capture+BundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+BundleHelper.swift"; sourceTree = "<group>"; };
@@ -567,6 +569,7 @@
 				A0800410232F4EE4006B4711 /* ImagePickerController.swift */,
 				A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */,
 				A0800412232F5B44006B4711 /* AssetPickerViewController.swift */,
+				A03806B323BF2DF2002873A9 /* AssetPickerViewController+Capture.swift */,
 				A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */,
 				A5EFE3F8237D3E060071F39F /* PhotoPreviewController+Editor.swift */,
 			);
@@ -1272,6 +1275,7 @@
 				A0B50C3823AA0AD2002C9799 /* PreviewContentView.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
 				A5783956235ED584002A0498 /* LivePhotoTipView.swift in Sources */,
+				A03806B423BF2DF2002873A9 /* AssetPickerViewController+Capture.swift in Sources */,
 				A5F7DFCF2394D5CE006E10ED /* EditorTextToolView.swift in Sources */,
 				A50B2118237AA24300A894A9 /* Canvas.swift in Sources */,
 				A01C583523B44B2E00691F11 /* AnyImageMediaType.swift in Sources */,

@@ -22,9 +22,9 @@ final class AssetPickerViewController: UIViewController {
     
     weak var delegate: AssetPickerViewControllerDelegate?
     
-    private var albumsPicker: AlbumPickerViewController?
-    private var album: Album?
-    private var albums = [Album]()
+    private(set) var albumsPicker: AlbumPickerViewController?
+    private(set) var album: Album?
+    private(set) var albums = [Album]()
     
     private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
@@ -185,7 +185,9 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.name)
-        addCameraAsset()
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        addCameraAssetIfNeed()
+        #endif
         collectionView.reloadData()
         if manager.options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: false)
@@ -204,7 +206,7 @@ extension AssetPickerViewController {
         }
     }
     
-    private func updateVisibleCellState(_ animatedItem: Int = -1) {
+    func updateVisibleCellState(_ animatedItem: Int = -1) {
         guard let album = album else { return }
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
@@ -320,10 +322,12 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let album = album else { return }
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         if album.assets[indexPath.item].isCamera { // 点击拍照 Item
             showCapture()
             return
         }
+        #endif
         
         if !album.assets[indexPath.item].isSelected && manager.isUpToLimit { return }
         let controller = PhotoPreviewController(manager: manager)
@@ -331,6 +335,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -424,96 +429,3 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         collectionView.reloadItems(at: [indexPath])
     }
 }
-
-#if ANYIMAGEKIT_ENABLE_CAPTURE
-
-// MARK: - Capture
-extension AssetPickerViewController {
-    
-    private func showCapture() {
-        #if !targetEnvironment(simulator)
-        let controller = ImageCaptureController(options: manager.options.captureOptions, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true, completion: nil)
-        #else
-        let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
-        #endif
-    }
-    
-    /// 添加拍照 Item
-    private func addCameraAsset() {
-        guard let album = album, album.isCameraRoll else { return }
-        let options = manager.options
-        let sortType = options.orderByDate
-        if !options.captureOptions.mediaOptions.isEmpty {
-            switch sortType {
-            case .asc:
-                album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), atLast: true)
-            case .desc:
-                album.insertAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
-            }
-        }
-    }
-    
-    /// 拍照结束后，插入 PHAsset
-    private func addPHAsset(_ phAsset: PHAsset) {
-        guard let album = album else { return }
-        let sortType = manager.options.orderByDate
-        let addSuccess: Bool
-        switch sortType {
-        case .asc:
-            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
-            album.addAsset(asset, atLast: false)
-            addSuccess = manager.addSelectedAsset(asset)
-            collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
-        case .desc:
-            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
-            album.insertAsset(asset, at: 1, sort: manager.options.orderByDate)
-            addSuccess = manager.addSelectedAsset(asset)
-            collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
-        }
-        updateVisibleCellState()
-        toolBar.setEnable(true)
-        if addSuccess {
-            /// 拍照结束后，如果 limit=1 直接返回
-            if manager.options.selectLimit == 1 {
-                delegate?.assetPickerDidFinishPicking(self)
-            }
-        }
-    }
-}
-
-// MARK: - ImageCaptureControllerDelegate
-extension AssetPickerViewController: ImageCaptureControllerDelegate {
-    
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: AnyImageMediaType) {
-        capture.dismiss(animated: true, completion: nil)
-        showWaitHUD()
-        switch type {
-        case .photo:
-            manager.savePhoto(url: media) { [weak self] (result) in
-                switch result {
-                case .success(let asset):
-                    self?.addPHAsset(asset)
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                }
-                hideHUD()
-            }
-        case .video:
-            manager.saveVideo(url: media) { [weak self] (result) in
-                switch result {
-                case .success(let asset):
-                    self?.addPHAsset(asset)
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                }
-                hideHUD()
-            }
-        }
-    }
-}
-
-#endif
