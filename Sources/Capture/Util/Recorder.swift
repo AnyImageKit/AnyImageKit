@@ -18,7 +18,6 @@ final class Recorder {
     
     weak var delegate: RecorderDelegate?
     
-    var preferredFileName: String?
     var preferredAudioSettings: [String: Any]?
     var preferredVideoSettings: [String: Any]?
     
@@ -39,9 +38,7 @@ final class Recorder {
 extension Recorder {
     
     var isReadyForStartWriting: Bool {
-        guard let writer: AVAssetWriter = writer else {
-            return false
-        }
+        guard let writer: AVAssetWriter = writer else { return false }
         return writer.inputs.count == 2
     }
     
@@ -51,9 +48,11 @@ extension Recorder {
             
             self.rotateFile(with: sampleBuffer.presentationTimeStamp, mediaType: mediaType)
             
-            guard let writer = self.writer, let input = self.getWriterInput(mediaType: mediaType, sourceFormatHint: sampleBuffer.formatDescription), self.isReadyForStartWriting else {
+            guard let writer = self.writer, let input = self.getWriterInput(mediaType: mediaType, sourceFormatHint: sampleBuffer.formatDescription) else {
                 return
             }
+            
+            guard self.isReadyForStartWriting else { return }
             
             switch writer.status {
             case .unknown:
@@ -97,16 +96,21 @@ extension Recorder {
         for (_, input) in writerInputs {
             input.markAsFinished()
         }
-        writer.finishWriting {
+        
+        writer.finishWriting { [weak self] in
+            guard let self = self else { return }
             self.writer = nil
             self.writerInputs.removeAll()
-        }
-        
-        let outputURL = writer.outputURL
-        let thumbnail = createThumbnail(at: outputURL)
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.recorder(self, didCreateMovieFileAt: outputURL, thumbnail: thumbnail)
+            self.sourceTime = .zero
+            self.duration = 0
+            self.rotateTime = .zero
+            
+            let outputURL = writer.outputURL
+            let thumbnail = self.createThumbnail(at: outputURL)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.recorder(self, didCreateMovieFileAt: outputURL, thumbnail: thumbnail)
+            }
         }
     }
     
@@ -117,7 +121,7 @@ extension Recorder {
         if writer != nil {
             finishWriting()
         }
-        writer = createWriter(preferredFileName)
+        writer = createWriter()
         rotateTime = CMTimeAdd(
             presentationTimeStamp,
             CMTimeMake(value: duration == 0 ? .max : duration * Int64(presentationTimeStamp.timescale), timescale: presentationTimeStamp.timescale)
@@ -146,11 +150,11 @@ extension Recorder {
         }
     }
     
-    private func createWriter(_ fileName: String?) -> AVAssetWriter? {
+    private func createWriter() -> AVAssetWriter? {
         do {
             FileHelper.createDirectory(at: cacheTool.path)
             let pathURL = URL(fileURLWithPath: cacheTool.path)
-            let url = pathURL.appendingPathComponent((fileName ?? UUID().uuidString) + ".mp4")
+            let url = pathURL.appendingPathComponent((UUID().uuidString) + ".mp4")
             _print("Create AVAssetWriter at utl: \(url)")
             return try AVAssetWriter(outputURL: url, fileType: .mp4)
         } catch {
