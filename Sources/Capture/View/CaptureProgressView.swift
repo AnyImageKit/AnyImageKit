@@ -10,8 +10,6 @@ import UIKit
 
 final class CaptureProgressView: UIView {
     
-    var color: UIColor = .mainColor
-    
     private var style: Style = .progress(0.0)
     
     private lazy var animationLayer: CAShapeLayer = {
@@ -25,7 +23,7 @@ final class CaptureProgressView: UIView {
                     endAngle: .pi + .pi / 2,
                     clockwise: true)
         layer.fillColor = nil
-        layer.strokeColor = color.cgColor
+        layer.strokeColor = options.tintColor.cgColor
         layer.lineWidth = lineWidth
         layer.backgroundColor = nil
         layer.path = path.cgPath
@@ -33,7 +31,10 @@ final class CaptureProgressView: UIView {
         return layer
     }()
     
-    override init(frame: CGRect) {
+    private let options: AnyImageCaptureOptionsInfo
+    
+    init(frame: CGRect, options: AnyImageCaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -61,7 +62,7 @@ final class CaptureProgressView: UIView {
                 let end: CGFloat = start + .pi * 2.0 * progress
                 let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: start, endAngle: end, clockwise: true)
                 context.setLineWidth(lineWidth)
-                color.setStroke()
+                options.tintColor.setStroke()
                 context.addPath(path.cgPath)
                 context.strokePath()
             }

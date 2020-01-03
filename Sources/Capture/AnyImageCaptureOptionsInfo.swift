@@ -7,9 +7,13 @@
 //
 
 import Foundation
+import UIKit
 import AVFoundation
 
 public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
+    /// 主题色
+    /// 默认：green
+    case tintColor(UIColor)
     case mediaOptions(AnyImageCaptureMediaOptions)
     case photoAspectRatio(AnyImageCaptureAspectRatio)
     case preferredPositions([AVCaptureDevice.Position])
@@ -23,6 +27,7 @@ public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
 
 public struct AnyImageCaptureOptionsInfo: Equatable {
     
+    public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
     public var mediaOptions: AnyImageCaptureMediaOptions = [.photo, .video]
     public var photoAspectRatio: AnyImageCaptureAspectRatio = .ratio4x3
     public var preferredPositions: [AVCaptureDevice.Position] = [.back, .front]
@@ -33,6 +38,7 @@ public struct AnyImageCaptureOptionsInfo: Equatable {
     public init(_ info: [AnyImageCaptureOptionsInfoItem] = []) {
         for option in info {
             switch option {
+            case .tintColor(let value): tintColor = value
             case .mediaOptions(let value): mediaOptions = value
             case .photoAspectRatio(let value): photoAspectRatio = value
             case .preferredPositions(let value): preferredPositions = value

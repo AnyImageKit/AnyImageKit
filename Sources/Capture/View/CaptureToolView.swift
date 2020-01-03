@@ -11,7 +11,7 @@ import UIKit
 final class CaptureToolView: UIView {
     
     private(set) lazy var captureButton: CaptureButton = {
-        let view = CaptureButton(frame: .zero)
+        let view = CaptureButton(frame: .zero, options: options)
         view.isAccessibilityElement = true
         view.accessibilityTraits = .button
         view.accessibilityLabel = BundleHelper.captureLocalizedString(key: "Tap to take photo and hode to record video")
@@ -34,7 +34,10 @@ final class CaptureToolView: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
+    private let options: AnyImageCaptureOptionsInfo
+    
+    init(frame: CGRect, options: AnyImageCaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }

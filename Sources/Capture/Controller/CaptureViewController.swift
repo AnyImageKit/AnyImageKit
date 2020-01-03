@@ -27,7 +27,7 @@ final class CaptureViewController: UIViewController {
     }()
     
     private lazy var toolView: CaptureToolView = {
-        let view = CaptureToolView(frame: .zero)
+        let view = CaptureToolView(frame: .zero, options: options)
         view.cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         view.switchButton.addTarget(self, action: #selector(switchButtonTapped(_:)), for: .touchUpInside)
         view.captureButton.delegate = self

@@ -14,6 +14,7 @@ import Photos
 // MARK: - Capture
 extension AssetPickerViewController {
     
+    /// 打开相机
     func showCapture() {
         #if !targetEnvironment(simulator)
         let controller = ImageCaptureController(options: manager.options.captureOptions, delegate: self)

@@ -30,7 +30,7 @@ final class CaptureButton: UIControl {
     }()
     
     private lazy var progressView: CaptureProgressView = {
-        let view = CaptureProgressView(frame: .zero)
+        let view = CaptureProgressView(frame: .zero, options: options)
         return view
     }()
     
@@ -43,7 +43,10 @@ final class CaptureButton: UIControl {
         return CGSize(width: 88, height: 88)
     }
     
-    override init(frame: CGRect) {
+    private let options: AnyImageCaptureOptionsInfo
+    
+    init(frame: CGRect, options: AnyImageCaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
         setupGestureRecognizer()
