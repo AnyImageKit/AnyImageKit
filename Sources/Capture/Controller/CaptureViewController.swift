@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func capture(_ capture: CaptureViewController, didOutput media: URL, type: CaptureMediaType)
+    func capture(_ capture: CaptureViewController, didOutput media: URL, type: AnyImageMediaType)
 }
 
 final class CaptureViewController: UIViewController {

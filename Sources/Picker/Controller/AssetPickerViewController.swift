@@ -488,7 +488,7 @@ extension AssetPickerViewController {
 // MARK: - ImageCaptureControllerDelegate
 extension AssetPickerViewController: ImageCaptureControllerDelegate {
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: CaptureMediaType) {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: AnyImageMediaType) {
         capture.dismiss(animated: true, completion: nil)
         showWaitHUD()
         switch type {

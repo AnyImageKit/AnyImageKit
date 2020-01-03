@@ -84,7 +84,7 @@ final class CaptureConfigViewController: UITableViewController {
 
 extension CaptureConfigViewController: ImageCaptureControllerDelegate {
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: CaptureMediaType) {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: AnyImageMediaType) {
         switch type {
         case .photo:
             capture.dismiss(animated: true, completion: { [weak self] in

@@ -1,5 +1,5 @@
 //
-//  CaptureMediaType.swift
+//  AnyImageMediaType.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/26.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CaptureMediaType: Hashable {
+public enum AnyImageMediaType: Hashable {
     
     case photo
     case video
