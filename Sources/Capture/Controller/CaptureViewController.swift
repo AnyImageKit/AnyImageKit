@@ -208,7 +208,7 @@ extension CaptureViewController: CaptureDelegate {
             self.orientationUtil.stopRunning()
         }
         #else
-        output(photoData: photoData, fileType: fileType)
+        output(photo: photoData, fileType: fileType)
         #endif
     }
     

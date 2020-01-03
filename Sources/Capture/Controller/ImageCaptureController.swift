@@ -45,6 +45,7 @@ open class ImageCaptureController: AnyImageNavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
         if let _ = presentedViewController as? ImageEditorController {
             presentingViewController?.dismiss(animated: flag, completion: completion)
@@ -52,6 +53,7 @@ open class ImageCaptureController: AnyImageNavigationController {
             super.dismiss(animated: flag, completion: completion)
         }
     }
+    #endif
     
     open override var prefersStatusBarHidden: Bool {
         return true
