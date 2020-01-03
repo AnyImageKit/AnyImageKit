@@ -14,6 +14,11 @@ class PickerUITests: XCTestCase {
     
     override func setUp() {
         app = XCUIApplication()
+        app.launchArguments = [
+            "-inUITest",
+            "-AppleLanguages",
+            "(en)",
+        ]
         app.launch()
         continueAfterFailure = false
     }
