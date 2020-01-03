@@ -53,6 +53,8 @@ final class PickerArrowButton: UIControl {
         super.init(frame: frame)
         setupView()
         addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        isAccessibilityElement = true
+        accessibilityTraits = .button
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -111,6 +113,7 @@ extension PickerArrowButton {
             self.label.text = title
             self.layoutIfNeeded()
         }
+        accessibilityLabel = String(format: BundleHelper.pickerLocalizedString(key: "Switch album current album is %@"), title)
     }
 }
 

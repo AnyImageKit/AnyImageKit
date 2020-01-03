@@ -297,6 +297,9 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         guard let asset = album?.assets[indexPath.item] else { return UICollectionViewCell() }
         if asset.isCamera {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
+            cell.isAccessibilityElement = true
+            cell.accessibilityTraits = .button
+            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Take photo")
             return cell
         }
         
