@@ -87,12 +87,14 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
     func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: CaptureMediaType) {
         switch type {
         case .photo:
-            guard let data = try? Data(contentsOf: media) else { return }
-            guard let image = UIImage(data: data) else { return }
-            let controller = EditorResultViewController()
-            controller.imageView.image = image
-            show(controller, sender: nil)
-            capture.dismiss(animated: true, completion: nil)
+            capture.dismiss(animated: true, completion: { [weak self] in
+                guard let self = self else { return }
+                guard let data = try? Data(contentsOf: media) else { return }
+                guard let image = UIImage(data: data) else { return }
+                let controller = EditorResultViewController()
+                controller.imageView.image = image
+                self.show(controller, sender: nil)
+            })
         case .video:
             capture.dismiss(animated: true, completion: { [weak self] in
                 guard let self = self else { return }
