@@ -54,7 +54,8 @@ class PickerUITests: XCTestCase {
     /// 取消选择图片
     func testUnselectPhoto() {
         selectPhotoBySelectButton()
-        for i in 0..<3 {
+        let cells = app.collectionViews.children(matching: .cell)
+        for i in cells.count-3..<cells.count {
             sleep(0.5)
             selectPhoto(idx: i)
             exitPreviewController()
@@ -64,8 +65,8 @@ class PickerUITests: XCTestCase {
     /// 在已选图片预览中测试跳转
     func testPreviewTool() {
         selectPhotoBySelectButton()
-        app.collectionViews.children(matching: .cell).element(boundBy: 3).tap()
         let cells = app.collectionViews.element(boundBy: 1).cells
+        app.collectionViews.children(matching: .cell).element(boundBy: cells.count-3).tap()
         for i in 0..<cells.count {
             sleep(0.5)
             cells.element(boundBy: i).tap()
@@ -101,7 +102,8 @@ extension PickerUITests {
     /// 通过预览按钮选择图片
     func selectPhotoBySelectButton() {
         openPickerController()
-        for i in 0..<3 {
+        let cells = app.collectionViews.children(matching: .cell)
+        for i in cells.count-3..<cells.count {
             sleep(0.5)
             selectPhoto(idx: i)
             exitPreviewController()
@@ -174,7 +176,8 @@ extension PickerUITests {
     func openPreviewController() {
         exitToHomeController()
         openPickerController()
-        app.collectionViews.children(matching: .cell).element(boundBy: 0).tap()
+        let cells = app.collectionViews.children(matching: .cell)
+        cells.element(boundBy: cells.count-1).tap()
     }
     
     /// 进入切换相册控制器

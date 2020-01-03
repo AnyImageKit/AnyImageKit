@@ -20,6 +20,7 @@ final class PickerConfigViewController: UITableViewController {
         self.title = "Picker"
         setupView()
         setupNavigation()
+        options.captureOptionInfoItems.update(.mediaOptions([]))
     }
     
     private func setupView() {
