@@ -42,16 +42,17 @@ open class ImagePickerController: AnyImageNavigationController {
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
         super.init(nibName: nil, bundle: nil)
+        let newOptions = check(options: options)
         self.addNotifications()
-        self.manager.options = options
+        self.manager.options = newOptions
         self.pickerDelegate = delegate
         
         let rootViewController = AssetPickerViewController(manager: manager)
         rootViewController.delegate = self
         self.viewControllers = [rootViewController]
         
-        navigationBar.barTintColor = options.theme.backgroundColor
-        navigationBar.tintColor = options.theme.textColor
+        navigationBar.barTintColor = newOptions.theme.backgroundColor
+        navigationBar.tintColor = newOptions.theme.textColor
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
@@ -111,6 +112,25 @@ open class ImagePickerController: AnyImageNavigationController {
 
 // MARK: - Private function
 extension ImagePickerController {
+    
+    private func check(options: AnyImagePickerOptionsInfo) -> AnyImagePickerOptionsInfo {
+        var options = options
+        options.largePhotoMaxWidth = max(options.photoMaxWidth, options.largePhotoMaxWidth)
+        #if DEBUG
+        assert(options.selectLimit >= 1, "Select limit should bigger then 1")
+        assert(options.columnNumber >= 3 && options.columnNumber <= 5, "Column number should between 3 to 5")
+        #else
+        if options.selectLimit < 1 {
+            options.selectLimit = 1
+        }
+        if options.columnNumber < 3 {
+            options.columnNumber = 3
+        } else if options.columnNumber > 5 {
+            options.columnNumber = 5
+        }
+        #endif
+        return options
+    }
     
     private func checkData() {
         showWaitHUD()

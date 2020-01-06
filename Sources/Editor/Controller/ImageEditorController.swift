@@ -35,9 +35,9 @@ open class ImageEditorController: AnyImageNavigationController {
     public required init(image: UIImage, options: AnyImageEditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        check(options: options)
+        let newOptions = check(options: options)
         self.editorDelegate = delegate
-        let rootViewController = PhotoEditorController(image: image, options: options, delegate: self)
+        let rootViewController = PhotoEditorController(image: image, options: newOptions, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
@@ -64,10 +64,24 @@ open class ImageEditorController: AnyImageNavigationController {
 // MARK: - Private function
 extension ImageEditorController {
     
-    private func check(options: AnyImageEditorPhotoOptionsInfo) {
+    private func check(options: AnyImageEditorPhotoOptionsInfo) -> AnyImageEditorPhotoOptionsInfo {
+        #if DEBUG
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         assert(options.penColors.count <= 7, "Pen colors count can't bigger then 7")
         assert(options.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
+        #else
+        var options = options
+        if options.cacheIdentifier.firstIndex(of: "/") != nil {
+            options.cacheIdentifier = options.cacheIdentifier.replacingOccurrences(of: "/", with: "-")
+        }
+        if options.penColors.count > 7 {
+            options.penColors = Array(options.penColors.prefix(upTo: 7))
+        }
+        if options.mosaicOptions.count > 5 {
+            options.mosaicOptions = Array(options.mosaicOptions.prefix(upTo: 5))
+        }
+        #endif
+        return options
     }
     
     private func output(photo: UIImage, fileType: FileType) -> Result<URL, AnyImageError> {
