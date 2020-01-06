@@ -250,7 +250,7 @@ extension CaptureViewController: RecorderDelegate {
 // MARK: - DeviceOrientationUtilDelegate
 extension CaptureViewController: DeviceOrientationUtilDelegate {
     
-    func device(_ util: DeviceOrientationUtil, didUpdate orientation: CaptureOrientation) {
+    func device(_ util: DeviceOrientationUtil, didUpdate orientation: DeviceOrientation) {
         capture.orientation = orientation
         recorder.orientation = orientation
         toolView.rotate(to: orientation, animated: true)

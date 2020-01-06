@@ -1,5 +1,5 @@
 //
-//  CaptureOrientation.swift
+//  DeviceOrientation.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/24.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreImage
 
-enum CaptureOrientation: Equatable {
+enum DeviceOrientation: Equatable {
     
     case portrait
     case portraitUpsideDown
@@ -17,7 +17,7 @@ enum CaptureOrientation: Equatable {
     case landscapeRight
 }
 
-extension CaptureOrientation {
+extension DeviceOrientation {
     
     var exifOrientation: Int32 {
         return Int32(cgImagePropertyOrientation.rawValue)
@@ -37,7 +37,7 @@ extension CaptureOrientation {
     }
 }
 
-extension CaptureOrientation {
+extension DeviceOrientation {
     
     var transform: CGAffineTransform {
         switch self {

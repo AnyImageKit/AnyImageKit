@@ -25,7 +25,7 @@ final class Capture {
     private let audioCapture: AudioCapture
     private let videoCapture: VideoCapture
     
-    var orientation: CaptureOrientation = .portrait
+    var orientation: DeviceOrientation = .portrait
     var isSwitchingCamera = false
     
     init(options: AnyImageCaptureOptionsInfo) {

@@ -26,7 +26,7 @@ final class VideoCapture: NSObject {
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
     
-    private var orientation: CaptureOrientation = .portrait
+    private var orientation: DeviceOrientation = .portrait
     private var position: AVCaptureDevice.Position = .back
     
     private lazy var photoContext: CIContext = {
@@ -169,7 +169,7 @@ extension VideoCapture {
 // MARK: - Photo
 extension VideoCapture {
     
-    func capturePhoto(orientation: CaptureOrientation) {
+    func capturePhoto(orientation: DeviceOrientation) {
         self.orientation = orientation
         let settings = AVCapturePhotoSettings()
         settings.flashMode = .off

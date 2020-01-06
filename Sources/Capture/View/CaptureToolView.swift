@@ -89,7 +89,7 @@ final class CaptureToolView: UIView {
 // MARK: - Animation
 extension CaptureToolView {
     
-    func rotate(to orientation: CaptureOrientation, animated: Bool) {
+    func rotate(to orientation: DeviceOrientation, animated: Bool) {
         let angle: CGFloat
         switch orientation {
         case .portrait:

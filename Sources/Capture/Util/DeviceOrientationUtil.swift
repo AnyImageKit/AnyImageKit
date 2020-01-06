@@ -10,7 +10,7 @@ import CoreMotion
 
 protocol DeviceOrientationUtilDelegate: class {
     
-    func device(_ util: DeviceOrientationUtil, didUpdate orientation: CaptureOrientation)
+    func device(_ util: DeviceOrientationUtil, didUpdate orientation: DeviceOrientation)
 }
 
 final class DeviceOrientationUtil {
@@ -25,14 +25,14 @@ final class DeviceOrientationUtil {
     
     private lazy var queue: OperationQueue = OperationQueue()
     
-    private(set) var orientation: CaptureOrientation = .portrait
+    private(set) var orientation: DeviceOrientation = .portrait
     
     func startRunning() {
         let motionLimit: Double = 0.6
         motionManager.startAccelerometerUpdates(to: queue) { [weak self] (data, error) in
             guard let self = self else { return }
             guard let data = data else { return }
-            let newOrientation: CaptureOrientation
+            let newOrientation: DeviceOrientation
             if data.acceleration.x >= motionLimit {
                 newOrientation = .landscapeRight
             } else if data.acceleration.x <= -motionLimit {

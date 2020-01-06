@@ -21,7 +21,7 @@ final class Recorder {
     var preferredAudioSettings: [String: Any]?
     var preferredVideoSettings: [String: Any]?
     
-    var orientation: CaptureOrientation = .portrait
+    var orientation: DeviceOrientation = .portrait
     
     private(set) var isRunning: Bool = false
     
