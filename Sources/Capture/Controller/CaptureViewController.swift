@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func capture(_ capture: CaptureViewController, didOutput media: URL, type: MediaType)
+    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType)
 }
 
 final class CaptureViewController: UIViewController {
@@ -100,29 +100,6 @@ final class CaptureViewController: UIViewController {
             maker.bottom.equalTo(layoutGuide.snp.bottom)
             maker.height.equalTo(88)
         }
-    }
-}
-
-// MARK: - Private
-extension CaptureViewController {
-    
-    private func output(photo: Data, fileType: FileType) {
-        let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let tmpPath = NSTemporaryDirectory()
-        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
-        FileHelper.createDirectory(at: tmpPath)
-        let url = URL(fileURLWithPath: filePath)
-        // Write to file
-        do {
-            try photo.write(to: url)
-            delegate?.capture(self, didOutput: url, type: .photo)
-        } catch {
-            _print(error.localizedDescription)
-        }
-    }
-    
-    private func output(video url: URL) {
-        delegate?.capture(self, didOutput: url, type: .video)
     }
 }
 
@@ -269,13 +246,8 @@ extension CaptureViewController: ImageEditorControllerDelegate {
         editor.dismiss(animated: false, completion: nil)
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        guard let photoData = photo.jpegData(compressionQuality: 1.0) else { return }
-        output(photo: photoData, fileType: .jpeg)
-    }
-    
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) {
-        output(video: video)
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool) {
+        delegate?.capture(self, didOutput: mediaURL, type: type)
     }
 }
 

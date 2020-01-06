@@ -88,11 +88,15 @@ final class EditorConfigViewController: UITableViewController {
 // MARK: - ImageEditorPhotoDelegate
 extension EditorConfigViewController: ImageEditorControllerDelegate {
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        let controller = EditorResultViewController()
-        controller.imageView.image = photo
-        show(controller, sender: nil)
-        editor.dismiss(animated: true, completion: nil)
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool) {
+        if type == .photo {
+            guard let photoData = try? Data(contentsOf: mediaURL) else { return }
+            guard let photo = UIImage(data: photoData) else { return }
+            let controller = EditorResultViewController()
+            controller.imageView.image = photo
+            show(controller, sender: nil)
+            editor.dismiss(animated: true, completion: nil)
+        }
     }
 }
 

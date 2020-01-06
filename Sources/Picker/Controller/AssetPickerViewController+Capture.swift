@@ -73,12 +73,12 @@ extension AssetPickerViewController {
 // MARK: - ImageCaptureControllerDelegate
 extension AssetPickerViewController: ImageCaptureControllerDelegate {
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: MediaType) {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing mediaURL: URL, type: MediaType) {
         capture.dismiss(animated: true, completion: nil)
         showWaitHUD()
         switch type {
         case .photo:
-            manager.savePhoto(url: media) { [weak self] (result) in
+            manager.savePhoto(url: mediaURL) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
                     self?.addPHAsset(asset)
@@ -88,7 +88,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 hideHUD()
             }
         case .video:
-            manager.saveVideo(url: media) { [weak self] (result) in
+            manager.saveVideo(url: mediaURL) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
                     self?.addPHAsset(asset)

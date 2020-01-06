@@ -12,7 +12,7 @@ import SnapKit
 public protocol ImageCaptureControllerDelegate: class {
     
     func imageCaptureDidCancel(_ capture: ImageCaptureController)
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing media: URL, type: MediaType)
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing mediaURL: URL, type: MediaType)
 }
 
 extension ImageCaptureControllerDelegate {
@@ -67,7 +67,7 @@ extension ImageCaptureController: CaptureViewControllerDelegate {
         captureDelegate?.imageCaptureDidCancel(self)
     }
     
-    func capture(_ capture: CaptureViewController, didOutput media: URL, type: MediaType) {
-        captureDelegate?.imageCapture(self, didFinishCapturing: media, type: type)
+    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType) {
+        captureDelegate?.imageCapture(self, didFinishCapturing: mediaURL, type: type)
     }
 }

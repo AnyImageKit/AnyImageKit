@@ -12,8 +12,7 @@ import SnapKit
 public protocol ImageEditorControllerDelegate: class {
     
     func imageEditorDidCancel(_ editor: ImageEditorController)
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool)
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool)
 }
 
 extension ImageEditorControllerDelegate {
@@ -21,8 +20,6 @@ extension ImageEditorControllerDelegate {
     public func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: true, completion: nil)
     }
-    public func imageEditor(_ editor: ImageEditorController, didFinishEditing photo: UIImage, isEdited: Bool) { }
-    public func imageEditor(_ editor: ImageEditorController, didFinishEditing video: URL, isEdited: Bool) { }
 }
 
 open class ImageEditorController: AnyImageNavigationController {
@@ -72,6 +69,24 @@ extension ImageEditorController {
         assert(options.penColors.count <= 7, "Pen colors count can't bigger then 7")
         assert(options.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
     }
+    
+    private func output(photo: UIImage, fileType: FileType) -> Result<URL, AnyImageError> {
+        guard let data = photo.jpegData(compressionQuality: 1.0) else {
+            return .failure(.invalidData)
+        }
+        let timestamp = Int(Date().timeIntervalSince1970*1000)
+        let tmpPath = NSTemporaryDirectory()
+        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
+        FileHelper.createDirectory(at: tmpPath)
+        let url = URL(fileURLWithPath: filePath)
+        do {
+            try data.write(to: url)
+        } catch {
+            _print(error.localizedDescription)
+            return .failure(.fileWriteFail)
+        }
+        return .success(url)
+    }
 }
 
 // MARK: - PhotoEditorControllerDelegate
@@ -82,7 +97,13 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
     }
     
     func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        editorDelegate?.imageEditor(self, didFinishEditing: photo, isEdited: isEdited)
+        let result = output(photo: photo, fileType: .jpeg)
+        switch result {
+        case .success(let url):
+            editorDelegate?.imageEditor(self, didFinishEditing: url, type: .photo, isEdited: isEditing)
+        case .failure(let error):
+            _print(error.localizedDescription)
+        }
     }
 }
 
@@ -94,6 +115,6 @@ extension ImageEditorController: VideoEditorControllerDelegate {
     }
     
     func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool) {
-        editorDelegate?.imageEditor(self, didFinishEditing: video, isEdited: isEdited)
+        editorDelegate?.imageEditor(self, didFinishEditing: video, type: .video, isEdited: isEditing)
     }
 }
