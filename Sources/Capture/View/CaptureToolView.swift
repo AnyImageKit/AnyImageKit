@@ -12,6 +12,7 @@ final class CaptureToolView: UIView {
     
     private(set) lazy var captureButton: CaptureButton = {
         let view = CaptureButton(frame: .zero, options: options)
+        view.limitInterval = options.videoMaximumDuration
         view.isAccessibilityElement = true
         view.accessibilityTraits = .button
         view.accessibilityLabel = BundleHelper.captureLocalizedString(key: "Tap to take photo and hode to record video")

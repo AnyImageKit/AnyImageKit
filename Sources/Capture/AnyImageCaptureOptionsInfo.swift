@@ -32,8 +32,12 @@ public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
     case flashMode(AVCaptureDevice.FlashMode)
     
     /// 视频拍摄最大时间
-    /// 默认 30 秒
+    /// 默认 20 秒
     case videoMaximumDuration(TimeInterval)
+    
+    /// 相机预设
+    /// 默认支持从 1920*1080@60 开始查找支持的最佳分辨率
+    case preferredPreset([CapturePreset])
     
     /// 启用调试日志
     /// 默认：false
@@ -47,7 +51,8 @@ public struct AnyImageCaptureOptionsInfo: Equatable {
     public var photoAspectRatio: AnyImageCaptureAspectRatio = .ratio4x3
     public var preferredPositions: [AVCaptureDevice.Position] = [.back, .front]
     public var flashMode: AVCaptureDevice.FlashMode = .off
-    public var videoMaximumDuration: TimeInterval = 30
+    public var videoMaximumDuration: TimeInterval = 20
+    public var preferredPreset: [CapturePreset] = [.fhd1920x1080_60, .fhd1920x1080_30, .hd1280x720_60, .hd1280x720_30]
     public var enableDebugLog: Bool = false
     
     public init(_ info: [AnyImageCaptureOptionsInfoItem] = []) {
@@ -59,6 +64,7 @@ public struct AnyImageCaptureOptionsInfo: Equatable {
             case .preferredPositions(let value): preferredPositions = value
             case .flashMode(let value): flashMode = value
             case .videoMaximumDuration(let value): videoMaximumDuration = value
+            case .preferredPreset(let value): preferredPreset = value
             case .enableDebugLog: enableDebugLog = true
             }
         }

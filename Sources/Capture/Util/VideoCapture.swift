@@ -24,11 +24,9 @@ final class VideoCapture: NSObject {
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
     
-    private var orientation: DeviceOrientation = .portrait
-    private var position: AVCaptureDevice.Position
-    private var photoAspectRatio: AnyImageCaptureAspectRatio
-    
-    var flashMode: AVCaptureDevice.FlashMode
+    private(set) var orientation: DeviceOrientation
+    private(set) var position: AVCaptureDevice.Position
+    private(set) var flashMode: AVCaptureDevice.FlashMode
     
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
@@ -41,10 +39,13 @@ final class VideoCapture: NSObject {
     private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
+    private let options: AnyImageCaptureOptionsInfo
+    
     init(session: AVCaptureSession, options: AnyImageCaptureOptionsInfo) {
+        self.options = options
+        self.orientation = .portrait
         self.position = options.preferredPositions.first ?? .back
         self.flashMode = options.flashMode
-        self.photoAspectRatio = options.photoAspectRatio
         super.init()
         do {
             // Add device input
@@ -71,7 +72,7 @@ final class VideoCapture: NSObject {
         }
         self.device = camera
         
-        let (preset, formats) = camera.preferredFormats(for: AVCaptureDevice.Preset.preferred)
+        let (preset, formats) = camera.preferredFormats(for: options.preferredPreset)
         guard let format = formats.last else {
             _print("Can't find any available format")
             return
@@ -220,7 +221,7 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         let fixedImage = orientedImage.oriented(forExifOrientation: orientation.exifOrientation)
         // Crop to expected aspect ratio
         let size = fixedImage.extent.size
-        let aspectRatio = photoAspectRatio.cropValue
+        let aspectRatio = options.photoAspectRatio.cropValue
         let rect: CGRect
         switch orientation {
         case .portrait, .portraitUpsideDown:

@@ -52,6 +52,7 @@
 		A082D24623C2D57B001F3D51 /* Picker+AnyImageMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A082D24523C2D57B001F3D51 /* Picker+AnyImageMediaType.swift */; };
 		A0831E1923B0A33100B7E70F /* Capture+CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0831E1823B0A33100B7E70F /* Capture+CIImage.swift */; };
 		A0839B6D23C2DBD700FF8FDE /* VideoExportPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0839B6C23C2DBD700FF8FDE /* VideoExportPreset.swift */; };
+		A0839B6F23C32E5700FF8FDE /* CapturePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */; };
 		A08DF7BC23B1F7F1002B92EE /* CaptureBufferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08DF7BB23B1F7F1002B92EE /* CaptureBufferType.swift */; };
 		A08DF7BE23B1F814002B92EE /* DeviceOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08DF7BD23B1F814002B92EE /* DeviceOrientation.swift */; };
 		A08DF7C223B2F5E6002B92EE /* DeviceOrientationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08DF7C123B2F5E6002B92EE /* DeviceOrientationUtil.swift */; };
@@ -270,6 +271,7 @@
 		A082D24523C2D57B001F3D51 /* Picker+AnyImageMediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+AnyImageMediaType.swift"; sourceTree = "<group>"; };
 		A0831E1823B0A33100B7E70F /* Capture+CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+CIImage.swift"; sourceTree = "<group>"; };
 		A0839B6C23C2DBD700FF8FDE /* VideoExportPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExportPreset.swift; sourceTree = "<group>"; };
+		A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreset.swift; sourceTree = "<group>"; };
 		A08DF7BB23B1F7F1002B92EE /* CaptureBufferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureBufferType.swift; sourceTree = "<group>"; };
 		A08DF7BD23B1F814002B92EE /* DeviceOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientation.swift; sourceTree = "<group>"; };
 		A08DF7C123B2F5E6002B92EE /* DeviceOrientationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationUtil.swift; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 			children = (
 				A08DF7BB23B1F7F1002B92EE /* CaptureBufferType.swift */,
 				A08DF7BD23B1F814002B92EE /* DeviceOrientation.swift */,
+				A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1226,6 +1229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A52E1D87237AAACC0002174A /* Editor+BundleHelper.swift in Sources */,
+				A0839B6F23C32E5700FF8FDE /* CapturePreset.swift in Sources */,
 				A50B2101237AA24200A894A9 /* ResponseTouch.swift in Sources */,
 				A50B2117237AA24300A894A9 /* PhotoEditorContentView.swift in Sources */,
 				A519FA3223AB11ED0028CCC8 /* MediaType.swift in Sources */,
