@@ -97,6 +97,9 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 }
                 hideHUD()
             }
+        case .photoLive, .photoGIF:
+            // Not support yet
+            break
         }
     }
 }

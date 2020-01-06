@@ -106,6 +106,9 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
                     player.playImmediately(atRate: 1)
                 }
             })
+        case .photoLive, .photoGIF:
+            // Not support yet
+            break
         }
     }
 }

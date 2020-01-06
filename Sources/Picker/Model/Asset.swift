@@ -13,7 +13,7 @@ public class Asset: Equatable {
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
-    public let mediaType: MediaType
+    public let mediaType: AnyImageMediaType
     /// 输出图像
     public var image: UIImage {
         return _image ?? .init()
@@ -35,7 +35,7 @@ public class Asset: Equatable {
     init(idx: Int, asset: PHAsset, selectOptions: AnyImagePickerSelectOptions) {
         self.idx = idx
         self.phAsset = asset
-        self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)
+        self.mediaType = AnyImageMediaType(asset: asset, selectOptions: selectOptions)
         self.videoDuration = asset.videoDuration
     }
     
