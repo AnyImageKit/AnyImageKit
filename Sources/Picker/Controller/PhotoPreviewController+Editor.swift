@@ -36,7 +36,7 @@ extension PhotoPreviewController {
             }
         } else if data.asset.phAsset.mediaType == .video {
             manager.cancelFetch(for: data.asset.phAsset.localIdentifier)
-            var videoOptions = manager.options.editorOptions.videoOptions
+            var videoOptions = manager.options.editorVideoOptions
             videoOptions.enableDebugLog = manager.options.enableDebugLog
             let image = data.asset._images[.initial] ?? data.thumbnail
             let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, options: videoOptions, delegate: self)
@@ -62,9 +62,9 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
         
-        if data.asset.phAsset.mediaType == .image && manager.options.editorOptions.options.contains(.photo) {
+        if data.asset.phAsset.mediaType == .image && manager.options.editorOptions.contains(.photo) {
             toolBar.leftButton.isHidden = false
-        } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.options.contains(.video) {
+        } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
             toolBar.leftButton.isHidden = false
         }
     }
@@ -74,7 +74,7 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func showEditor(_ image: UIImage, identifier: String) {
-        var options = manager.options.editorOptions.photoOptions
+        var options = manager.options.editorPhotoOptions
         options.enableDebugLog = manager.options.enableDebugLog
         options.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
         let controller = ImageEditorController(image: image, options: options, delegate: self)

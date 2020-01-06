@@ -293,11 +293,11 @@ extension PickerConfigViewController {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
         let alert = UIAlertController(title: "EditorOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
-            self?.options.editorOptions.options = []
+            self?.options.editorOptions = []
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
-            self?.options.editorOptions.options = [.photo]
+            self?.options.editorOptions = [.photo]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

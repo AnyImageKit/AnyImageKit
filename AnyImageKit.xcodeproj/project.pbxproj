@@ -139,7 +139,6 @@
 		A561239B23B5EDA90071C3E8 /* UserInterfaceStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A561239A23B5EDA90071C3E8 /* UserInterfaceStyle.swift */; };
 		A561239D23B5EE400071C3E8 /* AnyImageEditorPhotoOptionsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A561239C23B5EE400071C3E8 /* AnyImageEditorPhotoOptionsInfo.swift */; };
 		A561239F23B5EE4F0071C3E8 /* AnyImageEditorVideoOptionsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A561239E23B5EE4F0071C3E8 /* AnyImageEditorVideoOptionsInfo.swift */; };
-		A56123A123B5EE570071C3E8 /* AnyImageEditorOptionsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56123A023B5EE570071C3E8 /* AnyImageEditorOptionsInfo.swift */; };
 		A56123A323B5F43B0071C3E8 /* AnyImageCaptureOptionsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56123A223B5F43B0071C3E8 /* AnyImageCaptureOptionsInfo.swift */; };
 		A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */; };
 		A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */; };
@@ -362,7 +361,6 @@
 		A561239A23B5EDA90071C3E8 /* UserInterfaceStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInterfaceStyle.swift; sourceTree = "<group>"; };
 		A561239C23B5EE400071C3E8 /* AnyImageEditorPhotoOptionsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageEditorPhotoOptionsInfo.swift; sourceTree = "<group>"; };
 		A561239E23B5EE4F0071C3E8 /* AnyImageEditorVideoOptionsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageEditorVideoOptionsInfo.swift; sourceTree = "<group>"; };
-		A56123A023B5EE570071C3E8 /* AnyImageEditorOptionsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageEditorOptionsInfo.swift; sourceTree = "<group>"; };
 		A56123A223B5F43B0071C3E8 /* AnyImageCaptureOptionsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageCaptureOptionsInfo.swift; sourceTree = "<group>"; };
 		A56A3C7723306CB700EBFC48 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
 		A56A3C7A2330747A00EBFC48 /* ScalePresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalePresentationController.swift; sourceTree = "<group>"; };
@@ -711,7 +709,6 @@
 		A50B20CC237AA22900A894A9 /* Editor */ = {
 			isa = PBXGroup;
 			children = (
-				A56123A023B5EE570071C3E8 /* AnyImageEditorOptionsInfo.swift */,
 				A561239C23B5EE400071C3E8 /* AnyImageEditorPhotoOptionsInfo.swift */,
 				A561239E23B5EE4F0071C3E8 /* AnyImageEditorVideoOptionsInfo.swift */,
 				A50B20D4237AA24200A894A9 /* Controller */,
@@ -1263,7 +1260,6 @@
 				A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
-				A56123A123B5EE570071C3E8 /* AnyImageEditorOptionsInfo.swift in Sources */,
 				A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */,
 				A08DF7C523B3326C002B92EE /* CaptureToolView.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,

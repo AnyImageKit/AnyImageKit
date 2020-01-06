@@ -51,10 +51,19 @@ public enum AnyImagePickerOptionsInfoItem: AnyImageOptionsInfoItem {
     case orderByDate(Sort)
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
-    case editorOptions(AnyImageEditorOptionsInfo)
+    /// Editor Options 可编辑资源类型
+    /// - Default: Photo
+    case editorOptions(AnyImageEditorOptions)
+    
+    /// Editor photo option info items 图片编辑配置项
+    case editorPhotoOptionInfoItems([AnyImageEditorPhotoOptionsInfoItem])
+    
+    /// Editor video option info items 视频编辑配置项
+//    case editorVideoOptionInfoItems([AnyImageEditorVideoOptionsInfoItem])
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
+    /// Capture option info items 相机配置项
     case captureOptionInfoItems([AnyImageCaptureOptionsInfoItem])
     #endif
     
@@ -77,8 +86,21 @@ public struct AnyImagePickerOptionsInfo: Equatable {
     public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
-    public var editorOptions: AnyImageEditorOptionsInfo = .init()
+    public var editorOptions: AnyImageEditorOptions = []
+    public var editorPhotoOptionInfoItems: [AnyImageEditorPhotoOptionsInfoItem] = [] {
+        didSet {
+            editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+        }
+    }
+    var editorVideoOptionInfoItems: [AnyImageEditorVideoOptionsInfoItem] = [] {
+        didSet {
+            editorVideoOptions = .init(editorVideoOptionInfoItems)
+        }
+    }
+    var editorPhotoOptions: AnyImageEditorPhotoOptionsInfo = .init()
+    var editorVideoOptions: AnyImageEditorVideoOptionsInfo = .init()
     #endif
+    
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     public var captureOptionInfoItems: [AnyImageCaptureOptionsInfoItem] = [] {
         didSet {
@@ -104,6 +126,7 @@ public struct AnyImagePickerOptionsInfo: Equatable {
                 
             #if ANYIMAGEKIT_ENABLE_EDITOR
             case .editorOptions(let value): editorOptions = value
+            case .editorPhotoOptionInfoItems(let value): editorPhotoOptionInfoItems = value
             #endif
             #if ANYIMAGEKIT_ENABLE_CAPTURE
             case .captureOptionInfoItems(let value): captureOptionInfoItems = value
@@ -140,6 +163,20 @@ public struct AnyImagePickerAlbumOptions: OptionSet {
     
     public let rawValue: Int
     
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Editor Options 编辑类型
+public struct AnyImageEditorOptions: OptionSet {
+    /// Photo 照片
+    public static let photo = AnyImageEditorOptions(rawValue: 1 << 0)
+    /// Video not finish 视频 未完成
+    static let video = AnyImageEditorOptions(rawValue: 1 << 1)
+
+    public let rawValue: Int
+
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
