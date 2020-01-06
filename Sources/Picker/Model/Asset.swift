@@ -30,8 +30,6 @@ public class Asset: Equatable {
     var isSelected: Bool = false
     var selectedNum: Int = 1
     
-    private lazy var _manager = PickerManager()
-    
     init(idx: Int, asset: PHAsset, selectOptions: AnyImagePickerSelectOptions) {
         self.idx = idx
         self.phAsset = asset
