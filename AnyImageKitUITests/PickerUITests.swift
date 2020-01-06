@@ -37,14 +37,19 @@ class PickerUITests: XCTestCase {
     func testSwitchAlbum() {
         openAlbumController()
         selectLastAlbum()
+        openAlbumController(false)
+        selectAlbum(idx: 0)
     }
     
     /// 选择照片
     func testSelectPhoto() {
-        selectPhotoBySelectButton()
+        openPreviewController()
+        selectPhotoBySelectButton(count: 3)
         tapDoneButton()
         sleep(2.0)
+        openPreviewController()
         selectPhotoByOriginalImage()
+        exitPreviewController()
         tapDoneButton()
         sleep(2.0)
         openPreviewController()
@@ -53,7 +58,9 @@ class PickerUITests: XCTestCase {
     
     /// 取消选择图片
     func testUnselectPhoto() {
-        selectPhotoBySelectButton()
+        openPreviewController()
+        selectPhotoBySelectButton(count: 3)
+        exitPreviewController()
         let cells = app.collectionViews.children(matching: .cell)
         for i in cells.count-3..<cells.count {
             sleep(0.5)
@@ -64,25 +71,56 @@ class PickerUITests: XCTestCase {
     
     /// 在已选图片预览中测试跳转
     func testPreviewTool() {
-        selectPhotoBySelectButton()
-        let photoCells = app.collectionViews.children(matching: .cell)
-        photoCells.element(boundBy: photoCells.count-4).tap()
-        let previewCells = app.collectionViews.element(boundBy: 1).cells
-        for i in 0..<previewCells.count {
+        openPreviewController()
+        selectPhotoBySelectButton(count: 3)
+        exitPreviewController()
+        app.buttons["Preview"].tap()
+        sleep(0.5)
+        let cells = app.collectionViews.element(boundBy: 1).cells
+        for i in 0..<cells.count {
             sleep(0.5)
-            previewCells.element(boundBy: i).tap()
+            cells.element(boundBy: i).tap()
         }
     }
     
-    func testPhotoSwipe() {
+    /// 测试预览时滑动
+    func testSwipeInPreviewController() {
         openPreviewController()
         let collectionView = app.collectionViews.firstMatch
-        for i in 0...5 {
+        for _ in 0...5 {
             collectionView.swipeRight()
         }
-        for i in 0...5 {
+        for _ in 0...5 {
             collectionView.swipeLeft()
         }
+    }
+    
+    /// 测试选择上限
+    func testSelectLimit() {
+        openOptionController()
+        setOption("SelectLimit", value: "2")
+        openPreviewController(false)
+        selectPhotoBySelectButton(count: 3)
+        app.alerts["Alert"].scrollViews.otherElements.buttons["OK"].tap()
+    }
+    
+    /// 测试播放视频
+    func testPlayVideo() {
+        openOptionController()
+        setOption("SelectOptions", value: "Video")
+        openPreviewController(false)
+        app.collectionViews.firstMatch.tap()
+        sleep(5.0)
+    }
+    
+    /// 测试选择视频
+    func testSelectVideo() {
+        openOptionController()
+        setOption("SelectOptions", value: "Video")
+        openPreviewController(false)
+        selectPhotoBySelectButton(count: 3)
+        exitPreviewController()
+        tapDoneButton()
     }
 }
 
@@ -95,7 +133,7 @@ extension PickerUITests {
     }
     
     /// 切换相册
-    func switchAlbum(idx: Int) {
+    func selectAlbum(idx: Int) {
         app.tables.cells.element(boundBy: idx).tapIfElementExists()
     }
     
@@ -112,23 +150,28 @@ extension PickerUITests {
         app.buttons.element(boundBy: 3).tap() // Select button
     }
     
-    /// 通过预览按钮选择图片
-    func selectPhotoBySelectButton() {
-        openPickerController()
-        let cells = app.collectionViews.children(matching: .cell)
-        for i in cells.count-3..<cells.count {
-            sleep(0.5)
-            selectPhoto(idx: i)
-            exitPreviewController()
+    /// 通过选择按钮选择图片
+    func selectPhotoBySelectButton(count: Int) {
+        for i in 0..<count {
+            app.buttons.element(boundBy: 3).tap() // Select button
+            if i != count-1 {
+                app.collectionViews.firstMatch.swipeRight()
+            }
         }
     }
     
     /// 通过原图选择图片
     func selectPhotoByOriginalImage() {
-        openPreviewController()
         let app = XCUIApplication()
         app.buttons["Original image"].firstMatch.tap()
-        exitPreviewController()
+    }
+    
+    /// 设置配置项
+    func setOption(_ option: String, value: String?) {
+        app.tables.staticTexts[option].tap()
+        if let value = value {
+            app.alerts[option].scrollViews.otherElements.buttons[value].tap()
+        }
     }
 }
 
@@ -172,32 +215,40 @@ extension PickerUITests {
     }
     
     /// 进入配置控制器
-    func openOptionController() {
-        exitToHomeController()
-        app.tables.staticTexts["Picker"].tap()
+    func openOptionController(_ exit: Bool = true) {
+        if exit {
+            exitToHomeController()
+        }
+        app.tables.staticTexts["Picker"].tapIfElementExists()
     }
     
     /// 进入相册控制器
-    func openPickerController() {
-        exitToHomeController()
-        openOptionController()
+    func openPickerController(_ exit: Bool = true) {
+        if exit {
+            exitToHomeController()
+        }
+        openOptionController(exit)
         let bar = app.navigationBars["Picker"]
-        bar.buttons["Open picker"].tap()
+        bar.buttons["Open picker"].tapIfElementExists()
     }
     
     /// 进入预览控制器
-    func openPreviewController() {
-        exitToHomeController()
-        openPickerController()
+    func openPreviewController(_ exit: Bool = true) {
+        if exit {
+            exitToHomeController()
+        }
+        openPickerController(exit)
         let cells = app.collectionViews.children(matching: .cell)
-        cells.element(boundBy: cells.count-1).tap()
+        cells.element(boundBy: cells.count-1).tapIfElementExists()
         sleep(0.5)
     }
     
     /// 进入切换相册控制器
-    func openAlbumController() {
-        exitToHomeController()
-        openPickerController()
+    func openAlbumController(_ exit: Bool = true) {
+        if exit {
+            exitToHomeController()
+        }
+        openPickerController(exit)
         let bar = app.navigationBars.firstMatch
         bar.buttons.element(boundBy: 1).tap()
     }
