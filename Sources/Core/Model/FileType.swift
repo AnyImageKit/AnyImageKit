@@ -1,5 +1,5 @@
 //
-//  AnyImageFileType.swift
+//  FileType.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/27.
@@ -9,7 +9,7 @@
 import Foundation
 import MobileCoreServices
 
-enum AnyImageFileType: Equatable {
+enum FileType: Equatable {
     
     case jpeg
     case png

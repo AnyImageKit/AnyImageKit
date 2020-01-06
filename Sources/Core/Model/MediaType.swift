@@ -1,5 +1,5 @@
 //
-//  AnyImageMediaType.swift
+//  MediaType.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum AnyImageMediaType: Equatable, CustomStringConvertible {
+public enum MediaType: Equatable, CustomStringConvertible {
     
     case photo
     case video

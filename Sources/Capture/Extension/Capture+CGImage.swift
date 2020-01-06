@@ -20,7 +20,7 @@ extension CGImage {
         return data(fileType: .png)
     }
     
-    private func data(fileType: AnyImageFileType, options: [CFString: Any] = [:]) -> Data? {
+    private func data(fileType: FileType, options: [CFString: Any] = [:]) -> Data? {
         guard
             let mutableData = CFDataCreateMutable(nil, 0),
             let destination = CGImageDestinationCreateWithData(mutableData, fileType.utType, 1, nil)

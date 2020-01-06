@@ -48,7 +48,7 @@ public enum AnyImagePickerOptionsInfoItem: AnyImageOptionsInfoItem {
     /// - Default: ASC
     /// - ASC:  按时间升序排列，自动滚动到底部
     /// - DESC: 按时间倒序排列，自动滚动到顶部
-    case orderByDate(AnyImageSort)
+    case orderByDate(Sort)
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     case editorOptions(AnyImageEditorOptionsInfo)
@@ -73,7 +73,7 @@ public struct AnyImagePickerOptionsInfo: Equatable {
     public var allowUseOriginalImage: Bool = true
     public var albumOptions: AnyImagePickerAlbumOptions = [.smart, .userCreated]
     public var selectOptions: AnyImagePickerSelectOptions = [.photo]
-    public var orderByDate: AnyImageSort = .asc
+    public var orderByDate: Sort = .asc
     public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
@@ -148,7 +148,7 @@ public struct AnyImagePickerAlbumOptions: OptionSet {
 /// UI Theme 主题
 public struct AnyImagePickerTheme: Equatable {
     /// User Interface Style 界面风格
-    public let style: AnyImageUserInterfaceStyle
+    public let style: UserInterfaceStyle
     /// Main Color 主题色调
     public var mainColor: UIColor
     /// Text Color 主文本颜色
@@ -166,7 +166,7 @@ public struct AnyImagePickerTheme: Equatable {
     /// Button Disable Color 不可用按钮颜色
     public var buttonDisableColor: UIColor
     
-    public init(style: AnyImageUserInterfaceStyle) {
+    public init(style: UserInterfaceStyle) {
         switch style {
         case .auto:
             self.init(style: .auto,
@@ -201,7 +201,7 @@ public struct AnyImagePickerTheme: Equatable {
         }
     }
     
-    public init(style: AnyImageUserInterfaceStyle,
+    public init(style: UserInterfaceStyle,
                 mainColor: UIColor,
                 textColor: UIColor,
                 subTextColor: UIColor,

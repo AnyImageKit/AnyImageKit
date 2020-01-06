@@ -1,5 +1,5 @@
 //
-//  Picker+AnyImageMediaType.swift
+//  Picker+MediaType.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2020/1/6.
@@ -8,7 +8,7 @@
 
 import Photos
 
-extension AnyImageMediaType {
+extension MediaType {
     
     init(asset: PHAsset, selectOptions: AnyImagePickerSelectOptions) {
         let selectPhotoGIF = selectOptions.contains(.photoGIF)

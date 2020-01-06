@@ -13,7 +13,7 @@ import CoreImage
 protocol VideoCaptureDelegate: class {
     
     func videoCaptureWillOutputPhoto(_ capture: VideoCapture)
-    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: AnyImageFileType)
+    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: FileType)
     func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer)
 }
 

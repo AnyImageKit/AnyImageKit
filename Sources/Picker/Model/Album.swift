@@ -30,7 +30,7 @@ class Album: Equatable {
 
 extension Album {
     
-    func insertAsset(_ asset: Asset, at: Int, sort: AnyImageSort) {
+    func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
         assets.insert(asset, at: at)
         reloadIndex(sort: sort)
     }
@@ -77,7 +77,7 @@ extension Album {
         assets = array
     }
     
-    private func reloadIndex(sort: AnyImageSort) {
+    private func reloadIndex(sort: Sort) {
         var idx = 0
         let array: [Asset]
         switch sort {

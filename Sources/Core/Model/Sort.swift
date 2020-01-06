@@ -1,5 +1,5 @@
 //
-//  AnyImageSort.swift
+//  Sort.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// Sort 排序规则
-public enum AnyImageSort: Equatable {
+public enum Sort: Equatable {
     /// ASC 升序
     case asc
     /// DESC 降序

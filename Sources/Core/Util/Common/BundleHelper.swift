@@ -38,7 +38,7 @@ extension BundleHelper {
         return UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
-    static func image(named: String, style: AnyImageUserInterfaceStyle) -> UIImage? {
+    static func image(named: String, style: UserInterfaceStyle) -> UIImage? {
         let imageName: String
         switch style {
         case .auto:

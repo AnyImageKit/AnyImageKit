@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: class {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func capture(_ capture: CaptureViewController, didOutput media: URL, type: AnyImageMediaType)
+    func capture(_ capture: CaptureViewController, didOutput media: URL, type: MediaType)
 }
 
 final class CaptureViewController: UIViewController {
@@ -106,7 +106,7 @@ final class CaptureViewController: UIViewController {
 // MARK: - Private
 extension CaptureViewController {
     
-    private func output(photo: Data, fileType: AnyImageFileType) {
+    private func output(photo: Data, fileType: FileType) {
         let timestamp = Int(Date().timeIntervalSince1970*1000)
         let tmpPath = NSTemporaryDirectory()
         let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
@@ -196,7 +196,7 @@ extension CaptureViewController: CaptureDelegate {
         isPreviewing = false
     }
     
-    func capture(_ capture: Capture, didOutput photoData: Data, fileType: AnyImageFileType) {
+    func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
         let editor = ImageEditorController(image: image, options: .init(), delegate: self)
