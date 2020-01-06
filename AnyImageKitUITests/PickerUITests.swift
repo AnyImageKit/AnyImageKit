@@ -65,11 +65,23 @@ class PickerUITests: XCTestCase {
     /// 在已选图片预览中测试跳转
     func testPreviewTool() {
         selectPhotoBySelectButton()
-        let cells = app.collectionViews.element(boundBy: 1).cells
-        app.collectionViews.children(matching: .cell).element(boundBy: cells.count-3).tap()
-        for i in 0..<cells.count {
+        let photoCells = app.collectionViews.children(matching: .cell)
+        photoCells.element(boundBy: photoCells.count-4).tap()
+        let previewCells = app.collectionViews.element(boundBy: 1).cells
+        for i in 0..<previewCells.count {
             sleep(0.5)
-            cells.element(boundBy: i).tap()
+            previewCells.element(boundBy: i).tap()
+        }
+    }
+    
+    func testPhotoSwipe() {
+        openPreviewController()
+        let collectionView = app.collectionViews.firstMatch
+        for i in 0...5 {
+            collectionView.swipeRight()
+        }
+        for i in 0...5 {
+            collectionView.swipeLeft()
         }
     }
 }
@@ -96,6 +108,7 @@ extension PickerUITests {
     /// 选择照片
     func selectPhoto(idx: Int) {
         app.collectionViews.children(matching: .cell).element(boundBy: idx).tap() // Cell
+        sleep(0.5)
         app.buttons.element(boundBy: 3).tap() // Select button
     }
     
@@ -178,6 +191,7 @@ extension PickerUITests {
         openPickerController()
         let cells = app.collectionViews.children(matching: .cell)
         cells.element(boundBy: cells.count-1).tap()
+        sleep(0.5)
     }
     
     /// 进入切换相册控制器
