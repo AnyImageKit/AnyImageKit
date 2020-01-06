@@ -72,7 +72,7 @@
 		A0B22EAD237AA1B3001F6066 /* ScreenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */; };
 		A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */; };
 		A0B50C3623A9EDDC002C9799 /* Capture+CGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */; };
-		A0B50C3823AA0AD2002C9799 /* PreviewContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B50C3723AA0AD2002C9799 /* PreviewContentView.swift */; };
+		A0B50C3823AA0AD2002C9799 /* CapturePreviewContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B50C3723AA0AD2002C9799 /* CapturePreviewContentView.swift */; };
 		A0B577D42382999D000879F7 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
 		A0B577D52382999D000879F7 /* AnyImageKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C192331D426005F742C /* Picker+UIColor.swift */; };
@@ -290,7 +290,7 @@
 		A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenHelper.swift; sourceTree = "<group>"; };
 		A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDViewController.swift; sourceTree = "<group>"; };
 		A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+CGImage.swift"; sourceTree = "<group>"; };
-		A0B50C3723AA0AD2002C9799 /* PreviewContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContentView.swift; sourceTree = "<group>"; };
+		A0B50C3723AA0AD2002C9799 /* CapturePreviewContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewContentView.swift; sourceTree = "<group>"; };
 		A0C03C192331D426005F742C /* Picker+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Picker+UIColor.swift"; sourceTree = "<group>"; };
 		A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDropDownPresentationController.swift; sourceTree = "<group>"; };
 		A0DBD4F12334A20700121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Picker.strings"; sourceTree = "<group>"; };
@@ -511,7 +511,7 @@
 			isa = PBXGroup;
 			children = (
 				A076999C23963F270006AC9B /* CapturePreviewView.swift */,
-				A0B50C3723AA0AD2002C9799 /* PreviewContentView.swift */,
+				A0B50C3723AA0AD2002C9799 /* CapturePreviewContentView.swift */,
 				A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */,
 				A035830223A20ED800F6B424 /* CaptureToolView.swift */,
 				A09D15A2239E0FEF00F3FE77 /* CaptureButton.swift */,
@@ -1269,7 +1269,7 @@
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */,
-				A0B50C3823AA0AD2002C9799 /* PreviewContentView.swift in Sources */,
+				A0B50C3823AA0AD2002C9799 /* CapturePreviewContentView.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
 				A5783956235ED584002A0498 /* LivePhotoTipView.swift in Sources */,
 				A03806B423BF2DF2002873A9 /* AssetPickerViewController+Capture.swift in Sources */,

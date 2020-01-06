@@ -1,5 +1,5 @@
 //
-//  PreviewContentView.swift
+//  CapturePreviewContentView.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/18.
@@ -10,7 +10,7 @@ import UIKit
 import CoreImage
 import MetalKit
 
-final class PreviewContentView: MTKView {
+final class CapturePreviewContentView: MTKView {
     
     var videoGravity: VideoGravity = .resizeAspectFill
     
@@ -37,7 +37,7 @@ final class PreviewContentView: MTKView {
     }
 }
 
-extension PreviewContentView {
+extension CapturePreviewContentView {
     
     func draw(image: CIImage) {
         DispatchQueue.main.async {
@@ -47,7 +47,7 @@ extension PreviewContentView {
     }
 }
 
-extension PreviewContentView: MTKViewDelegate {
+extension CapturePreviewContentView: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -92,7 +92,7 @@ extension PreviewContentView: MTKViewDelegate {
     }
 }
 
-extension PreviewContentView {
+extension CapturePreviewContentView {
     
     enum VideoGravity {
         

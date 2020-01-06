@@ -11,8 +11,8 @@ import CoreMedia
 
 final class CapturePreviewView: UIView {
     
-    private lazy var previewContentView: PreviewContentView = {
-        let view = PreviewContentView(frame: .zero)
+    private lazy var previewContentView: CapturePreviewContentView = {
+        let view = CapturePreviewContentView(frame: .zero)
         return view
     }()
     
