@@ -97,7 +97,7 @@ extension ImageEditorController {
             try data.write(to: url)
         } catch {
             _print(error.localizedDescription)
-            return .failure(.fileWriteFail)
+            return .failure(.fileWriteFailed)
         }
         return .success(url)
     }

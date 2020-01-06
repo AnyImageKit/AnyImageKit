@@ -20,13 +20,12 @@ public enum AnyImageError: Error {
     case invalidExportPreset
     case invalidExportSession
     case unsupportedFileType
-    case directoryCreateFail
-    case fileWriteFail
-    case exportFail
-    case exportCancel
+    case fileWriteFailed
+    case exportFailed
+    case exportCanceled
     
     case cannotFindInLocal
     
-    case savePhotoFail
-    case saveVideoFail
+    case savePhotoFailed
+    case saveVideoFailed
 }

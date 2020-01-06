@@ -87,11 +87,11 @@ extension ExportTool {
                     if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
                         completion?(.success(asset))
                     } else {
-                        completion?(.failure(.savePhotoFail))
+                        completion?(.failure(.savePhotoFailed))
                     }
                 } else if let error = error {
                     _print("Save photo error: \(error.localizedDescription)")
-                    completion?(.failure(.savePhotoFail))
+                    completion?(.failure(.savePhotoFailed))
                 }
             }
         }
@@ -108,11 +108,11 @@ extension ExportTool {
                     if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
                         completion?(.success(asset))
                     } else {
-                        completion?(.failure(.savePhotoFail))
+                        completion?(.failure(.savePhotoFailed))
                     }
                 } else if let error = error {
                     _print("Save photo error: \(error.localizedDescription)")
-                    completion?(.failure(.savePhotoFail))
+                    completion?(.failure(.savePhotoFailed))
                 }
             }
         }

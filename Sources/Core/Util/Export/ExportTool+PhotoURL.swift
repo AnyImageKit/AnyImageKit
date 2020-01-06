@@ -56,7 +56,7 @@ extension ExportTool {
                 do {
                     try response.data.write(to: outputURL)
                 } catch {
-                    completion(.failure(.exportFail), requestID)
+                    completion(.failure(.exportFailed), requestID)
                     return
                 }
                 completion(.success(.init(url: outputURL, dataUTI: response.dataUTI, orientation: response.orientation)), requestID)

@@ -108,9 +108,9 @@ extension ExportTool {
                 case .completed:
                     completion(.success(VideoURLFetchResponse(url: outputURL)))
                 case .failed:
-                    completion(.failure(.exportFail))
+                    completion(.failure(.exportFailed))
                 case .cancelled:
-                    completion(.failure(.exportCancel))
+                    completion(.failure(.exportCanceled))
                 @unknown default:
                     break
                 }
