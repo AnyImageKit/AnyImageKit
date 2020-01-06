@@ -177,7 +177,11 @@ extension CaptureViewController: CaptureDelegate {
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
-        let editor = ImageEditorController(image: image, options: .init(), delegate: self)
+        var editorOptions: [AnyImageEditorPhotoOptionsInfoItem] = []
+        if options.enableDebugLog {
+            editorOptions.append(.enableDebugLog)
+        }
+        let editor = ImageEditorController(image: image, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
@@ -186,7 +190,18 @@ extension CaptureViewController: CaptureDelegate {
             self.orientationUtil.stopRunning()
         }
         #else
-        output(photo: photoData, fileType: fileType)
+        let timestamp = Int(Date().timeIntervalSince1970*1000)
+        let tmpPath = NSTemporaryDirectory()
+        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
+        FileHelper.createDirectory(at: tmpPath)
+        let url = URL(fileURLWithPath: filePath)
+        // Write to file
+        do {
+            try photoData.write(to: url)
+            delegate?.capture(self, didOutput: url, type: .photo)
+        } catch {
+            _print(error.localizedDescription)
+        }
         #endif
     }
     
@@ -211,7 +226,11 @@ extension CaptureViewController: RecorderDelegate {
         previewView.showToolMask(animated: true)
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, options: .init(), delegate: self)
+        var editorOptions: [AnyImageEditorVideoOptionsInfoItem] = [.tintColor(options.tintColor)]
+        if options.enableDebugLog {
+            editorOptions.append(.enableDebugLog)
+        }
+        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
@@ -220,7 +239,7 @@ extension CaptureViewController: RecorderDelegate {
             self.orientationUtil.stopRunning()
         }
         #else
-        output(video: url)
+        delegate?.capture(self, didOutput: url, type: .video)
         #endif
     }
 }
