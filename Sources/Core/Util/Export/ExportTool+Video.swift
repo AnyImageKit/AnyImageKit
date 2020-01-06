@@ -66,11 +66,11 @@ extension ExportTool {
                     if let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject {
                         completion(.success(asset))
                     } else {
-                        completion(.failure(.saveVideoFail))
+                        completion(.failure(.saveVideoFailed))
                     }
                 } else if error != nil {
                     _print("Save video error: \(error!.localizedDescription)")
-                    completion(.failure(.saveVideoFail))
+                    completion(.failure(.saveVideoFailed))
                 }
             }
         }
