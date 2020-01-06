@@ -21,13 +21,14 @@ final class VideoCapture: NSObject {
     
     weak var delegate: VideoCaptureDelegate?
     
-    private let options: AnyImageCaptureOptionsInfo
-    
     private var device: AVCaptureDevice?
     private var input: AVCaptureDeviceInput?
     
     private var orientation: DeviceOrientation = .portrait
-    private var position: AVCaptureDevice.Position = .back
+    private var position: AVCaptureDevice.Position
+    private var photoAspectRatio: AnyImageCaptureAspectRatio
+    
+    var flashMode: AVCaptureDevice.FlashMode
     
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
@@ -41,7 +42,9 @@ final class VideoCapture: NSObject {
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
     init(session: AVCaptureSession, options: AnyImageCaptureOptionsInfo) {
-        self.options = options
+        self.position = options.preferredPositions.first ?? .back
+        self.flashMode = options.flashMode
+        self.photoAspectRatio = options.photoAspectRatio
         super.init()
         do {
             // Add device input
@@ -68,15 +71,15 @@ final class VideoCapture: NSObject {
         }
         self.device = camera
         
-        let formats = camera.preferredFormats(for: AVCaptureDevice.Preset.preferred)
+        let (preset, formats) = camera.preferredFormats(for: AVCaptureDevice.Preset.preferred)
         guard let format = formats.last else {
             _print("Can't find any available format")
             return
         }
         try camera.lockForConfiguration()
         camera.activeFormat = format
-        camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: 60)
-        camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: 60)
+        camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
+        camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
         camera.unlockForConfiguration()
         if let oldInput = self.input {
             session.removeInput(oldInput)
@@ -172,7 +175,7 @@ extension VideoCapture {
     func capturePhoto(orientation: DeviceOrientation) {
         self.orientation = orientation
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = .off
+        settings.flashMode = flashMode
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
@@ -217,7 +220,7 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         let fixedImage = orientedImage.oriented(forExifOrientation: orientation.exifOrientation)
         // Crop to expected aspect ratio
         let size = fixedImage.extent.size
-        let aspectRatio = CGFloat(options.photoAspectRatio.value)
+        let aspectRatio = photoAspectRatio.cropValue
         let rect: CGRect
         switch orientation {
         case .portrait, .portraitUpsideDown:

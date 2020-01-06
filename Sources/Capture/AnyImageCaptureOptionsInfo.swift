@@ -12,12 +12,27 @@ import AVFoundation
 
 public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
     /// 主题色
-    /// 默认：green
+    /// 默认：绿色 0x57BE6A
     case tintColor(UIColor)
+    
+    /// 媒体类型
+    /// 默认：Photo+Video
     case mediaOptions(AnyImageCaptureMediaOptions)
+    
+    /// 照片拍摄比例
+    /// 默认：4:3
     case photoAspectRatio(AnyImageCaptureAspectRatio)
+    
+    /// 使用的摄像头
+    /// 默认：后置+前置
     case preferredPositions([AVCaptureDevice.Position])
+    
+    /// 默认闪光灯模式
+    /// 默认：关闭
     case flashMode(AVCaptureDevice.FlashMode)
+    
+    /// 视频拍摄最大时间
+    /// 默认 30 秒
     case videoMaximumDuration(TimeInterval)
     
     /// 启用调试日志
@@ -31,7 +46,7 @@ public struct AnyImageCaptureOptionsInfo: Equatable {
     public var mediaOptions: AnyImageCaptureMediaOptions = [.photo, .video]
     public var photoAspectRatio: AnyImageCaptureAspectRatio = .ratio4x3
     public var preferredPositions: [AVCaptureDevice.Position] = [.back, .front]
-    public var flashMode: AVCaptureDevice.FlashMode = .auto
+    public var flashMode: AVCaptureDevice.FlashMode = .off
     public var videoMaximumDuration: TimeInterval = 30
     public var enableDebugLog: Bool = false
     
@@ -77,6 +92,17 @@ public enum AnyImageCaptureAspectRatio: Equatable {
             return 3.0/4.0
         case .ratio16x9:
             return 9.0/16.0
+        }
+    }
+    
+    var cropValue: CGFloat {
+        switch self {
+        case .ratio1x1:
+            return 9.0/16.0
+        case .ratio4x3:
+            return 3.0/4.0
+        case .ratio16x9:
+            return 1.0/1.0
         }
     }
 }

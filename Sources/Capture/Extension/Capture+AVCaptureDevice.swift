@@ -10,20 +10,20 @@ import AVFoundation
 
 extension AVCaptureDevice {
     
-    func preferredFormats(for presets: [Preset]) -> [AVCaptureDevice.Format] {
+    func preferredFormats(for presets: [Preset]) -> (Preset, [AVCaptureDevice.Format]) {
         for preset in presets {
             let formats = preferredFormats(for: preset)
-            if !formats.isEmpty { return formats }
+            if !formats.isEmpty { return (preset, formats) }
         }
-        return []
+        return (Preset(width: 1280, height: 720, frameRate: 30.0), [])
     }
     
     private func preferredFormats(for preset: Preset) -> [AVCaptureDevice.Format] {
         return formats.filter { format in
-            let dimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+            let dimensions = format.formatDescription.dimensions
             if dimensions.width == preset.width && dimensions.height == preset.height {
                 let ranges = format.videoSupportedFrameRateRanges.filter {
-                    return $0.maxFrameRate >= 60
+                    return $0.maxFrameRate >= preset.frameRate
                 }
                 return !ranges.isEmpty
             }
@@ -38,15 +38,15 @@ extension AVCaptureDevice {
         
         let width: Int32
         let height: Int32
-        let fps: Double
+        let frameRate: Double
         
         static let preferred: [Preset] = [
-            Preset(width: 3840, height: 2160, fps: 60.0),
-            Preset(width: 3840, height: 2160, fps: 30.0),
-            Preset(width: 1920, height: 1080, fps: 60.0),
-            Preset(width: 1920, height: 1080, fps: 30.0),
-            Preset(width: 1280, height: 720, fps: 60.0),
-            Preset(width: 1280, height: 720, fps: 30.0),
+            Preset(width: 3840, height: 2160, frameRate: 60.0),
+            Preset(width: 3840, height: 2160, frameRate: 30.0),
+            Preset(width: 1920, height: 1080, frameRate: 60.0),
+            Preset(width: 1920, height: 1080, frameRate: 30.0),
+            Preset(width: 1280, height: 720, frameRate: 60.0),
+            Preset(width: 1280, height: 720, frameRate: 30.0),
         ]
     }
 }
@@ -60,7 +60,7 @@ extension AVCaptureDevice.Position {
         case .front:
             self = .back
         default:
-            break
+            self = .front
         }
     }
 }

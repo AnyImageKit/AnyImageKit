@@ -30,6 +30,7 @@ final class CaptureViewController: UIViewController {
         let view = CaptureToolView(frame: .zero, options: options)
         view.cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         view.switchButton.addTarget(self, action: #selector(switchButtonTapped(_:)), for: .touchUpInside)
+        view.switchButton.isHidden = options.preferredPositions.count <= 1
         view.captureButton.delegate = self
         return view
     }()

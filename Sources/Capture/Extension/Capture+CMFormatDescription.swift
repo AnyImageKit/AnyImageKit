@@ -14,3 +14,10 @@ extension CMAudioFormatDescription {
         return CMAudioFormatDescriptionGetStreamBasicDescription(self)?.pointee
     }
 }
+
+extension CMVideoFormatDescription {
+    
+    var dimensions: CMVideoDimensions {
+        return CMVideoFormatDescriptionGetDimensions(self)
+    }
+}
