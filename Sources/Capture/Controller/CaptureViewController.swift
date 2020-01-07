@@ -15,7 +15,7 @@ protocol CaptureViewControllerDelegate: class {
     func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType)
 }
 
-final class CaptureViewController: UIViewController {
+final class CaptureViewController: AnyImageViewController {
     
     weak var delegate: CaptureViewControllerDelegate?
     
@@ -68,8 +68,14 @@ final class CaptureViewController: UIViewController {
         super.viewDidLoad()
         setupNavigation()
         setupView()
-        capture.startRunning()
-        orientationUtil.startRunning()
+        check(permission: .camera, authorized: { [weak self] in
+            guard let self = self else { return }
+            self.capture.startRunning()
+            self.orientationUtil.startRunning()
+        }, canceled: { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.captureDidCancel(self)
+        })
     }
     
     private func setupNavigation() {

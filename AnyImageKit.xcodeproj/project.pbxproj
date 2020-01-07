@@ -14,6 +14,7 @@
 		A0147E0223C458BF0071E9D5 /* Core+Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0123C458BF0071E9D5 /* Core+Thread.swift */; };
 		A0147E0423C45A200071E9D5 /* Permission+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0323C45A200071E9D5 /* Permission+Camera.swift */; };
 		A0147E0623C45A2C0071E9D5 /* Permission+Microphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0523C45A2C0071E9D5 /* Permission+Microphone.swift */; };
+		A0147E0C23C4870D0071E9D5 /* AnyImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */; };
 		A01866F1239F8740002E623D /* CapturePreviewMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */; };
 		A01C582923B33C7A00691F11 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582823B33C7A00691F11 /* Palette.swift */; };
 		A01C582B23B33CB200691F11 /* Core+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582A23B33CB200691F11 /* Core+UIDevice.swift */; };
@@ -230,6 +231,7 @@
 		A0147E0123C458BF0071E9D5 /* Core+Thread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+Thread.swift"; sourceTree = "<group>"; };
 		A0147E0323C45A200071E9D5 /* Permission+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permission+Camera.swift"; sourceTree = "<group>"; };
 		A0147E0523C45A2C0071E9D5 /* Permission+Microphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permission+Microphone.swift"; sourceTree = "<group>"; };
+		A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageViewController.swift; sourceTree = "<group>"; };
 		A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewMaskView.swift; sourceTree = "<group>"; };
 		A01C582823B33C7A00691F11 /* Palette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		A01C582A23B33CB200691F11 /* Core+UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UIDevice.swift"; sourceTree = "<group>"; };
@@ -693,6 +695,7 @@
 			isa = PBXGroup;
 			children = (
 				A076999623963A360006AC9B /* AnyImageNavigationController.swift */,
+				A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */,
 				A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */,
 			);
 			path = Controller;
@@ -1335,6 +1338,7 @@
 				A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */,
 				A52E1D85237AAA560002174A /* Picker+BundleHelper.swift in Sources */,
 				A07AC74823B5EC64002CB5AF /* Recorder.swift in Sources */,
+				A0147E0C23C4870D0071E9D5 /* AnyImageViewController.swift in Sources */,
 				A50B211C237AA24300A894A9 /* PhotoEditorContentView+Pen.swift in Sources */,
 				A544372023AB61C9003C65F9 /* VideoEditorCropToolView.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,

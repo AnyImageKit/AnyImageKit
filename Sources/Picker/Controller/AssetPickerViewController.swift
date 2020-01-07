@@ -18,7 +18,7 @@ protocol AssetPickerViewControllerDelegate: class {
     func assetPickerDidFinishPicking(_ picker: AssetPickerViewController)
 }
 
-final class AssetPickerViewController: UIViewController {
+final class AssetPickerViewController: AnyImageViewController {
     
     weak var delegate: AssetPickerViewControllerDelegate?
     
@@ -95,6 +95,15 @@ final class AssetPickerViewController: UIViewController {
         setupNavigation()
         setupView()
         checkPermission()
+        
+        check(permission: .photos, authorized: { [weak self] in
+            guard let self = self else { return }
+            self.loadDefaultAlbumIfNeeded()
+            self.preLoadAlbums()
+        }, denied: { [weak self] in
+            guard let self = self else { return }
+            self.permissionView.isHidden = false
+        })
     }
     
     override func viewDidLayoutSubviews() {
