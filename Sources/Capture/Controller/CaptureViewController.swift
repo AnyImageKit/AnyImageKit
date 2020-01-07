@@ -53,9 +53,9 @@ final class CaptureViewController: UIViewController {
         return util
     }()
     
-    private let options: CaptureOptionsInfo
+    private let options: CaptureParsedOptionsInfo
     
-    init(options: CaptureOptionsInfo) {
+    init(options: CaptureParsedOptionsInfo) {
         self.options = options
         super.init(nibName: nil, bundle: nil)
     }

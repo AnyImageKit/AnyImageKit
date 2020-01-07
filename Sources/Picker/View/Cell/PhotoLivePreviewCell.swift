@@ -49,7 +49,7 @@ final class PhotoLivePreviewCell: PreviewCell {
         livePhotoView.frame = CGRect(origin: .zero, size: fitSize)
     }
     
-    override func updateOptions(_ options: PickerOptionsInfo) {
+    override func updateOptions(_ options: PickerParsedOptionsInfo) {
         super.updateOptions(options)
         livePhotoTipView.updateOptions(options)
     }

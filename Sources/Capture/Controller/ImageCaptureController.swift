@@ -26,11 +26,11 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
     
-    public convenience init(options: [CaptureOptionsInfoItem] = [], delegate: ImageCaptureControllerDelegate) {
+    public convenience init(options: CaptureOptionsInfo = .empty, delegate: ImageCaptureControllerDelegate) {
         self.init(options: .init(options), delegate: delegate)
     }
     
-    public required init(options: CaptureOptionsInfo = .init(), delegate: ImageCaptureControllerDelegate) {
+    public required init(options: CaptureParsedOptionsInfo, delegate: ImageCaptureControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         self.captureDelegate = delegate

@@ -8,7 +8,10 @@
 
 import UIKit
 
+public typealias EditorPhotoOptionsInfo = [EditorPhotoOptionsInfoItem]
+
 public enum EditorPhotoOptionsInfoItem: OptionsInfoItem {
+    
     /// 主题色
     /// 默认：green
     case tintColor(UIColor)
@@ -58,7 +61,7 @@ public enum EditorPhotoOptionsInfoItem: OptionsInfoItem {
     case enableDebugLog
 }
 
-public struct EditorPhotoOptionsInfo: Equatable {
+public struct EditorPhotoParsedOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
     public var toolOptions: [EditorPhotoToolOption] = [.pen, .text, .crop, .mosaic]

@@ -47,7 +47,7 @@ final class LivePhotoTipView: UIView {
         }
     }
     
-    func updateOptions(_ options: PickerOptionsInfo) {
+    func updateOptions(_ options: PickerParsedOptionsInfo) {
         imageView.image = BundleHelper.image(named: "LivePhoto", style: options.theme.style)
         let color = UIColor.create(style: options.theme.style,
                                    light: UIColor.color(hex: 0x666666),

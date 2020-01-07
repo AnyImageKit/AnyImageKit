@@ -95,9 +95,9 @@ final class EditorToolView: UIView {
         return view
     }()
     
-    private let options: EditorPhotoOptionsInfo
+    private let options: EditorPhotoParsedOptionsInfo
     
-    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
+    init(frame: CGRect, options: EditorPhotoParsedOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         isUserInteractionEnabled = false

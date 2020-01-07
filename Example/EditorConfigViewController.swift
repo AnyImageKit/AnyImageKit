@@ -11,7 +11,7 @@ import AnyImageKit
 
 final class EditorConfigViewController: UITableViewController {
 
-    var options = EditorPhotoOptionsInfo()
+    var options = EditorPhotoParsedOptionsInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()

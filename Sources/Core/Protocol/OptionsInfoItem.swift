@@ -12,6 +12,10 @@ public protocol OptionsInfoItem: EnumCaseEquatable { }
 
 extension Array where Element: OptionsInfoItem {
     
+    public static var empty: [Element] {
+        return []
+    }
+    
     public mutating func update(_ element: Element) {
         self.remove(element)
         self.append(element)

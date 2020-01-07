@@ -9,7 +9,10 @@
 import UIKit
 import AVFoundation
 
+public typealias CaptureOptionsInfo = [CaptureOptionsInfoItem]
+
 public enum CaptureOptionsInfoItem: OptionsInfoItem {
+    
     /// 主题色
     /// 默认：绿色 0x57BE6A
     case tintColor(UIColor)
@@ -43,7 +46,7 @@ public enum CaptureOptionsInfoItem: OptionsInfoItem {
     case enableDebugLog
 }
 
-public struct CaptureOptionsInfo: Equatable {
+public struct CaptureParsedOptionsInfo: Equatable {
     
     public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
     public var mediaOptions: CaptureMediaOption = [.photo, .video]

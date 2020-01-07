@@ -11,7 +11,7 @@ import AnyImageKit
 
 final class PickerConfigViewController: UITableViewController {
     
-    var options = PickerOptionsInfo()
+    var options = PickerParsedOptionsInfo()
     
     var isFullScreen = true
     
