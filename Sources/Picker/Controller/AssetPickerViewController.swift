@@ -94,7 +94,7 @@ final class AssetPickerViewController: UIViewController {
         addNotifications()
         setupNavigation()
         setupView()
-        check()
+        checkPermission()
     }
     
     override func viewDidLayoutSubviews() {
@@ -148,19 +148,18 @@ extension AssetPickerViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
     }
     
-    private func check() {
-        let status = PHPhotoLibrary.authorizationStatus()
-        switch status {
+    private func checkPermission() {
+        let permission = Permission.photos
+        switch permission.status {
         case .notDetermined:
-            PHPhotoLibrary.requestAuthorization { [weak self] (_) in
-                DispatchQueue.main.async {
-                    self?.check()
-                }
+            permission.request { [weak self] _ in
+                guard let self = self else { return }
+                self.checkPermission()
             }
         case .authorized:
-            self.loadDefaultAlbumIfNeeded()
-            self.preLoadAlbums()
-        default:
+            loadDefaultAlbumIfNeeded()
+            preLoadAlbums()
+        case .denied:
             permissionView.isHidden = false
         }
     }
