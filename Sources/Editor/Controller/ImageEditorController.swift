@@ -50,6 +50,7 @@ open class ImageEditorController: AnyImageNavigationController {
     public required init(video resource: VideoResource, placeholdImage: UIImage?, options: AnyImageEditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
+        check(resource: resource)
         self.editorDelegate = delegate
         let rootViewController = VideoEditorController(resource: resource, placeholdImage: placeholdImage, options: options, delegate: self)
         self.viewControllers = [rootViewController]
@@ -67,8 +68,8 @@ extension ImageEditorController {
     private func check(options: AnyImageEditorPhotoOptionsInfo) -> AnyImageEditorPhotoOptionsInfo {
         #if DEBUG
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        assert(options.penColors.count <= 7, "Pen colors count can't bigger then 7")
-        assert(options.mosaicOptions.count <= 5, "Mosaic count can't bigger then 5")
+        assert(options.penColors.count <= 7, "Pen colors count can't more then 7")
+        assert(options.mosaicOptions.count <= 5, "Mosaic count can't more then 5")
         #else
         var options = options
         if options.cacheIdentifier.firstIndex(of: "/") != nil {
@@ -82,6 +83,15 @@ extension ImageEditorController {
         }
         #endif
         return options
+    }
+    
+    private func check(resource: VideoResource) {
+        switch resource {
+        case let resource as URL:
+            assert(resource.isFileURL, "DO NOT support remote URL yet")
+        default:
+            break
+        }
     }
     
     private func output(photo: UIImage, fileType: FileType) -> Result<URL, AnyImageError> {
