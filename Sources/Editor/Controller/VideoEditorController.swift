@@ -17,7 +17,7 @@ protocol VideoEditorControllerDelegate: class {
 
 final class VideoEditorController: UIViewController {
     
-    private let resource: VideoResource
+    private let resource: EditorVideoResource
     private let placeholdImage: UIImage?
     private let options: EditorVideoOptionsInfo
     private weak var delegate: VideoEditorControllerDelegate?
@@ -53,7 +53,7 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     
-    init(resource: VideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
+    init(resource: EditorVideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
         self.resource = resource
         self.placeholdImage = placeholdImage
         self.options = options

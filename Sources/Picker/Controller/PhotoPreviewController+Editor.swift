@@ -77,7 +77,7 @@ extension PhotoPreviewController {
         var options = manager.options.editorPhotoOptions
         options.enableDebugLog = manager.options.enableDebugLog
         options.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
-        let controller = ImageEditorController(image: image, options: options, delegate: self)
+        let controller = ImageEditorController(photo: image, options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false, completion: nil)
     }
