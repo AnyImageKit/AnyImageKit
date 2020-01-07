@@ -177,7 +177,9 @@ extension VideoCapture {
         self.orientation = orientation
         let settings = AVCapturePhotoSettings()
         settings.flashMode = flashMode
+        #if !targetEnvironment(macCatalyst)
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
+        #endif
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
 }
@@ -204,12 +206,14 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         export(photoData: photoData)
     }
     
+    #if !targetEnvironment(macCatalyst)
     // for iOS 10
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         guard let photoSampleBuffer: CMSampleBuffer = photoSampleBuffer else { return }
         guard let photoData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) else { return }
         export(photoData: photoData)
     }
+    #endif
     
     private func export(photoData: Data) {
         guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }
