@@ -33,10 +33,12 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
+    /// Init picker with PickerOptionsInfo
     public convenience init(options: PickerOptionsInfo = .empty, delegate: ImagePickerControllerDelegate) {
         self.init(options: .init(options), delegate: delegate)
     }
     
+    /// Init picker with PickerParsedOptionsInfo
     public required init(options: PickerParsedOptionsInfo, delegate: ImagePickerControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         // Note:

@@ -26,12 +26,12 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
-    /// Init image editor
+    /// Init image editor with EditorPhotoOptionsInfo
     public convenience init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
         self.init(photo: resource, options: .init(options), delegate: delegate)
     }
     
-    /// Init image editor
+    /// Init image editor with EditorPhotoParsedOptionsInfo
     public required init(photo resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
@@ -41,12 +41,12 @@ open class ImageEditorController: AnyImageNavigationController {
         self.viewControllers = [rootViewController]
     }
     
-    /// Init video editor
+    /// Init video editor with EditorVideoOptionsInfo
     public convenience init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
         self.init(video: resource, placeholderImage: placeholderImage, options: .init(options), delegate: delegate)
     }
     
-    /// Init video editor
+    /// Init video editor with EditorVideoParsedOptionsInfo
     public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
