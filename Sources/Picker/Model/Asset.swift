@@ -30,7 +30,7 @@ public class Asset: Equatable {
     var isSelected: Bool = false
     var selectedNum: Int = 1
     
-    init(idx: Int, asset: PHAsset, selectOptions: AnyImagePickerSelectOption) {
+    init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
         self.idx = idx
         self.phAsset = asset
         self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)

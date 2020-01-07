@@ -1,27 +1,26 @@
 //
-//  AnyImageCaptureOptionsInfo.swift
+//  CaptureOptionsInfo.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import AVFoundation
 
-public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
+public enum CaptureOptionsInfoItem: OptionsInfoItem {
     /// 主题色
     /// 默认：绿色 0x57BE6A
     case tintColor(UIColor)
     
     /// 媒体类型
     /// 默认：Photo+Video
-    case mediaOptions(AnyImageCaptureMediaOptions)
+    case mediaOptions(CaptureMediaOption)
     
     /// 照片拍摄比例
     /// 默认：4:3
-    case photoAspectRatio(AnyImageCaptureAspectRatio)
+    case photoAspectRatio(CaptureAspectRatio)
     
     /// 使用的摄像头
     /// 默认：后置+前置
@@ -44,18 +43,18 @@ public enum AnyImageCaptureOptionsInfoItem: AnyImageOptionsInfoItem {
     case enableDebugLog
 }
 
-public struct AnyImageCaptureOptionsInfo: Equatable {
+public struct CaptureOptionsInfo: Equatable {
     
     public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
-    public var mediaOptions: AnyImageCaptureMediaOptions = [.photo, .video]
-    public var photoAspectRatio: AnyImageCaptureAspectRatio = .ratio4x3
+    public var mediaOptions: CaptureMediaOption = [.photo, .video]
+    public var photoAspectRatio: CaptureAspectRatio = .ratio4x3
     public var preferredPositions: [AVCaptureDevice.Position] = [.back, .front]
     public var flashMode: AVCaptureDevice.FlashMode = .off
     public var videoMaximumDuration: TimeInterval = 20
     public var preferredPreset: [CapturePreset] = [.fhd1920x1080_60, .fhd1920x1080_30, .hd1280x720_60, .hd1280x720_30]
     public var enableDebugLog: Bool = false
     
-    public init(_ info: [AnyImageCaptureOptionsInfoItem] = []) {
+    public init(_ info: [CaptureOptionsInfoItem] = []) {
         for option in info {
             switch option {
             case .tintColor(let value): tintColor = value
@@ -71,7 +70,7 @@ public struct AnyImageCaptureOptionsInfo: Equatable {
     }
 }
 
-public struct AnyImageCaptureMediaOptions: OptionSet {
+public struct CaptureMediaOption: OptionSet {
     
     public let rawValue: Int
     
@@ -79,12 +78,12 @@ public struct AnyImageCaptureMediaOptions: OptionSet {
         self.rawValue = rawValue
     }
     
-    public static let photo = AnyImageCaptureMediaOptions(rawValue: 1 << 0)
+    public static let photo = CaptureMediaOption(rawValue: 1 << 0)
     
-    public static let video = AnyImageCaptureMediaOptions(rawValue: 1 << 1)
+    public static let video = CaptureMediaOption(rawValue: 1 << 1)
 }
 
-public enum AnyImageCaptureAspectRatio: Equatable {
+public enum CaptureAspectRatio: Equatable {
     
     case ratio1x1
     case ratio4x3

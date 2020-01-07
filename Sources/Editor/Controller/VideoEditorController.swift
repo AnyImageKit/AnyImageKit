@@ -19,7 +19,7 @@ final class VideoEditorController: UIViewController {
     
     private let resource: VideoResource
     private let placeholdImage: UIImage?
-    private let options: AnyImageEditorVideoOptionsInfo
+    private let options: EditorVideoOptionsInfo
     private weak var delegate: VideoEditorControllerDelegate?
     
     private var url: URL?
@@ -53,7 +53,7 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     
-    init(resource: VideoResource, placeholdImage: UIImage?, options: AnyImageEditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
+    init(resource: VideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
         self.resource = resource
         self.placeholdImage = placeholdImage
         self.options = options
@@ -184,7 +184,7 @@ extension VideoEditorController: VideoPreviewDelegate {
 // MARK: - VideoEditorToolViewDelegate
 extension VideoEditorController: VideoEditorToolViewDelegate {
     
-    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: AnyImageEditorVideoEditOption?) {
+    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: EditorVideoToolOption?) {
         guard let option = option else {
             cropToolView.isHidden = true
             return

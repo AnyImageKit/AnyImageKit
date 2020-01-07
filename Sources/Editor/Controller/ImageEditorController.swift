@@ -27,12 +27,12 @@ open class ImageEditorController: AnyImageNavigationController {
     public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
     /// Init image editor
-    public convenience init(image: UIImage, options: [AnyImageEditorPhotoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
+    public convenience init(image: UIImage, options: [EditorPhotoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
         self.init(image: image, options: .init(options), delegate: delegate)
     }
     
     /// Init image editor
-    public required init(image: UIImage, options: AnyImageEditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
+    public required init(image: UIImage, options: EditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         let newOptions = check(options: options)
@@ -42,12 +42,12 @@ open class ImageEditorController: AnyImageNavigationController {
     }
     
     /// Init video editor
-    public convenience init(video resource: VideoResource, placeholdImage: UIImage?, options: [AnyImageEditorVideoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
+    public convenience init(video resource: VideoResource, placeholdImage: UIImage?, options: [EditorVideoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
         self.init(video: resource, placeholdImage: placeholdImage, options: .init(options), delegate: delegate)
     }
     
     /// Init video editor
-    public required init(video resource: VideoResource, placeholdImage: UIImage?, options: AnyImageEditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
+    public required init(video resource: VideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         check(resource: resource)
@@ -65,7 +65,7 @@ open class ImageEditorController: AnyImageNavigationController {
 // MARK: - Private function
 extension ImageEditorController {
     
-    private func check(options: AnyImageEditorPhotoOptionsInfo) -> AnyImageEditorPhotoOptionsInfo {
+    private func check(options: EditorPhotoOptionsInfo) -> EditorPhotoOptionsInfo {
         #if DEBUG
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         assert(options.penColors.count <= 7, "Pen colors count can't more then 7")

@@ -17,7 +17,7 @@ struct FetchRecord {
 
 final class PickerManager {
     
-    var options: AnyImagePickerOptionsInfo = .init()
+    var options: PickerOptionsInfo = .init()
     
     var isUpToLimit: Bool {
         return selectedAssets.count == options.selectLimit

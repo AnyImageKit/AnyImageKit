@@ -29,9 +29,9 @@ final class OriginalButton: UIControl {
         return view
     }()
     
-    private let options: AnyImagePickerOptionsInfo
+    private let options: PickerOptionsInfo
     
-    init(frame: CGRect, options: AnyImagePickerOptionsInfo) {
+    init(frame: CGRect, options: PickerOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()
@@ -96,9 +96,9 @@ fileprivate class CircleView: UIView {
         smallCircleView.layer.cornerRadius = bounds.width * 0.5 - 3
     }
     
-    private let options: AnyImagePickerOptionsInfo
+    private let options: PickerOptionsInfo
     
-    init(frame: CGRect, options: AnyImagePickerOptionsInfo) {
+    init(frame: CGRect, options: PickerOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

@@ -28,9 +28,9 @@ final class PermissionDeniedView: UIView {
         return view
     }()
     
-    private let options: AnyImagePickerOptionsInfo
+    private let options: PickerOptionsInfo
     
-    init(frame: CGRect, options: AnyImagePickerOptionsInfo) {
+    init(frame: CGRect, options: PickerOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

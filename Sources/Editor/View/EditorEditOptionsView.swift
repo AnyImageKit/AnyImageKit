@@ -10,20 +10,20 @@ import UIKit
 
 protocol EditorEditOptionsViewDelegate: class {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: AnyImageEditorPhotoOption?)
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: EditorPhotoToolOption?)
 }
 
 final class EditorEditOptionsView: UIView {
     
     weak var delegate: EditorEditOptionsViewDelegate?
     
-    private(set) var currentOption: AnyImageEditorPhotoOption?
+    private(set) var currentOption: EditorPhotoToolOption?
     
-    private let options: AnyImageEditorPhotoOptionsInfo
+    private let options: EditorPhotoOptionsInfo
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    init(frame: CGRect, options: AnyImageEditorPhotoOptionsInfo) {
+    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()
@@ -34,7 +34,7 @@ final class EditorEditOptionsView: UIView {
     }
     
     private func setupView() {
-        for (idx, option) in options.editOptions.enumerated() {
+        for (idx, option) in options.toolOptions.enumerated() {
             let button = createButton(tag: idx, option: option)
             buttons.append(button)
         }
@@ -56,7 +56,7 @@ final class EditorEditOptionsView: UIView {
         }
     }
     
-    private func createButton(tag: Int, option: AnyImageEditorPhotoOption) -> UIButton {
+    private func createButton(tag: Int, option: EditorPhotoToolOption) -> UIButton {
         let button = UIButton(type: .custom)
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
@@ -67,7 +67,7 @@ final class EditorEditOptionsView: UIView {
     }
     
     private func selectButton(_ button: UIButton) {
-        currentOption = options.editOptions[button.tag]
+        currentOption = options.toolOptions[button.tag]
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
@@ -96,7 +96,7 @@ extension EditorEditOptionsView: ResponseTouch {
         for (idx, button) in buttons.enumerated() {
             let frame = button.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(point) { // inside
-                if let current = currentOption, options.editOptions[idx] == current {
+                if let current = currentOption, options.toolOptions[idx] == current {
                     unselectButtons()
                 } else {
                     selectButton(button)

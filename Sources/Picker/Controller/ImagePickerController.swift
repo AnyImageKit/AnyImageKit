@@ -33,11 +33,11 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
-    public convenience init(options: [AnyImagePickerOptionsInfoItem] = [], delegate: ImagePickerControllerDelegate) {
+    public convenience init(options: [PickerOptionsInfoItem] = [], delegate: ImagePickerControllerDelegate) {
         self.init(options: .init(options), delegate: delegate)
     }
     
-    public required init(options: AnyImagePickerOptionsInfo = .init(), delegate: ImagePickerControllerDelegate) {
+    public required init(options: PickerOptionsInfo = .init(), delegate: ImagePickerControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
@@ -113,7 +113,7 @@ open class ImagePickerController: AnyImageNavigationController {
 // MARK: - Private function
 extension ImagePickerController {
     
-    private func check(options: AnyImagePickerOptionsInfo) -> AnyImagePickerOptionsInfo {
+    private func check(options: PickerOptionsInfo) -> PickerOptionsInfo {
         var options = options
         options.largePhotoMaxWidth = max(options.photoMaxWidth, options.largePhotoMaxWidth)
         #if DEBUG

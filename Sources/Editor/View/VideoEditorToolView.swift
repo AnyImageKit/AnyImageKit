@@ -9,13 +9,13 @@
 import UIKit
 
 protocol VideoEditorToolViewDelegate: class {
-    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: AnyImageEditorVideoEditOption?)
+    func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: EditorVideoToolOption?)
 }
 
 final class VideoEditorToolView: UIView {
 
     public weak var delegate: VideoEditorToolViewDelegate?
-    private(set) var currentOption: AnyImageEditorVideoEditOption?
+    private(set) var currentOption: EditorVideoToolOption?
     
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -30,9 +30,9 @@ final class VideoEditorToolView: UIView {
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    private let options: AnyImageEditorVideoOptionsInfo
+    private let options: EditorVideoOptionsInfo
     
-    init(frame: CGRect, options: AnyImageEditorVideoOptionsInfo) {
+    init(frame: CGRect, options: EditorVideoOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()
@@ -50,7 +50,7 @@ final class VideoEditorToolView: UIView {
         }
         
         
-        for (idx, option) in options.editOptions.enumerated() {
+        for (idx, option) in options.toolOptions.enumerated() {
             let button = createButton(tag: idx, option: option)
             buttons.append(button)
         }
@@ -71,7 +71,7 @@ final class VideoEditorToolView: UIView {
         }
     }
     
-    private func createButton(tag: Int, option: AnyImageEditorVideoEditOption) -> UIButton {
+    private func createButton(tag: Int, option: EditorVideoToolOption) -> UIButton {
         let button = UIButton(type: .custom)
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
@@ -83,7 +83,7 @@ final class VideoEditorToolView: UIView {
     }
     
     private func selectButton(_ button: UIButton) {
-        currentOption = options.editOptions[button.tag]
+        currentOption = options.toolOptions[button.tag]
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
@@ -95,8 +95,8 @@ final class VideoEditorToolView: UIView {
 // MARK: - Public
 extension VideoEditorToolView {
     
-    func selectOption(_ option: AnyImageEditorVideoEditOption) -> Bool {
-        guard let idx = options.editOptions.firstIndex(of: option) else { return false }
+    func selectOption(_ option: EditorVideoToolOption) -> Bool {
+        guard let idx = options.toolOptions.firstIndex(of: option) else { return false }
         selectButton(buttons[idx])
         return true
     }
@@ -114,7 +114,7 @@ extension VideoEditorToolView {
 extension VideoEditorToolView {
     
     @objc private func optionButtonTapped(_ sender: UIButton) {
-        if let current = currentOption, options.editOptions[sender.tag] == current {
+        if let current = currentOption, options.toolOptions[sender.tag] == current {
             unselectButtons()
         } else {
             selectButton(sender)

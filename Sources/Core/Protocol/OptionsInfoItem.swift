@@ -1,5 +1,5 @@
 //
-//  AnyImageOptionsInfoItem.swift
+//  OptionsInfoItem.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-public protocol AnyImageOptionsInfoItem: EnumCaseEquatable { }
+public protocol OptionsInfoItem: EnumCaseEquatable { }
 
-extension Array where Element: AnyImageOptionsInfoItem {
+extension Array where Element: OptionsInfoItem {
     
     public mutating func update(_ element: Element) {
         self.remove(element)

@@ -1,5 +1,5 @@
 //
-//  AnyImageEditorPhotoOptionsInfo.swift
+//  EditorPhotoOptionsInfo.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
@@ -8,14 +8,14 @@
 
 import UIKit
 
-public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
+public enum EditorPhotoOptionsInfoItem: OptionsInfoItem {
     /// 主题色
     /// 默认：green
     case tintColor(UIColor)
     
     /// 编辑功能，会按顺序排布
     /// 默认：[.pen, .text, .crop, .mosaic]
-    case editOptions([AnyImageEditorPhotoOption])
+    case toolOptions([EditorPhotoToolOption])
     
     /// 画笔颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
@@ -31,7 +31,7 @@ public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
     
     /// 马赛克的种类，会按顺序排布
     /// 默认：[.default, .colorful]
-    case mosaicOptions([AnyImageEditorPhotoMosaicOption])
+    case mosaicOptions([EditorPhotoMosaicOption])
     
     /// 默认选中马赛克的下标
     /// 默认：0
@@ -47,7 +47,7 @@ public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
     
     /// 文字颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
-    case textColors([AnyImageEditorPhotoTextColor])
+    case textColors([EditorPhotoTextColor])
     
     /// 缓存ID
     /// 默认："" 不启用
@@ -58,26 +58,26 @@ public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
     case enableDebugLog
 }
 
-public struct AnyImageEditorPhotoOptionsInfo: Equatable {
+public struct EditorPhotoOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
-    public var editOptions: [AnyImageEditorPhotoOption] = [.pen, .text, .crop, .mosaic]
+    public var toolOptions: [EditorPhotoToolOption] = [.pen, .text, .crop, .mosaic]
     public var penColors: [UIColor] = Palette.penColors
     public var defaultPenIndex: Int = 2
     public var penWidth: CGFloat = 5.0
-    public var mosaicOptions: [AnyImageEditorPhotoMosaicOption] = [.default, .colorful]
+    public var mosaicOptions: [EditorPhotoMosaicOption] = [.default, .colorful]
     public var defaultMosaicIndex: Int = 0
     public var mosaicWidth: CGFloat = 15.0
     public var mosaicLevel: Int = 30
-    public var textColors: [AnyImageEditorPhotoTextColor] = Palette.textColors
+    public var textColors: [EditorPhotoTextColor] = Palette.textColors
     public var cacheIdentifier: String = ""
     public var enableDebugLog: Bool = false
     
-    public init(_ info: [AnyImageEditorPhotoOptionsInfoItem] = []) {
+    public init(_ info: [EditorPhotoOptionsInfoItem] = []) {
         for option in info {
             switch option {
             case .tintColor(let value): tintColor = value
-            case .editOptions(let value): editOptions = value
+            case .toolOptions(let value): toolOptions = value
             case .penColors(let value): penColors = value
             case .defaultPenIndex(let value): defaultPenIndex = value
             case .penWidth(let value): penWidth = value
@@ -94,7 +94,7 @@ public struct AnyImageEditorPhotoOptionsInfo: Equatable {
 }
 
 /// 图片编辑功能
-public enum AnyImageEditorPhotoOption: Equatable {
+public enum EditorPhotoToolOption: Equatable {
     /// 画笔
     case pen
     /// 文字
@@ -106,7 +106,7 @@ public enum AnyImageEditorPhotoOption: Equatable {
 }
 
 /// 马赛克样式
-public enum AnyImageEditorPhotoMosaicOption: Equatable {
+public enum EditorPhotoMosaicOption: Equatable {
     /// 默认马赛克
     case `default`
     /// 彩色图片马赛克
@@ -116,7 +116,7 @@ public enum AnyImageEditorPhotoMosaicOption: Equatable {
 }
 
 /// 输入文本颜色
-public struct AnyImageEditorPhotoTextColor: Equatable {
+public struct EditorPhotoTextColor: Equatable {
     /// 主色
     public let color: UIColor
     /// 辅色
@@ -124,7 +124,7 @@ public struct AnyImageEditorPhotoTextColor: Equatable {
 }
 
 // MARK: - Extension
-extension AnyImageEditorPhotoOption: CustomStringConvertible {
+extension EditorPhotoToolOption: CustomStringConvertible {
     var imageName: String {
         switch self {
         case .pen:

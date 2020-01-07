@@ -42,12 +42,12 @@ final class PhotoEditorController: UIViewController {
     }()
     
     private let image: UIImage
-    private let options: AnyImageEditorPhotoOptionsInfo
+    private let options: EditorPhotoOptionsInfo
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var context = CIContext()
     
-    init(image: UIImage, options: AnyImageEditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
+    init(image: UIImage, options: EditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
         self.image = image
         self.options = options
         self.delegate = delegate
@@ -156,7 +156,7 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
 extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 点击了功能按钮
-    func toolView(_ toolView: EditorToolView, optionDidChange option: AnyImageEditorPhotoOption?) {
+    func toolView(_ toolView: EditorToolView, optionDidChange option: EditorPhotoToolOption?) {
         contentView.canvas.isUserInteractionEnabled = false
         contentView.mosaic?.isUserInteractionEnabled = false
         contentView.scrollView.isScrollEnabled = option == nil

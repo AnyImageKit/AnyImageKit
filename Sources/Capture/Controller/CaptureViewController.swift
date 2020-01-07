@@ -53,9 +53,9 @@ final class CaptureViewController: UIViewController {
         return util
     }()
     
-    private let options: AnyImageCaptureOptionsInfo
+    private let options: CaptureOptionsInfo
     
-    init(options: AnyImageCaptureOptionsInfo) {
+    init(options: CaptureOptionsInfo) {
         self.options = options
         super.init(nibName: nil, bundle: nil)
     }
@@ -177,7 +177,7 @@ extension CaptureViewController: CaptureDelegate {
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
-        var editorOptions: [AnyImageEditorPhotoOptionsInfoItem] = []
+        var editorOptions: [EditorPhotoOptionsInfoItem] = []
         if options.enableDebugLog {
             editorOptions.append(.enableDebugLog)
         }
@@ -226,7 +226,7 @@ extension CaptureViewController: RecorderDelegate {
         previewView.showToolMask(animated: true)
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        var editorOptions: [AnyImageEditorVideoOptionsInfoItem] = [.tintColor(options.tintColor)]
+        var editorOptions: [EditorVideoOptionsInfoItem] = [.tintColor(options.tintColor)]
         if options.enableDebugLog {
             editorOptions.append(.enableDebugLog)
         }

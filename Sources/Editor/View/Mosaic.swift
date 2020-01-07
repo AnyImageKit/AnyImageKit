@@ -25,7 +25,7 @@ final class Mosaic: UIView {
     weak var delegate: MosaicDelegate?
     
     private let originalMosaicImage: UIImage
-    private let mosaicOptions: [AnyImageEditorPhotoMosaicOption]
+    private let mosaicOptions: [EditorPhotoMosaicOption]
     private let lineWidth: CGFloat
     
     /// 当前马赛克覆盖的图片
@@ -48,7 +48,7 @@ final class Mosaic: UIView {
     }
     
     
-    init(frame: CGRect, originalMosaicImage: UIImage, mosaicOptions: [AnyImageEditorPhotoMosaicOption], lineWidth: CGFloat) {
+    init(frame: CGRect, originalMosaicImage: UIImage, mosaicOptions: [EditorPhotoMosaicOption], lineWidth: CGFloat) {
         self.originalMosaicImage = originalMosaicImage
         self.mosaicOptions = mosaicOptions
         self.lineWidth = lineWidth

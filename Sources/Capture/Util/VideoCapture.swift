@@ -39,9 +39,9 @@ final class VideoCapture: NSObject {
     private lazy var videoOutput: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.VideoCapture")
     
-    private let options: AnyImageCaptureOptionsInfo
+    private let options: CaptureOptionsInfo
     
-    init(session: AVCaptureSession, options: AnyImageCaptureOptionsInfo) {
+    init(session: AVCaptureSession, options: CaptureOptionsInfo) {
         self.options = options
         self.orientation = .portrait
         self.position = options.preferredPositions.first ?? .back
