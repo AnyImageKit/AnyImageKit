@@ -12,6 +12,7 @@ public enum AnyImageError: Error {
     
     case invalidMediaType
     case invalidInfo
+    case invalidURL
     case invalidData
     case invalidDataUTI
     case invalidImage

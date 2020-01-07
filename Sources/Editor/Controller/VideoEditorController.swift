@@ -17,9 +17,9 @@ protocol VideoEditorControllerDelegate: class {
 
 final class VideoEditorController: UIViewController {
     
-    private let resource: VideoResource
-    private let placeholdImage: UIImage?
-    private let options: EditorVideoOptionsInfo
+    private let resource: EditorVideoResource
+    private let placeholderImage: UIImage?
+    private let options: EditorVideoParsedOptionsInfo
     private weak var delegate: VideoEditorControllerDelegate?
     
     private var url: URL?
@@ -34,7 +34,7 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     private lazy var videoPreview: VideoPreview = {
-        let view = VideoPreview(frame: .zero, image: placeholdImage)
+        let view = VideoPreview(frame: .zero, image: placeholderImage)
         return view
     }()
     private lazy var toolView: VideoEditorToolView = {
@@ -53,9 +53,9 @@ final class VideoEditorController: UIViewController {
         return view
     }()
     
-    init(resource: VideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
+    init(resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: VideoEditorControllerDelegate) {
         self.resource = resource
-        self.placeholdImage = placeholdImage
+        self.placeholderImage = placeholderImage
         self.options = options
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -220,7 +220,7 @@ extension VideoEditorController {
     
     /// 获取进度条上第一张缩略图
     private func getProgressImage(url: URL, completion: @escaping (UIImage) -> Void) {
-        if let image = placeholdImage {
+        if let image = placeholderImage {
             completion(image)
             return
         }

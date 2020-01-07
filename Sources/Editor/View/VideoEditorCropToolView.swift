@@ -17,7 +17,7 @@ protocol VideoEditorCropToolViewDelegate: class {
 final class VideoEditorCropToolView: UIView {
     
     public weak var delegate: VideoEditorCropToolViewDelegate?
-    private let options: EditorVideoOptionsInfo
+    private let options: EditorVideoParsedOptionsInfo
     
     private(set) lazy var playButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -38,7 +38,7 @@ final class VideoEditorCropToolView: UIView {
         return view
     }()
     
-    init(frame: CGRect, options: EditorVideoOptionsInfo) {
+    init(frame: CGRect, options: EditorVideoParsedOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

@@ -12,7 +12,7 @@ import AnyImageKit
 
 final class CaptureConfigViewController: UITableViewController {
     
-    var options = CaptureOptionsInfo()
+    var options = CaptureParsedOptionsInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()

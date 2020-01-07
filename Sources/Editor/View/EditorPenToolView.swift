@@ -33,7 +33,7 @@ final class EditorPenToolView: UIView {
     private var colorViews: [UIView] = []
     private let spacing: CGFloat = 22
     
-    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
+    init(frame: CGRect, options: EditorPhotoParsedOptionsInfo) {
         self.colors = options.penColors
         self.currentIdx = options.defaultPenIndex
         super.init(frame: frame)

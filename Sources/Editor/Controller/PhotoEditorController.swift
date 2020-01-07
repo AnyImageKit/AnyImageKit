@@ -41,14 +41,15 @@ final class PhotoEditorController: UIViewController {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap(_:)))
     }()
     
-    private let image: UIImage
-    private let options: EditorPhotoOptionsInfo
+    private var image: UIImage = UIImage()
+    private let resource: EditorPhotoResource
+    private let options: EditorPhotoParsedOptionsInfo
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var context = CIContext()
     
-    init(image: UIImage, options: EditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
-        self.image = image
+    init(photo resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo, delegate: PhotoEditorControllerDelegate) {
+        self.resource = resource
         self.options = options
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -60,7 +61,7 @@ final class PhotoEditorController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        loadData()
         navigationController?.navigationBar.isHidden = true
     }
     
@@ -81,8 +82,23 @@ final class PhotoEditorController: UIViewController {
         }
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
+    private func loadData() {
+        resource.loadImage { [weak self] (result) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let image):
+                hideHUD()
+                self.image = image
+                self.setupView()
+            case .failure(let error):
+                if error == .cannotFindInLocal {
+                    showWaitHUD()
+                    return
+                }
+                _print("Fetch image failed: \(error.localizedDescription)")
+                self.delegate?.photoEditorDidCancel(self)
+            }
+        }
     }
 }
 

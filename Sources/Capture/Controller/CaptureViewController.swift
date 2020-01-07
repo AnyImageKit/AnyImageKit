@@ -53,9 +53,9 @@ final class CaptureViewController: UIViewController {
         return util
     }()
     
-    private let options: CaptureOptionsInfo
+    private let options: CaptureParsedOptionsInfo
     
-    init(options: CaptureOptionsInfo) {
+    init(options: CaptureParsedOptionsInfo) {
         self.options = options
         super.init(nibName: nil, bundle: nil)
     }
@@ -181,7 +181,7 @@ extension CaptureViewController: CaptureDelegate {
         if options.enableDebugLog {
             editorOptions.append(.enableDebugLog)
         }
-        let editor = ImageEditorController(image: image, options: editorOptions, delegate: self)
+        let editor = ImageEditorController(photo: image, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
@@ -230,7 +230,7 @@ extension CaptureViewController: RecorderDelegate {
         if options.enableDebugLog {
             editorOptions.append(.enableDebugLog)
         }
-        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, options: editorOptions, delegate: self)
+        let editor = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }

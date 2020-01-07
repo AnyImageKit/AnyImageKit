@@ -1,5 +1,5 @@
 //
-//  VideoResource.swift
+//  EditorVideoResource.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/18.
@@ -9,18 +9,22 @@
 import UIKit
 import Photos
 
-public protocol VideoResource {
+public protocol EditorVideoResource {
     func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void)
 }
 
-extension URL: VideoResource {
+extension URL: EditorVideoResource {
     
     public func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
-        completion(.success(self))
+        if self.isFileURL {
+            completion(.success(self))
+        } else {
+            completion(.failure(.invalidURL))
+        }
     }
 }
 
-extension PHAsset: VideoResource {
+extension PHAsset: EditorVideoResource {
     
     public func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
         guard mediaType == .video || mediaSubtypes == .photoLive else {

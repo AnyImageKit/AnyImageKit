@@ -19,11 +19,11 @@ final class EditorEditOptionsView: UIView {
     
     private(set) var currentOption: EditorPhotoToolOption?
     
-    private let options: EditorPhotoOptionsInfo
+    private let options: EditorPhotoParsedOptionsInfo
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
+    init(frame: CGRect, options: EditorPhotoParsedOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

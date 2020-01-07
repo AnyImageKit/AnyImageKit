@@ -188,7 +188,7 @@ class PreviewCell: UICollectionViewCell {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
     
-    func updateOptions(_ options: PickerOptionsInfo) {
+    func updateOptions(_ options: PickerParsedOptionsInfo) {
         
     }
 }

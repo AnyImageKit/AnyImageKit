@@ -26,33 +26,33 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
-    /// Init image editor
-    public convenience init(image: UIImage, options: [EditorPhotoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
-        self.init(image: image, options: .init(options), delegate: delegate)
+    /// Init image editor with EditorPhotoOptionsInfo
+    public convenience init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
+        self.init(photo: resource, options: .init(options), delegate: delegate)
     }
     
-    /// Init image editor
-    public required init(image: UIImage, options: EditorPhotoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
+    /// Init image editor with EditorPhotoParsedOptionsInfo
+    public required init(photo resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        let newOptions = check(options: options)
+        let checkedOptions = check(resource: resource, options: options)
         self.editorDelegate = delegate
-        let rootViewController = PhotoEditorController(image: image, options: newOptions, delegate: self)
+        let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
-    /// Init video editor
-    public convenience init(video resource: VideoResource, placeholdImage: UIImage?, options: [EditorVideoOptionsInfoItem] = [], delegate: ImageEditorControllerDelegate) {
-        self.init(video: resource, placeholdImage: placeholdImage, options: .init(options), delegate: delegate)
+    /// Init video editor with EditorVideoOptionsInfo
+    public convenience init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
+        self.init(video: resource, placeholderImage: placeholderImage, options: .init(options), delegate: delegate)
     }
     
-    /// Init video editor
-    public required init(video resource: VideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo = .init(), delegate: ImageEditorControllerDelegate) {
+    /// Init video editor with EditorVideoParsedOptionsInfo
+    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        check(resource: resource)
+        let checkedOptions = check(resource: resource, options: options)
         self.editorDelegate = delegate
-        let rootViewController = VideoEditorController(resource: resource, placeholdImage: placeholdImage, options: options, delegate: self)
+        let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
@@ -60,13 +60,23 @@ open class ImageEditorController: AnyImageNavigationController {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    open override var prefersStatusBarHidden: Bool {
+        return true
+    }
 }
 
 // MARK: - Private function
 extension ImageEditorController {
     
-    private func check(options: EditorPhotoOptionsInfo) -> EditorPhotoOptionsInfo {
+    private func check(resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo) -> EditorPhotoParsedOptionsInfo {
         #if DEBUG
+        switch resource {
+        case let resource as URL:
+            assert(resource.isFileURL, "DO NOT support remote URL yet")
+        default:
+            break
+        }
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         assert(options.penColors.count <= 7, "Pen colors count can't more then 7")
         assert(options.mosaicOptions.count <= 5, "Mosaic count can't more then 5")
@@ -85,13 +95,14 @@ extension ImageEditorController {
         return options
     }
     
-    private func check(resource: VideoResource) {
+    private func check(resource: EditorVideoResource, options: EditorVideoParsedOptionsInfo) -> EditorVideoParsedOptionsInfo {
         switch resource {
         case let resource as URL:
             assert(resource.isFileURL, "DO NOT support remote URL yet")
         default:
             break
         }
+        return options
     }
     
     private func output(photo: UIImage, fileType: FileType) -> Result<URL, AnyImageError> {
@@ -124,7 +135,7 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
         let result = output(photo: photo, fileType: .jpeg)
         switch result {
         case .success(let url):
-            editorDelegate?.imageEditor(self, didFinishEditing: url, type: .photo, isEdited: isEditing)
+            editorDelegate?.imageEditor(self, didFinishEditing: url, type: .photo, isEdited: isEdited)
         case .failure(let error):
             _print(error.localizedDescription)
         }

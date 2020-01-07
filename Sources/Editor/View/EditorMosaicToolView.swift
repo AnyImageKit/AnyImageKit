@@ -29,11 +29,11 @@ final class EditorMosaicToolView: UIView {
         return view
     }()
     
-    private let options: EditorPhotoOptionsInfo
+    private let options: EditorPhotoParsedOptionsInfo
     private var mosaicIcon: [UIImageView] = []
     private let spacing: CGFloat = 40
     
-    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
+    init(frame: CGRect, options: EditorPhotoParsedOptionsInfo) {
         self.options = options
         self.currentIdx = options.defaultMosaicIndex
         super.init(frame: frame)

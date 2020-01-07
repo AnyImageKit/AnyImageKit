@@ -423,9 +423,11 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PhotoPreviewCell:
             if data.asset._image != nil {
                 cell.setImage(data.asset._image)
+                cell.setDownloadingProgress(1.0)
             } else {
                 if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
                     cell.setImage(originalImage)
+                    cell.setDownloadingProgress(1.0)
                 } else {
                     cell.setImage(data.thumbnail)
                     cell.requestPhoto()

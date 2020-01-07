@@ -17,12 +17,12 @@ final class AudioCapture: NSObject {
     
     weak var delegate: AudioCaptureDelegate?
     
-    let options: CaptureOptionsInfo
+    let options: CaptureParsedOptionsInfo
     
     private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
     
-    init(session: AVCaptureSession, options: CaptureOptionsInfo) {
+    init(session: AVCaptureSession, options: CaptureParsedOptionsInfo) {
         self.options = options
         super.init()
     }

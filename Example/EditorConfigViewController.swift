@@ -11,7 +11,7 @@ import AnyImageKit
 
 final class EditorConfigViewController: UITableViewController {
 
-    var options = EditorPhotoOptionsInfo()
+    var options = EditorPhotoParsedOptionsInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ final class EditorConfigViewController: UITableViewController {
     @objc private func openEditorTapped() {
         options.enableDebugLog = true
         let image = UIImage(named: "EditorTestImage")!
-        let controller = ImageEditorController(image: image, options: options, delegate: self)
+        let controller = ImageEditorController(photo: image, options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

@@ -8,7 +8,10 @@
 
 import UIKit
 
+public typealias EditorVideoOptionsInfo = [EditorVideoOptionsInfoItem]
+
 public enum EditorVideoOptionsInfoItem: OptionsInfoItem {
+    
     /// 主题色
     /// 默认：green
     case tintColor(UIColor)
@@ -22,7 +25,7 @@ public enum EditorVideoOptionsInfoItem: OptionsInfoItem {
     case enableDebugLog
 }
 
-public struct EditorVideoOptionsInfo: Equatable {
+public struct EditorVideoParsedOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
     public var toolOptions: [EditorVideoToolOption] = [.crop]

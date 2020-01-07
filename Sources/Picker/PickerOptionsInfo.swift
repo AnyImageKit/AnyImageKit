@@ -9,7 +9,10 @@
 import UIKit
 import Photos
 
+public typealias PickerOptionsInfo = [PickerOptionsInfoItem]
+
 public enum PickerOptionsInfoItem: OptionsInfoItem {
+    
     /// Theme 主题
     /// - Default: Auto
     case theme(PickerTheme)
@@ -72,7 +75,7 @@ public enum PickerOptionsInfoItem: OptionsInfoItem {
     case enableDebugLog
 }
 
-public struct PickerOptionsInfo: Equatable {
+public struct PickerParsedOptionsInfo: Equatable {
     
     public var theme: PickerTheme = .init(style: .auto)
     public var selectLimit: Int = 9
@@ -97,8 +100,8 @@ public struct PickerOptionsInfo: Equatable {
             editorVideoOptions = .init(editorVideoOptionInfoItems)
         }
     }
-    var editorPhotoOptions: EditorPhotoOptionsInfo = .init()
-    var editorVideoOptions: EditorVideoOptionsInfo = .init()
+    var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init()
+    var editorVideoOptions: EditorVideoParsedOptionsInfo = .init()
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
@@ -107,7 +110,7 @@ public struct PickerOptionsInfo: Equatable {
             captureOptions = .init(captureOptionInfoItems)
         }
     }
-    var captureOptions: CaptureOptionsInfo = .init()
+    var captureOptions: CaptureParsedOptionsInfo = .init()
     #endif
     
     public init(_ info: [PickerOptionsInfoItem] = []) {

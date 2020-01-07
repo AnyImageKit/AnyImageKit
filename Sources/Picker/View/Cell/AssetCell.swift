@@ -123,7 +123,7 @@ extension AssetCell {
 
 extension AssetCell {
     
-    private func setOptions(_ options: PickerOptionsInfo) {
+    private func setOptions(_ options: PickerParsedOptionsInfo) {
         boxCoverView.layer.borderColor = options.theme.mainColor.cgColor
         selectButton.setTheme(options.theme)
     }
