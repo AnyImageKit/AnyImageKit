@@ -346,16 +346,12 @@ extension PhotoPreviewController {
         data.asset.isSelected = !sender.isSelected
         if data.asset.isSelected {
             manager.addSelectedAsset(data.asset)
-        } else {
-            manager.removeSelectedAsset(data.asset)
-        }
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
-        
-        if data.asset.isSelected {
             delegate?.previewController(self, didSelected: currentIndex)
         } else {
+            manager.removeSelectedAsset(data.asset)
             delegate?.previewController(self, didDeselected: currentIndex)
         }
+        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
     }
     
