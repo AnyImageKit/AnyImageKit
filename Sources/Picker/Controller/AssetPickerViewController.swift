@@ -185,7 +185,7 @@ extension AssetPickerViewController {
         self.album = album
         titleView.setTitle(album.name)
         #if ANYIMAGEKIT_ENABLE_CAPTURE
-        addCameraAssetIfNeed()
+        addCameraAssetIfNeeded()
         #endif
         collectionView.reloadData()
         if manager.options.orderByDate == .asc {
