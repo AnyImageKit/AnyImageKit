@@ -43,7 +43,7 @@ public struct EditorVideoParsedOptionsInfo: Equatable {
 }
 
 /// 视频编辑功能
-public enum EditorVideoToolOption {
+public enum EditorVideoToolOption: Equatable {
     /// 裁剪
     case crop
 }
