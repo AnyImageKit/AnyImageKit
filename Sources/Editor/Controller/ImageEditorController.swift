@@ -135,7 +135,7 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
         let result = output(photo: photo, fileType: .jpeg)
         switch result {
         case .success(let url):
-            editorDelegate?.imageEditor(self, didFinishEditing: url, type: .photo, isEdited: isEditing)
+            editorDelegate?.imageEditor(self, didFinishEditing: url, type: .photo, isEdited: isEdited)
         case .failure(let error):
             _print(error.localizedDescription)
         }
