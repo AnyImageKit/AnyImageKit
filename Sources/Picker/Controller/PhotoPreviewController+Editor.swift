@@ -39,7 +39,7 @@ extension PhotoPreviewController {
             var videoOptions = manager.options.editorVideoOptions
             videoOptions.enableDebugLog = manager.options.enableDebugLog
             let image = data.asset._images[.initial] ?? data.thumbnail
-            let controller = ImageEditorController(video: data.asset.phAsset, placeholdImage: image, options: videoOptions, delegate: self)
+            let controller = ImageEditorController(video: data.asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
             controller.modalPresentationStyle = .fullScreen
             present(controller, animated: false, completion: nil)
         }

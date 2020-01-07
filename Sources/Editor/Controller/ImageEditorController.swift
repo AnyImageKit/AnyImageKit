@@ -42,17 +42,17 @@ open class ImageEditorController: AnyImageNavigationController {
     }
     
     /// Init video editor
-    public convenience init(video resource: EditorVideoResource, placeholdImage: UIImage?, options: EditorVideoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
-        self.init(video: resource, placeholdImage: placeholdImage, options: .init(options), delegate: delegate)
+    public convenience init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
+        self.init(video: resource, placeholderImage: placeholderImage, options: .init(options), delegate: delegate)
     }
     
     /// Init video editor
-    public required init(video resource: EditorVideoResource, placeholdImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
+    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
         self.editorDelegate = delegate
-        let rootViewController = VideoEditorController(resource: resource, placeholdImage: placeholdImage, options: checkedOptions, delegate: self)
+        let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
         self.viewControllers = [rootViewController]
     }
     

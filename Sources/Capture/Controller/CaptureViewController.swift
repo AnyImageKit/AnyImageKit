@@ -230,7 +230,7 @@ extension CaptureViewController: RecorderDelegate {
         if options.enableDebugLog {
             editorOptions.append(.enableDebugLog)
         }
-        let editor = ImageEditorController(video: url, placeholdImage: thumbnail, options: editorOptions, delegate: self)
+        let editor = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
             guard let self = self else { return }
