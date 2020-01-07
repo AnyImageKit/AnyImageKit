@@ -156,7 +156,7 @@ extension PhotoEditorController: PhotoEditorContentViewDelegate {
 extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 点击了功能按钮
-    func toolView(_ toolView: EditorToolView, optionDidChange option: AnyImageEditorPhotoOptions?) {
+    func toolView(_ toolView: EditorToolView, optionDidChange option: AnyImageEditorPhotoOption?) {
         contentView.canvas.isUserInteractionEnabled = false
         contentView.mosaic?.isUserInteractionEnabled = false
         contentView.scrollView.isScrollEnabled = option == nil

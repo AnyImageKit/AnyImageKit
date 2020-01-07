@@ -15,7 +15,7 @@ public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
     
     /// 编辑功能，会按顺序排布
     /// 默认：[.pen, .text, .crop, .mosaic]
-    case editOptions([AnyImageEditorPhotoOptions])
+    case editOptions([AnyImageEditorPhotoOption])
     
     /// 画笔颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
@@ -61,7 +61,7 @@ public enum AnyImageEditorPhotoOptionsInfoItem: AnyImageOptionsInfoItem {
 public struct AnyImageEditorPhotoOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
-    public var editOptions: [AnyImageEditorPhotoOptions] = [.pen, .text, .crop, .mosaic]
+    public var editOptions: [AnyImageEditorPhotoOption] = [.pen, .text, .crop, .mosaic]
     public var penColors: [UIColor] = Palette.penColors
     public var defaultPenIndex: Int = 2
     public var penWidth: CGFloat = 5.0
@@ -94,7 +94,7 @@ public struct AnyImageEditorPhotoOptionsInfo: Equatable {
 }
 
 /// 图片编辑功能
-public enum AnyImageEditorPhotoOptions: Equatable {
+public enum AnyImageEditorPhotoOption: Equatable {
     /// 画笔
     case pen
     /// 文字
@@ -124,7 +124,7 @@ public struct AnyImageEditorPhotoTextColor: Equatable {
 }
 
 // MARK: - Extension
-extension AnyImageEditorPhotoOptions: CustomStringConvertible {
+extension AnyImageEditorPhotoOption: CustomStringConvertible {
     var imageName: String {
         switch self {
         case .pen:

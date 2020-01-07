@@ -10,7 +10,7 @@ import Photos
 
 extension MediaType {
     
-    init(asset: PHAsset, selectOptions: AnyImagePickerSelectOptions) {
+    init(asset: PHAsset, selectOptions: AnyImagePickerSelectOption) {
         let selectPhotoGIF = selectOptions.contains(.photoGIF)
         let selectPhotoLive = selectOptions.contains(.photoLive)
         

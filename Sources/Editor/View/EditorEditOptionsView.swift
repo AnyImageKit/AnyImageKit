@@ -10,14 +10,14 @@ import UIKit
 
 protocol EditorEditOptionsViewDelegate: class {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: AnyImageEditorPhotoOptions?)
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: AnyImageEditorPhotoOption?)
 }
 
 final class EditorEditOptionsView: UIView {
     
     weak var delegate: EditorEditOptionsViewDelegate?
     
-    private(set) var currentOption: AnyImageEditorPhotoOptions?
+    private(set) var currentOption: AnyImageEditorPhotoOption?
     
     private let options: AnyImageEditorPhotoOptionsInfo
     private var buttons: [UIButton] = []
@@ -56,7 +56,7 @@ final class EditorEditOptionsView: UIView {
         }
     }
     
-    private func createButton(tag: Int, option: AnyImageEditorPhotoOptions) -> UIButton {
+    private func createButton(tag: Int, option: AnyImageEditorPhotoOption) -> UIButton {
         let button = UIButton(type: .custom)
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag

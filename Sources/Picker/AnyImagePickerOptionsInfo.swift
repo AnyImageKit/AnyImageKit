@@ -42,7 +42,7 @@ public enum AnyImagePickerOptionsInfoItem: AnyImageOptionsInfoItem {
     /// - Default: Photo
     /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
     /// - .photoLive 和 .photoGIF 是 .photo 的子项，当不显式指明时，都会作为 photo 处理，否则会特殊处理（可播放&专有标识）
-    case selectOptions(AnyImagePickerSelectOptions)
+    case selectOptions(AnyImagePickerSelectOption)
     
     /// Order by date 按日期排序
     /// - Default: ASC
@@ -81,7 +81,7 @@ public struct AnyImagePickerOptionsInfo: Equatable {
     public var largePhotoMaxWidth: CGFloat = 1200
     public var allowUseOriginalImage: Bool = true
     public var albumOptions: AnyImagePickerAlbumOptions = [.smart, .userCreated]
-    public var selectOptions: AnyImagePickerSelectOptions = [.photo]
+    public var selectOptions: AnyImagePickerSelectOption = [.photo]
     public var orderByDate: Sort = .asc
     public var enableDebugLog: Bool = false
     
@@ -137,15 +137,15 @@ public struct AnyImagePickerOptionsInfo: Equatable {
 }
 
 /// Select Options 可选择的类型
-public struct AnyImagePickerSelectOptions: OptionSet {
+public struct AnyImagePickerSelectOption: OptionSet {
     /// Photo 照片
-    public static let photo = AnyImagePickerSelectOptions(rawValue: 1 << 0)
+    public static let photo = AnyImagePickerSelectOption(rawValue: 1 << 0)
     /// Video 视频
-    public static let video = AnyImagePickerSelectOptions(rawValue: 1 << 1)
+    public static let video = AnyImagePickerSelectOption(rawValue: 1 << 1)
     /// GIF 动图
-    public static let photoGIF = AnyImagePickerSelectOptions(rawValue: 1 << 2)
+    public static let photoGIF = AnyImagePickerSelectOption(rawValue: 1 << 2)
     /// Live photo 实况照片
-    public static let photoLive = AnyImagePickerSelectOptions(rawValue: 1 << 3)
+    public static let photoLive = AnyImagePickerSelectOption(rawValue: 1 << 3)
     
     public let rawValue: Int
     
@@ -260,7 +260,7 @@ public struct AnyImagePickerTheme: Equatable {
 }
 
 // MARK: - Extension
-extension AnyImagePickerSelectOptions {
+extension AnyImagePickerSelectOption {
     
     var mediaTypes: [PHAssetMediaType] {
         var result: [PHAssetMediaType] = []
