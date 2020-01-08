@@ -14,7 +14,7 @@ protocol InputTextViewControllerDelegate: class {
     func inputText(_ controller: InputTextViewController, didFinishInput data: TextData)
 }
 
-final class InputTextViewController: UIViewController {
+final class InputTextViewController: AnyImageViewController {
     
     private lazy var coverImageView: UIImageView = {
         let view = UIImageView(image: coverImage)

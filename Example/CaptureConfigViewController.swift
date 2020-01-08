@@ -161,7 +161,7 @@ extension CaptureConfigViewController {
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Front+Back", style: .default, handler: { [weak self] (action) in
-            self?.options.preferredPositions = [.back, .front]
+            self?.options.preferredPositions = [.front, .back]
             self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Front", style: .default, handler: { [weak self] (action) in

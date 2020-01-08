@@ -31,6 +31,25 @@ struct BundleHelper {
     }
 }
 
+// MARK: - Info
+extension BundleHelper {
+    
+    static var appName: String {
+        if let info = Bundle.main.localizedInfoDictionary {
+            if let appName = info["CFBundleDisplayName"] as? String { return appName }
+            if let appName = info["CFBundleName"] as? String { return appName }
+            if let appName = info["CFBundleExecutable"] as? String { return appName }
+        }
+        
+        if let info = Bundle.main.infoDictionary {
+            if let appName = info["CFBundleDisplayName"] as? String { return appName }
+            if let appName = info["CFBundleName"] as? String { return appName }
+            if let appName = info["CFBundleExecutable"] as? String { return appName }
+        }
+        return ""
+    }
+}
+
 // MARK: - Styled Image
 extension BundleHelper {
     
@@ -62,6 +81,10 @@ extension BundleHelper {
             return result
         }
         return Bundle.main.localizedString(forKey: key, value: value, table: nil)
+    }
+    
+    static func coreLocalizedString(key: String) -> String {
+        localizedString(key: key, value: nil, table: .core)
     }
 }
 

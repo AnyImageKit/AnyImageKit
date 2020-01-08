@@ -41,6 +41,35 @@ enum Permission: Equatable {
 
 extension Permission {
     
+    var localizedTitle: String {
+        switch self {
+        case .photos:
+            return BundleHelper.coreLocalizedString(key: "Photos")
+        case .camera:
+            return BundleHelper.coreLocalizedString(key: "Camera")
+        case .microphone:
+            return BundleHelper.coreLocalizedString(key: "Microphone")
+        }
+    }
+    
+    var localizedAlertTitle: String {
+        return String(format: BundleHelper.coreLocalizedString(key: "%@ is disabled"), localizedTitle)
+    }
+    
+    var localizedAlertMessage: String {
+        switch self {
+        case .photos:
+            return BundleHelper.coreLocalizedString(key: "Allow %@ to access your album in \"Settings -> Privacy -> Photos\"")
+        case .camera:
+            return BundleHelper.coreLocalizedString(key: "Allow %@ to access your camera in \"Settings -> Privacy -> Camera\"")
+        case .microphone:
+            return BundleHelper.coreLocalizedString(key: "Allow %@ to access your microphone in \"Settings -> Privacy -> Microphone\"")
+        }
+    }
+}
+
+extension Permission {
+    
     enum Status: Equatable {
         
         case notDetermined

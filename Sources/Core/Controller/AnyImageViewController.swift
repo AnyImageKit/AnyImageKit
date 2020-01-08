@@ -10,13 +10,12 @@ import UIKit
 
 class AnyImageViewController: UIViewController {
     
-    
 }
 
-// MARK: - AnyImageViewController+Permission
+// MARK: - Permission
 extension AnyImageViewController {
     
-    func check(permission: Permission, authorized: @escaping (() -> Void), denied: @escaping (() -> Void)) {
+    func check(permission: Permission, authorized: @escaping () -> Void, denied: @escaping () -> Void) {
         switch permission.status {
         case .notDetermined:
             permission.request { [weak self] _ in
@@ -30,7 +29,7 @@ extension AnyImageViewController {
         }
     }
     
-    func check(permission: Permission, authorized: @escaping (() -> Void), canceled: @escaping (() -> Void)) {
+    func check(permission: Permission, authorized: @escaping () -> Void, canceled: @escaping () -> Void) {
         switch permission.status {
         case .notDetermined:
             permission.request { [weak self] _ in
@@ -40,8 +39,11 @@ extension AnyImageViewController {
         case .authorized:
             authorized()
         case .denied:
-            let alert = UIAlertController(title: "相机被禁用", message: "请在您设备的\"设置-隐私-照片\"选项中，允许%@访问你的相机。", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "设置", style: .default, handler: { [weak self] _ in
+            let title = permission.localizedAlertTitle
+            let message = String(format: permission.localizedAlertMessage, BundleHelper.appName)
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let settings = BundleHelper.coreLocalizedString(key: "Settings")
+            alert.addAction(UIAlertAction(title: settings, style: .default, handler: { [weak self] _ in
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 UIApplication.shared.open(url, options: [:]) { [weak self] result in
                     DispatchQueue.main.asyncAfter(deadline: .now()+3) { [weak self] in
@@ -50,7 +52,8 @@ extension AnyImageViewController {
                     }
                 }
             }))
-            alert.addAction(UIAlertAction(title: "返回", style: .cancel, handler: { _ in
+            let cancel = BundleHelper.coreLocalizedString(key: "Cancel")
+            alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: { _ in
                 canceled()
             }))
             present(alert, animated: true, completion: nil)

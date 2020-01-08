@@ -14,7 +14,7 @@ protocol PhotoEditorControllerDelegate: class {
     func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
 }
 
-final class PhotoEditorController: UIViewController {
+final class PhotoEditorController: AnyImageViewController {
     
     private lazy var contentView: PhotoEditorContentView = {
         let view = PhotoEditorContentView(frame: self.view.bounds, image: image, options: options)

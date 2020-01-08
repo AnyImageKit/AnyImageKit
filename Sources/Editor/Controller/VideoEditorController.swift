@@ -15,7 +15,7 @@ protocol VideoEditorControllerDelegate: class {
     func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool)
 }
 
-final class VideoEditorController: UIViewController {
+final class VideoEditorController: AnyImageViewController {
     
     private let resource: EditorVideoResource
     private let placeholderImage: UIImage?

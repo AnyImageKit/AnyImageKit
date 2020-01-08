@@ -158,18 +158,26 @@ extension CaptureViewController: CaptureButtonDelegate {
     
     func captureButtonDidBeganLongPress(_ button: CaptureButton) {
         impactFeedback()
-        toolView.hideButtons(animated: true)
-        previewView.hideToolMask(animated: true)
-        capture.startCaptureVideo()
-        recorder.preferredAudioSettings = capture.recommendedAudioSetting
-        recorder.preferredVideoSettings = capture.recommendedVideoSetting
-        recorder.startRunning()
+        check(permission: .microphone, authorized: { [weak self] in
+            guard let self = self else { return }
+            self.toolView.hideButtons(animated: true)
+            self.previewView.hideToolMask(animated: true)
+            self.capture.startCaptureVideo()
+            self.recorder.preferredAudioSettings = self.capture.recommendedAudioSetting
+            self.recorder.preferredVideoSettings = self.capture.recommendedVideoSetting
+            self.recorder.startRunning()
+        }, canceled: { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.captureDidCancel(self)
+        })
     }
     
     func captureButtonDidEndedLongPress(_ button: CaptureButton) {
-        recorder.stopRunning()
-        capture.stopCaptureVideo()
-        button.startProcessing()
+        if recorder.isRunning {
+            recorder.stopRunning()
+            capture.stopCaptureVideo()
+            button.startProcessing()
+        }
     }
 }
 

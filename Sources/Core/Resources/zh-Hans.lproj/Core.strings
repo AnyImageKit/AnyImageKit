@@ -13,3 +13,12 @@
 "Alert" = "提示";
 "Cancel" = "取消";
 "Preview" = "预览";
+"Photos" = "相册";
+"Camera" = "相机";
+"Microphone" = "麦克风";
+"Settings" = "设置";
+"%@ is disabled" = "%@被禁用";
+"Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "请在您设备的\"设置-隐私-照片\"选项中，\n允许%@访问手机相册。";
+"Allow %@ to access your camera in \"Settings -> Privacy -> Camera\"" = "请在您设备的\"设置-隐私-相机\"选项中，\n允许%@访问相机。";
+"Allow %@ to access your microphone in \"Settings -> Privacy -> Microphone\"" = "请在您设备的\"设置-隐私-麦克风\"选项中，\n允许%@访问麦克风。";
+"Go to Settings" = "前往设置";
