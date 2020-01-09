@@ -46,24 +46,24 @@ final class CaptureTipsView: UIView {
 extension CaptureTipsView {
     
     func showTips(hideAfter second: TimeInterval, animated: Bool) {
-        if isHidden {
-            self.alpha = 0
-            self.isHidden = false
-            let duration = animated ? 0.25 : 0
-            let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
-            let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
-            animator.addAnimations {
-                self.alpha = 1
-            }
-            animator.addCompletion { [weak self ]_ in
-                guard let self = self else { return }
-                self.hideTips(afterDelay: second, animated: animated)
-            }
-            animator.startAnimation()
+        guard isHidden else { return }
+        self.alpha = 0
+        self.isHidden = false
+        let duration = animated ? 0.25 : 0
+        let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
+        animator.addAnimations {
+            self.alpha = 1
         }
+        animator.addCompletion { [weak self ]_ in
+            guard let self = self else { return }
+            self.hideTips(afterDelay: second, animated: animated)
+        }
+        animator.startAnimation()
     }
     
-    private func hideTips(afterDelay second: TimeInterval, animated: Bool) {
+    func hideTips(afterDelay second: TimeInterval, animated: Bool) {
+        guard !isHidden else { return }
         let duration = animated ? 0.25 : 0
         let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
         let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)

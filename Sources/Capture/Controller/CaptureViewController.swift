@@ -179,6 +179,7 @@ extension CaptureViewController: CaptureButtonDelegate {
             guard let self = self else { return }
             self.toolView.hideButtons(animated: true)
             self.previewView.hideToolMask(animated: true)
+            self.tipsView.hideTips(afterDelay: 0, animated: true)
             self.capture.startCaptureVideo()
             self.recorder.preferredAudioSettings = self.capture.recommendedAudioSetting
             self.recorder.preferredVideoSettings = self.capture.recommendedVideoSetting
