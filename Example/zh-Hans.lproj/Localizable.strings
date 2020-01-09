@@ -29,3 +29,8 @@
 
 // Capture
 "Open camera" = "打开相机";
+"MediaOptions" = "MediaOptions（媒体配置）";
+"PhotoAspectRatio" = "PhotoAspectRatio（照片比例）";
+"PreferredPositions" = "PreferredPositions（优先使用的相机）";
+"FlashMode" = "FlashMode（闪光灯模式）";
+"VideoMaximumDuration" = "VideoMaximumDuration（视频拍摄最长时间）";

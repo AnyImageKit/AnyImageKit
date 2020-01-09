@@ -29,3 +29,8 @@
 
 // Capture
 "Open camera" = "Open camera";
+"MediaOptions" = "Media Options";
+"PhotoAspectRatio" = "Photo Aspect Ratio";
+"PreferredPositions" = "Preferred Positions";
+"FlashMode" = "Flash Mode";
+"VideoMaximum Duration" = "Video Maximum Duration";
