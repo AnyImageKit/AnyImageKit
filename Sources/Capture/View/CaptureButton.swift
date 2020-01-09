@@ -73,10 +73,14 @@ final class CaptureButton: UIControl {
     }
     
     private func setupGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapped(_:)))
-        addGestureRecognizer(tapGesture)
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressed(_:)))
-        addGestureRecognizer(longPressGesture)
+        if options.mediaOptions.contains(.photo) {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapped(_:)))
+            addGestureRecognizer(tapGesture)
+        }
+        if options.mediaOptions.contains(.video) {
+            let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressed(_:)))
+            addGestureRecognizer(longPressGesture)
+        }
     }
 }
 
