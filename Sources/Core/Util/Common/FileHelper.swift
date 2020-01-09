@@ -32,4 +32,20 @@ struct FileHelper {
             }
         }
     }
+    
+    static func write(photoData: Data, fileType: FileType) -> URL? {
+        let timestamp = Int(Date().timeIntervalSince1970*1000)
+        let tmpPath = NSTemporaryDirectory()
+        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
+        FileHelper.createDirectory(at: tmpPath)
+        let url = URL(fileURLWithPath: filePath)
+        // Write to file
+        do {
+            try photoData.write(to: url)
+            return url
+        } catch {
+            _print(error.localizedDescription)
+        }
+        return nil
+    }
 }

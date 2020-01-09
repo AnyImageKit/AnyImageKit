@@ -109,15 +109,7 @@ extension ImageEditorController {
         guard let data = photo.jpegData(compressionQuality: 1.0) else {
             return .failure(.invalidData)
         }
-        let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let tmpPath = NSTemporaryDirectory()
-        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
-        FileHelper.createDirectory(at: tmpPath)
-        let url = URL(fileURLWithPath: filePath)
-        do {
-            try data.write(to: url)
-        } catch {
-            _print(error.localizedDescription)
+        guard let url = FileHelper.write(photoData: data, fileType: fileType) else {
             return .failure(.fileWriteFailed)
         }
         return .success(url)

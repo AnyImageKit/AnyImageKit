@@ -207,6 +207,14 @@ extension CaptureViewController: CaptureDelegate {
     }
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { // TODO: iPadOS is not support yet
+            if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
+                toolView.captureButton.stopProcessing()
+                delegate?.capture(self, didOutput: url, type: .photo)
+            }
+            return
+        }
+        
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
         var editorOptions: [EditorPhotoOptionsInfoItem] = []
@@ -222,17 +230,8 @@ extension CaptureViewController: CaptureDelegate {
             self.orientationUtil.stopRunning()
         }
         #else
-        let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let tmpPath = NSTemporaryDirectory()
-        let filePath = tmpPath.appending("PHOTO-SAVED-\(timestamp)"+fileType.fileExtension)
-        FileHelper.createDirectory(at: tmpPath)
-        let url = URL(fileURLWithPath: filePath)
-        // Write to file
-        do {
-            try photoData.write(to: url)
+        if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
             delegate?.capture(self, didOutput: url, type: .photo)
-        } catch {
-            _print(error.localizedDescription)
         }
         #endif
     }
@@ -256,6 +255,12 @@ extension CaptureViewController: RecorderDelegate {
     func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL, thumbnail: UIImage?) {
         toolView.showButtons(animated: true)
         previewView.showToolMask(animated: true)
+        
+        guard UIDevice.current.userInterfaceIdiom == .phone else { // TODO: iPadOS is not support yet
+            toolView.captureButton.stopProcessing()
+            delegate?.capture(self, didOutput: url, type: .video)
+            return
+        }
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         var editorOptions: [EditorVideoOptionsInfoItem] = [.tintColor(options.tintColor)]
