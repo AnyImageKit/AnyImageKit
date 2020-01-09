@@ -15,7 +15,7 @@ final class CaptureToolView: UIView {
         view.limitInterval = options.videoMaximumDuration
         view.isAccessibilityElement = true
         view.accessibilityTraits = .button
-        view.accessibilityLabel = BundleHelper.captureLocalizedString(key: "Tap to take photo and hode to record video")
+        view.accessibilityLabel = options.mediaOptions.localizedTips
         return view
     }()
     

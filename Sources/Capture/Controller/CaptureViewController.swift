@@ -35,6 +35,13 @@ final class CaptureViewController: AnyImageViewController {
         return view
     }()
     
+    private lazy var tipsView: CaptureTipsView = {
+        let view = CaptureTipsView(frame: .zero, options: options)
+        view.isHidden = true
+        view.isAccessibilityElement = false
+        return view
+    }()
+    
     private lazy var capture: Capture = {
         let capture = Capture(options: options)
         capture.delegate = self
@@ -78,6 +85,11 @@ final class CaptureViewController: AnyImageViewController {
         })
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tipsView.showTips(hideAfter: 3, animated: true)
+    }
+    
     private func setupNavigation() {
         navigationController?.navigationBar.isHidden = true
     }
@@ -88,6 +100,7 @@ final class CaptureViewController: AnyImageViewController {
         view.addLayoutGuide(layoutGuide)
         view.addSubview(previewView)
         view.addSubview(toolView)
+        view.addSubview(tipsView)
         var aspectRatio: Double = options.photoAspectRatio.value
         if options.mediaOptions.contains(.video) {
             aspectRatio = 9.0/16.0
@@ -106,6 +119,10 @@ final class CaptureViewController: AnyImageViewController {
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(layoutGuide.snp.bottom)
             maker.height.equalTo(88)
+        }
+        tipsView.snp.makeConstraints { maker in
+            maker.centerX.equalToSuperview()
+            maker.bottom.equalTo(toolView.snp.top).offset(-8)
         }
     }
 }

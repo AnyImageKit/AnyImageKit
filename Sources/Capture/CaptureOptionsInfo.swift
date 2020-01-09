@@ -86,6 +86,22 @@ public struct CaptureMediaOption: OptionSet {
     public static let video = CaptureMediaOption(rawValue: 1 << 1)
 }
 
+extension CaptureMediaOption {
+    
+    var localizedTips: String {
+        if contains(.photo) && contains(.video) {
+            return BundleHelper.captureLocalizedString(key: "Tap to take photo and hode to record video")
+        }
+        if contains(.photo) {
+            return BundleHelper.captureLocalizedString(key: "Tap to take photo")
+        }
+        if contains(.video) {
+            return BundleHelper.captureLocalizedString(key: "Hode to record video")
+        }
+        return ""
+    }
+}
+
 public enum CaptureAspectRatio: Equatable {
     
     case ratio1x1
