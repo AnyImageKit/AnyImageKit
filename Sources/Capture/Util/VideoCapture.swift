@@ -77,11 +77,7 @@ final class VideoCapture: NSObject {
             _print("Can't find any available format")
             return
         }
-        try camera.lockForConfiguration()
-        camera.activeFormat = format
-        camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
-        camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
-        camera.unlockForConfiguration()
+        _print("Use preset=\(preset), format=\(format)")
         if let oldInput = self.input {
             session.removeInput(oldInput)
             self.input = nil
@@ -93,6 +89,13 @@ final class VideoCapture: NSObject {
         } else {
             _print("Can't add video device input")
         }
+        
+        // config after add input
+        try camera.lockForConfiguration()
+        camera.activeFormat = format
+        camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
+        camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
+        camera.unlockForConfiguration()
     }
     
     private func setupPhotoOutput(session: AVCaptureSession) {
