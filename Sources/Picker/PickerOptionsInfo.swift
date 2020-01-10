@@ -90,30 +90,19 @@ public struct PickerParsedOptionsInfo: Equatable {
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     public var editorOptions: PickerEditorOption = []
-    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
-        didSet {
-            editorPhotoOptions = .init(editorPhotoOptionInfoItems)
-        }
-    }
-    var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
-        didSet {
-            editorVideoOptions = .init(editorVideoOptionInfoItems)
-        }
-    }
+    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = []
+    /*public*/ var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = []
     var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init()
     var editorVideoOptions: EditorVideoParsedOptionsInfo = .init()
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
-    public var captureOptionInfoItems: [CaptureOptionsInfoItem] = [] {
-        didSet {
-            captureOptions = .init(captureOptionInfoItems)
-        }
-    }
+    public var captureOptionInfoItems: [CaptureOptionsInfoItem] = [.mediaOptions([])]
     var captureOptions: CaptureParsedOptionsInfo = .init()
     #endif
     
     public init(_ info: [PickerOptionsInfoItem] = []) {
+        captureOptions.mediaOptions = []
         for option in info {
             switch option {
             case .theme(let value): theme = value
@@ -129,10 +118,14 @@ public struct PickerParsedOptionsInfo: Equatable {
                 
             #if ANYIMAGEKIT_ENABLE_EDITOR
             case .editorOptions(let value): editorOptions = value
-            case .editorPhotoOptionInfoItems(let value): editorPhotoOptionInfoItems = value
+            case .editorPhotoOptionInfoItems(let value):
+                editorPhotoOptionInfoItems = value
+                editorPhotoOptions = .init(value)
             #endif
             #if ANYIMAGEKIT_ENABLE_CAPTURE
-            case .captureOptionInfoItems(let value): captureOptionInfoItems = value
+            case .captureOptionInfoItems(let value):
+                captureOptionInfoItems = value
+                captureOptions = .init(value)
             #endif
             }
         }
