@@ -150,11 +150,7 @@ final class VideoCapture: NSObject {
 extension VideoCapture {
     
     var recommendedWriterSettings: [String: Any]? {
-        if #available(iOS 11.0, *) {
-            return videoOutput.recommendedVideoSettings(forVideoCodecType: .h264, assetWriterOutputFileType: .mp4) as? [String: Any]
-        } else {
-            return videoOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
-        }
+        return videoOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
     }
 }
 
