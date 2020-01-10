@@ -37,6 +37,8 @@
 		A05C8DA7233DFC71005B0F3C /* PickerManager+Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA6233DFC71005B0F3C /* PickerManager+Album.swift */; };
 		A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0604E7023307ABD00D9AA01 /* Picker+PHFetchResult.swift */; };
 		A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1623C6FDD800FF681B /* CaptureTipsView.swift */; };
+		A067AC1923C8105B00FF681B /* Core+CGImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */; };
+		A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1A23C816DB00FF681B /* Core+CGSize.swift */; };
 		A068533523B596C00042A031 /* FileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A068533423B596C00042A031 /* FileType.swift */; };
 		A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */; };
 		A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0769994239638630006AC9B /* ImageCaptureController.swift */; };
@@ -263,6 +265,8 @@
 		A05C8DAA233E0F56005B0F3C /* MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 		A0604E7023307ABD00D9AA01 /* Picker+PHFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+PHFetchResult.swift"; sourceTree = "<group>"; };
 		A067AC1623C6FDD800FF681B /* CaptureTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTipsView.swift; sourceTree = "<group>"; };
+		A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGImageSource.swift"; sourceTree = "<group>"; };
+		A067AC1A23C816DB00FF681B /* Core+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGSize.swift"; sourceTree = "<group>"; };
 		A068533423B596C00042A031 /* FileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileType.swift; sourceTree = "<group>"; };
 		A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureProgressView.swift; sourceTree = "<group>"; };
 		A0769994239638630006AC9B /* ImageCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureController.swift; sourceTree = "<group>"; };
@@ -680,6 +684,8 @@
 				A513C45F23ACB6AC0071D0D5 /* Core+UIImageView.swift */,
 				A07D8793233CA257000108C7 /* Core+CGImagePropertyOrientation.swift */,
 				A0147E0123C458BF0071E9D5 /* Core+Thread.swift */,
+				A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */,
+				A067AC1A23C816DB00FF681B /* Core+CGSize.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1375,6 +1381,7 @@
 				A59332622338AED8003CE652 /* AnimatedImage.swift in Sources */,
 				A5347D2623A9FD2700C93874 /* ExportTool+Photo.swift in Sources */,
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
+				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
 				A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */,
 				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,
 				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
@@ -1399,6 +1406,7 @@
 				A50B2114237AA24300A894A9 /* EditorPenToolView.swift in Sources */,
 				A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */,
 				A01C582D23B33CCA00691F11 /* DebugHelper.swift in Sources */,
+				A067AC1923C8105B00FF681B /* Core+CGImageSource.swift in Sources */,
 				A56123A323B5F43B0071C3E8 /* CaptureOptionsInfo.swift in Sources */,
 				A0839B7423C44B1A00FF8FDE /* Permission.swift in Sources */,
 				A076999E23963F270006AC9B /* Capture.swift in Sources */,

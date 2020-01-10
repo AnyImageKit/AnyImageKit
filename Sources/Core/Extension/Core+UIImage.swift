@@ -17,9 +17,8 @@ extension UIImage {
         } else {
             if image.size.width <= limitSize.width || image.size.height <= limitSize.height { return image }
         }
-        let size = calculate(from: image.size, to: limitSize)
         guard let pngData = image.pngData() else { return image }
-        guard let resized = resize(from: pngData, limitSize: size) else { return image }
+        guard let resized = resize(from: pngData, limitSize: limitSize) else { return image }
         return resized
     }
     
@@ -28,28 +27,40 @@ extension UIImage {
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else {
             return nil
         }
-        
-        let maxDimensionInPixels = max(limitSize.width, limitSize.height)
-        let downsampleOptions = [
+        let size = calculate(from: imageSource.size, to: limitSize)
+        let maxDimensionInPixels = max(size.width, size.height)
+        let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceShouldCacheImmediately: true,
             kCGImageSourceCreateThumbnailWithTransform: true,
-            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
-        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else {
+            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels,
+        ]
+        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
             return nil
         }
         return UIImage(cgImage: downsampledImage, scale: 1.0, orientation: .up)
     }
     
     private static func calculate(from originalSize: CGSize, to limitSize: CGSize) -> CGSize {
+        let aspectRatioLimit: CGFloat = 2.5
         if originalSize.width >= originalSize.height {
-            let width = limitSize.width
-            let height = originalSize.height*width/originalSize.width
-            return CGSize(width: width, height: height)
+            let aspectRatio = originalSize.width/originalSize.height
+            if aspectRatio >= aspectRatioLimit { // long picture
+                let height = min(originalSize.height, limitSize.height)
+                return originalSize.resizeTo(height: height)
+            } else {
+                let width = limitSize.width
+                return originalSize.resizeTo(width: width)
+            }
         } else {
-            let height = limitSize.height
-            let width = originalSize.width*height/originalSize.height
-            return CGSize(width: width, height: height)
+            let aspectRatio = originalSize.height/originalSize.width
+            if aspectRatio >= aspectRatioLimit { // long picture
+                let width = min(originalSize.width, limitSize.width)
+                return originalSize.resizeTo(width: width)
+            } else {
+                let height = limitSize.height
+                return originalSize.resizeTo(height: height)
+            }
         }
     }
 }
