@@ -19,15 +19,17 @@ final class AudioCapture: NSObject {
     
     let options: CaptureParsedOptionsInfo
     
+    private var device: AVCaptureDeviceInput?
     private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
     
     init(session: AVCaptureSession, options: CaptureParsedOptionsInfo) {
         self.options = options
         super.init()
+        setupMicrophone(session: session)
     }
     
-    func addMicrophone(session: AVCaptureSession) {
+    private func setupMicrophone(session: AVCaptureSession) {
         do {
             let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInMicrophone],
                                                                     mediaType: .audio,
@@ -37,6 +39,7 @@ final class AudioCapture: NSObject {
                 return
             }
             let input = try AVCaptureDeviceInput(device: microphone)
+            self.device = input
             if session.canAddInput(input) {
                 session.addInput(input)
             } else {
@@ -51,11 +54,6 @@ final class AudioCapture: NSObject {
         } catch {
             _print(error)
         }
-    }
-    
-    func removeMicrophone(session: AVCaptureSession) {
-        audioOutput.setSampleBufferDelegate(nil, queue: nil)
-        session.removeOutput(audioOutput)
     }
 }
 

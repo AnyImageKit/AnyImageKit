@@ -65,8 +65,7 @@ final class VideoCapture: NSObject {
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,
                                                                 position: position.rawValue)
-        let preferredDevices = discoverySession.devices
-        guard let camera = preferredDevices.first else {
+        guard let camera = discoverySession.devices.first else {
             _print("Can't find the specified video device")
             return
         }
@@ -95,6 +94,9 @@ final class VideoCapture: NSObject {
         camera.activeFormat = format
         camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
         camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
+        if camera.isFocusModeSupported(.autoFocus) {
+            camera.focusMode = .autoFocus
+        }
         camera.unlockForConfiguration()
     }
     
