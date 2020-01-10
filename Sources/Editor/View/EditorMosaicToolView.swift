@@ -63,12 +63,13 @@ final class EditorMosaicToolView: UIView {
                 image = BundleHelper.image(named: "PhotoToolMosaicDefault")?.withRenderingMode(.alwaysTemplate)
             case .colorful:
                 image = BundleHelper.image(named: "CustomMosaic")
-            case .custom(_, let customMosaic):
-                image = customMosaic
+            case .custom(let customMosaicIcon, let customMosaic):
+                image = customMosaicIcon ?? customMosaic
             }
             let imageView = UIImageView(image: image)
             imageView.tintColor = .white
-            imageView.layer.cornerRadius = 2
+            imageView.clipsToBounds = true
+            imageView.layer.cornerRadius = option == .default ? 0 : 2
             imageView.layer.borderColor = UIColor.white.cgColor
             mosaicIcon.append(imageView)
         }
