@@ -23,6 +23,7 @@ final class CaptureViewController: AnyImageViewController {
     
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero, options: options)
+        view.delegate = self
         return view
     }()
     
@@ -196,6 +197,14 @@ extension CaptureViewController: CaptureButtonDelegate {
             recorder.stopRunning()
             button.startProcessing()
         }
+    }
+}
+
+// MARK: - CapturePreviewViewDelegate
+extension CaptureViewController: CapturePreviewViewDelegate {
+    
+    func previewView(_ previewView: CapturePreviewView, didFocusAt point: CGPoint) {
+        capture.focus(at: point)
     }
 }
 

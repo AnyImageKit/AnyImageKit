@@ -45,13 +45,17 @@ extension Capture {
     
     func startRunning() {
         #if !targetEnvironment(simulator)
-        session.startRunning()
+        DispatchQueue.global().async {
+            self.session.startRunning()
+        }
         #endif
     }
     
     func stopRunning() {
         #if !targetEnvironment(simulator)
-        session.stopRunning()
+        DispatchQueue.global().async {
+            self.session.stopRunning()
+        }
         #endif
     }
 }
@@ -69,6 +73,10 @@ extension Capture {
     func stopSwitchCamera() -> CapturePosition {
         isSwitchingCamera = false
         return videoCapture.position
+    }
+    
+    func focus(at point: CGPoint) {
+        videoCapture.focus(at: point)
     }
 }
 

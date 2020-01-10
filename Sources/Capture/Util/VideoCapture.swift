@@ -94,8 +94,8 @@ final class VideoCapture: NSObject {
         camera.activeFormat = format
         camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
         camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
-        if camera.isFocusModeSupported(.autoFocus) {
-            camera.focusMode = .autoFocus
+        if camera.isFocusModeSupported(.locked) {
+            camera.focusMode = .locked
         }
         camera.unlockForConfiguration()
     }
@@ -167,6 +167,24 @@ extension VideoCapture {
             setupOutputConnection(videoOutput)
         } catch {
             _print(error)
+        }
+    }
+    
+    func focus(at point: CGPoint) {
+        guard let camera = device else { return }
+        do {
+            if !camera.isAdjustingFocus {
+                try camera.lockForConfiguration()
+                if camera.isFocusPointOfInterestSupported {
+                    camera.focusPointOfInterest = point
+                }
+                if camera.isExposurePointOfInterestSupported {
+                    camera.exposurePointOfInterest = point
+                }
+                camera.unlockForConfiguration()
+            }
+        } catch {
+            _print(error.localizedDescription)
         }
     }
 }

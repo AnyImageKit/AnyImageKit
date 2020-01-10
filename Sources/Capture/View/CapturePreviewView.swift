@@ -9,6 +9,11 @@
 import UIKit
 import CoreMedia
 
+protocol CapturePreviewViewDelegate: class {
+    
+    func previewView(_ previewView: CapturePreviewView, didFocusAt point: CGPoint)
+}
+
 final class CapturePreviewView: UIView {
     
     private lazy var previewContentView: CapturePreviewContentView = {
@@ -30,10 +35,13 @@ final class CapturePreviewView: UIView {
     
     private let options: CaptureParsedOptionsInfo
     
+    weak var delegate: CapturePreviewViewDelegate?
+    
     init(frame: CGRect, options: CaptureParsedOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()
+        setupGestrue()
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +61,23 @@ final class CapturePreviewView: UIView {
         previewMaskView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
+    }
+    
+    private func setupGestrue() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTapped(_:)))
+        addGestureRecognizer(tap)
+    }
+}
+
+// MARK: - Action
+extension CapturePreviewView {
+    
+    @objc private func onTapped(_ sender: UITapGestureRecognizer) {
+        let touchPoint = sender.location(in: self)
+        guard touchPoint.x > 0, touchPoint.x < frame.width else { return }
+        guard touchPoint.y > 0, touchPoint.y < frame.height else { return }
+        let point = CGPoint(x: touchPoint.x/frame.width, y: touchPoint.y/frame.height)
+        delegate?.previewView(self, didFocusAt: point)
     }
 }
 
