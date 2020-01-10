@@ -80,18 +80,6 @@ extension Capture {
     }
 }
 
-// MARK: - Video
-extension Capture {
-    
-    func startCaptureVideo() {
-        audioCapture.startAudioSession()
-    }
-    
-    func stopCaptureVideo() {
-        audioCapture.stopAudioSession()
-    }
-}
-
 // MARK: - Asset Writer Settings
 extension Capture {
     

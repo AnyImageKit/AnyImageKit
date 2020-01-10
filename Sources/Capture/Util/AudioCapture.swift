@@ -65,29 +65,6 @@ extension AudioCapture {
     }
 }
 
-// MARK: - Audio Session
-extension AudioCapture {
-
-    func startAudioSession() {
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(.record, mode: .default, options: [.duckOthers])
-            try session.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            _print(error)
-        }
-    }
-    
-    func stopAudioSession() {
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            _print(error)
-        }
-    }
-}
-
 // MARK: - AVCaptureAudioDataOutputSampleBufferDelegate
 extension AudioCapture: AVCaptureAudioDataOutputSampleBufferDelegate {
     

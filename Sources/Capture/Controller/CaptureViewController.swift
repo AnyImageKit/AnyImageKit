@@ -182,7 +182,6 @@ extension CaptureViewController: CaptureButtonDelegate {
             self.toolView.hideButtons(animated: true)
             self.previewView.hideToolMask(animated: true)
             self.tipsView.hideTips(afterDelay: 0, animated: true)
-            self.capture.startCaptureVideo()
             self.recorder.preferredAudioSettings = self.capture.recommendedAudioSetting
             self.recorder.preferredVideoSettings = self.capture.recommendedVideoSetting
             self.recorder.startRunning()
@@ -195,7 +194,6 @@ extension CaptureViewController: CaptureButtonDelegate {
     func captureButtonDidEndedLongPress(_ button: CaptureButton) {
         if recorder.isRunning {
             recorder.stopRunning()
-            capture.stopCaptureVideo()
             button.startProcessing()
         }
     }
