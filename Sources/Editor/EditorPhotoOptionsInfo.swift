@@ -115,7 +115,7 @@ public enum EditorPhotoMosaicOption: Equatable {
     /// 彩色图片马赛克
     case colorful
     /// 自定义马赛克
-    case custom(icon: UIImage, mosaic: UIImage)
+    case custom(icon: UIImage?, mosaic: UIImage)
 }
 
 /// 输入文本颜色
