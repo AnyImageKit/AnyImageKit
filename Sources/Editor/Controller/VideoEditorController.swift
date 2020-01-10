@@ -35,6 +35,7 @@ final class VideoEditorController: AnyImageViewController {
     }()
     private lazy var videoPreview: VideoPreview = {
         let view = VideoPreview(frame: .zero, image: placeholderImage)
+        view.delegate = self
         return view
     }()
     private lazy var toolView: VideoEditorToolView = {
@@ -178,6 +179,7 @@ extension VideoEditorController: VideoPreviewDelegate {
     
     func previewPlayerDidPlayToEndTime(_ view: VideoPreview) {
         cropToolView.playButton.isSelected = view.isPlaying
+        view.setProgress(cropToolView.progressView.left)
     }
 }
 
