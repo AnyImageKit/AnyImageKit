@@ -56,7 +56,11 @@ final class CapturePreviewMaskView: UIView {
             maker.top.equalTo(topMaskView.snp.bottom)
             maker.left.equalTo(snp.left)
             maker.right.equalTo(snp.right)
-            maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(options.photoAspectRatio.value)
+            if !options.mediaOptions.contains(.photo) {
+                maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(9.0/16.0)
+            } else {
+                maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(options.photoAspectRatio.value)
+            }
         }
         bottomMaskView.snp.makeConstraints { maker in
             maker.top.equalTo(centerLayoutGuide.snp.bottom)
