@@ -32,17 +32,3 @@ extension AVCaptureDevice {
         }
     }
 }
-
-extension AVCaptureDevice.Position {
-    
-    mutating func toggle() {
-        switch self {
-        case .back:
-            self = .front
-        case .front:
-            self = .back
-        default:
-            self = .front
-        }
-    }
-}

@@ -25,8 +25,8 @@ final class VideoCapture: NSObject {
     private var input: AVCaptureDeviceInput?
     
     private(set) var orientation: DeviceOrientation
-    private(set) var position: AVCaptureDevice.Position
-    private(set) var flashMode: AVCaptureDevice.FlashMode
+    private(set) var position: CapturePosition
+    private(set) var flashMode: CaptureFlashMode
     
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
@@ -64,7 +64,7 @@ final class VideoCapture: NSObject {
     private func setupInput(session: AVCaptureSession) throws {
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,
-                                                                position: position)
+                                                                position: position.rawValue)
         let preferredDevices = discoverySession.devices
         guard let camera = preferredDevices.first else {
             _print("Can't find the specified video device")
@@ -176,7 +176,7 @@ extension VideoCapture {
     func capturePhoto(orientation: DeviceOrientation) {
         self.orientation = orientation
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = flashMode
+        settings.flashMode = flashMode.rawValue
         #if !targetEnvironment(macCatalyst)
         settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
         #endif

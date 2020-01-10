@@ -27,11 +27,11 @@ public enum CaptureOptionsInfoItem: OptionsInfoItem {
     
     /// 使用的摄像头
     /// 默认：后置+前置
-    case preferredPositions([AVCaptureDevice.Position])
+    case preferredPositions([CapturePosition])
     
     /// 默认闪光灯模式
     /// 默认：关闭
-    case flashMode(AVCaptureDevice.FlashMode)
+    case flashMode(CaptureFlashMode)
     
     /// 视频拍摄最大时间
     /// 默认 20 秒
@@ -51,8 +51,8 @@ public struct CaptureParsedOptionsInfo: Equatable {
     public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
     public var mediaOptions: CaptureMediaOption = [.photo, .video]
     public var photoAspectRatio: CaptureAspectRatio = .ratio4x3
-    public var preferredPositions: [AVCaptureDevice.Position] = [.back, .front]
-    public var flashMode: AVCaptureDevice.FlashMode = .off
+    public var preferredPositions: [CapturePosition] = [.back, .front]
+    public var flashMode: CaptureFlashMode = .off
     public var videoMaximumDuration: TimeInterval = 20
     public var preferredPreset: [CapturePreset] = [.fhd1920x1080_60, .fhd1920x1080_30, .hd1280x720_60, .hd1280x720_30]
     public var enableDebugLog: Bool = false

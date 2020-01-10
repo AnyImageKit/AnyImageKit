@@ -66,8 +66,9 @@ extension Capture {
         session.commitConfiguration()
     }
     
-    func stopSwitchCamera() {
+    func stopSwitchCamera() -> CapturePosition {
         isSwitchingCamera = false
+        return videoCapture.position
     }
 }
 

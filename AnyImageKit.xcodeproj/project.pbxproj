@@ -39,6 +39,8 @@
 		A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1623C6FDD800FF681B /* CaptureTipsView.swift */; };
 		A067AC1923C8105B00FF681B /* Core+CGImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */; };
 		A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1A23C816DB00FF681B /* Core+CGSize.swift */; };
+		A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1C23C81B8C00FF681B /* CapturePosition.swift */; };
+		A067AC1F23C81D8F00FF681B /* CaptureFlashMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A067AC1E23C81D8F00FF681B /* CaptureFlashMode.swift */; };
 		A068533523B596C00042A031 /* FileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A068533423B596C00042A031 /* FileType.swift */; };
 		A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */; };
 		A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0769994239638630006AC9B /* ImageCaptureController.swift */; };
@@ -267,6 +269,8 @@
 		A067AC1623C6FDD800FF681B /* CaptureTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTipsView.swift; sourceTree = "<group>"; };
 		A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGImageSource.swift"; sourceTree = "<group>"; };
 		A067AC1A23C816DB00FF681B /* Core+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGSize.swift"; sourceTree = "<group>"; };
+		A067AC1C23C81B8C00FF681B /* CapturePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePosition.swift; sourceTree = "<group>"; };
+		A067AC1E23C81D8F00FF681B /* CaptureFlashMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureFlashMode.swift; sourceTree = "<group>"; };
 		A068533423B596C00042A031 /* FileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileType.swift; sourceTree = "<group>"; };
 		A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureProgressView.swift; sourceTree = "<group>"; };
 		A0769994239638630006AC9B /* ImageCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureController.swift; sourceTree = "<group>"; };
@@ -614,6 +618,8 @@
 				A08DF7BB23B1F7F1002B92EE /* CaptureBufferType.swift */,
 				A08DF7BD23B1F814002B92EE /* DeviceOrientation.swift */,
 				A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */,
+				A067AC1C23C81B8C00FF681B /* CapturePosition.swift */,
+				A067AC1E23C81D8F00FF681B /* CaptureFlashMode.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1295,6 +1301,7 @@
 				A5347D1E23A9EC3D00C93874 /* VideoEditorController.swift in Sources */,
 				A5DF1E87237AA32C00E3A32E /* Editor+CGRect.swift in Sources */,
 				A5CEB00D233DAF4700C67706 /* PhotoGIFPreviewCell.swift in Sources */,
+				A067AC1F23C81D8F00FF681B /* CaptureFlashMode.swift in Sources */,
 				A07699A023963F270006AC9B /* CapturePreviewView.swift in Sources */,
 				A5CC86C123349D4B00BCB372 /* PickerPreviewIndexView.swift in Sources */,
 				A544371E23AB4BA4003C65F9 /* VideoEditorToolView.swift in Sources */,
@@ -1371,6 +1378,7 @@
 				A076999F23963F270006AC9B /* AudioCapture.swift in Sources */,
 				A50B2115237AA24300A894A9 /* PhotoEditorContentView+Getter.swift in Sources */,
 				A01C582B23B33CB200691F11 /* Core+UIDevice.swift in Sources */,
+				A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */,
 				A5347D2823A9FF2900C93874 /* ExportTool+PhotoData.swift in Sources */,
 				A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */,
 				A5ABEF2A239F76EC00B50543 /* TextImageView.swift in Sources */,
