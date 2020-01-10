@@ -139,20 +139,25 @@ extension CaptureButton {
     }
     
     @objc private func onDisplayLink(_ sender: CADisplayLink) {
-        guard processState == .pressing else { return }
-        let currentTime = Date()
-        let timeInterval = currentTime.timeIntervalSince1970 - startTime.timeIntervalSince1970
-        if timeInterval >= limitInterval {
-            processState = .idle
-            progressView.setProgress(0.0)
-            circleView.setStyle(.small, animated: true)
-            buttonView.setStyle(.normal, animated: true)
-            delegate?.captureButtonDidEndedLongPress(self)
+        switch processState {
+        case .pressing:
+            let currentTime = Date()
+            let timeInterval = currentTime.timeIntervalSince1970 - startTime.timeIntervalSince1970
+            if timeInterval >= limitInterval {
+                processState = .idle
+                progressView.setProgress(0.0)
+                circleView.setStyle(.small, animated: true)
+                buttonView.setStyle(.normal, animated: true)
+                delegate?.captureButtonDidEndedLongPress(self)
+                displayLink?.invalidate()
+                displayLink = nil
+            } else {
+                let progress = CGFloat(timeInterval/limitInterval)
+                progressView.setProgress(progress)
+            }
+        default:
             displayLink?.invalidate()
             displayLink = nil
-        } else {
-            let progress = CGFloat(timeInterval/limitInterval)
-            progressView.setProgress(progress)
         }
     }
 }
