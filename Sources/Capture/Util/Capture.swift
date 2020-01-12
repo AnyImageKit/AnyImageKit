@@ -76,7 +76,11 @@ extension Capture {
     }
     
     func focus(at point: CGPoint) {
-        videoCapture.focus(at: point)
+        videoCapture.setFocus(point: point)
+    }
+    
+    func exposure(at point: CGPoint) {
+        videoCapture.setExposure(point: point)
     }
 }
 

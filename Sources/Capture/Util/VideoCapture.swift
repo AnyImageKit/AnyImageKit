@@ -28,6 +28,9 @@ final class VideoCapture: NSObject {
     private(set) var position: CapturePosition
     private(set) var flashMode: CaptureFlashMode
     
+    private var autoLockFocus: Bool = true
+    private var autoLockExposure: Bool = true
+    
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
             return CIContext(mtlDevice: mtlDevice)
@@ -61,6 +64,13 @@ final class VideoCapture: NSObject {
         }
     }
     
+    deinit {
+        if let camera = device {
+            camera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus))
+            camera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
+        }
+    }
+    
     private func setupInput(session: AVCaptureSession) throws {
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,
@@ -68,6 +78,10 @@ final class VideoCapture: NSObject {
         guard let camera = discoverySession.devices.first else {
             _print("Can't find the specified video device")
             return
+        }
+        if let oldCamera = device {
+            oldCamera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus))
+            oldCamera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
         }
         self.device = camera
         
@@ -94,9 +108,8 @@ final class VideoCapture: NSObject {
         camera.activeFormat = format
         camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
         camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
-        if camera.isFocusModeSupported(.locked) {
-            camera.focusMode = .locked
-        }
+        camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus), options: [.old, .new], context: nil)
+        camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure), options: [.old, .new], context: nil)
         camera.unlockForConfiguration()
     }
     
@@ -138,12 +151,27 @@ final class VideoCapture: NSObject {
             }
             // Set video stabilization
             if connection.isVideoStabilizationSupported {
-                if #available(iOS 13.0, *) {
-                    connection.preferredVideoStabilizationMode = .cinematicExtended
-                } else {
-                    connection.preferredVideoStabilizationMode = .cinematic
+                connection.preferredVideoStabilizationMode = .cinematic
+            }
+        }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        switch keyPath {
+        case #keyPath(AVCaptureDevice.isAdjustingFocus):
+            if let newValue = change?[.newKey] as? Bool, let oldValue = change?[.oldKey] as? Bool {
+                if oldValue, !newValue, autoLockFocus { // isAdjustingFocus: true -> false
+                    setFoucs(mode: .locked)
                 }
             }
+        case #keyPath(AVCaptureDevice.isAdjustingExposure):
+            if let newValue = change?[.newKey] as? Bool, let oldValue = change?[.oldKey] as? Bool  {
+                if oldValue, !newValue,autoLockExposure { // isAdjustingExposure: true -> false
+                    setExposure(mode: .locked)
+                }
+            }
+        default:
+            break
         }
     }
 }
@@ -169,17 +197,61 @@ extension VideoCapture {
             _print(error)
         }
     }
+}
+
+// MARK: - Foucs
+extension VideoCapture {
     
-    func focus(at point: CGPoint) {
+    func setFoucs(mode: AVCaptureDevice.FocusMode) {
+        guard let camera = device else { return }
+        if camera.isFocusModeSupported(mode) {
+            do {
+                try camera.lockForConfiguration()
+                camera.focusMode = mode
+                camera.unlockForConfiguration()
+            } catch {
+                _print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func setFocus(point: CGPoint, autoLock: Bool = true) {
         guard let camera = device else { return }
         do {
-            if !camera.isAdjustingFocus {
+            if camera.isFocusPointOfInterestSupported {
                 try camera.lockForConfiguration()
-                if camera.isFocusPointOfInterestSupported {
-                    camera.focusPointOfInterest = point
+                camera.focusPointOfInterest = point
+                if camera.isFocusModeSupported(.continuousAutoFocus) {
+                    camera.focusMode = .continuousAutoFocus
                 }
-                if camera.isExposurePointOfInterestSupported {
-                    camera.exposurePointOfInterest = point
+                camera.unlockForConfiguration()
+            }
+        } catch {
+            _print(error.localizedDescription)
+        }
+    }
+}
+
+// MARK: - Exposure
+extension VideoCapture {
+    
+    func setExposure(mode: AVCaptureDevice.ExposureMode) {
+        guard let camera = device else { return }
+        do {
+            
+        } catch {
+            
+        }
+    }
+    
+    func setExposure(point: CGPoint) {
+        guard let camera = device else { return }
+        do {
+            if camera.isExposurePointOfInterestSupported, camera.isAdjustingFocus {
+                try camera.lockForConfiguration()
+                camera.exposurePointOfInterest = point
+                if camera.isExposureModeSupported(.continuousAutoExposure) {
+                    camera.exposureMode = .continuousAutoExposure
                 }
                 camera.unlockForConfiguration()
             }

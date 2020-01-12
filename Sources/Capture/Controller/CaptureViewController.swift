@@ -205,6 +205,7 @@ extension CaptureViewController: CapturePreviewViewDelegate {
     
     func previewView(_ previewView: CapturePreviewView, didFocusAt point: CGPoint) {
         capture.focus(at: point)
+        capture.exposure(at: point)
     }
 }
 
