@@ -270,7 +270,7 @@ extension PhotoEditorController {
     
     /// 获取最终的图片
     private func getResultImage() -> UIImage? {
-        guard let source = contentView.imageView.screenshot.cgImage else { return nil }
+        guard let source = contentView.imageView.screenshotForImageView?.cgImage else { return nil }
         let size = CGSize(width: source.width, height: source.height)
         let cropRect = contentView.cropRealRect
         

@@ -18,3 +18,17 @@ extension UIView {
         return image
     }
 }
+
+extension UIImageView {
+    
+    var screenshotForImageView: UIImage? {
+        guard let image = self.image else { return nil }
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = image.size.width / self.bounds.width
+        let renderer = UIGraphicsImageRenderer(size: self.bounds.size, format: format)
+        let newImage = renderer.image { [weak self] (context) in
+            return self?.layer.render(in: context.cgContext)
+        }
+        return newImage
+    }
+}
