@@ -146,6 +146,7 @@
 		A544371E23AB4BA4003C65F9 /* VideoEditorToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A544371D23AB4BA4003C65F9 /* VideoEditorToolView.swift */; };
 		A544372023AB61C9003C65F9 /* VideoEditorCropToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A544371F23AB61C9003C65F9 /* VideoEditorCropToolView.swift */; };
 		A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A544372123AB6A60003C65F9 /* VideoEditorCropProgressView.swift */; };
+		A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D09FD23CC05B00095574C /* CaptureFocusView.swift */; };
 		A557BF9B235D5B820029CCDB /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A557BF9A235D5B820029CCDB /* CameraCell.swift */; };
 		A561239723B5E7B90071C3E8 /* PickerOptionsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A561239623B5E7B90071C3E8 /* PickerOptionsInfo.swift */; };
 		A561239923B5E8550071C3E8 /* Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A561239823B5E8550071C3E8 /* Sort.swift */; };
@@ -380,6 +381,7 @@
 		A544371D23AB4BA4003C65F9 /* VideoEditorToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorToolView.swift; sourceTree = "<group>"; };
 		A544371F23AB61C9003C65F9 /* VideoEditorCropToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorCropToolView.swift; sourceTree = "<group>"; };
 		A544372123AB6A60003C65F9 /* VideoEditorCropProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorCropProgressView.swift; sourceTree = "<group>"; };
+		A54D09FD23CC05B00095574C /* CaptureFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureFocusView.swift; sourceTree = "<group>"; };
 		A557BF9A235D5B820029CCDB /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
 		A5601D4F233B0FE500D0E95E /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 		A561239623B5E7B90071C3E8 /* PickerOptionsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerOptionsInfo.swift; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 				A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */,
 				A0AF771E23A7762300A3DD9F /* CaptureRecordView.swift */,
 				A067AC1623C6FDD800FF681B /* CaptureTipsView.swift */,
+				A54D09FD23CC05B00095574C /* CaptureFocusView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1282,6 +1285,7 @@
 				A05C8DA7233DFC71005B0F3C /* PickerManager+Album.swift in Sources */,
 				A5347D1823A9D11F00C93874 /* EditorVideoResource.swift in Sources */,
 				A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */,
+				A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */,
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				A50B2105237AA24200A894A9 /* TouchState.swift in Sources */,

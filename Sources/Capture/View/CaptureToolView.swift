@@ -91,24 +91,12 @@ final class CaptureToolView: UIView {
 extension CaptureToolView {
     
     func rotate(to orientation: DeviceOrientation, animated: Bool) {
-        let angle: CGFloat
-        switch orientation {
-        case .portrait:
-            angle = 0
-        case .portraitUpsideDown:
-            angle = .pi
-        case .landscapeLeft:
-            angle = .pi/2
-        case .landscapeRight:
-            angle = -.pi/2
-        }
-        let transform = CGAffineTransform(rotationAngle: angle)
         let duration = animated ? 0.25 : 0
         let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
         let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
         animator.addAnimations {
-            self.cancelButton.transform = transform
-            self.switchButton.transform = transform
+            self.cancelButton.transform = orientation.transformMirrored
+            self.switchButton.transform = orientation.transformMirrored
         }
         animator.startAnimation()
     }

@@ -33,6 +33,11 @@ final class CapturePreviewView: UIView {
         return view
     }()
     
+    private lazy var focusView: CaptureFocusView = {
+        let view = CaptureFocusView(frame: .zero, color: options.tintColor)
+        return view
+    }()
+    
     private let options: CaptureParsedOptionsInfo
     
     weak var delegate: CapturePreviewViewDelegate?
@@ -52,6 +57,7 @@ final class CapturePreviewView: UIView {
         addSubview(previewContentView)
         previewContentView.addSubview(blurView)
         addSubview(previewMaskView)
+        addSubview(focusView)
         previewContentView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
@@ -61,11 +67,16 @@ final class CapturePreviewView: UIView {
         previewMaskView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
+        focusView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
+        }
     }
     
     private func setupGestrue() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTapped(_:)))
         addGestureRecognizer(tap)
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        addGestureRecognizer(pan)
     }
 }
 
@@ -77,7 +88,16 @@ extension CapturePreviewView {
         guard touchPoint.x > 0, touchPoint.x < frame.width else { return }
         guard touchPoint.y > 0, touchPoint.y < frame.height else { return }
         let point = CGPoint(x: touchPoint.x/frame.width, y: touchPoint.y/frame.height)
+        focusView.focusing(at: point)
         delegate?.previewView(self, didFocusAt: point)
+    }
+    
+    @objc private func onPan(_ sender: UIPanGestureRecognizer) {
+        guard focusView.isFocusing else { return }
+        let point = sender.translation(in: self)
+        sender.setTranslation(.zero, in: self)
+        let value = point.y / bounds.height
+        focusView.setLight(focusView.exposureValue + value)
     }
 }
 
@@ -157,5 +177,16 @@ extension CapturePreviewView {
                 }
             }
         }
+    }
+    
+    func rotate(to orientation: DeviceOrientation, animated: Bool) {
+        // TODO:
+//        let duration = animated ? 0.25 : 0
+//        let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
+//        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
+//        animator.addAnimations {
+//            self.focusView.transform = orientation.transformMirrored
+//        }
+//        animator.startAnimation()
     }
 }

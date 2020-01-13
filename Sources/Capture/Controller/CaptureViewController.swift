@@ -298,6 +298,7 @@ extension CaptureViewController: DeviceOrientationUtilDelegate {
         capture.orientation = orientation
         recorder.orientation = orientation
         toolView.rotate(to: orientation, animated: true)
+        previewView.rotate(to: orientation, animated: true)
     }
 }
 

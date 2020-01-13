@@ -51,4 +51,17 @@ extension DeviceOrientation {
             return CGAffineTransform(rotationAngle: .pi/2)
         }
     }
+    
+    var transformMirrored: CGAffineTransform {
+        switch self {
+        case .portrait:
+            return CGAffineTransform(rotationAngle: 0)
+        case .portraitUpsideDown:
+            return CGAffineTransform(rotationAngle: .pi)
+        case .landscapeLeft:
+            return CGAffineTransform(rotationAngle: .pi/2)
+        case .landscapeRight:
+            return CGAffineTransform(rotationAngle: .pi/2*3)
+        }
+    }
 }
