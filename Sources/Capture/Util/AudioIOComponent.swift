@@ -1,5 +1,5 @@
 //
-//  AudioCapture.swift
+//  AudioIOComponent.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/7/22.
@@ -8,18 +8,17 @@
 
 import AVFoundation
 
-protocol AudioCaptureDelegate: class {
+protocol AudioIOComponentDelegate: class {
     
-    func audioCapture(_ capture: AudioCapture, didOutput sampleBuffer: CMSampleBuffer)
+    func audioIO(_ component: AudioIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
 
-final class AudioCapture: NSObject {
+final class AudioIOComponent: DeviceIOComponent {
     
-    weak var delegate: AudioCaptureDelegate?
+    weak var delegate: AudioIOComponentDelegate?
     
     let options: CaptureParsedOptionsInfo
     
-    private var device: AVCaptureDeviceInput?
     private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
     
@@ -38,8 +37,9 @@ final class AudioCapture: NSObject {
                 _print("Can't find the specified audio device")
                 return
             }
+            self.device = microphone
             let input = try AVCaptureDeviceInput(device: microphone)
-            self.device = input
+            self.input = input
             if session.canAddInput(input) {
                 session.addInput(input)
             } else {
@@ -58,7 +58,7 @@ final class AudioCapture: NSObject {
 }
 
 // MARK: - Writer Settings
-extension AudioCapture {
+extension AudioIOComponent {
     
     var recommendedWriterSettings: [String: Any]? {
         return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4) as? [String : Any]
@@ -66,9 +66,9 @@ extension AudioCapture {
 }
 
 // MARK: - AVCaptureAudioDataOutputSampleBufferDelegate
-extension AudioCapture: AVCaptureAudioDataOutputSampleBufferDelegate {
+extension AudioIOComponent: AVCaptureAudioDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        delegate?.audioCapture(self, didOutput: sampleBuffer)
+        delegate?.audioIO(self, didOutput: sampleBuffer)
     }
 }

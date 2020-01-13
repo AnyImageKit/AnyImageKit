@@ -21,6 +21,7 @@
 		A01C582D23B33CCA00691F11 /* DebugHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582C23B33CCA00691F11 /* DebugHelper.swift */; };
 		A01C582F23B33CE600691F11 /* AnyImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582E23B33CE600691F11 /* AnyImageError.swift */; };
 		A01C583123B33CFD00691F11 /* ImageEditorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C583023B33CFD00691F11 /* ImageEditorCache.swift */; };
+		A01F15CF23CC38A800F41097 /* DeviceIOComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01F15CE23CC38A800F41097 /* DeviceIOComponent.swift */; };
 		A0226A4023AB69F1000AFC87 /* Capture+AVCaptureDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */; };
 		A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026C99E23978DF400931028 /* CaptureConfigViewController.swift */; };
 		A029D04F2330856C00BC6720 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753B232F7DE500BB117B /* Album.swift */; };
@@ -45,9 +46,9 @@
 		A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */; };
 		A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0769994239638630006AC9B /* ImageCaptureController.swift */; };
 		A076999723963A360006AC9B /* AnyImageNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999623963A360006AC9B /* AnyImageNavigationController.swift */; };
-		A076999D23963F270006AC9B /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999923963F270006AC9B /* VideoCapture.swift */; };
+		A076999D23963F270006AC9B /* VideoIOComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999923963F270006AC9B /* VideoIOComponent.swift */; };
 		A076999E23963F270006AC9B /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999A23963F270006AC9B /* Capture.swift */; };
-		A076999F23963F270006AC9B /* AudioCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999B23963F270006AC9B /* AudioCapture.swift */; };
+		A076999F23963F270006AC9B /* AudioIOComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999B23963F270006AC9B /* AudioIOComponent.swift */; };
 		A07699A023963F270006AC9B /* CapturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076999C23963F270006AC9B /* CapturePreviewView.swift */; };
 		A07AC74823B5EC64002CB5AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07AC74723B5EC64002CB5AF /* Recorder.swift */; };
 		A07AC74A23B5EE0C002CB5AF /* Capture+CMSampleBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07AC74923B5EE0C002CB5AF /* Capture+CMSampleBuffer.swift */; };
@@ -244,6 +245,7 @@
 		A01C582C23B33CCA00691F11 /* DebugHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugHelper.swift; sourceTree = "<group>"; };
 		A01C582E23B33CE600691F11 /* AnyImageError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyImageError.swift; sourceTree = "<group>"; };
 		A01C583023B33CFD00691F11 /* ImageEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEditorCache.swift; sourceTree = "<group>"; };
+		A01F15CE23CC38A800F41097 /* DeviceIOComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIOComponent.swift; sourceTree = "<group>"; };
 		A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AVCaptureDevice.swift"; sourceTree = "<group>"; };
 		A026C99E23978DF400931028 /* CaptureConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureConfigViewController.swift; sourceTree = "<group>"; };
 		A029D04E233084B600BC6720 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
@@ -276,9 +278,9 @@
 		A073C77C239E3BF60078DD4E /* CaptureProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureProgressView.swift; sourceTree = "<group>"; };
 		A0769994239638630006AC9B /* ImageCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureController.swift; sourceTree = "<group>"; };
 		A076999623963A360006AC9B /* AnyImageNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageNavigationController.swift; sourceTree = "<group>"; };
-		A076999923963F270006AC9B /* VideoCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
+		A076999923963F270006AC9B /* VideoIOComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoIOComponent.swift; sourceTree = "<group>"; };
 		A076999A23963F270006AC9B /* Capture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
-		A076999B23963F270006AC9B /* AudioCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioCapture.swift; sourceTree = "<group>"; };
+		A076999B23963F270006AC9B /* AudioIOComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioIOComponent.swift; sourceTree = "<group>"; };
 		A076999C23963F270006AC9B /* CapturePreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapturePreviewView.swift; sourceTree = "<group>"; };
 		A07AC74723B5EC64002CB5AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		A07AC74923B5EE0C002CB5AF /* Capture+CMSampleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+CMSampleBuffer.swift"; sourceTree = "<group>"; };
@@ -556,8 +558,9 @@
 			isa = PBXGroup;
 			children = (
 				A076999A23963F270006AC9B /* Capture.swift */,
-				A076999B23963F270006AC9B /* AudioCapture.swift */,
-				A076999923963F270006AC9B /* VideoCapture.swift */,
+				A01F15CE23CC38A800F41097 /* DeviceIOComponent.swift */,
+				A076999B23963F270006AC9B /* AudioIOComponent.swift */,
+				A076999923963F270006AC9B /* VideoIOComponent.swift */,
 				A08DF7C123B2F5E6002B92EE /* DeviceOrientationUtil.swift */,
 				A07AC74723B5EC64002CB5AF /* Recorder.swift */,
 			);
@@ -1300,7 +1303,7 @@
 				A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */,
 				A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */,
 				A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */,
-				A076999D23963F270006AC9B /* VideoCapture.swift in Sources */,
+				A076999D23963F270006AC9B /* VideoIOComponent.swift in Sources */,
 				A5783954235EAA88002A0498 /* PhotoLivePreviewCell.swift in Sources */,
 				A5347D1E23A9EC3D00C93874 /* VideoEditorController.swift in Sources */,
 				A5DF1E87237AA32C00E3A32E /* Editor+CGRect.swift in Sources */,
@@ -1379,7 +1382,7 @@
 				A01866F1239F8740002E623D /* CapturePreviewMaskView.swift in Sources */,
 				A08DF7BE23B1F814002B92EE /* DeviceOrientation.swift in Sources */,
 				A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */,
-				A076999F23963F270006AC9B /* AudioCapture.swift in Sources */,
+				A076999F23963F270006AC9B /* AudioIOComponent.swift in Sources */,
 				A50B2115237AA24300A894A9 /* PhotoEditorContentView+Getter.swift in Sources */,
 				A01C582B23B33CB200691F11 /* Core+UIDevice.swift in Sources */,
 				A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */,
@@ -1404,6 +1407,7 @@
 				A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */,
 				A50B2113237AA24300A894A9 /* CropGridView.swift in Sources */,
 				A0831E1923B0A33100B7E70F /* Capture+CIImage.swift in Sources */,
+				A01F15CF23CC38A800F41097 /* DeviceIOComponent.swift in Sources */,
 				A0B22EAD237AA1B3001F6066 /* ScreenHelper.swift in Sources */,
 				A0B50C3623A9EDDC002C9799 /* Capture+CGImage.swift in Sources */,
 				A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */,

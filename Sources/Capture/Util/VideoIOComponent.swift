@@ -1,5 +1,5 @@
 //
-//  VideoCapture.swift
+//  VideoIOComponent.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/7/22.
@@ -10,19 +10,16 @@ import UIKit
 import AVFoundation
 import CoreImage
 
-protocol VideoCaptureDelegate: class {
+protocol VideoIOComponentDelegate: class {
     
-    func videoCaptureWillOutputPhoto(_ capture: VideoCapture)
-    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: FileType)
-    func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer)
+    func videoIODidCapturePhoto(_ component: VideoIOComponent)
+    func videoIO(_ component: VideoIOComponent, didOutput photoData: Data, fileType: FileType)
+    func videoIO(_ component: VideoIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
 
-final class VideoCapture: NSObject {
+final class VideoIOComponent: DeviceIOComponent {
     
-    weak var delegate: VideoCaptureDelegate?
-    
-    private var device: AVCaptureDevice?
-    private var input: AVCaptureDeviceInput?
+    weak var delegate: VideoIOComponentDelegate?
     
     private(set) var orientation: DeviceOrientation
     private(set) var position: CapturePosition
@@ -114,7 +111,7 @@ final class VideoCapture: NSObject {
         }
         
         // config after add input
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             camera.isSubjectAreaChangeMonitoringEnabled = true
             if camera.isSmoothAutoFocusSupported {
                 camera.isSmoothAutoFocusEnabled = true
@@ -193,7 +190,7 @@ final class VideoCapture: NSObject {
 }
 
 // MARK: - Actions
-extension VideoCapture {
+extension VideoIOComponent {
     
     @objc private func deviceSubjectAreaDidChange(_ sender: Notification) {
         setFocus(point: CGPoint(x: 0.5, y: 0.5))
@@ -202,7 +199,7 @@ extension VideoCapture {
 }
 
 // MARK: - Writer Settings
-extension VideoCapture {
+extension VideoIOComponent {
     
     var recommendedWriterSettings: [String: Any]? {
         return videoOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
@@ -210,7 +207,7 @@ extension VideoCapture {
 }
 
 // MARK: - Camera Setup
-extension VideoCapture {
+extension VideoIOComponent {
     
     func switchCamera(session: AVCaptureSession) {
         position.toggle()
@@ -224,25 +221,16 @@ extension VideoCapture {
     }
 }
 
-extension VideoCapture {
+// MARK: - Zoom
+extension VideoIOComponent {
     
-    private func updateDeviceProperty(_ change: (AVCaptureDevice) -> Void) {
-        guard let device = device else { return }
-        do {
-            try device.lockForConfiguration()
-            change(device)
-            device.unlockForConfiguration()
-        } catch {
-            _print(error.localizedDescription)
-        }
-    }
 }
 
 // MARK: - Foucs
-extension VideoCapture {
+extension VideoIOComponent {
     
     func setFocus(mode: AVCaptureDevice.FocusMode) {
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             if camera.isFocusModeSupported(mode) {
                 camera.focusMode = mode
             }
@@ -250,7 +238,7 @@ extension VideoCapture {
     }
     
     func setFocus(point: CGPoint) {
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             if camera.isFocusPointOfInterestSupported {
                 camera.focusPointOfInterest = point
             }
@@ -262,10 +250,10 @@ extension VideoCapture {
 }
 
 // MARK: - Exposure
-extension VideoCapture {
+extension VideoIOComponent {
     
     func setExposure(mode: AVCaptureDevice.ExposureMode) {
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             if camera.isExposureModeSupported(mode) {
                 camera.exposureMode = mode
             }
@@ -273,7 +261,7 @@ extension VideoCapture {
     }
     
     func setExposure(point: CGPoint) {
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             if camera.isExposurePointOfInterestSupported {
                 camera.exposurePointOfInterest = point
             }
@@ -296,16 +284,16 @@ extension VideoCapture {
     }
     
     func setExposure(bias: Float) {
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             camera.setExposureTargetBias(bias, completionHandler: nil)
         }
     }
 }
 
-extension VideoCapture {
+extension VideoIOComponent {
     
     func setWhiteBalance(mode: AVCaptureDevice.WhiteBalanceMode) {
-        updateDeviceProperty { camera in
+        updateProperty { camera in
             if camera.isWhiteBalanceModeSupported(mode) {
                 camera.whiteBalanceMode = mode
             }
@@ -314,7 +302,7 @@ extension VideoCapture {
 }
 
 // MARK: - Photo
-extension VideoCapture {
+extension VideoIOComponent {
     
     func capturePhoto(orientation: DeviceOrientation) {
         self.orientation = orientation
@@ -328,18 +316,18 @@ extension VideoCapture {
 }
 
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
-extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension VideoIOComponent: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        delegate?.videoCapture(self, didOutput: sampleBuffer)
+        delegate?.videoIO(self, didOutput: sampleBuffer)
     }
 }
 
 // MARK: - AVCapturePhotoCaptureDelegate
-extension VideoCapture: AVCapturePhotoCaptureDelegate {
+extension VideoIOComponent: AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        delegate?.videoCaptureWillOutputPhoto(self)
+        delegate?.videoIODidCapturePhoto(self)
     }
     
     // for iOS 11+
@@ -380,6 +368,6 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         guard let cgImage: CGImage = photoContext.createCGImage(croppedImage, from: rect) else { return }
         // Output
         guard let photoData = cgImage.jpegData(compressionQuality: 1.0) else { return }
-        delegate?.videoCapture(self, didOutput: photoData, fileType: .jpeg)
+        delegate?.videoIO(self, didOutput: photoData, fileType: .jpeg)
     }
 }

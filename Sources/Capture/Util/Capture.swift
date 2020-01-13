@@ -11,7 +11,7 @@ import UIKit
 
 protocol CaptureDelegate: class {
     
-    func captureWillOutputPhoto(_ capture: Capture)
+    func captureDidCapturePhoto(_ capture: Capture)
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType)
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType)
 }
@@ -22,8 +22,8 @@ final class Capture {
     
     private let options: CaptureParsedOptionsInfo
     private let session: AVCaptureSession
-    private let audioCapture: AudioCapture
-    private let videoCapture: VideoCapture
+    private let audioIO: AudioIOComponent
+    private let videoIO: VideoIOComponent
     
     private var exposureBiasBaseline: Float = 0
     
@@ -34,11 +34,11 @@ final class Capture {
         self.options = options
         self.session = AVCaptureSession()
         self.session.beginConfiguration()
-        self.audioCapture = AudioCapture(session: session, options: options)
-        self.videoCapture = VideoCapture(session: session, options: options)
+        self.audioIO = AudioIOComponent(session: session, options: options)
+        self.videoIO = VideoIOComponent(session: session, options: options)
         self.session.commitConfiguration()
-        self.audioCapture.delegate = self
-        self.videoCapture.delegate = self
+        self.audioIO.delegate = self
+        self.videoIO.delegate = self
     }
 }
 
@@ -68,25 +68,25 @@ extension Capture {
     func startSwitchCamera() {
         isSwitchingCamera = true
         session.beginConfiguration()
-        videoCapture.switchCamera(session: session)
+        videoIO.switchCamera(session: session)
         session.commitConfiguration()
     }
     
     func stopSwitchCamera() -> CapturePosition {
         isSwitchingCamera = false
-        return videoCapture.position
+        return videoIO.position
     }
     
     func focus(at point: CGPoint) {
-        videoCapture.setFocus(point: point)
+        videoIO.setFocus(point: point)
     }
     
     func exposure(at point: CGPoint) {
-        videoCapture.setExposure(point: point)
+        videoIO.setExposure(point: point)
     }
     
     func beginUpdateExposureTargetBias() {
-        exposureBiasBaseline = videoCapture.exposureTargetBias
+        exposureBiasBaseline = videoIO.exposureTargetBias
     }
 
     func endUpdateExposureTargetBias() {
@@ -97,15 +97,15 @@ extension Capture {
         let base = exposureBiasBaseline
         let avaiableRange: Float = 0.4
         if level < 0.5 { // [minExposureTargetBias, exposureBiasBaseline)
-            let systemMin = videoCapture.minExposureTargetBias
+            let systemMin = videoIO.minExposureTargetBias
             let min = systemMin + (base-systemMin)*avaiableRange
             let newBias = min + (base-min)*(level/0.5)
-            videoCapture.setExposure(bias: newBias)
+            videoIO.setExposure(bias: newBias)
         } else { // [exposureBiasBaseline, maxExposureTargetBias]
-            let systemMax = videoCapture.maxExposureTargetBias
+            let systemMax = videoIO.maxExposureTargetBias
             let max = base + (systemMax-base)*avaiableRange
             let newBias = base + (max - base)*((level-0.5)/0.5)
-            videoCapture.setExposure(bias: newBias)
+            videoIO.setExposure(bias: newBias)
         }
     }
 }
@@ -114,7 +114,7 @@ extension Capture {
 extension Capture {
     
     func capturePhoto() {
-        videoCapture.capturePhoto(orientation: orientation)
+        videoIO.capturePhoto(orientation: orientation)
     }
 }
 
@@ -122,36 +122,35 @@ extension Capture {
 extension Capture {
     
     var recommendedAudioSetting: [String: Any]? {
-        return audioCapture.recommendedWriterSettings
+        return audioIO.recommendedWriterSettings
     }
     
     var recommendedVideoSetting: [String: Any]? {
-        return videoCapture.recommendedWriterSettings
+        return videoIO.recommendedWriterSettings
     }
 }
 
-// MARK: - AudioCaptureDelegate
-extension Capture: AudioCaptureDelegate {
+// MARK: - AudioIOComponentDelegate
+extension Capture: AudioIOComponentDelegate {
     
-    func audioCapture(_ capture: AudioCapture, didOutput sampleBuffer: CMSampleBuffer) {
+    func audioIO(_ component: AudioIOComponent, didOutput sampleBuffer: CMSampleBuffer) {
         delegate?.capture(self, didOutput: sampleBuffer, type: .audio)
     }
 }
 
-// MARK: - VideoCaptureDelegate
-extension Capture: VideoCaptureDelegate {
+// MARK: - VideoIOComponentDelegate
+extension Capture: VideoIOComponentDelegate {
     
-    func videoCaptureWillOutputPhoto(_ capture: VideoCapture) {
-        delegate?.captureWillOutputPhoto(self)
+    func videoIODidCapturePhoto(_ component: VideoIOComponent) {
+        delegate?.captureDidCapturePhoto(self)
     }
     
-    func videoCapture(_ capture: VideoCapture, didOutput photoData: Data, fileType: FileType) {
+    func videoIO(_ component: VideoIOComponent, didOutput photoData: Data, fileType: FileType) {
         delegate?.capture(self, didOutput: photoData, fileType: fileType)
     }
     
-    func videoCapture(_ capture: VideoCapture, didOutput sampleBuffer: CMSampleBuffer) {
+    func videoIO(_ component: VideoIOComponent, didOutput sampleBuffer: CMSampleBuffer) {
         guard !isSwitchingCamera else { return }
         delegate?.capture(self, didOutput: sampleBuffer, type: .video)
     }
 }
-

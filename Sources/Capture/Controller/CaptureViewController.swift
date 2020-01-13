@@ -212,7 +212,7 @@ extension CaptureViewController: CapturePreviewViewDelegate {
 // MARK: - CaptureDelegate
 extension CaptureViewController: CaptureDelegate {
     
-    func captureWillOutputPhoto(_ capture: Capture) {
+    func captureDidCapturePhoto(_ capture: Capture) {
         isPreviewing = false
     }
     
