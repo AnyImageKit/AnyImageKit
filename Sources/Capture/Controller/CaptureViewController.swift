@@ -90,6 +90,8 @@ final class CaptureViewController: AnyImageViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tipsView.showTips(hideAfter: 3, animated: true)
+        capture.focus(at: CGPoint(x: 0.5, y: 0.5))
+        capture.exposure(at: CGPoint(x: 0.5, y: 0.5))
     }
     
     private func setupNavigation() {
@@ -207,6 +209,14 @@ extension CaptureViewController: CapturePreviewViewDelegate {
         capture.focus(at: point)
         capture.exposure(at: point)
     }
+    
+    func previewView(_ previewView: CapturePreviewView, didUpdateExposure level: CGFloat) {
+        capture.exposure(bias: 1-level)
+    }
+    
+    func previewView(_ previewView: CapturePreviewView, didPinchWith scale: CGFloat) {
+        capture.zoom(scale)
+    }
 }
 
 // MARK: - CaptureDelegate
@@ -214,6 +224,11 @@ extension CaptureViewController: CaptureDelegate {
     
     func captureDidCapturePhoto(_ capture: Capture) {
         isPreviewing = false
+    }
+    
+    func captureDidChangeSubjectArea(_ capture: Capture) {
+        capture.focus()
+        capture.exposure()
     }
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {

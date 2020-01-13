@@ -12,6 +12,7 @@ final class CaptureFocusView: UIView {
     
     private(set) var isFocusing: Bool = false
     
+    // up = 0, down = 1
     internal var exposureValue: CGFloat {
         return exposureView.value
     }

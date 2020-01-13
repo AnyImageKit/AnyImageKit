@@ -12,6 +12,8 @@ import CoreMedia
 protocol CapturePreviewViewDelegate: class {
     
     func previewView(_ previewView: CapturePreviewView, didFocusAt point: CGPoint)
+    func previewView(_ previewView: CapturePreviewView, didUpdateExposure level: CGFloat)
+    func previewView(_ previewView: CapturePreviewView, didPinchWith scale: CGFloat)
 }
 
 final class CapturePreviewView: UIView {
@@ -77,6 +79,8 @@ final class CapturePreviewView: UIView {
         addGestureRecognizer(tap)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
         addGestureRecognizer(pan)
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(onPinch(_:)))
+        addGestureRecognizer(pinch)
     }
 }
 
@@ -84,6 +88,7 @@ final class CapturePreviewView: UIView {
 extension CapturePreviewView {
     
     @objc private func onTapped(_ sender: UITapGestureRecognizer) {
+        guard sender.state == .ended else { return }
         let touchPoint = sender.location(in: self)
         guard touchPoint.x > 0, touchPoint.x < frame.width else { return }
         guard touchPoint.y > 0, touchPoint.y < frame.height else { return }
@@ -98,6 +103,13 @@ extension CapturePreviewView {
         sender.setTranslation(.zero, in: self)
         let value = point.y / bounds.height
         focusView.setLight(focusView.exposureValue + value)
+        delegate?.previewView(self, didUpdateExposure: focusView.exposureValue)
+    }
+    
+    @objc private func onPinch(_ sender: UIPinchGestureRecognizer) {
+        let scale = sender.scale
+        sender.scale = 1.0
+        delegate?.previewView(self, didPinchWith: scale)
     }
 }
 

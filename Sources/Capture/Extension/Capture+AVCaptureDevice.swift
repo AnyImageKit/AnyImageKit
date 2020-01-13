@@ -12,14 +12,18 @@ extension AVCaptureDevice {
     
     func preferredFormats(for presets: [CapturePreset]) -> (CapturePreset, [AVCaptureDevice.Format]) {
         for preset in presets {
-            let formats = preferredFormats(for: preset)
+            let formats = preferredFormats(for: preset, autoFocusSystem: .phaseDetection)
+            if !formats.isEmpty { return (preset, formats) }
+        }
+        for preset in presets {
+            let formats = preferredFormats(for: preset, autoFocusSystem: .contrastDetection)
             if !formats.isEmpty { return (preset, formats) }
         }
         let defaultPreset: CapturePreset = .hd1280x720_30
-        return (defaultPreset, preferredFormats(for: defaultPreset))
+        return (defaultPreset, preferredFormats(for: defaultPreset, autoFocusSystem: .contrastDetection))
     }
     
-    private func preferredFormats(for preset: CapturePreset) -> [AVCaptureDevice.Format] {
+    private func preferredFormats(for preset: CapturePreset, autoFocusSystem: AVCaptureDevice.Format.AutoFocusSystem) -> [AVCaptureDevice.Format] {
         return formats.filter { format in
             let dimensions = format.formatDescription.dimensions
             if dimensions.width == preset.width && dimensions.height == preset.height {
@@ -29,6 +33,8 @@ extension AVCaptureDevice {
                 return !ranges.isEmpty
             }
             return false
+        }.filter { format in
+            return format.autoFocusSystem == autoFocusSystem
         }
     }
 }

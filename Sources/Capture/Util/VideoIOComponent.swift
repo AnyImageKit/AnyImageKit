@@ -13,6 +13,7 @@ import CoreImage
 protocol VideoIOComponentDelegate: class {
     
     func videoIODidCapturePhoto(_ component: VideoIOComponent)
+    func videoIODidChangeSubjectArea(_ component: VideoIOComponent)
     func videoIO(_ component: VideoIOComponent, didOutput photoData: Data, fileType: FileType)
     func videoIO(_ component: VideoIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
@@ -91,6 +92,7 @@ final class VideoIOComponent: DeviceIOComponent {
             oldCamera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
         }
         self.device = camera
+        print(camera.formats)
         
         let (preset, formats) = camera.preferredFormats(for: options.preferredPreset)
         guard let format = formats.last else {
@@ -174,13 +176,13 @@ final class VideoIOComponent: DeviceIOComponent {
         case #keyPath(AVCaptureDevice.isAdjustingFocus):
             if let newValue = change?[.newKey] as? Bool, let oldValue = change?[.oldKey] as? Bool {
                 if oldValue, !newValue { // isAdjustingFocus: true -> false
-                    setFocus(mode: .locked)
+//                    setFocus(mode: .locked)
                 }
             }
         case #keyPath(AVCaptureDevice.isAdjustingExposure):
             if let newValue = change?[.newKey] as? Bool, let oldValue = change?[.oldKey] as? Bool  {
                 if oldValue, !newValue { // isAdjustingExposure: true -> false
-                    setExposure(mode: .locked)
+//                    setExposure(mode: .locked)
                 }
             }
         default:
@@ -193,8 +195,7 @@ final class VideoIOComponent: DeviceIOComponent {
 extension VideoIOComponent {
     
     @objc private func deviceSubjectAreaDidChange(_ sender: Notification) {
-        setFocus(point: CGPoint(x: 0.5, y: 0.5))
-        setExposure(point: CGPoint(x: 0.5, y: 0.5))
+        delegate?.videoIODidChangeSubjectArea(self)
     }
 }
 
@@ -227,6 +228,15 @@ extension VideoIOComponent {
     var zoomFactor: CGFloat {
         return device?.videoZoomFactor ?? 0
     }
+    
+    var minZoomFactor: CGFloat {
+        return 1.0
+    }
+    
+    var maxZoomFactor: CGFloat {
+        let max = device?.activeFormat.videoMaxZoomFactor ?? 2.0
+        return max > 6.0 ? 6.0 : max
+    }
 
     func setZoomFactor(_ zoomFactor: CGFloat, ramping: Bool = false, withRate: Float = 1.0) {
         updateProperty { camera in
@@ -253,11 +263,10 @@ extension VideoIOComponent {
     
     func setFocus(point: CGPoint) {
         updateProperty { camera in
+            guard !camera.isAdjustingFocus else { return }
             if camera.isFocusPointOfInterestSupported {
                 camera.focusPointOfInterest = point
-            }
-            if camera.isFocusModeSupported(.continuousAutoFocus) {
-                camera.focusMode = .continuousAutoFocus
+                camera.focusMode = .autoFocus
             }
         }
     }
@@ -276,24 +285,27 @@ extension VideoIOComponent {
     
     func setExposure(point: CGPoint) {
         updateProperty { camera in
+            guard !camera.isAdjustingExposure else { return }
             if camera.isExposurePointOfInterestSupported {
                 camera.exposurePointOfInterest = point
+                camera.exposureMode = .autoExpose
             }
-            if camera.isExposureModeSupported(.continuousAutoExposure) {
-                camera.exposureMode = .continuousAutoExposure
-            }
+            camera.setExposureTargetBias(0.0, completionHandler: nil)
         }
     }
     
     var maxExposureTargetBias: Float {
+        _print("maxExposureTargetBias, \(device?.maxExposureTargetBias ?? 0)")
         return device?.maxExposureTargetBias ?? 0
     }
 
     var minExposureTargetBias: Float {
+        _print("minExposureTargetBias, \(device?.minExposureTargetBias ?? 0)")
         return device?.minExposureTargetBias ?? 0
     }
     
     var exposureTargetBias: Float {
+        _print("exposureTargetBias, \(device?.exposureTargetBias ?? 0)")
         return device?.exposureTargetBias ?? 0
     }
     
