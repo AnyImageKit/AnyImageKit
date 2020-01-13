@@ -224,6 +224,20 @@ extension VideoIOComponent {
 // MARK: - Zoom
 extension VideoIOComponent {
     
+    var zoomFactor: CGFloat {
+        return device?.videoZoomFactor ?? 0
+    }
+
+    func setZoomFactor(_ zoomFactor: CGFloat, ramping: Bool = false, withRate: Float = 1.0) {
+        updateProperty { camera in
+            guard zoomFactor >= 1, zoomFactor < camera.activeFormat.videoMaxZoomFactor else { return }
+            if ramping {
+                camera.ramp(toVideoZoomFactor: zoomFactor, withRate: withRate)
+            } else {
+                camera.videoZoomFactor = zoomFactor
+            }
+        }
+    }
 }
 
 // MARK: - Foucs
