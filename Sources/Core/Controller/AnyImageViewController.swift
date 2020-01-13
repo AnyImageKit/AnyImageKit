@@ -30,15 +30,8 @@ extension AnyImageViewController {
     }
     
     func check(permission: Permission, authorized: @escaping () -> Void, canceled: @escaping () -> Void) {
-        switch permission.status {
-        case .notDetermined:
-            permission.request { [weak self] _ in
-                guard let self = self else { return }
-                self.check(permission: permission, authorized: authorized, canceled: canceled)
-            }
-        case .authorized:
-            authorized()
-        case .denied:
+        check(permission: permission, authorized: authorized, denied: { [weak self] in
+            guard let self = self else { return }
             let title = permission.localizedAlertTitle
             let message = String(format: permission.localizedAlertMessage, BundleHelper.appName)
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -56,7 +49,7 @@ extension AnyImageViewController {
             alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: { _ in
                 canceled()
             }))
-            present(alert, animated: true, completion: nil)
-        }
+            self.present(alert, animated: true, completion: nil)
+        })
     }
 }
