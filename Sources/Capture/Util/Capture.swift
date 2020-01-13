@@ -25,6 +25,8 @@ final class Capture {
     private let audioCapture: AudioCapture
     private let videoCapture: VideoCapture
     
+    private var exposureBiasBaseline: Float = 0
+    
     var orientation: DeviceOrientation = .portrait
     var isSwitchingCamera = false
     
@@ -81,6 +83,30 @@ extension Capture {
     
     func exposure(at point: CGPoint) {
         videoCapture.setExposure(point: point)
+    }
+    
+    func beginUpdateExposureTargetBias() {
+        exposureBiasBaseline = videoCapture.exposureTargetBias
+    }
+
+    func endUpdateExposureTargetBias() {
+        exposureBiasBaseline = 0
+    }
+    
+    func exposure(bias level: Float) {
+        let base = exposureBiasBaseline
+        let avaiableRange: Float = 0.4
+        if level < 0.5 { // [minExposureTargetBias, exposureBiasBaseline)
+            let systemMin = videoCapture.minExposureTargetBias
+            let min = systemMin + (base-systemMin)*avaiableRange
+            let newBias = min + (base-min)*(level/0.5)
+            videoCapture.setExposure(bias: newBias)
+        } else { // [exposureBiasBaseline, maxExposureTargetBias]
+            let systemMax = videoCapture.maxExposureTargetBias
+            let max = base + (systemMax-base)*avaiableRange
+            let newBias = base + (max - base)*((level-0.5)/0.5)
+            videoCapture.setExposure(bias: newBias)
+        }
     }
 }
 
