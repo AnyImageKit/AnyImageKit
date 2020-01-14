@@ -67,10 +67,9 @@ final class InputTextViewController: AnyImageViewController {
         return view
     }()
     /// 仅用于计算TextView最后一行的文本
-    private lazy var calculatelabel: UILabel = {
+    private lazy var calculateLabel: UILabel = {
         let view = UILabel()
         view.isHidden = true
-        view.font = UIFont.systemFont(ofSize: 32)
         return view
     }()
     
@@ -125,7 +124,7 @@ final class InputTextViewController: AnyImageViewController {
         view.addSubview(toolView)
         view.addSubview(textCoverView)
         textCoverView.addSubview(textView)
-        view.addSubview(calculatelabel)
+        view.addSubview(calculateLabel)
         
         coverImageView.snp.makeConstraints { (maker) in
             maker.left.right.equalToSuperview()
@@ -171,10 +170,10 @@ final class InputTextViewController: AnyImageViewController {
             maker.top.bottom.equalToSuperview()
             maker.left.right.equalToSuperview().inset(10)
         }
-        calculatelabel.snp.makeConstraints { (maker) in
-            maker.top.equalTo(cancelButton.snp.bottom).offset(200)
+        calculateLabel.snp.makeConstraints { (maker) in
+            maker.top.equalTo(cancelButton.snp.bottom).offset(250)
             maker.left.right.equalToSuperview().inset(25)
-            maker.height.equalTo(55)
+            maker.height.greaterThanOrEqualTo(55)
         }
     }
     
@@ -208,35 +207,16 @@ extension InputTextViewController {
     private func setupMaskLayer(_ height: CGFloat = 0) {
         let height = height == 0 ? textCoverView.bounds.height : height
         textLayer?.removeFromSuperlayer()
-        let array = getLinesArrayOfString(in: calculatelabel)
+        let array = textView.getSeparatedLines()
         if array.isEmpty { return }
-        let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 30
+        
+        var attr = textView.attributedText
+        attr = attr?.attributedSubstring(from: (attr!.string as NSString).range(of: array.last!))
+        calculateLabel.attributedText = attr
+        
+        let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
         textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
         textCoverView.layer.insertSublayer(textLayer!, at: 0)
-    }
-    
-    /// 计算行数
-    private func getLinesArrayOfString(in label: UILabel) -> [String] {
-        var linesArray = [String]()
-        let rect = label.frame
-        guard let text = label.text, let font = label.font else { return linesArray }
-        let attr = NSMutableAttributedString(string: text)
-        attr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attr.length))
-        let frameSetter: CTFramesetter = CTFramesetterCreateWithAttributedString(attr)
-        let path: CGMutablePath = CGMutablePath()
-        path.addRect(CGRect(x: 0, y: 0, width: rect.size.width, height: 100000), transform: .identity)
-        
-        let frame: CTFrame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, nil)
-        guard let lines = CTFrameGetLines(frame) as? [Any] else {return linesArray}
-        
-        for line in lines {
-            let lineRef = line as! CTLine
-            let lineRange: CFRange = CTLineGetStringRange(lineRef)
-            let range = NSRange(location: lineRange.location, length: lineRange.length)
-            let lineString: String = (text as NSString).substring(with: range)
-            linesArray.append(lineString)
-        }
-        return linesArray
     }
     
     /// 创建蒙层
@@ -279,19 +259,12 @@ extension InputTextViewController {
         return cropBezier.reversing()
     }
     
-    /// 计算文本宽度
-    private func string(text: String, font: UIFont, widthOfHeight height: CGFloat) -> CGFloat {
-        let attr = NSMutableAttributedString(string: text)
-        attr.addAttribute(.font, value: font, range: NSRange(location: 0, length: text.count))
-        let constraintRect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: height)
-        return attr.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil).integral.width
-    }
-    
     /// 更新宽度
     private func updateTextCoverView() {
-        let array = getLinesArrayOfString(in: calculatelabel)
+        let array = textView.getSeparatedLines()
         if array.count == 1 {
-            let lastLineWidth = string(text: array.last!, font: textView.font!, widthOfHeight: 100) + 30
+            calculateLabel.text = array.last!
+            let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
             let offset = textCoverView.bounds.width - lastLineWidth + 10
             textCoverView.snp.updateConstraints { (maker) in
                 maker.right.equalToSuperview().offset(-offset)
@@ -304,8 +277,7 @@ extension InputTextViewController {
 extension InputTextViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        calculatelabel.text = textView.text
-        let line = CGFloat(getLinesArrayOfString(in: calculatelabel).count)
+        let line = CGFloat(textView.getSeparatedLines().count)
         let height: CGFloat = max(lineHeight * line + 10 * 2, textView.contentSize.height)
         textCoverView.snp.updateConstraints { (maker) in
             maker.height.equalTo(height)
@@ -364,5 +336,35 @@ extension InputTextViewController {
             maker.height.equalTo(30)
         }
         view.layoutIfNeeded()
+    }
+}
+
+extension UITextView {
+    
+    /// 计算行数
+    func getSeparatedLines() -> [String] {
+        var linesArray: [String] = []
+        guard let text = text, let font = font else { return linesArray }
+        
+        let attStr = NSMutableAttributedString(string: text)
+        attStr.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: 0, length: attStr.length))
+        
+        let frameSetter = CTFramesetterCreateWithAttributedString(attStr as CFAttributedString)
+        let path = CGMutablePath()
+        
+        // size needs to be adjusted, because frame might change because of intelligent word wrapping of iOS
+        let size = sizeThatFits(CGSize(width: self.frame.width, height: .greatestFiniteMagnitude))
+        path.addRect(CGRect(x: 0, y: 0, width: size.width, height: size.height), transform: .identity)
+        
+        let frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attStr.length), path, nil)
+        guard let lines = CTFrameGetLines(frame) as? [Any] else { return linesArray }
+        for line in lines {
+            let lineRef = line as! CTLine
+            let lineRange = CTLineGetStringRange(lineRef)
+            let range = NSRange(location: lineRange.location, length: lineRange.length)
+            let lineString = (text as NSString).substring(with: range)
+            linesArray.append(lineString)
+        }
+        return linesArray
     }
 }
