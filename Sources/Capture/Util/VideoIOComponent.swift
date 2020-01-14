@@ -11,12 +11,10 @@ import AVFoundation
 import CoreImage
 
 protocol VideoIOComponentDelegate: class {
-    // for preview
+    
     func videoIODidChangeSubjectArea(_ component: VideoIOComponent)
-    // for take photos
     func videoIODidCapturePhoto(_ component: VideoIOComponent)
     func videoIO(_ component: VideoIOComponent, didOutput photoData: Data, fileType: FileType)
-    
     func videoIO(_ component: VideoIOComponent, didUpdate property: VideoIOComponent.ObservableProperty)
     func videoIO(_ component: VideoIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
@@ -307,7 +305,6 @@ extension VideoIOComponent {
             guard !camera.isAdjustingFocus else { return }
             if camera.isFocusPointOfInterestSupported {
                 camera.focusPointOfInterest = point
-                camera.focusMode = .autoFocus
             }
         }
     }
@@ -329,7 +326,6 @@ extension VideoIOComponent {
             guard !camera.isAdjustingExposure else { return }
             if camera.isExposurePointOfInterestSupported {
                 camera.exposurePointOfInterest = point
-                camera.exposureMode = .autoExpose
             }
             camera.setExposureTargetBias(0.0, completionHandler: nil)
         }
@@ -459,7 +455,7 @@ extension VideoIOComponent {
             case .exposureDuration(let value):
                 return "Exposure Duration: \(String(format: "%.2f", value.seconds))"
             case .iso(let value):
-                return "ISO: \(String(format: "%.2f", value))"
+                return "ISO: \(String(format: "%.0f", value))"
             case .isAdjustingExposure(let value):
                 return "Exposuring: \(value)"
             case .whiteBalance(let value):

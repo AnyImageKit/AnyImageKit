@@ -236,7 +236,7 @@ extension CaptureViewController: CaptureDelegate {
     }
     
     func capture(_ captrue: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty) {
-        print(videoProperty.description)
+        
     }
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
