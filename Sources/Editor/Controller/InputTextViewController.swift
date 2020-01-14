@@ -282,8 +282,15 @@ extension InputTextViewController: UITextViewDelegate {
         textCoverView.snp.updateConstraints { (maker) in
             maker.height.equalTo(height)
         }
-        
         setupMaskLayer(height)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            doneButtonTapped(doneButton)
+            return false
+        }
+        return true
     }
 }
 
