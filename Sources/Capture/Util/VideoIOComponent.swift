@@ -92,9 +92,8 @@ final class VideoIOComponent: DeviceIOComponent {
             oldCamera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
         }
         self.device = camera
-        print(camera.formats)
         
-        let (preset, formats) = camera.preferredFormats(for: options.preferredPreset)
+        let (preset, formats) = camera.preferredConfigs(for: options.preferredPreset)
         guard let format = formats.last else {
             _print("Can't find any available format")
             return
@@ -123,8 +122,9 @@ final class VideoIOComponent: DeviceIOComponent {
             camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
             camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
             // set keyPath observer
-            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus), options: [.old, .new], context: nil)
-            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure), options: [.old, .new], context: nil)
+            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus), options: [.new], context: nil)
+            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure), options: [.new], context: nil)
+            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingWhiteBalance), options: [.new], context: nil)
         }
     }
     
@@ -174,16 +174,16 @@ final class VideoIOComponent: DeviceIOComponent {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         switch keyPath {
         case #keyPath(AVCaptureDevice.isAdjustingFocus):
-            if let newValue = change?[.newKey] as? Bool, let oldValue = change?[.oldKey] as? Bool {
-                if oldValue, !newValue { // isAdjustingFocus: true -> false
-//                    setFocus(mode: .locked)
-                }
+            if let newValue = change?[.newKey] as? Bool {
+                
             }
         case #keyPath(AVCaptureDevice.isAdjustingExposure):
-            if let newValue = change?[.newKey] as? Bool, let oldValue = change?[.oldKey] as? Bool  {
-                if oldValue, !newValue { // isAdjustingExposure: true -> false
-//                    setExposure(mode: .locked)
-                }
+            if let newValue = change?[.newKey] as? Bool {
+                
+            }
+        case #keyPath(AVCaptureDevice.isAdjustingWhiteBalance):
+            if let newValue = change?[.newKey] as? Bool {
+                
             }
         default:
             break
