@@ -13,6 +13,8 @@ protocol CaptureDelegate: class {
     
     func captureDidCapturePhoto(_ capture: Capture)
     func captureDidChangeSubjectArea(_ capture: Capture)
+    func capture(_ captrue: Capture, didUpdate audioProperty: AudioIOComponent.ObservableProperty)
+    func capture(_ captrue: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty)
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType)
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType)
 }
@@ -139,6 +141,10 @@ extension Capture {
 // MARK: - AudioIOComponentDelegate
 extension Capture: AudioIOComponentDelegate {
     
+    func audioIO(_ component: AudioIOComponent, didUpdate property: AudioIOComponent.ObservableProperty) {
+        delegate?.capture(self, didUpdate: property)
+    }
+    
     func audioIO(_ component: AudioIOComponent, didOutput sampleBuffer: CMSampleBuffer) {
         delegate?.capture(self, didOutput: sampleBuffer, type: .audio)
     }
@@ -153,6 +159,10 @@ extension Capture: VideoIOComponentDelegate {
     
     func videoIODidChangeSubjectArea(_ component: VideoIOComponent) {
         delegate?.captureDidChangeSubjectArea(self)
+    }
+    
+    func videoIO(_ component: VideoIOComponent, didUpdate property: VideoIOComponent.ObservableProperty) {
+        delegate?.capture(self, didUpdate: property)
     }
     
     func videoIO(_ component: VideoIOComponent, didOutput photoData: Data, fileType: FileType) {

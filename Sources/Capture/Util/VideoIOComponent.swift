@@ -11,10 +11,13 @@ import AVFoundation
 import CoreImage
 
 protocol VideoIOComponentDelegate: class {
-    
-    func videoIODidCapturePhoto(_ component: VideoIOComponent)
+    // for preview
     func videoIODidChangeSubjectArea(_ component: VideoIOComponent)
+    // for take photos
+    func videoIODidCapturePhoto(_ component: VideoIOComponent)
     func videoIO(_ component: VideoIOComponent, didOutput photoData: Data, fileType: FileType)
+    
+    func videoIO(_ component: VideoIOComponent, didUpdate property: VideoIOComponent.ObservableProperty)
     func videoIO(_ component: VideoIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
 
@@ -25,9 +28,6 @@ final class VideoIOComponent: DeviceIOComponent {
     private(set) var orientation: DeviceOrientation
     private(set) var position: CapturePosition
     private(set) var flashMode: CaptureFlashMode
-    
-    private var autoLockFocus: Bool = true
-    private var autoLockExposure: Bool = true
     
     private lazy var photoContext: CIContext = {
         if let mtlDevice = MTLCreateSystemDefaultDevice() {
@@ -65,11 +65,54 @@ final class VideoIOComponent: DeviceIOComponent {
     
     deinit {
         if let camera = device {
-            camera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus))
-            camera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
+            removeObserver(from: camera)
         }
         removeNotifications()
     }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        switch keyPath {
+        case #keyPath(AVCaptureDevice.lensPosition):
+            if let value = change?[.newKey] as? Float {
+                delegate?.videoIO(self, didUpdate: .lensPosition(value))
+            }
+        case #keyPath(AVCaptureDevice.isAdjustingFocus):
+            if let value = change?[.newKey] as? Bool {
+                delegate?.videoIO(self, didUpdate: .isAdjustingFocus(value))
+            }
+        case #keyPath(AVCaptureDevice.exposureDuration):
+            if let value = change?[.newKey] as? CMTime {
+                delegate?.videoIO(self, didUpdate: .exposureDuration(value))
+            }
+        case #keyPath(AVCaptureDevice.iso):
+            if let value = change?[.newKey] as? Float {
+                delegate?.videoIO(self, didUpdate: .iso(value))
+            }
+        case #keyPath(AVCaptureDevice.isAdjustingExposure):
+            if let value = change?[.newKey] as? Bool {
+                delegate?.videoIO(self, didUpdate: .isAdjustingExposure(value))
+            }
+        case #keyPath(AVCaptureDevice.deviceWhiteBalanceGains):
+            if let value = change?[.newKey] as? NSValue {
+                var whiteBalanceGains: AVCaptureDevice.WhiteBalanceGains = .init()
+                value.getValue(&whiteBalanceGains)
+                if let temperatureAndTintValues = device?.temperatureAndTintValues(for: whiteBalanceGains) {
+                    let whiteBalance = CaptureWhiteBalance(temperatureAndTintValues)
+                    delegate?.videoIO(self, didUpdate: .whiteBalance(whiteBalance))
+                }
+            }
+        case #keyPath(AVCaptureDevice.isAdjustingWhiteBalance):
+            if let value = change?[.newKey] as? Bool {
+                delegate?.videoIO(self, didUpdate: .isAdjustingWhiteBalance(value))
+            }
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Private
+extension VideoIOComponent {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceSubjectAreaDidChange(_:)), name: .AVCaptureDeviceSubjectAreaDidChange, object: nil)
@@ -77,6 +120,26 @@ final class VideoIOComponent: DeviceIOComponent {
     
     private func removeNotifications() {
         NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: nil)
+    }
+    
+    private func addObserver(to device: AVCaptureDevice) {
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.lensPosition), options: [.new], context: nil)
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus), options: [.new], context: nil)
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.exposureDuration), options: [.new], context: nil)
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.iso), options: [.new], context: nil)
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure), options: [.new], context: nil)
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.deviceWhiteBalanceGains), options: [.new], context: nil)
+        device.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingWhiteBalance), options: [.new], context: nil)
+    }
+    
+    private func removeObserver(from device: AVCaptureDevice) {
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.lensPosition))
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus))
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.exposureDuration))
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.iso))
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.deviceWhiteBalanceGains))
+        device.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingWhiteBalance))
     }
     
     private func setupInput(session: AVCaptureSession) throws {
@@ -88,8 +151,7 @@ final class VideoIOComponent: DeviceIOComponent {
             return
         }
         if let oldCamera = device {
-            oldCamera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus))
-            oldCamera.removeObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure))
+            removeObserver(from: oldCamera)
         }
         self.device = camera
         
@@ -122,9 +184,7 @@ final class VideoIOComponent: DeviceIOComponent {
             camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
             camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
             // set keyPath observer
-            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingFocus), options: [.new], context: nil)
-            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingExposure), options: [.new], context: nil)
-            camera.addObserver(self, forKeyPath: #keyPath(AVCaptureDevice.isAdjustingWhiteBalance), options: [.new], context: nil)
+            addObserver(to: camera)
         }
     }
     
@@ -168,25 +228,6 @@ final class VideoIOComponent: DeviceIOComponent {
             if connection.isVideoStabilizationSupported {
                 connection.preferredVideoStabilizationMode = .cinematic
             }
-        }
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        switch keyPath {
-        case #keyPath(AVCaptureDevice.isAdjustingFocus):
-            if let newValue = change?[.newKey] as? Bool {
-                
-            }
-        case #keyPath(AVCaptureDevice.isAdjustingExposure):
-            if let newValue = change?[.newKey] as? Bool {
-                
-            }
-        case #keyPath(AVCaptureDevice.isAdjustingWhiteBalance):
-            if let newValue = change?[.newKey] as? Bool {
-                
-            }
-        default:
-            break
         }
     }
 }
@@ -295,17 +336,14 @@ extension VideoIOComponent {
     }
     
     var maxExposureTargetBias: Float {
-        _print("maxExposureTargetBias, \(device?.maxExposureTargetBias ?? 0)")
         return device?.maxExposureTargetBias ?? 0
     }
 
     var minExposureTargetBias: Float {
-        _print("minExposureTargetBias, \(device?.minExposureTargetBias ?? 0)")
         return device?.minExposureTargetBias ?? 0
     }
     
     var exposureTargetBias: Float {
-        _print("exposureTargetBias, \(device?.exposureTargetBias ?? 0)")
         return device?.exposureTargetBias ?? 0
     }
     
@@ -395,5 +433,40 @@ extension VideoIOComponent: AVCapturePhotoCaptureDelegate {
         // Output
         guard let photoData = cgImage.jpegData(compressionQuality: 1.0) else { return }
         delegate?.videoIO(self, didOutput: photoData, fileType: .jpeg)
+    }
+}
+
+extension VideoIOComponent {
+    
+    enum ObservableProperty: Equatable, CustomStringConvertible {
+        // F
+        case lensPosition(Float)
+        case isAdjustingFocus(Bool)
+        // E
+        case exposureDuration(CMTime)
+        case iso(Float)
+        case isAdjustingExposure(Bool)
+        // WB
+        case whiteBalance(CaptureWhiteBalance)
+        case isAdjustingWhiteBalance(Bool)
+        
+        var description: String {
+            switch self {
+            case .lensPosition(let value):
+                return "Lens Position: \(String(format: "%.2f", value))"
+            case .isAdjustingFocus(let value):
+                return "Focusing: \(value)"
+            case .exposureDuration(let value):
+                return "Exposure Duration: \(String(format: "%.2f", value.seconds))"
+            case .iso(let value):
+                return "ISO: \(String(format: "%.2f", value))"
+            case .isAdjustingExposure(let value):
+                return "Exposuring: \(value)"
+            case .whiteBalance(let value):
+                return "White Balance: TEMP \(String(format: "%.0f", value.temperature)), TINT \(String(format: "%.0f", value.tint))"
+            case .isAdjustingWhiteBalance(let value):
+                return "White Balancing: \(value)"
+            }
+        }
     }
 }

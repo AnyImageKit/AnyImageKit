@@ -10,6 +10,7 @@ import AVFoundation
 
 protocol AudioIOComponentDelegate: class {
     
+    func audioIO(_ component: AudioIOComponent, didUpdate property: AudioIOComponent.ObservableProperty)
     func audioIO(_ component: AudioIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
 
@@ -17,10 +18,10 @@ final class AudioIOComponent: DeviceIOComponent {
     
     weak var delegate: AudioIOComponentDelegate?
     
-    let options: CaptureParsedOptionsInfo
-    
     private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
+    
+    private let options: CaptureParsedOptionsInfo
     
     init(session: AVCaptureSession, options: CaptureParsedOptionsInfo) {
         self.options = options
@@ -70,5 +71,12 @@ extension AudioIOComponent: AVCaptureAudioDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         delegate?.audioIO(self, didOutput: sampleBuffer)
+    }
+}
+
+extension AudioIOComponent {
+    
+    enum ObservableProperty: Equatable {
+        
     }
 }

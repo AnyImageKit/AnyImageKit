@@ -90,8 +90,8 @@ final class CaptureViewController: AnyImageViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tipsView.showTips(hideAfter: 3, animated: true)
-        capture.focus(at: CGPoint(x: 0.5, y: 0.5))
-        capture.exposure(at: CGPoint(x: 0.5, y: 0.5))
+        capture.focus()
+        capture.exposure()
     }
     
     private func setupNavigation() {
@@ -229,6 +229,14 @@ extension CaptureViewController: CaptureDelegate {
     func captureDidChangeSubjectArea(_ capture: Capture) {
         capture.focus()
         capture.exposure()
+    }
+    
+    func capture(_ captrue: Capture, didUpdate audioProperty: AudioIOComponent.ObservableProperty) {
+           
+    }
+    
+    func capture(_ captrue: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty) {
+        print(videoProperty.description)
     }
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
