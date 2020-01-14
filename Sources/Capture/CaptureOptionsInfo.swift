@@ -54,7 +54,7 @@ public struct CaptureParsedOptionsInfo: Equatable {
     public var preferredPositions: [CapturePosition] = [.back, .front]
     public var flashMode: CaptureFlashMode = .off
     public var videoMaximumDuration: TimeInterval = 20
-    public var preferredPreset: [CapturePreset] = [.fhd1920x1080_60, .fhd1920x1080_30, .hd1280x720_60, .hd1280x720_30]
+    public var preferredPreset: [CapturePreset] = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
     public var enableDebugLog: Bool = false
     
     public init(_ info: [CaptureOptionsInfoItem] = []) {
