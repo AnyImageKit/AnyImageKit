@@ -67,8 +67,6 @@ final class Mosaic: UIView {
             switch option {
             case .default:
                 image = originalMosaicImage
-            case .colorful:
-                image = BundleHelper.image(named: "CustomMosaic")!
             case .custom(_, let customMosaic):
                 image = customMosaic
             }

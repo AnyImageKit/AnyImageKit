@@ -112,10 +112,12 @@ public enum EditorPhotoToolOption: Equatable {
 public enum EditorPhotoMosaicOption: Equatable {
     /// 默认马赛克
     case `default`
-    /// 彩色图片马赛克
-    case colorful
     /// 自定义马赛克
     case custom(icon: UIImage?, mosaic: UIImage)
+    
+    public static var colorful: EditorPhotoMosaicOption {
+        return .custom(icon: nil, mosaic: BundleHelper.image(named: "CustomMosaic")!)
+    }
 }
 
 /// 输入文本颜色

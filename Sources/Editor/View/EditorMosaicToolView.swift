@@ -61,8 +61,6 @@ final class EditorMosaicToolView: UIView {
             switch option {
             case .default:
                 image = BundleHelper.image(named: "PhotoToolMosaicDefault")?.withRenderingMode(.alwaysTemplate)
-            case .colorful:
-                image = BundleHelper.image(named: "CustomMosaic")
             case .custom(let customMosaicIcon, let customMosaic):
                 image = customMosaicIcon ?? customMosaic
             }
