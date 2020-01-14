@@ -191,6 +191,11 @@ extension CapturePreviewView {
         }
     }
     
+    func autoFocus() {
+        let point = CGPoint(x: 0.5, y: 0.5)
+        focusView.focusing(at: point, isAuto: true)
+    }
+    
     func rotate(to orientation: DeviceOrientation, animated: Bool) {
         // TODO:
 //        let duration = animated ? 0.25 : 0

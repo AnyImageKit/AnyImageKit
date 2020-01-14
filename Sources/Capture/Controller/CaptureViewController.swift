@@ -227,6 +227,8 @@ extension CaptureViewController: CaptureDelegate {
     }
     
     func captureDidChangeSubjectArea(_ capture: Capture) {
+        print("captureDidChangeSubjectArea")
+        previewView.autoFocus()
         capture.focus()
         capture.exposure()
     }

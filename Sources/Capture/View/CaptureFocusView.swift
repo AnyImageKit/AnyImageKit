@@ -11,6 +11,7 @@ import UIKit
 final class CaptureFocusView: UIView {
     
     private(set) var isFocusing: Bool = false
+    private var isAuto: Bool = false
     
     // up = 0, down = 1
     internal var exposureValue: CGFloat {
@@ -63,19 +64,25 @@ final class CaptureFocusView: UIView {
 // MARK: - Public function
 extension CaptureFocusView {
     
-    public func focusing(at point: CGPoint) {
+    public func focusing(at point: CGPoint, isAuto: Bool = false) {
+        if isAuto && isFocusing { return }
+        self.isAuto = isAuto
         stopTimer()
         self.alpha = 0.5
         isFocusing = true
         exposureView.resotre()
         rectView.isHidden = false
-        exposureView.isHidden = false
-        let offsetX = point.x * bounds.width - rectView.bounds.width / 2
-        let offsetY = point.y * bounds.height - rectView.bounds.height / 2
+        exposureView.isHidden = isAuto
+        
+        let width: CGFloat = isAuto ? frame.width/3 : 75
+        let offsetX = point.x * bounds.width - width / 2
+        let offsetY = point.y * bounds.height - width / 2
         rectView.snp.updateConstraints { (maker) in
+            maker.width.height.equalTo(width)
             maker.top.equalToSuperview().offset(offsetY)
             maker.left.equalToSuperview().offset(offsetX)
         }
+        rectView.setNeedsDisplay()
         exposureView.snp.remakeConstraints { (maker) in
             if point.x < 0.8 {
                 maker.left.equalTo(rectView.snp.right).offset(5)
@@ -87,7 +94,8 @@ extension CaptureFocusView {
             maker.height.equalTo(145)
         }
         
-        rectView.transform = CGAffineTransform(scaleX: 1.6, y: 1.6)
+        let rectViewSacle: CGFloat = isAuto ? 1.1 : 1.6
+        rectView.transform = CGAffineTransform(scaleX: rectViewSacle, y: rectViewSacle)
         exposureView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
         UIView.animate(withDuration: 0.25) {
             self.alpha = 1.0
@@ -130,14 +138,21 @@ extension CaptureFocusView {
         if isFocusing {
             if self.alpha == 1 {
                 UIView.animate(withDuration: 0.25, animations: {
-                    self.alpha = 0.4
+                    self.alpha = self.isAuto ? 0.0 : 0.4
                 }) { (_) in
-                    self.startTimer(8)
+                    if self.isAuto {
+                        self.isAuto = false
+                        self.isFocusing = false
+                        self.stopTimer()
+                    } else {
+                        self.startTimer(8)
+                    }
                 }
             } else {
                 UIView.animate(withDuration: 0.25, animations: {
                     self.alpha = 0
                 }) { (_) in
+                    self.isAuto = false
                     self.isFocusing = false
                     self.stopTimer()
                 }
