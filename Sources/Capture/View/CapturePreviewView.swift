@@ -36,7 +36,7 @@ final class CapturePreviewView: UIView {
     }()
     
     private lazy var focusView: CaptureFocusView = {
-        let view = CaptureFocusView(frame: .zero, color: options.tintColor)
+        let view = CaptureFocusView(frame: .zero, color: UIColor.color(hex: 0xFFD60A))
         return view
     }()
     

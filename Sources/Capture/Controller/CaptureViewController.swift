@@ -263,6 +263,7 @@ extension CaptureViewController: CaptureDelegate {
         if options.enableDebugLog {
             editorOptions.append(.enableDebugLog)
         }
+        editorOptions.append(.tintColor(options.tintColor))
         let editor = ImageEditorController(photo: image, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in

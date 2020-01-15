@@ -48,7 +48,7 @@ public enum CaptureOptionsInfoItem: OptionsInfoItem {
 
 public struct CaptureParsedOptionsInfo: Equatable {
     
-    public var tintColor: UIColor = UIColor.color(hex: 0xFFD60A)
+    public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
     public var mediaOptions: CaptureMediaOption = [.photo, .video]
     public var photoAspectRatio: CaptureAspectRatio = .ratio4x3
     public var preferredPositions: [CapturePosition] = [.back, .front]
