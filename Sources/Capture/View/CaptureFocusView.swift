@@ -14,8 +14,12 @@ final class CaptureFocusView: UIView {
     private var isAuto: Bool = false
     
     // up = 0, down = 1
-    internal var exposureValue: CGFloat {
+    var value: CGFloat {
         return exposureView.value
+    }
+    
+    var orientation: DeviceOrientation {
+        return exposureView.orientation
     }
     
     private lazy var rectView: CaptureFocusRectView = {
@@ -48,11 +52,11 @@ final class CaptureFocusView: UIView {
         addSubview(rectView)
         addSubview(exposureView)
         
-        rectView.snp.makeConstraints { (maker) in
+        rectView.snp.makeConstraints { maker in
             maker.top.left.equalToSuperview()
             maker.width.height.equalTo(75)
         }
-        exposureView.snp.makeConstraints { (maker) in
+        exposureView.snp.makeConstraints { maker in
             maker.left.equalTo(rectView.snp.right).offset(5)
             maker.centerY.equalTo(rectView)
             maker.width.equalTo(27)
@@ -64,7 +68,7 @@ final class CaptureFocusView: UIView {
 // MARK: - Public function
 extension CaptureFocusView {
     
-    public func focusing(at point: CGPoint, isAuto: Bool = false) {
+    func focusing(at point: CGPoint, isAuto: Bool = false) {
         if isAuto && isFocusing { return }
         self.isAuto = isAuto
         stopTimer()
@@ -77,25 +81,17 @@ extension CaptureFocusView {
         let width: CGFloat = isAuto ? frame.width/3 : 75
         let offsetX = point.x * bounds.width - width / 2
         let offsetY = point.y * bounds.height - width / 2
-        rectView.snp.updateConstraints { (maker) in
+        rectView.snp.updateConstraints { maker in
             maker.width.height.equalTo(width)
             maker.top.equalToSuperview().offset(offsetY)
             maker.left.equalToSuperview().offset(offsetX)
         }
         rectView.setNeedsDisplay()
-        exposureView.snp.remakeConstraints { (maker) in
-            if point.x < 0.8 {
-                maker.left.equalTo(rectView.snp.right).offset(5)
-            } else {
-                maker.right.equalTo(rectView.snp.left).offset(-5)
-            }
-            maker.centerY.equalTo(rectView)
-            maker.width.equalTo(27)
-            maker.height.equalTo(145)
-        }
+        exposureView.point = point
+        updateExposureView()
         
-        let rectViewSacle: CGFloat = isAuto ? 1.1 : 1.6
-        rectView.transform = CGAffineTransform(scaleX: rectViewSacle, y: rectViewSacle)
+        let rectViewScale: CGFloat = isAuto ? 1.1 : 1.6
+        rectView.transform = CGAffineTransform(scaleX: rectViewScale, y: rectViewScale)
         exposureView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
         UIView.animate(withDuration: 0.25) {
             self.alpha = 1.0
@@ -105,11 +101,64 @@ extension CaptureFocusView {
         startTimer()
     }
     
-    public func setLight(_ value: CGFloat) {
+    func setLight(_ value: CGFloat) {
         stopTimer()
         self.alpha = 1.0
         exposureView.setValue(value)
         startTimer()
+    }
+    
+    func rotate(to orientation: DeviceOrientation, animated: Bool) {
+        startTimer()
+        self.alpha = 1.0
+        exposureView.prepare(orientation: orientation, animated: animated) { [weak self] in
+            guard let self = self else { return }
+            self.updateExposureView()
+            self.exposureView.rotate(animated: animated)
+        }
+    }
+    
+    private func updateExposureView() {
+        exposureView.snp.remakeConstraints { maker in
+            switch exposureView.orientation {
+            case .portrait:
+                if exposureView.point.x < 0.8 {
+                    maker.left.equalTo(rectView.snp.right).offset(5)
+                } else {
+                    maker.right.equalTo(rectView.snp.left).offset(-5)
+                }
+                maker.centerY.equalTo(rectView)
+                maker.width.equalTo(27)
+                maker.height.equalTo(145)
+            case .portraitUpsideDown:
+                if exposureView.point.x > 0.2 {
+                    maker.right.equalTo(rectView.snp.left).offset(-5)
+                } else {
+                    maker.left.equalTo(rectView.snp.right).offset(5)
+                }
+                maker.centerY.equalTo(rectView)
+                maker.width.equalTo(27)
+                maker.height.equalTo(145)
+            case .landscapeLeft:
+                if exposureView.point.y < 0.8 {
+                    maker.top.equalTo(rectView.snp.bottom).offset(5)
+                } else {
+                    maker.bottom.equalTo(rectView.snp.top).offset(-5)
+                }
+                maker.centerX.equalTo(rectView)
+                maker.width.equalTo(145)
+                maker.height.equalTo(27)
+            case .landscapeRight:
+                if exposureView.point.y > 0.2 {
+                    maker.bottom.equalTo(rectView.snp.top).offset(-5)
+                } else {
+                    maker.top.equalTo(rectView.snp.bottom).offset(5)
+                }
+                maker.centerX.equalTo(rectView)
+                maker.width.equalTo(145)
+                maker.height.equalTo(27)
+            }
+        }
     }
 }
 
@@ -229,6 +278,8 @@ private final class CaptureExposureView: UIView {
         return view
     }()
     
+    var point: CGPoint = .zero
+    var orientation: DeviceOrientation = .portrait
     private let color: UIColor
     private(set) var value: CGFloat = 0.5
     
@@ -248,18 +299,18 @@ private final class CaptureExposureView: UIView {
         addSubview(bottomLine)
         addSubview(imageView)
         
-        imageView.snp.makeConstraints { (maker) in
+        imageView.snp.makeConstraints { maker in
             maker.width.height.equalTo(self.snp.width)
             maker.centerX.equalToSuperview()
             maker.centerY.equalToSuperview()
         }
-        topLine.snp.makeConstraints { (maker) in
+        topLine.snp.makeConstraints { maker in
             maker.top.equalToSuperview().offset(-5)
             maker.bottom.equalTo(imageView.snp.top).offset(-3)
             maker.centerX.equalToSuperview()
             maker.width.equalTo(1)
         }
-        bottomLine.snp.makeConstraints { (maker) in
+        bottomLine.snp.makeConstraints { maker in
             maker.top.equalTo(imageView.snp.bottom).offset(3)
             maker.bottom.equalToSuperview().offset(5)
             maker.centerX.equalToSuperview()
@@ -270,23 +321,119 @@ private final class CaptureExposureView: UIView {
 
 extension CaptureExposureView {
     
-    public func setValue(_ value: CGFloat) {
-        guard value >= 0 && value <= 1 else { return }
-        self.value = value
-        topLine.isHidden = false
-        bottomLine.isHidden = false
-        let height = bounds.height - imageView.bounds.height
-        let offset = -(height * 0.5 - height * value)
-        imageView.snp.updateConstraints { (maker) in
-            maker.centerY.equalToSuperview().offset(offset)
+    func prepare(orientation: DeviceOrientation, animated: Bool, completion: @escaping () -> Void) {
+        self.orientation = orientation
+        let duration = animated ? 0.15 : 0
+        let timingParameters = UICubicTimingParameters(animationCurve: .easeOut)
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
+        animator.addAnimations {
+            self.alpha = 0
         }
+        animator.addCompletion { _ in
+            self.imageView.snp.removeConstraints()
+            self.topLine.snp.removeConstraints()
+            self.bottomLine.snp.removeConstraints()
+            completion()
+        }
+        animator.startAnimation()
     }
     
-    public func resotre() {
+    func rotate(animated: Bool) {
+        switch orientation {
+        case .portrait, .portraitUpsideDown:
+            imageView.snp.remakeConstraints { maker in
+                maker.width.height.equalTo(self.snp.width)
+                maker.centerX.equalToSuperview()
+                maker.centerY.equalToSuperview()
+            }
+            topLine.snp.remakeConstraints { maker in
+                maker.top.equalToSuperview().offset(-5)
+                maker.bottom.equalTo(imageView.snp.top).offset(-3)
+                maker.centerX.equalToSuperview()
+                maker.width.equalTo(1)
+            }
+            bottomLine.snp.remakeConstraints { maker in
+                maker.top.equalTo(imageView.snp.bottom).offset(3)
+                maker.bottom.equalToSuperview().offset(5)
+                maker.centerX.equalToSuperview()
+                maker.width.equalTo(1)
+            }
+        case .landscapeLeft, .landscapeRight:
+            imageView.snp.remakeConstraints { maker in
+                maker.height.height.equalTo(self.snp.height)
+                maker.centerX.equalToSuperview()
+                maker.centerY.equalToSuperview()
+            }
+            topLine.snp.remakeConstraints { maker in
+                maker.left.equalToSuperview().offset(-5)
+                maker.right.equalTo(imageView.snp.left).offset(-3)
+                maker.centerY.equalToSuperview()
+                maker.height.equalTo(1)
+            }
+            bottomLine.snp.remakeConstraints { maker in
+                maker.left.equalTo(imageView.snp.right).offset(3)
+                maker.right.equalToSuperview().offset(5)
+                maker.centerY.equalToSuperview()
+                maker.height.equalTo(1)
+            }
+        }
+        
+        layoutIfNeeded()
+        setValue(value)
+        
+        let duration = animated ? 0.15 : 0
+        let timingParameters = UICubicTimingParameters(animationCurve: .easeIn)
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
+        animator.addAnimations {
+            self.alpha = 1
+        }
+        animator.startAnimation(afterDelay: 0.1)
+    }
+    
+    func setValue(_ value: CGFloat) {
+        guard value >= 0 && value <= 1 else { return }
+        self.value = value
+        topLine.isHidden = value == 0.5
+        bottomLine.isHidden = value == 0.5
+        switch orientation {
+        case .portrait:
+            let height = bounds.height - imageView.bounds.height
+            let offset = -(height * 0.5 - height * value)
+            imageView.snp.updateConstraints { maker in
+                maker.centerX.equalToSuperview()
+                maker.centerY.equalToSuperview().offset(offset)
+            }
+        case .portraitUpsideDown:
+            let height = bounds.height - imageView.bounds.height
+            let offset = height * 0.5 - height * value
+            imageView.snp.updateConstraints { maker in
+                maker.centerX.equalToSuperview()
+                maker.centerY.equalToSuperview().offset(offset)
+            }
+        case .landscapeLeft:
+            let width = bounds.width - imageView.bounds.width
+            let offset = width * 0.5 - width * value
+            imageView.snp.updateConstraints { maker in
+                maker.centerX.equalToSuperview().offset(offset)
+                maker.centerY.equalToSuperview()
+            }
+        case .landscapeRight:
+            let width = bounds.width - imageView.bounds.width
+            let offset = -(width * 0.5 - width * value)
+            imageView.snp.updateConstraints { maker in
+                maker.centerX.equalToSuperview().offset(offset)
+                maker.centerY.equalToSuperview()
+            }
+        }
+        print("setValue=\(value), \(orientation)")
+    }
+    
+    func resotre() {
         value = 0.5
         topLine.isHidden = true
         bottomLine.isHidden = true
-        imageView.snp.updateConstraints { (maker) in
+        imageView.snp.updateConstraints { maker in
+            maker.centerX.equalToSuperview()
             maker.centerY.equalToSuperview()
         }
     }

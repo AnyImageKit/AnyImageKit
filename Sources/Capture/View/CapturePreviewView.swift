@@ -102,9 +102,21 @@ extension CapturePreviewView {
         guard focusView.isFocusing else { return }
         let point = sender.translation(in: self)
         sender.setTranslation(.zero, in: self)
-        let value = point.y / bounds.height
-        focusView.setLight(focusView.exposureValue + value)
-        delegate?.previewView(self, didUpdateExposure: focusView.exposureValue)
+        switch focusView.orientation {
+        case .portrait:
+            let difference = point.y / bounds.height
+            focusView.setLight(focusView.value + difference)
+        case .portraitUpsideDown:
+            let difference = -point.y / bounds.height
+            focusView.setLight(focusView.value + difference)
+        case .landscapeLeft:
+            let difference = -point.x / bounds.width
+            focusView.setLight(focusView.value + difference)
+        case .landscapeRight:
+            let difference = point.x / bounds.width
+            focusView.setLight(focusView.value + difference)
+        }
+        delegate?.previewView(self, didUpdateExposure: focusView.value)
     }
     
     @objc private func onPinch(_ sender: UIPinchGestureRecognizer) {
@@ -199,13 +211,6 @@ extension CapturePreviewView {
     }
     
     func rotate(to orientation: DeviceOrientation, animated: Bool) {
-        // TODO:
-//        let duration = animated ? 0.25 : 0
-//        let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
-//        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingParameters)
-//        animator.addAnimations {
-//            self.focusView.transform = orientation.transformMirrored
-//        }
-//        animator.startAnimation()
+        focusView.rotate(to: orientation, animated: animated)
     }
 }
