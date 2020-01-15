@@ -42,6 +42,7 @@ final class CaptureFocusView: UIView {
         super.init(frame: frame)
         setupView()
         isUserInteractionEnabled = false
+        clipsToBounds = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -140,7 +141,7 @@ extension CaptureFocusView {
                 maker.width.equalTo(27)
                 maker.height.equalTo(145)
             case .landscapeLeft:
-                if exposureView.point.y < 0.8 {
+                if exposureView.point.y < 0.7 {
                     maker.top.equalTo(rectView.snp.bottom).offset(5)
                 } else {
                     maker.bottom.equalTo(rectView.snp.top).offset(-5)
@@ -149,7 +150,7 @@ extension CaptureFocusView {
                 maker.width.equalTo(145)
                 maker.height.equalTo(27)
             case .landscapeRight:
-                if exposureView.point.y > 0.2 {
+                if exposureView.point.y > 0.25 {
                     maker.bottom.equalTo(rectView.snp.top).offset(-5)
                 } else {
                     maker.top.equalTo(rectView.snp.bottom).offset(5)
@@ -425,7 +426,6 @@ extension CaptureExposureView {
                 maker.centerY.equalToSuperview()
             }
         }
-        print("setValue=\(value), \(orientation)")
     }
     
     func resotre() {
