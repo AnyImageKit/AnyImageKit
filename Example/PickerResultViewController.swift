@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 import AnyImageKit
 
 final class PickerResultViewController: UIViewController {
@@ -83,7 +84,17 @@ extension PickerResultViewController: UICollectionViewDelegate {
                 case .success(let response):
                     alert.title = "Result"
                     alert.message = response.url.absoluteString
-                    alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Watch", style: .default, handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        let player = AVPlayer(url: response.url)
+                        let controller = AVPlayerViewController()
+                        controller.player = player
+                        controller.modalPresentationStyle = .fullScreen
+                        self.present(controller, animated: true) {
+                            player.playImmediately(atRate: 1)
+                        }
+                    }))
+                    alert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
                 case .failure(let error):
                     print(error)
                 }
