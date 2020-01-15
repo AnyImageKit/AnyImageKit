@@ -27,7 +27,10 @@ final class CaptureConfigViewController: UITableViewController {
     }
     
     private func setupView() {
-        
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.width * 500 / 1200))
+        imageView.image = UIImage(named: "TitleMapCapture")
+        tableView.tableHeaderView = imageView
+        tableView.tableFooterView = UIView()
     }
     
     @IBAction func openCaptureTapped() {
