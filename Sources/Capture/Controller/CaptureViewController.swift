@@ -250,7 +250,7 @@ extension CaptureViewController: CaptureDelegate {
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
         guard UIDevice.current.userInterfaceIdiom == .phone else { // TODO: iPadOS is not support yet
-            if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
+            if let url = FileHelper.write(photoData: photoData, utType: fileType.utType) {
                 toolView.captureButton.stopProcessing()
                 delegate?.capture(self, didOutput: url, type: .photo)
             }

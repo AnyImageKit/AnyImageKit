@@ -18,11 +18,15 @@ public struct PhotoURLFetchOptions {
     public init(version: PHImageRequestOptionsVersion = .current,
                 isNetworkAccessAllowed: Bool = true,
                 progressHandler: PHAssetImageProgressHandler? = nil,
-                preferredOutputPath: String = NSTemporaryDirectory()) {
+                preferredOutputPath: String? = nil) {
         self.version = version
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.progressHandler = progressHandler
-        self.preferredOutputPath = preferredOutputPath
+        if let preferredOutputPath = preferredOutputPath {
+            self.preferredOutputPath = preferredOutputPath
+        } else {
+            self.preferredOutputPath = FileHelper.temporaryDirectory(for: .photo)
+        }
     }
 }
 
@@ -46,17 +50,8 @@ extension ExportTool {
         return ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { result, requestID in
             switch result {
             case .success(let response):
-                // Check Path
-                FileHelper.createDirectory(at: options.preferredOutputPath)
-                // Prepare Output URL
-                let timestamp = Int(Date().timeIntervalSince1970*1000)
-                let outputPath = options.preferredOutputPath.appending("PHOTO-EXPORT-\(timestamp)).\(FileHelper.fileExtension(from: response.dataUTI as CFString))")
-                let outputURL = URL(fileURLWithPath: outputPath)
-                // Write to File
-                do {
-                    try response.data.write(to: outputURL)
-                } catch {
-                    completion(.failure(.exportFailed), requestID)
+                guard let outputURL = FileHelper.write(photoData: response.data, utType: response.dataUTI as CFString) else {
+                    completion(.failure(.fileWriteFailed), requestID)
                     return
                 }
                 completion(.success(.init(url: outputURL, dataUTI: response.dataUTI, orientation: response.orientation)), requestID)

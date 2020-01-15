@@ -25,7 +25,6 @@ final class Recorder {
     
     private(set) var isRunning: Bool = false
     
-    private let cacheTool = CacheTool(config: .init(module: .capture(.recorder)))
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.Recorder")
     
     private var writer: AVAssetWriter?
@@ -140,11 +139,13 @@ extension Recorder {
     
     private func createWriter() -> AVAssetWriter? {
         do {
-            FileHelper.createDirectory(at: cacheTool.path)
-            let pathURL = URL(fileURLWithPath: cacheTool.path)
-            let url = pathURL.appendingPathComponent((UUID().uuidString) + ".mp4")
-            _print("Create AVAssetWriter at utl: \(url)")
-            return try AVAssetWriter(outputURL: url, fileType: .mp4)
+            let tmpPath = FileHelper.temporaryDirectory(for: .video)
+            let dateString = FileHelper.dateString()
+            let filePath = tmpPath.appending("Video-\(dateString).mp4")
+            FileHelper.createDirectory(at: tmpPath)
+            let outputURL = URL(fileURLWithPath: filePath)
+            _print("Create AVAssetWriter at utl: \(outputURL)")
+            return try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
         } catch {
             _print("Fail to create AVAssetWriter, error=\(error)")
         }

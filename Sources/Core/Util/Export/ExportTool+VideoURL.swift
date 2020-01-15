@@ -25,14 +25,18 @@ public struct VideoURLFetchOptions {
                 version: PHVideoRequestOptionsVersion = .current,
                 deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
                 fetchProgressHandler: PHAssetVideoProgressHandler? = nil,
-                preferredOutputPath: String = NSTemporaryDirectory(),
+                preferredOutputPath: String? = nil,
                 exportPreset: VideoExportPreset = .h264_1280x720,
                 exportProgressHandler: VideoURLExportProgressHandler? = nil) {
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
         self.version = version
         self.deliveryMode = deliveryMode
         self.fetchProgressHandler = fetchProgressHandler
-        self.preferredOutputPath = preferredOutputPath
+        if let preferredOutputPath = preferredOutputPath {
+            self.preferredOutputPath = preferredOutputPath
+        } else {
+            self.preferredOutputPath = FileHelper.temporaryDirectory(for: .video)
+        }
         self.exportPreset = exportPreset
         self.exportProgressHandler = exportProgressHandler
     }
@@ -89,8 +93,8 @@ extension ExportTool {
             return
         }
         // Prepare Output URL
-        let timestamp = Int(Date().timeIntervalSince1970*1000)
-        let outputPath = options.preferredOutputPath.appending("VIDEO-EXPORT-\(timestamp).mp4")
+        let dateString = FileHelper.dateString()
+        let outputPath = options.preferredOutputPath.appending("VIDEO-\(dateString).mp4")
         let outputURL = URL(fileURLWithPath: outputPath)
         // Setup Export Session
         exportSession.shouldOptimizeForNetworkUse = true

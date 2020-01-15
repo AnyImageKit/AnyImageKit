@@ -68,7 +68,6 @@ extension ImageEditorCache {
     public static func clearDiskCache() {
         _print("Delete all editor cache")
         clearImageEditorCache()
-        clearVideoEditorCache()
     }
     
     /// 删除图片编辑的磁盘缓存
@@ -77,19 +76,6 @@ extension ImageEditorCache {
         let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
         for item in list {
             clearDiskCache(id: item)
-        }
-    }
-    
-    /// 删除视频编辑的磁盘缓存
-    public static func clearVideoEditorCache() {
-        let path = CacheModule.editor(.videoOutput).path
-        let list = (try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []
-        for item in list {
-            do {
-                try FileManager.default.removeItem(atPath: path+item)
-            } catch {
-                _print(error.localizedDescription)
-            }
         }
     }
 }

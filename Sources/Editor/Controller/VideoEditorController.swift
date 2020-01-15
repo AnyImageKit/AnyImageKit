@@ -354,10 +354,11 @@ extension VideoEditorController {
     
     /// 导出视频
     private func exportVideo(_ composition: AVMutableComposition, videoComposition: AVVideoComposition?, metadata: [AVMetadataItem], completion: @escaping (Result<URL, Error>) -> Void) {
-        let outputRoot = CacheModule.editor(.videoOutput).path
-        let uuid = UUID().uuidString
-        let outputURL = URL(fileURLWithPath: outputRoot + "\(uuid).mp4")
-        FileHelper.createDirectory(at: outputRoot)
+        let tmpPath = FileHelper.temporaryDirectory(for: .video)
+        let dateString = FileHelper.dateString()
+        let filePath = tmpPath.appending("Video-\(dateString).mp4")
+        FileHelper.createDirectory(at: tmpPath)
+        let outputURL = URL(fileURLWithPath: filePath)
         
         guard let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough) else { return }
         exportSession.metadata = metadata

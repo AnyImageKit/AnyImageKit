@@ -28,7 +28,6 @@ struct CacheConfig {
 enum CacheModule {
     case picker(CacheModulePicker)
     case editor(CacheModuleEditor)
-    case capture(CacheModuleCapture)
     
     var title: String {
         switch self {
@@ -36,8 +35,6 @@ enum CacheModule {
             return "Picker"
         case .editor:
             return "Editor"
-        case .capture:
-            return "Capture"
         }
     }
     
@@ -47,18 +44,11 @@ enum CacheModule {
             return subModule.rawValue
         case .editor(let subModule):
             return subModule.rawValue
-        case .capture(let subModule):
-            return subModule.rawValue
         }
     }
     
     var path: String {
-        #if DEBUG
-        let directory: FileManager.SearchPathDirectory = .documentDirectory
-        #else
-        let directory: FileManager.SearchPathDirectory = .libraryDirectory
-        #endif
-        let lib = NSSearchPathForDirectoriesInDomains(directory, .userDomainMask, true).first ?? ""
+        let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? ""
         return "\(lib)/AnyImageKitCache/\(title)/\(subTitle)/"
     }
 }
@@ -71,11 +61,6 @@ enum CacheModuleEditor: String {
     case pen = "Pen"
     case mosaic = "Mosaic"
     case history = "History"
-    case videoOutput = "VideoOutput"
-}
-
-enum CacheModuleCapture: String {
-    case recorder = "Recorder"
 }
 
 final class CacheTool {

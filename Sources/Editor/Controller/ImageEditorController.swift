@@ -109,7 +109,7 @@ extension ImageEditorController {
         guard let data = photo.jpegData(compressionQuality: 1.0) else {
             return .failure(.invalidData)
         }
-        guard let url = FileHelper.write(photoData: data, fileType: fileType) else {
+        guard let url = FileHelper.write(photoData: data, utType: fileType.utType) else {
             return .failure(.fileWriteFailed)
         }
         return .success(url)
