@@ -43,6 +43,7 @@ final class CapturePreviewView: UIView {
     private let options: CaptureParsedOptionsInfo
     
     weak var delegate: CapturePreviewViewDelegate?
+    var isRunning: Bool = true
     
     init(frame: CGRect, options: CaptureParsedOptionsInfo) {
         self.options = options
@@ -123,6 +124,7 @@ extension CapturePreviewView {
     }
     
     func draw(_ sampleBuffer: CMSampleBuffer) {
+        guard isRunning else { return }
         if let imageBuffer = sampleBuffer.imageBuffer {
             let image = CIImage(cvImageBuffer: imageBuffer)
             previewContentView.draw(image: image)

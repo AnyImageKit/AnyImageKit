@@ -19,8 +19,6 @@ final class CaptureViewController: AnyImageViewController {
     
     weak var delegate: CaptureViewControllerDelegate?
     
-    private var isPreviewing: Bool = true
-    
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero, options: options)
         view.delegate = self
@@ -223,11 +221,10 @@ extension CaptureViewController: CapturePreviewViewDelegate {
 extension CaptureViewController: CaptureDelegate {
     
     func captureDidCapturePhoto(_ capture: Capture) {
-        isPreviewing = false
+        previewView.isRunning = false
     }
     
     func captureDidChangeSubjectArea(_ capture: Capture) {
-        print("captureDidChangeSubjectArea")
         previewView.autoFocus()
         capture.focus()
         capture.exposure()
@@ -277,9 +274,7 @@ extension CaptureViewController: CaptureDelegate {
             recorder.append(sampleBuffer: sampleBuffer, mediaType: .audio)
         case .video:
             recorder.append(sampleBuffer: sampleBuffer, mediaType: .video)
-            if isPreviewing {
-                previewView.draw(sampleBuffer)
-            }
+            previewView.draw(sampleBuffer)
         }
     }
 }
@@ -335,7 +330,7 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         capture.startRunning()
         orientationUtil.startRunning()
-        isPreviewing = true
+        previewView.isRunning = true
         editor.dismiss(animated: false, completion: nil)
     }
     
