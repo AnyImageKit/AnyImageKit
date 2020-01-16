@@ -36,7 +36,7 @@
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
-将下面内容添加到 `Podfile`，并执行依赖更新
+将下面内容添加到 `Podfile`，并执行依赖更新。
 
 ```ruby
 pod 'AnyImageKit'
@@ -44,15 +44,17 @@ pod 'AnyImageKit'
 
 ### [Carthage](https://github.com/Carthage/Carthage)
 
-将下面内容添加到 `Cartfile`，并执行依赖更新
+将下面内容添加到 `Cartfile`，并执行依赖更新。
 
 ```ogdl
 github "AnyImageProject/AnyImageKit"
 ```
 
-> 由于 Carthage 的依赖问题，不支持 `--no-use-binaries`，请直接使用我们的二进制文件
+> 由于 Carthage 的依赖问题，不支持 `--no-use-binaries`，请直接使用我们的二进制文件。
 
 ## 使用方法
+
+> 我们在 [Wiki](https://github.com/AnyImageProject/AnyImageKit/wiki) 中提供了更详细的使用说明。
 
 ### 快速上手
 
