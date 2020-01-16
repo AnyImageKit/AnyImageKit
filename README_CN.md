@@ -1,4 +1,4 @@
-![AnyImageKit](./Resources/TitleMap@2x.png)
+![AnyImageKit](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/TitleMap@2x.png)
 
 `AnyImageKit` 是一个选取与编辑图片的工具套件，使用 Swift 编写。
 
@@ -16,7 +16,7 @@
 - [ ] 编辑图片 (技术预览版)
     - [x] 涂鸦
     - [ ] 表情
-    - [ ] 文字
+    - [x] 文字
     - [x] 裁剪
     - [x] 马赛克
 - [ ] 多平台支持
@@ -91,7 +91,7 @@ asset.fetchVideoURL { (result) in
 
 ## 预览
 
-![](./Resources/QuickLook.gif)
+![](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/QuickLook.gif)
 
 ## 版权协议
 
