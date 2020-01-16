@@ -36,13 +36,10 @@ extension AnyImageViewController {
             let message = String(format: permission.localizedAlertMessage, BundleHelper.appName)
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             let settings = BundleHelper.coreLocalizedString(key: "Settings")
-            alert.addAction(UIAlertAction(title: settings, style: .default, handler: { [weak self] _ in
+            alert.addAction(UIAlertAction(title: settings, style: .default, handler: { _ in
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-                UIApplication.shared.open(url, options: [:]) { [weak self] result in
-                    DispatchQueue.main.asyncAfter(deadline: .now()+3) { [weak self] in
-                        guard let self = self else { return }
-                        self.check(permission: permission, authorized: authorized, canceled: canceled)
-                    }
+                UIApplication.shared.open(url, options: [:]) { _ in
+                    canceled()
                 }
             }))
             let cancel = BundleHelper.coreLocalizedString(key: "Cancel")
@@ -51,5 +48,33 @@ extension AnyImageViewController {
             }))
             self.present(alert, animated: true, completion: nil)
         })
+    }
+    
+    func check(permissions: [Permission], authorized: @escaping () -> Void, denied: @escaping (Permission) -> Void) {
+        if !permissions.isEmpty {
+            var _permissions = permissions
+            let permission = _permissions.removeFirst()
+            check(permission: permission, authorized: { [weak self] in
+                guard let self = self else { return }
+                self.check(permissions: _permissions, authorized: authorized, denied: denied)
+            }, denied: {
+                denied(permission)
+            })
+        } else {
+            authorized()
+        }
+    }
+    
+    func check(permissions: [Permission], authorized: @escaping () -> Void, canceled: @escaping () -> Void) {
+        if !permissions.isEmpty {
+            var _permissions = permissions
+            let permission = _permissions.removeFirst()
+            check(permission: permission, authorized: { [weak self] in
+                guard let self = self else { return }
+                self.check(permissions: _permissions, authorized: authorized, canceled: canceled)
+            }, canceled: canceled)
+        } else {
+            authorized()
+        }
     }
 }

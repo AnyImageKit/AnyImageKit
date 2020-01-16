@@ -30,6 +30,7 @@ final class AudioIOComponent: DeviceIOComponent {
     }
     
     private func setupMicrophone(session: AVCaptureSession) {
+        guard options.mediaOptions.contains(.video) else { return }
         do {
             let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInMicrophone],
                                                                     mediaType: .audio,

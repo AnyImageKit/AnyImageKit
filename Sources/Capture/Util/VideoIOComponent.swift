@@ -148,9 +148,11 @@ extension VideoIOComponent {
             _print("Can't find the specified video device")
             return
         }
+        // add/remove kvo
         if let oldCamera = device {
             removeObserver(from: oldCamera)
         }
+        addObserver(to: camera)
         self.device = camera
         
         let (preset, formats) = camera.preferredConfigs(for: options.preferredPreset)
@@ -181,8 +183,6 @@ extension VideoIOComponent {
             camera.activeFormat = format
             camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
             camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(preset.frameRate))
-            // set keyPath observer
-            addObserver(to: camera)
         }
     }
     

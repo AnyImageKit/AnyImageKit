@@ -75,7 +75,11 @@ final class CaptureViewController: AnyImageViewController {
         super.viewDidLoad()
         setupNavigation()
         setupView()
-        check(permission: .camera, authorized: { [weak self] in
+        var permissions: [Permission] = [.camera]
+        if options.mediaOptions.contains(.video) {
+            permissions.append(.microphone)
+        }
+        check(permissions: permissions, authorized: { [weak self] in
             guard let self = self else { return }
             self.capture.startRunning()
             self.orientationUtil.startRunning()
@@ -188,18 +192,12 @@ extension CaptureViewController: CaptureButtonDelegate {
     
     func captureButtonDidBeganLongPress(_ button: CaptureButton) {
         impactFeedback()
-        check(permission: .microphone, authorized: { [weak self] in
-            guard let self = self else { return }
-            self.toolView.hideButtons(animated: true)
-            self.previewView.hideToolMask(animated: true)
-            self.tipsView.hideTips(afterDelay: 0, animated: true)
-            self.recorder.preferredAudioSettings = self.capture.recommendedAudioSetting
-            self.recorder.preferredVideoSettings = self.capture.recommendedVideoSetting
-            self.recorder.startRunning()
-        }, canceled: { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.captureDidCancel(self)
-        })
+        toolView.hideButtons(animated: true)
+        previewView.hideToolMask(animated: true)
+        tipsView.hideTips(afterDelay: 0, animated: true)
+        recorder.preferredAudioSettings = capture.recommendedAudioSetting
+        recorder.preferredVideoSettings = capture.recommendedVideoSetting
+        recorder.startRunning()
     }
     
     func captureButtonDidEndedLongPress(_ button: CaptureButton) {
