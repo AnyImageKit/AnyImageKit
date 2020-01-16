@@ -48,3 +48,12 @@ extension AVCaptureDevice {
         }
     }
 }
+
+#if targetEnvironment(macCatalyst)
+extension AVCaptureDevice.Format {
+    
+    var supportedColorSpaces: [AVCaptureColorSpace] {
+        return __supportedColorSpaces.compactMap { AVCaptureColorSpace(rawValue: $0.intValue) }
+    }
+}
+#endif
