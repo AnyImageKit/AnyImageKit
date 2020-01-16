@@ -92,12 +92,10 @@ extension Capture {
     }
     
     func focus(at point: CGPoint = CGPoint(x: 0.5, y: 0.5)) {
-        guard session.isRunning else { return }
         videoIO.setFocus(point: point)
     }
     
     func exposure(at point: CGPoint = CGPoint(x: 0.5, y: 0.5)) {
-        guard session.isRunning else { return }
         videoIO.setExposure(point: point)
     }
     
