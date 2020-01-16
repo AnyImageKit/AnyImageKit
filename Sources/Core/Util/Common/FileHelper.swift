@@ -13,11 +13,13 @@ struct FileHelper {
     static func fileExtension(from dataUTI: CFString) -> String {
         guard
             let declaration = UTTypeCopyDeclaration(dataUTI)?.takeRetainedValue() as? [CFString: Any],
-            let tagSpecification = declaration[kUTTypeTagSpecificationKey] as? [CFString: Any],
-            let fileExtension = tagSpecification[kUTTagClassFilenameExtension] as? String else {
-                return ""
+            let tagSpecification = declaration[kUTTypeTagSpecificationKey] as? [CFString: Any] else {
+                return "jpg"
         }
-        return fileExtension
+        if let fileExtension = tagSpecification[kUTTagClassFilenameExtension] as? String {
+            return fileExtension
+        }
+        return (tagSpecification[kUTTagClassFilenameExtension] as? [String])?.first ?? "jpg"
     }
     
     static func createDirectory(at path: String) {
@@ -42,7 +44,6 @@ struct FileHelper {
         // Write to file
         do {
             try photoData.write(to: url)
-            print("Did write file at \(url)")
             return url
         } catch {
             _print(error.localizedDescription)
