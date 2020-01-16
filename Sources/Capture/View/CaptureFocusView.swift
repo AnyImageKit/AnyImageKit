@@ -103,6 +103,7 @@ extension CaptureFocusView {
     }
     
     func setLight(_ value: CGFloat) {
+        guard !isAuto else { return }
         stopTimer()
         self.alpha = 1.0
         exposureView.setValue(value)
