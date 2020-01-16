@@ -1,4 +1,4 @@
-![AnyImageKit](./Resources/TitleMap@2x.png)
+![AnyImageKit](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/TitleMap@2x.png)
 
 [![GitHub Actions](https://github.com/AnyImageProject/AnyImageKit/workflows/build/badge.svg?branch=master)](https://github.com/AnyImageProject/AnyImageKit/actions?query=workflow%3Abuild)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImageKit.svg)](https://cocoapods.org/pods/AnyImageKit)
@@ -99,7 +99,7 @@ asset.fetchVideoURL { (result) in
 
 ## Quick Look
 
-![](./Resources/QuickLook.gif)
+![](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/QuickLook.gif)
 
 ## License
 
