@@ -102,7 +102,9 @@ public struct PickerParsedOptionsInfo: Equatable {
     #endif
     
     public init(_ info: [PickerOptionsInfoItem] = []) {
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         captureOptions.mediaOptions = []
+        #endif
         for option in info {
             switch option {
             case .theme(let value): theme = value

@@ -273,7 +273,7 @@ extension CaptureViewController: CaptureDelegate {
             self.orientationUtil.stopRunning()
         }
         #else
-        if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
+        if let url = FileHelper.write(photoData: photoData, utType: fileType.utType) {
             delegate?.capture(self, didOutput: url, type: .photo)
         }
         #endif
