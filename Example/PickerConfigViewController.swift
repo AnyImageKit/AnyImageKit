@@ -31,7 +31,7 @@ final class PickerConfigViewController: UITableViewController {
     }
     
     private func setupNavigation() {
-        let title = BundleHelper.localizedString(key: "Open picker")
+        let title = BundleHelper.localizedString(key: "OpenPicker")
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
     }
     
@@ -457,7 +457,7 @@ extension PickerConfigViewController {
         var options: String {
             switch self {
             case .captureOptions:
-                return ".captureOptions"
+                return ".captureOptionInfoItems"
             }
         }
         

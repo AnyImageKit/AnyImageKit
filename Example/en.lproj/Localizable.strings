@@ -7,17 +7,17 @@
 */
 
 // Picker
-"Open picker" = "Open picker";
+"OpenPicker" = "Open picker";
 "Theme" = "Theme";
-"SelectLimit" = "SelectLimit";
-"ColumnNumber" = "ColumnNumber";
-"UseOriginalImage" = "UseOriginalImage";
-"SelectOptions" = "SelectOptions";
-"AlbumOptions" = "AlbumOptions";
-"OrderByDate" = "OrderByDate";
-"EditorOptions" = "EditorOptions";
-"CaptureOptions" = "CaptureOptions";
-"FullScreen" = "FullScreen";
+"SelectLimit" = "Select Limit";
+"ColumnNumber" = "Column Number";
+"UseOriginalImage" = "Use Original Image";
+"SelectOptions" = "Select Options";
+"AlbumOptions" = "Album Options";
+"OrderByDate" = "Order By Date";
+"EditorOptions" = "Editor Options";
+"CaptureOptions" = "Capture Options";
+"FullScreen" = "Full Screen";
 
 // Editor
 "OpenEditor" = "Open editor";

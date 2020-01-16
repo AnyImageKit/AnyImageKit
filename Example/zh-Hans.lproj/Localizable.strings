@@ -7,7 +7,7 @@
 */
 
 // Picker
-"Open picker" = "打开相册";
+"OpenPicker" = "打开相册";
 "Theme" = "主题";
 "SelectLimit" = "最多可选择的资源";
 "ColumnNumber" = "一行的列数";
