@@ -55,7 +55,7 @@ extension FileHelper {
     
     static func dateString() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd-HHmmss"
+        formatter.dateFormat = "yyyyMMdd-HHmmss-SSS"
         return formatter.string(from: Date())
     }
     

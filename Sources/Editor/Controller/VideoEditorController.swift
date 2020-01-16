@@ -161,6 +161,11 @@ extension VideoEditorController {
         let start = cropToolView.progressView.left
         let end = cropToolView.progressView.right
         let isEdited = end - start != 1
+        if let url = resource as? URL, !isEdited {
+            _print("Export video at \(url)")
+            delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+            return
+        }
         clipVideo(url: url, start: start, end: end) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
