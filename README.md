@@ -24,7 +24,7 @@
 - [ ] Edit image ( Technical Preview )
     - [x] Drawing
     - [ ] Emoji
-    - [ ] Input text
+    - [x] Input text
     - [x] Cropping
     - [x] Mosaic
 - [ ] Multiple platform support

@@ -21,10 +21,9 @@ extension UIView {
 
 extension UIImageView {
     
-    var screenshotForImageView: UIImage? {
-        guard let image = self.image else { return nil }
+    func screenshot(_ imageSize: CGSize) -> UIImage? {
         let format = UIGraphicsImageRendererFormat()
-        format.scale = image.size.width / self.bounds.width
+        format.scale = imageSize.width / self.bounds.width
         let renderer = UIGraphicsImageRenderer(size: self.bounds.size, format: format)
         let newImage = renderer.image { [weak self] (context) in
             return self?.layer.render(in: context.cgContext)
