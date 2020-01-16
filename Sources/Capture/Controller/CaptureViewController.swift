@@ -60,6 +60,7 @@ final class CaptureViewController: AnyImageViewController {
         return util
     }()
     
+    private var permissionsChecked: Bool = false
     private let options: CaptureParsedOptionsInfo
     
     init(options: CaptureParsedOptionsInfo) {
@@ -81,6 +82,7 @@ final class CaptureViewController: AnyImageViewController {
         }
         check(permissions: permissions, authorized: { [weak self] in
             guard let self = self else { return }
+            self.permissionsChecked = true
             self.capture.startRunning()
             self.orientationUtil.startRunning()
         }, canceled: { [weak self] in
@@ -102,6 +104,11 @@ final class CaptureViewController: AnyImageViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tipsView.showTips(hideAfter: 3, animated: true)
+        if permissionsChecked {
+            capture.focus()
+            capture.exposure()
+            previewView.autoFocus(isForce: true)
+        }
     }
     
     private func setupNavigation() {

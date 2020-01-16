@@ -205,9 +205,9 @@ extension CapturePreviewView {
         }
     }
     
-    func autoFocus() {
+    func autoFocus(isForce: Bool = false) {
         let point = CGPoint(x: 0.5, y: 0.5)
-        focusView.focusing(at: point, isAuto: true)
+        focusView.focusing(at: point, isAuto: true, isForce: isForce)
     }
     
     func rotate(to orientation: DeviceOrientation, animated: Bool) {

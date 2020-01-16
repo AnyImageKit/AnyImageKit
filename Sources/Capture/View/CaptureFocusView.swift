@@ -69,8 +69,8 @@ final class CaptureFocusView: UIView {
 // MARK: - Public function
 extension CaptureFocusView {
     
-    func focusing(at point: CGPoint, isAuto: Bool = false) {
-        if isAuto && isFocusing { return }
+    func focusing(at point: CGPoint, isAuto: Bool = false, isForce: Bool = false) {
+        if !isForce && isAuto && isFocusing { return }
         self.isAuto = isAuto
         stopTimer()
         self.alpha = 0.5
