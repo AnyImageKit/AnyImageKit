@@ -10,6 +10,7 @@ import UIKit
 
 protocol RowTypeRule {
     var title: String { get }
+    var options: String { get }
     var defaultValue: String { get }
     var indexPath: IndexPath { get }
 }

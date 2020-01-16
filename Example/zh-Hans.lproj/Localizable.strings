@@ -8,29 +8,29 @@
 
 // Picker
 "Open picker" = "打开相册";
-"Theme" = "Theme (主题)";
-"SelectLimit" = "SelectLimit (最多可选择的资源)";
-"ColumnNumber" = "ColumnNumber (一行的列数)";
-"UseOriginalImage" = "UseOriginalImage (是否使用原图)";
-"SelectOptions" = "SelectOptions (选择类型)";
-"AlbumOptions" = "AlbumOptions (相册类型)";
-"OrderByDate" = "OrderByDate (排序方式)";
-"EditorOptions" = "EditorOptions (编辑类型)";
-"CaptureOptions" = "CaptureOptions (拍摄类型)";
-"FullScreen" = "FullScreen (是否全屏)";
+"Theme" = "主题";
+"SelectLimit" = "最多可选择的资源";
+"ColumnNumber" = "一行的列数";
+"UseOriginalImage" = "是否使用原图";
+"SelectOptions" = "选择类型";
+"AlbumOptions" = "相册类型";
+"OrderByDate" = "排序方式";
+"EditorOptions" = "编辑类型";
+"CaptureOptions" = "拍摄类型";
+"FullScreen" = "是否全屏";
 
 // Editor
-"Open editor" = "打开编辑器";
-"EditOptions" = "EditOptions (编辑功能)";
-"PenWidth" = "PenWidth (画笔宽度)";
-"MosaicOptions" = "MosaicOptions (马赛克种类)";
-"MosaicWidth" = "MosaicWidth (马赛克线条宽度)";
-"MosaicLevel" = "MosaicLevel (马赛克模糊度)";
+"OpenEditor" = "打开编辑器";
+"EditOptions" = "编辑功能";
+"PenWidth" = "画笔宽度";
+"MosaicOptions" = "马赛克种类";
+"MosaicWidth" = "马赛克线条宽度";
+"MosaicLevel" = "马赛克模糊度";
 
 // Capture
-"Open camera" = "打开相机";
-"MediaOptions" = "MediaOptions（媒体配置）";
-"PhotoAspectRatio" = "PhotoAspectRatio（照片比例）";
-"PreferredPositions" = "PreferredPositions（优先使用的相机）";
-"FlashMode" = "FlashMode（闪光灯模式）";
-"VideoMaximumDuration" = "VideoMaximumDuration（视频拍摄最长时间）";
+"OpenCamera" = "打开相机";
+"MediaOptions" = "媒体配置";
+"PhotoAspectRatio" = "照片比例";
+"PreferredPositions" = "优先使用的相机";
+"FlashMode" = "闪光灯模式";
+"VideoMaximumDuration" = "视频拍摄最长时间";

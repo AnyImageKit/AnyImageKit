@@ -20,17 +20,17 @@
 "FullScreen" = "FullScreen";
 
 // Editor
-"Open editor" = "Open editor";
-"EditOptions" = "EditOptions";
-"PenWidth" = "PenWidth";
-"MosaicOptions" = "MosaicOptions";
-"MosaicWidth" = "MosaicWidth";
-"MosaicLevel" = "MosaicLevel";
+"OpenEditor" = "Open editor";
+"EditOptions" = "Edit Options";
+"PenWidth" = "Pen Width";
+"MosaicOptions" = "Mosaic Options";
+"MosaicWidth" = "Mosaic Width";
+"MosaicLevel" = "Mosaic Level";
 
 // Capture
-"Open camera" = "Open camera";
+"OpenCamera" = "Open camera";
 "MediaOptions" = "Media Options";
 "PhotoAspectRatio" = "Photo Aspect Ratio";
 "PreferredPositions" = "Preferred Positions";
 "FlashMode" = "Flash Mode";
-"VideoMaximum Duration" = "Video Maximum Duration";
+"VideoMaximumDuration" = "Video Maximum Duration";

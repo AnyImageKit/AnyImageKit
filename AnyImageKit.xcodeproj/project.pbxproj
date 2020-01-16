@@ -91,6 +91,7 @@
 		A0B577D52382999D000879F7 /* AnyImageKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C192331D426005F742C /* Picker+UIColor.swift */; };
 		A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */; };
+		A0C452E623D007D90087B412 /* ConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C452E523D007D90087B412 /* ConfigCell.swift */; };
 		A0E8F5ED23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E8F5EC23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift */; };
 		A0F4753E232F7DFA00BB117B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753D232F7DFA00BB117B /* Asset.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
@@ -323,6 +324,7 @@
 		A0B50C3723AA0AD2002C9799 /* CapturePreviewContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewContentView.swift; sourceTree = "<group>"; };
 		A0C03C192331D426005F742C /* Picker+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Picker+UIColor.swift"; sourceTree = "<group>"; };
 		A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDropDownPresentationController.swift; sourceTree = "<group>"; };
+		A0C452E523D007D90087B412 /* ConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCell.swift; sourceTree = "<group>"; };
 		A0DBD4F12334A20700121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Picker.strings"; sourceTree = "<group>"; };
 		A0E8F5EC23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureWhiteBalance.swift; sourceTree = "<group>"; };
 		A0F4753B232F7DE500BB117B /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
@@ -1010,6 +1012,7 @@
 			children = (
 				A5601D4F233B0FE500D0E95E /* Example.entitlements */,
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
+				A0C452E523D007D90087B412 /* ConfigCell.swift */,
 				A52E1D88237AAD420002174A /* HomeViewController.swift */,
 				A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */,
 				A52E1D9A237AB6430002174A /* PickerResultViewController.swift */,
@@ -1454,6 +1457,7 @@
 				A52E1D97237AB01D0002174A /* RowTypeRule.swift in Sources */,
 				A52E1D9E237AB6980002174A /* PickerPreviewCell.swift in Sources */,
 				A52E1D89237AAD420002174A /* HomeViewController.swift in Sources */,
+				A0C452E623D007D90087B412 /* ConfigCell.swift in Sources */,
 				A52E1D9B237AB6430002174A /* PickerResultViewController.swift in Sources */,
 				A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
