@@ -398,7 +398,7 @@ extension PickerConfigViewController {
             case .columnNumber:
                 return "4"
             case .allowUseOriginalImage:
-                return "true"
+                return "false"
             case .albumOptions:
                 return "Smart+User Created"
             case .selectOptions:

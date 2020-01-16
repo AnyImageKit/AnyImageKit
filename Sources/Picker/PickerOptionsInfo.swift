@@ -82,7 +82,7 @@ public struct PickerParsedOptionsInfo: Equatable {
     public var columnNumber: Int = 4
     public var photoMaxWidth: CGFloat = 800
     public var largePhotoMaxWidth: CGFloat = 1200
-    public var allowUseOriginalImage: Bool = true
+    public var allowUseOriginalImage: Bool = false
     public var albumOptions: PickerAlbumOption = [.smart, .userCreated]
     public var selectOptions: PickerSelectOption = [.photo]
     public var orderByDate: Sort = .asc
