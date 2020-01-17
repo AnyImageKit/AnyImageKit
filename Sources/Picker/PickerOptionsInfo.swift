@@ -90,14 +90,26 @@ public struct PickerParsedOptionsInfo: Equatable {
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     public var editorOptions: PickerEditorOption = []
-    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = []
-    /*public*/ var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = []
+    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
+        didSet {
+            editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+        }
+    }
+    /*public*/ var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
+        didSet {
+            editorVideoOptions = .init(editorVideoOptionInfoItems)
+        }
+    }
     var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init()
     var editorVideoOptions: EditorVideoParsedOptionsInfo = .init()
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
-    public var captureOptionInfoItems: [CaptureOptionsInfoItem] = [.mediaOptions([])]
+    public var captureOptionInfoItems: [CaptureOptionsInfoItem] = [.mediaOptions([])] {
+        didSet {
+            captureOptions = .init(captureOptionInfoItems)
+        }
+    }
     var captureOptions: CaptureParsedOptionsInfo = .init()
     #endif
     
@@ -120,14 +132,10 @@ public struct PickerParsedOptionsInfo: Equatable {
                 
             #if ANYIMAGEKIT_ENABLE_EDITOR
             case .editorOptions(let value): editorOptions = value
-            case .editorPhotoOptionInfoItems(let value):
-                editorPhotoOptionInfoItems = value
-                editorPhotoOptions = .init(value)
+            case .editorPhotoOptionInfoItems(let value): editorPhotoOptionInfoItems = value
             #endif
             #if ANYIMAGEKIT_ENABLE_CAPTURE
-            case .captureOptionInfoItems(let value):
-                captureOptionInfoItems = value
-                captureOptions = .init(value)
+            case .captureOptionInfoItems(let value): captureOptionInfoItems = value
             #endif
             }
         }

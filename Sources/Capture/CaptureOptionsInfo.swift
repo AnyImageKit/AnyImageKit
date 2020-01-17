@@ -41,6 +41,14 @@ public enum CaptureOptionsInfoItem: OptionsInfoItem {
     /// 默认支持从 1920*1080@60 开始查找支持的最佳分辨率
     case preferredPreset([CapturePreset])
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    /// Editor photo option info items 图片编辑配置项
+    case editorPhotoOptionInfoItems([EditorPhotoOptionsInfoItem])
+    
+    /// Editor video option info items 视频编辑配置项
+    case editorVideoOptionInfoItems([EditorVideoOptionsInfoItem])
+    #endif
+    
     /// 启用调试日志
     /// 默认：false
     case enableDebugLog
@@ -57,6 +65,21 @@ public struct CaptureParsedOptionsInfo: Equatable {
     public var preferredPreset: [CapturePreset] = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
     public var enableDebugLog: Bool = false
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR 
+    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
+        didSet {
+            editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+        }
+    }
+    public var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
+        didSet {
+            editorVideoOptions = .init(editorVideoOptionInfoItems)
+        }
+    }
+    var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init()
+    var editorVideoOptions: EditorVideoParsedOptionsInfo = .init()
+    #endif
+    
     public init(_ info: [CaptureOptionsInfoItem] = []) {
         for option in info {
             switch option {
@@ -68,6 +91,11 @@ public struct CaptureParsedOptionsInfo: Equatable {
             case .videoMaximumDuration(let value): videoMaximumDuration = value
             case .preferredPreset(let value): preferredPreset = value
             case .enableDebugLog: enableDebugLog = true
+                
+            #if ANYIMAGEKIT_ENABLE_EDITOR
+            case .editorPhotoOptionInfoItems(let value): editorPhotoOptionInfoItems = value
+            case .editorVideoOptionInfoItems(let value): editorVideoOptionInfoItems = value
+            #endif
             }
         }
     }
