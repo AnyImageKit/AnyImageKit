@@ -26,7 +26,7 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
-    /// Init image editor
+    /// Init Photo Editor
     public required init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
@@ -36,7 +36,7 @@ open class ImageEditorController: AnyImageNavigationController {
         self.viewControllers = [rootViewController]
     }
     
-    /// Init video editor
+    /// Init Video Editor
     public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)

@@ -112,6 +112,14 @@ extension ImagePickerController {
     private func check(options: PickerOptionsInfo) -> PickerOptionsInfo {
         var options = options
         options.largePhotoMaxWidth = max(options.photoMaxWidth, options.largePhotoMaxWidth)
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
+        if options.useSameEditorOptionsInCapture {
+            options.captureOptions.editorPhotoOptions = options.editorPhotoOptions
+            options.captureOptions.editorVideoOptions = options.editorVideoOptions
+        }
+        #endif
+        
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if !options.selectOptions.contains(.photo) && options.captureOptions.mediaOptions.contains(.photo) {
             options.captureOptions.mediaOptions.remove(.photo)
@@ -120,6 +128,7 @@ extension ImagePickerController {
             options.captureOptions.mediaOptions.remove(.video)
         }
         #endif
+        
         #if DEBUG
         assert(options.selectLimit >= 1, "Select limit should more then 1")
         assert(options.columnNumber >= 3 && options.columnNumber <= 5, "Column number should between 3 to 5")
@@ -133,6 +142,7 @@ extension ImagePickerController {
             options.columnNumber = 5
         }
         #endif
+        
         return options
     }
     

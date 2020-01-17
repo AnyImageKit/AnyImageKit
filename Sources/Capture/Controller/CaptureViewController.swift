@@ -262,7 +262,7 @@ extension CaptureViewController: CaptureDelegate {
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
-        var editorOptions = EditorPhotoOptionsInfo()
+        var editorOptions = options.editorPhotoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
         let editor = ImageEditorController(photo: image, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
@@ -304,7 +304,7 @@ extension CaptureViewController: RecorderDelegate {
         }
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        var editorOptions = EditorVideoOptionsInfo()
+        var editorOptions = options.editorVideoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
         let editor = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen

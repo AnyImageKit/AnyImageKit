@@ -72,8 +72,16 @@ public struct PickerOptionsInfo: Equatable {
     public var captureOptions: CaptureOptionsInfo = .init()
     #endif
     
+    #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
+    /// Use Same Editor Options In Capture 在相机中使用相同的编辑配置项
+    /// - Default: true
+    public var useSameEditorOptionsInCapture: Bool = true
+    #endif
+    
     public init() {
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         captureOptions.mediaOptions = []
+        #endif
     }
 }
 

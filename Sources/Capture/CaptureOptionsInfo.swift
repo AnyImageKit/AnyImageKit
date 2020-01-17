@@ -44,7 +44,10 @@ public struct CaptureOptionsInfo: Equatable {
     public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
+    /// Editor photo option info items 图片编辑配置项
     public var editorPhotoOptions: EditorPhotoOptionsInfo = .init()
+    
+    /// Editor video option info items 视频编辑配置项
     public var editorVideoOptions: EditorVideoOptionsInfo = .init()
     #endif
     
