@@ -29,11 +29,12 @@ final class ConfigCell: UITableViewCell {
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.tertiarySystemGroupedBackground
         } else {
-            view.backgroundColor = UIColor(red: 228.0/255.0, green: 237.0/255.0, blue: 251.0/255.0, alpha: 1.0)
+            view.backgroundColor = UIColor(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1.0)
         }
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 2
         view.contentEdgeInsets = UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4)
+        view.isUserInteractionEnabled = false
         return view
     }()
     
