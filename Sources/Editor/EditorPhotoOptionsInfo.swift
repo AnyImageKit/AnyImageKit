@@ -94,6 +94,25 @@ public struct EditorPhotoParsedOptionsInfo: Equatable {
             }
         }
     }
+    
+    public var infoItems: EditorPhotoOptionsInfo {
+        var items: EditorPhotoOptionsInfo
+        items = [.tintColor(tintColor),
+                   .toolOptions(toolOptions),
+                   .penColors(penColors),
+                   .defaultPenIndex(defaultPenIndex),
+                   .penWidth(penWidth),
+                   .mosaicOptions(mosaicOptions),
+                   .defaultMosaicIndex(defaultMosaicIndex),
+                   .mosaicWidth(mosaicWidth),
+                   .mosaicLevel(mosaicLevel),
+                   .textColors(textColors),
+                   .cacheIdentifier(cacheIdentifier)]
+        if enableDebugLog {
+            items.append(.enableDebugLog)
+        }
+        return items
+    }
 }
 
 /// 图片编辑功能

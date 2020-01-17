@@ -65,19 +65,37 @@ public struct CaptureParsedOptionsInfo: Equatable {
     public var preferredPreset: [CapturePreset] = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
     public var enableDebugLog: Bool = false
     
-    #if ANYIMAGEKIT_ENABLE_EDITOR 
+    #if ANYIMAGEKIT_ENABLE_EDITOR
     public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
         didSet {
-            editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+            if editorPhotoOptionInfoItems != editorPhotoOptions.infoItems {
+                editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+            }
+        }
+    }
+    public var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init() {
+        didSet {
+            let infoItems = editorPhotoOptions.infoItems
+            if editorPhotoOptionInfoItems != infoItems {
+                editorPhotoOptionInfoItems = infoItems
+            }
         }
     }
     public var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
         didSet {
-            editorVideoOptions = .init(editorVideoOptionInfoItems)
+            if editorVideoOptionInfoItems != editorVideoOptions.infoItems {
+                editorVideoOptions = .init(editorVideoOptionInfoItems)
+            }
         }
     }
-    var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init()
-    var editorVideoOptions: EditorVideoParsedOptionsInfo = .init()
+    public var editorVideoOptions: EditorVideoParsedOptionsInfo = .init() {
+        didSet {
+            let infoItems = editorVideoOptions.infoItems
+            if editorVideoOptionInfoItems != infoItems {
+                editorVideoOptionInfoItems = infoItems
+            }
+        }
+    }
     #endif
     
     public init(_ info: [CaptureOptionsInfoItem] = []) {
@@ -98,6 +116,27 @@ public struct CaptureParsedOptionsInfo: Equatable {
             #endif
             }
         }
+    }
+    
+    public var infoItems: CaptureOptionsInfo {
+        var items: CaptureOptionsInfo
+        items = [.tintColor(tintColor),
+                   .mediaOptions(mediaOptions),
+                   .photoAspectRatio(photoAspectRatio),
+                   .preferredPositions(preferredPositions),
+                   .flashMode(flashMode),
+                   .videoMaximumDuration(videoMaximumDuration),
+                   .preferredPreset(preferredPreset)]
+        if enableDebugLog {
+            items.append(.enableDebugLog)
+        }
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        items.append(.editorPhotoOptionInfoItems(editorPhotoOptionInfoItems))
+        items.append(.editorVideoOptionInfoItems(editorVideoOptionInfoItems))
+        #endif
+        
+        return items
     }
 }
 

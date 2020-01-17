@@ -40,6 +40,16 @@ public struct EditorVideoParsedOptionsInfo: Equatable {
             }
         }
     }
+    
+    public var infoItems: EditorVideoOptionsInfo {
+        var items: EditorVideoOptionsInfo
+        items = [.tintColor(tintColor),
+                   .toolOptions(toolOptions)]
+        if enableDebugLog {
+            items.append(.enableDebugLog)
+        }
+        return items
+    }
 }
 
 /// 视频编辑功能

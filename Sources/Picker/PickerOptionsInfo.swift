@@ -92,25 +92,52 @@ public struct PickerParsedOptionsInfo: Equatable {
     public var editorOptions: PickerEditorOption = []
     public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
         didSet {
-            editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+            if editorPhotoOptionInfoItems != editorPhotoOptions.infoItems {
+                editorPhotoOptions = .init(editorPhotoOptionInfoItems)
+            }
+        }
+    }
+    public var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init() {
+        didSet {
+            let infoItems = editorPhotoOptions.infoItems
+            if editorPhotoOptionInfoItems != infoItems {
+                editorPhotoOptionInfoItems = infoItems
+            }
         }
     }
     /*public*/ var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
         didSet {
-            editorVideoOptions = .init(editorVideoOptionInfoItems)
+            if editorVideoOptionInfoItems != editorVideoOptions.infoItems {
+                editorVideoOptions = .init(editorVideoOptionInfoItems)
+            }
         }
     }
-    var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init()
-    var editorVideoOptions: EditorVideoParsedOptionsInfo = .init()
+    /*public*/ var editorVideoOptions: EditorVideoParsedOptionsInfo = .init() {
+        didSet {
+            let infoItems = editorVideoOptions.infoItems
+            if editorVideoOptionInfoItems != infoItems {
+                editorVideoOptionInfoItems = infoItems
+            }
+        }
+    }
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     public var captureOptionInfoItems: [CaptureOptionsInfoItem] = [.mediaOptions([])] {
         didSet {
-            captureOptions = .init(captureOptionInfoItems)
+            if captureOptionInfoItems != captureOptions.infoItems {
+                captureOptions = .init(captureOptionInfoItems)
+            }
         }
     }
-    var captureOptions: CaptureParsedOptionsInfo = .init()
+    public var captureOptions: CaptureParsedOptionsInfo = .init([.mediaOptions([])]) {
+        didSet {
+            let infoItems = captureOptions.infoItems
+            if captureOptionInfoItems != captureOptions.infoItems {
+                captureOptionInfoItems = infoItems
+            }
+        }
+    }
     #endif
     
     public init(_ info: [PickerOptionsInfoItem] = []) {
@@ -139,6 +166,35 @@ public struct PickerParsedOptionsInfo: Equatable {
             #endif
             }
         }
+    }
+    
+    public var infoItems: PickerOptionsInfo {
+        var items: PickerOptionsInfo
+        items = [.theme(theme),
+                   .selectLimit(selectLimit),
+                   .columnNumber(columnNumber),
+                   .photoMaxWidth(photoMaxWidth),
+                   .largePhotoMaxWidth(largePhotoMaxWidth),
+                   .albumOptions(albumOptions),
+                   .selectOptions(selectOptions),
+                   .orderByDate(orderByDate)
+                   ]
+        if allowUseOriginalImage {
+            items.append(.allowUseOriginalImage)
+        }
+        if enableDebugLog {
+            items.append(.enableDebugLog)
+        }
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        items.append(.editorOptions(editorOptions))
+        items.append(.editorPhotoOptionInfoItems(editorPhotoOptionInfoItems))
+        #endif
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        items.append(.captureOptionInfoItems(captureOptionInfoItems))
+        #endif
+        
+        return items
     }
 }
 
