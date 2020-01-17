@@ -453,7 +453,7 @@ extension PickerConfigViewController {
         var options: String {
             switch self {
             case .captureOptions:
-                return ".captureOptionInfoItems"
+                return ".captureOptions.mediaOptions"
             }
         }
         
