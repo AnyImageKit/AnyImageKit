@@ -28,7 +28,7 @@ public enum EditorVideoOptionsInfoItem: OptionsInfoItem {
 public struct EditorVideoParsedOptionsInfo: Equatable {
     
     public var tintColor: UIColor = Palette.main
-    public var toolOptions: [EditorVideoToolOption] = [.crop]
+    public var toolOptions: [EditorVideoToolOption] = [.clip]
     public var enableDebugLog: Bool = false
     
     public init(_ info: [EditorVideoOptionsInfoItem] = []) {
@@ -54,22 +54,22 @@ public struct EditorVideoParsedOptionsInfo: Equatable {
 
 /// 视频编辑功能
 public enum EditorVideoToolOption: Equatable {
-    /// 裁剪
-    case crop
+    /// 剪辑
+    case clip
 }
 
 // MARK: - Extension
 extension EditorVideoToolOption: CustomStringConvertible {
     var imageName: String {
         switch self {
-        case .crop:
+        case .clip:
             return "VideoToolVideo"
         }
     }
     
     public var description: String {
         switch self {
-        case .crop:
+        case .clip:
             return "Crop"
         }
     }

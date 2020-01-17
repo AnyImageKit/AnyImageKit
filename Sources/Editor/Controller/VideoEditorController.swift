@@ -128,7 +128,7 @@ final class VideoEditorController: AnyImageViewController {
                     guard let self = self else { return }
                     self.url = url
                     self.toolView.isHidden = false
-                    if self.toolView.selectOption(.crop) {
+                    if self.toolView.selectOption(.clip) {
                         self.cropToolView.isHidden = false
                     }
                     self.getProgressImage(url: url) { [weak self] (image) in
@@ -196,7 +196,7 @@ extension VideoEditorController: VideoEditorToolViewDelegate {
             cropToolView.isHidden = true
             return
         }
-        cropToolView.isHidden = option != .crop
+        cropToolView.isHidden = option != .clip
     }
 }
 
