@@ -26,13 +26,8 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
-    /// Init image editor with EditorPhotoOptionsInfo
-    public convenience init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
-        self.init(photo: resource, options: .init(options), delegate: delegate)
-    }
-    
-    /// Init image editor with EditorPhotoParsedOptionsInfo
-    public required init(photo resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
+    /// Init image editor
+    public required init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
@@ -41,13 +36,8 @@ open class ImageEditorController: AnyImageNavigationController {
         self.viewControllers = [rootViewController]
     }
     
-    /// Init video editor with EditorVideoOptionsInfo
-    public convenience init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo = .empty, delegate: ImageEditorControllerDelegate) {
-        self.init(video: resource, placeholderImage: placeholderImage, options: .init(options), delegate: delegate)
-    }
-    
-    /// Init video editor with EditorVideoParsedOptionsInfo
-    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: ImageEditorControllerDelegate) {
+    /// Init video editor
+    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
@@ -69,7 +59,7 @@ open class ImageEditorController: AnyImageNavigationController {
 // MARK: - Private function
 extension ImageEditorController {
     
-    private func check(resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo) -> EditorPhotoParsedOptionsInfo {
+    private func check(resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) -> EditorPhotoOptionsInfo {
         #if DEBUG
         switch resource {
         case let resource as URL:
@@ -95,7 +85,7 @@ extension ImageEditorController {
         return options
     }
     
-    private func check(resource: EditorVideoResource, options: EditorVideoParsedOptionsInfo) -> EditorVideoParsedOptionsInfo {
+    private func check(resource: EditorVideoResource, options: EditorVideoOptionsInfo) -> EditorVideoOptionsInfo {
         switch resource {
         case let resource as URL:
             assert(resource.isFileURL, "DO NOT support remote URL yet")

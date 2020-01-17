@@ -40,12 +40,12 @@ final class CapturePreviewView: UIView {
         return view
     }()
     
-    private let options: CaptureParsedOptionsInfo
+    private let options: CaptureOptionsInfo
     
     weak var delegate: CapturePreviewViewDelegate?
     var isRunning: Bool = true
     
-    init(frame: CGRect, options: CaptureParsedOptionsInfo) {
+    init(frame: CGRect, options: CaptureOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

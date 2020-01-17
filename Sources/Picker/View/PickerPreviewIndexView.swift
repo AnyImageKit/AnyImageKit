@@ -44,11 +44,11 @@ final class PickerPreviewIndexView: UIView {
         return view
     }()
     
-    private let options: PickerParsedOptionsInfo
+    private let options: PickerOptionsInfo
     
     private var manager: PickerManager!
     
-    init(frame: CGRect, options: PickerParsedOptionsInfo) {
+    init(frame: CGRect, options: PickerOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

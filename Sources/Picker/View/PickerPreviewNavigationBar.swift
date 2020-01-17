@@ -23,9 +23,9 @@ final class PickerPreviewNavigationBar: UIView {
         return view
     }()
     
-    private let options: PickerParsedOptionsInfo
+    private let options: PickerOptionsInfo
     
-    init(frame: CGRect, options: PickerParsedOptionsInfo) {
+    init(frame: CGRect, options: PickerOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         backgroundColor = UIColor.create(style: options.theme.style,

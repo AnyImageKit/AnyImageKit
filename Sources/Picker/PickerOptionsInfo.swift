@@ -9,192 +9,71 @@
 import UIKit
 import Photos
 
-public typealias PickerOptionsInfo = [PickerOptionsInfoItem]
-
-public enum PickerOptionsInfoItem: OptionsInfoItem {
+public struct PickerOptionsInfo: Equatable {
     
     /// Theme 主题
     /// - Default: Auto
-    case theme(PickerTheme)
+    public var theme: PickerTheme = .init(style: .auto)
     
     /// Select Limit 最多可选择的资源数量
     /// - Default: 9
-    case selectLimit(Int)
+    public var selectLimit: Int = 9
     
     /// Column Number 每行的列数
     /// - Default: 4
-    case columnNumber(Int)
+    public var columnNumber: Int = 4
     
     /// Max Width for export Photo 导出小图的最大宽度
     /// - Default: 800
-    case photoMaxWidth(CGFloat)
+    public var photoMaxWidth: CGFloat = 800
     
     /// Max Width for export Large Photo(When User pick original image) 导出大图的最大宽度(勾选原图时)
     /// - Default: 1200
-    case largePhotoMaxWidth(CGFloat)
+    public var largePhotoMaxWidth: CGFloat = 1200
     
     /// Allow Use Original Image 是否允许选择原图
     /// - Default: true
-    case allowUseOriginalImage
+    public var allowUseOriginalImage: Bool = false
     
     /// Album Options 相册类型
     /// - Default: smart album + user create album
-    case albumOptions(PickerAlbumOption)
+    public var albumOptions: PickerAlbumOption = [.smart, .userCreated]
     
     /// Select Options 可选择的类型
     /// - Default: Photo
     /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
     /// - .photoLive 和 .photoGIF 是 .photo 的子项，当不显式指明时，都会作为 photo 处理，否则会特殊处理（可播放&专有标识）
-    case selectOptions(PickerSelectOption)
+    public var selectOptions: PickerSelectOption = [.photo]
     
     /// Order by date 按日期排序
     /// - Default: ASC
     /// - ASC:  按时间升序排列，自动滚动到底部
     /// - DESC: 按时间倒序排列，自动滚动到顶部
-    case orderByDate(Sort)
+    public var orderByDate: Sort = .asc
+    
+    /// Enable Debug Log 启用调试日志
+    /// - Default: false
+    public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     /// Editor Options 可编辑资源类型
-    /// - Default: Photo
-    case editorOptions(PickerEditorOption)
+    /// - Default: []
+    public var editorOptions: PickerEditorOption = []
     
     /// Editor photo option info items 图片编辑配置项
-    case editorPhotoOptionInfoItems([EditorPhotoOptionsInfoItem])
+    public var editorPhotoOptions: EditorPhotoOptionsInfo = .init()
     
     /// Editor video option info items 视频编辑配置项
-//    case editorVideoOptionInfoItems([EditorVideoOptionsInfoItem])
+    /*public*/ var editorVideoOptions: EditorVideoOptionsInfo = .init()
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     /// Capture option info items 相机配置项
-    case captureOptionInfoItems([CaptureOptionsInfoItem])
+    public var captureOptions: CaptureOptionsInfo = .init()
     #endif
     
-    /// Enable Debug Log 启用调试日志
-    /// - Default: false
-    case enableDebugLog
-}
-
-public struct PickerParsedOptionsInfo: Equatable {
-    
-    public var theme: PickerTheme = .init(style: .auto)
-    public var selectLimit: Int = 9
-    public var columnNumber: Int = 4
-    public var photoMaxWidth: CGFloat = 800
-    public var largePhotoMaxWidth: CGFloat = 1200
-    public var allowUseOriginalImage: Bool = false
-    public var albumOptions: PickerAlbumOption = [.smart, .userCreated]
-    public var selectOptions: PickerSelectOption = [.photo]
-    public var orderByDate: Sort = .asc
-    public var enableDebugLog: Bool = false
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    public var editorOptions: PickerEditorOption = []
-    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
-        didSet {
-            if editorPhotoOptionInfoItems != editorPhotoOptions.infoItems {
-                editorPhotoOptions = .init(editorPhotoOptionInfoItems)
-            }
-        }
-    }
-    public var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init() {
-        didSet {
-            let infoItems = editorPhotoOptions.infoItems
-            if editorPhotoOptionInfoItems != infoItems {
-                editorPhotoOptionInfoItems = infoItems
-            }
-        }
-    }
-    /*public*/ var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
-        didSet {
-            if editorVideoOptionInfoItems != editorVideoOptions.infoItems {
-                editorVideoOptions = .init(editorVideoOptionInfoItems)
-            }
-        }
-    }
-    /*public*/ var editorVideoOptions: EditorVideoParsedOptionsInfo = .init() {
-        didSet {
-            let infoItems = editorVideoOptions.infoItems
-            if editorVideoOptionInfoItems != infoItems {
-                editorVideoOptionInfoItems = infoItems
-            }
-        }
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    public var captureOptionInfoItems: [CaptureOptionsInfoItem] = [.mediaOptions([])] {
-        didSet {
-            if captureOptionInfoItems != captureOptions.infoItems {
-                captureOptions = .init(captureOptionInfoItems)
-            }
-        }
-    }
-    public var captureOptions: CaptureParsedOptionsInfo = .init([.mediaOptions([])]) {
-        didSet {
-            let infoItems = captureOptions.infoItems
-            if captureOptionInfoItems != captureOptions.infoItems {
-                captureOptionInfoItems = infoItems
-            }
-        }
-    }
-    #endif
-    
-    public init(_ info: [PickerOptionsInfoItem] = []) {
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
+    public init() {
         captureOptions.mediaOptions = []
-        #endif
-        for option in info {
-            switch option {
-            case .theme(let value): theme = value
-            case .selectLimit(let value): selectLimit = value
-            case .columnNumber(let value): columnNumber = value
-            case .photoMaxWidth(let value): photoMaxWidth = value
-            case .largePhotoMaxWidth(let value): largePhotoMaxWidth = value
-            case .allowUseOriginalImage: allowUseOriginalImage = true
-            case .albumOptions(let value): albumOptions = value
-            case .selectOptions(let value): selectOptions = value
-            case .orderByDate(let value): orderByDate = value
-            case .enableDebugLog: enableDebugLog = true
-                
-            #if ANYIMAGEKIT_ENABLE_EDITOR
-            case .editorOptions(let value): editorOptions = value
-            case .editorPhotoOptionInfoItems(let value): editorPhotoOptionInfoItems = value
-            #endif
-            #if ANYIMAGEKIT_ENABLE_CAPTURE
-            case .captureOptionInfoItems(let value): captureOptionInfoItems = value
-            #endif
-            }
-        }
-    }
-    
-    public var infoItems: PickerOptionsInfo {
-        var items: PickerOptionsInfo
-        items = [.theme(theme),
-                   .selectLimit(selectLimit),
-                   .columnNumber(columnNumber),
-                   .photoMaxWidth(photoMaxWidth),
-                   .largePhotoMaxWidth(largePhotoMaxWidth),
-                   .albumOptions(albumOptions),
-                   .selectOptions(selectOptions),
-                   .orderByDate(orderByDate)
-                   ]
-        if allowUseOriginalImage {
-            items.append(.allowUseOriginalImage)
-        }
-        if enableDebugLog {
-            items.append(.enableDebugLog)
-        }
-        
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        items.append(.editorOptions(editorOptions))
-        items.append(.editorPhotoOptionInfoItems(editorPhotoOptionInfoItems))
-        #endif
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        items.append(.captureOptionInfoItems(captureOptionInfoItems))
-        #endif
-        
-        return items
     }
 }
 

@@ -61,9 +61,9 @@ final class CaptureViewController: AnyImageViewController {
     }()
     
     private var permissionsChecked: Bool = false
-    private let options: CaptureParsedOptionsInfo
+    private let options: CaptureOptionsInfo
     
-    init(options: CaptureParsedOptionsInfo) {
+    init(options: CaptureOptionsInfo) {
         self.options = options
         super.init(nibName: nil, bundle: nil)
     }
@@ -262,11 +262,8 @@ extension CaptureViewController: CaptureDelegate {
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard let image = UIImage(data: photoData) else { return }
-        var editorOptions: [EditorPhotoOptionsInfoItem] = []
-        if options.enableDebugLog {
-            editorOptions.append(.enableDebugLog)
-        }
-        editorOptions.append(.tintColor(options.tintColor))
+        var editorOptions = EditorPhotoOptionsInfo()
+        editorOptions.enableDebugLog = options.enableDebugLog
         let editor = ImageEditorController(photo: image, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in
@@ -307,10 +304,8 @@ extension CaptureViewController: RecorderDelegate {
         }
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        var editorOptions: [EditorVideoOptionsInfoItem] = [.tintColor(options.tintColor)]
-        if options.enableDebugLog {
-            editorOptions.append(.enableDebugLog)
-        }
+        var editorOptions = EditorVideoOptionsInfo()
+        editorOptions.enableDebugLog = options.enableDebugLog
         let editor = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
         editor.modalPresentationStyle = .fullScreen
         present(editor, animated: false) { [weak self] in

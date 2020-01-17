@@ -50,9 +50,9 @@ final class PickerToolBar: UIView {
     }()
     
     private let style: Style
-    private let options: PickerParsedOptionsInfo
+    private let options: PickerOptionsInfo
     
-    init(style: Style, options: PickerParsedOptionsInfo) {
+    init(style: Style, options: PickerOptionsInfo) {
         self.style = style
         self.options = options
         super.init(frame: .zero)

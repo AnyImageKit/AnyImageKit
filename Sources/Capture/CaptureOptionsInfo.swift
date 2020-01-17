@@ -9,135 +9,46 @@
 import UIKit
 import AVFoundation
 
-public typealias CaptureOptionsInfo = [CaptureOptionsInfoItem]
-
-public enum CaptureOptionsInfoItem: OptionsInfoItem {
+public struct CaptureOptionsInfo: Equatable {
     
     /// 主题色
     /// 默认：绿色 0x57BE6A
-    case tintColor(UIColor)
+    public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
     
     /// 媒体类型
     /// 默认：Photo+Video
-    case mediaOptions(CaptureMediaOption)
+    public var mediaOptions: CaptureMediaOption = [.photo, .video]
     
     /// 照片拍摄比例
     /// 默认：4:3
-    case photoAspectRatio(CaptureAspectRatio)
+    public var photoAspectRatio: CaptureAspectRatio = .ratio4x3
     
     /// 使用的摄像头
     /// 默认：后置+前置
-    case preferredPositions([CapturePosition])
+    public var preferredPositions: [CapturePosition] = [.back, .front]
     
     /// 默认闪光灯模式
     /// 默认：关闭
-    case flashMode(CaptureFlashMode)
+    public var flashMode: CaptureFlashMode = .off
     
     /// 视频拍摄最大时间
     /// 默认 20 秒
-    case videoMaximumDuration(TimeInterval)
+    public var videoMaximumDuration: TimeInterval = 20
     
     /// 相机预设
     /// 默认支持从 1920*1080@60 开始查找支持的最佳分辨率
-    case preferredPreset([CapturePreset])
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    /// Editor photo option info items 图片编辑配置项
-    case editorPhotoOptionInfoItems([EditorPhotoOptionsInfoItem])
-    
-    /// Editor video option info items 视频编辑配置项
-    case editorVideoOptionInfoItems([EditorVideoOptionsInfoItem])
-    #endif
+    public var preferredPreset: [CapturePreset] = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
     
     /// 启用调试日志
     /// 默认：false
-    case enableDebugLog
-}
-
-public struct CaptureParsedOptionsInfo: Equatable {
-    
-    public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
-    public var mediaOptions: CaptureMediaOption = [.photo, .video]
-    public var photoAspectRatio: CaptureAspectRatio = .ratio4x3
-    public var preferredPositions: [CapturePosition] = [.back, .front]
-    public var flashMode: CaptureFlashMode = .off
-    public var videoMaximumDuration: TimeInterval = 20
-    public var preferredPreset: [CapturePreset] = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
     public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
-    public var editorPhotoOptionInfoItems: [EditorPhotoOptionsInfoItem] = [] {
-        didSet {
-            if editorPhotoOptionInfoItems != editorPhotoOptions.infoItems {
-                editorPhotoOptions = .init(editorPhotoOptionInfoItems)
-            }
-        }
-    }
-    public var editorPhotoOptions: EditorPhotoParsedOptionsInfo = .init() {
-        didSet {
-            let infoItems = editorPhotoOptions.infoItems
-            if editorPhotoOptionInfoItems != infoItems {
-                editorPhotoOptionInfoItems = infoItems
-            }
-        }
-    }
-    public var editorVideoOptionInfoItems: [EditorVideoOptionsInfoItem] = [] {
-        didSet {
-            if editorVideoOptionInfoItems != editorVideoOptions.infoItems {
-                editorVideoOptions = .init(editorVideoOptionInfoItems)
-            }
-        }
-    }
-    public var editorVideoOptions: EditorVideoParsedOptionsInfo = .init() {
-        didSet {
-            let infoItems = editorVideoOptions.infoItems
-            if editorVideoOptionInfoItems != infoItems {
-                editorVideoOptionInfoItems = infoItems
-            }
-        }
-    }
+    public var editorPhotoOptions: EditorPhotoOptionsInfo = .init()
+    public var editorVideoOptions: EditorVideoOptionsInfo = .init()
     #endif
     
-    public init(_ info: [CaptureOptionsInfoItem] = []) {
-        for option in info {
-            switch option {
-            case .tintColor(let value): tintColor = value
-            case .mediaOptions(let value): mediaOptions = value
-            case .photoAspectRatio(let value): photoAspectRatio = value
-            case .preferredPositions(let value): preferredPositions = value
-            case .flashMode(let value): flashMode = value
-            case .videoMaximumDuration(let value): videoMaximumDuration = value
-            case .preferredPreset(let value): preferredPreset = value
-            case .enableDebugLog: enableDebugLog = true
-                
-            #if ANYIMAGEKIT_ENABLE_EDITOR
-            case .editorPhotoOptionInfoItems(let value): editorPhotoOptionInfoItems = value
-            case .editorVideoOptionInfoItems(let value): editorVideoOptionInfoItems = value
-            #endif
-            }
-        }
-    }
-    
-    public var infoItems: CaptureOptionsInfo {
-        var items: CaptureOptionsInfo
-        items = [.tintColor(tintColor),
-                   .mediaOptions(mediaOptions),
-                   .photoAspectRatio(photoAspectRatio),
-                   .preferredPositions(preferredPositions),
-                   .flashMode(flashMode),
-                   .videoMaximumDuration(videoMaximumDuration),
-                   .preferredPreset(preferredPreset)]
-        if enableDebugLog {
-            items.append(.enableDebugLog)
-        }
-        
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        items.append(.editorPhotoOptionInfoItems(editorPhotoOptionInfoItems))
-        items.append(.editorVideoOptionInfoItems(editorVideoOptionInfoItems))
-        #endif
-        
-        return items
-    }
+    public init() { }
 }
 
 public struct CaptureMediaOption: OptionSet {

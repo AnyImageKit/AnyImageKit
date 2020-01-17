@@ -12,7 +12,7 @@ import AnyImageKit
 
 final class CaptureConfigViewController: UITableViewController {
     
-    var options: CaptureOptionsInfo = .empty
+    var options =  CaptureOptionsInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ final class CaptureConfigViewController: UITableViewController {
     }
     
     @IBAction func openCaptureTapped() {
-        options.update(.enableDebugLog)
+        options.enableDebugLog = true
         let controller = ImageCaptureController(options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
@@ -123,15 +123,15 @@ extension CaptureConfigViewController {
         let indexPath = RowType.mediaOptions.indexPath
         let alert = UIAlertController(title: "Media Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.mediaOptions([.photo, .video]))
+            self?.options.mediaOptions = [.photo, .video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.mediaOptions([.photo]))
+            self?.options.mediaOptions = [.photo]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.mediaOptions([.video]))
+            self?.options.mediaOptions = [.video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -142,15 +142,15 @@ extension CaptureConfigViewController {
         let indexPath = RowType.photoAspectRatio.indexPath
         let alert = UIAlertController(title: "Photo Aspect Ratio", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "1:1", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.photoAspectRatio(.ratio1x1))
+            self?.options.photoAspectRatio = .ratio1x1
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "4:3", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.photoAspectRatio(.ratio4x3))
+            self?.options.photoAspectRatio = .ratio4x3
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "16:9", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.photoAspectRatio(.ratio16x9))
+            self?.options.photoAspectRatio = .ratio16x9
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -161,19 +161,19 @@ extension CaptureConfigViewController {
         let indexPath = RowType.preferredPositions.indexPath
         let alert = UIAlertController(title: "Preferred Positions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Back+Front", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.preferredPositions([.back, .front]))
+            self?.options.preferredPositions = [.back, .front]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Front+Back", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.preferredPositions([.front, .back]))
+            self?.options.preferredPositions = [.front, .back]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Front", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.preferredPositions([.front]))
+            self?.options.preferredPositions = [.front]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Back", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.preferredPositions([.back]))
+            self?.options.preferredPositions = [.back]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -184,15 +184,15 @@ extension CaptureConfigViewController {
         let indexPath = RowType.flashMode.indexPath
         let alert = UIAlertController(title: "Flash Mode", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.flashMode(.auto))
+            self?.options.flashMode = .auto
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Off", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.flashMode(.off))
+            self?.options.flashMode = .off
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "On", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.flashMode(.on))
+            self?.options.flashMode = .on
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -203,23 +203,23 @@ extension CaptureConfigViewController {
         let indexPath = RowType.videoMaximumDuration.indexPath
         let alert = UIAlertController(title: "Video Maximum Duration", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "10", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.videoMaximumDuration(10))
+            self?.options.videoMaximumDuration = 10
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.videoMaximumDuration(20))
+            self?.options.videoMaximumDuration = 20
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "30", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.videoMaximumDuration(30))
+            self?.options.videoMaximumDuration = 30
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "60", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.videoMaximumDuration(60))
+            self?.options.videoMaximumDuration = 60
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "120", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.videoMaximumDuration(120))
+            self?.options.videoMaximumDuration = 120
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

@@ -21,9 +21,9 @@ final class AudioIOComponent: DeviceIOComponent {
     private let audioOutput = AVCaptureAudioDataOutput()
     private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
     
-    private let options: CaptureParsedOptionsInfo
+    private let options: CaptureOptionsInfo
     
-    init(session: AVCaptureSession, options: CaptureParsedOptionsInfo) {
+    init(session: AVCaptureSession, options: CaptureOptionsInfo) {
         self.options = options
         super.init()
         setupMicrophone(session: session)

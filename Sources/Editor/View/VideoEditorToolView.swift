@@ -30,9 +30,9 @@ final class VideoEditorToolView: UIView {
     private var buttons: [UIButton] = []
     private let spacing: CGFloat = 25
     
-    private let options: EditorVideoParsedOptionsInfo
+    private let options: EditorVideoOptionsInfo
     
-    init(frame: CGRect, options: EditorVideoParsedOptionsInfo) {
+    init(frame: CGRect, options: EditorVideoOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

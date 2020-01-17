@@ -8,48 +8,21 @@
 
 import UIKit
 
-public typealias EditorVideoOptionsInfo = [EditorVideoOptionsInfoItem]
-
-public enum EditorVideoOptionsInfoItem: OptionsInfoItem {
+public struct EditorVideoOptionsInfo: Equatable {
     
     /// 主题色
     /// 默认：green
-    case tintColor(UIColor)
+    public var tintColor: UIColor = Palette.main
     
     /// 编辑功能，会按顺序排布
-    /// 默认：[.crop]
-    case toolOptions([EditorVideoToolOption])
+    /// 默认：[.clip]
+    public var toolOptions: [EditorVideoToolOption] = [.clip]
     
     /// 启用调试日志
     /// 默认：false
-    case enableDebugLog
-}
-
-public struct EditorVideoParsedOptionsInfo: Equatable {
-    
-    public var tintColor: UIColor = Palette.main
-    public var toolOptions: [EditorVideoToolOption] = [.clip]
     public var enableDebugLog: Bool = false
-    
-    public init(_ info: [EditorVideoOptionsInfoItem] = []) {
-        for option in info {
-            switch option {
-            case .tintColor(let value): tintColor = value
-            case .toolOptions(let value): toolOptions = value
-            case .enableDebugLog: enableDebugLog = true
-            }
-        }
-    }
-    
-    public var infoItems: EditorVideoOptionsInfo {
-        var items: EditorVideoOptionsInfo
-        items = [.tintColor(tintColor),
-                   .toolOptions(toolOptions)]
-        if enableDebugLog {
-            items.append(.enableDebugLog)
-        }
-        return items
-    }
+
+    public init() { }
 }
 
 /// 视频编辑功能

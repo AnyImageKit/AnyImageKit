@@ -43,12 +43,12 @@ final class PhotoEditorController: AnyImageViewController {
     
     private var image: UIImage = UIImage()
     private let resource: EditorPhotoResource
-    private let options: EditorPhotoParsedOptionsInfo
+    private let options: EditorPhotoOptionsInfo
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var context = CIContext()
     
-    init(photo resource: EditorPhotoResource, options: EditorPhotoParsedOptionsInfo, delegate: PhotoEditorControllerDelegate) {
+    init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
         self.resource = resource
         self.options = options
         self.delegate = delegate

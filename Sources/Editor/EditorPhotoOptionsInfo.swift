@@ -8,111 +8,57 @@
 
 import UIKit
 
-public typealias EditorPhotoOptionsInfo = [EditorPhotoOptionsInfoItem]
-
-public enum EditorPhotoOptionsInfoItem: OptionsInfoItem {
+public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 主题色
     /// 默认：green
-    case tintColor(UIColor)
+    public var tintColor: UIColor = Palette.main
     
     /// 编辑功能，会按顺序排布
     /// 默认：[.pen, .text, .crop, .mosaic]
-    case toolOptions([EditorPhotoToolOption])
+    public var toolOptions: [EditorPhotoToolOption] = [.pen, .text, .crop, .mosaic]
     
     /// 画笔颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
-    case penColors([UIColor])
+    public var penColors: [UIColor] = Palette.penColors
     
     /// 默认选中画笔的下标
     /// 默认：2
-    case defaultPenIndex(Int)
+    public var defaultPenIndex: Int = 2
     
     /// 画笔宽度
     /// 默认：5.0
-    case penWidth(CGFloat)
+    public var penWidth: CGFloat = 5.0
     
     /// 马赛克的种类，会按顺序排布
     /// 默认：[.default, .colorful]
-    case mosaicOptions([EditorPhotoMosaicOption])
+    public var mosaicOptions: [EditorPhotoMosaicOption] = [.default, .colorful]
     
     /// 默认选中马赛克的下标
     /// 默认：0
-    case defaultMosaicIndex(Int)
+    public var defaultMosaicIndex: Int = 0
     
     /// 马赛克线条宽度
     /// 默认：15.0
-    case mosaicWidth(CGFloat)
+    public var mosaicWidth: CGFloat = 15.0
     
     /// 马赛克模糊度，仅用于默认马赛克样式
     /// 默认：30
-    case mosaicLevel(Int)
+    public var mosaicLevel: Int = 30
     
     /// 文字颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
-    case textColors([EditorPhotoTextColor])
+    public var textColors: [EditorPhotoTextColor] = Palette.textColors
     
     /// 缓存ID
     /// 默认："" 不启用
-    case cacheIdentifier(String)
+    public var cacheIdentifier: String = ""
     
     /// 启用调试日志
     /// 默认：false
-    case enableDebugLog
-}
-
-public struct EditorPhotoParsedOptionsInfo: Equatable {
-    
-    public var tintColor: UIColor = Palette.main
-    public var toolOptions: [EditorPhotoToolOption] = [.pen, .text, .crop, .mosaic]
-    public var penColors: [UIColor] = Palette.penColors
-    public var defaultPenIndex: Int = 2
-    public var penWidth: CGFloat = 5.0
-    public var mosaicOptions: [EditorPhotoMosaicOption] = [.default, .colorful]
-    public var defaultMosaicIndex: Int = 0
-    public var mosaicWidth: CGFloat = 15.0
-    public var mosaicLevel: Int = 30
-    public var textColors: [EditorPhotoTextColor] = Palette.textColors
-    public var cacheIdentifier: String = ""
     public var enableDebugLog: Bool = false
     
-    public init(_ info: [EditorPhotoOptionsInfoItem] = []) {
-        for option in info {
-            switch option {
-            case .tintColor(let value): tintColor = value
-            case .toolOptions(let value): toolOptions = value
-            case .penColors(let value): penColors = value
-            case .defaultPenIndex(let value): defaultPenIndex = value
-            case .penWidth(let value): penWidth = value
-            case .mosaicOptions(let value): mosaicOptions = value
-            case .defaultMosaicIndex(let value): defaultMosaicIndex = value
-            case .mosaicWidth(let value): mosaicWidth = value
-            case .mosaicLevel(let value): mosaicLevel = value
-            case .textColors(let value): textColors = value
-            case .cacheIdentifier(let value): cacheIdentifier = value
-            case .enableDebugLog: enableDebugLog = true
-            }
-        }
-    }
-    
-    public var infoItems: EditorPhotoOptionsInfo {
-        var items: EditorPhotoOptionsInfo
-        items = [.tintColor(tintColor),
-                   .toolOptions(toolOptions),
-                   .penColors(penColors),
-                   .defaultPenIndex(defaultPenIndex),
-                   .penWidth(penWidth),
-                   .mosaicOptions(mosaicOptions),
-                   .defaultMosaicIndex(defaultMosaicIndex),
-                   .mosaicWidth(mosaicWidth),
-                   .mosaicLevel(mosaicLevel),
-                   .textColors(textColors),
-                   .cacheIdentifier(cacheIdentifier)]
-        if enableDebugLog {
-            items.append(.enableDebugLog)
-        }
-        return items
-    }
+    public init() { }
 }
 
 /// 图片编辑功能

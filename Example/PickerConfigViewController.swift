@@ -11,7 +11,7 @@ import AnyImageKit
 
 final class PickerConfigViewController: UITableViewController {
     
-    var options: PickerOptionsInfo = .empty
+    var options = PickerOptionsInfo()
     
     var isFullScreen = true
     
@@ -38,7 +38,7 @@ final class PickerConfigViewController: UITableViewController {
     // MARK: - Target
     
     @IBAction func openPickerTapped() {
-        options.update(.enableDebugLog)
+        options.enableDebugLog = true
         let controller = ImagePickerController(options: options, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
@@ -171,15 +171,15 @@ extension PickerConfigViewController {
         let indexPath = ConfigRowType.theme.indexPath
         let alert = UIAlertController(title: "Theme", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.theme(.init(style: .auto)))
+            self?.options.theme = .init(style: .auto)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Light", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.theme(.init(style: .light)))
+            self?.options.theme = .init(style: .light)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Dark", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.theme(.init(style: .dark)))
+            self?.options.theme = .init(style: .dark)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -191,12 +191,12 @@ extension PickerConfigViewController {
         let alert = UIAlertController(title: "SelectLimit", message: nil, preferredStyle: .alert)
         for i in 1...9 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
-                self?.options.update(.selectLimit(i))
+                self?.options.selectLimit = i
                 (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(i)"
             }))
         }
         alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectLimit(20))
+            self?.options.selectLimit = 20
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -208,7 +208,7 @@ extension PickerConfigViewController {
         let alert = UIAlertController(title: "ColumnNumber", message: nil, preferredStyle: .alert)
         for i in 3...5 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
-                self?.options.update(.columnNumber(i))
+                self?.options.columnNumber = i
                 (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(i)"
             }))
         }
@@ -218,27 +218,23 @@ extension PickerConfigViewController {
     
     private func allowUseOriginalImageTapped() {
         let indexPath = ConfigRowType.allowUseOriginalImage.indexPath
-        if options.contains(.allowUseOriginalImage) {
-            options.remove(.allowUseOriginalImage)
-        } else {
-            options.append(.allowUseOriginalImage)
-        }
-        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.contains(.allowUseOriginalImage))"
+        options.allowUseOriginalImage = !options.allowUseOriginalImage
+        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.allowUseOriginalImage)"
     }
     
     private func albumOptionsTapped() {
         let indexPath = ConfigRowType.albumOptions.indexPath
         let alert = UIAlertController(title: "AlbumOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Smart", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.albumOptions([.smart]))
+            self?.options.albumOptions = [.smart]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "User Created", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.albumOptions([.userCreated]))
+            self?.options.albumOptions = [.userCreated]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Smart+User Created", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.albumOptions([.smart, .userCreated]))
+            self?.options.albumOptions = [.smart, .userCreated]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -249,27 +245,27 @@ extension PickerConfigViewController {
         let indexPath = ConfigRowType.selectOptions.indexPath
         let alert = UIAlertController(title: "SelectOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectOptions([.photo, .video]))
+            self?.options.selectOptions = [.photo, .video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo+GIF+LivePhoto", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectOptions([.photo, .photoGIF, .photoLive]))
+            self?.options.selectOptions = [.photo, .photoGIF, .photoLive]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectOptions([.photo]))
+            self?.options.selectOptions = [.photo]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectOptions([.video]))
+            self?.options.selectOptions = [.video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "GIF", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectOptions([.photoGIF]))
+            self?.options.selectOptions = [.photoGIF]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "LivePhoto", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.selectOptions([.photoLive]))
+            self?.options.selectOptions = [.photoLive]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -280,11 +276,11 @@ extension PickerConfigViewController {
         let indexPath = ConfigRowType.orderByDate.indexPath
         let alert = UIAlertController(title: "OrderbyDate", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ASC", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.orderByDate(.asc))
+            self?.options.orderByDate = .asc
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "DESC", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.orderByDate(.desc))
+            self?.options.orderByDate = .desc
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -295,11 +291,11 @@ extension PickerConfigViewController {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
         let alert = UIAlertController(title: "EditorOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.editorOptions([]))
+            self?.options.editorOptions = []
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.editorOptions([.photo]))
+            self?.options.editorOptions = [.photo]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -310,19 +306,19 @@ extension PickerConfigViewController {
         let indexPath = CaptureConfigRowType.captureOptions.indexPath
         let alert = UIAlertController(title: "CaptureOptions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.captureOptionInfoItems([.mediaOptions([])]))
+            self?.options.captureOptions.mediaOptions = []
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.captureOptionInfoItems([.mediaOptions([.photo, .video])]))
+            self?.options.captureOptions.mediaOptions = [.photo, .video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.captureOptionInfoItems([.mediaOptions([.photo])]))
+            self?.options.captureOptions.mediaOptions = [.photo]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { [weak self] (action) in
-            self?.options.update(.captureOptionInfoItems([.mediaOptions([.video])]))
+            self?.options.captureOptions.mediaOptions = [.video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

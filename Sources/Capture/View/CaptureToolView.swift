@@ -35,9 +35,9 @@ final class CaptureToolView: UIView {
         return view
     }()
     
-    private let options: CaptureParsedOptionsInfo
+    private let options: CaptureOptionsInfo
     
-    init(frame: CGRect, options: CaptureParsedOptionsInfo) {
+    init(frame: CGRect, options: CaptureOptionsInfo) {
         self.options = options
         super.init(frame: frame)
         setupView()

@@ -19,7 +19,7 @@ final class VideoEditorController: AnyImageViewController {
     
     private let resource: EditorVideoResource
     private let placeholderImage: UIImage?
-    private let options: EditorVideoParsedOptionsInfo
+    private let options: EditorVideoOptionsInfo
     private weak var delegate: VideoEditorControllerDelegate?
     
     private var url: URL?
@@ -54,7 +54,7 @@ final class VideoEditorController: AnyImageViewController {
         return view
     }()
     
-    init(resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoParsedOptionsInfo, delegate: VideoEditorControllerDelegate) {
+    init(resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo, delegate: VideoEditorControllerDelegate) {
         self.resource = resource
         self.placeholderImage = placeholderImage
         self.options = options
