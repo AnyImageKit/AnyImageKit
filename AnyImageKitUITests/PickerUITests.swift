@@ -47,7 +47,9 @@ class PickerUITests: XCTestCase {
         selectPhotoBySelectButton(count: 3)
         tapDoneButton()
         sleep(2.0)
-        openPreviewController()
+        openOptionController()
+        setOption("Use Original Image", value: nil)
+        openPreviewController(false)
         selectPhotoByOriginalImage()
         exitPreviewController()
         tapDoneButton()
@@ -98,7 +100,7 @@ class PickerUITests: XCTestCase {
     /// 测试选择上限
     func testSelectLimit() {
         openOptionController()
-        setOption("SelectLimit", value: "2")
+        setOption("Select Limit", value: "2")
         openPreviewController(false)
         selectPhotoBySelectButton(count: 3)
         app.alerts["Alert"].scrollViews.otherElements.buttons["OK"].tap()
@@ -107,7 +109,7 @@ class PickerUITests: XCTestCase {
     /// 测试播放视频
     func testPlayVideo() {
         openOptionController()
-        setOption("SelectOptions", value: "Video")
+        setOption("Select Options", value: "Video")
         openPreviewController(false)
         app.collectionViews.firstMatch.tap()
         sleep(5.0)
@@ -116,7 +118,7 @@ class PickerUITests: XCTestCase {
     /// 测试选择视频
     func testSelectVideo() {
         openOptionController()
-        setOption("SelectOptions", value: "Video")
+        setOption("Select Options", value: "Video")
         openPreviewController(false)
         selectPhotoBySelectButton(count: 3)
         exitPreviewController()
