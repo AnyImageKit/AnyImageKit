@@ -106,7 +106,7 @@ extension EditorConfigViewController {
     
     private func editOptionsTapped() {
         let indexPath = RowType.editOptions.indexPath
-        let alert = UIAlertController(title: "EditOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Edit Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Pen+Text+Crop+Mosaic", style: .default, handler: { [weak self] (action) in
             self?.options.toolOptions = [.pen, .crop, .mosaic]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -133,7 +133,7 @@ extension EditorConfigViewController {
     
     private func penWidthTapped() {
         let indexPath = RowType.penWidth.indexPath
-        let alert = UIAlertController(title: "PenWidth", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Pen Width", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "2.5", style: .default, handler: { [weak self] (action) in
             self?.options.penWidth = 2.5
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -156,7 +156,7 @@ extension EditorConfigViewController {
     
     private func mosaicOptionsTapped() {
         let indexPath = RowType.mosaicOptions.indexPath
-        let alert = UIAlertController(title: "MosaicOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Mosaic Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Default+Colorful", style: .default, handler: { [weak self] (action) in
             self?.options.mosaicOptions = [.default, .colorful]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -175,7 +175,7 @@ extension EditorConfigViewController {
     
     private func mosaicWidthTapped() {
         let indexPath = RowType.mosaicWidth.indexPath
-        let alert = UIAlertController(title: "MosaicWidth", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Mosaic Width", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "15.0", style: .default, handler: { [weak self] (action) in
             self?.options.mosaicWidth = 15.0
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -198,7 +198,7 @@ extension EditorConfigViewController {
     
     private func mosaicLevelTapped() {
         let indexPath = RowType.mosaicLevel.indexPath
-        let alert = UIAlertController(title: "MosaicLevel", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Mosaic Level", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (action) in
             self?.options.mosaicLevel = 20
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title

@@ -188,7 +188,7 @@ extension PickerConfigViewController {
     
     private func selectLimitTapped() {
         let indexPath = ConfigRowType.selectLimit.indexPath
-        let alert = UIAlertController(title: "SelectLimit", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Select Limit", message: nil, preferredStyle: .alert)
         for i in 1...9 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
                 self?.options.selectLimit = i
@@ -205,7 +205,7 @@ extension PickerConfigViewController {
     
     private func columnNumberTapped() {
         let indexPath = ConfigRowType.columnNumber.indexPath
-        let alert = UIAlertController(title: "ColumnNumber", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Column Number", message: nil, preferredStyle: .alert)
         for i in 3...5 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
                 self?.options.columnNumber = i
@@ -224,7 +224,7 @@ extension PickerConfigViewController {
     
     private func albumOptionsTapped() {
         let indexPath = ConfigRowType.albumOptions.indexPath
-        let alert = UIAlertController(title: "AlbumOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Album Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Smart", style: .default, handler: { [weak self] (action) in
             self?.options.albumOptions = [.smart]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -243,7 +243,7 @@ extension PickerConfigViewController {
     
     private func selectOptionsTapped() {
         let indexPath = ConfigRowType.selectOptions.indexPath
-        let alert = UIAlertController(title: "SelectOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Select Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photo, .video]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -274,7 +274,7 @@ extension PickerConfigViewController {
     
     private func orderbyDateTapped() {
         let indexPath = ConfigRowType.orderByDate.indexPath
-        let alert = UIAlertController(title: "OrderbyDate", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Order By Date", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ASC", style: .default, handler: { [weak self] (action) in
             self?.options.orderByDate = .asc
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -289,7 +289,7 @@ extension PickerConfigViewController {
     
     private func editorOptionsTapped() {
         let indexPath = EditorConfigRowType.editorOptions.indexPath
-        let alert = UIAlertController(title: "EditorOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Editor Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
             self?.options.editorOptions = []
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
@@ -304,7 +304,7 @@ extension PickerConfigViewController {
     
     private func captureMediaOptionsTapped() {
         let indexPath = CaptureConfigRowType.captureOptions.indexPath
-        let alert = UIAlertController(title: "CaptureOptions", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Capture Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
             self?.options.captureOptions.mediaOptions = []
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
