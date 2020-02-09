@@ -42,7 +42,7 @@ extension AVCaptureDevice {
             }
             return false
         }.filter { format in
-            return format.autoFocusSystem == autoFocusSystem
+            return (format.autoFocusSystem == autoFocusSystem) || (format.autoFocusSystem == .none) /* For front camera*/
         }.filter { format in
             return format.supportedColorSpaces.contains(colorSpace)
         }
