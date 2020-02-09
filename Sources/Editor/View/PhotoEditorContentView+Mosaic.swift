@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -64,7 +64,7 @@ extension PhotoEditorContentView: MosaicDelegate {
     func mosaicDidEndPen() {
         delegate?.photoDidEndPen()
         canvas.isHidden = true // 不能把画笔部分截进去
-        let screenshot = imageView.screenshot
+        let screenshot = imageView.screenshot(image.size)
         canvas.isHidden = false
         imageView.image = screenshot
         mosaic?.reset()

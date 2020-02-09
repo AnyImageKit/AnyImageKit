@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -39,7 +39,7 @@ extension PhotoEditorContentView: CanvasDelegate {
     func canvasDidEndPen() {
         delegate?.photoDidEndPen()
         
-        let screenshot = canvas.screenshot
+        let screenshot = canvas.screenshot()
         canvas.lastPenImageView.image = screenshot
         canvas.reset()
         penCache.write(screenshot)

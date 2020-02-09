@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -193,14 +193,14 @@ extension PhotoEditorContentView {
         // Set
         scrollView.minimumZoomScale = didCrop ? scrollView.zoomScale : 1.0
         scrollView.maximumZoomScale = didCrop ? scrollView.zoomScale : 3.0
-        UIView.animate(withDuration: fromCache ? 0 : 0.25, animations: {
+        animate(withDuration: fromCache ? 0 : 0.25) {
             self.scrollView.frame = self.bounds
             self.scrollView.contentInset = .zero
             
             self.imageView.frame.origin = CGPoint(x: x - offsetX, y: y - offsetY)
             self.imageView.frame.size = imageSize
             self.scrollView.contentSize = contentSize
-        })
+        }
         
         // CropLayer
         guard didCrop else { return }

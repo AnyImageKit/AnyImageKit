@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0045E77884F3963C5C20723E /* Pods_AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75C01BB9A372D886CD627A5F /* Pods_AnyImageKit.framework */; };
 		35038B27B0724AA635D09CEC /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFDDF6D07FE50B56C4A76362 /* Pods_Example.framework */; };
+		716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
 		A0147E0223C458BF0071E9D5 /* Core+Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0123C458BF0071E9D5 /* Core+Thread.swift */; };
 		A0147E0423C45A200071E9D5 /* Permission+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0323C45A200071E9D5 /* Permission+Camera.swift */; };
@@ -229,6 +230,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
 		75C01BB9A372D886CD627A5F /* Pods_AnyImageKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnyImageKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CFA632A28BF9C902DE86893 /* Pods-AnyImageKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImageKit.debug.xcconfig"; path = "Target Support Files/Pods-AnyImageKit/Pods-AnyImageKit.debug.xcconfig"; sourceTree = "<group>"; };
 		81CF2560538BA5251C4F854B /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -698,6 +700,7 @@
 				A0147E0123C458BF0071E9D5 /* Core+Thread.swift */,
 				A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */,
 				A067AC1A23C816DB00FF681B /* Core+CGSize.swift */,
+				716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1287,6 +1290,7 @@
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
+				716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */,
 				A0AF771F23A7762300A3DD9F /* CaptureRecordView.swift in Sources */,
 				A08DF7C223B2F5E6002B92EE /* DeviceOrientationUtil.swift in Sources */,
 				A557BF9B235D5B820029CCDB /* CameraCell.swift in Sources */,

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/2.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -194,7 +194,7 @@ extension InputTextViewController {
         updateTextCoverView()
         textView.resignFirstResponder()
         data.text = textView.text
-        data.imageData = textCoverView.screenshot.pngData() ?? Data()
+        data.imageData = textCoverView.screenshot().pngData() ?? Data()
         delegate?.inputText(self, didFinishInput: data)
         dismiss(animated: true, completion: nil)
     }

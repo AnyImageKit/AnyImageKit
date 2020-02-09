@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/23.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -270,8 +270,8 @@ extension PhotoEditorController {
     
     /// 获取最终的图片
     private func getResultImage() -> UIImage? {
-        guard let source = contentView.imageView.screenshot(image.size)?.cgImage else { return nil }
-        let size = CGSize(width: source.width, height: source.height)
+        guard let source = contentView.imageView.screenshot(image.size).cgImage else { return nil }
+        let size = image.size
         let cropRect = contentView.cropRealRect
         
         // 获取原始imageFrame
@@ -315,7 +315,7 @@ extension PhotoEditorController {
         backButton.isHidden = true
         contentView.scrollView.isScrollEnabled = true
         contentView.deactivateAllTextView()
-        let image = contentView.imageView.screenshot
+        let image = contentView.imageView.screenshot(self.image.size)
         contentView.canvas.isHidden = true
         contentView.hiddenAllTextView()
         contentView.imageBeforeCrop = contentView.imageView.image

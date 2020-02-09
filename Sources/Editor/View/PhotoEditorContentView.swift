@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -176,6 +176,14 @@ final class PhotoEditorContentView: UIView {
         scrollView.contentInset = .zero
         imageView.frame = fitFrame
         scrollView.contentSize = imageView.bounds.size
+    }
+    
+    internal func animate(withDuration duration: TimeInterval, animations: @escaping () -> Void) {
+        if duration <= 0 {
+            animations()
+        } else {
+            UIView.animate(withDuration: duration, animations: animations)
+        }
     }
 }
 
