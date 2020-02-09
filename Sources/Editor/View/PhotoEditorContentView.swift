@@ -134,14 +134,12 @@ final class PhotoEditorContentView: UIView {
         setupView()
         setupMosaicView()
         
-        let cache = loadCacheIfNeeded()
-        if let cache = cache {
-            layoutEndCrop(true)
+        layout()
+        if let cache = loadCacheIfNeeded() {
             cache.textDataList.forEach {
                 self.addText(data: $0)
             }
-        } else {
-            layout()
+            layoutEndCrop(true)
         }
         if cropRealRect == .zero {
             cropRealRect = imageView.frame
