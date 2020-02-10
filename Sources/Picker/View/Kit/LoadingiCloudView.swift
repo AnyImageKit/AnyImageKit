@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/14.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -71,7 +71,7 @@ final class LoadingiCloudView: UIView {
             maker.centerY.equalToSuperview()
         }
         progressLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(tipLabel.snp.right).offset(1)
+            maker.left.equalTo(tipLabel.snp.right).offset(3)
             maker.right.equalToSuperview().offset(-5)
             maker.centerY.equalToSuperview()
         }
