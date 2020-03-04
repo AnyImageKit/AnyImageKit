@@ -210,10 +210,7 @@ extension InputTextViewController {
         let array = textView.getSeparatedLines()
         if array.isEmpty { return }
         
-        var attr = textView.attributedText
-        attr = attr?.attributedSubstring(from: (attr!.string as NSString).range(of: array.last!))
-        calculateLabel.attributedText = attr
-        
+        updateCalculateLabel(string: array.last!)
         let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
         textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
         textCoverView.layer.insertSublayer(textLayer!, at: 0)
@@ -259,17 +256,24 @@ extension InputTextViewController {
         return cropBezier.reversing()
     }
     
-    /// 更新宽度
+    /// 仅单行文本时，更新实际输出视图的宽度
     private func updateTextCoverView() {
         let array = textView.getSeparatedLines()
         if array.count == 1 {
-            calculateLabel.text = array.last!
+            updateCalculateLabel(string: array.last!)
             let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
             let offset = textCoverView.bounds.width - lastLineWidth + 10
             textCoverView.snp.updateConstraints { (maker) in
                 maker.right.equalToSuperview().offset(-offset)
             }
         }
+    }
+    
+    /// 更新计算文本的内容
+    private func updateCalculateLabel(string: String) {
+        guard var attr = textView.attributedText else { return }
+        attr = attr.attributedSubstring(from: (attr.string as NSString).range(of: string))
+        calculateLabel.attributedText = attr
     }
 }
 
