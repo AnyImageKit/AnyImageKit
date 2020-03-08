@@ -37,12 +37,12 @@ extension PhotoEditorContentView: CanvasDelegate {
     }
     
     func canvasDidEndPen() {
-        delegate?.photoDidEndPen()
-        
         let screenshot = canvas.screenshot()
         canvas.lastPenImageView.image = screenshot
         canvas.reset()
         penCache.write(screenshot)
+        
+        delegate?.photoDidEndPen()
     }
 }
 
