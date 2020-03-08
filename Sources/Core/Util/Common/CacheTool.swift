@@ -172,7 +172,7 @@ extension CacheTool {
     
     /// 创建缓存标识符
     static private func createIdentifier() -> String {
-        let timestamp = Int(Date().timeIntervalSince1970*100)
+        let timestamp = String(format: "%.0lf", Date().timeIntervalSince1970*100)
         let random = (arc4random() % 8999) + 1000
         return "\(timestamp)_\(random)"
     }
