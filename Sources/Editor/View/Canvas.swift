@@ -96,15 +96,11 @@ class Canvas: UIView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        defer {
-            bezierGenerator.finish()
-            lastPoint = .zero
-        }
-        
-        guard bezierGenerator.points.count > 0 else { return }
-        guard let touch = touches.first else { return }
-        let point = touch.preciseLocation(in: self)
-        pushPoint(point, to: bezierGenerator, state: .end)
+        touchesEndedOrCancelled(touches)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchesEndedOrCancelled(touches)
     }
 }
 
@@ -127,7 +123,7 @@ extension Canvas {
             reset()
         }
         defer {
-            if state == .end && layerList.count > 3 {
+            if state == .end && layerList.count > 0 {
                 delegate?.canvasDidEndPen()
             }
         }
@@ -153,5 +149,17 @@ extension Canvas {
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = brush.color.cgColor
         return shapeLayer
+    }
+    
+    private func touchesEndedOrCancelled(_ touches: Set<UITouch>) {
+        defer {
+            bezierGenerator.finish()
+            lastPoint = .zero
+        }
+        
+        guard bezierGenerator.points.count > 0 else { return }
+        guard let touch = touches.first else { return }
+        let point = touch.preciseLocation(in: self)
+        pushPoint(point, to: bezierGenerator, state: .end)
     }
 }
