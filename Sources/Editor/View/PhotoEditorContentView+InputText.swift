@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/10.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -87,8 +87,20 @@ extension PhotoEditorContentView {
         var x: CGFloat
         var y: CGFloat
         if !didCrop {
-            x = (imageView.frame.width - size.width) / 2
-            y = (imageView.frame.height - size.height) / 2
+            if scale == 1.0 {
+                x = (imageView.frame.width - size.width) / 2
+                y = (imageView.frame.height - size.height) / 2
+            } else {
+                let width = UIScreen.main.bounds.width * imageView.bounds.width / imageView.frame.width
+                x = abs(scrollView.contentOffset.x) / scale
+                x = x + (width - size.width) / 2
+                
+                var height = UIScreen.main.bounds.height * imageView.bounds.height / imageView.frame.height
+                let screenHeight = UIScreen.main.bounds.height / scale
+                height = height > screenHeight ? screenHeight : height
+                y = scrollView.contentOffset.y / scale
+                y = y + (height - size.height) / 2
+            }
         } else {
             let width = cropRealRect.width * imageView.bounds.width / imageView.frame.width
             x = abs(imageView.frame.origin.x) / scale

@@ -344,16 +344,7 @@ extension PhotoEditorController {
     
     /// 获取输入界面的占位图
     private func getInputCoverImage() -> UIImage? {
-        guard let image = getResultImage()?.gaussianImage(context: context, blur: 8) else { return nil }
-        guard let cgImage = image.cgImage else { return image }
-        let size = image.size
-        let scale = size.width / UIScreen.main.bounds.width
-        if size.height / scale > UIScreen.main.bounds.height { // 超出屏幕高，截取超出部分
-            let rect = CGRect(x: 0, y: contentView.scrollView.contentOffset.y * scale, width: size.width, height: UIScreen.main.bounds.height * scale)
-            guard let cropImage = cgImage.cropping(to: rect) else { return nil }
-            return UIImage(cgImage: cropImage)
-        }
-        return image
+        return contentView.screenshot().gaussianImage(context: context, blur: 8)
     }
     
     /// 准备开始输入文本
