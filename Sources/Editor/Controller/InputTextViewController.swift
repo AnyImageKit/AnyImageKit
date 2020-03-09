@@ -59,6 +59,8 @@ final class InputTextViewController: AnyImageViewController {
         let view = UITextView()
         view.delegate = self
         view.backgroundColor = .clear
+        view.keyboardAppearance = .dark
+        view.showsVerticalScrollIndicator = false
         view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         view.tintColor = options.tintColor
         let color = options.textColors[data.colorIdx]
@@ -355,19 +357,14 @@ extension UITextView {
     /// 计算行数
     func getSeparatedLines() -> [String] {
         var linesArray: [String] = []
-        guard let text = text, let font = font else { return linesArray }
-        
-        let attStr = NSMutableAttributedString(string: text)
-        attStr.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: 0, length: attStr.length))
-        
-        let frameSetter = CTFramesetterCreateWithAttributedString(attStr as CFAttributedString)
+        let frameSetter = CTFramesetterCreateWithAttributedString(attributedText)
         let path = CGMutablePath()
         
         // size needs to be adjusted, because frame might change because of intelligent word wrapping of iOS
         let size = sizeThatFits(CGSize(width: self.frame.width, height: .greatestFiniteMagnitude))
         path.addRect(CGRect(x: 0, y: 0, width: size.width, height: size.height), transform: .identity)
         
-        let frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attStr.length), path, nil)
+        let frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attributedText.length), path, nil)
         guard let lines = CTFrameGetLines(frame) as? [Any] else { return linesArray }
         for line in lines {
             let lineRef = line as! CTLine
