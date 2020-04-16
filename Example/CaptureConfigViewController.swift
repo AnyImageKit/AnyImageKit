@@ -20,19 +20,29 @@ final class CaptureConfigViewController: UITableViewController {
         setupView()
     }
     
+    private func setupView() {
+        tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
+        tableView.tableFooterView = UIView()
+    }
+    
     private func setupNavigation() {
         navigationItem.title = "Capture"
         let title = BundleHelper.localizedString(key: "OpenCamera")
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openCaptureTapped))
     }
     
-    private func setupView() {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.width * 500 / 1200))
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        let imageViewHeight = view.bounds.width * 500 / 1200
+        if let headerView = tableView.tableHeaderView as? UIImageView, headerView.bounds.height == imageViewHeight {
+            return
+        }
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: imageViewHeight))
         imageView.image = UIImage(named: "TitleMapCapture")
-        tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableHeaderView = imageView
-        tableView.tableFooterView = UIView()
     }
+    
+    // MARK: - Target
     
     @IBAction func openCaptureTapped() {
         options.enableDebugLog = true

@@ -21,10 +21,7 @@ final class EditorConfigViewController: UITableViewController {
     }
     
     private func setupView() {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.width * 500 / 1200))
-        imageView.image = UIImage(named: "TitleMapEditor")
         tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
-        tableView.tableHeaderView = imageView
         tableView.tableFooterView = UIView()
     }
     
@@ -32,6 +29,19 @@ final class EditorConfigViewController: UITableViewController {
         let title = BundleHelper.localizedString(key: "OpenEditor")
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openEditorTapped))
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        let imageViewHeight = view.bounds.width * 500 / 1200
+        if let headerView = tableView.tableHeaderView as? UIImageView, headerView.bounds.height == imageViewHeight {
+            return
+        }
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: imageViewHeight))
+        imageView.image = UIImage(named: "TitleMapEditor")
+        tableView.tableHeaderView = imageView
+    }
+    
+    // MARK: - Target
     
     @objc private func openEditorTapped() {
         options.enableDebugLog = true
