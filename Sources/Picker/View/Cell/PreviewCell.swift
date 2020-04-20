@@ -137,9 +137,10 @@ class PreviewCell: UICollectionViewCell {
     
     /// 设置图片
     func setImage(_ image: UIImage?) {
-        if image == nil { return }
         imageView.image = image
-        layout()
+        if image != nil {
+            layout()
+        }
     }
     
     override func layoutSubviews() {
