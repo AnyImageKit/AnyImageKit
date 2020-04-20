@@ -31,6 +31,8 @@ final class EditorTextToolView: UIView {
     
     private let colors: [EditorPhotoTextColor]
     private var colorButtons: [ColorButton] = []
+    private let spacing: CGFloat = 22
+    private let itemWidth: CGFloat = 22
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
         self.colors = options.textColors
@@ -50,6 +52,9 @@ final class EditorTextToolView: UIView {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             colorButton.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
             colorButton.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+            
+            let colorButtonRight = 25 + 25 + CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
+            colorButton.isHidden = colorButtonRight > bounds.width
         }
     }
     
@@ -68,8 +73,6 @@ final class EditorTextToolView: UIView {
         for (idx, color) in colors.enumerated() {
             colorButtons.append(createColorView(color.color, idx: idx))
         }
-        let colorWidth: CGFloat = 30
-        let spacing = (UIScreen.main.bounds.width - 40 - 50 - CGFloat(colors.count) * colorWidth) / (CGFloat(colors.count) - 1)
         let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
         stackView.axis = .horizontal
@@ -78,7 +81,7 @@ final class EditorTextToolView: UIView {
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalTo(textButton.snp.right).offset(25)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(colorWidth)
+            maker.height.equalTo(itemWidth)
         }
         
         for colorView in colorButtons {
@@ -89,7 +92,8 @@ final class EditorTextToolView: UIView {
     }
     
     private func createColorView(_ color: UIColor, idx: Int) -> ColorButton {
-        let view = ColorButton(tag: idx, size: 22, color: color, borderWidth: 2, borderColor: UIColor.white)
+        let view = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
+        view.isHidden = true
         view.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
         return view
     }

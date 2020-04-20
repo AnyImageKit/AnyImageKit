@@ -90,7 +90,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: false, completion: nil)
         let indexPath = IndexPath(item: currentIndex, section: 0)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
         }
     }

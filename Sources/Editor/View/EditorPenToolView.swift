@@ -32,6 +32,7 @@ final class EditorPenToolView: UIView {
     private let colors: [UIColor]
     private var colorViews: [UIView] = []
     private let spacing: CGFloat = 22
+    private let itemWidth: CGFloat = 22
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.colors = options.penColors
@@ -50,6 +51,9 @@ final class EditorPenToolView: UIView {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
             colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+            
+            let colorViewRight = CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
+            colorView.isHidden = colorViewRight > (bounds.width - itemWidth)
         }
     }
     
@@ -60,7 +64,7 @@ final class EditorPenToolView: UIView {
         undoButton.snp.makeConstraints { (maker) in
             maker.right.equalToSuperview()
             maker.centerY.equalToSuperview()
-            maker.width.height.equalTo(22)
+            maker.width.height.equalTo(itemWidth)
         }
     }
     
@@ -76,7 +80,7 @@ final class EditorPenToolView: UIView {
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview()
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(22)
+            maker.height.equalTo(itemWidth)
         }
         
         for colorView in colorViews {
@@ -105,6 +109,7 @@ extension EditorPenToolView: ResponseTouch {
     func responseTouch(_ point: CGPoint) -> Bool {
         // Color view
         for (idx, colorView) in colorViews.enumerated() {
+            if colorView.isHidden || colorView.alpha == 0 { continue }
             let frame = colorView.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(point) { // inside
                 if currentIdx != idx {

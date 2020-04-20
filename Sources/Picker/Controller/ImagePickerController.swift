@@ -131,7 +131,6 @@ extension ImagePickerController {
         
         #if DEBUG
         assert(options.selectLimit >= 1, "Select limit should more then 1")
-        assert(options.columnNumber >= 3 && options.columnNumber <= 5, "Column number should between 3 to 5")
         #else
         if options.selectLimit < 1 {
             options.selectLimit = 1

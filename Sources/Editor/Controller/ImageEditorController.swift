@@ -26,6 +26,8 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
     
+    private var containerSize: CGSize = .zero
+    
     /// Init Photo Editor
     public required init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: ImageEditorControllerDelegate) {
         enableDebugLog = options.enableDebugLog
@@ -60,6 +62,17 @@ open class ImageEditorController: AnyImageNavigationController {
         removeNotifications()
     }
     
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let newSize = view.frame.size
+        if containerSize != .zero, containerSize != newSize {
+            view.endEditing(true)
+            presentingViewController?.dismiss(animated: false, completion: nil)
+            editorDelegate?.imageEditorDidCancel(self)
+        }
+        containerSize = newSize
+    }
+    
     open override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -77,7 +90,6 @@ extension ImageEditorController {
             break
         }
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        assert(options.penColors.count <= 7, "Pen colors count can't more then 7")
         assert(options.mosaicOptions.count <= 5, "Mosaic count can't more then 5")
         #else
         var options = options

@@ -82,6 +82,7 @@ final class InputTextViewController: AnyImageViewController {
     
     private let lineHeight: CGFloat = 36
     private var isBegin: Bool = true
+    private var containerSize: CGSize = .zero
     
     init(options: EditorPhotoOptionsInfo, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
         self.delegate = delegate
@@ -108,6 +109,14 @@ final class InputTextViewController: AnyImageViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let newSize = view.frame.size
+        if containerSize != .zero, containerSize != newSize {
+            view.endEditing(true)
+            dismiss(animated: false, completion: nil)
+            return
+        }
+        containerSize = newSize
+        
         if isBegin {
             isBegin = false
             if !data.text.isEmpty {
