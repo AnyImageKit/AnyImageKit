@@ -223,6 +223,14 @@ extension PreviewCell {
         if size.width > size.height {
             return size.height / screenSize.height
         }
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let height = scrollView.bounds.height
+            let scale = image.size.width / image.size.height
+            let size = CGSize(width: height * scale, height: height)
+            if size.height > size.width {
+                return size.width / screenSize.width
+            }
+        }
         return 1.0
     }
 }

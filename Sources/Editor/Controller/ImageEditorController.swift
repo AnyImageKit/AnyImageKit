@@ -51,6 +51,15 @@ open class ImageEditorController: AnyImageNavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        addNotification()
+    }
+    
+    deinit {
+        removeNotifications()
+    }
+    
     open override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -103,6 +112,27 @@ extension ImageEditorController {
             return .failure(.fileWriteFailed)
         }
         return .success(url)
+    }
+}
+
+// MARK: - Notification
+extension ImageEditorController {
+    
+    private func addNotification() {
+        beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    private func removeNotifications() {
+        endGeneratingDeviceOrientationNotifications()
+    }
+    
+    @objc private func orientationDidChangeNotification(_ sender: Notification) {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            view.endEditing(true)
+            presentingViewController?.dismiss(animated: false, completion: nil)
+            editorDelegate?.imageEditorDidCancel(self)
+        }
     }
 }
 

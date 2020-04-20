@@ -57,6 +57,7 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     internal func autoSetEditorButtonHidden() {
+        guard !collectionView.visibleCells.isEmpty else { return }
         toolBar.leftButton.isHidden = true
         guard UIDevice.current.userInterfaceIdiom == .phone else { return } // Editor not support iPad yet
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
@@ -88,6 +89,10 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: false, completion: nil)
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        }
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool) {

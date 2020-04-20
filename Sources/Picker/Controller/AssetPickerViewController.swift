@@ -153,10 +153,6 @@ final class AssetPickerViewController: AnyImageViewController {
 // MARK: - Private function
 extension AssetPickerViewController {
     
-    private func addNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
-    }
-    
     private func checkPermission() {
         let permission = Permission.photos
         switch permission.status {
@@ -224,12 +220,27 @@ extension AssetPickerViewController {
     }
 }
 
-// MARK: - Target
+// MARK: - Notification
 extension AssetPickerViewController {
     
-    @objc private func containerSizeDidChange(_ sender: Notification) {
-        collectionView.reloadData()
+    private func addNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
     }
+    
+    @objc private func containerSizeDidChange(_ sender: Notification) {
+        guard collectionView.visibleCells.count > 0 else { return }
+        let visibleCellRows = collectionView.visibleCells.map{ $0.tag }.sorted()
+        let row = visibleCellRows[visibleCellRows.count / 2]
+        let indexPath = IndexPath(row: row, section: 0)
+        collectionView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+        }
+    }
+}
+
+// MARK: - Target
+extension AssetPickerViewController {
     
     @objc private func titleViewTapped(_ sender: PickerArrowButton) {
         let controller = AlbumPickerViewController(manager: manager)
@@ -314,6 +325,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         }
         
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
+        cell.tag = indexPath.row
         cell.setContent(asset, manager: manager)
         cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         cell.backgroundColor = UIColor.white
@@ -435,5 +447,8 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         let idx = controller.currentIndex + itemOffset
         let indexPath = IndexPath(item: idx, section: 0)
         collectionView.reloadItems(at: [indexPath])
+        if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
+            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+        }
     }
 }
