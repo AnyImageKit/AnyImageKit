@@ -301,6 +301,7 @@ extension InputTextViewController: UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        textView.setContentOffset(.zero, animated: false)
         if text == "\n" {
             doneButtonTapped(doneButton)
             return false
