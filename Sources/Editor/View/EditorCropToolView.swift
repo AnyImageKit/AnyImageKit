@@ -106,8 +106,8 @@ extension EditorCropToolView {
     }
 }
 
-// MARK: - ResponseTouch
-extension EditorCropToolView: ResponseTouch {
+// MARK: - Event
+extension EditorCropToolView {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
@@ -119,25 +119,5 @@ extension EditorCropToolView: ResponseTouch {
             }
         }
         return nil
-    }
-    
-    func responseTouch(_ point: CGPoint) -> Bool {
-        for (idx, view) in [cancelButton, doneButton, resetbutton].enumerated() {
-            let frame = view.frame.bigger(.init(top: 10, left: 15, bottom: 30, right: 30))
-            if frame.contains(point) {
-                switch idx {
-                case 0: // 取消按钮
-                    delegate?.cropToolViewCancelButtonTapped(self)
-                case 1: // 完成按钮
-                    delegate?.cropToolViewDoneButtonTapped(self)
-                case 2: // 重置按钮
-                    delegate?.cropToolViewResetButtonTapped(self)
-                default:
-                    break
-                }
-                return true
-            }
-        }
-        return false
     }
 }

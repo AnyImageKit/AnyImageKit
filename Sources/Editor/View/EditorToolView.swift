@@ -231,8 +231,8 @@ extension EditorToolView: EditorMosaicToolViewDelegate {
     }
 }
 
-// MARK: - ResponseTouch
-extension EditorToolView: ResponseTouch {
+// MARK: - Event
+extension EditorToolView {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
@@ -245,22 +245,5 @@ extension EditorToolView: ResponseTouch {
             }
         }
         return nil
-    }
-    
-    @discardableResult
-    func responseTouch(_ point: CGPoint) -> Bool {
-        let subViews = [editOptionsView, penToolView, cropToolView, mosaicToolView].filter{ !$0.isHidden }
-        for subView in subViews {
-            let viewPoint = point.subtraction(with: subView.frame.origin)
-            if let subView = subView as? ResponseTouch, subView.responseTouch(viewPoint) {
-                return true
-            }
-        }
-        let doneFrame = doneButton.frame.bigger(.init(top: 10, left: 20, bottom: 20, right: 20))
-        if doneFrame.contains(point) {
-            delegate?.toolViewDoneButtonTapped(self)
-            return true
-        }
-        return false
     }
 }

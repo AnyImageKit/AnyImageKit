@@ -120,8 +120,8 @@ extension EditorPenToolView {
     }
 }
 
-// MARK: - ResponseTouch
-extension EditorPenToolView: ResponseTouch {
+// MARK: - Event
+extension EditorPenToolView {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
@@ -135,29 +135,5 @@ extension EditorPenToolView: ResponseTouch {
             }
         }
         return nil
-    }
-    
-    @discardableResult
-    func responseTouch(_ point: CGPoint) -> Bool {
-        // Color view
-        for (idx, colorView) in colorButtons.enumerated() {
-            if colorView.isHidden || colorView.alpha == 0 { continue }
-            let frame = colorView.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
-            if frame.contains(point) { // inside
-                if currentIdx != idx {
-                    currentIdx = idx
-                    layoutSubviews()
-                }
-                delegate?.penToolView(self, colorDidChange: currentIdx)
-                return true
-            }
-        }
-        // Undo
-        let undoFrame = undoButton.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
-        if undoFrame.contains(point) {
-            delegate?.penToolViewUndoButtonTapped(self)
-            return true
-        }
-        return false
     }
 }

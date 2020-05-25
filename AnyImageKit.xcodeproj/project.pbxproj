@@ -98,7 +98,6 @@
 		A0F475422330736200BB117B /* Picker+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Picker+PHAssetCollection.swift */; };
 		A507CD8223C4228F00E55A6B /* EditorPhotoResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A507CD8123C4228F00E55A6B /* EditorPhotoResource.swift */; };
 		A50B2100237AA24200A894A9 /* Editor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A50B20D1237AA24200A894A9 /* Editor.xcassets */; };
-		A50B2101237AA24200A894A9 /* ResponseTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D3237AA24200A894A9 /* ResponseTouch.swift */; };
 		A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D6237AA24200A894A9 /* PhotoEditorController.swift */; };
 		A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D7237AA24200A894A9 /* ImageEditorController.swift */; };
 		A50B2105237AA24200A894A9 /* TouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D9237AA24200A894A9 /* TouchState.swift */; };
@@ -332,7 +331,6 @@
 		A0F475412330736200BB117B /* Picker+PHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+PHAssetCollection.swift"; sourceTree = "<group>"; };
 		A507CD8123C4228F00E55A6B /* EditorPhotoResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorPhotoResource.swift; sourceTree = "<group>"; };
 		A50B20D1237AA24200A894A9 /* Editor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Editor.xcassets; sourceTree = "<group>"; };
-		A50B20D3237AA24200A894A9 /* ResponseTouch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseTouch.swift; sourceTree = "<group>"; };
 		A50B20D6237AA24200A894A9 /* PhotoEditorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorController.swift; sourceTree = "<group>"; };
 		A50B20D7237AA24200A894A9 /* ImageEditorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEditorController.swift; sourceTree = "<group>"; };
 		A50B20D9237AA24200A894A9 /* TouchState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchState.swift; sourceTree = "<group>"; };
@@ -789,7 +787,6 @@
 		A50B20D2237AA24200A894A9 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
-				A50B20D3237AA24200A894A9 /* ResponseTouch.swift */,
 				A507CD8123C4228F00E55A6B /* EditorPhotoResource.swift */,
 				A5347D1723A9D11F00C93874 /* EditorVideoResource.swift */,
 			);
@@ -1275,7 +1272,6 @@
 			files = (
 				A52E1D87237AAACC0002174A /* Editor+BundleHelper.swift in Sources */,
 				A0839B6F23C32E5700FF8FDE /* CapturePreset.swift in Sources */,
-				A50B2101237AA24200A894A9 /* ResponseTouch.swift in Sources */,
 				A50B2117237AA24300A894A9 /* PhotoEditorContentView.swift in Sources */,
 				A519FA3223AB11ED0028CCC8 /* MediaType.swift in Sources */,
 				A561239723B5E7B90071C3E8 /* PickerOptionsInfo.swift in Sources */,

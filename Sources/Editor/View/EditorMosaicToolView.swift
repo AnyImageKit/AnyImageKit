@@ -138,8 +138,8 @@ extension EditorMosaicToolView {
     }
 }
 
-// MARK: - ResponseTouch
-extension EditorMosaicToolView: ResponseTouch {
+// MARK: - Event
+extension EditorMosaicToolView {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
@@ -153,30 +153,5 @@ extension EditorMosaicToolView: ResponseTouch {
             }
         }
         return nil
-    }
-    
-    @discardableResult
-    func responseTouch(_ point: CGPoint) -> Bool {
-        // Mosaic view
-        let mosaicPoint = point.subtraction(with: mosaicButtons.first!.superview!.frame.origin)
-        for (idx, mosaicView) in mosaicButtons.enumerated() {
-            let frame = mosaicView.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
-            if frame.contains(mosaicPoint) { // inside
-                if currentIdx != idx {
-                    currentIdx = idx
-                    layoutSubviews()
-                }
-                delegate?.mosaicToolView(self, mosaicDidChange: idx)
-                updateState()
-                return true
-            }
-        }
-        // Undo
-        let undoFrame = undoButton.frame.bigger(.init(top: 10, left: 15, bottom: 30, right: 30))
-        if undoFrame.contains(point) {
-            delegate?.mosaicToolViewUndoButtonTapped(self)
-            return true
-        }
-        return false
     }
 }

@@ -37,9 +37,6 @@ final class PhotoEditorController: AnyImageViewController {
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Back")
         return view
     }()
-    private lazy var singleTap: UITapGestureRecognizer = {
-        return UITapGestureRecognizer(target: self, action: #selector(onSingleTap(_:)))
-    }()
     
     private var image: UIImage = UIImage()
     private let resource: EditorPhotoResource
@@ -69,7 +66,6 @@ final class PhotoEditorController: AnyImageViewController {
         view.addSubview(contentView)
         view.addSubview(toolView)
         view.addSubview(backButton)
-//        view.addGestureRecognizer(singleTap)
         
         backButton.snp.makeConstraints { (maker) in
             if #available(iOS 11.0, *) {
@@ -108,19 +104,6 @@ extension PhotoEditorController {
     /// 返回按钮触发
     @objc private func backButtonTapped(_ sender: UIButton) {
         delegate?.photoEditorDidCancel(self)
-    }
-    
-    /// Tap手势触发，由于ToolView不能响应手势否则会干扰画板的手势，所以要手动完成ToolView的响应链
-    @objc private func onSingleTap(_ tap: UITapGestureRecognizer) {
-        let point = tap.location(in: toolView)
-        let tapped = toolView.responseTouch(point)
-        if !tapped && toolView.currentOption != .crop { // 未命中视图时，显示/隐藏所有视图
-            let hidden = toolView.alpha == 1
-            UIView.animate(withDuration: 0.25) {
-                self.toolView.alpha = hidden ? 0 : 1
-                self.backButton.alpha = hidden ? 0 : 1
-            }
-        }
     }
 }
 

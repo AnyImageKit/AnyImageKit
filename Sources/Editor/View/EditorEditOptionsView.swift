@@ -102,8 +102,8 @@ extension EditorEditOptionsView {
     }
 }
 
-// MARK: - ResponseTouch
-extension EditorEditOptionsView: ResponseTouch {
+// MARK: - Event
+extension EditorEditOptionsView {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
@@ -115,22 +115,5 @@ extension EditorEditOptionsView: ResponseTouch {
             }
         }
         return nil
-    }
-    
-    @discardableResult
-    func responseTouch(_ point: CGPoint) -> Bool {
-        for (idx, button) in buttons.enumerated() {
-            let frame = button.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
-            if frame.contains(point) { // inside
-                if let current = currentOption, options.toolOptions[idx] == current {
-                    unselectButtons()
-                } else {
-                    selectButton(button)
-                }
-                delegate?.editOptionsView(self, optionDidChange: self.currentOption)
-                return true
-            }
-        }
-        return false
     }
 }

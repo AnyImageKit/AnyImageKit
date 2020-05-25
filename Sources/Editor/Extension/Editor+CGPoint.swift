@@ -18,8 +18,4 @@ extension CGPoint {
         let p = pow(x - other.x, 2) + pow(y - other.y, 2)
         return sqrt(p)
     }
-    
-    func subtraction(with other: CGPoint) -> CGPoint {
-        return CGPoint(x: x - other.x, y: y - other.y)
-    }
 }
