@@ -73,7 +73,7 @@ final class EditorToolView: UIView {
         return view
     }()
     private(set) lazy var cropToolView: EditorCropToolView = {
-        let view = EditorCropToolView(frame: .zero)
+        let view = EditorCropToolView(frame: .zero, options: options)
         view.delegate = self
         view.isHidden = true
         return view
@@ -134,21 +134,14 @@ final class EditorToolView: UIView {
         mosaicToolView.snp.makeConstraints { (maker) in
             maker.edges.equalTo(penToolView)
         }
+        cropToolView.snp.makeConstraints { (maker) in
+            maker.left.right.equalToSuperview()
+            maker.bottom.equalTo(editOptionsView).offset(15)
+            maker.height.equalTo(40+60)
+        }
         doneButton.snp.makeConstraints { (maker) in
             maker.centerY.equalTo(editOptionsView)
             maker.right.equalToSuperview().offset(-20)
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        cropToolView.snp.makeConstraints { (maker) in
-            maker.left.right.bottom.equalToSuperview()
-            if #available(iOS 11, *) {
-                maker.height.equalTo(65 + safeAreaInsets.bottom)
-            } else {
-                maker.height.equalTo(65)
-            }
         }
     }
 }

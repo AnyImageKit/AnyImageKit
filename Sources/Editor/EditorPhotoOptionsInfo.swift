@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -16,7 +16,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 编辑功能，会按顺序排布
     /// 默认：[.pen, .text, .crop, .mosaic]
-    public var toolOptions: [EditorPhotoToolOption] = [.pen, .text, .crop, .mosaic]
+    public var toolOptions: [EditorPhotoToolOption] = EditorPhotoToolOption.allCases
     
     /// 画笔颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
@@ -32,7 +32,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 马赛克的种类，会按顺序排布
     /// 默认：[.default, .colorful]
-    public var mosaicOptions: [EditorPhotoMosaicOption] = [.default, .colorful]
+    public var mosaicOptions: [EditorPhotoMosaicOption] = EditorPhotoMosaicOption.allCases
     
     /// 默认选中马赛克的下标
     /// 默认：0
@@ -50,6 +50,10 @@ public struct EditorPhotoOptionsInfo: Equatable {
     /// 默认：[white, black, red, yellow, green, blue, purple]
     public var textColors: [EditorPhotoTextColor] = Palette.textColors
     
+    /// 裁剪尺寸，会按顺序排布
+    /// 默认：[.free, 1:1, 3:4, 4:3, 9:16, 16:9]
+    public var cropOptions: [EditorCropOption] = EditorCropOption.allCases
+    
     /// 缓存ID
     /// 默认："" 不启用
     public var cacheIdentifier: String = ""
@@ -62,7 +66,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
 }
 
 /// 图片编辑功能
-public enum EditorPhotoToolOption: Equatable {
+public enum EditorPhotoToolOption: Equatable, CaseIterable {
     /// 画笔
     case pen
     /// 文字
@@ -74,7 +78,8 @@ public enum EditorPhotoToolOption: Equatable {
 }
 
 /// 马赛克样式
-public enum EditorPhotoMosaicOption: Equatable {
+public enum EditorPhotoMosaicOption: Equatable, CaseIterable {
+    
     /// 默认马赛克
     case `default`
     /// 自定义马赛克
@@ -82,6 +87,10 @@ public enum EditorPhotoMosaicOption: Equatable {
     
     public static var colorful: EditorPhotoMosaicOption {
         return .custom(icon: nil, mosaic: BundleHelper.image(named: "CustomMosaic")!)
+    }
+    
+    public static var allCases: [EditorPhotoMosaicOption] {
+        return [.default, .colorful]
     }
 }
 
@@ -91,6 +100,18 @@ public struct EditorPhotoTextColor: Equatable {
     public let color: UIColor
     /// 辅色
     public let subColor: UIColor
+}
+
+/// 裁剪比例
+public enum EditorCropOption: Equatable, CaseIterable {
+    /// 自由裁剪
+    case free
+    /// 自定义裁剪 宽高比
+    case custom(w: UInt, h: UInt)
+    
+    public static var allCases: [EditorCropOption] {
+        return [.free, .custom(w: 1, h: 1), .custom(w: 3, h: 4), .custom(w: 4, h: 3), .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
+    }
 }
 
 // MARK: - Extension

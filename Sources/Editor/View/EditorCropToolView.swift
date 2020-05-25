@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -19,6 +19,26 @@ final class EditorCropToolView: UIView {
     
     weak var delegate: EditorCropToolViewDelegate?
     
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 50, height: 50)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.backgroundColor = .clear
+        view.showsHorizontalScrollIndicator = false
+        view.registerCell(EditorCropOptionCell.self)
+        view.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        view.dataSource = self
+        view.delegate = self
+        return view
+    }()
+    private lazy var line: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        return view
+    }()
     private(set) lazy var cancelButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.image(named: "XMark"), for: .normal)
@@ -41,13 +61,11 @@ final class EditorCropToolView: UIView {
         view.addTarget(self, action: #selector(resetButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var line: UIView = {
-        let view = UIView(frame: .zero)
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.2)
-        return view
-    }()
     
-    override init(frame: CGRect) {
+    private let options: EditorPhotoOptionsInfo
+    
+    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -59,14 +77,20 @@ final class EditorCropToolView: UIView {
     private func setupView() {
         let content = UILayoutGuide()
         addLayoutGuide(content)
+        addSubview(collectionView)
         addSubview(line)
         addSubview(cancelButton)
         addSubview(doneButton)
         addSubview(resetbutton)
         
+        collectionView.snp.makeConstraints { (maker) in
+            maker.bottom.equalTo(line.snp.top).offset(-10)
+            maker.left.right.equalToSuperview()
+            maker.height.equalTo(40)
+        }
         content.snp.makeConstraints { (maker) in
-            maker.top.left.right.equalToSuperview()
-            maker.height.equalTo(65)
+            maker.left.right.bottom.equalToSuperview()
+            maker.height.equalTo(60)
         }
         line.snp.makeConstraints { (maker) in
             maker.top.left.right.equalTo(content)
@@ -90,19 +114,55 @@ final class EditorCropToolView: UIView {
     }
 }
 
+// MARK: - Public
+extension EditorCropToolView {
+    
+    func reset() {
+        guard !options.cropOptions.isEmpty else { return }
+        collectionView.reloadData()
+        collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .left)
+    }
+}
+
 // MARK: - Target
 extension EditorCropToolView {
     
     @objc private func cancelButtonTapped(_ sender: UIButton) {
+        reset()
         delegate?.cropToolViewCancelButtonTapped(self)
     }
     
     @objc private func resetButtonTapped(_ sender: UIButton) {
+        reset()
         delegate?.cropToolViewResetButtonTapped(self)
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        reset()
         delegate?.cropToolViewDoneButtonTapped(self)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension EditorCropToolView: UICollectionViewDataSource {
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return options.cropOptions.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(EditorCropOptionCell.self, for: indexPath)
+        cell.set(option: options.cropOptions[indexPath.row], selectColor: options.tintColor)
+        return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension EditorCropToolView: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
     }
 }
 
@@ -113,7 +173,7 @@ extension EditorCropToolView {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
             return nil
         }
-        for subView in [cancelButton, doneButton, resetbutton] {
+        for subView in [cancelButton, doneButton, resetbutton, collectionView] {
             if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
                 return hitView
             }

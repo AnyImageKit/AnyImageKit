@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0045E77884F3963C5C20723E /* Pods_AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75C01BB9A372D886CD627A5F /* Pods_AnyImageKit.framework */; };
 		35038B27B0724AA635D09CEC /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFDDF6D07FE50B56C4A76362 /* Pods_Example.framework */; };
+		713E7D9C247BACE300BF6245 /* EditorCropOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */; };
 		716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
@@ -230,6 +231,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCropOptionCell.swift; sourceTree = "<group>"; };
 		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		75C01BB9A372D886CD627A5F /* Pods_AnyImageKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnyImageKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -472,6 +474,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		713E7D9A247BACBE00BF6245 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		78A3F0174AF6679C2826AD8C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -849,6 +859,7 @@
 				A544371D23AB4BA4003C65F9 /* VideoEditorToolView.swift */,
 				A544371F23AB61C9003C65F9 /* VideoEditorCropToolView.swift */,
 				A544372123AB6A60003C65F9 /* VideoEditorCropProgressView.swift */,
+				713E7D9A247BACBE00BF6245 /* Cell */,
 				A50B20E8237AA24200A894A9 /* Kit */,
 			);
 			path = View;
@@ -1410,6 +1421,7 @@
 				A09D15A3239E0FEF00F3FE77 /* CaptureButton.swift in Sources */,
 				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
 				A596FE5B23A8A86F005C8AFA /* TextData.swift in Sources */,
+				713E7D9C247BACE300BF6245 /* EditorCropOptionCell.swift in Sources */,
 				A50B2109237AA24300A894A9 /* Brush.swift in Sources */,
 				A076999723963A360006AC9B /* AnyImageNavigationController.swift in Sources */,
 				A08DF7C723B332E8002B92EE /* Capture+UIImage.swift in Sources */,
