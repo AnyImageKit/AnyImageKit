@@ -62,6 +62,7 @@ final class EditorEditOptionsView: UIView {
         button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white
+        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         button.accessibilityLabel = BundleHelper.editorLocalizedString(key: option.description)
         return button
     }
@@ -73,6 +74,19 @@ final class EditorEditOptionsView: UIView {
             btn.isSelected = isSelected
             btn.imageView?.tintColor = isSelected ? options.tintColor : .white
         }
+    }
+}
+
+// MARK: - Target
+extension EditorEditOptionsView {
+    
+    @objc private func buttonTapped(_ sender: UIButton) {
+        if let current = currentOption, options.toolOptions[sender.tag] == current {
+            unselectButtons()
+        } else {
+            selectButton(sender)
+        }
+        delegate?.editOptionsView(self, optionDidChange: currentOption)
     }
 }
 
@@ -90,6 +104,18 @@ extension EditorEditOptionsView {
 
 // MARK: - ResponseTouch
 extension EditorEditOptionsView: ResponseTouch {
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
+            return nil
+        }
+        for subView in buttons {
+            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
+                return hitView
+            }
+        }
+        return nil
+    }
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {

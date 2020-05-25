@@ -10,6 +10,8 @@ import UIKit
 
 protocol PhotoEditorContentViewDelegate: class {
     
+    func contentViewTapped()
+    
     func photoDidBeginPen()
     func photoDidEndPen()
     
@@ -166,6 +168,7 @@ final class PhotoEditorContentView: UIView {
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
         setupCropView()
+        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
     }
     
     internal func layout() {
@@ -184,6 +187,14 @@ final class PhotoEditorContentView: UIView {
         } else {
             UIView.animate(withDuration: duration, animations: animations)
         }
+    }
+}
+
+// MARK: - Target
+extension PhotoEditorContentView {
+    
+    @objc private func onSingleTapped() {
+        delegate?.contentViewTapped()
     }
 }
 

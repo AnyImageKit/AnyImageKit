@@ -100,7 +100,7 @@ final class EditorToolView: UIView {
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.options = options
         super.init(frame: frame)
-        isUserInteractionEnabled = false
+//        isUserInteractionEnabled = false
         setupView()
     }
     
@@ -233,6 +233,19 @@ extension EditorToolView: EditorMosaicToolViewDelegate {
 
 // MARK: - ResponseTouch
 extension EditorToolView: ResponseTouch {
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
+            return nil
+        }
+        let subViews = [editOptionsView, penToolView, cropToolView, mosaicToolView]
+        for subView in subViews {
+            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
+                return hitView
+            }
+        }
+        return nil
+    }
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {

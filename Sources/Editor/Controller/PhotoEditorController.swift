@@ -69,7 +69,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.addSubview(contentView)
         view.addSubview(toolView)
         view.addSubview(backButton)
-        view.addGestureRecognizer(singleTap)
+//        view.addGestureRecognizer(singleTap)
         
         backButton.snp.makeConstraints { (maker) in
             if #available(iOS 11.0, *) {
@@ -126,6 +126,16 @@ extension PhotoEditorController {
 
 // MARK: - PhotoEditorContentViewDelegate
 extension PhotoEditorController: PhotoEditorContentViewDelegate {
+    
+    func contentViewTapped() {
+        if toolView.currentOption != .crop {
+            let hidden = toolView.alpha == 1
+            UIView.animate(withDuration: 0.25) {
+                self.toolView.alpha = hidden ? 0 : 1
+                self.backButton.alpha = hidden ? 0 : 1
+            }
+        }
+    }
     
     /// 开始涂鸦
     func photoDidBeginPen() {

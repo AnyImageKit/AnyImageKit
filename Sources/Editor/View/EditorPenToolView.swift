@@ -25,12 +25,13 @@ final class EditorPenToolView: UIView {
         let view = UIButton(type: .custom)
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo"), for: .normal)
+        view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Undo")
         return view
     }()
     
     private let colors: [UIColor]
-    private var colorViews: [UIView] = []
+    private var colorButtons: [UIButton] = []
     private let spacing: CGFloat = 22
     private let itemWidth: CGFloat = 22
     
@@ -47,7 +48,7 @@ final class EditorPenToolView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        for (idx, colorView) in colorViews.enumerated() {
+        for (idx, colorView) in colorButtons.enumerated() {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
             colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
@@ -70,9 +71,9 @@ final class EditorPenToolView: UIView {
     
     private func setupColorView() {
         for (idx, color) in colors.enumerated() {
-            colorViews.append(createColorView(color, idx: idx))
+            colorButtons.append(createColorButton(color, idx: idx))
         }
-        let stackView = UIStackView(arrangedSubviews: colorViews)
+        let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
@@ -83,32 +84,63 @@ final class EditorPenToolView: UIView {
             maker.height.equalTo(itemWidth)
         }
         
-        for colorView in colorViews {
+        for colorView in colorButtons {
             colorView.snp.makeConstraints { (maker) in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }
     }
     
-    private func createColorView(_ color: UIColor, idx: Int) -> UIView {
-        let view = UIView(frame: .zero)
+    private func createColorButton(_ color: UIColor, idx: Int) -> UIButton {
+        let view = UIButton(type: .custom)
         view.tag = idx
         view.backgroundColor = color
         view.clipsToBounds = true
         view.layer.cornerRadius = 11
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.white.cgColor
+        view.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
         return view
+    }
+}
+
+// MARK: - Target
+extension EditorPenToolView {
+    
+    @objc private func undoButtonTapped(_ sender: UIButton) {
+        delegate?.penToolViewUndoButtonTapped(self)
+    }
+    
+    @objc private func colorButtonTapped(_ sender: UIButton) {
+        if currentIdx != sender.tag {
+            currentIdx = sender.tag
+            layoutSubviews()
+        }
+        delegate?.penToolView(self, colorDidChange: currentIdx)
     }
 }
 
 // MARK: - ResponseTouch
 extension EditorPenToolView: ResponseTouch {
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
+            return nil
+        }
+        var subViews: [UIView] = colorButtons
+        subViews.append(undoButton)
+        for subView in subViews {
+            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
+                return hitView
+            }
+        }
+        return nil
+    }
+    
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {
         // Color view
-        for (idx, colorView) in colorViews.enumerated() {
+        for (idx, colorView) in colorButtons.enumerated() {
             if colorView.isHidden || colorView.alpha == 0 { continue }
             let frame = colorView.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(point) { // inside

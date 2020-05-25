@@ -26,11 +26,12 @@ final class EditorMosaicToolView: UIView {
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo"), for: .normal)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Undo")
+        view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
     private let options: EditorPhotoOptionsInfo
-    private var mosaicIcon: [UIImageView] = []
+    private var mosaicButtons: [UIButton] = []
     private let spacing: CGFloat = 40
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
@@ -56,28 +57,16 @@ final class EditorMosaicToolView: UIView {
     }
     
     private func setupMosaicView() {
-        for option in options.mosaicOptions {
-            let image: UIImage?
-            switch option {
-            case .default:
-                image = BundleHelper.image(named: "PhotoToolMosaicDefault")?.withRenderingMode(.alwaysTemplate)
-            case .custom(let customMosaicIcon, let customMosaic):
-                image = customMosaicIcon ?? customMosaic
-            }
-            let imageView = UIImageView(image: image)
-            imageView.tintColor = .white
-            imageView.clipsToBounds = true
-            imageView.layer.cornerRadius = option == .default ? 0 : 2
-            imageView.layer.borderColor = UIColor.white.cgColor
-            mosaicIcon.append(imageView)
+        for (idx, option) in options.mosaicOptions.enumerated() {
+            mosaicButtons.append(createMosaicButton(option, idx: idx))
         }
         
-        let stackView = UIStackView(arrangedSubviews: mosaicIcon)
+        let stackView = UIStackView(arrangedSubviews: mosaicButtons)
         stackView.spacing = spacing
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
-        let width = 20 * CGFloat(mosaicIcon.count) + spacing * CGFloat(mosaicIcon.count-1)
+        let width = 20 * CGFloat(mosaicButtons.count) + spacing * CGFloat(mosaicButtons.count-1)
         let offset = (UIScreen.main.bounds.width - width - 20*2 - 20) / 2
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview().offset(offset)
@@ -85,11 +74,30 @@ final class EditorMosaicToolView: UIView {
             maker.height.equalTo(20)
         }
         
-        for icon in mosaicIcon {
+        for icon in mosaicButtons {
             icon.snp.makeConstraints { (maker) in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }
+    }
+    
+    private func createMosaicButton(_ option: EditorPhotoMosaicOption, idx: Int) -> UIButton {
+        let image: UIImage?
+        switch option {
+        case .default:
+            image = BundleHelper.image(named: "PhotoToolMosaicDefault")?.withRenderingMode(.alwaysTemplate)
+        case .custom(let customMosaicIcon, let customMosaic):
+            image = customMosaicIcon ?? customMosaic
+        }
+        let button = UIButton(type: .custom)
+        button.tag = idx
+        button.tintColor = .white
+        button.clipsToBounds = true
+        button.setImage(image, for: .normal)
+        button.layer.cornerRadius = option == .default ? 0 : 2
+        button.layer.borderColor = UIColor.white.cgColor
+        button.addTarget(self, action: #selector(mosaicButtonTapped(_:)), for: .touchUpInside)
+        return button
     }
 }
 
@@ -100,12 +108,12 @@ extension EditorMosaicToolView {
         let option = options.mosaicOptions[currentIdx]
         switch option {
         case .default:
-            for imageView in mosaicIcon {
+            for imageView in mosaicButtons {
                 imageView.tintColor = options.tintColor
                 imageView.layer.borderWidth = 0
             }
         default:
-            for (idx, imageView) in mosaicIcon.enumerated() {
+            for (idx, imageView) in mosaicButtons.enumerated() {
                 imageView.tintColor = .white
                 imageView.layer.borderWidth = idx == currentIdx ? 2 : 0
             }
@@ -113,14 +121,45 @@ extension EditorMosaicToolView {
     }
 }
 
+// MARK: - Target
+extension EditorMosaicToolView {
+    
+    @objc private func mosaicButtonTapped(_ sender: UIButton) {
+        if currentIdx != sender.tag {
+            currentIdx = sender.tag
+            layoutSubviews()
+        }
+        delegate?.mosaicToolView(self, mosaicDidChange: currentIdx)
+        updateState()
+    }
+    
+    @objc private func undoButtonTapped(_ sender: UIButton) {
+        delegate?.mosaicToolViewUndoButtonTapped(self)
+    }
+}
+
 // MARK: - ResponseTouch
 extension EditorMosaicToolView: ResponseTouch {
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
+            return nil
+        }
+        var subViews: [UIView] = mosaicButtons
+        subViews.append(undoButton)
+        for subView in subViews {
+            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
+                return hitView
+            }
+        }
+        return nil
+    }
     
     @discardableResult
     func responseTouch(_ point: CGPoint) -> Bool {
         // Mosaic view
-        let mosaicPoint = point.subtraction(with: mosaicIcon.first!.superview!.frame.origin)
-        for (idx, mosaicView) in mosaicIcon.enumerated() {
+        let mosaicPoint = point.subtraction(with: mosaicButtons.first!.superview!.frame.origin)
+        for (idx, mosaicView) in mosaicButtons.enumerated() {
             let frame = mosaicView.frame.bigger(.init(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
             if frame.contains(mosaicPoint) { // inside
                 if currentIdx != idx {

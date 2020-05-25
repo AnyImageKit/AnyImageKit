@@ -23,12 +23,14 @@ final class EditorCropToolView: UIView {
         let view = UIButton(type: .custom)
         view.setImage(BundleHelper.image(named: "XMark"), for: .normal)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Cancel")
+        view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(BundleHelper.image(named: "CheckMark"), for: .normal)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Done")
+        view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var resetbutton: UIButton = {
@@ -36,6 +38,7 @@ final class EditorCropToolView: UIView {
         view.setTitle(BundleHelper.editorLocalizedString(key: "Reset"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        view.addTarget(self, action: #selector(resetButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private lazy var line: UIView = {
@@ -87,8 +90,36 @@ final class EditorCropToolView: UIView {
     }
 }
 
+// MARK: - Target
+extension EditorCropToolView {
+    
+    @objc private func cancelButtonTapped(_ sender: UIButton) {
+        delegate?.cropToolViewCancelButtonTapped(self)
+    }
+    
+    @objc private func resetButtonTapped(_ sender: UIButton) {
+        delegate?.cropToolViewResetButtonTapped(self)
+    }
+    
+    @objc private func doneButtonTapped(_ sender: UIButton) {
+        delegate?.cropToolViewDoneButtonTapped(self)
+    }
+}
+
 // MARK: - ResponseTouch
 extension EditorCropToolView: ResponseTouch {
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
+            return nil
+        }
+        for subView in [cancelButton, doneButton, resetbutton] {
+            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
+                return hitView
+            }
+        }
+        return nil
+    }
     
     func responseTouch(_ point: CGPoint) -> Bool {
         for (idx, view) in [cancelButton, doneButton, resetbutton].enumerated() {
