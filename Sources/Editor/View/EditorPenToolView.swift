@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -22,7 +22,7 @@ final class EditorPenToolView: UIView {
     private(set) var currentIdx: Int
     
     private(set) lazy var undoButton: UIButton = {
-        let view = UIButton(type: .custom)
+        let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo"), for: .normal)
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
@@ -92,15 +92,15 @@ final class EditorPenToolView: UIView {
     }
     
     private func createColorButton(_ color: UIColor, idx: Int) -> UIButton {
-        let view = UIButton(type: .custom)
-        view.tag = idx
-        view.backgroundColor = color
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 11
-        view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.white.cgColor
-        view.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
-        return view
+        let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
+        button.tag = idx
+        button.backgroundColor = color
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 11
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.white.cgColor
+        button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+        return button
     }
 }
 

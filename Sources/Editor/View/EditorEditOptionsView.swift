@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -57,7 +57,7 @@ final class EditorEditOptionsView: UIView {
     }
     
     private func createButton(tag: Int, option: EditorPhotoToolOption) -> UIButton {
-        let button = UIButton(type: .custom)
+        let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
         button.setImage(image, for: .normal)

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/26.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -22,7 +22,7 @@ final class EditorMosaicToolView: UIView {
     private(set) var currentIdx: Int = 0
     
     private(set) lazy var undoButton: UIButton = {
-        let view = UIButton(type: .custom)
+        let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo"), for: .normal)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Undo")
@@ -89,7 +89,7 @@ final class EditorMosaicToolView: UIView {
         case .custom(let customMosaicIcon, let customMosaic):
             image = customMosaicIcon ?? customMosaic
         }
-        let button = UIButton(type: .custom)
+        let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         button.tag = idx
         button.tintColor = .white
         button.clipsToBounds = true

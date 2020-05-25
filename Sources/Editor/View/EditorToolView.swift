@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -85,13 +85,14 @@ final class EditorToolView: UIView {
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
-        let view = UIButton(type: .custom)
+        let view = BigButton(moreInsets: UIEdgeInsets(top: 10, left: 20, bottom: 20, right: 20))
         view.layer.cornerRadius = 2
         view.backgroundColor = options.tintColor
         view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
+        view.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         return view
     }()
     
@@ -100,7 +101,6 @@ final class EditorToolView: UIView {
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.options = options
         super.init(frame: frame)
-//        isUserInteractionEnabled = false
         setupView()
     }
     
@@ -150,6 +150,14 @@ final class EditorToolView: UIView {
                 maker.height.equalTo(65)
             }
         }
+    }
+}
+
+// MARK: - Target
+extension EditorToolView {
+    
+    @objc private func doneButtonTapped() {
+        delegate?.toolViewDoneButtonTapped(self)
     }
 }
 
@@ -238,7 +246,7 @@ extension EditorToolView {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
             return nil
         }
-        let subViews = [editOptionsView, penToolView, cropToolView, mosaicToolView]
+        let subViews = [editOptionsView, penToolView, cropToolView, mosaicToolView, doneButton]
         for subView in subViews {
             if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
                 return hitView
