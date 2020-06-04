@@ -528,6 +528,11 @@ extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int) {
         currentIndex = idx
         collectionView.scrollToItem(at: IndexPath(item: idx, section: 0), at: .left, animated: false)
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.autoSetEditorButtonHidden()
+        }
+        #endif
     }
 }
 
