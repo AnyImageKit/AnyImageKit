@@ -54,6 +54,8 @@ final class PhotoEditorContentView: UIView {
     /// 马赛克，延时加载
     internal var mosaic: Mosaic?
     /// 裁剪 - Crop
+    /// 裁剪尺寸
+    internal var cropOption: EditorCropOption = .free
     /// 裁剪框的四个角
     private let cornerFrame = CGRect(x: 0, y: 0, width: 40, height: 40)
     private(set) lazy var topLeftCorner: CropCornerView = {

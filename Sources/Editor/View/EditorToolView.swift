@@ -17,6 +17,7 @@ protocol EditorToolViewDelegate: class {
     
     func toolViewUndoButtonTapped(_ toolView: EditorToolView)
     
+    func toolViewCrop(_ toolView: EditorToolView, didClickCropOption option: EditorCropOption)
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView)
     func toolViewCropDoneButtonTapped(_ toolView: EditorToolView)
     func toolViewCropResetButtonTapped(_ toolView: EditorToolView)
@@ -196,6 +197,10 @@ extension EditorToolView: EditorPenToolViewDelegate {
 
 // MARK: - EditorCropToolViewDelegate
 extension EditorToolView: EditorCropToolViewDelegate {
+    
+    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) {
+        delegate?.toolViewCrop(self, didClickCropOption: option)
+    }
     
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView) {
         delegate?.toolViewCropCancelButtonTapped(self)

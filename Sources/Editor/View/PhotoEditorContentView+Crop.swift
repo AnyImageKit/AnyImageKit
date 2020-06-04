@@ -11,6 +11,19 @@ import UIKit
 // MARK: - Public function
 extension PhotoEditorContentView {
 
+    /// 设置裁剪尺寸
+    func setCrop(_ option: EditorCropOption) {
+        cropOption = option
+        let rect = getCropRect(by: option)
+        if rect != .zero {
+            UIView.animate(withDuration: 0.5) {
+                self.layoutStartCrop(animated: false, setCrop: false)
+                self.setCropRect(rect, animated: true)
+                self.updateScrollViewAndCropRect(nil)
+            }
+        }
+    }
+    
     /// 开始裁剪
     func cropStart() {
         isCrop = true
@@ -86,7 +99,11 @@ extension PhotoEditorContentView {
             cropStartPanRect = cropRect
         }
         
-        updateCropRect(point, position)
+        if cropOption == .free {
+            updateCropRect(point, position)
+        } else {
+            updateCropRectWithCropOption(point, position)
+        }
         
         if gr.state == .ended {
             updateScrollViewAndCropRect(position)
@@ -108,7 +125,7 @@ extension PhotoEditorContentView {
     }
     
     /// 布局开始裁剪 - 未裁剪过
-    private func layoutStartCrop(animated: Bool = false) {
+    private func layoutStartCrop(animated: Bool = false, setCrop: Bool = true) {
         let top = cropY
         let bottom = cropBottomOffset
         scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
@@ -122,7 +139,9 @@ extension PhotoEditorContentView {
         imageView.frame.origin.y -= top
         scrollView.contentSize = imageView.bounds.size
         
-        setCropRect(cropFrame, animated: animated)
+        if setCrop {
+            setCropRect(cropFrame, animated: animated)
+        }
         
         setupContentInset()
     }
@@ -263,8 +282,11 @@ extension PhotoEditorContentView {
         lastCropData.contentOffset = .zero
         lastCropData.imageViewFrame = cropFrame
     }
+}
+
+// MARK: - Calculate
+extension PhotoEditorContentView {
     
-    // MARK: - Calculate
     /// pan手势移动中，计算新的裁剪框的位置
     private func updateCropRect(_ point: CGPoint, _ position: CropCornerPosition) {
         let limit: CGFloat = 55
@@ -299,7 +321,7 @@ extension PhotoEditorContentView {
             if isYDown {
                 rect.size.height += point.y
             }
-        case .bottomRight:// x- y-
+        case .bottomRight: // x- y-
             if isXDown {
                 rect.size.width += point.x
             }
@@ -310,8 +332,72 @@ extension PhotoEditorContentView {
         setCropRect(rect)
     }
     
+    /// pan手势移动中，计算新的裁剪框的位置，用设置了裁剪比例的情况下
+    private func updateCropRectWithCropOption(_ point: CGPoint, _ posision: CropCornerPosition) {
+        let limit: CGFloat = 55
+        var rect = cropRect
+        let ratio: CGPoint
+        if point.x != 0 {
+            ratio = CGPoint(x: point.x, y: point.x / cropOption.ratioOfWidth)
+        } else if point.y != 0 {
+            ratio = CGPoint(x: point.y / cropOption.ratioOfHeight, y: point.y)
+        } else {
+            ratio = point
+        }
+        switch posision {
+        case .topLeft: // x+ y+
+            if point.x != 0 {
+                rect.origin.x += point.x
+                rect.origin.y += ratio.y
+                rect.size.width -= point.x
+                rect.size.height -= ratio.y
+            } else if point.y != 0 {
+                rect.origin.x += ratio.x
+                rect.origin.y += point.y
+                rect.size.width -= ratio.x
+                rect.size.height -= point.y
+            }
+        case .topRight: // x- y+
+            if point.x != 0 {
+                rect.origin.y -= ratio.y
+                rect.size.width += point.x
+                rect.size.height += ratio.y
+            } else if point.y != 0 {
+                rect.origin.y += point.y
+                rect.size.width -= ratio.x
+                rect.size.height -= point.y
+            }
+        case .bottomLeft: // x+ y-
+            if point.x != 0 {
+                rect.origin.x += point.x
+                rect.size.width -= point.x
+                rect.size.height -= ratio.y
+            } else if point.y != 0 {
+                rect.origin.x -= ratio.x
+                rect.size.width += ratio.x
+                rect.size.height += point.y
+            }
+        case .bottomRight: // x- y-
+            if point.x != 0 {
+                rect.size.width += point.x
+                rect.size.height += ratio.y
+            } else if point.y != 0 {
+                rect.size.width += ratio.x
+                rect.size.height += point.y
+            }
+        }
+        if rect.width < limit || rect.height < limit
+            || rect.origin.x < imageView.frame.origin.x + scrollView.frame.origin.x - scrollView.contentOffset.x
+            || rect.origin.y < imageView.frame.origin.y + scrollView.frame.origin.y - scrollView.contentOffset.y
+            || rect.width > imageView.frame.width - scrollView.contentOffset.x
+            || rect.height > imageView.frame.height - scrollView.contentOffset.y {
+            return
+        }
+        setCropRect(rect)
+    }
+    
     /// pan手势移动结束，根据裁剪框位置，计算scrollView的zoomScale、minimumZoomScale、contentOffset，以及新的裁剪框的位置
-    private func updateScrollViewAndCropRect(_ position: CropCornerPosition) {
+    private func updateScrollViewAndCropRect(_ position: CropCornerPosition?) {
         // zoomScale
         let maxZoom = scrollView.maximumZoomScale
         let zoomH = scrollView.bounds.width / (cropRect.width / scrollView.zoomScale)
@@ -326,18 +412,24 @@ extension PhotoEditorContentView {
         
         // contentOffset
         let zoomScale = zoom / scrollView.zoomScale
-        let offsetX = (scrollView.contentOffset.x * zoomScale) + ((cropRect.origin.x - cropStartPanRect.origin.x) * zoomScale)
-        let offsetY = (scrollView.contentOffset.y * zoomScale) + ((cropRect.origin.y - cropStartPanRect.origin.y) * zoomScale)
         let offset: CGPoint
-        switch position {
-        case .topLeft:
+        if let position = position {
+            let offsetX = (scrollView.contentOffset.x * zoomScale) + ((cropRect.origin.x - cropStartPanRect.origin.x) * zoomScale)
+            let offsetY = (scrollView.contentOffset.y * zoomScale) + ((cropRect.origin.y - cropStartPanRect.origin.y) * zoomScale)
+            switch position {
+            case .topLeft:
+                offset = CGPoint(x: offsetX, y: offsetY)
+            case .topRight:
+                offset = CGPoint(x: scrollView.contentOffset.x * zoomScale, y: offsetY)
+            case .bottomLeft:
+                offset = CGPoint(x: offsetX, y: scrollView.contentOffset.y * zoomScale)
+            case .bottomRight:
+                offset = CGPoint(x: scrollView.contentOffset.x * zoomScale, y: scrollView.contentOffset.y * zoomScale)
+            }
+        } else { // 设置裁剪尺寸分支
+            let offsetX = (scrollView.contentSize.width - cropRect.width) / 2 * zoomScale
+            let offsetY = (scrollView.contentSize.height - cropRect.height) / 2 * zoomScale
             offset = CGPoint(x: offsetX, y: offsetY)
-        case .topRight:
-            offset = CGPoint(x: scrollView.contentOffset.x * zoomScale, y: offsetY)
-        case .bottomLeft:
-            offset = CGPoint(x: offsetX, y: scrollView.contentOffset.y * zoomScale)
-        case .bottomRight:
-            offset = CGPoint(x: scrollView.contentOffset.x * zoomScale, y: scrollView.contentOffset.y * zoomScale)
         }
         
         // newCropRect
@@ -376,5 +468,27 @@ extension PhotoEditorContentView {
         // set
         setupContentInset()
         scrollView.minimumZoomScale = mZoom
+    }
+    
+    // 根据裁剪比例计算实际裁剪大小
+    private func getCropRect(by option: EditorCropOption) -> CGRect {
+        switch option {
+        case .free:
+            return .zero
+        case .custom(let w, let h):
+            let w = CGFloat(w), h = CGFloat(h)
+            let cropFrame = self.cropFrame
+            var newCrop: CGRect = .zero
+            if w / h >= cropFrame.width / cropFrame.height {
+                newCrop.size.width = cropFrame.width
+                newCrop.size.height = newCrop.width * h / w
+            } else {
+                newCrop.size.height = cropFrame.height
+                newCrop.size.width = newCrop.height * w / h
+            }
+            newCrop.origin.x = (cropFrame.width - newCrop.width) / 2 + cropFrame.origin.x
+            newCrop.origin.y = (cropFrame.height - newCrop.height) / 2 + cropFrame.origin.y
+            return newCrop
+        }
     }
 }

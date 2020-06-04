@@ -205,7 +205,7 @@ extension PhotoEditorContentView {
     /// 旋转手势
     @objc private func onTextRotation(_ rotation: UIRotationGestureRecognizer) {
         guard let textView = rotation.view as? TextImageView else { return }
-        guard activeTextViewIfPossible(textView) else { print(1); return }
+        guard activeTextViewIfPossible(textView) else { return }
         
         textView.data.rotation += rotation.rotation
         textView.transform = textView.calculateTransform()

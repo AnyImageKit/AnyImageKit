@@ -142,3 +142,24 @@ extension EditorPhotoToolOption: CustomStringConvertible {
         }
     }
 }
+
+extension EditorCropOption {
+    
+    internal var ratioOfWidth: CGFloat {
+        switch self {
+        case .free:
+            return 1
+        case .custom(let w, let h):
+            return CGFloat(w)/CGFloat(h)
+        }
+    }
+    
+    internal var ratioOfHeight: CGFloat {
+        switch self {
+        case .free:
+            return 1
+        case .custom(let w, let h):
+            return CGFloat(h)/CGFloat(w)
+        }
+    }
+}

@@ -10,6 +10,7 @@ import UIKit
 
 protocol EditorCropToolViewDelegate: class {
     
+    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption)
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView)
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView)
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView)
@@ -68,6 +69,7 @@ final class EditorCropToolView: UIView {
         self.options = options
         super.init(frame: frame)
         setupView()
+        reset()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -161,8 +163,7 @@ extension EditorCropToolView: UICollectionViewDataSource {
 extension EditorCropToolView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        
+        delegate?.cropToolView(self, didClickCropOption: options.cropOptions[indexPath.row])
     }
 }
 

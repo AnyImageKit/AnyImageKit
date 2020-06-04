@@ -211,6 +211,11 @@ extension PhotoEditorController: EditorToolViewDelegate {
         }
     }
     
+    /// 设置裁剪尺寸
+    func toolViewCrop(_ toolView: EditorToolView, didClickCropOption option: EditorCropOption) {
+        contentView.setCrop(option)
+    }
+    
     /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
         backButton.isHidden = false
