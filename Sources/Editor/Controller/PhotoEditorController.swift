@@ -177,7 +177,12 @@ extension PhotoEditorController: EditorToolViewDelegate {
             openInputController()
         case .crop:
             willBeginCrop()
-            contentView.cropStart()
+            if let option = options.cropOptions.first, !contentView.didCrop {
+                toolView.cropToolView.currentOption = option
+                contentView.cropStart(with: option)
+            } else {
+                contentView.cropStart()
+            }
         case .mosaic:
             if contentView.mosaic == nil {
                 showWaitHUD()

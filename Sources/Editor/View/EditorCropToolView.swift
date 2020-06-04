@@ -20,6 +20,16 @@ final class EditorCropToolView: UIView {
     
     weak var delegate: EditorCropToolViewDelegate?
     
+    var currentOption: EditorCropOption = .free {
+        didSet {
+            if let idx = options.cropOptions.firstIndex(where: { $0 == currentOption }) {
+                collectionView.reloadData()
+                collectionView.selectItem(at: IndexPath(row: idx, section: 0), animated: true, scrollPosition: .left)
+                delegate?.cropToolView(self, didClickCropOption: options.cropOptions[idx])
+            }
+        }
+    }
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
@@ -69,7 +79,9 @@ final class EditorCropToolView: UIView {
         self.options = options
         super.init(frame: frame)
         setupView()
-        reset()
+        if let option = options.cropOptions.first {
+            currentOption = option
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -84,6 +96,7 @@ final class EditorCropToolView: UIView {
         addSubview(cancelButton)
         addSubview(doneButton)
         addSubview(resetbutton)
+        collectionView.isHidden = options.cropOptions.count <= 1
         
         collectionView.snp.makeConstraints { (maker) in
             maker.bottom.equalTo(line.snp.top).offset(-10)
@@ -116,31 +129,22 @@ final class EditorCropToolView: UIView {
     }
 }
 
-// MARK: - Public
-extension EditorCropToolView {
-    
-    func reset() {
-        guard !options.cropOptions.isEmpty else { return }
-        collectionView.reloadData()
-        collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .left)
-    }
-}
-
 // MARK: - Target
 extension EditorCropToolView {
     
     @objc private func cancelButtonTapped(_ sender: UIButton) {
-        reset()
         delegate?.cropToolViewCancelButtonTapped(self)
     }
     
     @objc private func resetButtonTapped(_ sender: UIButton) {
-        reset()
-        delegate?.cropToolViewResetButtonTapped(self)
+        if currentOption == .free {
+            delegate?.cropToolViewResetButtonTapped(self)
+        } else {
+            delegate?.cropToolView(self, didClickCropOption: currentOption)
+        }
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
-        reset()
         delegate?.cropToolViewDoneButtonTapped(self)
     }
 }
@@ -163,7 +167,9 @@ extension EditorCropToolView: UICollectionViewDataSource {
 extension EditorCropToolView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.cropToolView(self, didClickCropOption: options.cropOptions[indexPath.row])
+        if currentOption != options.cropOptions[indexPath.row] {
+            currentOption = options.cropOptions[indexPath.row]
+        }
     }
 }
 

@@ -25,7 +25,7 @@ extension PhotoEditorContentView {
     }
     
     /// 开始裁剪
-    func cropStart() {
+    func cropStart(with option: EditorCropOption? = nil) {
         isCrop = true
         cropLayer.removeFromSuperlayer()
         lastImageViewBounds = imageView.bounds
@@ -38,6 +38,9 @@ extension PhotoEditorContentView {
             self.updateCanvasFrame()
         }) { (_) in
             self.setCropHidden(false, animated: true)
+            if let cropOption = option {
+                self.setCrop(cropOption)
+            }
         }
     }
     
