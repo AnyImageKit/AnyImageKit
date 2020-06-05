@@ -47,7 +47,6 @@ final class PickerConfigViewController: UITableViewController {
     
     @IBAction func openPickerTapped() {
         options.enableDebugLog = true
-        options.editorPhotoOptions.toolOptions = [.crop]
         let controller = ImagePickerController(options: options, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
@@ -58,104 +57,31 @@ final class PickerConfigViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return Section.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return ConfigRowType.allCases.count
-        case 1:
-            return EditorConfigRowType.allCases.count
-        case 2:
-            return CaptureConfigRowType.allCases.count
-        case 3:
-            return OtherConfigRowType.allCases.count
-        default:
-            return 0
-        }
+        let sectionType = Section(rawValue: section)!
+        return sectionType.allRowCase.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rowType: RowTypeRule
-        switch indexPath.section {
-        case 0:
-            rowType = ConfigRowType.allCases[indexPath.row]
-        case 1:
-            rowType = EditorConfigRowType.allCases[indexPath.row]
-        case 2:
-            rowType = CaptureConfigRowType.allCases[indexPath.row]
-        case 3:
-            rowType = OtherConfigRowType.allCases[indexPath.row]
-        default:
-            fatalError()
-        }
+        let sectionType = Section(rawValue: indexPath.section)!
+        let rowType = sectionType.allRowCase[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ConfigCell
-        cell.titleLabel.text = BundleHelper.localizedString(key: rowType.title)
-        cell.tagsButton.setTitle(rowType.options, for: .normal)
-        cell.contentLabel.text = rowType.defaultValue
+        cell.setupData(rowType)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch indexPath.section {
-        case 0:
-            let rowType = ConfigRowType.allCases[indexPath.row]
-            switch rowType {
-            case .theme:
-                themeTapped()
-            case .selectLimit:
-                selectLimitTapped()
-            case .columnNumber:
-                columnNumberTapped()
-            case .allowUseOriginalImage:
-                allowUseOriginalImageTapped()
-            case .quickPick:
-                quickPickTapped()
-            case .albumOptions:
-                albumOptionsTapped()
-            case .selectOptions:
-                selectOptionsTapped()
-            case .orderByDate:
-                orderbyDateTapped()
-            }
-        case 1:
-            let rowType = EditorConfigRowType.allCases[indexPath.row]
-            switch rowType {
-            case .editorOptions:
-                editorOptionsTapped()
-            }
-        case 2:
-            let rowType = CaptureConfigRowType.allCases[indexPath.row]
-            switch rowType {
-            case .captureOptions:
-                captureMediaOptionsTapped()
-            }
-        case 3:
-            let rowType = OtherConfigRowType.allCases[indexPath.row]
-            switch rowType {
-            case .fullScreen:
-                fullScreenTapped()
-            }
-        default:
-            break
-        }
+        let sectionType = Section(rawValue: indexPath.section)!
+        let rowType = sectionType.allRowCase[indexPath.row]
+        rowType.getFunction(self)()
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "Options"
-        case 1:
-            return "Editor options"
-        case 2:
-            return "Capture options"
-        case 3:
-            return "Other options"
-        default:
-            return nil
-        }
+        return Section(rawValue: section)?.title
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -354,6 +280,40 @@ extension PickerConfigViewController {
 // MARK: - Enum
 extension PickerConfigViewController {
     
+    // MARK: - Section
+    enum Section: Int, CaseIterable {
+        case config = 0
+        case editor
+        case capture
+        case other
+        
+        var title: String {
+            switch self {
+            case .config:
+                return "Options"
+            case .editor:
+                return "Editor options"
+            case .capture:
+                return "Capture options"
+            case .other:
+                return "Other options"
+            }
+        }
+        
+        var allRowCase: [RowTypeRule] {
+            switch self {
+            case .config:
+                return ConfigRowType.allCases
+            case .editor:
+                return EditorConfigRowType.allCases
+            case .capture:
+                return CaptureConfigRowType.allCases
+            case .other:
+                return OtherConfigRowType.allCases
+            }
+        }
+    }
+    
     // MARK: - Config
     enum ConfigRowType: Int, CaseIterable, RowTypeRule {
         case theme = 0
@@ -431,6 +391,28 @@ extension PickerConfigViewController {
         var indexPath: IndexPath {
             return IndexPath(row: rawValue, section: 0)
         }
+
+        func getFunction<T: UIViewController>(_ controller: T) -> (() -> Void) {
+            guard let controller = controller as? PickerConfigViewController else { return { } }
+            switch self {
+            case .theme:
+                return controller.themeTapped
+            case .selectLimit:
+                return controller.selectLimitTapped
+            case .columnNumber:
+                return controller.columnNumberTapped
+            case .allowUseOriginalImage:
+                return controller.allowUseOriginalImageTapped
+            case .quickPick:
+                return controller.quickPickTapped
+            case .albumOptions:
+                return controller.albumOptionsTapped
+            case .selectOptions:
+                return controller.selectOptionsTapped
+            case .orderByDate:
+                return controller.orderbyDateTapped
+            }
+        }
     }
     
     // MARK: - Editor Config
@@ -460,6 +442,14 @@ extension PickerConfigViewController {
         
         var indexPath: IndexPath {
             return IndexPath(row: rawValue, section: 1)
+        }
+        
+        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
+            guard let controller = controller as? PickerConfigViewController else { return { } }
+            switch self {
+            case .editorOptions:
+                return controller.editorOptionsTapped
+            }
         }
     }
     
@@ -491,6 +481,14 @@ extension PickerConfigViewController {
         var indexPath: IndexPath {
             return IndexPath(row: rawValue, section: 2)
         }
+        
+        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
+            guard let controller = controller as? PickerConfigViewController else { return { } }
+            switch self {
+            case .captureOptions:
+                return controller.captureMediaOptionsTapped
+            }
+        }
     }
     
     // MARK: - Other Config
@@ -520,6 +518,14 @@ extension PickerConfigViewController {
         
         var indexPath: IndexPath {
             return IndexPath(row: rawValue, section: 3)
+        }
+        
+        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
+            guard let controller = controller as? PickerConfigViewController else { return { } }
+            switch self {
+            case .fullScreen:
+                return controller.fullScreenTapped
+            }
         }
     }
 }

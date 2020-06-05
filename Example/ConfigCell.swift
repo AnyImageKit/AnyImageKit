@@ -87,4 +87,10 @@ final class ConfigCell: UITableViewCell {
             maker.right.equalToSuperview().offset(-16)
         }
     }
+    
+    public func setupData(_ rowType: RowTypeRule) {
+        titleLabel.text = BundleHelper.localizedString(key: rowType.title)
+        tagsButton.setTitle(rowType.options, for: .normal)
+        contentLabel.text = rowType.defaultValue
+    }
 }

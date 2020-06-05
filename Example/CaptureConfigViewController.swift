@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 刘栋 on 2019/12/4.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -64,27 +64,14 @@ final class CaptureConfigViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let rowType = RowType.allCases[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ConfigCell
-        cell.titleLabel.text = BundleHelper.localizedString(key: rowType.title)
-        cell.tagsButton.setTitle(rowType.options, for: .normal)
-        cell.contentLabel.text = rowType.defaultValue
+        cell.setupData(rowType)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let rowType = RowType.allCases[indexPath.row]
-        switch rowType {
-        case .mediaOptions:
-            mediaOptionsTapped()
-        case .photoAspectRatio:
-            photoAspectRatioTapped()
-        case .preferredPositions:
-            preferredPositionsTapped()
-        case .flashMode:
-            flashModeTapped()
-        case .videoMaximumDuration:
-             videoMaximumDurationTapped()
-        }
+        rowType.getFunction(self)()
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -96,6 +83,7 @@ final class CaptureConfigViewController: UITableViewController {
     }
 }
 
+// MARK: - ImageCaptureControllerDelegate
 extension CaptureConfigViewController: ImageCaptureControllerDelegate {
     
     func imageCapture(_ capture: ImageCaptureController, didFinishCapturing mediaURL: URL, type: MediaType) {
@@ -127,6 +115,7 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
     }
 }
 
+// MARK: - Tapped
 extension CaptureConfigViewController {
     
     private func mediaOptionsTapped() {
@@ -240,7 +229,7 @@ extension CaptureConfigViewController {
 // MARK: - Enum
 extension CaptureConfigViewController {
     
-    enum RowType: Int, CaseIterable {
+    enum RowType: Int, CaseIterable, RowTypeRule {
         case mediaOptions = 0
         case photoAspectRatio
         case preferredPositions
@@ -294,6 +283,22 @@ extension CaptureConfigViewController {
         
         var indexPath: IndexPath {
             return IndexPath(row: rawValue, section: 0)
+        }
+        
+        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
+            guard let controller = controller as? CaptureConfigViewController else { return { } }
+            switch self {
+            case .mediaOptions:
+                return controller.mediaOptionsTapped
+            case .photoAspectRatio:
+                return controller.photoAspectRatioTapped
+            case .preferredPositions:
+                return controller.preferredPositionsTapped
+            case .flashMode:
+                return controller.flashModeTapped
+            case .videoMaximumDuration:
+                return controller.videoMaximumDurationTapped
+            }
         }
     }
 }

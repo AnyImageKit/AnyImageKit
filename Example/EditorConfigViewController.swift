@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 蒋惠 on 2019/11/12.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -64,27 +64,14 @@ final class EditorConfigViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let rowType = RowType.allCases[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ConfigCell
-        cell.titleLabel.text = BundleHelper.localizedString(key: rowType.title)
-        cell.tagsButton.setTitle(rowType.options, for: .normal)
-        cell.contentLabel.text = rowType.defaultValue
+        cell.setupData(rowType)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let rowType = RowType.allCases[indexPath.row]
-        switch rowType {
-        case .editOptions:
-            editOptionsTapped()
-        case .penWidth:
-            penWidthTapped()
-        case .mosaicOptions:
-            mosaicOptionsTapped()
-        case .mosaicWidth:
-            mosaicWidthTapped()
-        case .mosaicLevel:
-            mosaicLevelTapped()
-        }
+        rowType.getFunction(self)()
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -233,7 +220,7 @@ extension EditorConfigViewController {
 // MARK: - Enum
 extension EditorConfigViewController {
     
-    enum RowType: Int, CaseIterable {
+    enum RowType: Int, CaseIterable, RowTypeRule {
         case editOptions = 0
         case penWidth
         case mosaicOptions
@@ -287,6 +274,22 @@ extension EditorConfigViewController {
         
         var indexPath: IndexPath {
             return IndexPath(row: rawValue, section: 0)
+        }
+        
+        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
+            guard let controller = controller as? EditorConfigViewController else { return { } }
+            switch self {
+            case .editOptions:
+                return controller.editOptionsTapped
+            case .penWidth:
+                return controller.penWidthTapped
+            case .mosaicOptions:
+                return controller.mosaicOptionsTapped
+            case .mosaicWidth:
+                return controller.mosaicWidthTapped
+            case .mosaicLevel:
+                return controller.mosaicLevelTapped
+            }
         }
     }
 }
