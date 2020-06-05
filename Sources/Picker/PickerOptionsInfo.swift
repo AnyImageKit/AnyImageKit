@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -32,8 +32,14 @@ public struct PickerOptionsInfo: Equatable {
     public var largePhotoMaxWidth: CGFloat = 1200
     
     /// Allow Use Original Image 是否允许选择原图
-    /// - Default: true
+    /// - Default: false
     public var allowUseOriginalImage: Bool = false
+    
+    /// Quick pick 快速选择
+    /// - Default: false
+    /// - It will select photo instead of show preview controller when you click photo on asset picker controller
+    /// - 点击图片时会直接选中该图片，而不会进入预览页面
+    public var quickPick: Bool = false
     
     /// Album Options 相册类型
     /// - Default: smart album + user create album

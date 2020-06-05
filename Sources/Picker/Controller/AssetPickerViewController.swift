@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -40,9 +40,10 @@ final class AssetPickerViewController: AnyImageViewController {
         layout.minimumLineSpacing = defaultAssetSpacing
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let hideToolBar = manager.options.quickPick && manager.options.selectLimit == 1
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
                                          left: defaultAssetSpacing,
-                                         bottom: toolBarHeight + defaultAssetSpacing,
+                                         bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
         view.backgroundColor = manager.options.theme.backgroundColor
         view.registerCell(AssetCell.self)
@@ -60,6 +61,7 @@ final class AssetPickerViewController: AnyImageViewController {
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
+        view.isHidden = manager.options.quickPick && manager.options.selectLimit == 1
         return view
     }()
     
@@ -349,13 +351,20 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         }
         #endif
         
-        if !album.assets[indexPath.item].isSelected && manager.isUpToLimit { return }
-        let controller = PhotoPreviewController(manager: manager)
-        controller.currentIndex = indexPath.item - itemOffset
-        controller.dataSource = self
-        controller.delegate = self
-        present(controller, animated: true, completion: nil)
-        
+        if manager.options.quickPick {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
+            selectButtonTapped(cell.selectButton)
+            if manager.options.selectLimit == 1 {
+                doneButtonTapped(toolBar.doneButton)
+            }
+        } else {
+            if !album.assets[indexPath.item].isSelected && manager.isUpToLimit { return }
+            let controller = PhotoPreviewController(manager: manager)
+            controller.currentIndex = indexPath.item - itemOffset
+            controller.dataSource = self
+            controller.delegate = self
+            present(controller, animated: true, completion: nil)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
