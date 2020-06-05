@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 蒋惠 on 2019/11/12.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -47,6 +47,7 @@ final class PickerConfigViewController: UITableViewController {
     
     @IBAction func openPickerTapped() {
         options.enableDebugLog = true
+        options.editorPhotoOptions.toolOptions = [.crop]
         let controller = ImagePickerController(options: options, delegate: self)
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
@@ -110,6 +111,8 @@ final class PickerConfigViewController: UITableViewController {
                 columnNumberTapped()
             case .allowUseOriginalImage:
                 allowUseOriginalImageTapped()
+            case .quickPick:
+                quickPickTapped()
             case .albumOptions:
                 albumOptionsTapped()
             case .selectOptions:
@@ -228,6 +231,12 @@ extension PickerConfigViewController {
         let indexPath = ConfigRowType.allowUseOriginalImage.indexPath
         options.allowUseOriginalImage = !options.allowUseOriginalImage
         (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.allowUseOriginalImage)"
+    }
+    
+    private func quickPickTapped() {
+        let indexPath = ConfigRowType.quickPick.indexPath
+        options.quickPick = !options.quickPick
+        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.quickPick)"
     }
     
     private func albumOptionsTapped() {
@@ -351,6 +360,7 @@ extension PickerConfigViewController {
         case selectLimit
         case columnNumber
         case allowUseOriginalImage
+        case quickPick
         case albumOptions
         case selectOptions
         case orderByDate
@@ -365,6 +375,8 @@ extension PickerConfigViewController {
                 return "ColumnNumber"
             case .allowUseOriginalImage:
                 return "UseOriginalImage"
+            case .quickPick:
+                return "QuickPick"
             case .albumOptions:
                 return "AlbumOptions"
             case .selectOptions:
@@ -384,6 +396,8 @@ extension PickerConfigViewController {
                 return ".columnNumber"
             case .allowUseOriginalImage:
                 return ".allowUseOriginalImage"
+            case .quickPick:
+                return ".quickPick"
             case .albumOptions:
                 return ".albumOptions"
             case .selectOptions:
@@ -402,6 +416,8 @@ extension PickerConfigViewController {
             case .columnNumber:
                 return "4"
             case .allowUseOriginalImage:
+                return "false"
+            case .quickPick:
                 return "false"
             case .albumOptions:
                 return "Smart+User Created"

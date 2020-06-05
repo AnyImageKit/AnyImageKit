@@ -3,7 +3,7 @@
   AnyImageEditor
 
   Created by 蒋惠 on 2019/11/8.
-  Copyright © 2019 AnyImageProject.org. All rights reserved.
+  Copyright © 2020 AnyImageProject.org. All rights reserved.
 */
 
 // Picker
@@ -12,6 +12,7 @@
 "SelectLimit" = "Select Limit";
 "ColumnNumber" = "Column Number";
 "UseOriginalImage" = "Use Original Image";
+"QuickPick" = "QuickPick";
 "SelectOptions" = "Select Options";
 "AlbumOptions" = "Album Options";
 "OrderByDate" = "Order By Date";
