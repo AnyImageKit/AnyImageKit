@@ -54,8 +54,6 @@ final class PhotoEditorContentView: UIView {
     /// 马赛克，延时加载
     internal var mosaic: Mosaic?
     /// 裁剪 - Crop
-    /// 裁剪尺寸
-    internal var cropOption: EditorCropOption = .free
     /// 裁剪框的四个角
     private let cornerFrame = CGRect(x: 0, y: 0, width: 40, height: 40)
     private(set) lazy var topLeftCorner: CropCornerView = {
@@ -116,6 +114,8 @@ final class PhotoEditorContentView: UIView {
     internal var lastCropData: CropData = CropData()
     /// 裁剪前的图片
     internal var imageBeforeCrop: UIImage?
+    /// 裁剪尺寸
+    internal var cropOption: EditorCropOption = .free
     
     /// 存储画笔过程的图片
     internal lazy var penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty))
@@ -130,7 +130,7 @@ final class PhotoEditorContentView: UIView {
         return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache() || !textImageViews.isEmpty
     }
     
-    init(frame: CGRect, image: UIImage, options: EditorPhotoOptionsInfo) {
+    init(frame: CGRect, image: UIImage, options: EditorPhotoOptionsInfo, cache: ImageEditorCache?) {
         self.image = image
         self.options = options
         super.init(frame: frame)
@@ -139,12 +139,7 @@ final class PhotoEditorContentView: UIView {
         setupMosaicView()
         
         layout()
-        if let cache = loadCacheIfNeeded() {
-            cache.textDataList.forEach {
-                self.addText(data: $0)
-            }
-            layoutEndCrop(true)
-        }
+        setup(from: cache)
         if cropRealRect == .zero {
             cropRealRect = imageView.frame
         }
@@ -155,22 +150,25 @@ final class PhotoEditorContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func loadCacheIfNeeded() -> ImageEditorCache? {
-        guard let cache = ImageEditorCache(id: options.cacheIdentifier) else { return nil }
-        lastCropData = cache.cropData
-        penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
-        mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
-        imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
-        canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: false)
-        return cache
-    }
-    
     private func setupView() {
         addSubview(scrollView)
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
         setupCropView()
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
+    }
+    
+    private func setup(from cache: ImageEditorCache?) {
+        guard let cache = cache else { return }
+        lastCropData = cache.cropData
+        penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
+        mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
+        imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
+        canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: false)
+        cache.textDataList.forEach {
+            addText(data: $0)
+        }
+        layoutEndCrop(true)
     }
     
     internal func layout() {

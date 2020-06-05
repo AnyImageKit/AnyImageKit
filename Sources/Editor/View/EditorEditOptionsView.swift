@@ -93,6 +93,12 @@ extension EditorEditOptionsView {
 // MARK: - Public function
 extension EditorEditOptionsView {
     
+    public func selectFirstItemIfNeeded() {
+        if self.currentOption == nil && self.options.toolOptions.count == 1 && self.options.toolOptions.first! != .text {
+            buttonTapped(buttons.first!)
+        }
+    }
+    
     func unselectButtons() {
         self.currentOption = nil
         for button in buttons {

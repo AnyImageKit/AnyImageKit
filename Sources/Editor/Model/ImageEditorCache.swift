@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/11/15.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import Foundation
@@ -12,6 +12,7 @@ public final class ImageEditorCache: Codable {
     
     let id: String
     let cropData: CropData
+    let cropOptionIdx: Int
     let textDataList: [TextData]
     let penCacheList: [String]
     let mosaicCacheList: [String]
@@ -20,11 +21,13 @@ public final class ImageEditorCache: Codable {
     /// Create cache
     init(id: String,
          cropData: CropData,
+         cropOptionIdx: Int,
          textDataList: [TextData],
          penCacheList: [String],
          mosaicCacheList: [String]) {
         self.id = id
         self.cropData = cropData
+        self.cropOptionIdx = cropOptionIdx
         self.textDataList = textDataList
         self.penCacheList = penCacheList
         self.mosaicCacheList = mosaicCacheList
@@ -39,6 +42,7 @@ public final class ImageEditorCache: Codable {
         
         self.id = id
         self.cropData = obj.cropData
+        self.cropOptionIdx = obj.cropOptionIdx
         self.textDataList = obj.textDataList
         self.penCacheList = obj.penCacheList
         self.mosaicCacheList = obj.mosaicCacheList

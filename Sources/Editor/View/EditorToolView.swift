@@ -147,6 +147,14 @@ final class EditorToolView: UIView {
     }
 }
 
+// MARK: - Public
+extension EditorToolView {
+    
+    public func selectFirstItemIfNeeded() {
+        editOptionsView.selectFirstItemIfNeeded()
+    }
+}
+
 // MARK: - Target
 extension EditorToolView {
     

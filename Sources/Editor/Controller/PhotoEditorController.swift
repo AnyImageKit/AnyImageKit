@@ -17,7 +17,7 @@ protocol PhotoEditorControllerDelegate: class {
 final class PhotoEditorController: AnyImageViewController {
     
     private lazy var contentView: PhotoEditorContentView = {
-        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, options: options)
+        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, options: options, cache: cache)
         view.delegate = self
         view.canvas.brush.color = options.penColors[options.defaultPenIndex]
         return view
@@ -27,6 +27,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.delegate = self
         view.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
         view.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
+        view.cropToolView.currentOptionIdx = cache?.cropOptionIdx ?? 0
         return view
     }()
     private lazy var backButton: UIButton = {
@@ -44,6 +45,7 @@ final class PhotoEditorController: AnyImageViewController {
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var context = CIContext()
+    private lazy var cache = ImageEditorCache(id: options.cacheIdentifier)
     
     init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
         self.resource = resource
@@ -60,6 +62,11 @@ final class PhotoEditorController: AnyImageViewController {
         super.viewDidLoad()
         loadData()
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        toolView.selectFirstItemIfNeeded()
     }
     
     private func setupView() {
@@ -223,6 +230,11 @@ extension PhotoEditorController: EditorToolViewDelegate {
     
     /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
+        if options.toolOptions.count == 1 {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+        
         backButton.isHidden = false
         contentView.cropCancel { [weak self] (_) in
             self?.didEndCroping()
@@ -234,6 +246,10 @@ extension PhotoEditorController: EditorToolViewDelegate {
         backButton.isHidden = false
         contentView.cropDone { [weak self] (_) in
             self?.didEndCroping()
+
+            if self?.options.toolOptions.count == 1 {
+                self?.toolViewDoneButtonTapped(toolView)
+            }
         }
     }
     
@@ -302,11 +318,13 @@ extension PhotoEditorController {
         if options.cacheIdentifier.isEmpty { return }
         contentView.setupLastCropDataIfNeeded()
         let textDataList = contentView.textImageViews.map{ $0.data }
-        ImageEditorCache(id: options.cacheIdentifier,
-                         cropData: contentView.lastCropData,
-                         textDataList: textDataList,
-                         penCacheList: contentView.penCache.diskCacheList,
-                         mosaicCacheList: contentView.mosaicCache.diskCacheList).save()
+        let cache = ImageEditorCache(id: options.cacheIdentifier,
+                                     cropData: contentView.lastCropData,
+                                     cropOptionIdx: toolView.cropToolView.currentOptionIdx,
+                                     textDataList: textDataList,
+                                     penCacheList: contentView.penCache.diskCacheList,
+                                     mosaicCacheList: contentView.mosaicCache.diskCacheList)
+        cache.save()
     }
 }
 

@@ -20,13 +20,24 @@ final class EditorCropToolView: UIView {
     
     weak var delegate: EditorCropToolViewDelegate?
     
+    var currentOptionIdx: Int {
+        get {
+            if let idx = options.cropOptions.firstIndex(where: { $0 == currentOption }) {
+                return idx
+            }
+            return 0
+        } set {
+            if newValue < options.cropOptions.count {
+                currentOption = options.cropOptions[newValue]
+            }
+        }
+    }
     var currentOption: EditorCropOption = .free {
         didSet {
-            if let idx = options.cropOptions.firstIndex(where: { $0 == currentOption }) {
-                collectionView.reloadData()
-                collectionView.selectItem(at: IndexPath(row: idx, section: 0), animated: true, scrollPosition: .left)
-                delegate?.cropToolView(self, didClickCropOption: options.cropOptions[idx])
-            }
+            let idx = currentOptionIdx
+            collectionView.reloadData()
+            collectionView.selectItem(at: IndexPath(row: idx, section: 0), animated: true, scrollPosition: .left)
+            delegate?.cropToolView(self, didClickCropOption: options.cropOptions[idx])
         }
     }
     
