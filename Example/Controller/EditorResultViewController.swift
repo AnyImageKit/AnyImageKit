@@ -90,4 +90,3 @@ extension EditorResultViewController: UIScrollViewDelegate {
         imageView.center = centerOfContentSize
     }
 }
-

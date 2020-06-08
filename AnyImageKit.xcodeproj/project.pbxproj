@@ -11,6 +11,7 @@
 		35038B27B0724AA635D09CEC /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFDDF6D07FE50B56C4A76362 /* Pods_Example.framework */; };
 		713E7D9C247BACE300BF6245 /* EditorCropOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */; };
 		716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */; };
+		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
 		A0147E0223C458BF0071E9D5 /* Core+Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0123C458BF0071E9D5 /* Core+Thread.swift */; };
@@ -233,6 +234,7 @@
 /* Begin PBXFileReference section */
 		713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCropOptionCell.swift; sourceTree = "<group>"; };
 		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
+		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		75C01BB9A372D886CD627A5F /* Pods_AnyImageKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnyImageKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CFA632A28BF9C902DE86893 /* Pods-AnyImageKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImageKit.debug.xcconfig"; path = "Target Support Files/Pods-AnyImageKit/Pods-AnyImageKit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -480,6 +482,20 @@
 				713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		7176B7DF248DD7FE00B607BD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A52E1D88237AAD420002174A /* HomeViewController.swift */,
+				A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */,
+				A52E1D9A237AB6430002174A /* PickerResultViewController.swift */,
+				A52E1D98237AB3F60002174A /* EditorConfigViewController.swift */,
+				A52E1D9F237AB6DA0002174A /* EditorResultViewController.swift */,
+				A026C99E23978DF400931028 /* CaptureConfigViewController.swift */,
+				7176B7E2248DD86800B607BD /* AvatarPickerController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		78A3F0174AF6679C2826AD8C /* Pods */ = {
@@ -910,6 +926,7 @@
 		A52E1D9C237AB6860002174A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A0C452E523D007D90087B412 /* ConfigCell.swift */,
 				A52E1D9D237AB6980002174A /* PickerPreviewCell.swift */,
 			);
 			path = View;
@@ -1012,13 +1029,7 @@
 			children = (
 				A5601D4F233B0FE500D0E95E /* Example.entitlements */,
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
-				A0C452E523D007D90087B412 /* ConfigCell.swift */,
-				A52E1D88237AAD420002174A /* HomeViewController.swift */,
-				A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */,
-				A52E1D9A237AB6430002174A /* PickerResultViewController.swift */,
-				A52E1D98237AB3F60002174A /* EditorConfigViewController.swift */,
-				A52E1D9F237AB6DA0002174A /* EditorResultViewController.swift */,
-				A026C99E23978DF400931028 /* CaptureConfigViewController.swift */,
+				7176B7DF248DD7FE00B607BD /* Controller */,
 				A52E1D9C237AB6860002174A /* View */,
 				A52E1D95237AB0040002174A /* Protocol */,
 				A52E1D8C237AAEFF0002174A /* Util */,
@@ -1451,6 +1462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */,
 				A52E1D8B237AAEB40002174A /* PickerConfigViewController.swift in Sources */,
 				A07E11EE2387D34C006F7208 /* BundleHelper.swift in Sources */,
 				A52E1DA0237AB6DA0002174A /* EditorResultViewController.swift in Sources */,

@@ -61,13 +61,11 @@ final class PickerConfigViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionType = Section(rawValue: section)!
-        return sectionType.allRowCase.count
+        return Section.allCases[section].allRowCase.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let sectionType = Section(rawValue: indexPath.section)!
-        let rowType = sectionType.allRowCase[indexPath.row]
+        let rowType = Section.allCases[indexPath.section].allRowCase[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ConfigCell
         cell.setupData(rowType)
         return cell
@@ -77,7 +75,7 @@ final class PickerConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let sectionType = Section(rawValue: indexPath.section)!
         let rowType = sectionType.allRowCase[indexPath.row]
-        rowType.getFunction(self)()
+        rowType.getFunction(self)(indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -104,8 +102,7 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
 // MARK: - Tapped
 extension PickerConfigViewController {
     
-    private func themeTapped() {
-        let indexPath = ConfigRowType.theme.indexPath
+    private func themeTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Theme", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (action) in
             self?.options.theme = .init(style: .auto)
@@ -123,8 +120,7 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func selectLimitTapped() {
-        let indexPath = ConfigRowType.selectLimit.indexPath
+    private func selectLimitTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Select Limit", message: nil, preferredStyle: .alert)
         for i in 1...9 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
@@ -140,8 +136,7 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func columnNumberTapped() {
-        let indexPath = ConfigRowType.columnNumber.indexPath
+    private func columnNumberTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Column Number", message: nil, preferredStyle: .alert)
         for i in 3...5 {
             alert.addAction(UIAlertAction(title: "\(i)", style: .default, handler: { [weak self] (action) in
@@ -153,20 +148,17 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func allowUseOriginalImageTapped() {
-        let indexPath = ConfigRowType.allowUseOriginalImage.indexPath
+    private func allowUseOriginalImageTapped(_ indexPath: IndexPath) {
         options.allowUseOriginalImage = !options.allowUseOriginalImage
         (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.allowUseOriginalImage)"
     }
     
-    private func quickPickTapped() {
-        let indexPath = ConfigRowType.quickPick.indexPath
+    private func quickPickTapped(_ indexPath: IndexPath) {
         options.quickPick = !options.quickPick
         (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.quickPick)"
     }
     
-    private func albumOptionsTapped() {
-        let indexPath = ConfigRowType.albumOptions.indexPath
+    private func albumOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Album Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Smart", style: .default, handler: { [weak self] (action) in
             self?.options.albumOptions = [.smart]
@@ -184,8 +176,7 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func selectOptionsTapped() {
-        let indexPath = ConfigRowType.selectOptions.indexPath
+    private func selectOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Select Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
             self?.options.selectOptions = [.photo, .video]
@@ -215,8 +206,7 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func orderbyDateTapped() {
-        let indexPath = ConfigRowType.orderByDate.indexPath
+    private func orderbyDateTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Order By Date", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ASC", style: .default, handler: { [weak self] (action) in
             self?.options.orderByDate = .asc
@@ -230,8 +220,7 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func editorOptionsTapped() {
-        let indexPath = EditorConfigRowType.editorOptions.indexPath
+    private func editorOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Editor Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
             self?.options.editorOptions = []
@@ -245,8 +234,7 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func captureMediaOptionsTapped() {
-        let indexPath = CaptureConfigRowType.captureOptions.indexPath
+    private func captureMediaOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Capture Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
             self?.options.captureOptions.mediaOptions = []
@@ -270,8 +258,7 @@ extension PickerConfigViewController {
     
     // MARK: - Other Config
     
-    private func fullScreenTapped() {
-        let indexPath = OtherConfigRowType.fullScreen.indexPath
+    private func fullScreenTapped(_ indexPath: IndexPath) {
         isFullScreen.toggle()
         (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(isFullScreen)"
     }
@@ -387,13 +374,9 @@ extension PickerConfigViewController {
                 return "ASC"
             }
         }
-        
-        var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 0)
-        }
 
-        func getFunction<T: UIViewController>(_ controller: T) -> (() -> Void) {
-            guard let controller = controller as? PickerConfigViewController else { return { } }
+        func getFunction<T: UIViewController>(_ controller: T) -> ((IndexPath) -> Void) {
+            guard let controller = controller as? PickerConfigViewController else { return { _ in } }
             switch self {
             case .theme:
                 return controller.themeTapped
@@ -440,12 +423,8 @@ extension PickerConfigViewController {
             }
         }
         
-        var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 1)
-        }
-        
-        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
-            guard let controller = controller as? PickerConfigViewController else { return { } }
+        func getFunction<T>(_ controller: T) -> ((IndexPath) -> Void) where T : UIViewController {
+            guard let controller = controller as? PickerConfigViewController else { return { _ in } }
             switch self {
             case .editorOptions:
                 return controller.editorOptionsTapped
@@ -478,12 +457,8 @@ extension PickerConfigViewController {
             }
         }
         
-        var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 2)
-        }
-        
-        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
-            guard let controller = controller as? PickerConfigViewController else { return { } }
+        func getFunction<T>(_ controller: T) -> ((IndexPath) -> Void) where T : UIViewController {
+            guard let controller = controller as? PickerConfigViewController else { return { _ in } }
             switch self {
             case .captureOptions:
                 return controller.captureMediaOptionsTapped
@@ -516,12 +491,8 @@ extension PickerConfigViewController {
             }
         }
         
-        var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 3)
-        }
-        
-        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
-            guard let controller = controller as? PickerConfigViewController else { return { } }
+        func getFunction<T>(_ controller: T) -> ((IndexPath) -> Void) where T : UIViewController {
+            guard let controller = controller as? PickerConfigViewController else { return { _ in } }
             switch self {
             case .fullScreen:
                 return controller.fullScreenTapped

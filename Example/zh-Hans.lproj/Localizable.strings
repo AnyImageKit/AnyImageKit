@@ -27,6 +27,7 @@
 "MosaicOptions" = "马赛克种类";
 "MosaicWidth" = "马赛克线条宽度";
 "MosaicLevel" = "马赛克模糊度";
+"CropOptions" = "裁剪尺寸";
 
 // Capture
 "OpenCamera" = "打开相机";

@@ -8,18 +8,22 @@
 
 import UIKit
 
+protocol HomeRowTypeRule {
+    var title: String { get }
+    var controller: UIViewController { get }
+}
+
 protocol RowTypeRule {
     var title: String { get }
     var options: String { get }
     var defaultValue: String { get }
-    var indexPath: IndexPath { get }
     
-    func getFunction<T: UIViewController>(_ controller: T) -> (() -> Void)
+    func getFunction<T: UIViewController>(_ controller: T) -> ((IndexPath) -> Void)
 }
 
 extension RowTypeRule {
     
-    func getFunction<T: UIViewController>(_ controller: T) -> (() -> Void) {
-        return { }
+    func getFunction<T: UIViewController>(_ controller: T) -> ((IndexPath) -> Void) {
+        return { _ in  }
     }
 }

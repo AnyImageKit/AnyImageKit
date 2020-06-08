@@ -27,6 +27,7 @@
 "MosaicOptions" = "Mosaic Options";
 "MosaicWidth" = "Mosaic Width";
 "MosaicLevel" = "Mosaic Level";
+"CropOptions" = "Crop Options";
 
 // Capture
 "OpenCamera" = "Open camera";

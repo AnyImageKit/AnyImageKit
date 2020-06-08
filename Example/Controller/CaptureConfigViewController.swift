@@ -71,7 +71,7 @@ final class CaptureConfigViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let rowType = RowType.allCases[indexPath.row]
-        rowType.getFunction(self)()
+        rowType.getFunction(self)(indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -118,8 +118,7 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
 // MARK: - Tapped
 extension CaptureConfigViewController {
     
-    private func mediaOptionsTapped() {
-        let indexPath = RowType.mediaOptions.indexPath
+    private func mediaOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Media Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Photo+Video", style: .default, handler: { [weak self] (action) in
             self?.options.mediaOptions = [.photo, .video]
@@ -137,8 +136,7 @@ extension CaptureConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func photoAspectRatioTapped() {
-        let indexPath = RowType.photoAspectRatio.indexPath
+    private func photoAspectRatioTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Photo Aspect Ratio", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "1:1", style: .default, handler: { [weak self] (action) in
             self?.options.photoAspectRatio = .ratio1x1
@@ -156,8 +154,7 @@ extension CaptureConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func preferredPositionsTapped() {
-        let indexPath = RowType.preferredPositions.indexPath
+    private func preferredPositionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Preferred Positions", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Back+Front", style: .default, handler: { [weak self] (action) in
             self?.options.preferredPositions = [.back, .front]
@@ -179,8 +176,7 @@ extension CaptureConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func flashModeTapped() {
-        let indexPath = RowType.flashMode.indexPath
+    private func flashModeTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Flash Mode", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (action) in
             self?.options.flashMode = .auto
@@ -198,8 +194,7 @@ extension CaptureConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func videoMaximumDurationTapped() {
-        let indexPath = RowType.videoMaximumDuration.indexPath
+    private func videoMaximumDurationTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Video Maximum Duration", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "10", style: .default, handler: { [weak self] (action) in
             self?.options.videoMaximumDuration = 10
@@ -281,12 +276,8 @@ extension CaptureConfigViewController {
             }
         }
         
-        var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 0)
-        }
-        
-        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
-            guard let controller = controller as? CaptureConfigViewController else { return { } }
+        func getFunction<T>(_ controller: T) -> ((IndexPath) -> Void) where T : UIViewController {
+            guard let controller = controller as? CaptureConfigViewController else { return { _ in } }
             switch self {
             case .mediaOptions:
                 return controller.mediaOptionsTapped

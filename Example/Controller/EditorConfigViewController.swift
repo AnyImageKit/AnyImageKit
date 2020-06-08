@@ -71,7 +71,7 @@ final class EditorConfigViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let rowType = RowType.allCases[indexPath.row]
-        rowType.getFunction(self)()
+        rowType.getFunction(self)(indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -101,8 +101,7 @@ extension EditorConfigViewController: ImageEditorControllerDelegate {
 // MARK: - Tapped
 extension EditorConfigViewController {
     
-    private func editOptionsTapped() {
-        let indexPath = RowType.editOptions.indexPath
+    private func editOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Edit Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Pen+Text+Crop+Mosaic", style: .default, handler: { [weak self] (action) in
             self?.options.toolOptions = EditorPhotoToolOption.allCases
@@ -128,8 +127,7 @@ extension EditorConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func penWidthTapped() {
-        let indexPath = RowType.penWidth.indexPath
+    private func penWidthTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Pen Width", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "2.5", style: .default, handler: { [weak self] (action) in
             self?.options.penWidth = 2.5
@@ -151,8 +149,7 @@ extension EditorConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func mosaicOptionsTapped() {
-        let indexPath = RowType.mosaicOptions.indexPath
+    private func mosaicOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Mosaic Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Default+Colorful", style: .default, handler: { [weak self] (action) in
             self?.options.mosaicOptions = [.default, .colorful]
@@ -170,8 +167,7 @@ extension EditorConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func mosaicWidthTapped() {
-        let indexPath = RowType.mosaicWidth.indexPath
+    private func mosaicWidthTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Mosaic Width", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "15.0", style: .default, handler: { [weak self] (action) in
             self?.options.mosaicWidth = 15.0
@@ -193,8 +189,7 @@ extension EditorConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func mosaicLevelTapped() {
-        let indexPath = RowType.mosaicLevel.indexPath
+    private func mosaicLevelTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Mosaic Level", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "20", style: .default, handler: { [weak self] (action) in
             self?.options.mosaicLevel = 20
@@ -216,8 +211,7 @@ extension EditorConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func cropOptionsTapped() {
-        let indexPath = RowType.cropOptions.indexPath
+    private func cropOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Crop Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Free/1:1/3:4/4:3/9:16/16:9", style: .default, handler: { [weak self] (action) in
             self?.options.cropOptions = EditorCropOption.allCases
@@ -302,12 +296,8 @@ extension EditorConfigViewController {
             }
         }
         
-        var indexPath: IndexPath {
-            return IndexPath(row: rawValue, section: 0)
-        }
-        
-        func getFunction<T>(_ controller: T) -> (() -> Void) where T : UIViewController {
-            guard let controller = controller as? EditorConfigViewController else { return { } }
+        func getFunction<T>(_ controller: T) -> ((IndexPath) -> Void) where T : UIViewController {
+            guard let controller = controller as? EditorConfigViewController else { return { _ in } }
             switch self {
             case .editOptions:
                 return controller.editOptionsTapped
