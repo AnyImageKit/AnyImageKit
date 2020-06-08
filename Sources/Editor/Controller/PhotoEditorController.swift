@@ -231,7 +231,7 @@ extension PhotoEditorController: EditorToolViewDelegate {
     /// 取消裁剪
     func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
         if options.toolOptions.count == 1 {
-            dismiss(animated: true, completion: nil)
+            backButtonTapped(backButton)
             return
         }
         
