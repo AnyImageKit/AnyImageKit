@@ -32,12 +32,11 @@ final class EditorCropToolView: UIView {
             }
         }
     }
-    var currentOption: EditorCropOption = .free {
+    var currentOption: EditorCropOption? = nil {
         didSet {
             let idx = currentOptionIdx
             collectionView.reloadData()
             collectionView.selectItem(at: IndexPath(row: idx, section: 0), animated: true, scrollPosition: .left)
-            delegate?.cropToolView(self, didClickCropOption: options.cropOptions[idx])
         }
     }
     
@@ -90,9 +89,6 @@ final class EditorCropToolView: UIView {
         self.options = options
         super.init(frame: frame)
         setupView()
-        if let option = options.cropOptions.first {
-            currentOption = option
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -151,7 +147,7 @@ extension EditorCropToolView {
         if currentOption == .free {
             delegate?.cropToolViewResetButtonTapped(self)
         } else {
-            delegate?.cropToolView(self, didClickCropOption: currentOption)
+            delegate?.cropToolView(self, didClickCropOption: currentOption ?? .free)
         }
     }
     
@@ -180,6 +176,7 @@ extension EditorCropToolView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if currentOption != options.cropOptions[indexPath.row] {
             currentOption = options.cropOptions[indexPath.row]
+            delegate?.cropToolView(self, didClickCropOption: currentOption ?? .free)
         }
     }
 }

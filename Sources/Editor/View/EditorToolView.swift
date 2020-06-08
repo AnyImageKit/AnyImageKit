@@ -185,6 +185,9 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
             editOptionsView.isHidden = true
             topCoverLayer.isHidden = true
             doneButton.isHidden = true
+            if let option = options.cropOptions.first, cropToolView.currentOption == nil {
+                cropToolView.currentOption = option
+            }
         default:
             break
         }
