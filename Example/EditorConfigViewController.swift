@@ -105,7 +105,7 @@ extension EditorConfigViewController {
         let indexPath = RowType.editOptions.indexPath
         let alert = UIAlertController(title: "Edit Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Pen+Text+Crop+Mosaic", style: .default, handler: { [weak self] (action) in
-            self?.options.toolOptions = [.pen, .crop, .mosaic]
+            self?.options.toolOptions = EditorPhotoToolOption.allCases
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Pen", style: .default, handler: { [weak self] (action) in
@@ -215,6 +215,29 @@ extension EditorConfigViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
+    private func cropOptionsTapped() {
+        let indexPath = RowType.cropOptions.indexPath
+        let alert = UIAlertController(title: "Crop Options", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Free/1:1/3:4/4:3/9:16/16:9", style: .default, handler: { [weak self] (action) in
+            self?.options.cropOptions = EditorCropOption.allCases
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Free", style: .default, handler: { [weak self] (action) in
+            self?.options.cropOptions = [.free]
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "1:1", style: .default, handler: { [weak self] (action) in
+            self?.options.cropOptions = [.custom(w: 1, h: 1)]
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Free/9:16/16:9", style: .default, handler: { [weak self] (action) in
+            self?.options.cropOptions = [.free, .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Enum
@@ -226,6 +249,7 @@ extension EditorConfigViewController {
         case mosaicOptions
         case mosaicWidth
         case mosaicLevel
+        case cropOptions
         
         var title: String {
             switch self {
@@ -239,6 +263,8 @@ extension EditorConfigViewController {
                 return "MosaicWidth"
             case .mosaicLevel:
                 return "MosaicLevel"
+            case .cropOptions:
+                return "CropOptions"
             }
         }
         
@@ -254,6 +280,8 @@ extension EditorConfigViewController {
                 return ".mosaicWidth"
             case .mosaicLevel:
                 return ".mosaicLevel"
+            case .cropOptions:
+                return ".cropOptions"
             }
         }
         
@@ -269,6 +297,8 @@ extension EditorConfigViewController {
                 return "15.0"
             case .mosaicLevel:
                 return "30"
+            case .cropOptions:
+                return "Free/1:1/3:4/4:3/9:16/16:9"
             }
         }
         
@@ -289,6 +319,8 @@ extension EditorConfigViewController {
                 return controller.mosaicWidthTapped
             case .mosaicLevel:
                 return controller.mosaicLevelTapped
+            case .cropOptions:
+                return controller.cropOptionsTapped
             }
         }
     }
