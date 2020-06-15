@@ -371,6 +371,9 @@ extension PhotoPreviewController {
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        if manager.selectedAssets.isEmpty {
+            selectButtonTapped(navigationBar.selectButton)
+        }
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
     }

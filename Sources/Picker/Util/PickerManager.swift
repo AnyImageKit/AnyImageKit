@@ -27,6 +27,10 @@ final class PickerManager {
     
     /// 已选中的资源
     private(set) var selectedAssets: [Asset] = []
+    /// 获取失败的资源
+    private var failedAssets: [Asset] = []
+    /// 管理 failedAssets 队列的锁
+    private let lock: NSLock = .init()
     
     /// Running Fetch Requests
     private var fetchRecords = [FetchRecord]()
@@ -133,7 +137,7 @@ extension PickerManager {
             // 勾选图片就开始加载
             if let image = cache.read(identifier: asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
                 asset._images[.initial] = image
-                self.didLoadImage()
+                self.didSyncAsset()
             } else {
                 workQueue.async { [weak self] in
                     guard let self = self else { return }
@@ -143,9 +147,12 @@ extension PickerManager {
                         case .success(let response):
                             if !response.isDegraded {
                                 asset._images[.initial] = response.image
-                                self.didLoadImage()
+                                self.didSyncAsset()
                             }
                         case .failure(let error):
+                            self.lock.lock()
+                            self.failedAssets.append(asset)
+                            self.lock.unlock()
                             _print(error)
                             let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
                             NotificationCenter.default.post(name: .didSyncAsset, object: message)
@@ -171,8 +178,11 @@ extension PickerManager {
                             switch result {
                             case .success(_):
                                 asset.videoDidDownload = true
-                                self.didLoadImage()
+                                self.didSyncAsset()
                             case .failure(let error):
+                                self.lock.lock()
+                                self.failedAssets.append(asset)
+                                self.lock.unlock()
                                 _print(error)
                                 let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
                                 NotificationCenter.default.post(name: .didSyncAsset, object: message)
@@ -184,12 +194,19 @@ extension PickerManager {
         }
     }
     
+    func resynchronizeAsset() {
+        lock.lock()
+        let assets = failedAssets
+        failedAssets.removeAll()
+        lock.unlock()
+        assets.forEach { syncAsset($0) }
+    }
 }
 
 // MARK: - Private function
 extension PickerManager {
     
-    private func didLoadImage() {
+    private func didSyncAsset() {
         let isReady = selectedAssets.filter{ !$0.isReady }.isEmpty
         if isReady {
             NotificationCenter.default.post(name: .didSyncAsset, object: nil)

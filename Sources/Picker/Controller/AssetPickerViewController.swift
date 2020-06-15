@@ -444,11 +444,6 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
-        guard let album = album else { return }
-        if manager.selectedAssets.isEmpty {
-            let idx = controller.currentIndex + itemOffset
-            manager.addSelectedAsset(album.assets[idx])
-        }
         delegate?.assetPickerDidFinishPicking(self)
     }
     

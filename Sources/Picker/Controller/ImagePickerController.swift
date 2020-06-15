@@ -150,25 +150,16 @@ extension ImagePickerController {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             let assets = self.manager.selectedAssets
-            let isReady = self.manager.selectedAssets.filter{ !$0.isReady }.isEmpty
+            let isReady = assets.filter{ !$0.isReady }.isEmpty
             if !isReady { return }
             self.saveEditPhoto(assets)
             self.resizeImagesIfNeeded(assets)
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 hideHUD()
-                self.finishSelect()
+                self.pickerDelegate?.imagePicker(self, didFinishPicking: self.manager.selectedAssets, useOriginalImage: self.manager.useOriginalImage)
             }
         }
-    }
-    
-    private func finishSelect() {
-        lock.lock()
-        if didFinishSelect {
-            didFinishSelect = false
-            pickerDelegate?.imagePicker(self, didFinishPicking: manager.selectedAssets, useOriginalImage: manager.useOriginalImage)
-        }
-        lock.unlock()
     }
     
     private func saveEditPhoto(_ assets: [Asset]) {
@@ -206,6 +197,7 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
     
     func assetPickerDidFinishPicking(_ controller: AssetPickerViewController) {
         didFinishSelect = true
+        manager.resynchronizeAsset()
         checkData()
     }
 }
@@ -234,6 +226,7 @@ extension ImagePickerController {
     @objc private func didSyncAsset(_ sender: Notification) {
         if didFinishSelect {
             if let message = sender.object as? String {
+                didFinishSelect = false
                 showMessageHUD(message)
             } else {
                 checkData()
