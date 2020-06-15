@@ -42,10 +42,9 @@ final class EditorCropToolView: UIView {
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10
-        layout.minimumLineSpacing = 10
+        layout.minimumLineSpacing = 15
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.itemSize = CGSize(width: 40, height: 40)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.backgroundColor = .clear
         view.showsHorizontalScrollIndicator = false
