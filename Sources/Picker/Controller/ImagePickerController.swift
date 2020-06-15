@@ -151,7 +151,7 @@ extension ImagePickerController {
             guard let self = self else { return }
             let assets = self.manager.selectedAssets
             let isReady = assets.filter{ !$0.isReady }.isEmpty
-            if !isReady { return }
+            if !isReady && !assets.isEmpty { return }
             self.saveEditPhoto(assets)
             self.resizeImagesIfNeeded(assets)
             DispatchQueue.main.async { [weak self] in

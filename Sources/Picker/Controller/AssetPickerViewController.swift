@@ -227,6 +227,7 @@ extension AssetPickerViewController {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
     }
     
     @objc private func containerSizeDidChange(_ sender: Notification) {
@@ -238,6 +239,14 @@ extension AssetPickerViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
         }
+    }
+    
+    @objc private func didSyncAsset(_ sender: Notification) {
+        guard let _ = sender.object as? String else { return }
+        guard manager.options.selectLimit == 1 && manager.options.quickPick else { return }
+        guard let asset = manager.selectedAssets.first else { return }
+        guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
+        selectButtonTapped(cell.selectButton)
     }
 }
 
