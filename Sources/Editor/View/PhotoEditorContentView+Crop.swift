@@ -445,7 +445,7 @@ extension PhotoEditorContentView {
         } else {
             let scale = scrollView.bounds.height / cropRect.height
             let width = cropRect.width * scale
-            let x = (scrollView.bounds.width - width + scrollView.frame.origin.x) / 2
+            let x = (scrollView.bounds.width - width) / 2 + scrollView.frame.origin.x
             newCropRect = CGRect(x: x, y: scrollView.frame.origin.y, width: width, height: scrollView.frame.height)
         }
         
