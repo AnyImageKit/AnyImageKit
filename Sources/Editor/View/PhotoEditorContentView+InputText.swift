@@ -13,7 +13,9 @@ extension PhotoEditorContentView {
     
     func addText(data: TextData) {
         if data.text.isEmpty { return }
-        calculateTextFrame(data: data)
+        if data.frame.isEmpty {
+            calculateTextFrame(data: data)
+        }
         let textView = TextImageView(data: data)
         textView.deleteButton.addTarget(self, action: #selector(textDeletebuttonTapped(_:)), for: .touchUpInside)
         textView.transform = textView.calculateTransform()

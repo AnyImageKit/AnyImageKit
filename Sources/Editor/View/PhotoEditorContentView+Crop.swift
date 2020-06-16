@@ -215,6 +215,7 @@ extension PhotoEditorContentView {
         // Set
         scrollView.minimumZoomScale = didCrop ? scrollView.zoomScale : 1.0
         scrollView.maximumZoomScale = didCrop ? scrollView.zoomScale : 3.0
+        cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)
         animate(withDuration: fromCache ? 0 : 0.25) {
             self.scrollView.frame = self.bounds
             self.scrollView.contentInset = .zero
@@ -240,7 +241,6 @@ extension PhotoEditorContentView {
             cropLayer.add(cropAnimation, forKey: "path")
         }
         cropLayer.path = newCropPath.cgPath
-        cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)
     }
     
     /// 设置白色裁剪框的frame

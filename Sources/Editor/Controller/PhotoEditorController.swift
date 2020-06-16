@@ -246,7 +246,6 @@ extension PhotoEditorController: EditorToolViewDelegate {
         backButton.isHidden = false
         contentView.cropDone { [weak self] (_) in
             self?.didEndCroping()
-
             if self?.options.toolOptions.count == 1 {
                 self?.toolViewDoneButtonTapped(toolView)
             }
