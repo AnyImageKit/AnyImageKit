@@ -64,8 +64,10 @@ extension PhotoEditorContentView: MosaicDelegate {
     func mosaicDidEndPen() {
         delegate?.photoDidEndPen()
         canvas.isHidden = true // 不能把画笔部分截进去
+        textImageViews.forEach { $0.isHidden = true } // 不能把文本截进去
         let screenshot = imageView.screenshot(image.size)
         canvas.isHidden = false
+        textImageViews.forEach { $0.isHidden = false }
         imageView.image = screenshot
         mosaic?.reset()
         mosaicCache.write(screenshot)
