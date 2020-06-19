@@ -252,7 +252,7 @@ extension CaptureViewController: CaptureDelegate {
     }
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
-        guard UIDevice.current.userInterfaceIdiom == .phone else { // TODO: iPadOS is not support yet
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
             if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
                 toolView.captureButton.stopProcessing()
                 delegate?.capture(self, didOutput: url, type: .photo)
@@ -297,7 +297,7 @@ extension CaptureViewController: RecorderDelegate {
         toolView.showButtons(animated: true)
         previewView.showToolMask(animated: true)
         
-        guard UIDevice.current.userInterfaceIdiom == .phone else { // TODO: iPadOS is not support yet
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
             toolView.captureButton.stopProcessing()
             delegate?.capture(self, didOutput: url, type: .video)
             return
