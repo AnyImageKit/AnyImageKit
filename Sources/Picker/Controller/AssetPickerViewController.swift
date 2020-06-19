@@ -389,9 +389,16 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
-        let columnNumber = CGFloat(manager.options.columnNumber)
+        let columnNumber: CGFloat
+        if UIDevice.current.userInterfaceIdiom == .phone || !manager.options.autoCalculateColumnNumber {
+            columnNumber = CGFloat(manager.options.columnNumber)
+        } else {
+            let minWidth: CGFloat = 140
+            columnNumber = max(CGFloat(Int(contentSize.width / minWidth)), 3)
+        }
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
+            
     }
 }
 

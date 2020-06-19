@@ -23,6 +23,12 @@ public struct PickerOptionsInfo: Equatable {
     /// - Default: 4
     public var columnNumber: Int = 4
     
+    /// Auto Calculate Column Number 自动计算每行的列数
+    /// In iOS column number is `columnNumber`, in iPadOS column number will calculated by device orientation or device size.
+    /// iOS 上列数以 `columnNumber` 为准，iPadOS 上将根据设备方向、大小自动计算列数
+    /// - Default: true
+    public var autoCalculateColumnNumber: Bool = true
+    
     /// Max Width for export Photo 导出小图的最大宽度
     /// - Default: 800
     public var photoMaxWidth: CGFloat = 800
