@@ -3,10 +3,11 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import Foundation
+import MobileCoreServices
 
 public enum MediaType: Equatable, CustomStringConvertible {
     
@@ -14,6 +15,22 @@ public enum MediaType: Equatable, CustomStringConvertible {
     case video
     case photoGIF
     case photoLive
+    
+    init?(utType: String) {
+        let kUTType = utType as CFString
+        switch kUTType {
+        case kUTTypeImage:
+            self = .photo
+        case kUTTypeMovie:
+            self = .video
+        case kUTTypeGIF:
+            self = .photoGIF
+        case kUTTypeLivePhoto:
+            self = .photoLive
+        default:
+            return nil
+        }
+    }
     
     public var description: String {
         switch self {
@@ -25,6 +42,19 @@ public enum MediaType: Equatable, CustomStringConvertible {
             return "PHOTO/GIF"
         case .photoLive:
             return "PHOTO/LIVE"
+        }
+    }
+    
+    public var utType: String {
+        switch self {
+        case .photo:
+            return kUTTypeImage as String
+        case .video:
+            return kUTTypeMovie as String
+        case .photoGIF:
+            return kUTTypeGIF as String
+        case .photoLive:
+            return kUTTypeLivePhoto as String
         }
     }
     

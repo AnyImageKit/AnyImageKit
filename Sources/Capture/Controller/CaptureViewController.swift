@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/4.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -253,7 +253,7 @@ extension CaptureViewController: CaptureDelegate {
     
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType) {
         guard UIDevice.current.userInterfaceIdiom == .phone else { // TODO: iPadOS is not support yet
-            if let url = FileHelper.write(photoData: photoData, utType: fileType.utType) {
+            if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
                 toolView.captureButton.stopProcessing()
                 delegate?.capture(self, didOutput: url, type: .photo)
             }

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/7/22.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import AVFoundation
@@ -139,11 +139,7 @@ extension Recorder {
     
     private func createWriter() -> AVAssetWriter? {
         do {
-            let tmpPath = FileHelper.temporaryDirectory(for: .video)
-            let dateString = FileHelper.dateString()
-            let filePath = tmpPath.appending("Video-\(dateString).mp4")
-            FileHelper.createDirectory(at: tmpPath)
-            let outputURL = URL(fileURLWithPath: filePath)
+            let outputURL = FileHelper.getTemporaryUrl(by: .video, fileType: .mp4)
             _print("Create AVAssetWriter at utl: \(outputURL)")
             return try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
         } catch {

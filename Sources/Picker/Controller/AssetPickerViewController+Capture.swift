@@ -17,7 +17,9 @@ extension AssetPickerViewController {
     /// 打开相机
     func showCapture() {
         #if !targetEnvironment(simulator)
-        let controller = ImageCaptureController(options: manager.options.captureOptions, delegate: self)
+        var options = manager.options.captureOptions
+        options.enableDebugLog = manager.options.enableDebugLog
+        let controller = ImageCaptureController(options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
         #else

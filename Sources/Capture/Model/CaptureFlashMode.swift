@@ -6,6 +6,7 @@
 //  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
+import UIKit
 import AVFoundation
 
 public enum CaptureFlashMode: RawRepresentable, Equatable {
@@ -28,6 +29,17 @@ public enum CaptureFlashMode: RawRepresentable, Equatable {
     }
     
     public var rawValue: AVCaptureDevice.FlashMode {
+        switch self {
+        case .auto:
+            return .auto
+        case .on:
+            return .on
+        case .off:
+            return .off
+        }
+    }
+    
+    public var cameraFlashMode: UIImagePickerController.CameraFlashMode {
         switch self {
         case .auto:
             return .auto

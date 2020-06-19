@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import Foundation
@@ -13,6 +13,7 @@ enum FileType: Equatable {
     
     case jpeg
     case png
+    case mp4
     
     var fileExtension: String {
         switch self {
@@ -20,6 +21,8 @@ enum FileType: Equatable {
             return ".jpeg"
         case .png:
             return ".png"
+        case .mp4:
+            return ".mp4"
         }
     }
     
@@ -29,6 +32,8 @@ enum FileType: Equatable {
             return kUTTypeJPEG
         case .png:
             return kUTTypePNG
+        case .mp4:
+            return kUTTypeMPEG4
         }
     }
 }

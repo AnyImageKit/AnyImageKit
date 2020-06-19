@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -20,10 +20,12 @@ public struct CaptureOptionsInfo: Equatable {
     public var mediaOptions: CaptureMediaOption = [.photo, .video]
     
     /// 照片拍摄比例
+    /// iPadOS 环境下无效
     /// 默认：4:3
     public var photoAspectRatio: CaptureAspectRatio = .ratio4x3
     
     /// 使用的摄像头
+    /// iPadOS 环境下仅用于先打开前置/后置摄像头，用户仍然可以切换摄像头
     /// 默认：后置+前置
     public var preferredPositions: [CapturePosition] = [.back, .front]
     
@@ -36,6 +38,7 @@ public struct CaptureOptionsInfo: Equatable {
     public var videoMaximumDuration: TimeInterval = 20
     
     /// 相机预设
+    /// iPadOS 环境下无效
     /// 默认支持从 1920*1080@60 开始查找支持的最佳分辨率
     public var preferredPreset: [CapturePreset] = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
     
@@ -45,9 +48,11 @@ public struct CaptureOptionsInfo: Equatable {
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     /// Editor photo option info items 图片编辑配置项
+    /// iPadOS 环境下无效
     public var editorPhotoOptions: EditorPhotoOptionsInfo = .init()
     
     /// Editor video option info items 视频编辑配置项
+    /// iPadOS 环境下无效
     public var editorVideoOptions: EditorVideoOptionsInfo = .init()
     #endif
     

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/10/16.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import MobileCoreServices
@@ -34,14 +34,16 @@ struct FileHelper {
             }
         }
     }
+}
+
+extension FileHelper {
+    
+    static func write(photoData: Data, fileType: FileType) -> URL? {
+        write(photoData: photoData, utType: fileType.utType)
+    }
     
     static func write(photoData: Data, utType: CFString) -> URL? {
-        let tmpPath = temporaryDirectory(for: .photo)
-        let dateString = FileHelper.dateString()
-        let filePath = tmpPath.appending("Photo-\(dateString).\(FileHelper.fileExtension(from: utType))")
-        FileHelper.createDirectory(at: tmpPath)
-        let url = URL(fileURLWithPath: filePath)
-        // Write to file
+        let url = getTemporaryUrl(by: .photo, utType: utType)
         do {
             try photoData.write(to: url)
             return url
@@ -67,5 +69,17 @@ extension FileHelper {
         } else {
             return systemTemp.appending("AnyImageKit/Video/")
         }
+    }
+    
+    static func getTemporaryUrl(by type: MediaType, fileType: FileType) -> URL {
+        return getTemporaryUrl(by: type, utType: fileType.utType)
+    }
+    
+    static func getTemporaryUrl(by type: MediaType, utType: CFString) -> URL {
+        let tmpPath = temporaryDirectory(for: type)
+        let dateStr = dateString()
+        let filePath = tmpPath.appending("\(dateStr).\(fileExtension(from: utType))")
+        createDirectory(at: tmpPath)
+        return URL(fileURLWithPath: filePath)
     }
 }

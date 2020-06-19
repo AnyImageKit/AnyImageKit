@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/3.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -26,14 +26,22 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
     
+    /// Init capture controller
+    /// - Note: iPadOS will use `UIImagePickerController` instead.
     public required init(options: CaptureOptionsInfo, delegate: ImageCaptureControllerDelegate) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         self.captureDelegate = delegate
         
-        let rootViewController = CaptureViewController(options: options)
-        rootViewController.delegate = self
-        self.viewControllers = [rootViewController]
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let rootViewController = PadCaptureViewController(options: options)
+            rootViewController.delegate = self
+            self.viewControllers = [rootViewController]
+        } else {
+            let rootViewController = CaptureViewController(options: options)
+            rootViewController.delegate = self
+            self.viewControllers = [rootViewController]
+        }
     }
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")
@@ -41,15 +49,22 @@ open class ImageCaptureController: AnyImageNavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    #if ANYIMAGEKIT_ENABLE_EDITOR
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
+        var didDismiss = false
+        #if ANYIMAGEKIT_ENABLE_EDITOR
         if let _ = presentedViewController as? ImageEditorController {
+            didDismiss = true
             presentingViewController?.dismiss(animated: flag, completion: completion)
-        } else {
-            super.dismiss(animated: flag, completion: completion)
+        }
+        #endif
+        if !didDismiss {
+            if let _ = presentedViewController as? UIImagePickerController {
+                presentingViewController?.dismiss(animated: flag, completion: completion)
+            } else {
+                super.dismiss(animated: flag, completion: completion)
+            }
         }
     }
-    #endif
     
     open override var prefersStatusBarHidden: Bool {
         return true
@@ -64,6 +79,18 @@ extension ImageCaptureController: CaptureViewControllerDelegate {
     }
     
     func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType) {
+        captureDelegate?.imageCapture(self, didFinishCapturing: mediaURL, type: type)
+    }
+}
+
+// MARK: - PadCaptureViewControllerDelegate
+extension ImageCaptureController: PadCaptureViewControllerDelegate {
+    
+    func captureDidCancel(_ capture: PadCaptureViewController) {
+        captureDelegate?.imageCaptureDidCancel(self)
+    }
+    
+    func capture(_ capture: PadCaptureViewController, didOutput mediaURL: URL, type: MediaType) {
         captureDelegate?.imageCapture(self, didFinishCapturing: mediaURL, type: type)
     }
 }
