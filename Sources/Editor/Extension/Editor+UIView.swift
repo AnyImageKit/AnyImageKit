@@ -20,14 +20,8 @@ extension UIView {
             format.scale = imageSize.width / size.width
             renderer = UIGraphicsImageRenderer(size: size, format: format)
         }
-        #if swift(>=5.3)
-        return renderer.image { [self] (context) in
-            return layer.render(in: context.cgContext)
+        return renderer.image { [weak self] context in
+            self?.layer.render(in: context.cgContext)
         }
-        #else
-        return renderer.image { [weak self] (context) in
-            return self?.layer.render(in: context.cgContext)
-        }
-        #endif
     }
 }
