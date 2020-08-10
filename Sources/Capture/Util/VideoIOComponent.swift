@@ -224,7 +224,7 @@ extension VideoIOComponent {
             }
             // Set video stabilization
             if connection.isVideoStabilizationSupported {
-                connection.preferredVideoStabilizationMode = .cinematic
+                connection.preferredVideoStabilizationMode = .standard
             }
         }
     }
