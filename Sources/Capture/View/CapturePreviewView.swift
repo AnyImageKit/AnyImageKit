@@ -130,17 +130,13 @@ extension CapturePreviewView {
 extension CapturePreviewView {
     
     func clear() {
-        let size = previewContentView.drawableSize
-        let image = CIImage.image(size: size, backgroundColor: .black) ?? .empty()
-        previewContentView.draw(image: image)
+        previewContentView.clear()
     }
     
     func draw(_ sampleBuffer: CMSampleBuffer) {
         guard isRunning else { return }
-        if let imageBuffer = sampleBuffer.imageBuffer {
-            let image = CIImage(cvImageBuffer: imageBuffer)
-            previewContentView.draw(image: image)
-        }
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        previewContentView.draw(pixelBuffer: pixelBuffer)
     }
 }
 
