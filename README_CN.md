@@ -12,13 +12,19 @@
     - [x] GIF
     - [x] Live Photo
     - [x] Video
-- [x] 支持在选择时直接拍照
+- [x] 相机支持
+    - [x] Photo
+    - [x] Video
+    - [ ] LivePhoto
+    - [ ] GIF
+    - [ ] 滤镜
 - [ ] 编辑图片 (技术预览版)
     - [x] 涂鸦
     - [ ] 表情
     - [x] 文字
     - [x] 裁剪
     - [x] 马赛克
+    - [ ] 滤镜
 - [ ] 多平台支持
     - [x] iOS
     - [x] iPadOS (暂不支持编辑)
