@@ -15,7 +15,7 @@
 - [x] 相机支持
     - [x] Photo
     - [x] Video
-    - [ ] LivePhoto
+    - [ ] Live Photo
     - [ ] GIF
     - [ ] 滤镜
 - [ ] 编辑图片 (技术预览版)
