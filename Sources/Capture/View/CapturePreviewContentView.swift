@@ -113,14 +113,14 @@ extension CapturePreviewContentView: MTKViewDelegate {
         
         var cvTextureOut: CVMetalTexture?
         let status = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                                                  textureCache,
-                                                  previewPixelBuffer,
-                                                  nil,
-                                                  .bgra8Unorm,
-                                                  width,
-                                                  height,
-                                                  0,
-                                                  &cvTextureOut)
+                                                               textureCache,
+                                                               previewPixelBuffer,
+                                                               nil,
+                                                               .bgra8Unorm,
+                                                               width,
+                                                               height,
+                                                               0,
+                                                               &cvTextureOut)
         guard let cvTexture = cvTextureOut, let texture = CVMetalTextureGetTexture(cvTexture) else {
             _print("Failed to create Metal preview texture: \(status)")
             CVMetalTextureCacheFlush(textureCache, 0)
