@@ -81,7 +81,8 @@ final class CapturePreviewContentView: MTKView {
     
     private func createTextureCache() {
         var newTextureCache: CVMetalTextureCache?
-        let result = CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device!, nil, &newTextureCache)
+        guard let device = device else { return }
+        let result = CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &newTextureCache)
         if result == kCVReturnSuccess {
             textureCache = newTextureCache
         } else {
@@ -225,7 +226,7 @@ extension CapturePreviewContentView {
             -scaleX, scaleY, 0.0, 1.0,
             scaleX, scaleY, 0.0, 1.0
         ]
-        vertexCoordBuffer = device!.makeBuffer(bytes: vertexData, length: vertexData.count * MemoryLayout<Float>.size, options: [])
+        vertexCoordBuffer = device?.makeBuffer(bytes: vertexData, length: vertexData.count * MemoryLayout<Float>.size, options: [])
         
         // Texture coordinate takes the rotation into account.
         var textData: [Float]
