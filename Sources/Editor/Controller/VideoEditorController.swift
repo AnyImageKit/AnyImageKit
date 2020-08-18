@@ -286,8 +286,8 @@ extension VideoEditorController {
                 guard let self = self else { return }
                 guard self.videoPreview.isPlaying else { return }
                 guard let current = self.videoPreview.player?.currentItem?.currentTime() else { return }
-                guard let totle = self.videoPreview.player?.currentItem?.duration else { return }
-                let progress = CGFloat(current.seconds / totle.seconds)
+                guard let total = self.videoPreview.player?.currentItem?.duration else { return }
+                let progress = CGFloat(current.seconds / total.seconds)
                 let progressView = self.cropToolView.progressView
                 self.cropToolView.progressView.setProgress(progress)
                 if progress >= progressView.right {

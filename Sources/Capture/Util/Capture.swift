@@ -13,8 +13,8 @@ protocol CaptureDelegate: class {
     
     func captureDidCapturePhoto(_ capture: Capture)
     func captureDidChangeSubjectArea(_ capture: Capture)
-    func capture(_ captrue: Capture, didUpdate audioProperty: AudioIOComponent.ObservableProperty)
-    func capture(_ captrue: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty)
+    func capture(_ capture: Capture, didUpdate audioProperty: AudioIOComponent.ObservableProperty)
+    func capture(_ capture: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty)
     func capture(_ capture: Capture, didOutput photoData: Data, fileType: FileType)
     func capture(_ capture: Capture, didOutput sampleBuffer: CMSampleBuffer, type: CaptureBufferType)
 }
