@@ -23,7 +23,7 @@
 - [x] Camera
     - [x] Photo
     - [x] Video
-    - [ ] LivePhoto
+    - [ ] Live Photo
     - [ ] GIF
     - [ ] Fliter
 - [ ] Edit image ( Technical Preview )
