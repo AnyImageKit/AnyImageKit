@@ -28,6 +28,7 @@
 		A01F15CF23CC38A800F41097 /* DeviceIOComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01F15CE23CC38A800F41097 /* DeviceIOComponent.swift */; };
 		A0226A4023AB69F1000AFC87 /* Capture+AVCaptureDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */; };
 		A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026C99E23978DF400931028 /* CaptureConfigViewController.swift */; };
+		A02846B424E2E5A5001F1AB1 /* PassThrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = A02846B324E2E5A5001F1AB1 /* PassThrough.metal */; };
 		A029D04F2330856C00BC6720 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753B232F7DE500BB117B /* Album.swift */; };
 		A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3912330B5D000D32ED8 /* AlbumCell.swift */; };
 		A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036C3922330B5D000D32ED8 /* AssetCell.swift */; };
@@ -256,6 +257,7 @@
 		A01F15CE23CC38A800F41097 /* DeviceIOComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIOComponent.swift; sourceTree = "<group>"; };
 		A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AVCaptureDevice.swift"; sourceTree = "<group>"; };
 		A026C99E23978DF400931028 /* CaptureConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureConfigViewController.swift; sourceTree = "<group>"; };
+		A02846B324E2E5A5001F1AB1 /* PassThrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PassThrough.metal; sourceTree = "<group>"; };
 		A029D04E233084B600BC6720 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		A035830223A20ED800F6B424 /* CaptureToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureToolView.swift; sourceTree = "<group>"; };
 		A036C3912330B5D000D32ED8 /* AlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
@@ -527,6 +529,14 @@
 			path = Picker;
 			sourceTree = "<group>";
 		};
+		A02846B024E2E555001F1AB1 /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				A02846B324E2E5A5001F1AB1 /* PassThrough.metal */,
+			);
+			path = Shader;
+			sourceTree = "<group>";
+		};
 		A04B044423B1A52C00DA4D47 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -551,6 +561,7 @@
 				A076999823963D3B0006AC9B /* Controller */,
 				A08DF7BA23B1F7BA002B92EE /* Model */,
 				A07699A123963F560006AC9B /* View */,
+				A02846B024E2E555001F1AB1 /* Shader */,
 				A07699A223963F5E0006AC9B /* Util */,
 				A0B50C3423A9EDC4002C9799 /* Extension */,
 				A04B044423B1A52C00DA4D47 /* Resources */,
@@ -1362,6 +1373,7 @@
 				A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */,
 				A0B22EA5237AA1B3001F6066 /* Core+UICollectionView.swift in Sources */,
 				A561239D23B5EE400071C3E8 /* EditorPhotoOptionsInfo.swift in Sources */,
+				A02846B424E2E5A5001F1AB1 /* PassThrough.metal in Sources */,
 				A08DF7BC23B1F7F1002B92EE /* CaptureBufferType.swift in Sources */,
 				A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */,
 				A068533523B596C00042A031 /* FileType.swift in Sources */,
@@ -1758,7 +1770,7 @@
 				CODE_SIGN_ENTITLEMENTS = Example/Example.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = 5HZKWDU956;
+				DEVELOPMENT_TEAM = 7SA22A9L3L;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1783,7 +1795,7 @@
 				CODE_SIGN_ENTITLEMENTS = Example/Example.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = 5HZKWDU956;
+				DEVELOPMENT_TEAM = 7SA22A9L3L;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

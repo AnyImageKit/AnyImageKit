@@ -21,12 +21,18 @@
     - [x] Live Photo
     - [x] Video
 - [x] Camera
+    - [x] Photo
+    - [x] Video
+    - [ ] LivePhoto
+    - [ ] GIF
+    - [ ] Fliter
 - [ ] Edit image ( Technical Preview )
     - [x] Drawing
     - [ ] Emoji
     - [x] Input text
     - [x] Cropping
     - [x] Mosaic
+    - [ ] Fliter
 - [ ] Multiple platform support
     - [x] iOS
     - [x] iPadOS ( Not support in editor )

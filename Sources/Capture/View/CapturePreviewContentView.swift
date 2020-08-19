@@ -6,47 +6,92 @@
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
-import UIKit
-import CoreImage
 import MetalKit
+import CoreMedia
 
 final class CapturePreviewContentView: MTKView {
     
-    var videoGravity: VideoGravity = .resizeAspectFill
+    var mirroring = false
+    var rotation: Rotation = .rotate0Degrees
     
-    private var contentImage: CIImage?
-    private lazy var context: CIContext = {
-        if let mtlDevice = self.device {
-            return CIContext(mtlDevice: mtlDevice)
-        } else {
-            return CIContext()
-        }
-    }()
-    private let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()
+    private var pixelBuffer: CVPixelBuffer?
+    private var textureCache: CVMetalTextureCache?
+    private var textureWidth: Int = 0
+    private var textureHeight: Int = 0
+    private var textureMirroring = false
+    private var textureRotation: Rotation = .rotate0Degrees
+    private var sampler: MTLSamplerState?
+    private var renderPipelineState: MTLRenderPipelineState?
+    private var commandQueue: MTLCommandQueue?
+    private var vertexCoordBuffer: MTLBuffer?
+    private var textCoordBuffer: MTLBuffer?
+    private var internalBounds: CGRect = .zero
+    private var textureTranform: CGAffineTransform?
     
     init(frame: CGRect) {
         let device = MTLCreateSystemDefaultDevice()
         super.init(frame: frame, device: device)
-        self.delegate = self
-        self.framebufferOnly = false
-        self.enableSetNeedsDisplay = true
+        config()
     }
     
     required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        device = MTLCreateSystemDefaultDevice()
+        config()
     }
-}
-
-extension CapturePreviewContentView {
     
-    func draw(image: CIImage) {
-        DispatchQueue.main.async {
-            self.contentImage = image
-            self.setNeedsDisplay()
+    private func config() {
+        colorPixelFormat = .bgra8Unorm
+        delegate = self
+        configMetal()
+        createTextureCache()
+    }
+    
+    private func configMetal() {
+        guard let device = device else { return }
+        
+        do {
+            let bundle = Bundle(for: CapturePreviewContentView.self)
+            let defaultLibrary = try device.makeDefaultLibrary(bundle: bundle)
+            
+            let pipelineDescriptor = MTLRenderPipelineDescriptor()
+            pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+            pipelineDescriptor.vertexFunction = defaultLibrary.makeFunction(name: "vertexPassThrough")
+            pipelineDescriptor.fragmentFunction = defaultLibrary.makeFunction(name: "fragmentPassThrough")
+            
+            do {
+                renderPipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+            } catch {
+                _print("Fail to create preview Metal view pipeline state: \(error)")
+            }
+        } catch {
+            _print("Fail to make default library: \(error)")
+        }
+        
+        // To determine how textures are sampled, create a sampler descriptor to query for a sampler state from the device.
+        let samplerDescriptor = MTLSamplerDescriptor()
+        samplerDescriptor.sAddressMode = .clampToEdge
+        samplerDescriptor.tAddressMode = .clampToEdge
+        samplerDescriptor.minFilter = .linear
+        samplerDescriptor.magFilter = .linear
+        sampler = device.makeSamplerState(descriptor: samplerDescriptor)
+        
+        commandQueue = device.makeCommandQueue()
+    }
+    
+    private func createTextureCache() {
+        var newTextureCache: CVMetalTextureCache?
+        guard let device = device else { return }
+        let result = CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &newTextureCache)
+        if result == kCVReturnSuccess {
+            textureCache = newTextureCache
+        } else {
+            assertionFailure("Fail to allocate Metal texture cache")
         }
     }
 }
 
+// MARK: - MTKViewDelegate
 extension CapturePreviewContentView: MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -54,50 +99,244 @@ extension CapturePreviewContentView: MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
-        guard
-            let drawable: CAMetalDrawable = currentDrawable,
-            let image: CIImage = contentImage,
-            let commandBuffer: MTLCommandBuffer = device?.makeCommandQueue()?.makeCommandBuffer()
-            else {
-                return
+        guard let drawable = currentDrawable, let currentRenderPassDescriptor = currentRenderPassDescriptor, let previewPixelBuffer = pixelBuffer else {
+            return
         }
-        var scaleX: CGFloat = 0
-        var scaleY: CGFloat = 0
-        var translationX: CGFloat = 0
-        var translationY: CGFloat = 0
-        switch videoGravity {
-        case .resize:
-            scaleX = drawableSize.width / image.extent.width
-            scaleY = drawableSize.height / image.extent.height
-        case .resizeAspect:
-            let scale: CGFloat = min(drawableSize.width / image.extent.width, drawableSize.height / image.extent.height)
-            scaleX = scale
-            scaleY = scale
-            translationX = (drawableSize.width - image.extent.width * scale) / scaleX / 2
-            translationY = (drawableSize.height - image.extent.height * scale) / scaleY / 2
-        case .resizeAspectFill:
-            let scale: CGFloat = max(drawableSize.width / image.extent.width, drawableSize.height / image.extent.height)
-            scaleX = scale
-            scaleY = scale
-            translationX = (drawableSize.width - image.extent.width * scale) / scaleX / 2
-            translationY = (drawableSize.height - image.extent.height * scale) / scaleY / 2
+        
+        pixelBuffer = nil
+        
+        // Create a Metal texture from the image buffer.
+        let width = CVPixelBufferGetWidth(previewPixelBuffer)
+        let height = CVPixelBufferGetHeight(previewPixelBuffer)
+        
+        if textureCache == nil { createTextureCache() }
+        guard let textureCache = textureCache else { return }
+        
+        var cvTextureOut: CVMetalTexture?
+        let status = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+                                                               textureCache,
+                                                               previewPixelBuffer,
+                                                               nil,
+                                                               .bgra8Unorm,
+                                                               width,
+                                                               height,
+                                                               0,
+                                                               &cvTextureOut)
+        guard let cvTexture = cvTextureOut, let texture = CVMetalTextureGetTexture(cvTexture) else {
+            _print("Failed to create Metal preview texture: \(status)")
+            CVMetalTextureCacheFlush(textureCache, 0)
+            return
         }
-        let bounds = CGRect(origin: .zero, size: drawableSize)
-        let scaledImage: CIImage = image
-            .transformed(by: CGAffineTransform(translationX: translationX, y: translationY))
-            .transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
-        context.render(scaledImage, to: drawable.texture, commandBuffer: commandBuffer, bounds: bounds, colorSpace: colorSpace)
+        
+        if texture.width != textureWidth || texture.height != textureHeight || bounds != internalBounds || mirroring != textureMirroring || rotation != textureRotation {
+            setupTransform(width: texture.width, height: texture.height, mirroring: mirroring, rotation: rotation)
+        }
+        
+        // Set up command buffer and encoder
+        guard let commandQueue = commandQueue else {
+            _print("Failed to create Metal command queue")
+            CVMetalTextureCacheFlush(textureCache, 0)
+            return
+        }
+        
+        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+            _print("Failed to create Metal command buffer")
+            CVMetalTextureCacheFlush(textureCache, 0)
+            return
+        }
+        
+        guard let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentRenderPassDescriptor) else {
+            _print("Failed to create Metal command encoder")
+            CVMetalTextureCacheFlush(textureCache, 0)
+            return
+        }
+        
+        commandEncoder.label = "CapturePreviewContentView Display"
+        if let renderPipelineState = renderPipelineState {
+            commandEncoder.setRenderPipelineState(renderPipelineState)
+        }
+        commandEncoder.setVertexBuffer(vertexCoordBuffer, offset: 0, index: 0)
+        commandEncoder.setVertexBuffer(textCoordBuffer, offset: 0, index: 1)
+        commandEncoder.setFragmentTexture(texture, index: 0)
+        commandEncoder.setFragmentSamplerState(sampler, index: 0)
+        commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        commandEncoder.endEncoding()
+        
+        // Draw to the screen.
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }
 }
 
+// MARK: - Display
 extension CapturePreviewContentView {
     
-    enum VideoGravity {
+    func clear() {
+        textureCache = nil
+    }
+    
+    func draw(pixelBuffer: CVPixelBuffer) {
+        self.pixelBuffer = pixelBuffer
+    }
+}
+
+// MARK: - Coordinate
+extension CapturePreviewContentView {
+    
+    private func setupTransform(width: Int, height: Int, mirroring: Bool, rotation: Rotation) {
+        var scaleX: Float = 1.0
+        var scaleY: Float = 1.0
+        var resizeAspect: Float = 1.0
         
-        case resizeAspect
-        case resizeAspectFill
-        case resize
+        internalBounds = self.bounds
+        textureWidth = width
+        textureHeight = height
+        textureMirroring = mirroring
+        textureRotation = rotation
+        
+        if textureWidth > 0 && textureHeight > 0 {
+            switch textureRotation {
+            case .rotate0Degrees, .rotate180Degrees:
+                scaleX = Float(internalBounds.width / CGFloat(textureWidth))
+                scaleY = Float(internalBounds.height / CGFloat(textureHeight))
+                
+            case .rotate90Degrees, .rotate270Degrees:
+                scaleX = Float(internalBounds.width / CGFloat(textureHeight))
+                scaleY = Float(internalBounds.height / CGFloat(textureWidth))
+            }
+        }
+        // Resize aspect ratio.
+        resizeAspect = min(scaleX, scaleY)
+        if scaleX < scaleY {
+            scaleY = scaleX / scaleY
+            scaleX = 1.0
+        } else {
+            scaleX = scaleY / scaleX
+            scaleY = 1.0
+        }
+        
+        if textureMirroring {
+            scaleX *= -1.0
+        }
+        
+        // Vertex coordinate takes the gravity into account.
+        let vertexData: [Float] = [
+            -scaleX, -scaleY, 0.0, 1.0,
+            scaleX, -scaleY, 0.0, 1.0,
+            -scaleX, scaleY, 0.0, 1.0,
+            scaleX, scaleY, 0.0, 1.0
+        ]
+        vertexCoordBuffer = device?.makeBuffer(bytes: vertexData, length: vertexData.count * MemoryLayout<Float>.size, options: [])
+        
+        // Texture coordinate takes the rotation into account.
+        var textData: [Float]
+        switch textureRotation {
+        case .rotate0Degrees:
+            textData = [
+                0.0, 1.0,
+                1.0, 1.0,
+                0.0, 0.0,
+                1.0, 0.0
+            ]
+            
+        case .rotate180Degrees:
+            textData = [
+                1.0, 0.0,
+                0.0, 0.0,
+                1.0, 1.0,
+                0.0, 1.0
+            ]
+            
+        case .rotate90Degrees:
+            textData = [
+                1.0, 1.0,
+                1.0, 0.0,
+                0.0, 1.0,
+                0.0, 0.0
+            ]
+            
+        case .rotate270Degrees:
+            textData = [
+                0.0, 0.0,
+                0.0, 1.0,
+                1.0, 0.0,
+                1.0, 1.0
+            ]
+        }
+        textCoordBuffer = device?.makeBuffer(bytes: textData, length: textData.count * MemoryLayout<Float>.size, options: [])
+        
+        // Calculate the transform from texture coordinates to view coordinates
+        var transform = CGAffineTransform.identity
+        if textureMirroring {
+            transform = transform.concatenating(CGAffineTransform(scaleX: -1, y: 1))
+            transform = transform.concatenating(CGAffineTransform(translationX: CGFloat(textureWidth), y: 0))
+        }
+        
+        switch textureRotation {
+        case .rotate0Degrees:
+            transform = transform.concatenating(CGAffineTransform(rotationAngle: CGFloat(0)))
+            
+        case .rotate180Degrees:
+            transform = transform.concatenating(CGAffineTransform(rotationAngle: .pi))
+            transform = transform.concatenating(CGAffineTransform(translationX: CGFloat(textureWidth), y: CGFloat(textureHeight)))
+            
+        case .rotate90Degrees:
+            transform = transform.concatenating(CGAffineTransform(rotationAngle: .pi / 2))
+            transform = transform.concatenating(CGAffineTransform(translationX: CGFloat(textureHeight), y: 0))
+            
+        case .rotate270Degrees:
+            transform = transform.concatenating(CGAffineTransform(rotationAngle: 3 * .pi / 2))
+            transform = transform.concatenating(CGAffineTransform(translationX: 0, y: CGFloat(textureWidth)))
+        }
+        
+        transform = transform.concatenating(CGAffineTransform(scaleX: CGFloat(resizeAspect), y: CGFloat(resizeAspect)))
+        let tranformRect = CGRect(origin: .zero, size: CGSize(width: textureWidth, height: textureHeight)).applying(transform)
+        let xShift = (internalBounds.size.width - tranformRect.size.width) / 2
+        let yShift = (internalBounds.size.height - tranformRect.size.height) / 2
+        
+        transform = transform.concatenating(CGAffineTransform(translationX: xShift, y: yShift))
+        textureTranform = transform.inverted()
+    }
+    
+    func texturePoint(for viewPoint: CGPoint) -> CGPoint? {
+        var result: CGPoint?
+        guard let transform = textureTranform else {
+            return nil
+        }
+        let transformPoint = viewPoint.applying(transform)
+        
+        if CGRect(origin: .zero, size: CGSize(width: textureWidth, height: textureHeight)).contains(transformPoint) {
+            result = transformPoint
+        } else {
+            _print("Invalid point \(viewPoint) result point \(transformPoint)")
+        }
+        
+        return result
+    }
+    
+    func viewPoint(for texturePoint: CGPoint) -> CGPoint? {
+        var result: CGPoint?
+        guard let transform = textureTranform?.inverted() else {
+            return nil
+        }
+        let transformPoint = texturePoint.applying(transform)
+        
+        if internalBounds.contains(transformPoint) {
+            result = transformPoint
+        } else {
+            _print("Invalid point \(texturePoint) result point \(transformPoint)")
+        }
+        
+        return result
+    }
+}
+
+extension CapturePreviewContentView {
+    
+    enum Rotation: Int {
+        case rotate0Degrees
+        case rotate90Degrees
+        case rotate180Degrees
+        case rotate270Degrees
     }
 }

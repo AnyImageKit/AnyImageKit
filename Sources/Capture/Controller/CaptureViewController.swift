@@ -243,11 +243,11 @@ extension CaptureViewController: CaptureDelegate {
         capture.exposure()
     }
     
-    func capture(_ captrue: Capture, didUpdate audioProperty: AudioIOComponent.ObservableProperty) {
+    func capture(_ capture: Capture, didUpdate audioProperty: AudioIOComponent.ObservableProperty) {
            
     }
     
-    func capture(_ captrue: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty) {
+    func capture(_ capture: Capture, didUpdate videoProperty: VideoIOComponent.ObservableProperty) {
         
     }
     
