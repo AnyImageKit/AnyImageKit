@@ -136,6 +136,28 @@ extension CaptureConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func preferredPresetTapped(_ indexPath: IndexPath) {
+        let alert = UIAlertController(title: "Preferred Preset", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "High Resolution: YES, High FrameRate: YES", style: .default, handler: { [weak self] (action) in
+            self?.options.preferredPresets = CapturePreset.createPresets(enableHighResolution: true, enableHighFrameRate: true)
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "High Resolution: YES, High FrameRate: NO", style: .default, handler: { [weak self] (action) in
+            self?.options.preferredPresets = CapturePreset.createPresets(enableHighResolution: true, enableHighFrameRate: false)
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "High Resolution: NO, High FrameRate: YES", style: .default, handler: { [weak self] (action) in
+            self?.options.preferredPresets = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: true)
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "High Resolution: NO, High FrameRate: NO", style: .default, handler: { [weak self] (action) in
+            self?.options.preferredPresets = CapturePreset.createPresets(enableHighResolution: false, enableHighFrameRate: false)
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func photoAspectRatioTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Photo Aspect Ratio", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "1:1", style: .default, handler: { [weak self] (action) in
@@ -226,6 +248,7 @@ extension CaptureConfigViewController {
     
     enum RowType: Int, CaseIterable, RowTypeRule {
         case mediaOptions = 0
+        case preferredPresets
         case photoAspectRatio
         case preferredPositions
         case flashMode
@@ -235,6 +258,8 @@ extension CaptureConfigViewController {
             switch self {
             case .mediaOptions:
                 return "MediaOptions"
+            case .preferredPresets:
+                return "PreferredPresets"
             case .photoAspectRatio:
                 return "PhotoAspectRatio"
             case .preferredPositions:
@@ -250,6 +275,8 @@ extension CaptureConfigViewController {
             switch self {
             case .mediaOptions:
                 return ".mediaOptions"
+            case .preferredPresets:
+                return ".preferredPresets"
             case .photoAspectRatio:
                 return ".photoAspectRatio"
             case .preferredPositions:
@@ -265,6 +292,8 @@ extension CaptureConfigViewController {
             switch self {
             case .mediaOptions:
                 return "Photo+Video"
+            case .preferredPresets:
+                return "High Resolution: NO, High FrameRate: YES"
             case .photoAspectRatio:
                 return "4:3"
             case .preferredPositions:
@@ -281,6 +310,8 @@ extension CaptureConfigViewController {
             switch self {
             case .mediaOptions:
                 return controller.mediaOptionsTapped
+            case .preferredPresets:
+                return controller.preferredPresetTapped
             case .photoAspectRatio:
                 return controller.photoAspectRatioTapped
             case .preferredPositions:

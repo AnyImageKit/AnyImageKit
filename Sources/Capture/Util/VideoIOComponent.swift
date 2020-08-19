@@ -155,7 +155,7 @@ extension VideoIOComponent {
         addObserver(to: camera)
         self.device = camera
         
-        let (preset, formats) = camera.preferredConfigs(for: options.preferredPreset)
+        let (preset, formats) = camera.preferredConfigs(for: options.preferredPresets)
         guard let format = formats.last else {
             _print("Can't find any available format")
             return

@@ -32,6 +32,7 @@
 // Capture
 "OpenCamera" = "打开相机";
 "MediaOptions" = "媒体配置";
+"PreferredPresets" = "优先使用的相机预设";
 "PhotoAspectRatio" = "照片比例";
 "PreferredPositions" = "优先使用的相机";
 "FlashMode" = "闪光灯模式";

@@ -32,6 +32,7 @@
 // Capture
 "OpenCamera" = "Open camera";
 "MediaOptions" = "Media Options";
+"PreferredPresets" = "Preferred Presets";
 "PhotoAspectRatio" = "Photo Aspect Ratio";
 "PreferredPositions" = "Preferred Positions";
 "FlashMode" = "Flash Mode";
