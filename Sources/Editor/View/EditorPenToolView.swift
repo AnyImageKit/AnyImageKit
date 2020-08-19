@@ -10,7 +10,7 @@ import UIKit
 
 protocol EditorPenToolViewDelegate: class {
     
-    func penToolView(_ penToolView: EditorPenToolView, colorDidChange idx: Int)
+    func penToolView(_ penToolView: EditorPenToolView, colorDidChange color: UIColor)
     
     func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView)
 }
@@ -30,13 +30,13 @@ final class EditorPenToolView: UIView {
         return view
     }()
     
-    private let colors: [UIColor]
-    private var colorButtons: [UIButton] = []
-    private let spacing: CGFloat = 22
-    private let itemWidth: CGFloat = 22
+    private let colorOptions: [EditorPhotoPenColorOption]
+    private var colorButtons: [UIControl] = []
+    private let spacing: CGFloat = 20
+    private let itemWidth: CGFloat = 24
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
-        self.colors = options.penColors
+        self.colorOptions = options.penColors
         self.currentIdx = options.defaultPenIndex
         super.init(frame: frame)
         setupView()
@@ -49,9 +49,11 @@ final class EditorPenToolView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         for (idx, colorView) in colorButtons.enumerated() {
-            let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
-            colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
-            colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+            if let button = colorView as? ColorButton {
+                let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
+                button.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
+                button.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+            }
             
             let colorViewRight = CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
             colorView.isHidden = colorViewRight > (bounds.width - itemWidth)
@@ -70,8 +72,8 @@ final class EditorPenToolView: UIView {
     }
     
     private func setupColorView() {
-        for (idx, color) in colors.enumerated() {
-            colorButtons.append(createColorButton(color, idx: idx))
+        for (idx, option) in colorOptions.enumerated() {
+            colorButtons.append(createColorButton(by: option, idx: idx))
         }
         let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
@@ -81,26 +83,36 @@ final class EditorPenToolView: UIView {
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview()
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(itemWidth)
+            maker.height.equalTo(30)
         }
         
         for colorView in colorButtons {
             colorView.snp.makeConstraints { (maker) in
-                maker.width.height.equalTo(stackView.snp.height)
+                maker.width.height.equalTo(itemWidth)
             }
         }
     }
     
-    private func createColorButton(_ color: UIColor, idx: Int) -> UIButton {
-        let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
-        button.tag = idx
-        button.backgroundColor = color
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 11
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.white.cgColor
-        button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
-        return button
+    private func createColorButton(by option: EditorPhotoPenColorOption, idx: Int) -> UIControl {
+        switch option {
+        case .custom(let color):
+            let button = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
+            button.isHidden = true
+            button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+            return button
+        case .colorWell(let color):
+            if #available(iOS 14.0, *) {
+                let colorWell = UIColorWell()
+                colorWell.backgroundColor = .clear
+                colorWell.tag = idx
+                colorWell.selectedColor = color
+                colorWell.supportsAlpha = false
+                colorWell.addTarget(self, action: #selector(colorWellValueChanged(_:)), for: .valueChanged)
+                return colorWell
+            } else {
+                fatalError()
+            }
+        }
     }
 }
 
@@ -116,7 +128,16 @@ extension EditorPenToolView {
             currentIdx = sender.tag
             layoutSubviews()
         }
-        delegate?.penToolView(self, colorDidChange: currentIdx)
+        delegate?.penToolView(self, colorDidChange: colorOptions[currentIdx].color)
+    }
+    
+    @available(iOS 14, *)
+    @objc private func colorWellValueChanged(_ sender: UIColorWell) {
+        if currentIdx != sender.tag {
+            currentIdx = sender.tag
+            layoutSubviews()
+        }
+        delegate?.penToolView(self, colorDidChange: sender.selectedColor ?? .black)
     }
 }
 

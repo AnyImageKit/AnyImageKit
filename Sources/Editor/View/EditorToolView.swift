@@ -12,7 +12,7 @@ protocol EditorToolViewDelegate: class {
     
     func toolView(_ toolView: EditorToolView, optionDidChange option: EditorPhotoToolOption?)
     
-    func toolView(_ toolView: EditorToolView, colorDidChange idx: Int)
+    func toolView(_ toolView: EditorToolView, colorDidChange color: UIColor)
     func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int)
     
     func toolViewUndoButtonTapped(_ toolView: EditorToolView)
@@ -197,8 +197,8 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
 // MARK: - EditorPenToolViewDelegate
 extension EditorToolView: EditorPenToolViewDelegate {
     
-    func penToolView(_ penToolView: EditorPenToolView, colorDidChange idx: Int) {
-        delegate?.toolView(self, colorDidChange: idx)
+    func penToolView(_ penToolView: EditorPenToolView, colorDidChange color: UIColor) {
+        delegate?.toolView(self, colorDidChange: color)
     }
     
     func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView) {

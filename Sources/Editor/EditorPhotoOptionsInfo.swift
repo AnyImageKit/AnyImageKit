@@ -20,7 +20,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 画笔颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
-    public var penColors: [UIColor] = Palette.penColors
+    public var penColors: [EditorPhotoPenColorOption] = EditorPhotoPenColorOption.allCases
     
     /// 默认选中画笔的下标
     /// 默认：2
@@ -65,6 +65,25 @@ public struct EditorPhotoOptionsInfo: Equatable {
     public init() { }
 }
 
+/// 画笔颜色样式
+public enum EditorPhotoPenColorOption: Equatable, CaseIterable {
+    /// 自定义颜色
+    case custom(color: UIColor)
+    /// UIColorWell
+    @available(iOS 14.0, *)
+    case colorWell(color: UIColor)
+    
+    public static var allCases: [EditorPhotoPenColorOption] {
+        var cases: [EditorPhotoPenColorOption] = Palette.penColors.map { .custom(color: $0) }
+        if #available(iOS 14, *) {
+            cases[cases.count-1] = .colorWell(color: Palette.penColors.last!)
+            return cases
+        } else {
+            return cases
+        }
+    }
+}
+
 /// 图片编辑功能
 public enum EditorPhotoToolOption: Equatable, CaseIterable {
     /// 画笔
@@ -79,7 +98,6 @@ public enum EditorPhotoToolOption: Equatable, CaseIterable {
 
 /// 马赛克样式
 public enum EditorPhotoMosaicOption: Equatable, CaseIterable {
-    
     /// 默认马赛克
     case `default`
     /// 自定义马赛克
@@ -115,7 +133,20 @@ public enum EditorCropOption: Equatable, CaseIterable {
 }
 
 // MARK: - Extension
+extension EditorPhotoPenColorOption {
+    
+    public var color: UIColor {
+        switch self {
+        case .custom(let color):
+            return color
+        case .colorWell(let color):
+            return color
+        }
+    }
+}
+
 extension EditorPhotoToolOption: CustomStringConvertible {
+    
     var imageName: String {
         switch self {
         case .pen:
