@@ -122,14 +122,10 @@ final class CaptureViewController: AnyImageViewController {
         view.addSubview(previewView)
         view.addSubview(toolView)
         view.addSubview(tipsView)
-        var aspectRatio: Double = options.photoAspectRatio.value
-        if options.mediaOptions.contains(.video) {
-            aspectRatio = 9.0/16.0
-        }
         previewView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.center.equalToSuperview()
-            maker.width.equalTo(previewView.snp.height).multipliedBy(aspectRatio)
+            maker.width.equalTo(previewView.snp.height).multipliedBy(9.0/16.0)
         }
         layoutGuide.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
