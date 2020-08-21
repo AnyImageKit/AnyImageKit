@@ -42,6 +42,8 @@ final class CapturePreviewContentView: MTKView {
     
     private func config() {
         colorPixelFormat = .bgra8Unorm
+        isPaused = true
+        enableSetNeedsDisplay = true
         delegate = self
         configMetal()
         createTextureCache()
@@ -177,6 +179,9 @@ extension CapturePreviewContentView {
     
     func draw(pixelBuffer: CVPixelBuffer) {
         self.pixelBuffer = pixelBuffer
+        Thread.runOnMain {
+            self.setNeedsDisplay()
+        }
     }
 }
 
