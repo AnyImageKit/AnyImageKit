@@ -68,6 +68,14 @@ github "AnyImageProject/AnyImageKit"
 
 ## Usage
 
+### Prepare
+
+Add this key to your Info.plist:
+
+- NSPhotoLibraryUsageDescription
+- NSCameraUsageDescription
+- NSMicrophoneUsageDescription
+
 ### Quick Start
 
 ```swift

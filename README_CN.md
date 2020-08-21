@@ -62,6 +62,14 @@ github "AnyImageProject/AnyImageKit"
 
 > 我们在 [Wiki](https://github.com/AnyImageProject/AnyImageKit/wiki) 中提供了更详细的使用说明。
 
+### 准备工作
+
+在你的 Info.plist 中添加以下键值:
+
+- NSPhotoLibraryUsageDescription
+- NSCameraUsageDescription
+- NSMicrophoneUsageDescription
+
 ### 快速上手
 
 ```swift
