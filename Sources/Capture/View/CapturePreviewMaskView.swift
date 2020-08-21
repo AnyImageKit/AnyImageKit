@@ -10,9 +10,7 @@ import UIKit
 
 final class CapturePreviewMaskView: UIView {
     
-    var maskColor: UIColor = UIColor.black.withAlphaComponent(0.25) {
-        didSet { updateMaskColor() }
-    }
+    private var maskColor: UIColor = UIColor.black.withAlphaComponent(0.25)
     
     private(set) lazy var topMaskView: UIView = {
         let view = UIView(frame: .zero)
@@ -56,10 +54,20 @@ final class CapturePreviewMaskView: UIView {
             maker.top.equalTo(topMaskView.snp.bottom)
             maker.left.equalTo(snp.left)
             maker.right.equalTo(snp.right)
-            if !options.mediaOptions.contains(.photo) {
-                maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(9.0/16.0)
-            } else {
+            
+            switch options.mediaOptions {
+            case [.photo, .video]:
+                // mix mode
                 maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(options.photoAspectRatio.value)
+            case [.photo]:
+                // photo mode
+                maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(options.photoAspectRatio.value)
+                setMaskColorAlpha(1.0)
+            case [.video]:
+                // video mode
+                maker.width.equalTo(centerLayoutGuide.snp.height).multipliedBy(9.0/16.0)
+            default:
+                break
             }
         }
         bottomMaskView.snp.makeConstraints { maker in
@@ -70,9 +78,18 @@ final class CapturePreviewMaskView: UIView {
             maker.height.equalTo(topMaskView.snp.height)
         }
     }
+}
+
+extension CapturePreviewMaskView {
     
-    private func updateMaskColor() {
-        topMaskView.backgroundColor = maskColor
-        bottomMaskView.backgroundColor = maskColor
+    func setMaskColor(_ color: UIColor) {
+        maskColor = color
+        topMaskView.backgroundColor = color
+        bottomMaskView.backgroundColor = color
+    }
+    
+    func setMaskColorAlpha(_ alpha: CGFloat) {
+        let color = maskColor.withAlphaComponent(alpha)
+        setMaskColor(color)
     }
 }
