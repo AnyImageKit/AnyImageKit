@@ -76,7 +76,7 @@ public enum EditorPhotoPenColorOption: Equatable, CaseIterable {
     public static var allCases: [EditorPhotoPenColorOption] {
         var cases: [EditorPhotoPenColorOption] = Palette.penColors.map { .custom(color: $0) }
         if #available(iOS 14, *) {
-            cases[cases.count-1] = .colorWell(color: Palette.penColors.last!)
+            cases[0] = .colorWell(color: Palette.penColors.first!)
             return cases
         } else {
             return cases

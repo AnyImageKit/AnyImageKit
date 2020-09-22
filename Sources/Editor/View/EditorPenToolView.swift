@@ -49,10 +49,15 @@ final class EditorPenToolView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         for (idx, colorView) in colorButtons.enumerated() {
+            let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             if let button = colorView as? ColorButton {
-                let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
                 button.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
                 button.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+            }
+            if #available(iOS 14, *) {
+                if let colorWell = colorView as? ColorWell {
+                    colorWell.transform = CGAffineTransform(scaleX: scale, y: scale)
+                }
             }
             
             let colorViewRight = CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
@@ -102,11 +107,12 @@ final class EditorPenToolView: UIView {
             return button
         case .colorWell(let color):
             if #available(iOS 14.0, *) {
-                let colorWell = UIColorWell()
+                let colorWell = ColorWell(frame: CGRect(x: 0, y: 0, width: itemWidth, height: itemWidth))
                 colorWell.backgroundColor = .clear
                 colorWell.tag = idx
                 colorWell.selectedColor = color
                 colorWell.supportsAlpha = false
+                colorWell.addTarget(self, action: #selector(colorWellTapped(_:)), for: .touchUpInside)
                 colorWell.addTarget(self, action: #selector(colorWellValueChanged(_:)), for: .valueChanged)
                 return colorWell
             } else {
@@ -132,12 +138,16 @@ extension EditorPenToolView {
     }
     
     @available(iOS 14, *)
-    @objc private func colorWellValueChanged(_ sender: UIColorWell) {
+    @objc private func colorWellTapped(_ sender: ColorWell) {
         if currentIdx != sender.tag {
             currentIdx = sender.tag
             layoutSubviews()
         }
-        delegate?.penToolView(self, colorDidChange: sender.selectedColor ?? .black)
+    }
+    
+    @available(iOS 14, *)
+    @objc private func colorWellValueChanged(_ sender: ColorWell) {
+        delegate?.penToolView(self, colorDidChange: sender.selectedColor ?? .white)
     }
 }
 
