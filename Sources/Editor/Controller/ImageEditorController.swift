@@ -1,5 +1,5 @@
 //
-//  PhotoEditorController.swift
+//  ImageEditorController.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/23.
