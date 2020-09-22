@@ -1,19 +1,28 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
-  build:
-
+  iOS:
+    name: Test iOS
     runs-on: macOS-latest
     
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      
     strategy:
       matrix:
         destination: ['iOS Simulator,name=iPhone 11']
-        swift-version: [5.1]
+        swift-version: [5.3]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Install CocoaPods
       run: sudo gem install cocoapods
     - name: Pod Install
