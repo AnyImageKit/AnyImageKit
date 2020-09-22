@@ -15,6 +15,7 @@
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF13425199C0D00F79D19 /* ColorWell.swift */; };
+		71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1422519CC4B00F79D19 /* Core+UIView.swift */; };
 		A00869BD233C987600237651 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00869BC233C987600237651 /* AssociatedObject.swift */; };
 		A0147E0223C458BF0071E9D5 /* Core+Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0123C458BF0071E9D5 /* Core+Thread.swift */; };
 		A0147E0423C45A200071E9D5 /* Permission+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0323C45A200071E9D5 /* Permission+Camera.swift */; };
@@ -240,6 +241,7 @@
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		71CBF13425199C0D00F79D19 /* ColorWell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWell.swift; sourceTree = "<group>"; };
+		71CBF1422519CC4B00F79D19 /* Core+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+UIView.swift"; sourceTree = "<group>"; };
 		75C01BB9A372D886CD627A5F /* Pods_AnyImageKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnyImageKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CFA632A28BF9C902DE86893 /* Pods-AnyImageKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImageKit.debug.xcconfig"; path = "Target Support Files/Pods-AnyImageKit/Pods-AnyImageKit.debug.xcconfig"; sourceTree = "<group>"; };
 		81CF2560538BA5251C4F854B /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -732,6 +734,7 @@
 				A067AC1823C8105B00FF681B /* Core+CGImageSource.swift */,
 				A067AC1A23C816DB00FF681B /* Core+CGSize.swift */,
 				716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */,
+				71CBF1422519CC4B00F79D19 /* Core+UIView.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1458,6 +1461,7 @@
 				A01C583123B33CFD00691F11 /* ImageEditorCache.swift in Sources */,
 				A04B044323B1A4FE00DA4D47 /* Capture+BundleHelper.swift in Sources */,
 				A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */,
+				71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */,
 				A0B22EAB237AA1B3001F6066 /* BundleHelper.swift in Sources */,
 				A513C45E23ACA9FC0071D0D5 /* Core+UIImage.swift in Sources */,
 				A56A3C8E2330BCB000EBFC48 /* PickerToolBar.swift in Sources */,

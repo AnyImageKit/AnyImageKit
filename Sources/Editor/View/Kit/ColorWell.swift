@@ -9,7 +9,7 @@
 import UIKit
 
 @available(iOS 14, *)
-class ColorWell: UIControl {
+final class ColorWell: UIControl {
     
     /// Title for the color picker.
     ///
@@ -97,17 +97,6 @@ class ColorWell: UIControl {
         } else {
             UIApplication.shared.windows.first?.rootViewController?.present(picker, animated: true, completion: nil)
         }
-    }
-    
-    private func getController() -> UIViewController? {
-        var sView: UIView? = self.superview
-        while sView != nil {
-            if let controller = sView?.next as? UIViewController {
-                return controller
-            }
-            sView = sView?.superview
-        }
-        return nil
     }
 }
 
