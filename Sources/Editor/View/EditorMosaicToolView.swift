@@ -81,7 +81,7 @@ final class EditorMosaicToolView: UIView {
         }
     }
     
-    private func createMosaicButton(_ option: EditorPhotoMosaicOption, idx: Int) -> UIButton {
+    private func createMosaicButton(_ option: EditorMosaicOption, idx: Int) -> UIButton {
         let image: UIImage?
         switch option {
         case .default:

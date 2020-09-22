@@ -30,7 +30,7 @@ final class EditorPenToolView: UIView {
         return view
     }()
     
-    private let colorOptions: [EditorPhotoPenColorOption]
+    private let colorOptions: [EditorPenColorOption]
     private var colorButtons: [UIControl] = []
     private let spacing: CGFloat = 20
     private let itemWidth: CGFloat = 24
@@ -98,7 +98,7 @@ final class EditorPenToolView: UIView {
         }
     }
     
-    private func createColorButton(by option: EditorPhotoPenColorOption, idx: Int) -> UIControl {
+    private func createColorButton(by option: EditorPenColorOption, idx: Int) -> UIControl {
         switch option {
         case .custom(let color):
             let button = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)

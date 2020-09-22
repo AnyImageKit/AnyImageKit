@@ -29,7 +29,7 @@ final class EditorTextToolView: UIView {
         return view
     }()
     
-    private let colors: [EditorPhotoTextColor]
+    private let colors: [EditorTextColor]
     private var colorButtons: [ColorButton] = []
     private let spacing: CGFloat = 22
     private let itemWidth: CGFloat = 22
