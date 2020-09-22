@@ -143,6 +143,7 @@ extension EditorPenToolView {
             currentIdx = sender.tag
             layoutSubviews()
         }
+        delegate?.penToolView(self, colorDidChange: sender.selectedColor ?? .white)
     }
     
     @available(iOS 14, *)
