@@ -10,7 +10,9 @@ import Foundation
 
 extension Bundle {
     
+    #if !ANYIMAGEKIT_ENABLE_SPM
     private class _BundleClass { }
+    #endif
     
     static var current: Bundle {
         #if ANYIMAGEKIT_ENABLE_SPM
