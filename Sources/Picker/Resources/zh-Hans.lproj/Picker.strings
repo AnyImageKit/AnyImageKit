@@ -17,3 +17,4 @@
 "Downloading from iCloud" = "iCloud 同步中";
 "Fetch failed, please retry" = "获取内容失败，请重试";
 "Switch album, current album is %@" = "切换相册，当前相册是%@";
+"Can't fetch all photos\nClick to select more photos" = "无法查看相册全部照片\n点击选择更多照片";

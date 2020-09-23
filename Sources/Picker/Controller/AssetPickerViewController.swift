@@ -61,6 +61,7 @@ final class AssetPickerViewController: AnyImageViewController {
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
+        view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
         view.isHidden = manager.options.quickPick && manager.options.selectLimit == 1
         return view
     }()
@@ -97,15 +98,16 @@ final class AssetPickerViewController: AnyImageViewController {
         setupNavigation()
         setupView()
         checkPermission()
-        
-        check(permission: .photos, authorized: { [weak self] in
-            guard let self = self else { return }
-            self.loadDefaultAlbumIfNeeded()
-            self.preLoadAlbums()
-        }, denied: { [weak self] in
-            guard let self = self else { return }
-            self.permissionView.isHidden = false
-        })
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        PHPhotoLibrary.shared().register(self)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     override func viewDidLayoutSubviews() {
@@ -156,19 +158,17 @@ final class AssetPickerViewController: AnyImageViewController {
 extension AssetPickerViewController {
     
     private func checkPermission() {
-        let permission = Permission.photos
-        switch permission.status {
-        case .notDetermined:
-            permission.request { [weak self] _ in
-                guard let self = self else { return }
-                self.checkPermission()
+        check(permission: .photos, authorized: { [weak self] in
+            guard let self = self else { return }
+            self.loadDefaultAlbumIfNeeded()
+            self.preLoadAlbums()
+            if Permission.photos.status == .limited {
+                self.showLimitedView()
             }
-        case .authorized, .limited:
-            loadDefaultAlbumIfNeeded()
-            preLoadAlbums()
-        case .denied:
-            permissionView.isHidden = false
-        }
+        }, denied: { [weak self] in
+            guard let self = self else { return }
+            self.permissionView.isHidden = false
+        })
     }
     
     private func loadDefaultAlbumIfNeeded() {
@@ -209,6 +209,53 @@ extension AssetPickerViewController {
         if let albumsPicker = albumsPicker {
             albumsPicker.albums = albums
             albumsPicker.reloadData()
+        }
+    }
+    
+    private func reloadAlbums() {
+        manager.fetchAllAlbums { [weak self] albums in
+            guard let self = self else { return }
+            self.setAlbums(albums)
+            if let currentAlbumId = self.album?.id {
+                if let idx = (albums.firstIndex { $0.id == currentAlbumId }) {
+                    self.updateAlbum(albums[idx])
+                }
+            }
+        }
+    }
+    
+    private func updateAlbum(_ album: Album) {
+        // Remove selected assets if needed
+        for asset in manager.selectedAssets.reversed() {
+            if !(album.assets.contains { $0.phAsset.localIdentifier == asset.phAsset.localIdentifier }) {
+                manager.removeSelectedAsset(asset)
+            }
+        }
+        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        
+        self.album = album
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        addCameraAssetIfNeeded()
+        #endif
+        self.collectionView.reloadData()
+        if manager.options.orderByDate == .asc {
+            collectionView.scrollToLast(at: .bottom, animated: true)
+        } else {
+            collectionView.scrollToFirst(at: .top, animated: true)
+        }
+    }
+    
+    private func showLimitedView() {
+        if #available(iOS 14, *) {
+            let hideToolBar = manager.options.quickPick && manager.options.selectLimit == 1
+            let newToolBarHeight = (hideToolBar ? 0 : toolBarHeight) + toolBar.limitedViewHeight
+            toolBar.isHidden = false
+            toolBar.contentView.isHidden = hideToolBar
+            toolBar.snp.updateConstraints { update in
+                update.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-newToolBarHeight)
+            }
+            toolBar.showLimitedView()
+            collectionView.contentInset.bottom = defaultAssetSpacing + newToolBarHeight
         }
     }
     
@@ -311,6 +358,20 @@ extension AssetPickerViewController {
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         delegate?.assetPickerDidFinishPicking(self)
+    }
+    
+    @objc private func limitedButtonTapped(_ sender: UIButton) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+        }
+    }
+}
+
+// MARK: - PHPhotoLibraryChangeObserver
+extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
+    
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        reloadAlbums()
     }
 }
 
