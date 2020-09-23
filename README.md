@@ -43,10 +43,20 @@
 ## Requirements
 
 - iOS 10.0+
-- Xcode 11.0+
-- Swift 5.0+
+- Xcode 12.0+
+- Swift 5.3+
 
 ## Installation
+
+### [Swift Package Manager](https://github.com/apple/swift-package-manager)
+
+> ⚠️ Needs Xcode 12.0+ to support resources and localization files
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+]
+```
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 

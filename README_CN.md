@@ -35,10 +35,20 @@
 ## 要求
 
 - iOS 10.0+
-- Xcode 11.0+
-- Swift 5.0+
+- Xcode 12.0+
+- Swift 5.3+
 
 ## 安装
+
+### [Swift Package Manager](https://github.com/apple/swift-package-manager)
+
+> ⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+]
+```
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
