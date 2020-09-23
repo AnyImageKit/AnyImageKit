@@ -163,7 +163,7 @@ extension AssetPickerViewController {
                 guard let self = self else { return }
                 self.checkPermission()
             }
-        case .authorized:
+        case .authorized, .limited:
             loadDefaultAlbumIfNeeded()
             preLoadAlbums()
         case .denied:

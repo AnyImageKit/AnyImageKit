@@ -22,7 +22,7 @@ extension AnyImageViewController {
                 guard let self = self else { return }
                 self.check(permission: permission, authorized: authorized, denied: denied)
             }
-        case .authorized:
+        case .authorized, .limited:
             authorized()
         case .denied:
             denied()

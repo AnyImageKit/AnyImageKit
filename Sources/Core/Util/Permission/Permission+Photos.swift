@@ -11,7 +11,11 @@ import Photos
 extension Permission {
     
     func _checkPhotos() -> Status {
-        return PHPhotoLibrary.authorizationStatus()._status
+        if #available(iOS 14, *) {
+            return PHPhotoLibrary.authorizationStatus(for: .readWrite)._status
+        } else {
+            return PHPhotoLibrary.authorizationStatus()._status
+        }
     }
     
     func _requestPhotos(completion: @escaping PermissionCompletion) {
@@ -20,9 +24,17 @@ extension Permission {
             return
         }
         
-        PHPhotoLibrary.requestAuthorization { status in
-            Thread.runOnMain {
-                completion(status._status)
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                Thread.runOnMain {
+                    completion(status._status)
+                }
+            }
+        } else {
+            PHPhotoLibrary.requestAuthorization { status in
+                Thread.runOnMain {
+                    completion(status._status)
+                }
             }
         }
     }
@@ -36,6 +48,8 @@ fileprivate extension PHAuthorizationStatus {
             return .notDetermined
         case .authorized:
             return .authorized
+        case .limited:
+            return .limited
         default:
             return .denied
         }
