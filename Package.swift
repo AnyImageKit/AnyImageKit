@@ -20,6 +20,7 @@ let package = Package(
                     .process("Resources"),
                 ],
                 swiftSettings: [
+                    .define("ANYIMAGEKIT_ENABLE_SPM"),
                     .define("ANYIMAGEKIT_ENABLE_EDITOR"),
                     .define("ANYIMAGEKIT_ENABLE_CAPTURE"),
                 ]),
