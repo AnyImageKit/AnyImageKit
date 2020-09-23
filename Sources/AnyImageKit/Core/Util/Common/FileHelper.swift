@@ -6,6 +6,7 @@
 //  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
+import Foundation
 import MobileCoreServices
 
 struct FileHelper {

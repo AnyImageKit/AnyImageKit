@@ -6,6 +6,7 @@
 //  Copyright © 2019 AnyImageProject.org. All rights reserved.
 //
 
+import Foundation
 import CoreGraphics
 import ImageIO
 
