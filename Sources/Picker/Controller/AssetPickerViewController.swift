@@ -203,6 +203,7 @@ extension AssetPickerViewController {
         titleView.setTitle(album.name)
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
+        toolBar.setEnable(false)
         album.assets.forEach { $0.isSelected = false }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
