@@ -27,5 +27,5 @@ jobs:
       run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS"  -archivePath "Build/AnyImageKit.framework-iphoneos.xcarchive" SKIP_INSTALL=NO
     - name: Archive for Simulator slice
       run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS Simulator" -archivePath "Build/AnyImageKit.framework-iphonesimulator.xcarchive" SKIP_INSTALL=NO
-    - name: Archive for Mac Catalyst slice.
+    - name: Archive for Mac Catalyst slice
       run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
