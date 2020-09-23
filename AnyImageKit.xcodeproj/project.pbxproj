@@ -502,7 +502,6 @@
 				A0800416232F5F7F006B4711 /* Extension */,
 				A56A3C862330A43B00EBFC48 /* Animation */,
 				A56A3C792330746A00EBFC48 /* Presentation */,
-				A5A27BBF232F83E700D966B8 /* Resources */,
 			);
 			path = Picker;
 			sourceTree = "<group>";
@@ -515,21 +514,50 @@
 			path = Shader;
 			sourceTree = "<group>";
 		};
-		A04B044423B1A52C00DA4D47 /* Resources */ = {
+		A031CC57251B2EB600DECA44 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A031CC59251B2ED600DECA44 /* Core */,
+				A031CC5A251B2EDC00DECA44 /* Picker */,
+				A031CC5C251B2EE800DECA44 /* Editor */,
+				A031CC5B251B2EE100DECA44 /* Capture */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A031CC59251B2ED600DECA44 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A04B045023B1AB7400DA4D47 /* Core.strings */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A031CC5A251B2EDC00DECA44 /* Picker */ = {
+			isa = PBXGroup;
+			children = (
+				A5A27BC2232F840900D966B8 /* Picker.xcassets */,
+				A5A27BC8232F874500D966B8 /* Picker.strings */,
+			);
+			path = Picker;
+			sourceTree = "<group>";
+		};
+		A031CC5B251B2EE100DECA44 /* Capture */ = {
 			isa = PBXGroup;
 			children = (
 				A04B045323B1B1E700DA4D47 /* Capture.xcassets */,
 				A04B044923B1A54F00DA4D47 /* Capture.strings */,
 			);
-			path = Resources;
+			path = Capture;
 			sourceTree = "<group>";
 		};
-		A04B044B23B1AB5600DA4D47 /* Resources */ = {
+		A031CC5C251B2EE800DECA44 /* Editor */ = {
 			isa = PBXGroup;
 			children = (
-				A04B045023B1AB7400DA4D47 /* Core.strings */,
+				A50B20D1237AA24200A894A9 /* Editor.xcassets */,
+				A52E1D82237AA5A80002174A /* Editor.strings */,
 			);
-			path = Resources;
+			path = Editor;
 			sourceTree = "<group>";
 		};
 		A0769993239636E10006AC9B /* Capture */ = {
@@ -542,7 +570,6 @@
 				A02846B024E2E555001F1AB1 /* Shader */,
 				A07699A223963F5E0006AC9B /* Util */,
 				A0B50C3423A9EDC4002C9799 /* Extension */,
-				A04B044423B1A52C00DA4D47 /* Resources */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -694,6 +721,7 @@
 				A016917F237A828500B8857B /* Picker */,
 				A50B20CC237AA22900A894A9 /* Editor */,
 				A0769993239636E10006AC9B /* Capture */,
+				A031CC57251B2EB600DECA44 /* Resources */,
 			);
 			path = AnyImageKit;
 			sourceTree = "<group>";
@@ -716,7 +744,6 @@
 				A0B22EA3237AA1B3001F6066 /* Model */,
 				A0B22E9A237AA1B3001F6066 /* Util */,
 				A0B22E95237AA1B3001F6066 /* Extension */,
-				A04B044B23B1AB5600DA4D47 /* Resources */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -818,18 +845,8 @@
 				A50B20D2237AA24200A894A9 /* Protocol */,
 				A50B20DE237AA24200A894A9 /* Util */,
 				A50B20F6237AA24200A894A9 /* Extension */,
-				A50B20CD237AA24200A894A9 /* Resources */,
 			);
 			path = Editor;
-			sourceTree = "<group>";
-		};
-		A50B20CD237AA24200A894A9 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A50B20D1237AA24200A894A9 /* Editor.xcassets */,
-				A52E1D82237AA5A80002174A /* Editor.strings */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		A50B20D2237AA24200A894A9 /* Protocol */ = {
@@ -1058,15 +1075,6 @@
 				A5325EA32331C09900ADA116 /* Kit */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		A5A27BBF232F83E700D966B8 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A5A27BC2232F840900D966B8 /* Picker.xcassets */,
-				A5A27BC8232F874500D966B8 /* Picker.strings */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		A5B835B323BED26D00D10F85 /* Tests */ = {

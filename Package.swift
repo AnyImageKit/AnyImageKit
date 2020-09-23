@@ -17,10 +17,7 @@ let package = Package(
         .target(name: "AnyImageKit",
                 dependencies: ["SnapKit"],
                 resources: [
-                    .process("Core/Resources"),
-                    .process("Picker/Resources"),
-                    .process("Editor/Resources"),
-                    .process("Capture/Resources"),
+                    .process("Resources"),
                 ],
                 swiftSettings: [
                     .define("ANYIMAGEKIT_ENABLE_EDITOR"),
