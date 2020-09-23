@@ -96,7 +96,15 @@ extension Album {
 extension Album {
     
     var count: Int {
-        return assets.count
+        if hasCamera {
+            return assets.count - 1
+        } else {
+            return assets.count
+        }
+    }
+    
+    var hasCamera: Bool {
+        return (assets.first?.isCamera ?? false) || (assets.last?.isCamera ?? false)
     }
 }
 
