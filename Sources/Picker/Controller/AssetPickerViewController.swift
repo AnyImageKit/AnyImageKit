@@ -201,6 +201,9 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.name)
+        manager.removeAllSelectedAsset()
+        manager.cancelAllFetch()
+        album.assets.forEach { $0.isSelected = false }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
@@ -210,8 +213,6 @@ extension AssetPickerViewController {
         } else {
             collectionView.scrollToFirst(at: .top, animated: false)
         }
-        manager.removeAllSelectedAsset()
-        manager.cancelAllFetch()
     }
     
     private func setAlbums(_ albums: [Album]) {
