@@ -11,7 +11,7 @@ import Photos
 extension Permission {
     
     func _checkPhotos() -> Status {
-        if #available(iOS 14, *) {
+        if #available(iOS 14.0, *) {
             return PHPhotoLibrary.authorizationStatus(for: .readWrite)._status
         } else {
             return PHPhotoLibrary.authorizationStatus()._status
@@ -24,7 +24,7 @@ extension Permission {
             return
         }
         
-        if #available(iOS 14, *) {
+        if #available(iOS 14.0, *) {
             PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
                 Thread.runOnMain {
                     completion(status._status)
