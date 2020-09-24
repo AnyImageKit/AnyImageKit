@@ -32,6 +32,7 @@ extension AssetPickerViewController {
     /// 添加拍照 Item
     func addCameraAssetIfNeeded() {
         guard let album = album, album.isCameraRoll else { return }
+        if album.hasCamera { return }
         let options = manager.options
         let sortType = options.orderByDate
         if !options.captureOptions.mediaOptions.isEmpty {

@@ -28,7 +28,7 @@ final class VideoEditorCropToolView: UIView {
         return view
     }()
     private lazy var splitLine: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.backgroundColor = UIColor.black
         return view
     }()

@@ -10,6 +10,8 @@ import UIKit
 
 final class PickerToolBar: UIView {
     
+    private(set) lazy var contentView = UIView(frame: .zero)
+    
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
@@ -49,6 +51,15 @@ final class PickerToolBar: UIView {
         return view
     }()
     
+    private(set) lazy var permissionLimitedView: PermissionLimitedView = {
+        let view = PermissionLimitedView(options: options)
+        view.isHidden = true
+        return view
+    }()
+    
+    let limitedViewHeight: CGFloat = 64
+    let toolBarHeight: CGFloat = 56
+    
     private let style: Style
     private let options: PickerOptionsInfo
     
@@ -67,8 +78,13 @@ final class PickerToolBar: UIView {
         switch style {
         case .picker:
             addSubview(backgroundView)
+            addSubview(permissionLimitedView)
             backgroundView.snp.makeConstraints { maker in
                 maker.edges.equalToSuperview()
+            }
+            permissionLimitedView.snp.makeConstraints { (maker) in
+                maker.top.left.right.equalToSuperview()
+                maker.height.equalTo(limitedViewHeight)
             }
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Preview"), for: .normal)
         case .preview:
@@ -76,41 +92,47 @@ final class PickerToolBar: UIView {
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Edit"), for: .normal)
         }
         
-        let contentView = UILayoutGuide()
-        addLayoutGuide(contentView)
-        addSubview(leftButton)
-        addSubview(originalButton)
-        addSubview(doneButton)
+        addSubview(contentView)
+        contentView.addSubview(leftButton)
+        contentView.addSubview(originalButton)
+        contentView.addSubview(doneButton)
         
         contentView.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview()
-            maker.height.equalTo(56)
+            maker.height.equalTo(toolBarHeight)
         }
         leftButton.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(15)
-            maker.centerY.equalTo(contentView)
+            maker.centerY.equalToSuperview()
             maker.height.equalTo(30)
         }
         originalButton.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
-            maker.centerY.equalTo(contentView)
+            maker.centerY.equalToSuperview()
             maker.height.equalTo(30)
         }
         doneButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview().offset(-15)
-            maker.centerY.equalTo(contentView)
+            maker.centerY.equalToSuperview()
             maker.size.equalTo(CGSize(width: 60, height: 30))
         }
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension PickerToolBar {
     
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
         doneButton.backgroundColor = enable ? options.theme.mainColor : options.theme.buttonDisableColor
+    }
+    
+    func showLimitedView() {
+        permissionLimitedView.isHidden = false
+        contentView.snp.updateConstraints { (update) in
+            update.top.equalToSuperview().offset(limitedViewHeight)
+        }
     }
 }
 

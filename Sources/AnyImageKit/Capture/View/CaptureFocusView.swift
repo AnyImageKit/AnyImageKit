@@ -267,14 +267,14 @@ private final class CaptureExposureView: UIView {
     }()
     
     private lazy var topLine: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.backgroundColor = color
         return view
     }()
     
     private lazy var bottomLine: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.backgroundColor = color
         return view

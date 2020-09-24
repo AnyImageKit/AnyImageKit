@@ -11,18 +11,30 @@ import Photos
 extension Permission {
     
     func _checkPhotos() -> Status {
-        return PHPhotoLibrary.authorizationStatus()._status
+        if #available(iOS 14.0, *) {
+            return PHPhotoLibrary.authorizationStatus(for: .readWrite)._status
+        } else {
+            return PHPhotoLibrary.authorizationStatus()._status
+        }
     }
     
     func _requestPhotos(completion: @escaping PermissionCompletion) {
-        guard let _ = Bundle.main.object(forInfoDictionaryKey: ._photoLibraryUsageDescription) else {
+        guard Bundle.main.object(forInfoDictionaryKey: ._photoLibraryUsageDescription) != nil else {
             _print("WARNING: \(String._photoLibraryUsageDescription) not found in Info.plist")
             return
         }
         
-        PHPhotoLibrary.requestAuthorization { status in
-            Thread.runOnMain {
-                completion(status._status)
+        if #available(iOS 14.0, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                Thread.runOnMain {
+                    completion(status._status)
+                }
+            }
+        } else {
+            PHPhotoLibrary.requestAuthorization { status in
+                Thread.runOnMain {
+                    completion(status._status)
+                }
             }
         }
     }
@@ -36,6 +48,8 @@ fileprivate extension PHAuthorizationStatus {
             return .notDetermined
         case .authorized:
             return .authorized
+        case .limited:
+            return .limited
         default:
             return .denied
         }

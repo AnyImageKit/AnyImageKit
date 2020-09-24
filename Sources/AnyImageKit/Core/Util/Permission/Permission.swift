@@ -75,5 +75,6 @@ extension Permission {
         case notDetermined
         case denied
         case authorized
+        case limited // Photos only
     }
 }

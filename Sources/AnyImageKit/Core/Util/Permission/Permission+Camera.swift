@@ -15,7 +15,7 @@ extension Permission {
     }
     
     func _requestCamera(completion: @escaping PermissionCompletion) {
-        guard let _ = Bundle.main.object(forInfoDictionaryKey: ._cameraUsageDescription) else {
+        guard Bundle.main.object(forInfoDictionaryKey: ._cameraUsageDescription) != nil else {
             _print("WARNING: \(String._cameraUsageDescription) not found in Info.plist")
             return
         }
