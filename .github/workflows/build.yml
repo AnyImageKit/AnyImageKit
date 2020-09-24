@@ -59,3 +59,24 @@ jobs:
     - uses: actions/checkout@v2
     - name: Archive for Mac Catalyst slice
       run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
+
+  CocoaPods:
+    name: CocoaPods library lint
+    runs-on: macOS-latest
+
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+
+    strategy:
+      matrix:
+        destination: ['iOS Simulator,name=iPhone 11']
+        swift-version: [5.3]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install CocoaPods
+      run: sudo gem install cocoapods
+    - name: Pod Install
+      run: pod install
+    - name: Library lint check
+      run: pod lib lint
