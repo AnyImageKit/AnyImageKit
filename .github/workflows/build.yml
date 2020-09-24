@@ -61,7 +61,7 @@ jobs:
       run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
 
   CocoaPods:
-    name: CocoaPods library lint
+    name: CocoaPods Library Lint
     runs-on: macOS-latest
 
     env:
@@ -76,7 +76,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install CocoaPods
       run: sudo gem install cocoapods
-    - name: Pod Install
-      run: pod install
-    - name: Library lint check
+    - name: Library Lint Check
       run: pod lib lint
