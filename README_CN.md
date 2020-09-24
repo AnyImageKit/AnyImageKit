@@ -28,7 +28,7 @@
 - [ ] 多平台支持
     - [x] iOS
     - [x] iPadOS (暂不支持编辑)
-    - [x] Mac Catalyst (技术预览版，暂不支持编辑)
+    - [x] Mac Catalyst (技术预览版，暂不支持编辑. 由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
     - [ ] macOS
     - [ ] tvOS
 
