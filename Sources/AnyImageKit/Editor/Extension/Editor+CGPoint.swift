@@ -1,5 +1,5 @@
 //
-// Editor+CGPoint.swift
+//  Editor+CGPoint.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/23.

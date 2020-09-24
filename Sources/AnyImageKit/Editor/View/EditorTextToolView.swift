@@ -29,10 +29,10 @@ final class EditorTextToolView: UIView {
         return view
     }()
     
-    private let colors: [EditorPhotoTextColor]
+    private let colors: [EditorTextColor]
     private var colorButtons: [ColorButton] = []
-    private let spacing: CGFloat = 22
-    private let itemWidth: CGFloat = 22
+    private let spacing: CGFloat = 20
+    private let itemWidth: CGFloat = 24
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
         self.colors = options.textColors
@@ -53,7 +53,7 @@ final class EditorTextToolView: UIView {
             colorButton.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
             colorButton.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
             
-            let colorButtonRight = 25 + 25 + CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
+            let colorButtonRight = 25 + 20 + CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
             colorButton.isHidden = colorButtonRight > bounds.width
         }
     }
@@ -79,14 +79,14 @@ final class EditorTextToolView: UIView {
         stackView.distribution = .equalSpacing
         addSubview(stackView)
         stackView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(textButton.snp.right).offset(25)
+            maker.left.equalTo(textButton.snp.right).offset(20)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(itemWidth)
+            maker.height.equalTo(30)
         }
         
         for colorView in colorButtons {
             colorView.snp.makeConstraints { (maker) in
-                maker.width.height.equalTo(stackView.snp.height)
+                maker.width.height.equalTo(itemWidth)
             }
         }
     }

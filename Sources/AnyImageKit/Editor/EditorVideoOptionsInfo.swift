@@ -32,13 +32,17 @@ public enum EditorVideoToolOption: Equatable {
 }
 
 // MARK: - Extension
-extension EditorVideoToolOption: CustomStringConvertible {
+extension EditorVideoToolOption {
+    
     var imageName: String {
         switch self {
         case .clip:
             return "VideoToolVideo"
         }
     }
+}
+
+extension EditorVideoToolOption: CustomStringConvertible {
     
     public var description: String {
         switch self {

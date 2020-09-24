@@ -52,7 +52,7 @@ public struct Palette {
                 Palette.purple]
     }
     
-    public static var textColors: [EditorPhotoTextColor] {
+    public static var textColors: [EditorTextColor] {
         return [.init(color: Palette.white,  subColor: Palette.black),
                 .init(color: Palette.black,  subColor: UIColor.white),
                 .init(color: Palette.red,    subColor: UIColor.white),

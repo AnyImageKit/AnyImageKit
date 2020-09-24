@@ -1,5 +1,5 @@
 //
-//  _PhotoEditorController.swift
+//  PhotoEditorController.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/23.
@@ -19,7 +19,7 @@ final class PhotoEditorController: AnyImageViewController {
     private lazy var contentView: PhotoEditorContentView = {
         let view = PhotoEditorContentView(frame: self.view.bounds, image: image, options: options, cache: cache)
         view.delegate = self
-        view.canvas.brush.color = options.penColors[options.defaultPenIndex]
+        view.canvas.brush.color = options.penColors[options.defaultPenIndex].color
         return view
     }()
     private lazy var toolView: EditorToolView = {
@@ -199,8 +199,8 @@ extension PhotoEditorController: EditorToolViewDelegate {
     }
     
     /// 画笔切换颜色
-    func toolView(_ toolView: EditorToolView, colorDidChange idx: Int) {
-        contentView.canvas.brush.color = options.penColors[idx]
+    func toolView(_ toolView: EditorToolView, colorDidChange color: UIColor) {
+        contentView.canvas.brush.color = color
     }
     
     /// 马赛克切换类型

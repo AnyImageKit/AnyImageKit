@@ -20,7 +20,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 画笔颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
-    public var penColors: [UIColor] = Palette.penColors
+    public var penColors: [EditorPenColorOption] = EditorPenColorOption.allCases
     
     /// 默认选中画笔的下标
     /// 默认：2
@@ -32,7 +32,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 马赛克的种类，会按顺序排布
     /// 默认：[.default, .colorful]
-    public var mosaicOptions: [EditorPhotoMosaicOption] = EditorPhotoMosaicOption.allCases
+    public var mosaicOptions: [EditorMosaicOption] = EditorMosaicOption.allCases
     
     /// 默认选中马赛克的下标
     /// 默认：0
@@ -48,7 +48,7 @@ public struct EditorPhotoOptionsInfo: Equatable {
     
     /// 文字颜色，会按顺序排布
     /// 默认：[white, black, red, yellow, green, blue, purple]
-    public var textColors: [EditorPhotoTextColor] = Palette.textColors
+    public var textColors: [EditorTextColor] = Palette.textColors
     
     /// 裁剪尺寸，会按顺序排布
     /// 默认：[.free, 1:1, 3:4, 4:3, 9:16, 16:9]
@@ -77,45 +77,9 @@ public enum EditorPhotoToolOption: Equatable, CaseIterable {
     case mosaic
 }
 
-/// 马赛克样式
-public enum EditorPhotoMosaicOption: Equatable, CaseIterable {
-    
-    /// 默认马赛克
-    case `default`
-    /// 自定义马赛克
-    case custom(icon: UIImage?, mosaic: UIImage)
-    
-    public static var colorful: EditorPhotoMosaicOption {
-        return .custom(icon: nil, mosaic: BundleHelper.image(named: "CustomMosaic")!)
-    }
-    
-    public static var allCases: [EditorPhotoMosaicOption] {
-        return [.default, .colorful]
-    }
-}
-
-/// 输入文本颜色
-public struct EditorPhotoTextColor: Equatable {
-    /// 主色
-    public let color: UIColor
-    /// 辅色
-    public let subColor: UIColor
-}
-
-/// 裁剪比例
-public enum EditorCropOption: Equatable, CaseIterable {
-    /// 自由裁剪
-    case free
-    /// 自定义裁剪 宽高比
-    case custom(w: UInt, h: UInt)
-    
-    public static var allCases: [EditorCropOption] {
-        return [.free, .custom(w: 1, h: 1), .custom(w: 3, h: 4), .custom(w: 4, h: 3), .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
-    }
-}
-
 // MARK: - Extension
-extension EditorPhotoToolOption: CustomStringConvertible {
+extension EditorPhotoToolOption {
+    
     var imageName: String {
         switch self {
         case .pen:
@@ -129,6 +93,10 @@ extension EditorPhotoToolOption: CustomStringConvertible {
         }
     }
     
+}
+
+extension EditorPhotoToolOption: CustomStringConvertible {
+    
     public var description: String {
         switch self {
         case .pen:
@@ -139,27 +107,6 @@ extension EditorPhotoToolOption: CustomStringConvertible {
             return "Crop"
         case .mosaic:
             return "Mosaic"
-        }
-    }
-}
-
-extension EditorCropOption {
-    
-    internal var ratioOfWidth: CGFloat {
-        switch self {
-        case .free:
-            return 1
-        case .custom(let w, let h):
-            return CGFloat(w)/CGFloat(h)
-        }
-    }
-    
-    internal var ratioOfHeight: CGFloat {
-        switch self {
-        case .free:
-            return 1
-        case .custom(let w, let h):
-            return CGFloat(h)/CGFloat(w)
         }
     }
 }
