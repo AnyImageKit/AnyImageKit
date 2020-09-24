@@ -25,7 +25,7 @@ final class TextImageView: UIView {
     private(set) var isActive: Bool = false
     
     private lazy var rectView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.white.cgColor

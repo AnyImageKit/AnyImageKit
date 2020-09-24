@@ -22,7 +22,7 @@ final class InputTextViewController: AnyImageViewController {
         return view
     }()
     private lazy var coverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.backgroundColor = UIColor.black.withAlphaComponent(0.45)
         return view
     }()
@@ -52,7 +52,7 @@ final class InputTextViewController: AnyImageViewController {
     }()
     private var textLayer: CAShapeLayer?
     private lazy var textCoverView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         return view
     }()
     private lazy var textView: UITextView = {
@@ -70,7 +70,7 @@ final class InputTextViewController: AnyImageViewController {
     }()
     /// 仅用于计算TextView最后一行的文本
     private lazy var calculateLabel: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.isHidden = true
         return view
     }()

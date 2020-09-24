@@ -29,18 +29,18 @@ final class VideoEditorCropProgressView: UIView {
     private var videoDuration: CGFloat = 0
     
     private lazy var contentView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.layer.cornerRadius = 5
         return view
     }()
     private lazy var progressContentView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(progressViewPan(_:)))
         view.addGestureRecognizer(pan)
         return view
     }()
     private lazy var progressView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.layer.cornerRadius = 2.5
         view.backgroundColor = UIColor.white
         return view
@@ -75,13 +75,13 @@ final class VideoEditorCropProgressView: UIView {
         return layer
     }()
     private lazy var timeline: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isHidden = true
         view.backgroundColor = UIColor.white
         return view
     }()
     private lazy var timelineLabel: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.isHidden = true
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 12)

@@ -14,7 +14,7 @@ final class HomeViewController: UITableViewController {
         super.viewDidLoad()
         self.title = "AnyImageKit"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: .zero)
     }
 
     // MARK: - Table view data source

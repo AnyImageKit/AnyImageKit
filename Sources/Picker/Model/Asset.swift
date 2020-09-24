@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public class Asset: Equatable {
+public class Asset: Equatable, Hashable {
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
@@ -39,6 +39,10 @@ public class Asset: Equatable {
     
     public static func == (lhs: Asset, rhs: Asset) -> Bool {
         return lhs.phAsset.localIdentifier == rhs.phAsset.localIdentifier
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(phAsset.localIdentifier)
     }
 }
 

@@ -21,7 +21,7 @@ final class EditorCropOptionCell: UICollectionViewCell {
     }
     
     private lazy var label: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.font = .systemFont(ofSize: 8)
         view.textColor = .white
         view.textAlignment = .center

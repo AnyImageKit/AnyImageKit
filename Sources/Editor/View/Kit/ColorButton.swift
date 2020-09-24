@@ -11,7 +11,7 @@ import UIKit
 final class ColorButton: UIButton {
     
     private(set) lazy var colorView: UIView = {
-        let view = UIView()
+        let view = UIView(frame: .zero)
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         view.backgroundColor = color
