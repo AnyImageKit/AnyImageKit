@@ -36,17 +36,27 @@
 - [ ] Multiple platform support
     - [x] iOS
     - [x] iPadOS ( Not support in editor )
-    - [x] Mac Catalyst ( Technical Preview, Not support in editor )
+    - [ ] Mac Catalyst ( Technical Preview, Not support in editor. Remove from support as Xcode 12.0 can't support Mac Catalyst 14.0 features. )
     - [ ] macOS
     - [ ] tvOS
 
 ## Requirements
 
 - iOS 10.0+
-- Xcode 11.0+
-- Swift 5.0+
+- Xcode 12.0+
+- Swift 5.3+
 
 ## Installation
+
+### [Swift Package Manager](https://swift.org/package-manager/)
+
+> ⚠️ Needs Xcode 12.0+ to support resources and localization files
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+]
+```
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 

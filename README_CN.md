@@ -28,17 +28,27 @@
 - [ ] 多平台支持
     - [x] iOS
     - [x] iPadOS (暂不支持编辑)
-    - [x] Mac Catalyst (技术预览版，暂不支持编辑)
+    - [x] Mac Catalyst (技术预览版，暂不支持编辑. 由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
     - [ ] macOS
     - [ ] tvOS
 
 ## 要求
 
 - iOS 10.0+
-- Xcode 11.0+
-- Swift 5.0+
+- Xcode 12.0+
+- Swift 5.3+
 
 ## 安装
+
+### [Swift Package Manager](https://swift.org/package-manager/)
+
+> ⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+]
+```
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 

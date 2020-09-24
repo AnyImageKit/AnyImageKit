@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1130"
+   LastUpgradeVersion = "1200"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A5A27BA5232F82AE00D966B8"
-               BuildableName = "AnyImageKit .app"
+               BuildableName = "Example.app"
                BlueprintName = "Example"
                ReferencedContainer = "container:AnyImageKit.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A5A27BA5232F82AE00D966B8"
-            BuildableName = "AnyImageKit .app"
+            BuildableName = "Example.app"
             BlueprintName = "Example"
             ReferencedContainer = "container:AnyImageKit.xcodeproj">
          </BuildableReference>
@@ -63,7 +63,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A5A27BA5232F82AE00D966B8"
-            BuildableName = "AnyImageKit .app"
+            BuildableName = "Example.app"
             BlueprintName = "Example"
             ReferencedContainer = "container:AnyImageKit.xcodeproj">
          </BuildableReference>

@@ -8,11 +8,8 @@
 
 import UIKit
 
-private class _BundleClass { }
-
 struct BundleHelper {
     
-    static var bundle = Bundle(for: _BundleClass.self)
     static private var _languageBundle: Bundle?
     
     static var languageBundle: Bundle? {
@@ -25,7 +22,7 @@ struct BundleHelper {
                     language = "zh-Hant"
                 }
             }
-            _languageBundle = Bundle(path: bundle.path(forResource: language, ofType: "lproj") ?? "")
+            _languageBundle = Bundle(path: Bundle.current.path(forResource: language, ofType: "lproj") ?? "")
         }
         return _languageBundle
     }
@@ -54,7 +51,7 @@ extension BundleHelper {
 extension BundleHelper {
     
     static func image(named: String) -> UIImage? {
-        return UIImage(named: named, in: bundle, compatibleWith: nil)
+        return UIImage(named: named, in: .current, compatibleWith: nil)
     }
     
     static func image(named: String, style: UserInterfaceStyle) -> UIImage? {
@@ -67,7 +64,7 @@ extension BundleHelper {
         case .dark:
             imageName = named + "Dark"
         }
-        return UIImage(named: imageName, in: bundle, compatibleWith: nil)
+        return UIImage(named: imageName, in: .current, compatibleWith: nil)
     }
 }
 
