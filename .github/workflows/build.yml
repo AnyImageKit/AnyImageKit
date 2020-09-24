@@ -1,22 +1,80 @@
-name: build
+name: AnyImageKit CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
-  build:
-
+  iOS:
+    name: Test iOS
     runs-on: macOS-latest
+    
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      
+    strategy:
+      matrix:
+        destination: ['iOS Simulator,name=iPhone 11']
+        swift-version: [5.3]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Archive for Device slice
+      run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS"  -archivePath "Build/AnyImageKit.framework-iphoneos.xcarchive" SKIP_INSTALL=NO
+    
+  iOS_Simulator:
+    name: Test iOS Simulator
+    runs-on: macOS-latest
+
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
     
     strategy:
       matrix:
         destination: ['iOS Simulator,name=iPhone 11']
-        swift-version: [5.1]
+        swift-version: [5.3]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+    - name: Archive for Simulator slice
+      run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS Simulator" -archivePath "Build/AnyImageKit.framework-iphonesimulator.xcarchive" SKIP_INSTALL=NO
+    
+  # Mac_Catalyst:
+  #   name: Test Mac Catalys
+  #   runs-on: macOS-latest
+
+  #   env:
+  #     DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      
+  #   strategy:
+  #     matrix:
+  #       destination: ['iOS Simulator,name=iPhone 11']
+  #       swift-version: [5.3]
+    
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Archive for Mac Catalyst slice
+  #     run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
+
+  CocoaPods:
+    name: CocoaPods Library Lint
+    runs-on: macOS-latest
+
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+
+    strategy:
+      matrix:
+        destination: ['iOS Simulator,name=iPhone 11']
+        swift-version: [5.3]
+
+    steps:
+    - uses: actions/checkout@v2
     - name: Install CocoaPods
       run: sudo gem install cocoapods
-    - name: Pod Install
-      run: pod install 
-    - name: Build
-      run: xcodebuild -workspace AnyImageKit.xcworkspace -scheme Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+    - name: Library Lint Check
+      run: pod lib lint

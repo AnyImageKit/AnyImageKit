@@ -13,6 +13,7 @@ final class ConfigCell: UITableViewCell {
     private(set) lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        view.adjustsFontSizeToFitWidth = true
         if #available(iOS 13.0, *) {
             view.textColor = UIColor.label
         } else {
@@ -41,6 +42,8 @@ final class ConfigCell: UITableViewCell {
     private(set) lazy var contentLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        view.numberOfLines = 2
+        view.adjustsFontSizeToFitWidth = true
         if #available(iOS 13.0, *) {
             view.textColor = UIColor.secondaryLabel
         } else {

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImageKit'
-    s.version = '0.7.6'
+    s.version = '0.8.1'
     s.license = 'MIT'
     s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
     s.homepage = 'https://github.com/AnyImageProject/AnyImageKit'
@@ -16,27 +16,27 @@ Pod::Spec.new do |s|
     s.default_subspecs = 'Core', 'Picker', 'Editor', 'Capture'
     
     s.subspec 'Core' do |core|
-        core.source_files = 'Sources/Core/**/*.swift'
-        core.resources = 'Sources/Core/Resources/**/*'
+        core.source_files = 'Sources/AnyImageKit/Core/**/*.swift'
+        core.resources = 'Sources/AnyImageKit/Resources/Core/**/*'
         core.dependency 'SnapKit'
     end
     
     s.subspec 'Picker' do |picker|
-        picker.source_files = 'Sources/Picker/**/*.swift'
-        picker.resources = 'Sources/Picker/Resources/**/*'
+        picker.source_files = 'Sources/AnyImageKit/Picker/**/*.swift'
+        picker.resources = 'Sources/AnyImageKit/Resources/Picker/**/*'
         picker.dependency 'AnyImageKit/Core'
     end
     
     s.subspec 'Editor' do |editor|
-        editor.source_files = 'Sources/Editor/**/*.swift'
-        editor.resources = 'Sources/Editor/Resources/**/*'
+        editor.source_files = 'Sources/AnyImageKit/Editor/**/*.swift'
+        editor.resources = 'Sources/AnyImageKit/Resources/Editor/**/*'
         editor.dependency 'AnyImageKit/Core'
         editor.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_EDITOR' }
     end
     
     s.subspec 'Capture' do |capture|
-        capture.source_files = 'Sources/Capture/**/*.swift'
-        capture.resources = 'Sources/Capture/Resources/**/*'
+        capture.source_files = 'Sources/AnyImageKit/Capture/**/*.{swift,metal}'
+        capture.resources = 'Sources/AnyImageKit/Resources/Capture/**/*'
         capture.dependency 'AnyImageKit/Core'
         capture.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_CAPTURE' }
     end

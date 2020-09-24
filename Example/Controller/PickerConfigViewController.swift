@@ -24,7 +24,7 @@ final class PickerConfigViewController: UITableViewController {
     
     private func setupView() {
         tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: .zero)
     }
     
     private func setupNavigation() {

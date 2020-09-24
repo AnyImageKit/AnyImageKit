@@ -12,27 +12,43 @@
     - [x] GIF
     - [x] Live Photo
     - [x] Video
-- [x] 支持在选择时直接拍照
+- [x] 相机支持
+    - [x] Photo
+    - [x] Video
+    - [ ] Live Photo
+    - [ ] GIF
+    - [ ] 滤镜
 - [ ] 编辑图片 (技术预览版)
     - [x] 涂鸦
     - [ ] 表情
     - [x] 文字
     - [x] 裁剪
     - [x] 马赛克
+    - [ ] 滤镜
 - [ ] 多平台支持
     - [x] iOS
     - [x] iPadOS (暂不支持编辑)
-    - [x] Mac Catalyst (技术预览版，暂不支持编辑)
+    - [x] Mac Catalyst (技术预览版，暂不支持编辑. 由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
     - [ ] macOS
     - [ ] tvOS
 
 ## 要求
 
 - iOS 10.0+
-- Xcode 11.0+
-- Swift 5.0+
+- Xcode 12.0+
+- Swift 5.3+
 
 ## 安装
+
+### [Swift Package Manager](https://swift.org/package-manager/)
+
+> ⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+]
+```
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
@@ -55,6 +71,14 @@ github "AnyImageProject/AnyImageKit"
 ## 使用方法
 
 > 我们在 [Wiki](https://github.com/AnyImageProject/AnyImageKit/wiki) 中提供了更详细的使用说明。
+
+### 准备工作
+
+在你的 Info.plist 中添加以下键值:
+
+- NSPhotoLibraryUsageDescription
+- NSCameraUsageDescription
+- NSMicrophoneUsageDescription
 
 ### 快速上手
 

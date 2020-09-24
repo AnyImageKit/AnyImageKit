@@ -1,0 +1,39 @@
+/* 
+  Localizable.strings
+  AnyImageEditor
+
+  Created by 蒋惠 on 2019/11/8.
+  Copyright © 2020 AnyImageProject.org. All rights reserved.
+*/
+
+// Picker
+"OpenPicker" = "打开相册";
+"Theme" = "主题";
+"SelectLimit" = "最多可选择的资源";
+"ColumnNumber" = "一行的列数";
+"UseOriginalImage" = "是否使用原图";
+"QuickPick" = "快速选择";
+"SelectOptions" = "选择类型";
+"AlbumOptions" = "相册类型";
+"OrderByDate" = "排序方式";
+"EditorOptions" = "编辑类型";
+"CaptureOptions" = "拍摄类型";
+"FullScreen" = "是否全屏";
+
+// Editor
+"OpenEditor" = "打开编辑器";
+"EditOptions" = "编辑功能";
+"PenWidth" = "画笔宽度";
+"MosaicOptions" = "马赛克种类";
+"MosaicWidth" = "马赛克线条宽度";
+"MosaicLevel" = "马赛克模糊度";
+"CropOptions" = "裁剪尺寸";
+
+// Capture
+"OpenCamera" = "打开相机";
+"MediaOptions" = "媒体配置";
+"PreferredPresets" = "优先使用的相机预设";
+"PhotoAspectRatio" = "照片比例";
+"PreferredPositions" = "优先使用的相机";
+"FlashMode" = "闪光灯模式";
+"VideoMaximumDuration" = "视频拍摄最长时间";
