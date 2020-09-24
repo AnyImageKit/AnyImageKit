@@ -53,8 +53,7 @@ final class CapturePreviewContentView: MTKView {
         guard let device = device else { return }
         
         do {
-            let bundle = Bundle(for: CapturePreviewContentView.self)
-            let defaultLibrary = try device.makeDefaultLibrary(bundle: bundle)
+            let defaultLibrary = try device.makeDefaultLibrary(bundle: .current)
             
             let pipelineDescriptor = MTLRenderPipelineDescriptor()
             pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
