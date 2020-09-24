@@ -10,7 +10,7 @@ import UIKit
 
 final class PickerToolBar: UIView {
     
-    private(set) lazy var contentView = UIView()
+    private(set) lazy var contentView = UIView(frame: .zero)
     
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)

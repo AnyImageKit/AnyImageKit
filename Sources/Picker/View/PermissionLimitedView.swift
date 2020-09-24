@@ -11,13 +11,13 @@ import UIKit
 final class PermissionLimitedView: UIView {
 
     private lazy var warningImageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.image = BundleHelper.image(named: "Warning", style: options.theme.style)
         return view
     }()
     
     private lazy var tipsLabel: UILabel = {
-        let view = UILabel()
+        let view = UILabel(frame: .zero)
         view.numberOfLines = 2
         view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 14)
@@ -26,7 +26,7 @@ final class PermissionLimitedView: UIView {
     }()
     
     private lazy var arrowImageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(frame: .zero)
         view.image = BundleHelper.image(named: "ArrowRight", style: options.theme.style)
         return view
     }()
