@@ -77,6 +77,9 @@ extension ImageEditorCache {
     /// 删除图片编辑的磁盘缓存
     public static func clearImageEditorCache() {
         let path = CacheModule.editor(.history).path
+        var directoryExists: ObjCBool = false
+        FileManager.default.fileExists(atPath: path, isDirectory: &directoryExists)
+        guard directoryExists.boolValue else { return }
         let list = ((try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []).map{ $0.replacingOccurrences(of: ".json", with: "") }
         for item in list {
             clearDiskCache(id: item)
