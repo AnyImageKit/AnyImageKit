@@ -15,7 +15,7 @@ extension Permission {
     }
     
     func _requestMicrophone(completion: @escaping PermissionCompletion) {
-        guard let _ = Bundle.main.object(forInfoDictionaryKey: ._microphoneUsageDescription) else {
+        guard Bundle.main.object(forInfoDictionaryKey: ._microphoneUsageDescription) != nil else {
             _print("WARNING: \(String._microphoneUsageDescription) not found in Info.plist")
             return
         }

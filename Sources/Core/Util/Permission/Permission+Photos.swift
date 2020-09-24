@@ -19,7 +19,7 @@ extension Permission {
     }
     
     func _requestPhotos(completion: @escaping PermissionCompletion) {
-        guard let _ = Bundle.main.object(forInfoDictionaryKey: ._photoLibraryUsageDescription) else {
+        guard Bundle.main.object(forInfoDictionaryKey: ._photoLibraryUsageDescription) != nil else {
             _print("WARNING: \(String._photoLibraryUsageDescription) not found in Info.plist")
             return
         }
