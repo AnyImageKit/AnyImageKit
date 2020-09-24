@@ -40,7 +40,7 @@
 
 ## 安装
 
-### [Swift Package Manager](https://github.com/apple/swift-package-manager)
+### [Swift Package Manager](https://swift.org/package-manager/)
 
 > ⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
 

@@ -48,7 +48,7 @@
 
 ## Installation
 
-### [Swift Package Manager](https://github.com/apple/swift-package-manager)
+### [Swift Package Manager](https://swift.org/package-manager/)
 
 > ⚠️ Needs Xcode 12.0+ to support resources and localization files
 
