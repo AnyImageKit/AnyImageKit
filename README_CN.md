@@ -23,6 +23,7 @@
     - [ ] 表情
     - [x] 文字
     - [x] 裁剪
+    - [ ] 旋转
     - [x] 马赛克
     - [ ] 滤镜
 - [ ] 多平台支持
@@ -42,7 +43,7 @@
 
 ### [Swift Package Manager](https://swift.org/package-manager/)
 
-> ⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
+⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
 
 ```swift
 dependencies: [
@@ -58,15 +59,15 @@ dependencies: [
 pod 'AnyImageKit'
 ```
 
-### [Carthage](https://github.com/Carthage/Carthage)
+### <del>[Carthage](https://github.com/Carthage/Carthage)</del>
 
-将下面内容添加到 `Cartfile`，并执行依赖更新。
+<del>将下面内容添加到 `Cartfile`，并执行依赖更新。</del>
 
 ```ogdl
 github "AnyImageProject/AnyImageKit"
 ```
 
-> 由于 Carthage 的依赖问题，不支持 `--no-use-binaries`，请直接使用我们的二进制文件。
+⚠️ 由于 Carthage 自身的问题，无法在 Xcode 12 中使用，[查看详情](https://github.com/Carthage/Carthage/issues/3019)
 
 ## 使用方法
 
@@ -74,11 +75,15 @@ github "AnyImageProject/AnyImageKit"
 
 ### 准备工作
 
-在你的 Info.plist 中添加以下键值:
+按需在你的 Info.plist 中添加以下键值:
 
-- NSPhotoLibraryUsageDescription
-- NSCameraUsageDescription
-- NSMicrophoneUsageDescription
+| Key | 模块 | 备注 |
+| ----- | ----  | ---- |
+| NSPhotoLibraryUsageDescription | Picker |  |
+| NSPhotoLibraryAddUsageDescription | Picker |  |
+| PHPhotoLibraryPreventAutomaticLimitedAccessAlert | Picker | 设置为 `YES` iOS 14+ 以禁用自动弹出添加更多照片的弹框(Picker 已适配 Limited 功能，可由用户主动触发，提升用户体验)|
+| NSCameraUsageDescription | Capture |  |
+| NSMicrophoneUsageDescription | Capture |  |
 
 ### 快速上手
 
