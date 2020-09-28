@@ -12,7 +12,7 @@ import SnapKit
 public protocol ImageEditorControllerDelegate: class {
     
     func imageEditorDidCancel(_ editor: ImageEditorController)
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool)
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult)
 }
 
 extension ImageEditorControllerDelegate {
@@ -156,10 +156,11 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
     }
     
     func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        let result = output(photo: photo, fileType: .jpeg)
-        switch result {
+        let outputResult = output(photo: photo, fileType: .jpeg)
+        switch outputResult {
         case .success(let url):
-            editorDelegate?.imageEditor(self, didFinishEditing: url, type: .photo, isEdited: isEdited)
+            let result = EditorResult(mediaURL: url, type: .photo, isEdited: isEdited)
+            editorDelegate?.imageEditor(self, didFinishEditing: result)
         case .failure(let error):
             _print(error.localizedDescription)
         }
@@ -174,6 +175,7 @@ extension ImageEditorController: VideoEditorControllerDelegate {
     }
     
     func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool) {
-        editorDelegate?.imageEditor(self, didFinishEditing: video, type: .video, isEdited: isEditing)
+        let result = EditorResult(mediaURL: video, type: .video, isEdited: isEdited)
+        editorDelegate?.imageEditor(self, didFinishEditing: result)
     }
 }

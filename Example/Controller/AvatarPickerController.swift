@@ -95,9 +95,9 @@ extension AvatarPickerController: ImageEditorControllerDelegate {
         openPickerTapped()
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool) {
-        if type == .photo {
-            guard let photoData = try? Data(contentsOf: mediaURL) else { return }
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
+        if result.type == .photo {
+            guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
             guard let photo = UIImage(data: photoData) else { return }
             let controller = EditorResultViewController()
             controller.imageView.image = photo

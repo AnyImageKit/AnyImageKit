@@ -22,6 +22,7 @@
 		A0147E0623C45A2C0071E9D5 /* Permission+Microphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0523C45A2C0071E9D5 /* Permission+Microphone.swift */; };
 		A0147E0C23C4870D0071E9D5 /* AnyImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */; };
 		A01866F1239F8740002E623D /* CapturePreviewMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */; };
+		A01A59372522206A00FABD22 /* EditorResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01A59362522206A00FABD22 /* EditorResult.swift */; };
 		A01C582923B33C7A00691F11 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582823B33C7A00691F11 /* Palette.swift */; };
 		A01C582B23B33CB200691F11 /* Core+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582A23B33CB200691F11 /* Core+UIDevice.swift */; };
 		A01C582D23B33CCA00691F11 /* DebugHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01C582C23B33CCA00691F11 /* DebugHelper.swift */; };
@@ -255,6 +256,7 @@
 		A0147E0523C45A2C0071E9D5 /* Permission+Microphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permission+Microphone.swift"; sourceTree = "<group>"; };
 		A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageViewController.swift; sourceTree = "<group>"; };
 		A01866F0239F8740002E623D /* CapturePreviewMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewMaskView.swift; sourceTree = "<group>"; };
+		A01A59362522206A00FABD22 /* EditorResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorResult.swift; sourceTree = "<group>"; };
 		A01C582823B33C7A00691F11 /* Palette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		A01C582A23B33CB200691F11 /* Core+UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UIDevice.swift"; sourceTree = "<group>"; };
 		A01C582C23B33CCA00691F11 /* DebugHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugHelper.swift; sourceTree = "<group>"; };
@@ -855,6 +857,7 @@
 				71CBF1462519CF1400F79D19 /* EditorOptionsInfo.swift */,
 				A561239C23B5EE400071C3E8 /* EditorPhotoOptionsInfo.swift */,
 				A561239E23B5EE4F0071C3E8 /* EditorVideoOptionsInfo.swift */,
+				A01A59362522206A00FABD22 /* EditorResult.swift */,
 				A50B20D4237AA24200A894A9 /* Controller */,
 				A50B20D8237AA24200A894A9 /* Model */,
 				A50B20E6237AA24200A894A9 /* View */,
@@ -1307,6 +1310,7 @@
 				A08DF7C523B3326C002B92EE /* CaptureToolView.swift in Sources */,
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */,
+				A01A59372522206A00FABD22 /* EditorResult.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
