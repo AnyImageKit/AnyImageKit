@@ -91,33 +91,27 @@ Add this key to your Info.plist:
 ```swift
 import AnyImageKit
 
-let controller = ImagePickerController(delegate: self)
-present(controller, animated: true, completion: nil)
+class ViewController: UIViewController {
 
-/// ImagePickerControllerDelegate
-func imagePickerDidCancel(_ picker: ImagePickerController) {
-    // Your code, handle cancel
-    picker.dismiss(animated: true, completion: nil)
+    @IBAction private func openPicker() {
+        let options = PickerOptionsInfo()
+        let controller = ImagePickerController(options: options, delegate: self)
+        present(controller, animated: true, completion: nil)
+    }
 }
+
+extension ViewController: ImagePickerControllerDelegate {
+
+    func imagePickerDidCancel(_ picker: ImagePickerController) {
+        // Your code, handle cancel
+        picker.dismiss(animated: true, completion: nil)
+    }
     
-func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
-    // Your code, handle select assets
-    let images = assets.map { $0.image }
-    picker.dismiss(animated: true, completion: nil)
-}
-```
-
-### Fetch content data
-```swift
-/// Fetch Video URL 
-/// - Note: Only for `MediaType` Video
-/// - Parameter options: Video URL Fetch Options
-/// - Parameter completion: Video URL Fetch Completion
-func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion)
-
-// Call
-asset.fetchVideoURL { (result) in
-    // Your code
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
+        // Your code, handle select assets
+        let images = result.assets.map { $0.image }
+        picker.dismiss(animated: true, completion: nil)
+    }
 }
 ```
 

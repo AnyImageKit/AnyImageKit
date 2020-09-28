@@ -85,33 +85,27 @@ github "AnyImageProject/AnyImageKit"
 ```swift
 import AnyImageKit
 
-let controller = ImagePickerController(delegate: self)
-present(controller, animated: true, completion: nil)
+class ViewController: UIViewController {
 
-/// ImagePickerControllerDelegate
-func imagePickerDidCancel(_ picker: ImagePickerController) {
-    // 你的业务代码，处理取消(存在默认实现，如果需要额外行为请自行实现本方法)
-    picker.dismiss(animated: true, completion: nil)
+    @IBAction private func openPicker() {
+        let options = PickerOptionsInfo()
+        let controller = ImagePickerController(options: options, delegate: self)
+        present(controller, animated: true, completion: nil)
+    }
 }
+
+extension ViewController: ImagePickerControllerDelegate {
+
+    func imagePickerDidCancel(_ picker: ImagePickerController) {
+        // Your code, handle cancel
+        picker.dismiss(animated: true, completion: nil)
+    }
     
-func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
-    // 你的业务代码，处理选中的资源
-    let images = assets.map { $0.image }
-    picker.dismiss(animated: true, completion: nil)
-}
-```
-
-### 获取内容数据
-```swift
-/// Fetch Video URL 
-/// - Note: Only for `MediaType` Video
-/// - Parameter options: Video URL Fetch Options
-/// - Parameter completion: Video URL Fetch Completion
-func fetchVideoURL(options: VideoURLFetchOptions = .init(), completion: @escaping VideoURLFetchCompletion)
-
-// Call
-asset.fetchVideoURL { (result) in
-    // Your code
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
+        // Your code, handle select assets
+        let images = result.assets.map { $0.image }
+        picker.dismiss(animated: true, completion: nil)
+    }
 }
 ```
 
