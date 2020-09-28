@@ -74,14 +74,14 @@ final class AvatarPickerController: UITableViewController {
 // MARK: - ImagePickerControllerDelegate
 extension AvatarPickerController: ImagePickerControllerDelegate {
     
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
         picker.dismiss(animated: false, completion: nil)
         
         var options = EditorPhotoOptionsInfo()
         options.toolOptions = [.crop]
         options.cropOptions = [.custom(w: 1, h: 1)]
         
-        let controller = ImageEditorController(photo: assets.first!.image, options: options, delegate: self)
+        let controller = ImageEditorController(photo: result.assets.first!.image, options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false, completion: nil)
     }
