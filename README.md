@@ -31,6 +31,7 @@
     - [ ] Emoji
     - [x] Input text
     - [x] Cropping
+    - [ ] Rotate
     - [x] Mosaic
     - [ ] Fliter
 - [ ] Multiple platform support
@@ -50,7 +51,7 @@
 
 ### [Swift Package Manager](https://swift.org/package-manager/)
 
-> ⚠️ Needs Xcode 12.0+ to support resources and localization files
+⚠️ Needs Xcode 12.0+ to support resources and localization files
 
 ```swift
 dependencies: [
@@ -66,25 +67,29 @@ Add this to `Podfile`, and then update dependency:
 pod 'AnyImageKit'
 ```
 
-### [Carthage](https://github.com/Carthage/Carthage)
+### <del>[Carthage](https://github.com/Carthage/Carthage)</del>
 
-Add this to `Cartfile`, and then update dependency:
+<del>Add this to `Cartfile`, and then update dependency:</del>
 
 ```ogdl
 github "AnyImageProject/AnyImageKit"
 ```
 
-> Unsupport `--no-use-binaries`
+⚠️ Unsupport in Xcode 12.0, [more details](https://github.com/Carthage/Carthage/issues/3019)
 
 ## Usage
 
 ### Prepare
 
-Add this key to your Info.plist:
+Add these keys to your Info.plist when needed:
 
-- NSPhotoLibraryUsageDescription
-- NSCameraUsageDescription
-- NSMicrophoneUsageDescription
+| Key | Module | Info |
+| ----- | ----  | ---- |
+| NSPhotoLibraryUsageDescription | Picker |  |
+| NSPhotoLibraryAddUsageDescription | Picker |  |
+| PHPhotoLibraryPreventAutomaticLimitedAccessAlert | Picker | Set `YES` to prevent automatic limited access alert in iOS 14+ (Picker has been adapted with Limited features that can be triggered by the user to enhance the user experience) |
+| NSCameraUsageDescription | Capture |  |
+| NSMicrophoneUsageDescription | Capture |  |
 
 ### Quick Start
 
