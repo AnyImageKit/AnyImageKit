@@ -12,7 +12,7 @@ import SnapKit
 public protocol ImagePickerControllerDelegate: class {
     
     func imagePickerDidCancel(_ picker: ImagePickerController)
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool)
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult)
 }
 
 extension ImagePickerControllerDelegate {
@@ -157,7 +157,8 @@ extension ImagePickerController {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 hideHUD()
-                self.pickerDelegate?.imagePicker(self, didFinishPicking: self.manager.selectedAssets, useOriginalImage: self.manager.useOriginalImage)
+                let result = PickerResult(assets: self.manager.selectedAssets, useOriginalImage: self.manager.useOriginalImage)
+                self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
             }
         }
     }

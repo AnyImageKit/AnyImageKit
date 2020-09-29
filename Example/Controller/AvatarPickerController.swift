@@ -74,14 +74,14 @@ final class AvatarPickerController: UITableViewController {
 // MARK: - ImagePickerControllerDelegate
 extension AvatarPickerController: ImagePickerControllerDelegate {
     
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking assets: [Asset], useOriginalImage: Bool) {
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
         picker.dismiss(animated: false, completion: nil)
         
         var options = EditorPhotoOptionsInfo()
         options.toolOptions = [.crop]
         options.cropOptions = [.custom(w: 1, h: 1)]
         
-        let controller = ImageEditorController(photo: assets.first!.image, options: options, delegate: self)
+        let controller = ImageEditorController(photo: result.assets.first!.image, options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false, completion: nil)
     }
@@ -95,9 +95,9 @@ extension AvatarPickerController: ImageEditorControllerDelegate {
         openPickerTapped()
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool) {
-        if type == .photo {
-            guard let photoData = try? Data(contentsOf: mediaURL) else { return }
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
+        if result.type == .photo {
+            guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
             guard let photo = UIImage(data: photoData) else { return }
             let controller = EditorResultViewController()
             controller.imageView.image = photo

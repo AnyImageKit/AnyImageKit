@@ -86,12 +86,12 @@ final class CaptureConfigViewController: UITableViewController {
 // MARK: - ImageCaptureControllerDelegate
 extension CaptureConfigViewController: ImageCaptureControllerDelegate {
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing mediaURL: URL, type: MediaType) {
-        switch type {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: CaptureResult) {
+        switch result.type {
         case .photo:
             capture.dismiss(animated: true, completion: { [weak self] in
                 guard let self = self else { return }
-                guard let data = try? Data(contentsOf: mediaURL) else { return }
+                guard let data = try? Data(contentsOf: result.mediaURL) else { return }
                 guard let image = UIImage(data: data) else { return }
                 let controller = EditorResultViewController()
                 controller.imageView.image = image
@@ -100,7 +100,7 @@ extension CaptureConfigViewController: ImageCaptureControllerDelegate {
         case .video:
             capture.dismiss(animated: true, completion: { [weak self] in
                 guard let self = self else { return }
-                let player = AVPlayer(url: mediaURL)
+                let player = AVPlayer(url: result.mediaURL)
                 let controller = AVPlayerViewController()
                 controller.player = player
                 controller.modalPresentationStyle = .fullScreen

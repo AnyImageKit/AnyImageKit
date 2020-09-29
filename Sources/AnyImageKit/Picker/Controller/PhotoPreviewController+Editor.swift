@@ -94,14 +94,14 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         }
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing mediaURL: URL, type: MediaType, isEdited: Bool) {
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         defer { editor.dismiss(animated: false, completion: nil) }
-        guard type == .photo else { return }
-        guard let photoData = try? Data(contentsOf: mediaURL) else { return }
+        guard result.type == .photo else { return }
+        guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PhotoPreviewCell else { return }
-        data.asset._images[.edited] = isEdited ? photo : nil
+        data.asset._images[.edited] = result.isEdited ? photo : nil
         cell.setImage(photo)
         
         // 选择当前照片
