@@ -23,13 +23,13 @@
     - [ ] 表情
     - [x] 文字
     - [x] 裁剪
-    - [ ] 旋转
     - [x] 马赛克
+    - [ ] 旋转
     - [ ] 滤镜
 - [ ] 多平台支持
     - [x] iOS
-    - [x] iPadOS (暂不支持编辑)
-    - [x] Mac Catalyst (技术预览版，暂不支持编辑. 由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
+    - [x] iPadOS
+    - [ ] Mac Catalyst (技术预览版，暂不支持编辑。由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
     - [ ] macOS
     - [ ] tvOS
 
@@ -43,7 +43,7 @@
 
 ### [Swift Package Manager](https://swift.org/package-manager/)
 
-⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加
+⚠️ 需要 Xcode 12.0 及以上版本来支持资源文件/本地化文件的添加。
 
 ```swift
 dependencies: [
@@ -59,15 +59,15 @@ dependencies: [
 pod 'AnyImageKit'
 ```
 
-### <del>[Carthage](https://github.com/Carthage/Carthage)</del>
+### ~~[Carthage](https://github.com/Carthage/Carthage)~~
 
-<del>将下面内容添加到 `Cartfile`，并执行依赖更新。</del>
+~~将下面内容添加到 `Cartfile`，并执行依赖更新。~~
 
 ```ogdl
 github "AnyImageProject/AnyImageKit"
 ```
 
-⚠️ 由于 Carthage 自身的问题，无法在 Xcode 12 中使用，[查看详情](https://github.com/Carthage/Carthage/issues/3019)
+⚠️ 由于 Carthage 自身的问题，目前无法在 Xcode 12 中使用，[查看详情](https://github.com/Carthage/Carthage/issues/3019)
 
 ## 使用方法
 
@@ -79,11 +79,11 @@ github "AnyImageProject/AnyImageKit"
 
 | Key | 模块 | 备注 |
 | ----- | ----  | ---- |
-| NSPhotoLibraryUsageDescription | Picker |  |
-| NSPhotoLibraryAddUsageDescription | Picker |  |
+| NSPhotoLibraryUsageDescription | Picker | 允许访问相册 |
+| NSPhotoLibraryAddUsageDescription | Picker | 允许保存图片至相册 |
 | PHPhotoLibraryPreventAutomaticLimitedAccessAlert | Picker | 设置为 `YES` iOS 14+ 以禁用自动弹出添加更多照片的弹框(Picker 已适配 Limited 功能，可由用户主动触发，提升用户体验)|
-| NSCameraUsageDescription | Capture |  |
-| NSMicrophoneUsageDescription | Capture |  |
+| NSCameraUsageDescription | Capture | 允许使用相机 |
+| NSMicrophoneUsageDescription | Capture | 允许使用麦克风 |
 
 ### 快速上手
 

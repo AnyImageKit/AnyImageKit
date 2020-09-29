@@ -8,7 +8,7 @@
 
 `AnyImageKit` is a toolbox for picking and editing photos. It's written in Swift. 
 
-> [中文说明](./README_CN.md)
+> [中文说明](./Documentation/README_CN.md)
 
 ## Features
 
@@ -31,12 +31,12 @@
     - [ ] Emoji
     - [x] Input text
     - [x] Cropping
-    - [ ] Rotate
     - [x] Mosaic
+    - [ ] Rotate
     - [ ] Fliter
 - [ ] Multiple platform support
     - [x] iOS
-    - [x] iPadOS ( Not support in editor )
+    - [x] iPadOS
     - [ ] Mac Catalyst ( Technical Preview, Not support in editor. Remove from support as Xcode 12.0 can't support Mac Catalyst 14.0 features. )
     - [ ] macOS
     - [ ] tvOS
@@ -67,9 +67,9 @@ Add this to `Podfile`, and then update dependency:
 pod 'AnyImageKit'
 ```
 
-### <del>[Carthage](https://github.com/Carthage/Carthage)</del>
+### ~~[Carthage](https://github.com/Carthage/Carthage)~~
 
-<del>Add this to `Cartfile`, and then update dependency:</del>
+~~Add this to `Cartfile`, and then update dependency:~~
 
 ```ogdl
 github "AnyImageProject/AnyImageKit"
