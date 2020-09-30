@@ -29,7 +29,6 @@ open class ImagePickerController: AnyImageNavigationController {
     private var containerSize: CGSize = .zero
     private var hiddenStatusBar: Bool = false
     private var didFinishSelect: Bool = false
-    private let lock: NSLock = .init()
     
     private let manager: PickerManager = .init()
     

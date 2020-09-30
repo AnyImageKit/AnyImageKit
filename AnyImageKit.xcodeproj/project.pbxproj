@@ -393,7 +393,6 @@
 		A5325EA42331C14F00ADA116 /* PickerArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerArrowButton.swift; sourceTree = "<group>"; };
 		A5347D1723A9D11F00C93874 /* EditorVideoResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVideoResource.swift; sourceTree = "<group>"; };
 		A5347D1D23A9EC3D00C93874 /* VideoEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorController.swift; sourceTree = "<group>"; };
-		A5347D1F23A9F03D00C93874 /* ReplaceMe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceMe.swift; sourceTree = "<group>"; };
 		A5347D2323A9FC6300C93874 /* ExportTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTool.swift; sourceTree = "<group>"; };
 		A5347D2523A9FD2700C93874 /* ExportTool+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+Photo.swift"; sourceTree = "<group>"; };
 		A5347D2723A9FF2900C93874 /* ExportTool+PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportTool+PhotoData.swift"; sourceTree = "<group>"; };
@@ -865,7 +864,6 @@
 				A50B20D8237AA24200A894A9 /* Model */,
 				A50B20E6237AA24200A894A9 /* View */,
 				A50B20D2237AA24200A894A9 /* Protocol */,
-				A50B20DE237AA24200A894A9 /* Util */,
 				A50B20F6237AA24200A894A9 /* Extension */,
 			);
 			path = Editor;
@@ -903,14 +901,6 @@
 				A01C583023B33CFD00691F11 /* ImageEditorCache.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		A50B20DE237AA24200A894A9 /* Util */ = {
-			isa = PBXGroup;
-			children = (
-				A5347D1F23A9F03D00C93874 /* ReplaceMe.swift */,
-			);
-			path = Util;
 			sourceTree = "<group>";
 		};
 		A50B20E6237AA24200A894A9 /* View */ = {
