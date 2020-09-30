@@ -81,7 +81,7 @@ final class EditorTextToolView: UIView {
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalTo(textButton.snp.right).offset(20)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(30)
+            maker.height.equalTo(itemWidth)
         }
         
         for colorView in colorButtons {

@@ -88,7 +88,7 @@ final class EditorPenToolView: UIView {
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview()
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(30)
+            maker.height.equalTo(itemWidth)
         }
         
         for colorView in colorButtons {
