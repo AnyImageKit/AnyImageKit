@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-protocol VideoEditorControllerDelegate: class {
+protocol VideoEditorControllerDelegate: AnyObject {
     
     func videoEditorDidCancel(_ editor: VideoEditorController)
     func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool)

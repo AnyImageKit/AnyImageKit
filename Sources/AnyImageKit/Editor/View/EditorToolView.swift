@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditorToolViewDelegate: class {
+protocol EditorToolViewDelegate: AnyObject {
     
     func toolView(_ toolView: EditorToolView, optionDidChange option: EditorPhotoToolOption?)
     

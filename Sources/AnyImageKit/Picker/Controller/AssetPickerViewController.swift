@@ -12,7 +12,7 @@ import Photos
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
 
-protocol AssetPickerViewControllerDelegate: class {
+protocol AssetPickerViewControllerDelegate: AnyObject {
     
     func assetPickerDidCancel(_ picker: AssetPickerViewController)
     func assetPickerDidFinishPicking(_ picker: AssetPickerViewController)

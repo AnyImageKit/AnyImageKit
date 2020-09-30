@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-protocol PhotoPreviewControllerDataSource: class {
+protocol PhotoPreviewControllerDataSource: AnyObject {
     
     typealias PreviewData = (thumbnail: UIImage?, asset: Asset)
     
@@ -23,7 +23,7 @@ protocol PhotoPreviewControllerDataSource: class {
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
 }
 
-protocol PhotoPreviewControllerDelegate: class {
+protocol PhotoPreviewControllerDelegate: AnyObject {
     
     /// 选择一张图片，需要返回所选图片的序号
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CaptureButtonDelegate: class {
+protocol CaptureButtonDelegate: AnyObject {
     
     func captureButtonDidTapped(_ button: CaptureButton)
     func captureButtonDidBeganLongPress(_ button: CaptureButton)

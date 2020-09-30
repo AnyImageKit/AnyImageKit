@@ -302,10 +302,12 @@ class AnimatedImageView: UIImageView {
 }
 
 protocol AnimatorDelegate: AnyObject {
+    
     func animator(_ animator: AnimatedImageView.Animator, didPlayAnimationLoops count: UInt)
 }
 
 extension AnimatedImageView: AnimatorDelegate {
+    
     func animator(_ animator: Animator, didPlayAnimationLoops count: UInt) {
         delegate?.animatedImageView(self, didPlayAnimationLoops: count)
     }

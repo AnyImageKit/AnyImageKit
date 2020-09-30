@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditorPenToolViewDelegate: class {
+protocol EditorPenToolViewDelegate: AnyObject {
     
     func penToolView(_ penToolView: EditorPenToolView, colorDidChange color: UIColor)
     

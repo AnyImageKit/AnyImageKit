@@ -31,13 +31,13 @@
 
 import UIKit
 
-protocol CanvasDelegate: class {
+protocol CanvasDelegate: AnyObject {
     
     func canvasDidBeginPen()
     func canvasDidEndPen()
 }
 
-protocol CanvasDataSource: class {
+protocol CanvasDataSource: AnyObject {
     
     func canvasGetScale(_ canvas: Canvas) -> CGFloat
 }

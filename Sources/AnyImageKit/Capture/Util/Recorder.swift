@@ -9,7 +9,7 @@
 import AVFoundation
 import UIKit
 
-protocol RecorderDelegate: class {
+protocol RecorderDelegate: AnyObject {
     
     func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL, thumbnail: UIImage?)
 }

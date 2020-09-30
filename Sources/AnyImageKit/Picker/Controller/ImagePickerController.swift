@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-public protocol ImagePickerControllerDelegate: class {
+public protocol ImagePickerControllerDelegate: AnyObject {
     
     func imagePickerDidCancel(_ picker: ImagePickerController)
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult)

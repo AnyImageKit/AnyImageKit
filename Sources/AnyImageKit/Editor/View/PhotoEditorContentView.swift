@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PhotoEditorContentViewDelegate: class {
+protocol PhotoEditorContentViewDelegate: AnyObject {
     
     func contentViewTapped()
     

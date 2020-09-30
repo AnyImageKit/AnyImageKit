@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-protocol CaptureViewControllerDelegate: class {
+protocol CaptureViewControllerDelegate: AnyObject {
     
     func captureDidCancel(_ capture: CaptureViewController)
     func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType)

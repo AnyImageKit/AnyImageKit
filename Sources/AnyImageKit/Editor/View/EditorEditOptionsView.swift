@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditorEditOptionsViewDelegate: class {
+protocol EditorEditOptionsViewDelegate: AnyObject {
     
     func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: EditorPhotoToolOption?)
 }

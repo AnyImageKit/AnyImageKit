@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-protocol PadCaptureViewControllerDelegate: class {
+protocol PadCaptureViewControllerDelegate: AnyObject {
     
     func captureDidCancel(_ capture: PadCaptureViewController)
     func capture(_ capture: PadCaptureViewController, didOutput mediaURL: URL, type: MediaType)

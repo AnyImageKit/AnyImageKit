@@ -9,7 +9,7 @@
 import AVFoundation
 import UIKit
 
-protocol CaptureDelegate: class {
+protocol CaptureDelegate: AnyObject {
     
     func captureDidCapturePhoto(_ capture: Capture)
     func captureDidChangeSubjectArea(_ capture: Capture)

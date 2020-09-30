@@ -8,7 +8,7 @@
 
 import CoreMotion
 
-protocol DeviceOrientationUtilDelegate: class {
+protocol DeviceOrientationUtilDelegate: AnyObject {
     
     func device(_ util: DeviceOrientationUtil, didUpdate orientation: DeviceOrientation)
 }

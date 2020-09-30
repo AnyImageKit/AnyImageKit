@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PickerPreviewIndexViewDelegate: class {
+protocol PickerPreviewIndexViewDelegate: AnyObject {
     
     func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int)
 }

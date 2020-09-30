@@ -8,7 +8,8 @@
 
 import UIKit
 
-protocol VideoEditorCropProgressViewDelegate: class {
+protocol VideoEditorCropProgressViewDelegate: AnyObject {
+    
     func cropProgress(_ view: VideoEditorCropProgressView, didUpdate progress: CGFloat)
     func cropProgressDurationOfVideo(_ view: VideoEditorCropProgressView) -> CGFloat
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditorTextToolViewDelegate: class {
+protocol EditorTextToolViewDelegate: AnyObject {
     
     func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool)
     func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int)
