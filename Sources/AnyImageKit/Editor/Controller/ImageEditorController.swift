@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-public protocol ImageEditorControllerDelegate: class {
+public protocol ImageEditorControllerDelegate: AnyObject {
     
     func imageEditorDidCancel(_ editor: ImageEditorController)
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult)

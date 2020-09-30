@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PhotoEditorControllerDelegate: class {
+protocol PhotoEditorControllerDelegate: AnyObject {
     
     func photoEditorDidCancel(_ editor: PhotoEditorController)
     func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)

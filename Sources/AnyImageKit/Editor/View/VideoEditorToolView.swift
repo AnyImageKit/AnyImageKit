@@ -8,7 +8,8 @@
 
 import UIKit
 
-protocol VideoEditorToolViewDelegate: class {
+protocol VideoEditorToolViewDelegate: AnyObject {
+    
     func videoEditorTool(_ tool: VideoEditorToolView, optionDidChange option: EditorVideoToolOption?)
 }
 

@@ -12,7 +12,7 @@ import Photos
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
 
-protocol AssetPickerViewControllerDelegate: class {
+protocol AssetPickerViewControllerDelegate: AnyObject {
     
     func assetPickerDidCancel(_ picker: AssetPickerViewController)
     func assetPickerDidFinishPicking(_ picker: AssetPickerViewController)
@@ -31,6 +31,8 @@ final class AssetPickerViewController: AnyImageViewController {
     
     @available(iOS 14.0, *)
     private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
+    @available(iOS 14.0, *)
+    private lazy var lastPhotoLibraryUpdateTime: TimeInterval = 0
     
     private lazy var titleView: PickerArrowButton = {
         let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
@@ -112,12 +114,16 @@ final class AssetPickerViewController: AnyImageViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PHPhotoLibrary.shared().register(self)
+        if #available(iOS 14.0, *) {
+            PHPhotoLibrary.shared().register(self)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        if #available(iOS 14.0, *) {
+            PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -389,7 +395,14 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        reloadAlbums()
+        if #available(iOS 14.0, *) {
+            let minimumRefreshInterval: TimeInterval = 0.5
+            let now = Date().timeIntervalSince1970
+            if now - lastPhotoLibraryUpdateTime >= minimumRefreshInterval {
+                reloadAlbums()
+            }
+            lastPhotoLibraryUpdateTime = now
+        }
     }
 }
 
@@ -577,7 +590,7 @@ extension AssetPickerViewController {
     }
     
     @available(iOS 14.0, *)
-    func initialSnapshot() -> NSDiffableDataSourceSectionSnapshot<Asset> {
+    private func initialSnapshot() -> NSDiffableDataSourceSectionSnapshot<Asset> {
         var snapshot = NSDiffableDataSourceSectionSnapshot<Asset>()
         snapshot.append(album?.assets ?? [])
         return snapshot

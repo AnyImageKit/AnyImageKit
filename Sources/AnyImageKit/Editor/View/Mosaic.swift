@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol MosaicDelegate: class {
+protocol MosaicDelegate: AnyObject {
     
     func mosaicDidBeginPen()
     func mosaicDidEndPen()
 }
 
-protocol MosaicDataSource: class {
+protocol MosaicDataSource: AnyObject {
     
     func mosaicGetScale(_ mosaic: Mosaic) -> CGFloat
 }

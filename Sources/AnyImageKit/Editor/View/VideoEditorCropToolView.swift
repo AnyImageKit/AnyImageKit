@@ -8,7 +8,8 @@
 
 import UIKit
 
-protocol VideoEditorCropToolViewDelegate: class {
+protocol VideoEditorCropToolViewDelegate: AnyObject {
+    
     func cropTool(_ view: VideoEditorCropToolView, playButtonTapped button: UIButton)
     func cropTool(_ view: VideoEditorCropToolView, didUpdate progress: CGFloat)
     func cropToolDurationOfVideo(_ view: VideoEditorCropToolView) -> CGFloat

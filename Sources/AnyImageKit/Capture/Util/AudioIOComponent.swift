@@ -8,7 +8,7 @@
 
 import AVFoundation
 
-protocol AudioIOComponentDelegate: class {
+protocol AudioIOComponentDelegate: AnyObject {
     
     func audioIO(_ component: AudioIOComponent, didUpdate property: AudioIOComponent.ObservableProperty)
     func audioIO(_ component: AudioIOComponent, didOutput sampleBuffer: CMSampleBuffer)

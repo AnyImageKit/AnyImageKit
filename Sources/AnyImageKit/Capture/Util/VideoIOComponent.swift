@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import CoreImage
 
-protocol VideoIOComponentDelegate: class {
+protocol VideoIOComponentDelegate: AnyObject {
     
     func videoIODidChangeSubjectArea(_ component: VideoIOComponent)
     func videoIODidCapturePhoto(_ component: VideoIOComponent)

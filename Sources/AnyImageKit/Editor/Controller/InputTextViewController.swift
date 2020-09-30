@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol InputTextViewControllerDelegate: class {
+protocol InputTextViewControllerDelegate: AnyObject {
     
     func inputTextDidCancel(_ controller: InputTextViewController)
     func inputText(_ controller: InputTextViewController, didFinishInput data: TextData)

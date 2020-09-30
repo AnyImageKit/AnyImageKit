@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PreviewCellDelegate: class {
+protocol PreviewCellDelegate: AnyObject {
     
     /// 开始拖动
     func previewCellDidBeginPan(_ cell: PreviewCell)

@@ -55,12 +55,20 @@ extension AssetPickerViewController {
             let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.addAsset(asset, atLast: false)
             addSuccess = manager.addSelectedAsset(asset)
-            collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+            if #available(iOS 14.0, *) {
+                // iOS 14 将会监听相册，自动刷新
+            } else {
+                collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+            }
         case .desc:
             let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.insertAsset(asset, at: 1, sort: manager.options.orderByDate)
             addSuccess = manager.addSelectedAsset(asset)
-            collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
+            if #available(iOS 14.0, *) {
+                // iOS 14 将会监听相册，自动刷新
+            } else {
+                collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
+            }
         }
         updateVisibleCellState()
         toolBar.setEnable(true)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditorMosaicToolViewDelegate: class {
+protocol EditorMosaicToolViewDelegate: AnyObject {
     
     func mosaicToolView(_ mosaicToolView: EditorMosaicToolView, mosaicDidChange idx: Int)
     

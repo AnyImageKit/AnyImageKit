@@ -9,7 +9,7 @@
 import UIKit
 import CoreMedia
 
-protocol CapturePreviewViewDelegate: class {
+protocol CapturePreviewViewDelegate: AnyObject {
     
     func previewView(_ previewView: CapturePreviewView, didFocusAt point: CGPoint)
     func previewView(_ previewView: CapturePreviewView, didUpdateExposure level: CGFloat)

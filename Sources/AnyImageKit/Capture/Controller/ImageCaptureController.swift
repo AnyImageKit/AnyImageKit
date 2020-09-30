@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-public protocol ImageCaptureControllerDelegate: class {
+public protocol ImageCaptureControllerDelegate: AnyObject {
     
     func imageCaptureDidCancel(_ capture: ImageCaptureController)
     func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: CaptureResult)

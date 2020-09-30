@@ -10,7 +10,7 @@ import UIKit
 
 private let rowHeight: CGFloat = 55
 
-protocol AlbumPickerViewControllerDelegate: class {
+protocol AlbumPickerViewControllerDelegate: AnyObject {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album)
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController)

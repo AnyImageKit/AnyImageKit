@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditorCropToolViewDelegate: class {
+protocol EditorCropToolViewDelegate: AnyObject {
     
     func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption)
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView)

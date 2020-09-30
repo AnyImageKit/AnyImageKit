@@ -9,7 +9,8 @@
 import UIKit
 import AVFoundation
 
-protocol VideoPreviewDelegate: class {
+protocol VideoPreviewDelegate: AnyObject {
+    
     func previewPlayerDidPlayToEndTime(_ view: VideoPreview)
 }
 
