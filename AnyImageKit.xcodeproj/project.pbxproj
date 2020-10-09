@@ -242,6 +242,7 @@
 
 /* Begin PBXFileReference section */
 		713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCropOptionCell.swift; sourceTree = "<group>"; };
+		715F9B3E2523009A00FBC305 /* README_CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README_CN.md; path = Documentation/README_CN.md; sourceTree = "<group>"; };
 		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
 		71723646249C4CD5003D23DB /* PadCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadCaptureViewController.swift; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
@@ -274,7 +275,6 @@
 		A036C3922330B5D000D32ED8 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIImage.swift"; sourceTree = "<group>"; };
 		A03806B323BF2DF2002873A9 /* AssetPickerViewController+Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssetPickerViewController+Capture.swift"; sourceTree = "<group>"; };
-		A03E9CAA236042F0003C6335 /* README_CN.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A04B044223B1A4FE00DA4D47 /* Capture+BundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+BundleHelper.swift"; sourceTree = "<group>"; };
 		A04B044823B1A54F00DA4D47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Capture.strings; sourceTree = "<group>"; };
@@ -700,7 +700,7 @@
 			children = (
 				A080040F232F4EC8006B4711 /* LICENSE */,
 				A080040E232F4EC8006B4711 /* README.md */,
-				A03E9CAA236042F0003C6335 /* README_CN.md */,
+				715F9B3E2523009A00FBC305 /* README_CN.md */,
 				A029D04E233084B600BC6720 /* Cartfile */,
 				A0514F02235D455600D4AA0F /* AnyImageKit.podspec */,
 				A099CC62232F3BF70023CC3D /* Sources */,

@@ -27,11 +27,13 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>AnyImagePicker requires access to your phone’s camera.</string>
+	<string>AnyImageKit requires access to your phone’s camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>AnyImageKit requires access to your phone’s microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Use Photos</string>
+	<string>AnyImageKit requires access to your phone’s photo library.</string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
