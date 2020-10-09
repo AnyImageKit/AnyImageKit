@@ -25,6 +25,7 @@ final class EditorCropOptionCell: UICollectionViewCell {
         view.font = .systemFont(ofSize: 8)
         view.textColor = .white
         view.textAlignment = .center
+        view.minimumScaleFactor = 0.5
         view.adjustsFontSizeToFitWidth = true
         return view
     }()
