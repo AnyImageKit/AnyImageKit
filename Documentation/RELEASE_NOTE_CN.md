@@ -1,6 +1,6 @@
 # 更新日志
 
-- [0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0.9.0)
+- [0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090)
 
 
 
