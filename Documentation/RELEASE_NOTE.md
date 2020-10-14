@@ -1,6 +1,6 @@
 # Release Notes
 
-- [0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0.9.0)
+- [0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#090)
 
 
 
@@ -12,7 +12,7 @@
 - AnyImageKit use Swift Package Manager as dependency instead of Cocoapods.
 - AnyImageKit support Swift Package Manager.
 
-#### New Features
+### New Features
 
 - Picker
   - Adapt iOS 14 “Limited Photos Library” mode.
