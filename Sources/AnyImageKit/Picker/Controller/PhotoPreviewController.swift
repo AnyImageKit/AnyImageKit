@@ -156,6 +156,7 @@ final class PhotoPreviewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        page = .photoPreview
         addNotifications()
         setupViews()
     }
@@ -169,10 +170,6 @@ final class PhotoPreviewController: AnyImageViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setBar(hidden: false, animated: true)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
     
     override func viewDidLayoutSubviews() {

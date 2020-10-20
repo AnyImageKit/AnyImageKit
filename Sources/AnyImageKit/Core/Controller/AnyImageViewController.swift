@@ -10,6 +10,19 @@ import UIKit
 
 class AnyImageViewController: UIViewController {
     
+    var page: AnyImagePage = .undefined
+    
+    weak var trackObserver: DataTrackObserver?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        trackObserver?.track(page: page, state: .enter)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        trackObserver?.track(page: page, state: .leave)
+    }
 }
 
 // MARK: - Permission

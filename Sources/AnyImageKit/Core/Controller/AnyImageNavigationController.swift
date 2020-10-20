@@ -13,6 +13,8 @@ open class AnyImageNavigationController: UINavigationController {
     
     private var hasOverrideGeneratingDeviceOrientation = false
     
+    open weak var trackDelegate: ImageKitDataTrackDelegate?
+    
     open var tag: Int = 0
     
     open override var shouldAutorotate: Bool {
@@ -29,6 +31,18 @@ open class AnyImageNavigationController: UINavigationController {
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
+    }
+}
+
+// MARK: - DataTrackObserver
+extension AnyImageNavigationController: DataTrackObserver {
+    
+    func track(page: AnyImagePage, state: AnyImagePageState) {
+        trackDelegate?.dataTrack(page: page, state: state)
+    }
+    
+    func track(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
+        trackDelegate?.dataTrack(event: event, userInfo: userInfo)
     }
 }
 
