@@ -35,6 +35,7 @@ open class ImageEditorController: AnyImageNavigationController {
         let checkedOptions = check(resource: resource, options: options)
         self.editorDelegate = delegate
         let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
+        rootViewController.trackObserver = self
         self.viewControllers = [rootViewController]
     }
     
@@ -45,6 +46,7 @@ open class ImageEditorController: AnyImageNavigationController {
         let checkedOptions = check(resource: resource, options: options)
         self.editorDelegate = delegate
         let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
+        rootViewController.trackObserver = self
         self.viewControllers = [rootViewController]
     }
     

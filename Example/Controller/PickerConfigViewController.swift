@@ -100,6 +100,7 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
     }
 }
 
+// MARK: - ImageKitDataTrackDelegate
 extension PickerConfigViewController: ImageKitDataTrackDelegate {
     
     func dataTrack(page: AnyImagePage, state: AnyImagePageState) {

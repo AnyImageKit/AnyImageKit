@@ -47,6 +47,7 @@ final class CaptureConfigViewController: UITableViewController {
     @IBAction func openCaptureTapped() {
         options.enableDebugLog = true
         let controller = ImageCaptureController(options: options, delegate: self)
+        controller.trackDelegate = self
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
@@ -80,6 +81,23 @@ final class CaptureConfigViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 54
+    }
+}
+
+// MARK: - ImageKitDataTrackDelegate
+extension CaptureConfigViewController: ImageKitDataTrackDelegate {
+    
+    func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
+        switch state {
+        case .enter:
+            print("[Data Track] ENTER Page: \(page.rawValue)")
+        case .leave:
+            print("[Data Track] LEAVE Page: \(page.rawValue)")
+        }
+    }
+    
+    func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
+        print("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
     }
 }
 
