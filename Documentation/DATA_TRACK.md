@@ -1,6 +1,16 @@
 ## Data Track
 
-### Support Pages:
+### Usage
+
+Set `trackDelegate` in `AnyImageNavigationController`, which will also be found in `ImagePickerController`, `ImageEditorController`, `ImageCaptureController`
+
+```swift
+// AnyImageNavigationController.swift
+
+open weak var trackDelegate: ImageKitDataTrackDelegate?
+```
+
+### Supported Pages
 
 | Module | Controller | AnyImagePage |
 | - | - | - |
@@ -13,7 +23,7 @@
 | Capture | CaptureViewController | .capture |
 | Capture | PadCaptureViewController | .capture |
 
-### Support Events
+### Supported Events
 
 | Module | AnyImageEvent | userInfo |
 | - | - | - |
