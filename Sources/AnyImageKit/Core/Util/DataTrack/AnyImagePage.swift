@@ -26,7 +26,7 @@ extension AnyImagePage: ExpressibleByStringLiteral {
 
 extension AnyImagePage {
     
-    public static let undefined: AnyImagePage = "ANYIMAGEKIT_PAGE_CORE_UNDEFINED"
+    static let undefined: AnyImagePage = "ANYIMAGEKIT_PAGE_CORE_UNDEFINED"
 }
 
 public enum AnyImagePageState: Equatable {

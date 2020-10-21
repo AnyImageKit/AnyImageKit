@@ -590,7 +590,7 @@
 			path = Editor;
 			sourceTree = "<group>";
 		};
-		A04F40F62539A8EF00EF9EC6 /* Track */ = {
+		A04F40F62539A8EF00EF9EC6 /* DataTrack */ = {
 			isa = PBXGroup;
 			children = (
 				A04F40F72539A94B00EF9EC6 /* ImageKitDataTrackDelegate.swift */,
@@ -598,7 +598,7 @@
 				A005C308253D306C0021E323 /* AnyImagePage.swift */,
 				A005C30C253D33180021E323 /* AnyImageEvent.swift */,
 			);
-			path = Track;
+			path = DataTrack;
 			sourceTree = "<group>";
 		};
 		A0769993239636E10006AC9B /* Capture */ = {
@@ -815,7 +815,7 @@
 		A0B22E9A237AA1B3001F6066 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				A04F40F62539A8EF00EF9EC6 /* Track */,
+				A04F40F62539A8EF00EF9EC6 /* DataTrack */,
 				A0839B7223C44B0800FF8FDE /* Permission */,
 				A5347D2123A9FC2900C93874 /* Export */,
 				A5347D2223A9FC4900C93874 /* Common */,
