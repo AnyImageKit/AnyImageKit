@@ -37,3 +37,6 @@
 "PreferredPositions" = "Preferred Positions";
 "FlashMode" = "Flash Mode";
 "VideoMaximumDuration" = "Video Maximum Duration";
+
+// Other
+"Preselect Assets Tips" = "Preselect Assets\nIf you want to preselect assets when picker presented, you should pass identifier of the selected assets into picker before you present picker.";

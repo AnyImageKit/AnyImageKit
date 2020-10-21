@@ -13,7 +13,7 @@ final class AvatarPickerController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Avatar picker"
+        self.title = "Avatar Picker"
         setupView()
         setupNavigation()
     }

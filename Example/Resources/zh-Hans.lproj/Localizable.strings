@@ -37,3 +37,6 @@
 "PreferredPositions" = "优先使用的相机";
 "FlashMode" = "闪光灯模式";
 "VideoMaximumDuration" = "视频拍摄最长时间";
+
+// Other
+"Preselect Assets Tips" = "预选中功能\n首次选择照片后，再次进入Picker时传入选中照片的ID，可以实现预选中照片功能。";
