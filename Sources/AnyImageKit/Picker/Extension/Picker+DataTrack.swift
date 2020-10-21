@@ -18,5 +18,5 @@ extension AnyImagePage {
 extension AnyImageEvent {
     
     public static let takePhoto: AnyImageEvent = "ANYIMAGEKIT_EVENT_PICKER_TAKEPHOTO"
-    public static let shootVideo: AnyImageEvent = "ANYIMAGEKIT_EVENT_PICKER_SHOOTVIDEO"
+    public static let takeVideo: AnyImageEvent = "ANYIMAGEKIT_EVENT_PICKER_TAKEVIDEO"
 }
