@@ -15,7 +15,7 @@
 
 ### Support Events
 
-| Module | AnyImagePage | userInfo |
+| Module | AnyImageEvent | userInfo |
 | - | - | - |
 | Picker | .takePhoto |  |
 | Picker | .takeVideo |  |
