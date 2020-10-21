@@ -10,6 +10,10 @@ import UIKit
 import Photos
 
 public class Asset: Equatable, Hashable {
+    /// Identifier PHAsset.localIdentifier
+    public var identifier: String {
+        return phAsset.localIdentifier
+    }
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
