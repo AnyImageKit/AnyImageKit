@@ -147,7 +147,7 @@ final class MenuDropDownPresentationController: UIPresentationController {
             #if targetEnvironment(macCatalyst)
             return 28
             #else
-            return StatusBarHelper.height
+            return ScreenHelper.statusBarFrame.height
             #endif
         } else {
             if traitCollection.horizontalSizeClass == .compact {

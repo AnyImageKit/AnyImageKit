@@ -370,8 +370,8 @@ extension PhotoEditorController {
     /// 准备开始输入文本
     private func willBeginInput() {
         backButton.isHidden = true
-        toolView.topCoverLayer.isHidden = true
-        toolView.bottomCoverLayer.isHidden = true
+        toolView.topCoverView.isHidden = true
+        toolView.bottomCoverView.isHidden = true
         toolView.doneButton.isHidden = true
         toolView.editOptionsView.isHidden = true
         toolView.editOptionsView.unselectButtons()
@@ -381,8 +381,8 @@ extension PhotoEditorController {
     /// 已经结束输入文本
     private func didEndInputing() {
         backButton.isHidden = false
-        toolView.topCoverLayer.isHidden = false
-        toolView.bottomCoverLayer.isHidden = false
+        toolView.topCoverView.isHidden = false
+        toolView.bottomCoverView.isHidden = false
         toolView.doneButton.isHidden = false
         toolView.editOptionsView.isHidden = false
         contentView.scrollView.isScrollEnabled = true
