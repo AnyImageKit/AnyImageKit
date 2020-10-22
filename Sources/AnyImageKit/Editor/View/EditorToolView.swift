@@ -33,33 +33,31 @@ final class EditorToolView: UIView {
         editOptionsView.currentOption
     }
     
-    private(set) lazy var topCoverLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        let statusBarHeight = StatusBarHelper.height
-        layer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight + 120)
-        layer.colors = [
+    private(set) lazy var topCoverView: GradientView = {
+        let view = GradientView(frame: .zero)
+        view.layer.colors = [
             UIColor.black.withAlphaComponent(0.12).cgColor,
             UIColor.black.withAlphaComponent(0.12).cgColor,
             UIColor.black.withAlphaComponent(0.06).cgColor,
-            UIColor.black.withAlphaComponent(0).cgColor]
-        layer.locations = [0, 0.7, 0.85, 1]
-        layer.startPoint = CGPoint(x: 0.5, y: 0)
-        layer.endPoint = CGPoint(x: 0.5, y: 1)
-        return layer
+            UIColor.black.withAlphaComponent(0).cgColor,
+        ]
+        view.layer.locations = [0, 0.7, 0.85, 1]
+        view.layer.startPoint = CGPoint(x: 0.5, y: 0)
+        view.layer.endPoint = CGPoint(x: 0.5, y: 1)
+        return view
     }()
-    private(set) lazy var bottomCoverLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        let height: CGFloat = 100 + (UIDevice.isMordenPhone ? 34 : 0)
-        layer.frame = CGRect(x: 0, y: bounds.height-height, width: UIScreen.main.bounds.width, height: height)
-        layer.colors = [
+    private(set) lazy var bottomCoverView: GradientView = {
+        let view = GradientView(frame: .zero)
+        view.layer.colors = [
             UIColor.black.withAlphaComponent(0.12).cgColor,
             UIColor.black.withAlphaComponent(0.12).cgColor,
             UIColor.black.withAlphaComponent(0.06).cgColor,
-            UIColor.black.withAlphaComponent(0).cgColor]
-        layer.locations = [0, 0.7, 0.85, 1]
-        layer.startPoint = CGPoint(x: 0.5, y: 1)
-        layer.endPoint = CGPoint(x: 0.5, y: 0)
-        return layer
+            UIColor.black.withAlphaComponent(0).cgColor,
+        ]
+        view.layer.locations = [0, 0.7, 0.85, 1]
+        view.layer.startPoint = CGPoint(x: 0.5, y: 1)
+        view.layer.endPoint = CGPoint(x: 0.5, y: 0)
+        return view
     }()
     
     private(set) lazy var editOptionsView: EditorEditOptionsView = {
@@ -110,17 +108,33 @@ final class EditorToolView: UIView {
     }
     
     private func setupView() {
-        layer.addSublayer(topCoverLayer)
-        layer.addSublayer(bottomCoverLayer)
+        addSubview(topCoverView)
+        addSubview(bottomCoverView)
         addSubview(editOptionsView)
         addSubview(penToolView)
         addSubview(cropToolView)
         addSubview(mosaicToolView)
         addSubview(doneButton)
         
+        topCoverView.snp.makeConstraints { maker in
+            maker.top.left.right.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(safeAreaLayoutGuide.snp.top).offset(120)
+            } else {
+                maker.height.equalTo(120)
+            }
+        }
+        bottomCoverView.snp.makeConstraints { maker in
+            maker.bottom.left.right.equalToSuperview()
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-100)
+            } else {
+                maker.height.equalTo(100)
+            }
+        }
         editOptionsView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview().offset(20)
-            if #available(iOS 11, *) {
+            if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(safeAreaLayoutGuide).offset(-14)
             } else {
                 maker.bottom.equalToSuperview().offset(-14)
@@ -183,7 +197,7 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         switch option {
         case .crop:
             editOptionsView.isHidden = true
-            topCoverLayer.isHidden = true
+            topCoverView.isHidden = true
             doneButton.isHidden = true
             if let option = options.cropOptions.first, cropToolView.currentOption == nil {
                 cropToolView.currentOption = option
@@ -216,7 +230,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView) {
         delegate?.toolViewCropCancelButtonTapped(self)
         editOptionsView.isHidden = false
-        topCoverLayer.isHidden = false
+        topCoverView.isHidden = false
         doneButton.isHidden = false
         cropToolView.isHidden = true
         editOptionsView.unselectButtons()
@@ -225,7 +239,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView) {
         delegate?.toolViewCropDoneButtonTapped(self)
         editOptionsView.isHidden = false
-        topCoverLayer.isHidden = false
+        topCoverView.isHidden = false
         doneButton.isHidden = false
         cropToolView.isHidden = true
         editOptionsView.unselectButtons()
