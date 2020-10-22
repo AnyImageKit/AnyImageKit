@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/19.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -45,7 +45,7 @@ final class VideoEditorToolView: UIView {
     
     private func setupView() {
         addSubview(doneButton)
-        doneButton.snp.makeConstraints { (maker) in
+        doneButton.snp.makeConstraints { maker in
             maker.centerY.equalToSuperview()
             maker.right.equalToSuperview()
         }
@@ -62,11 +62,11 @@ final class VideoEditorToolView: UIView {
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         addSubview(stackView)
-        stackView.snp.makeConstraints { (maker) in
+        stackView.snp.makeConstraints { maker in
             maker.top.left.bottom.equalToSuperview()
         }
         buttons.forEach {
-            $0.snp.makeConstraints { (maker) in
+            $0.snp.makeConstraints { maker in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }

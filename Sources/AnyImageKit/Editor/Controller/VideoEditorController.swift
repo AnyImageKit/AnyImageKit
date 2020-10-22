@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/18.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -84,7 +84,7 @@ final class VideoEditorController: AnyImageViewController {
         view.addSubview(toolView)
         view.addSubview(cropToolView)
         
-        videoPreview.snp.makeConstraints { (maker) in
+        videoPreview.snp.makeConstraints { maker in
             if #available(iOS 11, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
             } else {
@@ -93,7 +93,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(cropToolView.snp.top).offset(-30)
         }
-        backButton.snp.makeConstraints { (maker) in
+        backButton.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             } else {
@@ -102,7 +102,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.left.equalToSuperview().offset(10)
             maker.width.height.equalTo(50)
         }
-        toolView.snp.makeConstraints { (maker) in
+        toolView.snp.makeConstraints { maker in
             if #available(iOS 11, *) {
                 maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
@@ -111,7 +111,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.left.right.equalToSuperview().inset(15)
             maker.height.equalTo(45)
         }
-        cropToolView.snp.makeConstraints { (maker) in
+        cropToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview().inset(15)
             maker.bottom.equalTo(toolView.snp.top).offset(-30)
             maker.height.equalTo(50)

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/2.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -62,7 +62,7 @@ final class EditorTextToolView: UIView {
         addSubview(textButton)
         setupColorView()
         
-        textButton.snp.makeConstraints { (maker) in
+        textButton.snp.makeConstraints { maker in
             maker.left.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(25)
@@ -78,14 +78,14 @@ final class EditorTextToolView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
-        stackView.snp.makeConstraints { (maker) in
+        stackView.snp.makeConstraints { maker in
             maker.left.equalTo(textButton.snp.right).offset(20)
             maker.centerY.equalToSuperview()
             maker.height.equalTo(itemWidth)
         }
         
         for colorView in colorButtons {
-            colorView.snp.makeConstraints { (maker) in
+            colorView.snp.makeConstraints { maker in
                 maker.width.height.equalTo(itemWidth)
             }
         }

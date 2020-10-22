@@ -157,7 +157,7 @@ extension ImagePickerController {
             let assets = self.manager.selectedAssets
             let isReady = assets.filter{ !$0.isReady }.isEmpty
             if !isReady && !assets.isEmpty { return }
-            self.saveEditPhotos(assets) { (newAssets) in
+            self.saveEditPhotos(assets) { newAssets in
                 self.resizeImagesIfNeeded(newAssets)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -176,7 +176,7 @@ extension ImagePickerController {
         for (idx, asset) in assets.enumerated() {
             guard let editedImage = asset._images[.edited] else { continue }
             group.enter()
-            manager.savePhoto(image: editedImage) { (result) in
+            manager.savePhoto(image: editedImage) { result in
                 switch result {
                 case .success(let newAsset):
                     assets[idx] = Asset(idx: asset.idx, asset: newAsset, selectOptions: selectOptions)

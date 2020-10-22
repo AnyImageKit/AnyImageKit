@@ -36,7 +36,7 @@ extension PhotoEditorContentView {
                 self.layoutStartCroped()
             }
             self.updateCanvasFrame()
-        }) { (_) in
+        }) { _ in
             self.setCropHidden(false, animated: true)
             if let cropOption = option {
                 self.setCrop(cropOption)

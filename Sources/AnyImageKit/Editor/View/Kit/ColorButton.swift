@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/10.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -42,7 +42,7 @@ final class ColorButton: UIButton {
     
     private func setupView() {
         addSubview(colorView)
-        colorView.snp.makeConstraints { (maker) in
+        colorView.snp.makeConstraints { maker in
             maker.center.equalToSuperview()
             maker.width.height.equalTo(size)
         }

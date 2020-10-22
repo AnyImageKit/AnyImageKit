@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/21.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -29,7 +29,7 @@ final class CameraCell: UICollectionViewCell {
     
     private func setupView() {
         addSubview(imageView)
-        imageView.snp.makeConstraints { (maker) in
+        imageView.snp.makeConstraints { maker in
             maker.center.equalToSuperview()
             maker.width.height.equalTo(self.snp.width).multipliedBy(0.5)
         }

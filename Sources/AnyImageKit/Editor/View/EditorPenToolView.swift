@@ -69,7 +69,7 @@ final class EditorPenToolView: UIView {
         setupColorView()
         addSubview(undoButton)
         
-        undoButton.snp.makeConstraints { (maker) in
+        undoButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(itemWidth)
@@ -85,14 +85,14 @@ final class EditorPenToolView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
-        stackView.snp.makeConstraints { (maker) in
+        stackView.snp.makeConstraints { maker in
             maker.left.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.height.equalTo(itemWidth)
         }
         
         for colorView in colorButtons {
-            colorView.snp.makeConstraints { (maker) in
+            colorView.snp.makeConstraints { maker in
                 maker.width.height.equalTo(itemWidth)
             }
         }

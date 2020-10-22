@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/7/22.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -70,7 +70,7 @@ final class CapturePreviewView: UIView {
         previewMaskView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        focusView.snp.makeConstraints { (maker) in
+        focusView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
     }

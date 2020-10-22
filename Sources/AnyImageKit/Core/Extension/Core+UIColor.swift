@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/11/12.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -27,7 +27,7 @@ extension UIColor {
     /// - Parameter darkColor: dark 模式下的颜色，低于 iOS 13.0 不生效
     static func create(light lightColor: UIColor, dark darkColor: UIColor?) -> UIColor {
         if #available(iOS 13.0, *) {
-            return UIColor { (traitCollection) -> UIColor in
+            return UIColor { traitCollection -> UIColor in
                 if let darkColor = darkColor, traitCollection.userInterfaceStyle == .dark {
                     return darkColor
                 } else {

@@ -132,7 +132,7 @@ final class EditorToolView: UIView {
                 maker.height.equalTo(100)
             }
         }
-        editOptionsView.snp.makeConstraints { (maker) in
+        editOptionsView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(20)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(safeAreaLayoutGuide).offset(-14)
@@ -141,20 +141,20 @@ final class EditorToolView: UIView {
             }
             maker.height.equalTo(50)
         }
-        penToolView.snp.makeConstraints { (maker) in
+        penToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview().inset(20)
             maker.bottom.equalTo(editOptionsView.snp.top).offset(-20)
             maker.height.equalTo(20)
         }
-        mosaicToolView.snp.makeConstraints { (maker) in
+        mosaicToolView.snp.makeConstraints { maker in
             maker.edges.equalTo(penToolView)
         }
-        cropToolView.snp.makeConstraints { (maker) in
+        cropToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(editOptionsView).offset(15)
             maker.height.equalTo(40+60)
         }
-        doneButton.snp.makeConstraints { (maker) in
+        doneButton.snp.makeConstraints { maker in
             maker.centerY.equalTo(editOptionsView)
             maker.right.equalToSuperview().offset(-20)
         }
