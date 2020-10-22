@@ -44,13 +44,13 @@ final class EditorEditOptionsView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
-        stackView.snp.makeConstraints { (maker) in
+        stackView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.height.equalTo(25)
         }
         buttons.forEach {
-            $0.snp.makeConstraints { (maker) in
+            $0.snp.makeConstraints { maker in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }

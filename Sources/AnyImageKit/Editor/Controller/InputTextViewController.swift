@@ -137,7 +137,7 @@ final class InputTextViewController: AnyImageViewController {
         textCoverView.addSubview(textView)
         view.addSubview(calculateLabel)
         
-        coverImageView.snp.makeConstraints { (maker) in
+        coverImageView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.centerY.equalToSuperview()
             if let image = coverImage {
@@ -147,10 +147,10 @@ final class InputTextViewController: AnyImageViewController {
                 maker.height.equalTo(0)
             }
         }
-        coverView.snp.makeConstraints { (maker) in
+        coverView.snp.makeConstraints { maker in
             maker.edges.equalTo(coverImageView)
         }
-        cancelButton.snp.makeConstraints { (maker) in
+        cancelButton.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             } else {
@@ -158,11 +158,11 @@ final class InputTextViewController: AnyImageViewController {
             }
             maker.left.equalToSuperview().offset(15)
         }
-        doneButton.snp.makeConstraints { (maker) in
+        doneButton.snp.makeConstraints { maker in
             maker.centerY.equalTo(cancelButton)
             maker.right.equalToSuperview().offset(-15)
         }
-        toolView.snp.makeConstraints { (maker) in
+        toolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview().inset(20)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
@@ -171,17 +171,17 @@ final class InputTextViewController: AnyImageViewController {
             }
             maker.height.equalTo(30)
         }
-        textCoverView.snp.makeConstraints { (maker) in
+        textCoverView.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(50)
             maker.left.equalToSuperview().offset(10)
             maker.right.equalToSuperview().offset(-10)
             maker.height.equalTo(lineHeight+10*2)
         }
-        textView.snp.makeConstraints { (maker) in
+        textView.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.left.right.equalToSuperview().inset(10)
         }
-        calculateLabel.snp.makeConstraints { (maker) in
+        calculateLabel.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(250)
             maker.left.right.equalToSuperview().inset(25)
             maker.height.greaterThanOrEqualTo(55)
@@ -274,7 +274,7 @@ extension InputTextViewController {
             updateCalculateLabel(string: array.last!)
             let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
             let offset = textCoverView.bounds.width - lastLineWidth + 10
-            textCoverView.snp.updateConstraints { (maker) in
+            textCoverView.snp.updateConstraints { maker in
                 maker.right.equalToSuperview().offset(-offset)
             }
         }
@@ -294,7 +294,7 @@ extension InputTextViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         let line = CGFloat(textView.getSeparatedLines().count)
         let height: CGFloat = max(lineHeight * line + 10 * 2, textView.contentSize.height)
-        textCoverView.snp.updateConstraints { (maker) in
+        textCoverView.snp.updateConstraints { maker in
             maker.height.equalTo(height)
         }
         setupMaskLayer(height)
@@ -345,7 +345,7 @@ extension InputTextViewController {
     @objc private func keyboardFrameChanged(_ notification: Notification) {
         guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let offset = UIScreen.main.bounds.height - frame.origin.y
-        toolView.snp.remakeConstraints { (maker) in
+        toolView.snp.remakeConstraints { maker in
             maker.left.right.equalToSuperview().inset(20)
             if offset == 0 {
                 if #available(iOS 11.0, *) {

@@ -99,8 +99,6 @@ func imagePicker(_ picker: ImagePickerController, didFinishPicking result: Picke
 
 `largePhotoMaxWidth` 是**选中“原图”时**导出的图片最大尺寸，默认为 1200。
 
-### 
-
 #### 举个例子
 
 对于**普通图片**，使其宽高中的**长边**小于等于指定值。
@@ -191,6 +189,16 @@ enum Sort: Equatable {
 当设置为 `ASC` 时，按时间**升序**排列，自动滚动到**底部**；
 
 当设置为 `desc` 时，按时间**倒序**排列，自动滚动到**顶部**。
+
+
+
+### PreselectAssets ([String])
+
+`preselectAssets` 是预选择的资源列表，默认为 `[]`。
+
+接收 `Asset.identifier` 字符串，设置之后打开 `Picker` 会选中该资源。
+
+具体使用方式可以在 `Example - PreselectAsset` 控制器中查看。
 
 
 

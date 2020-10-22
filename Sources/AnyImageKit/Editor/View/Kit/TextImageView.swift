@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/10.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -59,14 +59,14 @@ final class TextImageView: UIView {
         addSubview(rectView)
         addSubview(deleteButton)
         addSubview(imageView)
-        rectView.snp.makeConstraints { (maker) in
+        rectView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview().inset(data.inset*0.6)
         }
-        deleteButton.snp.makeConstraints { (maker) in
+        deleteButton.snp.makeConstraints { maker in
             maker.top.right.equalToSuperview()
             maker.width.height.equalTo(data.inset*1.25)
         }
-        imageView.snp.makeConstraints { (maker) in
+        imageView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview().inset(data.inset)
         }
     }

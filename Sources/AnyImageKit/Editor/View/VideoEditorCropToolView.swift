@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/19.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -54,16 +54,16 @@ final class VideoEditorCropToolView: UIView {
         addSubview(progressView)
         addSubview(splitLine)
         
-        playButton.snp.makeConstraints { (maker) in
+        playButton.snp.makeConstraints { maker in
             maker.top.left.bottom.equalToSuperview()
             maker.width.equalTo(45)
         }
-        splitLine.snp.makeConstraints { (maker) in
+        splitLine.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.left.equalTo(playButton.snp.right)
             maker.width.equalTo(2)
         }
-        progressView.snp.makeConstraints { (maker) in
+        progressView.snp.makeConstraints { maker in
             maker.top.right.bottom.equalToSuperview()
             maker.left.equalTo(splitLine.snp.right)
         }

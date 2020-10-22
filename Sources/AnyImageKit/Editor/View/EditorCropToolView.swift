@@ -104,30 +104,30 @@ final class EditorCropToolView: UIView {
         addSubview(resetbutton)
         collectionView.isHidden = options.cropOptions.count <= 1
         
-        collectionView.snp.makeConstraints { (maker) in
+        collectionView.snp.makeConstraints { maker in
             maker.bottom.equalTo(line.snp.top).offset(-10)
             maker.left.right.equalToSuperview()
             maker.height.equalTo(40)
         }
-        content.snp.makeConstraints { (maker) in
+        content.snp.makeConstraints { maker in
             maker.left.right.bottom.equalToSuperview()
             maker.height.equalTo(60)
         }
-        line.snp.makeConstraints { (maker) in
+        line.snp.makeConstraints { maker in
             maker.top.left.right.equalTo(content)
             maker.height.equalTo(0.5)
         }
-        cancelButton.snp.makeConstraints { (maker) in
+        cancelButton.snp.makeConstraints { maker in
             maker.left.equalTo(content).offset(20)
             maker.centerY.equalTo(content)
             maker.width.height.equalTo(40)
         }
-        doneButton.snp.makeConstraints { (maker) in
+        doneButton.snp.makeConstraints { maker in
             maker.right.equalTo(content).offset(-20)
             maker.centerY.equalTo(content)
             maker.width.height.equalTo(40)
         }
-        resetbutton.snp.makeConstraints { (maker) in
+        resetbutton.snp.makeConstraints { maker in
             maker.top.bottom.equalTo(content)
             maker.centerX.equalTo(content)
             maker.width.equalTo(60)

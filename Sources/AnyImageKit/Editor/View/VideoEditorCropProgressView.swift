@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/19.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -120,38 +120,38 @@ final class VideoEditorCropProgressView: UIView {
         progressContentView.addSubview(timeline)
         progressContentView.addSubview(timelineLabel)
         
-        contentView.snp.makeConstraints { (maker) in
+        contentView.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.left.equalToSuperview()
             maker.right.equalToSuperview()
         }
-        leftButton.snp.makeConstraints { (maker) in
+        leftButton.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.left.equalToSuperview()
             maker.width.equalTo(20)
         }
-        rightButton.snp.makeConstraints { (maker) in
+        rightButton.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.right.equalToSuperview()
             maker.width.equalTo(20)
         }
-        progressContentView.snp.makeConstraints { (maker) in
+        progressContentView.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.left.equalTo(leftButton.snp.right)
             maker.right.equalTo(rightButton.snp.left)
         }
-        progressView.snp.makeConstraints { (maker) in
+        progressView.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview().inset(3)
             maker.width.equalTo(5)
             maker.left.equalToSuperview()
         }
-        timeline.snp.makeConstraints { (maker) in
+        timeline.snp.makeConstraints { maker in
             maker.bottom.equalTo(progressView.snp.top).offset(-8)
             maker.centerX.equalTo(progressView)
             maker.width.equalTo(1)
             maker.height.equalTo(15)
         }
-        timelineLabel.snp.makeConstraints { (maker) in
+        timelineLabel.snp.makeConstraints { maker in
             maker.bottom.equalTo(timeline.snp.top).offset(-8)
             maker.centerX.equalTo(timeline)
         }
@@ -163,12 +163,12 @@ final class VideoEditorCropProgressView: UIView {
         rightButton.isSelected = isSelected
         contentLayer.isHidden = !isSelected
         
-        contentView.snp.updateConstraints { (maker) in
+        contentView.snp.updateConstraints { maker in
             maker.left.equalToSuperview().offset(left*bounds.width)
             maker.right.equalToSuperview().offset(-((1-right)*(bounds.width)))
         }
         if updateProgress {
-            progressView.snp.updateConstraints { (maker) in
+            progressView.snp.updateConstraints { maker in
                 maker.left.equalToSuperview()
             }
         }
@@ -208,7 +208,7 @@ extension VideoEditorCropProgressView {
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
         insertSubview(stackView, at: 0)
-        stackView.snp.makeConstraints { (maker) in
+        stackView.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview().inset(5)
             maker.left.right.equalToSuperview().inset(20)
         }
@@ -223,7 +223,7 @@ extension VideoEditorCropProgressView {
         var progress = progress < 0 ? 0 : (progress > 1 ? 1 : progress)
         progress = progress < left ? left : (progress > right ? right : progress)
         let offset = (progress - left) / (right - left) * (progressContentView.frame.width - progressView.frame.width)
-        progressView.snp.updateConstraints { (maker) in
+        progressView.snp.updateConstraints { maker in
             maker.left.equalToSuperview().offset(offset)
         }
         

@@ -54,20 +54,20 @@ final class PermissionLimitedView: UIView {
         addSubview(arrowImageView)
         addSubview(limitedButton)
         
-        warningImageView.snp.makeConstraints { (maker) in
+        warningImageView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(15)
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(25)
         }
-        tipsLabel.snp.makeConstraints { (maker) in
+        tipsLabel.snp.makeConstraints { maker in
             maker.left.equalTo(warningImageView.snp.right).offset(10)
             maker.centerY.equalToSuperview()
         }
-        arrowImageView.snp.makeConstraints { (maker) in
+        arrowImageView.snp.makeConstraints { maker in
             maker.right.equalToSuperview().offset(-15)
             maker.centerY.equalToSuperview()
         }
-        limitedButton.snp.makeConstraints { (maker) in
+        limitedButton.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
     }

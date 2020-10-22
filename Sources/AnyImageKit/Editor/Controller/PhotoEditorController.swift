@@ -74,7 +74,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.addSubview(toolView)
         view.addSubview(backButton)
         
-        backButton.snp.makeConstraints { (maker) in
+        backButton.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             } else {

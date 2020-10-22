@@ -47,7 +47,7 @@ final class EditorMosaicToolView: UIView {
     
     private func setupView() {
         addSubview(undoButton)
-        undoButton.snp.makeConstraints { (maker) in
+        undoButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(22)
@@ -68,14 +68,14 @@ final class EditorMosaicToolView: UIView {
         addSubview(stackView)
         let width = 20 * CGFloat(mosaicButtons.count) + spacing * CGFloat(mosaicButtons.count-1)
         let offset = (UIScreen.main.bounds.width - width - 20*2 - 20) / 2
-        stackView.snp.makeConstraints { (maker) in
+        stackView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(offset)
             maker.centerY.equalToSuperview()
             maker.height.equalTo(20)
         }
         
         for icon in mosaicButtons {
-            icon.snp.makeConstraints { (maker) in
+            icon.snp.makeConstraints { maker in
                 maker.width.height.equalTo(stackView.snp.height)
             }
         }

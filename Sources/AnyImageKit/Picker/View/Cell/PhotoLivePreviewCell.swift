@@ -2,8 +2,8 @@
 //  PhotoLivePreviewCell.swift
 //  AnyImageKit
 //
-//  Created by Ray on 2019/10/22.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Created by 蒋惠 on 2019/10/22.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -114,7 +114,7 @@ extension PhotoLivePreviewCell {
                     self.setDownloadingProgress(progress)
                 }
             }
-            self.manager.requestPhotoLive(for: self.asset.phAsset, options: options) { (result) in
+            self.manager.requestPhotoLive(for: self.asset.phAsset, options: options) { result in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in

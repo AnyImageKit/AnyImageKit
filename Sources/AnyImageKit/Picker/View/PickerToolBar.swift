@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -82,7 +82,7 @@ final class PickerToolBar: UIView {
             backgroundView.snp.makeConstraints { maker in
                 maker.edges.equalToSuperview()
             }
-            permissionLimitedView.snp.makeConstraints { (maker) in
+            permissionLimitedView.snp.makeConstraints { maker in
                 maker.top.left.right.equalToSuperview()
                 maker.height.equalTo(limitedViewHeight)
             }
@@ -130,7 +130,7 @@ extension PickerToolBar {
     
     func showLimitedView() {
         permissionLimitedView.isHidden = false
-        contentView.snp.updateConstraints { (update) in
+        contentView.snp.updateConstraints { update in
             update.top.equalToSuperview().offset(limitedViewHeight)
         }
     }

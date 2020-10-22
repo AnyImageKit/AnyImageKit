@@ -2,7 +2,7 @@
 //  EditorCropOptionCell.swift
 //  AnyImageKit
 //
-//  Created by Ray on 2020/5/25.
+//  Created by 蒋惠 on 2020/5/25.
 //  Copyright © 2020 AnyImageProject.org. All rights reserved.
 //
 
@@ -42,7 +42,7 @@ final class EditorCropOptionCell: UICollectionViewCell {
     
     private func setupView() {
         addSubview(label)
-        label.snp.makeConstraints { (maker) in
+        label.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
     }
@@ -120,7 +120,7 @@ extension EditorCropOptionCell {
         layer.addSublayer(shapeLayer)
         self.shapeLayer = shapeLayer
         
-        label.snp.remakeConstraints { (maker) in
+        label.snp.remakeConstraints { maker in
             maker.top.bottom.equalToSuperview()
             maker.centerX.equalToSuperview()
             maker.width.equalTo(labelWidth-2)

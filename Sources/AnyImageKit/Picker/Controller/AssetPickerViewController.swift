@@ -33,6 +33,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
     @available(iOS 14.0, *)
     private lazy var lastPhotoLibraryUpdateTime: TimeInterval = 0
+    private lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
         let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
@@ -192,6 +193,8 @@ extension AssetPickerViewController {
         manager.fetchCameraRollAlbum { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
+            self.preselectAssets()
+            self.reloadData(animated: false)
             self.autoScrollToLatest = true
         }
     }
@@ -214,7 +217,6 @@ extension AssetPickerViewController {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
-        reloadData(animated: false)
         if manager.options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: false)
         } else {
@@ -290,6 +292,26 @@ extension AssetPickerViewController {
                 cell.updateState(album.assets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
             }
         }
+    }
+    
+    private func preselectAssets() {
+        let preselectAssets = manager.options.preselectAssets
+        var selectedAssets: [Asset] = []
+        if preselectAssets.isEmpty { return }
+        for asset in (album?.assets ?? []).reversed() {
+            if preselectAssets.contains(asset.identifier) {
+                selectedAssets.append(asset)
+                if selectedAssets.count == preselectAssets.count {
+                    break
+                }
+            }
+        }
+        for identifier in preselectAssets {
+            if let asset = (selectedAssets.filter{ $0.identifier == identifier }).first {
+                manager.addSelectedAsset(asset)
+            }
+        }
+        toolBar.setEnable(!manager.selectedAssets.isEmpty)
     }
 }
 
@@ -381,6 +403,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
     }
     
@@ -395,7 +418,7 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        if #available(iOS 14.0, *) {
+        if #available(iOS 14.0, *), !stopReloadAlbum {
             let minimumRefreshInterval: TimeInterval = 0.5
             let now = Date().timeIntervalSince1970
             if now - lastPhotoLibraryUpdateTime >= minimumRefreshInterval {
@@ -507,6 +530,7 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
         setAlbum(album)
+        reloadData(animated: false)
     }
     
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {
@@ -560,6 +584,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
+        stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
     }
     

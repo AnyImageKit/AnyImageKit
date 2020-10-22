@@ -29,6 +29,7 @@ open class ImagePickerController: AnyImageNavigationController {
     private var containerSize: CGSize = .zero
     private var hiddenStatusBar: Bool = false
     private var didFinishSelect: Bool = false
+    private let workQueue = DispatchQueue.init(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.ImagePickerController")
     
     private let manager: PickerManager = .init()
     
@@ -134,36 +135,61 @@ extension ImagePickerController {
         if options.selectLimit < 1 {
             options.selectLimit = 1
         }
+        #endif
+        
         if options.columnNumber < 3 {
             options.columnNumber = 3
         } else if options.columnNumber > 5 {
             options.columnNumber = 5
         }
-        #endif
+        
+        if options.selectLimit < options.preselectAssets.count {
+            options.preselectAssets.removeLast(options.preselectAssets.count-options.selectLimit)
+        }
         
         return options
     }
     
     private func checkData() {
         showWaitHUD()
-        DispatchQueue.global().async { [weak self] in
+        workQueue.async { [weak self] in
             guard let self = self else { return }
             let assets = self.manager.selectedAssets
             let isReady = assets.filter{ !$0.isReady }.isEmpty
             if !isReady && !assets.isEmpty { return }
-            self.saveEditPhoto(assets)
-            self.resizeImagesIfNeeded(assets)
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                hideHUD()
-                let result = PickerResult(assets: self.manager.selectedAssets, useOriginalImage: self.manager.useOriginalImage)
-                self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
+            self.saveEditPhotos(assets) { newAssets in
+                self.resizeImagesIfNeeded(newAssets)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    hideHUD()
+                    let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
+                    self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
+                }
             }
         }
     }
     
-    private func saveEditPhoto(_ assets: [Asset]) {
-        assets.compactMap{ $0._images[.edited] }.forEach{ manager.savePhoto(image: $0) }
+    private func saveEditPhotos(_ assets: [Asset], completion: @escaping (([Asset]) -> Void)) {
+        var assets = assets
+        let selectOptions = manager.options.selectOptions
+        let group = DispatchGroup()
+        for (idx, asset) in assets.enumerated() {
+            guard let editedImage = asset._images[.edited] else { continue }
+            group.enter()
+            manager.savePhoto(image: editedImage) { result in
+                switch result {
+                case .success(let newAsset):
+                    assets[idx] = Asset(idx: asset.idx, asset: newAsset, selectOptions: selectOptions)
+                    assets[idx]._images[.initial] = editedImage
+                case .failure(let error):
+                    _print(error)
+                }
+                group.leave()
+            }
+        }
+        group.notify(queue: workQueue) {
+            completion(assets)
+        }
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {
