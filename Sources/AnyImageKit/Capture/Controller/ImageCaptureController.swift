@@ -24,14 +24,13 @@ extension ImageCaptureControllerDelegate {
 
 open class ImageCaptureController: AnyImageNavigationController {
     
-    open private(set) weak var captureDelegate: ImageCaptureControllerDelegate?
+    open weak var captureDelegate: ImageCaptureControllerDelegate?
     
-    /// Init capture controller
+    /// Init Capture Controller
     /// - Note: iPadOS will use `UIImagePickerController` instead.
-    public required init(options: CaptureOptionsInfo, delegate: ImageCaptureControllerDelegate) {
+    public required init(options: CaptureOptionsInfo) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
-        self.captureDelegate = delegate
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             let rootViewController = PadCaptureViewController(options: options)
@@ -42,6 +41,13 @@ open class ImageCaptureController: AnyImageNavigationController {
             rootViewController.delegate = self
             self.viewControllers = [rootViewController]
         }
+    }
+    
+    /// Init Capture Controller
+    /// - Note: iPadOS will use `UIImagePickerController` instead.
+    public convenience init(options: CaptureOptionsInfo, delegate: ImageCaptureControllerDelegate) {
+        self.init(options: options)
+        self.captureDelegate = delegate
     }
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")
