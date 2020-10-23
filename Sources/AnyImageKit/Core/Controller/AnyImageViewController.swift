@@ -54,6 +54,8 @@ extension AnyImageViewController {
             page = .photoEditor
         case _ as VideoEditorController:
             page = .videoEditor
+        case _ as InputTextViewController:
+            page = .textInput
         #endif
             
         #if ANYIMAGEKIT_ENABLE_CAPTURE
@@ -74,7 +76,7 @@ extension AnyImageViewController {
         } else if let controller = target as? AnyImageNavigationController {
             if let navigationController = navigationController as? AnyImageNavigationController {
                 controller.trackDelegate = navigationController.trackDelegate
-            } else if let navigationController = presentingViewController?.navigationController as? AnyImageNavigationController {
+            } else if let navigationController = presentingViewController as? AnyImageNavigationController {
                 controller.trackDelegate = navigationController.trackDelegate
             }
         }
