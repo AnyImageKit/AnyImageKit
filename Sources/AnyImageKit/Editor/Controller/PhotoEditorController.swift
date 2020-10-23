@@ -180,8 +180,10 @@ extension PhotoEditorController: EditorToolViewDelegate {
         switch option {
         case .pen:
             contentView.canvas.isUserInteractionEnabled = true
+            trackObserver?.track(event: .photoPen, userInfo: [:])
         case .text:
             openInputController()
+            trackObserver?.track(event: .photoText, userInfo: [:])
         case .crop:
             willBeginCrop()
             if let option = options.cropOptions.first, !contentView.didCrop {
@@ -190,11 +192,13 @@ extension PhotoEditorController: EditorToolViewDelegate {
             } else {
                 contentView.cropStart()
             }
+            trackObserver?.track(event: .photoCrop, userInfo: [:])
         case .mosaic:
             if contentView.mosaic == nil {
                 showWaitHUD()
             }
             contentView.mosaic?.isUserInteractionEnabled = true
+            trackObserver?.track(event: .photoMosaic, userInfo: [:])
         }
     }
     

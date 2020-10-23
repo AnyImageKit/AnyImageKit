@@ -44,6 +44,7 @@ open class ImagePickerController: AnyImageNavigationController {
         
         let rootViewController = AssetPickerViewController(manager: manager)
         rootViewController.delegate = self
+        rootViewController.trackObserver = self
         self.viewControllers = [rootViewController]
         
         navigationBar.barTintColor = newOptions.theme.backgroundColor

@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
         picker.source_files = 'Sources/AnyImageKit/Picker/**/*.swift'
         picker.resources = 'Sources/AnyImageKit/Resources/Picker/**/*'
         picker.dependency 'AnyImageKit/Core'
+        picker.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_PICKER' }
     end
     
     s.subspec 'Editor' do |editor|

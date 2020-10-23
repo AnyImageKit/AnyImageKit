@@ -10,6 +10,77 @@ import UIKit
 
 class AnyImageViewController: UIViewController {
     
+    private var page: AnyImagePage = .undefined
+    
+    weak var trackObserver: DataTrackObserver?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setTrackPage()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        trackObserver?.track(page: page, state: .enter)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        trackObserver?.track(page: page, state: .leave)
+    }
+   
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        setTrackObserverOrDelegate(viewControllerToPresent)
+        super.present(viewControllerToPresent, animated: true, completion: completion)
+    }
+}
+
+// MARK: - Data Track
+extension AnyImageViewController {
+    
+    private func setTrackPage() {
+        switch self {
+        #if ANYIMAGEKIT_ENABLE_PICKER
+        case _ as AlbumPickerViewController:
+            page = .albumPicker
+        case _ as AssetPickerViewController:
+            page = .assetPicker
+        case _ as PhotoPreviewController:
+            page = .photoPreview
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        case _ as PhotoEditorController:
+            page = .photoEditor
+        case _ as VideoEditorController:
+            page = .videoEditor
+        case _ as InputTextViewController:
+            page = .textInput
+        #endif
+            
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        case _ as CaptureViewController:
+            page = .capture
+        case _ as PadCaptureViewController:
+            page = .capture
+        #endif
+            
+        default:
+            page = .undefined
+        }
+    }
+    
+    private func setTrackObserverOrDelegate(_ target: UIViewController) {
+        if let controller = target as? AnyImageViewController {
+            controller.trackObserver = trackObserver
+        } else if let controller = target as? AnyImageNavigationController {
+            if let navigationController = navigationController as? AnyImageNavigationController {
+                controller.trackDelegate = navigationController.trackDelegate
+            } else if let navigationController = presentingViewController as? AnyImageNavigationController {
+                controller.trackDelegate = navigationController.trackDelegate
+            }
+        }
+    }
 }
 
 // MARK: - Permission

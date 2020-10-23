@@ -89,6 +89,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
         showWaitHUD()
         switch result.type {
         case .photo:
+            trackObserver?.track(event: .takePhoto, userInfo: [:])
             manager.savePhoto(url: result.mediaURL) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
@@ -99,6 +100,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 hideHUD()
             }
         case .video:
+            trackObserver?.track(event: .takeVideo, userInfo: [:])
             manager.saveVideo(url: result.mediaURL) { [weak self] (result) in
                 switch result {
                 case .success(let asset):

@@ -21,6 +21,7 @@ let package = Package(
                 ],
                 swiftSettings: [
                     .define("ANYIMAGEKIT_ENABLE_SPM"),
+                    .define("ANYIMAGEKIT_ENABLE_PICKER"),
                     .define("ANYIMAGEKIT_ENABLE_EDITOR"),
                     .define("ANYIMAGEKIT_ENABLE_CAPTURE"),
                 ]),
