@@ -24,7 +24,7 @@ extension ImagePickerControllerDelegate {
 
 open class ImagePickerController: AnyImageNavigationController {
     
-    public private(set) weak var pickerDelegate: ImagePickerControllerDelegate?
+    open weak var pickerDelegate: ImagePickerControllerDelegate?
     
     private var containerSize: CGSize = .zero
     private var hiddenStatusBar: Bool = false
@@ -33,7 +33,7 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
-    public required init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
+    public required init(options: PickerOptionsInfo) {
         enableDebugLog = options.enableDebugLog
         // Note:
         // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
@@ -41,7 +41,6 @@ open class ImagePickerController: AnyImageNavigationController {
         let newOptions = check(options: options)
         self.addNotifications()
         self.manager.options = newOptions
-        self.pickerDelegate = delegate
         
         let rootViewController = AssetPickerViewController(manager: manager)
         rootViewController.delegate = self
@@ -53,6 +52,11 @@ open class ImagePickerController: AnyImageNavigationController {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
         #endif
+    }
+    
+    public convenience init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
+        self.init(options: options)
+        self.pickerDelegate = delegate
     }
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")

@@ -24,28 +24,38 @@ extension ImageEditorControllerDelegate {
 
 open class ImageEditorController: AnyImageNavigationController {
     
-    public private(set) weak var editorDelegate: ImageEditorControllerDelegate?
+    open weak var editorDelegate: ImageEditorControllerDelegate?
     
     private var containerSize: CGSize = .zero
     
     /// Init Photo Editor
-    public required init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: ImageEditorControllerDelegate) {
+    public required init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
-        self.editorDelegate = delegate
         let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
         self.viewControllers = [rootViewController]
     }
     
+    /// Init Photo Editor
+    public convenience init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: ImageEditorControllerDelegate) {
+        self.init(photo: resource, options: options)
+        self.editorDelegate = delegate
+    }
+    
     /// Init Video Editor
-    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo, delegate: ImageEditorControllerDelegate) {
+    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo) {
         enableDebugLog = options.enableDebugLog
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
-        self.editorDelegate = delegate
         let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
         self.viewControllers = [rootViewController]
+    }
+    
+    /// Init Video Editor
+    public convenience init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo, delegate: ImageEditorControllerDelegate) {
+        self.init(video: resource, placeholderImage: placeholderImage, options: options)
+        self.editorDelegate = delegate
     }
     
     @available(*, deprecated, message: "init(coder:) has not been implemented")
@@ -53,13 +63,13 @@ open class ImageEditorController: AnyImageNavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        removeNotifications()
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         addNotification()
-    }
-    
-    deinit {
-        removeNotifications()
     }
     
     open override func viewDidLayoutSubviews() {
