@@ -49,7 +49,6 @@ final class AlbumPickerViewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .albumPicker
         addNotifications()
         updatePreferredContentSize(with: traitCollection)
         setupView()

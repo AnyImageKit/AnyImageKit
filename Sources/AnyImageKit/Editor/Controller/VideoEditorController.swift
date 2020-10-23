@@ -68,7 +68,6 @@ final class VideoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .videoEditor
         setupView()
         loadData()
         navigationController?.navigationBar.isHidden = true

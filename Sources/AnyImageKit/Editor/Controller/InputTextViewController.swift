@@ -102,7 +102,6 @@ final class InputTextViewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .textInput
         view.backgroundColor = .black
         setupView()
         addNotification()

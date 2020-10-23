@@ -60,7 +60,6 @@ final class PhotoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .photoEditor
         loadData()
         navigationController?.navigationBar.isHidden = true
     }

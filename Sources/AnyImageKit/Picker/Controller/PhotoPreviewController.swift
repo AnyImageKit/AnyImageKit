@@ -156,7 +156,6 @@ final class PhotoPreviewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .photoPreview
         addNotifications()
         setupViews()
     }

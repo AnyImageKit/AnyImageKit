@@ -103,7 +103,6 @@ final class AssetPickerViewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .assetPicker
         addNotifications()
         setupNavigation()
         setupView()
@@ -330,7 +329,6 @@ extension AssetPickerViewController {
         controller.album = album
         controller.albums = albums
         controller.delegate = self
-        controller.trackObserver = trackObserver
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
         let isFullScreen = ScreenHelper.mainBounds.height == view.frame.height
         presentationController.isFullScreen = isFullScreen
@@ -474,7 +472,6 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             controller.currentIndex = indexPath.item - itemOffset
             controller.dataSource = self
             controller.delegate = self
-            controller.trackObserver = trackObserver
             present(controller, animated: true, completion: nil)
         }
     }

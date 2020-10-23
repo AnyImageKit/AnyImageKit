@@ -32,7 +32,6 @@ final class PadCaptureViewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        page = .capture
         setupNavigation()
         setupView()
         showPickerController()
