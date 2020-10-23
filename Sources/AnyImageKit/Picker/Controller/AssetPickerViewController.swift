@@ -115,16 +115,12 @@ final class AssetPickerViewController: AnyImageViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if #available(iOS 14.0, *) {
-            PHPhotoLibrary.shared().register(self)
-        }
+        PHPhotoLibrary.shared().register(self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if #available(iOS 14.0, *) {
-            PHPhotoLibrary.shared().unregisterChangeObserver(self)
-        }
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     override func viewDidLayoutSubviews() {
