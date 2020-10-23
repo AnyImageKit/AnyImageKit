@@ -40,12 +40,14 @@ extension AnyImageViewController {
     
     private func setTrackPage() {
         switch self {
+        #if ANYIMAGEKIT_ENABLE_PICKER
         case _ as AlbumPickerViewController:
             page = .albumPicker
         case _ as AssetPickerViewController:
             page = .assetPicker
         case _ as PhotoPreviewController:
             page = .photoPreview
+        #endif
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         case _ as PhotoEditorController:
