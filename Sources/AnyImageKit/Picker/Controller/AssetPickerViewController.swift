@@ -236,11 +236,19 @@ extension AssetPickerViewController {
         manager.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
             self.setAlbums(albums)
-            if let currentAlbumId = self.album?.id {
-                if let idx = (albums.firstIndex { $0.id == currentAlbumId }) {
+            if let identifier = self.album?.identifier {
+                if let idx = (albums.firstIndex { $0.identifier == identifier }) {
                     self.updateAlbum(albums[idx])
                 }
             }
+        }
+    }
+    
+    private func reloadAlbum(_ album: Album) {
+        manager.fetchAlbum(album) { [weak self] newAlbum in
+            guard let self = self else { return }
+            self.updateAlbum(newAlbum)
+            self.preLoadAlbums()
         }
     }
     
@@ -418,13 +426,31 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        if #available(iOS 14.0, *), !stopReloadAlbum {
-            let minimumRefreshInterval: TimeInterval = 0.5
-            let now = Date().timeIntervalSince1970
-            if now - lastPhotoLibraryUpdateTime >= minimumRefreshInterval {
-                reloadAlbums()
-            }
-            lastPhotoLibraryUpdateTime = now
+        guard
+            let album = album,
+            let changeDetails = changeInstance.changeDetails(for: album.fetchResult),
+            changeDetails.hasIncrementalChanges
+        else {
+            return
+        }
+        
+        // Check Insert
+        let insertedObjects = changeDetails.insertedObjects
+        if !insertedObjects.isEmpty {
+            reloadAlbum(album)
+            return
+        }
+        // Check Remove
+        let removedObjects = changeDetails.removedObjects
+        if !removedObjects.isEmpty {
+            reloadAlbum(album)
+            return
+        }
+        // Check Change
+        let changedObjects = changeDetails.changedObjects.filter{ changeInstance.changeDetails(for: $0)?.assetContentChanged == true }
+        if !changedObjects.isEmpty {
+            reloadAlbum(album)
+            return
         }
     }
 }

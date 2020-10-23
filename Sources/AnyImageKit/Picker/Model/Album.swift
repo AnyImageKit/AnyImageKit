@@ -11,20 +11,23 @@ import Photos
 
 class Album: Equatable {
     
-    let id: String
+    let fetchResult: PHFetchResult<PHAsset>
+    
+    let identifier: String
     let name: String
     let isCameraRoll: Bool
     private(set) var assets: [Asset] = []
     
-    init(result: PHFetchResult<PHAsset>, id: String, name: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
-        self.id = id
+    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, name: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
+        self.fetchResult = fetchResult
+        self.identifier = identifier
         self.name = name ?? ""
         self.isCameraRoll = isCameraRoll
-        fetchAssets(result: result, selectOptions: selectOptions)
+        fetchAssets(result: fetchResult, selectOptions: selectOptions)
     }
     
     static func == (lhs: Album, rhs: Album) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.identifier == rhs.identifier
     }
 }
 
