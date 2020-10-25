@@ -35,7 +35,7 @@ extension PickerManager {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
                 let result = Album(fetchResult: assetsfetchResult,
                                    identifier: assetCollection.localIdentifier,
-                                   name: assetCollection.localizedTitle,
+                                   title: assetCollection.localizedTitle,
                                    isCameraRoll: true,
                                    selectOptions: options.selectOptions)
                 completion(result)
@@ -56,7 +56,7 @@ extension PickerManager {
                     let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
                     let result = Album(fetchResult: assetsfetchResult,
                                        identifier: assetCollection.localIdentifier,
-                                       name: assetCollection.localizedTitle,
+                                       title: assetCollection.localizedTitle,
                                        isCameraRoll: assetCollection.isCameraRoll,
                                        selectOptions: self.options.selectOptions)
                     DispatchQueue.main.async {
@@ -90,14 +90,14 @@ extension PickerManager {
                     if isCameraRoll {
                         let result = Album(fetchResult: assetFetchResult,
                                            identifier: assetCollection.localIdentifier,
-                                           name: assetCollection.localizedTitle,
+                                           title: assetCollection.localizedTitle,
                                            isCameraRoll: true,
                                            selectOptions: self.options.selectOptions)
                         results.insert(result, at: 0)
                     } else {
                         let result = Album(fetchResult: assetFetchResult,
                                            identifier: assetCollection.localIdentifier,
-                                           name: assetCollection.localizedTitle,
+                                           title: assetCollection.localizedTitle,
                                            isCameraRoll: false,
                                            selectOptions: self.options.selectOptions)
                         results.append(result)

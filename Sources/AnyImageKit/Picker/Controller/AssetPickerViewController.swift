@@ -200,7 +200,7 @@ extension AssetPickerViewController {
     private func setAlbum(_ album: Album) {
         guard self.album != album else { return }
         self.album = album
-        titleView.setTitle(album.name)
+        titleView.setTitle(album.title)
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)

@@ -14,14 +14,14 @@ class Album: Equatable {
     let fetchResult: PHFetchResult<PHAsset>
     
     let identifier: String
-    let name: String
+    let title: String
     let isCameraRoll: Bool
     private(set) var assets: [Asset] = []
     
-    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, name: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
+    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
         self.fetchResult = fetchResult
         self.identifier = identifier
-        self.name = name ?? ""
+        self.title = title ?? ""
         self.isCameraRoll = isCameraRoll
         fetchAssets(result: fetchResult, selectOptions: selectOptions)
     }
@@ -114,6 +114,6 @@ extension Album {
 extension Album: CustomStringConvertible {
     
     var description: String {
-        return "Album<\(name)>"
+        return "Album<\(title)>"
     }
 }

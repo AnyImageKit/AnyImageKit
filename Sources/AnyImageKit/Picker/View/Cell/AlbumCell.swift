@@ -86,7 +86,7 @@ extension AlbumCell {
     
     func setContent(_ album: Album, manager: PickerManager) {
         updateTheme(manager.options.theme)
-        titleLabel.text = album.name
+        titleLabel.text = album.title
         subTitleLabel.text = "(\(album.count))"
         manager.requestPhoto(for: album) { [weak self] result in
             guard let self = self else { return }
