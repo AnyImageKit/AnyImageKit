@@ -241,6 +241,7 @@ extension AssetPickerViewController {
     }
     
     private func reloadAlbum(_ album: Album) {
+        guard !stopReloadAlbum else { return }
         manager.fetchAlbum(album) { [weak self] newAlbum in
             guard let self = self else { return }
             self.updateAlbum(newAlbum)
@@ -422,12 +423,13 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        guard
-            let album = album,
-            let changeDetails = changeInstance.changeDetails(for: album.fetchResult),
-            changeDetails.hasIncrementalChanges
-        else {
+        guard let album = album, let changeDetails = changeInstance.changeDetails(for: album.fetchResult) else { return }
+        
+        if #available(iOS 14.0, *), Permission.photos.status == .limited {
+            reloadAlbum(album)
             return
+        } else {
+            guard changeDetails.hasIncrementalChanges else { return }
         }
         
         // Check Insert
