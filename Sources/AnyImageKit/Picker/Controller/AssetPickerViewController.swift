@@ -96,6 +96,11 @@ final class AssetPickerViewController: AnyImageViewController {
     init(manager: PickerManager) {
         self.manager = manager
         super.init(nibName: nil, bundle: nil)
+        PHPhotoLibrary.shared().register(self)
+    }
+    
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     required init?(coder: NSCoder) {
@@ -111,16 +116,6 @@ final class AssetPickerViewController: AnyImageViewController {
             setupDataSource()
         }
         checkPermission()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        PHPhotoLibrary.shared().register(self)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     override func viewDidLayoutSubviews() {
