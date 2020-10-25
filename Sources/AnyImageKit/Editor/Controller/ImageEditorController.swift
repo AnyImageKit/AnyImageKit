@@ -34,6 +34,7 @@ open class ImageEditorController: AnyImageNavigationController {
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
         let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
+        rootViewController.trackObserver = self
         self.viewControllers = [rootViewController]
     }
     
@@ -49,6 +50,7 @@ open class ImageEditorController: AnyImageNavigationController {
         super.init(nibName: nil, bundle: nil)
         let checkedOptions = check(resource: resource, options: options)
         let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
+        rootViewController.trackObserver = self
         self.viewControllers = [rootViewController]
     }
     

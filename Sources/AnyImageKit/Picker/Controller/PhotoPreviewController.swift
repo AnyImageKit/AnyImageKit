@@ -171,10 +171,6 @@ final class PhotoPreviewController: AnyImageViewController {
         setBar(hidden: false, animated: true)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateLayout()

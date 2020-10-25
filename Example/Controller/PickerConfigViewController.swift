@@ -48,6 +48,7 @@ final class PickerConfigViewController: UITableViewController {
     @IBAction func openPickerTapped() {
         options.enableDebugLog = true
         let controller = ImagePickerController(options: options, delegate: self)
+        controller.trackDelegate = self
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
         }
@@ -96,6 +97,23 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
         controller.assets = result.assets
         show(controller, sender: nil)
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - ImageKitDataTrackDelegate
+extension PickerConfigViewController: ImageKitDataTrackDelegate {
+    
+    func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
+        switch state {
+        case .enter:
+            print("[Data Track] ENTER Page: \(page.rawValue)")
+        case .leave:
+            print("[Data Track] LEAVE Page: \(page.rawValue)")
+        }
+    }
+    
+    func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
+        print("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
     }
 }
 

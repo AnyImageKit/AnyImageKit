@@ -35,10 +35,12 @@ open class ImageCaptureController: AnyImageNavigationController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let rootViewController = PadCaptureViewController(options: options)
             rootViewController.delegate = self
+            rootViewController.trackObserver = self
             self.viewControllers = [rootViewController]
         } else {
             let rootViewController = CaptureViewController(options: options)
             rootViewController.delegate = self
+            rootViewController.trackObserver = self
             self.viewControllers = [rootViewController]
         }
     }

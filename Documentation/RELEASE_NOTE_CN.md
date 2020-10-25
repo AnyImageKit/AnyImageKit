@@ -1,8 +1,11 @@
 # 更新日志
 
-- [0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090)
+## 0.10.0
 
+### 新增
 
+- Core
+  - 添加 `ImageKitDataTrackDelegate` 用以数据打点，已支持的页面和事件可以在 [这里](./DATA_TRACK.md) 找到
 
 ## 0.9.0
 

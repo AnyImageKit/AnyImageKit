@@ -1,8 +1,11 @@
 # Release Notes
 
-- [0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#090)
+## 0.10.0
 
+### New Features
 
+- Core
+  - Add `ImageKitDataTrackDelegate` for track page/event, supportted page and event can be find [HERE](./DATA_TRACK.md)
 
 ## 0.9.0
 
