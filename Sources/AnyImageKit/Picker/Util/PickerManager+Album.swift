@@ -33,9 +33,37 @@ extension PickerManager {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                let result = Album(result: assetsfetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, selectOptions: options.selectOptions)
+                let result = Album(fetchResult: assetsfetchResult,
+                                   identifier: assetCollection.localIdentifier,
+                                   title: assetCollection.localizedTitle,
+                                   isCameraRoll: true,
+                                   selectOptions: options.selectOptions)
                 completion(result)
                 return
+            }
+        }
+    }
+    
+    func fetchAlbum(_ album: Album, completion: @escaping (Album) -> Void) {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+            let fetchOptions = self.createFetchOptions()
+            let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+            let assetCollections = assetCollectionsFetchResult.objects()
+            for assetCollection in assetCollections {
+                if assetCollection.estimatedAssetCount <= 0 { continue }
+                if assetCollection.localIdentifier == album.identifier {
+                    let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+                    let result = Album(fetchResult: assetsfetchResult,
+                                       identifier: assetCollection.localIdentifier,
+                                       title: assetCollection.localizedTitle,
+                                       isCameraRoll: assetCollection.isCameraRoll,
+                                       selectOptions: self.options.selectOptions)
+                    DispatchQueue.main.async {
+                        completion(result)
+                        return
+                    }
+                }
             }
         }
     }
@@ -54,20 +82,25 @@ extension PickerManager {
                     
                     if assetCollection.isAllHidden { continue }
                     if assetCollection.isRecentlyDeleted  { continue }
+                    if results.contains(where: { assetCollection.localIdentifier == $0.identifier }) { continue }
                     
                     let assetFetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
                     if assetFetchResult.count <= 0 && !isCameraRoll { continue }
                     
                     if isCameraRoll {
-                        if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: true, selectOptions: self.options.selectOptions)
-                            results.insert(album, at: 0)
-                        }
+                        let result = Album(fetchResult: assetFetchResult,
+                                           identifier: assetCollection.localIdentifier,
+                                           title: assetCollection.localizedTitle,
+                                           isCameraRoll: true,
+                                           selectOptions: self.options.selectOptions)
+                        results.insert(result, at: 0)
                     } else {
-                        if !results.contains(where: { $0.id == assetCollection.localIdentifier }) {
-                            let album = Album(result: assetFetchResult, id: assetCollection.localIdentifier, name: assetCollection.localizedTitle, isCameraRoll: false, selectOptions: self.options.selectOptions)
-                            results.append(album)
-                        }
+                        let result = Album(fetchResult: assetFetchResult,
+                                           identifier: assetCollection.localIdentifier,
+                                           title: assetCollection.localizedTitle,
+                                           isCameraRoll: false,
+                                           selectOptions: self.options.selectOptions)
+                        results.append(result)
                     }
                 }
             }

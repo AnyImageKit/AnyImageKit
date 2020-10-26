@@ -31,7 +31,7 @@ class AnyImageViewController: UIViewController {
    
     override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         setTrackObserverOrDelegate(viewControllerToPresent)
-        super.present(viewControllerToPresent, animated: true, completion: completion)
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
     }
 }
 
