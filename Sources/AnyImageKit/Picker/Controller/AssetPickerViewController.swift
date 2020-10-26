@@ -168,11 +168,11 @@ extension AssetPickerViewController {
         check(permission: .photos, authorized: { [weak self] in
             guard let self = self else { return }
             self.loadDefaultAlbumIfNeeded()
-            self.preLoadAlbums()
-            if Permission.photos.status == .limited {
-                self.showLimitedView()
-            }
-        }, denied: { [weak self] in
+        }, limited: { [weak self] in
+            guard let self = self else { return }
+            self.loadDefaultAlbumIfNeeded()
+            self.showLimitedView()
+        }, denied: { [weak self] _ in
             guard let self = self else { return }
             self.permissionView.isHidden = false
         })
@@ -186,6 +186,7 @@ extension AssetPickerViewController {
             self.preselectAssets()
             self.reloadData(animated: false)
             self.autoScrollToLatest = true
+            self.preLoadAlbums()
         }
     }
     

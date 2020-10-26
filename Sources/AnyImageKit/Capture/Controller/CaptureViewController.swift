@@ -85,7 +85,7 @@ final class CaptureViewController: AnyImageViewController {
             self.permissionsChecked = true
             self.capture.startRunning()
             self.orientationUtil.startRunning()
-        }, canceled: { [weak self] in
+        }, canceled: { [weak self] _ in
             guard let self = self else { return }
             self.delegate?.captureDidCancel(self)
         })
