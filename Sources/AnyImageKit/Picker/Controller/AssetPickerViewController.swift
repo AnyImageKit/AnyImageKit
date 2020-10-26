@@ -31,8 +31,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     @available(iOS 14.0, *)
     private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
-    @available(iOS 14.0, *)
-    private lazy var lastPhotoLibraryUpdateTime: TimeInterval = 0
+    
     private lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
