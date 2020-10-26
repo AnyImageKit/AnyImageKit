@@ -60,6 +60,8 @@ final class InputTextViewController: AnyImageViewController {
         view.delegate = self
         view.backgroundColor = .clear
         view.keyboardAppearance = .dark
+        view.returnKeyType = .done
+        view.enablesReturnKeyAutomatically = true
         view.showsVerticalScrollIndicator = false
         view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         view.tintColor = options.tintColor
