@@ -71,34 +71,34 @@ extension BundleHelper {
 // MARK: - Localized String
 extension BundleHelper {
     
-    static func localizedString(key: String, value: String?, table: LocalizedTable) -> String {
-        if let result = languageBundle?.localizedString(forKey: key, value: value, table: table.rawValue), result != key {
+    static func localizedString(key: String, value: String?, table: String) -> String {
+        if let result = languageBundle?.localizedString(forKey: key, value: value, table: table), result != key {
             return result
-        } else if table != .core, let result = languageBundle?.localizedString(forKey: key, value: value, table: LocalizedTable.core.rawValue), result != key {
+        } else if table != "Core", let result = languageBundle?.localizedString(forKey: key, value: value, table: table), result != key {
             return result
         }
         return Bundle.main.localizedString(forKey: key, value: value, table: nil)
     }
     
     static func coreLocalizedString(key: String) -> String {
-        localizedString(key: key, value: nil, table: .core)
+        localizedString(key: key, value: nil, table: "Core")
     }
-}
-
-// MARK: - Localized Table
-extension BundleHelper {
     
-    struct LocalizedTable: RawRepresentable {
-        
-        let rawValue: String
-        
-        init(rawValue: String) {
-            self.rawValue = rawValue
-        }
+    #if ANYIMAGEKIT_ENABLE_PICKER
+    static func pickerLocalizedString(key: String) -> String {
+        return localizedString(key: key, value: nil, table: "Picker")
     }
-}
-
-extension BundleHelper.LocalizedTable {
+    #endif
     
-    static let core = BundleHelper.LocalizedTable(rawValue: "Core")
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    static func editorLocalizedString(key: String) -> String {
+        return localizedString(key: key, value: nil, table: "Editor")
+    }
+    #endif
+    
+    #if ANYIMAGEKIT_ENABLE_CAPTURE
+    static func captureLocalizedString(key: String) -> String {
+        return localizedString(key: key, value: nil, table: "Capture")
+    }
+    #endif
 }
