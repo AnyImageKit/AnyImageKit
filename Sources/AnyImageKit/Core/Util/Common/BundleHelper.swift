@@ -72,11 +72,18 @@ extension BundleHelper {
 extension BundleHelper {
     
     static func localizedString(key: String, value: String?, table: String) -> String {
-        if let result = languageBundle?.localizedString(forKey: key, value: value, table: table), result != key {
-            return result
-        } else if table != "Core", let result = languageBundle?.localizedString(forKey: key, value: value, table: "Core"), result != key {
-            return result
+        let currentTableResult = Bundle.current.localizedString(forKey: key, value: value, table: table)
+        if currentTableResult != key {
+            return currentTableResult
         }
+        
+        if table != "Core" {
+            let coreTableResult = Bundle.current.localizedString(forKey: key, value: value, table: "Core")
+            if coreTableResult != key {
+                return coreTableResult
+            }
+        }
+        
         return Bundle.main.localizedString(forKey: key, value: value, table: nil)
     }
     
