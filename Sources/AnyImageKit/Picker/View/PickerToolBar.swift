@@ -57,7 +57,7 @@ final class PickerToolBar: UIView {
         return view
     }()
     
-    let limitedViewHeight: CGFloat = 64
+    let limitedViewHeight: CGFloat = 56
     let toolBarHeight: CGFloat = 56
     
     private let style: Style
