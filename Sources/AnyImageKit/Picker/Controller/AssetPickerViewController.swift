@@ -120,11 +120,7 @@ final class AssetPickerViewController: AnyImageViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if autoScrollToLatest {
-            if manager.options.orderByDate == .asc {
-                collectionView.scrollToLast(at: .bottom, animated: false)
-            } else {
-                collectionView.scrollToFirst(at: .top, animated: false)
-            }
+            scrollToEnd()
             autoScrollToLatest = false
         }
     }
@@ -185,6 +181,7 @@ extension AssetPickerViewController {
             self.setAlbum(album)
             self.preselectAssets()
             self.reloadData(animated: false)
+            self.scrollToEnd()
             self.autoScrollToLatest = true
             self.preLoadAlbums()
         }
@@ -208,11 +205,6 @@ extension AssetPickerViewController {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
-        if manager.options.orderByDate == .asc {
-            collectionView.scrollToLast(at: .bottom, animated: false)
-        } else {
-            collectionView.scrollToFirst(at: .top, animated: false)
-        }
     }
     
     private func setAlbums(_ albums: [Album]) {
@@ -312,6 +304,14 @@ extension AssetPickerViewController {
             }
         }
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
+    }
+    
+    private func scrollToEnd(animated: Bool = false) {
+        if manager.options.orderByDate == .asc {
+            collectionView.scrollToLast(at: .bottom, animated: animated)
+        } else {
+            collectionView.scrollToFirst(at: .top, animated: animated)
+        }
     }
 }
 
@@ -550,6 +550,7 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
         setAlbum(album)
         reloadData(animated: false)
+        scrollToEnd()
     }
     
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {
