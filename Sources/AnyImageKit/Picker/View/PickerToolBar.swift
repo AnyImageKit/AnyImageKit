@@ -12,13 +12,6 @@ final class PickerToolBar: UIView {
     
     private(set) lazy var contentView = UIView(frame: .zero)
     
-    private lazy var backgroundView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .light)
-        let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = options.theme.backgroundColor.withAlphaComponent(0.7)
-        return view
-    }()
-    
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
@@ -75,20 +68,16 @@ final class PickerToolBar: UIView {
     }
     
     private func setupView() {
+        backgroundColor = options.theme.toolBarColor
         switch style {
         case .picker:
-            addSubview(backgroundView)
             addSubview(permissionLimitedView)
-            backgroundView.snp.makeConstraints { maker in
-                maker.edges.equalToSuperview()
-            }
             permissionLimitedView.snp.makeConstraints { maker in
                 maker.top.left.right.equalToSuperview()
                 maker.height.equalTo(limitedViewHeight)
             }
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Preview"), for: .normal)
         case .preview:
-            backgroundColor = options.theme.toolBarColor
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Edit"), for: .normal)
         }
         

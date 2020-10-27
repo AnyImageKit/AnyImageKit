@@ -47,7 +47,10 @@ open class ImagePickerController: AnyImageNavigationController {
         rootViewController.trackObserver = self
         self.viewControllers = [rootViewController]
         
-        navigationBar.barTintColor = newOptions.theme.backgroundColor
+        navigationBar.isTranslucent = false
+        navigationBar.shadowImage = UIImage()
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationBar.barTintColor = newOptions.theme.toolBarColor
         navigationBar.tintColor = newOptions.theme.textColor
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
