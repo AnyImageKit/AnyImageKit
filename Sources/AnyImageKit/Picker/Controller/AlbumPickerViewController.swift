@@ -118,7 +118,7 @@ extension AlbumPickerViewController {
     private func scrollToCurrentAlbum() {
         if let album = album, let index = albums.firstIndex(of: album) {
             let indexPath = IndexPath(row: index, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
     
