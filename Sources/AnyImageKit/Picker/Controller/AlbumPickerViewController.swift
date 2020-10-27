@@ -59,6 +59,11 @@ final class AlbumPickerViewController: AnyImageViewController {
         delegate?.albumPickerWillDisappear(self)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrollToCurrentAlbum()
+    }
+    
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         updatePreferredContentSize(with: newCollection)
@@ -107,6 +112,13 @@ extension AlbumPickerViewController {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { maker in
             maker.edges.equalTo(view.snp.edges)
+        }
+    }
+    
+    private func scrollToCurrentAlbum() {
+        if let album = album, let index = albums.firstIndex(of: album) {
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         }
     }
     
