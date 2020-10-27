@@ -51,7 +51,7 @@ extension UIColor {
     }
     
     static var toolBarDark: UIColor {
-        return UIColor.color(hex: 0x5C5C5C)
+        return UIColor.color(hex: 0x31302F)
     }
     
     // MARK: - background
