@@ -77,7 +77,6 @@ final class PickerToolBar: UIView {
     private func setupView() {
         switch style {
         case .picker:
-            backgroundColor = options.theme.toolBarColor
             addSubview(backgroundView)
             addSubview(permissionLimitedView)
             backgroundView.snp.makeConstraints { maker in
