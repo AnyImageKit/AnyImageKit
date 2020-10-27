@@ -28,10 +28,6 @@ final class PickerPreviewNavigationBar: UIView {
     init(frame: CGRect, options: PickerOptionsInfo) {
         self.options = options
         super.init(frame: frame)
-        backgroundColor = UIColor.create(style: options.theme.style,
-                                         light: options.theme.toolBarColor,
-                                         dark: options.theme.backgroundColor)
-            .withAlphaComponent(0.95)
         setupView()
         selectButton.setTheme(options.theme)
     }
@@ -41,6 +37,7 @@ final class PickerPreviewNavigationBar: UIView {
     }
     
     private func setupView() {
+        backgroundColor = options.theme.toolBarColor.withAlphaComponent(0.95)
         let contentView = UILayoutGuide()
         addLayoutGuide(contentView)
         addSubview(backButton)

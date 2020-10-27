@@ -89,10 +89,7 @@ final class PickerToolBar: UIView {
             }
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Preview"), for: .normal)
         case .preview:
-            backgroundColor = UIColor.create(style: options.theme.style,
-                                             light: options.theme.toolBarColor,
-                                             dark: options.theme.backgroundColor)
-                .withAlphaComponent(0.95)
+            backgroundColor = options.theme.toolBarColor.withAlphaComponent(0.95)
             leftButton.setTitle(BundleHelper.pickerLocalizedString(key: "Edit"), for: .normal)
         }
         
