@@ -71,9 +71,6 @@ final class MenuDropDownPresentationController: UIPresentationController {
             opaqueView.isOpaque = false
             opaqueView.backgroundColor = UIColor.black
             opaqueView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            if cornerRadius > 0 {
-                opaqueView.layer.cornerRadius = cornerRadius
-            }
             self.opaqueView = opaqueView
             // clickable area
             let dimmingView = UIView(frame: containerView.bounds)
