@@ -53,12 +53,12 @@ open class ImageCaptureController: AnyImageNavigationController {
             let rootViewController = PadCaptureViewController(options: options)
             rootViewController.delegate = self
             rootViewController.trackObserver = self
-            self.viewControllers = [rootViewController]
+            viewControllers = [rootViewController]
         } else {
             let rootViewController = CaptureViewController(options: options)
             rootViewController.delegate = self
             rootViewController.trackObserver = self
-            self.viewControllers = [rootViewController]
+            viewControllers = [rootViewController]
         }
     }
     
