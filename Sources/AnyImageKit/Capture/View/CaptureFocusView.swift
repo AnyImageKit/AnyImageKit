@@ -238,6 +238,7 @@ private final class CaptureFocusRectView: UIView {
     }
     
     private func setupView() {
+        backgroundColor = .clear
         layer.addSublayer(rectLayer)
     }
     
