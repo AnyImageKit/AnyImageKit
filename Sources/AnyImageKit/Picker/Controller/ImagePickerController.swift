@@ -33,30 +33,13 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
-    public required init(options: PickerOptionsInfo) {
-        enableDebugLog = options.enableDebugLog
-        // Note:
-        // Can't use `init(rootViewController:)` cause it will also call `init(nibName:,bundle:)` and reset `manager` even it's declaration by `let`
+    public init() {
         super.init(nibName: nil, bundle: nil)
-        let newOptions = check(options: options)
-        self.addNotifications()
-        self.manager.options = newOptions
-        
-        let rootViewController = AssetPickerViewController(manager: manager)
-        rootViewController.delegate = self
-        rootViewController.trackObserver = self
-        self.viewControllers = [rootViewController]
-        
-        navigationBar.barTintColor = newOptions.theme.backgroundColor
-        navigationBar.tintColor = newOptions.theme.textColor
-        
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        ImageEditorCache.clearDiskCache()
-        #endif
     }
     
     public convenience init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
-        self.init(options: options)
+        self.init()
+        self.update(options: options)
         self.pickerDelegate = delegate
     }
     
@@ -71,6 +54,23 @@ open class ImagePickerController: AnyImageNavigationController {
         ImageEditorCache.clearDiskCache()
         #endif
         manager.clearAll()
+    }
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        addNotifications()
+        
+        let rootViewController = AssetPickerViewController(manager: manager)
+        rootViewController.delegate = self
+        rootViewController.trackObserver = self
+        viewControllers = [rootViewController]
+        
+        navigationBar.barTintColor = manager.options.theme.backgroundColor
+        navigationBar.tintColor = manager.options.theme.textColor
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        ImageEditorCache.clearDiskCache()
+        #endif
     }
     
     open override func viewDidLayoutSubviews() {
@@ -108,6 +108,14 @@ open class ImagePickerController: AnyImageNavigationController {
         case .auto:
             return .default
         }
+    }
+}
+
+extension ImagePickerController {
+    
+    open func update(options: PickerOptionsInfo) {
+        enableDebugLog = options.enableDebugLog
+        manager.options = check(options: options)
     }
 }
 
