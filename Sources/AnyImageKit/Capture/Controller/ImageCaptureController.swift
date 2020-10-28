@@ -26,12 +26,29 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     open weak var captureDelegate: ImageCaptureControllerDelegate?
     
+    private var options: CaptureOptionsInfo = .init()
+    
     /// Init Capture Controller
     /// - Note: iPadOS will use `UIImagePickerController` instead.
-    public required init(options: CaptureOptionsInfo) {
-        enableDebugLog = options.enableDebugLog
+    public init() {
         super.init(nibName: nil, bundle: nil)
-        
+    }
+    
+    /// Init Capture Controller
+    /// - Note: iPadOS will use `UIImagePickerController` instead.
+    public convenience init(options: CaptureOptionsInfo, delegate: ImageCaptureControllerDelegate) {
+        self.init()
+        self.update(options: options)
+        self.captureDelegate = delegate
+    }
+    
+    @available(*, deprecated, message: "init(coder:) has not been implemented")
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
         if UIDevice.current.userInterfaceIdiom == .pad {
             let rootViewController = PadCaptureViewController(options: options)
             rootViewController.delegate = self
@@ -43,18 +60,6 @@ open class ImageCaptureController: AnyImageNavigationController {
             rootViewController.trackObserver = self
             self.viewControllers = [rootViewController]
         }
-    }
-    
-    /// Init Capture Controller
-    /// - Note: iPadOS will use `UIImagePickerController` instead.
-    public convenience init(options: CaptureOptionsInfo, delegate: ImageCaptureControllerDelegate) {
-        self.init(options: options)
-        self.captureDelegate = delegate
-    }
-    
-    @available(*, deprecated, message: "init(coder:) has not been implemented")
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
@@ -76,6 +81,14 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     open override var prefersStatusBarHidden: Bool {
         return true
+    }
+}
+
+extension ImageCaptureController {
+    
+    open func update(options: CaptureOptionsInfo) {
+        enableDebugLog = options.enableDebugLog
+        self.options = options
     }
 }
  
