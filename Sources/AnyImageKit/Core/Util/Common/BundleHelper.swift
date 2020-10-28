@@ -10,27 +10,6 @@ import UIKit
 
 struct BundleHelper {
     
-    static private var _languageBundle: Bundle?
-    
-    static var languageBundle: Bundle? {
-        if _languageBundle == nil {
-            var language = Locale.preferredLanguages.first ?? "en"
-            if language.hasPrefix("zh") {
-                if language.contains("Hans") {
-                    language = "zh-Hans"
-                } else {
-                    language = "zh-Hant"
-                }
-            }
-            _languageBundle = Bundle(path: Bundle.current.path(forResource: language, ofType: "lproj") ?? "")
-        }
-        return _languageBundle
-    }
-}
-
-// MARK: - Info
-extension BundleHelper {
-    
     static var appName: String {
         if let info = Bundle.main.localizedInfoDictionary {
             if let appName = info["CFBundleDisplayName"] as? String { return appName }
