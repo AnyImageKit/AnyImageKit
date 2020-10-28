@@ -76,9 +76,13 @@ extension PickerResultViewController: UICollectionViewDelegate {
         case .video:
             let alert = UIAlertController(title: "Processing", message: nil, preferredStyle: .alert)
             let options = VideoURLFetchOptions(fetchProgressHandler: { (progress, _, _, _) in
-                alert.message = "Fetching \(String(format: "%0.1f %", progress*100))"
+                DispatchQueue.main.async {
+                    alert.message = "Fetching \(String(format: "%0.1f %", progress*100))"
+                }
             }, exportPreset: .h264_1280x720) { progress in
-                alert.message = "Exporting \(String(format: "%0.1f %", progress*100))"
+                DispatchQueue.main.async {
+                    alert.message = "Exporting \(String(format: "%0.1f %", progress*100))"
+                }
             }
             present(alert, animated: true, completion: nil)
             asset.fetchVideoURL(options: options) { result, _ in
