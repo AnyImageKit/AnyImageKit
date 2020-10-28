@@ -7,7 +7,7 @@
 */
 
 // Picker
-"OpenPicker" = "Open picker";
+"OpenPicker" = "Open Picker";
 "Theme" = "Theme";
 "SelectLimit" = "Select Limit";
 "ColumnNumber" = "Column Number";
@@ -21,7 +21,7 @@
 "FullScreen" = "Full Screen";
 
 // Editor
-"OpenEditor" = "Open editor";
+"OpenEditor" = "Open Editor";
 "EditOptions" = "Edit Options";
 "PenWidth" = "Pen Width";
 "MosaicOptions" = "Mosaic Options";
@@ -30,7 +30,7 @@
 "CropOptions" = "Crop Options";
 
 // Capture
-"OpenCamera" = "Open camera";
+"OpenCamera" = "Open Camera";
 "MediaOptions" = "Media Options";
 "PreferredPresets" = "Preferred Presets";
 "PhotoAspectRatio" = "Photo Aspect Ratio";
