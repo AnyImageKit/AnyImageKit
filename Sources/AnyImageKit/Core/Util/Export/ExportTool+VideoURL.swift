@@ -23,7 +23,7 @@ public struct VideoURLFetchOptions {
     
     public init(isNetworkAccessAllowed: Bool = true,
                 version: PHVideoRequestOptionsVersion = .current,
-                deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
+                deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
                 fetchProgressHandler: PHAssetVideoProgressHandler? = nil,
                 preferredOutputPath: String? = nil,
                 exportPreset: VideoExportPreset = .h264_1280x720,
