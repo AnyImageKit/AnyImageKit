@@ -47,6 +47,7 @@ final class CropGridView: UIView {
     }
     
     private func setupView() {
+        backgroundColor = .clear
         layer.addSublayer(bgLayer)
         layer.addSublayer(rectLayer)
         layer.addSublayer(lineLayer)
