@@ -121,7 +121,7 @@ fileprivate class CircleView: UIView {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             guard options.theme.style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
             bigCircleView.layer.borderColor = options.theme.textColor.cgColor

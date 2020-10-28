@@ -35,7 +35,7 @@ extension PhotoEditorContentView {
     }
     /// 全面屏的顶部边距
     var topMargin: CGFloat {
-        if #available(iOS 11, *) {
+        if #available(iOS 11.0, *) {
             return safeAreaInsets.top
         } else {
             return 0
@@ -43,7 +43,7 @@ extension PhotoEditorContentView {
     }
     /// 全面屏的底部边距
     var bottomMargin: CGFloat {
-        if #available(iOS 11, *) {
+        if #available(iOS 11.0, *) {
             return safeAreaInsets.bottom
         } else {
             return 0

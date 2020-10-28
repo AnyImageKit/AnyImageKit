@@ -219,7 +219,7 @@ extension PhotoPreviewController {
         navigationBar.snp.makeConstraints { maker in
             maker.top.equalToSuperview()
             maker.left.right.equalToSuperview()
-            if #available(iOS 11, *) {
+            if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
             } else {
                 maker.bottom.equalTo(topLayoutGuide.snp.bottom).offset(44)
@@ -227,7 +227,7 @@ extension PhotoPreviewController {
         }
         toolBar.snp.makeConstraints { maker in
             maker.left.right.bottom.equalToSuperview()
-            if #available(iOS 11, *) {
+            if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
             } else {
                 maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)

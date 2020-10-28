@@ -28,7 +28,7 @@ final class HUDViewController: UIViewController {
     }()
     private lazy var indicator: UIActivityIndicatorView = {
         let view: UIActivityIndicatorView
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             view = UIActivityIndicatorView(style: .large)
             view.color = UIColor.white
         } else {

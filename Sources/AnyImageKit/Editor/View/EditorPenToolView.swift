@@ -54,7 +54,7 @@ final class EditorPenToolView: UIView {
                 button.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
                 button.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
             }
-            if #available(iOS 14, *) {
+            if #available(iOS 14.0, *) {
                 if let colorWell = colorView as? ColorWell {
                     colorWell.transform = CGAffineTransform(scaleX: scale, y: scale)
                 }

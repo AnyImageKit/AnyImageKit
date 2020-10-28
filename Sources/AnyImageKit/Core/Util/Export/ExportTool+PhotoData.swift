@@ -56,7 +56,7 @@ extension ExportTool {
             completion(.success(.init(data: data, dataUTI: dataUTI, orientation: orientation)), requestID)
         }
         
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { (data, dataUTI, orientation, info) in
                 handle(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
             }

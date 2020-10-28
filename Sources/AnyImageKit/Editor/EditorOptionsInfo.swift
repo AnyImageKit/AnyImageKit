@@ -50,7 +50,7 @@ extension EditorPenColorOption: CaseIterable {
     
     public static var allCases: [EditorPenColorOption] {
         var cases: [EditorPenColorOption] = Palette.penColors.map { .custom(color: $0) }
-        if #available(iOS 14, *) {
+        if #available(iOS 14.0, *) {
             cases[cases.count-1] = .colorWell(color: Palette.penColors.last!)
             return cases
         } else {

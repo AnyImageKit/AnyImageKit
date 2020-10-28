@@ -139,7 +139,7 @@ final class AssetPickerViewController: AnyImageViewController {
             maker.edges.equalToSuperview()
         }
         toolBar.snp.makeConstraints { maker in
-            if #available(iOS 11, *) {
+            if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-toolBarHeight)
             } else {
                 maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-toolBarHeight)

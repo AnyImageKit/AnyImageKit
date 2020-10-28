@@ -85,7 +85,7 @@ final class VideoEditorController: AnyImageViewController {
         view.addSubview(cropToolView)
         
         videoPreview.snp.makeConstraints { maker in
-            if #available(iOS 11, *) {
+            if #available(iOS 11.0, *) {
                 maker.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
             } else {
                 maker.top.equalToSuperview()
@@ -103,7 +103,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.width.height.equalTo(50)
         }
         toolView.snp.makeConstraints { maker in
-            if #available(iOS 11, *) {
+            if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             } else {
                 maker.bottom.equalToSuperview()
