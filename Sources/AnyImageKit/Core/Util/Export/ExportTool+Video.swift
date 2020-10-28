@@ -45,10 +45,10 @@ extension ExportTool {
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.progressHandler
         
-        return PHImageManager.default().requestPlayerItem(forVideo: asset, options: requestOptions) { (playerItem, info) in
+        return PHImageManager.default().requestAVAsset(forVideo: asset, options: requestOptions) { (avAsset, _, info) in
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
-            if let playerItem = playerItem {
-                completion(.success(.init(playerItem: playerItem)), requestID)
+            if let avAsset = avAsset {
+                completion(.success(.init(playerItem: AVPlayerItem(asset: avAsset))), requestID)
             } else {
                 completion(.failure(.invalidVideo), requestID)
             }
