@@ -28,41 +28,26 @@ open class ImageEditorController: AnyImageNavigationController {
     
     private var containerSize: CGSize = .zero
     
-    /// Init Photo Editor
-    public required init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
-        enableDebugLog = options.enableDebugLog
+    public required init() {
         super.init(nibName: nil, bundle: nil)
-        let checkedOptions = check(resource: resource, options: options)
-        let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
-        rootViewController.trackObserver = self
-        self.viewControllers = [rootViewController]
     }
     
     /// Init Photo Editor
     public convenience init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: ImageEditorControllerDelegate) {
-        self.init(photo: resource, options: options)
+        self.init()
+        self.update(photo: resource, options: options)
         self.editorDelegate = delegate
-    }
-    
-    /// Init Video Editor
-    public required init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo) {
-        enableDebugLog = options.enableDebugLog
-        super.init(nibName: nil, bundle: nil)
-        let checkedOptions = check(resource: resource, options: options)
-        let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
-        rootViewController.trackObserver = self
-        self.viewControllers = [rootViewController]
     }
     
     /// Init Video Editor
     public convenience init(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo, delegate: ImageEditorControllerDelegate) {
-        self.init(video: resource, placeholderImage: placeholderImage, options: options)
+        self.init()
+        self.update(video: resource, placeholderImage: placeholderImage, options: options)
         self.editorDelegate = delegate
     }
     
-    @available(*, deprecated, message: "init(coder:) has not been implemented")
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     deinit {
@@ -87,6 +72,25 @@ open class ImageEditorController: AnyImageNavigationController {
     
     open override var prefersStatusBarHidden: Bool {
         return true
+    }
+}
+
+extension ImageEditorController {
+    
+    open func update(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
+        enableDebugLog = options.enableDebugLog
+        let checkedOptions = check(resource: resource, options: options)
+        let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
+        rootViewController.trackObserver = self
+        viewControllers = [rootViewController]
+    }
+    
+    open func update(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo) {
+        enableDebugLog = options.enableDebugLog
+        let checkedOptions = check(resource: resource, options: options)
+        let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
+        rootViewController.trackObserver = self
+        viewControllers = [rootViewController]
     }
 }
 
