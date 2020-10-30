@@ -49,7 +49,9 @@ extension PickerManager {
     func clearAll() {
         useOriginalImage = false
         selectedAssets.removeAll()
+        failedAssets.removeAll()
         cache.clearAll()
+        cancelAllFetch()
     }
 }
 

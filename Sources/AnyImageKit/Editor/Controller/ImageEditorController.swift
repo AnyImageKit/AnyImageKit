@@ -78,6 +78,9 @@ open class ImageEditorController: AnyImageNavigationController {
 extension ImageEditorController {
     
     open func update(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
+        guard viewControllers.isEmpty || enableForceUpdate else {
+            return
+        }
         enableDebugLog = options.enableDebugLog
         let checkedOptions = check(resource: resource, options: options)
         let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)

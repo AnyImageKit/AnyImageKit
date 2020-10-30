@@ -106,7 +106,11 @@ open class ImagePickerController: AnyImageNavigationController {
 extension ImagePickerController {
     
     open func update(options: PickerOptionsInfo) {
+        guard viewControllers.isEmpty || enableForceUpdate else {
+            return
+        }
         enableDebugLog = options.enableDebugLog
+        manager.clearAll()
         manager.options = check(options: options)
         
         let rootViewController = AssetPickerViewController(manager: manager)

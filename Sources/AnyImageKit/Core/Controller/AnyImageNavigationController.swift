@@ -17,6 +17,8 @@ open class AnyImageNavigationController: UINavigationController {
     
     open var tag: Int = 0
     
+    open var enableForceUpdate: Bool = false
+    
     open override var shouldAutorotate: Bool {
         return false
     }

@@ -67,8 +67,10 @@ open class ImageCaptureController: AnyImageNavigationController {
 extension ImageCaptureController {
     
     open func update(options: CaptureOptionsInfo) {
+        guard viewControllers.isEmpty || enableForceUpdate else {
+            return
+        }
         enableDebugLog = options.enableDebugLog
-        
         if UIDevice.current.userInterfaceIdiom == .pad {
             let rootViewController = PadCaptureViewController(options: options)
             rootViewController.delegate = self
