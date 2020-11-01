@@ -33,19 +33,19 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private let manager: PickerManager = .init()
     
-    public init() {
+    public required init() {
         super.init(nibName: nil, bundle: nil)
     }
     
+    /// Init Picker
     public convenience init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
         self.init()
         self.update(options: options)
         self.pickerDelegate = delegate
     }
     
-    @available(*, deprecated, message: "init(coder:) has not been implemented")
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     deinit {
@@ -59,14 +59,6 @@ open class ImagePickerController: AnyImageNavigationController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         addNotifications()
-        
-        let rootViewController = AssetPickerViewController(manager: manager)
-        rootViewController.delegate = self
-        rootViewController.trackObserver = self
-        viewControllers = [rootViewController]
-        
-        navigationBar.barTintColor = manager.options.theme.backgroundColor
-        navigationBar.tintColor = manager.options.theme.textColor
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
@@ -114,8 +106,20 @@ open class ImagePickerController: AnyImageNavigationController {
 extension ImagePickerController {
     
     open func update(options: PickerOptionsInfo) {
+        guard viewControllers.isEmpty || enableForceUpdate else {
+            return
+        }
         enableDebugLog = options.enableDebugLog
+        manager.clearAll()
         manager.options = check(options: options)
+        
+        let rootViewController = AssetPickerViewController(manager: manager)
+        rootViewController.delegate = self
+        rootViewController.trackObserver = self
+        viewControllers = [rootViewController]
+        
+        navigationBar.barTintColor = manager.options.theme.backgroundColor
+        navigationBar.tintColor = manager.options.theme.textColor
     }
 }
 
