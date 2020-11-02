@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/AnyImageKit.svg?style=flat)](./)
 [![License](https://img.shields.io/cocoapods/l/AnyImageKit.svg?style=flat)](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/LICENSE)
 
-`AnyImageKit` is a toolbox for picking and editing photos. It's written in Swift. 
+`AnyImageKit` is a toolbox for picking, editing or capturing photos/videos, written in Swift. 
 
 > [中文说明](./Documentation/README_CN.md)
 
@@ -25,7 +25,7 @@
     - [x] Video
     - [ ] Live Photo
     - [ ] GIF
-    - [ ] Fliter
+    - [ ] Fliter Support
 - [ ] Edit image ( Technical Preview )
     - [x] Drawing
     - [ ] Emoji
@@ -33,7 +33,7 @@
     - [x] Cropping
     - [x] Mosaic
     - [ ] Rotate
-    - [ ] Fliter
+    - [ ] Fliter Support
 - [ ] Multiple platform support
     - [x] iOS
     - [x] iPadOS
@@ -98,7 +98,7 @@ import AnyImageKit
 
 class ViewController: UIViewController {
 
-    @IBAction private func openPicker() {
+    @IBAction private func openPicker(_ sender: UIButton) {
         let options = PickerOptionsInfo()
         let controller = ImagePickerController(options: options, delegate: self)
         present(controller, animated: true, completion: nil)
@@ -108,21 +108,27 @@ class ViewController: UIViewController {
 extension ViewController: ImagePickerControllerDelegate {
 
     func imagePickerDidCancel(_ picker: ImagePickerController) {
-        // Your code, handle cancel
+        /*
+          Your code, handle user cancel
+        */
         picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        // Your code, handle select assets
         let images = result.assets.map { $0.image }
+        /*
+          Your code, handle selected assets
+        */
         picker.dismiss(animated: true, completion: nil)
     }
 }
 ```
 
-## Quick Look
+## Release Note
 
-![](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/QuickLook.gif)
+* [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0100): Release on 2020-11-03
+
+* [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#090): Release on 2020-10-09
 
 ## License
 

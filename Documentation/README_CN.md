@@ -1,6 +1,6 @@
 ![AnyImageKit](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/TitleMap@2x.png)
 
-`AnyImageKit` 是一个选取与编辑图片的工具套件，使用 Swift 编写。
+`AnyImageKit` 是一个选取、编辑、拍摄图片/视频的工具套件，使用 Swift 编写。
 
 ## 功能
 
@@ -17,7 +17,7 @@
     - [x] Video
     - [ ] Live Photo
     - [ ] GIF
-    - [ ] 滤镜
+    - [ ] 滤镜支持
 - [ ] 编辑图片 (技术预览版)
     - [x] 涂鸦
     - [ ] 表情
@@ -25,7 +25,7 @@
     - [x] 裁剪
     - [x] 马赛克
     - [ ] 旋转
-    - [ ] 滤镜
+    - [ ] 滤镜支持
 - [ ] 多平台支持
     - [x] iOS
     - [x] iPadOS
@@ -92,7 +92,7 @@ import AnyImageKit
 
 class ViewController: UIViewController {
 
-    @IBAction private func openPicker() {
+    @IBAction private func openPicker(_ sender: UIButton) {
         let options = PickerOptionsInfo()
         let controller = ImagePickerController(options: options, delegate: self)
         present(controller, animated: true, completion: nil)
@@ -102,21 +102,27 @@ class ViewController: UIViewController {
 extension ViewController: ImagePickerControllerDelegate {
 
     func imagePickerDidCancel(_ picker: ImagePickerController) {
-        // 你的业务代码，处理取消(存在默认实现，如果需要额外行为请自行实现本方法)
+        /*
+          你的业务代码，处理用户取消(存在默认实现，如果需要额外行为请自行实现本方法)
+        */
         picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        // 你的业务代码，处理选中的资源
         let images = result.assets.map { $0.image }
+        /*
+          你的业务代码，处理选中的资源
+        */
         picker.dismiss(animated: true, completion: nil)
     }
 }
 ```
 
-## 预览
+## 更新日志
 
-![](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/QuickLook.gif)
+* [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100): 发布于 2020-11-03
+
+* [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090): 发布于 2020-10-09
 
 ## 版权协议
 
