@@ -5,7 +5,29 @@
 ### New Features
 
 - Core
-  - Add `ImageKitDataTrackDelegate` for track page/event, supportted page and event can be find [HERE](./DATA_TRACK.md)
+  - Add `ImageKitDataTrackDelegate` for track page/event, supported page and event can be find [HERE](./DATA_TRACK.md).
+- Picker
+  - Picker now observe photo library changes on all supported iOS versions and automatically loads add/remove changes.
+  - Added preselection mode, set `PickerOptionsInfo.preselectAssets: [String]` to enable preselection.
+
+### Fix
+
+- Picker
+  - Unify the color of the toolbar and navigation bar on selection.
+  - Better compatibility with iOS 14 "Limited Photos Library" mode.
+  - Fix issue with video loading in iOS 14.
+  - Now locate to the current album when opening album selection.
+- Editor
+  - Fix the issue with the crop box going black in iOS 11.
+  - When entering text in the editor, return now shows as done instead of a line break.
+- Capture
+  - Fix the issue with the focus frame going black in iOS 11.
+
+### Incompatible changes
+
+- Picker/Editor/Capture now has an empty initialization method `required init() ` and has changed the old func from `required init(options: ...) ` to `convenience init(options: ...) `, to make it easier to subclass related items.
+- The `delegate` of Picker/Editor/Capture is now open and can be changed after initialization.
+- The `update(options: ...)' method has been added in Picker/Editor/Capture, which should call before present.
 
 ## 0.9.0
 
