@@ -9,12 +9,27 @@
 import UIKit
 
 final class HomeViewController: UITableViewController {
+    
+    private var versionLabel: UILabel = {
+        let view = UILabel(frame: .zero)
+        if let info = Bundle.main.infoDictionary, let version = info["CFBundleShortVersionString"] as? String {
+            view.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            view.text = "v"+version
+        }
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "AnyImageKit"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableFooterView = UIView(frame: .zero)
+        
+        view.addSubview(versionLabel)
+        versionLabel.snp.makeConstraints { maker in
+            maker.centerX.equalToSuperview()
+            maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-8)
+        }
     }
 
     // MARK: - Table view data source
