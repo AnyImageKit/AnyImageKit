@@ -2,6 +2,10 @@
 
 ## 0.10.0
 
+### 通用
+
+- 已适配最新的 iPhone 12/12 Pro 系列设备。
+
 ### 新增
 
 - Core
@@ -31,7 +35,7 @@
 
 ## 0.9.0
 
-### 构建
+### 通用
 
 - 项目构建从 Xcode 11 升级到 Xcode 12。
 - 项目第三方依赖从 Cocoapods 变更为 Swift Package Manager。

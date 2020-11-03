@@ -2,6 +2,10 @@
 
 ## 0.10.0
 
+### General
+
+- AnyImageKit is now adapt for the latest iPhone 12/12 Pro series devices.
+
 ### New Features
 
 - Core
