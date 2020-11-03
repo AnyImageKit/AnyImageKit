@@ -124,7 +124,7 @@ extension ViewController: ImagePickerControllerDelegate {
 }
 ```
 
-## Release Note
+## Release Notes
 
 * [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0100): Release on 2020-11-03
 
