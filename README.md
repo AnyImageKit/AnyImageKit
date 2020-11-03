@@ -99,7 +99,10 @@ import AnyImageKit
 class ViewController: UIViewController {
 
     @IBAction private func openPicker(_ sender: UIButton) {
-        let options = PickerOptionsInfo()
+        var options = PickerOptionsInfo()
+        /*
+          Your code, handle custom options
+        */
         let controller = ImagePickerController(options: options, delegate: self)
         present(controller, animated: true, completion: nil)
     }

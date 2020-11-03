@@ -93,7 +93,10 @@ import AnyImageKit
 class ViewController: UIViewController {
 
     @IBAction private func openPicker(_ sender: UIButton) {
-        let options = PickerOptionsInfo()
+        var options = PickerOptionsInfo()
+        /*
+          你的业务代码，更新设置
+        */
         let controller = ImagePickerController(options: options, delegate: self)
         present(controller, animated: true, completion: nil)
     }
