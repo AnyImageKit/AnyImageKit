@@ -21,8 +21,17 @@ final class HomeViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "AnyImageKit"
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        setupNavigation()
+        setupView()
+    }
+    
+    private func setupNavigation() {
+        navigationItem.title = "AnyImageKit"
+    }
+    
+    private func setupView() {
+        tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
         
         view.addSubview(versionLabel)
@@ -43,7 +52,7 @@ final class HomeViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier, for: indexPath)
         let rowType = Section.allCases[indexPath.section].allRowCase[indexPath.row]
         cell.textLabel?.text = rowType.title
         cell.accessoryType = .disclosureIndicator
@@ -66,7 +75,7 @@ extension HomeViewController {
     
     // MARK: - Section
     enum Section: Int, CaseIterable {
-        case module = 0
+        case module
         case application
         
         var title: String {

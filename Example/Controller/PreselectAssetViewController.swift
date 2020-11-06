@@ -31,7 +31,7 @@ final class PreselectAssetViewController: UIViewController {
     }()
     private(set) lazy var tipsLabel: UILabel = {
         let view = UILabel()
-        view.text = BundleHelper.localizedString(key: "Preselect Assets Tips")
+        view.text = Bundle.main.localizedString(forKey: "Preselect Assets Tips", value: nil, table: nil)
         view.numberOfLines = 0
         view.textAlignment = .center
         return view
@@ -56,7 +56,7 @@ final class PreselectAssetViewController: UIViewController {
     }
     
     private func setupNavigation() {
-        let title = BundleHelper.localizedString(key: "OpenPicker")
+        let title = Bundle.main.localizedString(forKey: "OpenPicker", value: nil, table: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
     }
 }

@@ -19,12 +19,13 @@ final class AvatarPickerController: UITableViewController {
     }
     
     private func setupView() {
+        tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableFooterView = UIView(frame: .zero)
     }
     
     private func setupNavigation() {
-        let title = BundleHelper.localizedString(key: "OpenPicker")
+        let title = Bundle.main.localizedString(forKey: "OpenPicker", value: nil, table: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
     }
     

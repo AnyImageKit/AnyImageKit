@@ -17,35 +17,25 @@ final class PickerConfigViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Picker"
-        setupView()
         setupNavigation()
-    }
-    
-    private func setupView() {
-        tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
-        tableView.tableFooterView = UIView(frame: .zero)
+        setupView()
     }
     
     private func setupNavigation() {
-        let title = BundleHelper.localizedString(key: "OpenPicker")
+        navigationItem.title = "Picker"
+        let title = Bundle.main.localizedString(forKey: "OpenPicker", value: nil, table: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openPickerTapped))
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        let imageViewHeight = view.bounds.width * 500 / 1200
-        if let headerView = tableView.tableHeaderView as? UIImageView, headerView.bounds.height == imageViewHeight {
-            return
-        }
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: imageViewHeight))
-        imageView.image = UIImage(named: "TitleMapPicker")
-        tableView.tableHeaderView = imageView
+    private func setupView() {
+        tableView.cellLayoutMarginsFollowReadableWidth = true
+        tableView.register(ConfigCell.self, forCellReuseIdentifier: ConfigCell.reuseIdentifier)
+        tableView.tableFooterView = UIView(frame: .zero)
     }
     
     // MARK: - Target
     
-    @IBAction func openPickerTapped() {
+    @objc private func openPickerTapped() {
         options.enableDebugLog = true
         let controller = ImagePickerController(options: options, delegate: self)
         controller.trackDelegate = self
@@ -67,7 +57,7 @@ final class PickerConfigViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let rowType = Section.allCases[indexPath.section].allRowCase[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ConfigCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConfigCell.reuseIdentifier, for: indexPath) as! ConfigCell
         cell.setupData(rowType)
         return cell
     }
@@ -287,12 +277,12 @@ extension PickerConfigViewController {
     
     // MARK: - Section
     enum Section: Int, CaseIterable {
-        case config = 0
+        case config
         case editor
         case capture
         case other
         
-        var title: String {
+        var title: String? {
             switch self {
             case .config:
                 return "Options"

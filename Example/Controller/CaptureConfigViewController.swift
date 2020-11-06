@@ -21,25 +21,15 @@ final class CaptureConfigViewController: UITableViewController {
     }
     
     private func setupView() {
+        tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.register(ConfigCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableFooterView = UIView(frame: .zero)
     }
     
     private func setupNavigation() {
         navigationItem.title = "Capture"
-        let title = BundleHelper.localizedString(key: "OpenCamera")
+        let title = Bundle.main.localizedString(forKey: "OpenCamera", value: nil, table: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .done, target: self, action: #selector(openCaptureTapped))
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        let imageViewHeight = view.bounds.width * 500 / 1200
-        if let headerView = tableView.tableHeaderView as? UIImageView, headerView.bounds.height == imageViewHeight {
-            return
-        }
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: imageViewHeight))
-        imageView.image = UIImage(named: "TitleMapCapture")
-        tableView.tableHeaderView = imageView
     }
     
     // MARK: - Target

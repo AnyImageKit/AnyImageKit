@@ -92,7 +92,7 @@ final class ConfigCell: UITableViewCell {
     }
     
     public func setupData(_ rowType: RowTypeRule) {
-        titleLabel.text = BundleHelper.localizedString(key: rowType.title)
+        titleLabel.text = Bundle.main.localizedString(forKey: rowType.title, value: nil, table: nil)
         tagsButton.setTitle(rowType.options, for: .normal)
         contentLabel.text = rowType.defaultValue
     }
