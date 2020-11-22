@@ -17,12 +17,4 @@ extension PHAsset {
             return false
         }
     }
-    
-    var videoDuration: String {
-        guard mediaType == .video else { return "" }
-        let time = Int(duration)
-        let min = time / 60
-        let sec = time % 60
-        return String(format: "%02ld:%02ld", min, sec)
-    }
 }

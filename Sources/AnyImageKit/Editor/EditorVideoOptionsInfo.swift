@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct EditorVideoOptionsInfo: Equatable {
+public struct EditorVideoOptionsInfo {
     
     /// 主题色
     /// 默认：green

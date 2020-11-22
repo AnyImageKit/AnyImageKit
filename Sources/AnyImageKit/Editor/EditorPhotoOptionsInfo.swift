@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct EditorPhotoOptionsInfo: Equatable {
+public struct EditorPhotoOptionsInfo {
     
     /// 主题色
     /// 默认：green

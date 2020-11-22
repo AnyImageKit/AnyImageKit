@@ -130,6 +130,7 @@ extension AssetCell {
     }
     
     func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+        asset.check(disable: manager.options.disableRules)
         setOptions(manager.options)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
         identifier = asset.phAsset.localIdentifier
@@ -140,7 +141,7 @@ extension AssetCell {
                 guard self.identifier == asset.phAsset.localIdentifier else { return }
                 self.imageView.image = asset._image ?? response.image
                 if asset.mediaType == .video && !isPreview {
-                    self.videoView.setVideoTime(asset.videoDuration)
+                    self.videoView.setVideoTime(asset.durationDescription)
                 }
             case .failure(let error):
                 _print(error)
@@ -167,7 +168,11 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-            disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
+            if asset.isDisable {
+                disableCoverView.isHidden = false
+            } else {
+                disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
+            }
         }
     }
 }
