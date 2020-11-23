@@ -121,6 +121,14 @@ public struct PickerSelectOption: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+    
+    public var isPhoto: Bool {
+        return contains(.photo) || contains(.photoGIF) || contains(.photoLive)
+    }
+    
+    public var isVideo: Bool {
+        return contains(.video)
+    }
 }
 
 /// Album Options 相册类型
