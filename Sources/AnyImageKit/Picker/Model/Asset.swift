@@ -126,7 +126,6 @@ extension Asset {
             return state == .selected
         }
         set {
-            assert(state == .normal || state == .selected)
             state = newValue ? .selected : .normal
         }
     }
