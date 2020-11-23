@@ -25,10 +25,12 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
     }
     
     public func check(asset: Asset) -> Bool {
+        guard asset.mediaType.isVideo else { return false }
         return asset.duration < minDuration || asset.duration > maxDuration
     }
     
     public func alertMessage(for asset: Asset) -> String {
-        return "选取视频长度应在\(10)-\(60)秒之间"
+        let message = BundleHelper.pickerLocalizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE")
+        return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }
 }

@@ -67,7 +67,9 @@ public struct PickerOptionsInfo {
     /// - Default: []
     public var preselectAssets: [String] = []
     
-    public var disableRules: [AssetDisableCheckRule] = [VideoDurationDisableCheckRule(min: 5, max: 60)]
+    /// Disable Rules 资源禁用规则
+    /// - Default: []
+    public var disableRules: [AssetDisableCheckRule] = []
     
     /// Enable Debug Log 启用调试日志
     /// - Default: false
