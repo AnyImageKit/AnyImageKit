@@ -170,26 +170,29 @@ extension PickerManager {
                     guard let self = self else { return }
                     switch result {
                     case .success(let response):
-                        asset._images[.initial] = response.image
+                        if response.isDegraded {
+                            self.workQueue.async { [weak self] in
+                                guard let self = self else { return }
+                                self.requestVideo(for: asset.phAsset) { result in
+                                    switch result {
+                                    case .success(_):
+                                        asset.videoDidDownload = true
+                                        self.didSyncAsset()
+                                    case .failure(let error):
+                                        self.lock.lock()
+                                        self.failedAssets.append(asset)
+                                        self.lock.unlock()
+                                        _print(error)
+                                        let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
+                                        NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                                    }
+                                }
+                            }
+                        } else {
+                            asset._images[.initial] = response.image
+                        }
                     case .failure:
                         break
-                    }
-                    self.workQueue.async { [weak self] in
-                        guard let self = self else { return }
-                        self.requestVideo(for: asset.phAsset) { result in
-                            switch result {
-                            case .success(_):
-                                asset.videoDidDownload = true
-                                self.didSyncAsset()
-                            case .failure(let error):
-                                self.lock.lock()
-                                self.failedAssets.append(asset)
-                                self.lock.unlock()
-                                _print(error)
-                                let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
-                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
-                            }
-                        }
                     }
                 })
             }

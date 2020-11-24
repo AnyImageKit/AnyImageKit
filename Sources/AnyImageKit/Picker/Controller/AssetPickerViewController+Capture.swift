@@ -74,6 +74,7 @@ extension AssetPickerViewController {
         if addSuccess {
             /// 拍照结束后，如果 limit=1 直接返回
             if manager.options.selectLimit == 1 {
+                stopReloadAlbum = true
                 delegate?.assetPickerDidFinishPicking(self)
             }
         }

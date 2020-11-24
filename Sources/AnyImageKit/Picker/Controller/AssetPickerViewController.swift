@@ -32,7 +32,7 @@ final class AssetPickerViewController: AnyImageViewController {
     @available(iOS 14.0, *)
     private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
     
-    private lazy var stopReloadAlbum: Bool = false
+    lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
         let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
