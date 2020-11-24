@@ -378,6 +378,12 @@ extension PhotoPreviewController {
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        if case .disable(let rule) = data.asset.state {
+            let message = rule.alertMessage(for: data.asset)
+            showAlert(message: message)
+            return
+        }
         if manager.selectedAssets.isEmpty {
             selectButtonTapped(navigationBar.selectButton)
         }
