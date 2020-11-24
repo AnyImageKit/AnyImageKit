@@ -16,6 +16,7 @@
 		716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */; };
 		71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71723646249C4CD5003D23DB /* PadCaptureViewController.swift */; };
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
+		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF13425199C0D00F79D19 /* ColorWell.swift */; };
 		71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1422519CC4B00F79D19 /* Core+UIView.swift */; };
@@ -122,7 +123,6 @@
 		A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D7237AA24200A894A9 /* ImageEditorController.swift */; };
 		A50B2105237AA24200A894A9 /* TouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D9237AA24200A894A9 /* TouchState.swift */; };
 		A50B2107237AA24200A894A9 /* CropData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DB237AA24200A894A9 /* CropData.swift */; };
-		A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DC237AA24200A894A9 /* BezierGenerator.swift */; };
 		A50B2109237AA24300A894A9 /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DD237AA24200A894A9 /* Brush.swift */; };
 		A50B210B237AA24300A894A9 /* CacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E0237AA24200A894A9 /* CacheTool.swift */; };
 		A50B2111237AA24300A894A9 /* EditorCropToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */; };
@@ -132,7 +132,6 @@
 		A50B2115237AA24300A894A9 /* PhotoEditorContentView+Getter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EC237AA24200A894A9 /* PhotoEditorContentView+Getter.swift */; };
 		A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */; };
 		A50B2117237AA24300A894A9 /* PhotoEditorContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EE237AA24200A894A9 /* PhotoEditorContentView.swift */; };
-		A50B2118237AA24300A894A9 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20EF237AA24200A894A9 /* Canvas.swift */; };
 		A50B2119237AA24300A894A9 /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F0237AA24200A894A9 /* Mosaic.swift */; };
 		A50B211A237AA24300A894A9 /* EditorToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F1237AA24200A894A9 /* EditorToolView.swift */; };
 		A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */; };
@@ -256,6 +255,7 @@
 		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
 		71723646249C4CD5003D23DB /* PadCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadCaptureViewController.swift; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
+		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		71CBF13425199C0D00F79D19 /* ColorWell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWell.swift; sourceTree = "<group>"; };
 		71CBF1422519CC4B00F79D19 /* Core+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+UIView.swift"; sourceTree = "<group>"; };
@@ -381,7 +381,6 @@
 		A50B20D7237AA24200A894A9 /* ImageEditorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEditorController.swift; sourceTree = "<group>"; };
 		A50B20D9237AA24200A894A9 /* TouchState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchState.swift; sourceTree = "<group>"; };
 		A50B20DB237AA24200A894A9 /* CropData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropData.swift; sourceTree = "<group>"; };
-		A50B20DC237AA24200A894A9 /* BezierGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierGenerator.swift; sourceTree = "<group>"; };
 		A50B20DD237AA24200A894A9 /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
 		A50B20E0237AA24200A894A9 /* CacheTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTool.swift; sourceTree = "<group>"; };
 		A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorCropToolView.swift; sourceTree = "<group>"; };
@@ -391,7 +390,6 @@
 		A50B20EC237AA24200A894A9 /* PhotoEditorContentView+Getter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoEditorContentView+Getter.swift"; sourceTree = "<group>"; };
 		A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorMosaicToolView.swift; sourceTree = "<group>"; };
 		A50B20EE237AA24200A894A9 /* PhotoEditorContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorContentView.swift; sourceTree = "<group>"; };
-		A50B20EF237AA24200A894A9 /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		A50B20F0237AA24200A894A9 /* Mosaic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
 		A50B20F1237AA24200A894A9 /* EditorToolView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorToolView.swift; sourceTree = "<group>"; };
 		A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorEditOptionsView.swift; sourceTree = "<group>"; };
@@ -523,7 +521,6 @@
 				A50B20F4237AA24200A894A9 /* PhotoEditorContentView+Mosaic.swift */,
 				A50B20F5237AA24200A894A9 /* PhotoEditorContentView+Crop.swift */,
 				A5ABEF2B239F793B00B50543 /* PhotoEditorContentView+InputText.swift */,
-				A50B20EF237AA24200A894A9 /* Canvas.swift */,
 				A50B20F0237AA24200A894A9 /* Mosaic.swift */,
 				A50B20F1237AA24200A894A9 /* EditorToolView.swift */,
 				A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */,
@@ -979,7 +976,6 @@
 			isa = PBXGroup;
 			children = (
 				A50B20DD237AA24200A894A9 /* Brush.swift */,
-				A50B20DC237AA24200A894A9 /* BezierGenerator.swift */,
 				A50B20D9237AA24200A894A9 /* TouchState.swift */,
 				A50B20DB237AA24200A894A9 /* CropData.swift */,
 				A596FE5A23A8A86F005C8AFA /* TextData.swift */,
@@ -996,6 +992,7 @@
 			children = (
 				7142FF7425591DA0003FF44D /* Old */,
 				7142FF7525591DB0003FF44D /* DryDrawingView.swift */,
+				717DCA8B256CD25100568A6C /* Canvas.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1334,6 +1331,7 @@
 				A519FA3223AB11ED0028CCC8 /* MediaType.swift in Sources */,
 				A561239723B5E7B90071C3E8 /* PickerOptionsInfo.swift in Sources */,
 				A50B2107237AA24200A894A9 /* CropData.swift in Sources */,
+				717DCADA256CEEC700568A6C /* Canvas.swift in Sources */,
 				A05C8DA7233DFC71005B0F3C /* PickerManager+Album.swift in Sources */,
 				71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */,
 				A5347D1823A9D11F00C93874 /* EditorVideoResource.swift in Sources */,
@@ -1376,7 +1374,6 @@
 				A01A59372522206A00FABD22 /* EditorResult.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
-				A50B2108237AA24200A894A9 /* BezierGenerator.swift in Sources */,
 				A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */,
 				A0B50C3823AA0AD2002C9799 /* CapturePreviewContentView.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
@@ -1385,7 +1382,6 @@
 				71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */,
 				A03806B423BF2DF2002873A9 /* AssetPickerViewController+Capture.swift in Sources */,
 				A5F7DFCF2394D5CE006E10ED /* EditorTextToolView.swift in Sources */,
-				A50B2118237AA24300A894A9 /* Canvas.swift in Sources */,
 				A50B211D237AA24300A894A9 /* PhotoEditorContentView+Mosaic.swift in Sources */,
 				A0839B6D23C2DBD700FF8FDE /* VideoExportPreset.swift in Sources */,
 				A507CD8223C4228F00E55A6B /* EditorPhotoResource.swift in Sources */,
@@ -1803,7 +1799,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Example/Resources/Example.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5HZKWDU956;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1826,7 +1822,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Example/Resources/Example.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5HZKWDU956;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

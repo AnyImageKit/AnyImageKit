@@ -30,7 +30,6 @@ struct DrawnPath : GraphicsDrawing, Equatable {
     
     private func draw() {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        
         context.saveGState()
         defer {
             context.restoreGState()

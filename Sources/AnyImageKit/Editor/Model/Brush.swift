@@ -9,7 +9,7 @@
 import UIKit
 
 /// 画笔，描述 path 的样式
-final class Brush: Equatable {
+struct Brush: Equatable {
     
     var color: UIColor = .red
     var lineWidth: CGFloat = 5.0

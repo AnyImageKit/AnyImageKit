@@ -164,7 +164,7 @@ final class PhotoEditorContentView: UIView {
         penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
         mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
         imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
-        canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: false)
+        // TODO: Cache
         cache.textDataList.forEach {
             addText(data: $0)
         }

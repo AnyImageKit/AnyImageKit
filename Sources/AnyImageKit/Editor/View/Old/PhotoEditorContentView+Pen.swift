@@ -12,8 +12,7 @@ import UIKit
 extension PhotoEditorContentView {
     
     func canvasUndo() {
-        canvas.lastPenImageView.image = penCache.read(deleteMemoryStorage: true)
-        canvas.reset()
+        canvas.undo()
     }
     
     func canvasCanUndo() -> Bool {
@@ -38,8 +37,7 @@ extension PhotoEditorContentView: CanvasDelegate {
     
     func canvasDidEndPen() {
         let screenshot = canvas.screenshot()
-        canvas.lastPenImageView.image = screenshot
-        canvas.reset()
+        // TODO: Cache
         penCache.write(screenshot)
         
         delegate?.photoDidEndPen()
@@ -49,7 +47,8 @@ extension PhotoEditorContentView: CanvasDelegate {
 // MARK: - CanvasDataSource
 extension PhotoEditorContentView: CanvasDataSource {
     
-    func canvasGetScale(_ canvas: Canvas) -> CGFloat {
-        return scrollView.zoomScale
+    func canvasGetLineWidth(_ canvas: Canvas) -> CGFloat {
+        let scale = scrollView.zoomScale
+        return options.penWidth / scale
     }
 }
