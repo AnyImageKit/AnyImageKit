@@ -313,12 +313,6 @@ extension AssetPickerViewController {
             collectionView.scrollToFirst(at: .top, animated: animated)
         }
     }
-    
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
 }
 
 // MARK: - Notification

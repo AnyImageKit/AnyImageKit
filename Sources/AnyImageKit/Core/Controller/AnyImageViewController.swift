@@ -35,6 +35,16 @@ class AnyImageViewController: UIViewController {
     }
 }
 
+// MARK: - Alert
+extension AnyImageViewController {
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: BundleHelper.coreLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: BundleHelper.coreLocalizedString(key: "OK"), style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+}
+
 // MARK: - Data Track
 extension AnyImageViewController {
     

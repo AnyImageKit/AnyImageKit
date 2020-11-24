@@ -333,9 +333,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
             let message = rule.alertMessage(for: data.asset)
-            let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            showAlert(message: message)
             return
         }
         
@@ -348,9 +346,7 @@ extension PhotoPreviewController {
             } else {
                 message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
             }
-            let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            showAlert(message: message)
             return
         }
         
