@@ -9,9 +9,14 @@
 import UIKit
 
 /// 画笔，描述 path 的样式
-final class Brush {
+final class Brush: Equatable {
     
-    var name: String = ""
     var color: UIColor = .red
     var lineWidth: CGFloat = 5.0
+    
+    static func == (lhs: Brush, rhs: Brush) -> Bool {
+        guard lhs.color == rhs.color else { return false }
+        guard lhs.lineWidth == rhs.lineWidth else { return false }
+        return true
+    }
 }
