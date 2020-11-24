@@ -146,7 +146,7 @@ extension Asset {
     func check(disable rules: [AssetDisableCheckRule]) {
         guard isUnchecked else { return }
         for rule in rules {
-            guard !rule.check(asset: self) else {
+            if rule.isDisable(for: self) {
                 state = .disable(rule)
                 return
             }

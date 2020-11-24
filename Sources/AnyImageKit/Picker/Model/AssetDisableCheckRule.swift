@@ -10,7 +10,7 @@ import Foundation
 
 public protocol AssetDisableCheckRule {
     
-    func check(asset: Asset) -> Bool
+    func isDisable(for asset: Asset) -> Bool
     func alertMessage(for asset: Asset) -> String
 }
 
@@ -24,7 +24,7 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
         self.maxDuration = max
     }
     
-    public func check(asset: Asset) -> Bool {
+    public func isDisable(for asset: Asset) -> Bool {
         guard asset.mediaType.isVideo else { return false }
         return asset.duration < minDuration || asset.duration > maxDuration
     }
