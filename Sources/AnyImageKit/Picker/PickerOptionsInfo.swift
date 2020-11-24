@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public struct PickerOptionsInfo: Equatable {
+public struct PickerOptionsInfo {
     
     /// Theme 主题
     /// - Default: Auto
@@ -67,6 +67,10 @@ public struct PickerOptionsInfo: Equatable {
     /// - Default: []
     public var preselectAssets: [String] = []
     
+    /// Disable Rules 资源禁用规则
+    /// - Default: []
+    public var disableRules: [AssetDisableCheckRule] = []
+    
     /// Enable Debug Log 启用调试日志
     /// - Default: false
     public var enableDebugLog: Bool = false
@@ -109,13 +113,21 @@ public struct PickerSelectOption: OptionSet {
     public static let video = PickerSelectOption(rawValue: 1 << 1)
     /// GIF 动图
     public static let photoGIF = PickerSelectOption(rawValue: 1 << 2)
-    /// Live photo 实况照片
+    /// Live Photo 实况照片
     public static let photoLive = PickerSelectOption(rawValue: 1 << 3)
     
     public let rawValue: Int
     
     public init(rawValue: Int) {
         self.rawValue = rawValue
+    }
+    
+    public var isPhoto: Bool {
+        return contains(.photo) || contains(.photoGIF) || contains(.photoLive)
+    }
+    
+    public var isVideo: Bool {
+        return contains(.video)
     }
 }
 

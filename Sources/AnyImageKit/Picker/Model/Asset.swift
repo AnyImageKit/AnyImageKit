@@ -9,15 +9,33 @@
 import UIKit
 import Photos
 
-public class Asset: Equatable, Hashable {
-    /// Identifier PHAsset.localIdentifier
-    public var identifier: String {
-        return phAsset.localIdentifier
-    }
+public class Asset {
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
     public let mediaType: MediaType
+    
+    var _images: [ImageKey: UIImage] = [:]
+    var videoDidDownload: Bool = false
+    
+    var idx: Int
+    var state: State = .unchecked
+    var selectedNum: Int = 1
+    
+    init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
+        self.idx = idx
+        self.phAsset = asset
+        self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)
+    }
+}
+
+extension Asset {
+    
+    /// Identifier PHAsset.localIdentifier
+    public var identifier: String {
+        return phAsset.localIdentifier
+    }
+    
     /// 输出图像
     public var image: UIImage {
         return _image ?? .init()
@@ -26,40 +44,114 @@ public class Asset: Equatable, Hashable {
     var _image: UIImage? {
         return (_images[.output] ?? _images[.edited]) ?? _images[.initial]
     }
-    var _images: [ImageKey:UIImage] = [:]
-    var videoDidDownload: Bool = false
     
-    var idx: Int
-    let videoDuration: String
-    var isSelected: Bool = false
-    var selectedNum: Int = 1
-    
-    init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
-        self.idx = idx
-        self.phAsset = asset
-        self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)
-        self.videoDuration = asset.videoDuration
+    var duration: TimeInterval {
+        return phAsset.duration
     }
+    
+    var durationDescription: String {
+        let time = Int(duration)
+        let min = time / 60
+        let sec = time % 60
+        return String(format: "%02ld:%02ld", min, sec)
+    }
+    
+    var isReady: Bool {
+        switch mediaType {
+        case .photo, .photoGIF, .photoLive:
+            return _image != nil
+        case .video:
+            return videoDidDownload
+        }
+    }
+    
+    var isCamera: Bool {
+        return idx == -1
+    }
+}
+
+extension Asset: Equatable {
     
     public static func == (lhs: Asset, rhs: Asset) -> Bool {
-        return lhs.phAsset.localIdentifier == rhs.phAsset.localIdentifier
+        return lhs.identifier == rhs.identifier
     }
+}
+
+extension Asset: Hashable {
     
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(phAsset.localIdentifier)
+        hasher.combine(identifier)
     }
 }
 
 extension Asset: CustomStringConvertible {
     
     public var description: String {
-        return "<Asset> \(phAsset.localIdentifier) mediaType=\(mediaType) image=\(image)"
+        return "<Asset> \(identifier) mediaType=\(mediaType) image=\(image)"
     }
 }
 
+// MARK: - State
 extension Asset {
-    var isCamera: Bool {
-        return idx == -1
+    
+    enum State: Equatable {
+        
+        case unchecked
+        case normal
+        case selected
+        case disable(AssetDisableCheckRule)
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            switch (lhs, rhs) {
+            case (.unchecked, unchecked):
+                return true
+            case (.normal, normal):
+                return true
+            case (.selected, selected):
+                return true
+            case (.disable, disable):
+                return true
+            default:
+                return false
+            }
+        }
+    }
+    
+    var isUnchecked: Bool {
+        return state == .unchecked
+    }
+    
+    var isSelected: Bool {
+        get {
+            return state == .selected
+        }
+        set {
+            state = newValue ? .selected : .normal
+        }
+    }
+    
+    var isDisable: Bool {
+        switch state {
+        case .disable(_):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+// MARK: - Disable Check
+extension Asset {
+
+    func check(disable rules: [AssetDisableCheckRule]) {
+        guard isUnchecked else { return }
+        for rule in rules {
+            guard !rule.check(asset: self) else {
+                state = .disable(rule)
+                return
+            }
+        }
+        state = .normal
     }
 }
 
@@ -125,19 +217,8 @@ extension Asset {
 
 extension Asset {
     
-    var isReady: Bool {
-        switch mediaType {
-        case .photo, .photoGIF, .photoLive:
-            return _image != nil
-        case .video:
-            return videoDidDownload
-        }
-    }
-}
-
-extension Asset {
-    
     enum ImageKey: String, Hashable {
+        
         case initial
         case edited
         case output

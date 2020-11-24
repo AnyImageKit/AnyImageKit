@@ -201,7 +201,7 @@ extension AssetPickerViewController {
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)
-        album.assets.forEach { $0.isSelected = false }
+        album.assets.forEach { $0.state = .unchecked }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
@@ -313,6 +313,12 @@ extension AssetPickerViewController {
             collectionView.scrollToFirst(at: .top, animated: animated)
         }
     }
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Notification
@@ -370,11 +376,23 @@ extension AssetPickerViewController {
         guard let cell = sender.superview as? AssetCell else { return }
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
         let asset = album.assets[idx]
+        
+        if case .disable(let rule) = asset.state {
+            let message = rule.alertMessage(for: asset)
+            showAlert(message: message)
+            return
+        }
+        
         if !asset.isSelected && manager.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.options.selectLimit)
-            let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            let message: String
+            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS"), manager.options.selectLimit)
+            } else if manager.options.selectOptions.isPhoto {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS"), manager.options.selectLimit)
+            } else {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
+            }
+            showAlert(message: message)
             return
         }
         
@@ -461,6 +479,8 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let asset = album?.assets[indexPath.item] else { return UICollectionViewCell() }
+        
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             cell.isAccessibilityElement = true
@@ -468,6 +488,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
             cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Take photo")
             return cell
         }
+        #endif
         
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         cell.tag = indexPath.row
@@ -508,8 +529,13 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             if manager.options.selectLimit == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
+        } else if case .disable(let rule) = asset.state {
+            let message = rule.alertMessage(for: asset)
+            showAlert(message: message)
+            return
+        } else if !asset.isSelected && manager.isUpToLimit {
+            return
         } else {
-            if !asset.isSelected && manager.isUpToLimit { return }
             let controller = PhotoPreviewController(manager: manager)
             controller.currentIndex = indexPath.item - itemOffset
             controller.dataSource = self

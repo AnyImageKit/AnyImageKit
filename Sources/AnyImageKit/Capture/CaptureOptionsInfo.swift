@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-public struct CaptureOptionsInfo: Equatable {
+public struct CaptureOptionsInfo {
     
     /// 主题色
     /// 默认：绿色 0x57BE6A
