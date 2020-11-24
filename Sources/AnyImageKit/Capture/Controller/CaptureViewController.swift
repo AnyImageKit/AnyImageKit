@@ -260,7 +260,6 @@ extension CaptureViewController: CaptureDelegate {
         var editorOptions = options.editorPhotoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
         let controller = ImageEditorController(photo: image, options: editorOptions, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
@@ -303,7 +302,6 @@ extension CaptureViewController: RecorderDelegate {
         var editorOptions = options.editorVideoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
         let controller = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()

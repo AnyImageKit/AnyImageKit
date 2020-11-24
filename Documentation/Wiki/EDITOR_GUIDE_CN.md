@@ -12,7 +12,6 @@
 
 ```swift
 let controller = ImageEditorController(photo: image, options: .init(), delegate: self)
-controller.modalPresentationStyle = .fullScreen
 present(controller, animated: true, completion: nil)
 ```
 
@@ -20,7 +19,6 @@ present(controller, animated: true, completion: nil)
 
 ```swift
 let controller = ImageEditorController(video: fileURL, placeholderImage: nil, options: .init(), delegate: self)
-controller.modalPresentationStyle = .fullScreen
 present(controller, animated: true, completion: nil)
 ```
 

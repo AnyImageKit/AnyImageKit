@@ -92,6 +92,7 @@ final class InputTextViewController: AnyImageViewController {
         self.coverImage = coverImage
         self.data = data
         super.init(nibName: nil, bundle: nil)
+        self.modalPresentationStyle = .fullScreen
     }
     
     required init?(coder: NSCoder) {

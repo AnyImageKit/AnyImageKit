@@ -38,7 +38,6 @@ final class EditorConfigViewController: UITableViewController {
         let image = UIImage(named: "EditorTestImage")!
         let controller = ImageEditorController(photo: image, options: options, delegate: self)
         controller.trackDelegate = self
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
 

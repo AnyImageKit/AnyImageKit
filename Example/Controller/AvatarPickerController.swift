@@ -36,7 +36,6 @@ final class AvatarPickerController: UITableViewController {
         options.selectLimit = 1
         options.quickPick = true
         let controller = ImagePickerController(options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
     
@@ -83,7 +82,6 @@ extension AvatarPickerController: ImagePickerControllerDelegate {
         options.cropOptions = [.custom(w: 1, h: 1)]
         
         let controller = ImageEditorController(photo: result.assets.first!.image, options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false, completion: nil)
     }
 }

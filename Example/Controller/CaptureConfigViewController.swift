@@ -38,7 +38,6 @@ final class CaptureConfigViewController: UITableViewController {
         options.enableDebugLog = true
         let controller = ImageCaptureController(options: options, delegate: self)
         controller.trackDelegate = self
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
     

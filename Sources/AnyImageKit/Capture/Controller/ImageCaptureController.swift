@@ -28,6 +28,7 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     public required init() {
         super.init(nibName: nil, bundle: nil)
+        self.modalPresentationStyle = .fullScreen
     }
     
     /// Init Capture
@@ -40,6 +41,7 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.modalPresentationStyle = .fullScreen
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {

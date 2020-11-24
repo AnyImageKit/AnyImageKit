@@ -30,6 +30,7 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public required init() {
         super.init(nibName: nil, bundle: nil)
+        self.modalPresentationStyle = .fullScreen
     }
     
     /// Init Photo Editor
@@ -48,6 +49,7 @@ open class ImageEditorController: AnyImageNavigationController {
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.modalPresentationStyle = .fullScreen
     }
     
     deinit {

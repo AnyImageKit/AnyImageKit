@@ -362,7 +362,6 @@ extension PhotoEditorController {
         willBeginInput()
         let coverImage = getInputCoverImage()
         let controller = InputTextViewController(options: options, data: data, coverImage: coverImage, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
     
