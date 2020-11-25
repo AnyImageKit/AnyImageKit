@@ -188,9 +188,8 @@ extension PickerManager {
                                     }
                                 }
                             }
-                        } else {
-                            asset._images[.initial] = response.image
                         }
+                        asset._images[.initial] = response.image
                     case .failure:
                         break
                     }
