@@ -70,7 +70,7 @@
 		A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800410232F4EE4006B4711 /* ImagePickerController.swift */; };
 		A0800413232F5B44006B4711 /* AssetPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800412232F5B44006B4711 /* AssetPickerViewController.swift */; };
 		A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0800414232F5F7A006B4711 /* PickerManager.swift */; };
-		A082D24623C2D57B001F3D51 /* Picker+AnyImageMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A082D24523C2D57B001F3D51 /* Picker+AnyImageMediaType.swift */; };
+		A082D24623C2D57B001F3D51 /* Picker+MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A082D24523C2D57B001F3D51 /* Picker+MediaType.swift */; };
 		A0831E1923B0A33100B7E70F /* Capture+CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0831E1823B0A33100B7E70F /* Capture+CIImage.swift */; };
 		A0839B6D23C2DBD700FF8FDE /* VideoExportPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0839B6C23C2DBD700FF8FDE /* VideoExportPreset.swift */; };
 		A0839B6F23C32E5700FF8FDE /* CapturePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */; };
@@ -327,7 +327,7 @@
 		A0800410232F4EE4006B4711 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
 		A0800412232F5B44006B4711 /* AssetPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetPickerViewController.swift; sourceTree = "<group>"; };
 		A0800414232F5F7A006B4711 /* PickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerManager.swift; sourceTree = "<group>"; };
-		A082D24523C2D57B001F3D51 /* Picker+AnyImageMediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+AnyImageMediaType.swift"; sourceTree = "<group>"; };
+		A082D24523C2D57B001F3D51 /* Picker+MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+MediaType.swift"; sourceTree = "<group>"; };
 		A0831E1823B0A33100B7E70F /* Capture+CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+CIImage.swift"; sourceTree = "<group>"; };
 		A0839B6C23C2DBD700FF8FDE /* VideoExportPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExportPreset.swift; sourceTree = "<group>"; };
 		A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreset.swift; sourceTree = "<group>"; };
@@ -693,7 +693,7 @@
 				A0604E7023307ABD00D9AA01 /* Picker+PHFetchResult.swift */,
 				A036C3972330E5F300D32ED8 /* Picker+UIImage.swift */,
 				A0C03C192331D426005F742C /* Picker+UIColor.swift */,
-				A082D24523C2D57B001F3D51 /* Picker+AnyImageMediaType.swift */,
+				A082D24523C2D57B001F3D51 /* Picker+MediaType.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1440,7 +1440,7 @@
 				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,
 				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
 				A513C46023ACB6AC0071D0D5 /* Core+UIImageView.swift in Sources */,
-				A082D24623C2D57B001F3D51 /* Picker+AnyImageMediaType.swift in Sources */,
+				A082D24623C2D57B001F3D51 /* Picker+MediaType.swift in Sources */,
 				A09FFE6123404923000DEF87 /* PickerManager+Video.swift in Sources */,
 				A5347D2A23AA1B9A00C93874 /* ExportTool+PhotoURL.swift in Sources */,
 				A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */,
