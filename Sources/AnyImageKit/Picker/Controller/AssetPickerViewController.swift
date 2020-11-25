@@ -648,16 +648,17 @@ extension AssetPickerViewController {
     private func reloadData(animated: Bool = true) {
         if #available(iOS 14.0, *) {
             let snapshot = initialSnapshot()
-            dataSource.apply(snapshot, to: .main, animatingDifferences: animated)
+            dataSource.apply(snapshot, animatingDifferences: animated)
         } else {
             collectionView.reloadData()
         }
     }
     
     @available(iOS 14.0, *)
-    private func initialSnapshot() -> NSDiffableDataSourceSectionSnapshot<Asset> {
-        var snapshot = NSDiffableDataSourceSectionSnapshot<Asset>()
-        snapshot.append(album?.assets ?? [])
+    private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, Asset> {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Asset>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(album?.assets ?? [])
         return snapshot
     }
     
