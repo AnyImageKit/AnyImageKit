@@ -9,6 +9,7 @@
 import Foundation
 
 enum TouchState {
+    
     case begin
     case move
     case end

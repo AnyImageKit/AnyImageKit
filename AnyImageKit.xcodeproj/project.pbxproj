@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		71208EB2256F876F002C023A /* PhotoEditorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71208EB1256F876F002C023A /* PhotoEditorAction.swift */; };
+		71208EBA256F8D88002C023A /* PenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71208EB9256F8D88002C023A /* PenData.swift */; };
+		71208EC0256F8D93002C023A /* MosaicData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71208EBF256F8D93002C023A /* MosaicData.swift */; };
 		713E7D9C247BACE300BF6245 /* EditorCropOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */; };
 		7142FF6F25591AD7003FF44D /* EditingStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7142FF6E25591AD7003FF44D /* EditingStack.swift */; };
 		7142FF7625591DB0003FF44D /* DryDrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7142FF7525591DB0003FF44D /* DryDrawingView.swift */; };
@@ -247,6 +250,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		71208EB1256F876F002C023A /* PhotoEditorAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorAction.swift; sourceTree = "<group>"; };
+		71208EB9256F8D88002C023A /* PenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenData.swift; sourceTree = "<group>"; };
+		71208EBF256F8D93002C023A /* MosaicData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MosaicData.swift; sourceTree = "<group>"; };
 		713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCropOptionCell.swift; sourceTree = "<group>"; };
 		7142FF6E25591AD7003FF44D /* EditingStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingStack.swift; sourceTree = "<group>"; };
 		7142FF7525591DB0003FF44D /* DryDrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DryDrawingView.swift; sourceTree = "<group>"; };
@@ -506,6 +512,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71208EB7256F8D65002C023A /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				A50B20DD237AA24200A894A9 /* Brush.swift */,
+				A50B20D9237AA24200A894A9 /* TouchState.swift */,
+				A01C582823B33C7A00691F11 /* Palette.swift */,
+				A01C583023B33CFD00691F11 /* ImageEditorCache.swift */,
+			);
+			path = Old;
+			sourceTree = "<group>";
+		};
+		71208EB8256F8D72002C023A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				71208EB9256F8D88002C023A /* PenData.swift */,
+				71208EBF256F8D93002C023A /* MosaicData.swift */,
+				A50B20DB237AA24200A894A9 /* CropData.swift */,
+				A596FE5A23A8A86F005C8AFA /* TextData.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		713E7D9A247BACBE00BF6245 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -976,12 +1004,9 @@
 		A50B20D8237AA24200A894A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A50B20DD237AA24200A894A9 /* Brush.swift */,
-				A50B20D9237AA24200A894A9 /* TouchState.swift */,
-				A50B20DB237AA24200A894A9 /* CropData.swift */,
-				A596FE5A23A8A86F005C8AFA /* TextData.swift */,
-				A01C582823B33C7A00691F11 /* Palette.swift */,
-				A01C583023B33CFD00691F11 /* ImageEditorCache.swift */,
+				71208EB8256F8D72002C023A /* Data */,
+				71208EB7256F8D65002C023A /* Old */,
+				71208EB1256F876F002C023A /* PhotoEditorAction.swift */,
 				7142FF6E25591AD7003FF44D /* EditingStack.swift */,
 				71469B1325592C5E000A8E08 /* DrawnPath.swift */,
 			);
@@ -1391,6 +1416,7 @@
 				A507CD8223C4228F00E55A6B /* EditorPhotoResource.swift in Sources */,
 				A59332602338ADBA003CE652 /* AnimatableImageView.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
+				71208EC0256F8D93002C023A /* MosaicData.swift in Sources */,
 				A005C30D253D33180021E323 /* AnyImageEvent.swift in Sources */,
 				A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */,
 				A0B22EA5237AA1B3001F6066 /* Core+UICollectionView.swift in Sources */,
@@ -1445,6 +1471,7 @@
 				A5347D2823A9FF2900C93874 /* ExportTool+PhotoData.swift in Sources */,
 				A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */,
 				A5ABEF2A239F76EC00B50543 /* TextImageView.swift in Sources */,
+				71208EBA256F8D88002C023A /* PenData.swift in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,
 				A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */,
 				A561239F23B5EE4F0071C3E8 /* EditorVideoOptionsInfo.swift in Sources */,
@@ -1493,6 +1520,7 @@
 				A50B211E237AA24300A894A9 /* PhotoEditorContentView+Crop.swift in Sources */,
 				A0E14CBD251B8FAB00A9FC32 /* Core+Bundle.swift in Sources */,
 				A5DF1E85237AA32C00E3A32E /* Editor+CGPoint.swift in Sources */,
+				71208EB2256F876F002C023A /* PhotoEditorAction.swift in Sources */,
 				A01C583123B33CFD00691F11 /* ImageEditorCache.swift in Sources */,
 				A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */,
 				71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */,
