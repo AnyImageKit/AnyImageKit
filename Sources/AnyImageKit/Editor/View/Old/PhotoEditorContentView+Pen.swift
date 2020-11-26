@@ -16,15 +16,14 @@ extension PhotoEditorContentView {
     }
     
     func canvasCanUndo() -> Bool {
-        return penCache.hasDiskCache()
+        return true
+//        return penCache.hasDiskCache()
     }
-}
-
-// MARK: - Internal function
-extension PhotoEditorContentView {
     
     func updateCanvasFrame() {
         canvas.frame = CGRect(origin: .zero, size: imageView.bounds.size)
+        mosaic?.frame = CGRect(origin: .zero, size: imageView.bounds.size)
+        mosaic?.layoutSubviews()
     }
 }
 

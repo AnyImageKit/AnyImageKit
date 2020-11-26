@@ -347,6 +347,7 @@ extension PhotoEditorController {
         contentView.deactivateAllTextView()
         let image = contentView.imageView.screenshot(self.image.size)
         contentView.canvas.isHidden = true
+        contentView.mosaic?.isHidden = true
         contentView.hiddenAllTextView()
         contentView.imageBeforeCrop = contentView.imageView.image
         contentView.imageView.image = image
@@ -355,6 +356,7 @@ extension PhotoEditorController {
     /// 已经结束裁剪
     private func didEndCroping() {
         contentView.canvas.isHidden = false
+        contentView.mosaic?.isHidden = false
         contentView.restoreHiddenTextView()
         contentView.imageView.image = contentView.imageBeforeCrop
     }

@@ -136,7 +136,6 @@ final class PhotoEditorContentView: UIView {
         super.init(frame: frame)
         backgroundColor = .black
         setupView()
-        setupMosaicView()
         
         layout()
         setup(from: cache)
@@ -155,6 +154,7 @@ final class PhotoEditorContentView: UIView {
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
         setupCropView()
+        setupMosaicView()
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
     }
     
