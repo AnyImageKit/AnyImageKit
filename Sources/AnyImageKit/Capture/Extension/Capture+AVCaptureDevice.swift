@@ -44,21 +44,12 @@ extension AVCaptureDevice {
         }.filter { format in
             return (format.autoFocusSystem == autoFocusSystem) || (format.autoFocusSystem == .none) /* For front camera*/
         }.filter { format in
-            // fix for Xcode 12, which cannot find supportedColorSpaces 😂
-            #if targetEnvironment(simulator)
-            return true
-            #else
+            // Please use Xcode 12.2+, otherwise, you may not find supportedColorSpaces for simulator 😂
+            #if !targetEnvironment(macCatalyst)
             return format.supportedColorSpaces.contains(colorSpace)
+            #else
+            return format.__supportedColorSpaces.compactMap({ AVCaptureColorSpace(rawValue: $0.intValue) }).contains(colorSpace)
             #endif
         }
     }
 }
-
-#if targetEnvironment(macCatalyst)
-extension AVCaptureDevice.Format {
-    
-    var supportedColorSpaces: [AVCaptureColorSpace] {
-        return __supportedColorSpaces.compactMap { AVCaptureColorSpace(rawValue: $0.intValue) }
-    }
-}
-#endif

@@ -14,11 +14,11 @@ jobs:
     runs-on: macOS-latest
     
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
       
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 11']
+        destination: ['iOS Simulator,name=iPhone 12']
         swift-version: [5.3]
 
     steps:
@@ -31,11 +31,11 @@ jobs:
     runs-on: macOS-latest
 
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
     
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 11']
+        destination: ['iOS Simulator,name=iPhone 12']
         swift-version: [5.3]
 
     steps:
@@ -43,33 +43,33 @@ jobs:
     - name: Archive for Simulator slice
       run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS Simulator" -archivePath "Build/AnyImageKit.framework-iphonesimulator.xcarchive" SKIP_INSTALL=NO
     
-  # Mac_Catalyst:
-  #   name: Test Mac Catalys
-  #   runs-on: macOS-latest
+  Mac_Catalyst:
+    name: Test Mac Catalys
+    runs-on: macOS-latest
 
-  #   env:
-  #     DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
       
-  #   strategy:
-  #     matrix:
-  #       destination: ['iOS Simulator,name=iPhone 11']
-  #       swift-version: [5.3]
+    strategy:
+      matrix:
+        destination: ['iOS Simulator,name=iPhone 12']
+        swift-version: [5.3]
     
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Archive for Mac Catalyst slice
-  #     run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
+    steps:
+    - uses: actions/checkout@v2
+    - name: Archive for Mac Catalyst slice
+      run: xcodebuild archive -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
 
   CocoaPods:
     name: CocoaPods Library Lint
     runs-on: macOS-latest
 
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
 
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 11']
+        destination: ['iOS Simulator,name=iPhone 12']
         swift-version: [5.3]
 
     steps:
