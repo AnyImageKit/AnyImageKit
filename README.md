@@ -37,7 +37,7 @@
 - [ ] Multiple platform support
     - [x] iOS
     - [x] iPadOS
-    - [ ] Mac Catalyst ( Technical Preview, Not support in editor. Remove from support as Xcode 12.0 can't support Mac Catalyst 14.0 features. )
+    - [x] Mac Catalyst ( Technical Preview, Not support in editor.)
     - [ ] macOS
     - [ ] tvOS
 
