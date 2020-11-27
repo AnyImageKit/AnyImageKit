@@ -44,7 +44,7 @@
 ## Requirements
 
 - iOS 10.0+
-- Xcode 12.0+
+- Xcode 12.2+
 - Swift 5.3+
 
 ## Installation
@@ -128,6 +128,8 @@ extension ViewController: ImagePickerControllerDelegate {
 ```
 
 ## Release Notes
+
+* [v0.11.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0110): Release on 2020-11-30
 
 * [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0100): Release on 2020-11-03
 

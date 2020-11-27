@@ -659,7 +659,7 @@ extension AssetPickerViewController {
     private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, Asset> {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Asset>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(album?.assets ?? [])
+        snapshot.appendItems(album?.assets ?? [], toSection: .main)
         return snapshot
     }
     
