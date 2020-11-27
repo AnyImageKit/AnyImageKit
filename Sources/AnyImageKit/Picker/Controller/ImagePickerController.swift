@@ -170,15 +170,21 @@ extension ImagePickerController {
     private func checkData() {
         showWaitHUD()
         workQueue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {
+                hideHUD()
+                return
+            }
             let assets = self.manager.selectedAssets
             let isReady = assets.filter{ !$0.isReady }.isEmpty
-            if !isReady && !assets.isEmpty { return }
+            if !isReady && !assets.isEmpty {
+                if assets.count == 1 { hideHUD() }
+                return
+            }
             self.saveEditPhotos(assets) { newAssets in
                 self.resizeImagesIfNeeded(newAssets)
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
                     hideHUD()
+                    guard let self = self else { return }
                     let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
                     self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
                 }
