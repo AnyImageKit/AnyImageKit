@@ -29,7 +29,7 @@
 - [ ] 多平台支持
     - [x] iOS
     - [x] iPadOS
-    - [ ] Mac Catalyst (技术预览版，暂不支持编辑。由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
+    - [ ] Mac Catalyst (技术预览版，暂不支持编辑。)
     - [ ] macOS
     - [ ] tvOS
 
@@ -123,9 +123,11 @@ extension ViewController: ImagePickerControllerDelegate {
 
 ## 更新日志
 
-* [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100): 发布于 2020-11-03
-
-* [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090): 发布于 2020-10-09
+| 版本 | 发布时间 | Xcode | Swift |
+| ---- | ----  | ---- | ---- |
+| [v0.11.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0110) | 2020-11-30 | 12.2 | 5.3 |
+| [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0100) | 2020-11-03 | 12.1 | 5.3 |
+| [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#090) | 2020-10-09 | 12.0 | 5.3 |
 
 ## 版权协议
 
