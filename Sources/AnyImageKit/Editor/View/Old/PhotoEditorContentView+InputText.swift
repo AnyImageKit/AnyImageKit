@@ -26,7 +26,7 @@ extension PhotoEditorContentView {
     
     /// 裁剪结束时更新UI
     func updateTextFrameWhenCropEnd() {
-        let scale = imageView.bounds.width / lastImageViewBounds.width
+        let scale = imageView.bounds.width / cropContext.lastImageViewBounds.width
         for textView in textImageViews {
             let originPoint = textView.data.point
             let originScale = textView.data.scale
@@ -55,9 +55,16 @@ extension PhotoEditorContentView {
     func removeHiddenTextView() {
         for (idx, textView) in textImageViews.enumerated() {
             if textView.isHidden {
+                textView.removeFromSuperview()
                 textImageViews.remove(at: idx)
             }
         }
+    }
+    
+    /// 删除所有TextView
+    func removeAllTextView() {
+        textImageViews.forEach { $0.removeFromSuperview() }
+        textImageViews.removeAll()
     }
     
     /// 显示所有TextView
@@ -74,6 +81,13 @@ extension PhotoEditorContentView {
     func deactivateAllTextView() {
         textImageViews.forEach{ $0.setActive(false) }
     }
+    
+    func updateTextView(with edit: PhotoEditingStack.Edit) {
+        removeAllTextView()
+        for data in edit.textData {
+            addText(data: data)
+        }
+    }
 }
 
 // MARK: - Private
@@ -88,7 +102,7 @@ extension PhotoEditorContentView {
         
         var x: CGFloat
         var y: CGFloat
-        if !didCrop {
+        if !cropContext.didCrop {
             if scale == 1.0 {
                 x = (imageView.frame.width - size.width) / 2
                 y = (imageView.frame.height - size.height) / 2
@@ -104,14 +118,14 @@ extension PhotoEditorContentView {
                 y = y + (height - size.height) / 2
             }
         } else {
-            let width = cropRealRect.width * imageView.bounds.width / imageView.frame.width
+            let width = cropContext.cropRealRect.width * imageView.bounds.width / imageView.frame.width
             x = abs(imageView.frame.origin.x) / scale
             x = x + (width - size.width) / 2
             
-            var height = cropRealRect.height * imageView.bounds.height / imageView.frame.height
+            var height = cropContext.cropRealRect.height * imageView.bounds.height / imageView.frame.height
             let screenHeight = UIScreen.main.bounds.height / scale
             height = height > screenHeight ? screenHeight : height
-            y = lastCropData.contentOffset.y / scale
+            y = cropContext.lastCropData.contentOffset.y / scale
             y = y + scrollView.contentOffset.y / scale
             y = y + (height - size.height) / 2
         }
@@ -173,8 +187,7 @@ extension PhotoEditorContentView {
         } else {
             // 隐藏当前TextView，进入编辑页面
             textView.isHidden = true
-            deactivateAllTextView()
-            delegate?.inputTextWillBeginEdit(textView.data)
+            context.action(.textWillBeginEdit(textView.data))
         }
     }
     

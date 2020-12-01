@@ -11,15 +11,6 @@ import UIKit
 // MARK: - Public function
 extension PhotoEditorContentView {
     
-    func canvasUndo() {
-        canvas.undo()
-    }
-    
-    func canvasCanUndo() -> Bool {
-        return true
-//        return penCache.hasDiskCache()
-    }
-    
     func updateCanvasFrame() {
         canvas.frame = CGRect(origin: .zero, size: imageView.bounds.size)
         mosaic?.frame = CGRect(origin: .zero, size: imageView.bounds.size)
@@ -31,15 +22,11 @@ extension PhotoEditorContentView {
 extension PhotoEditorContentView: CanvasDelegate {
     
     func canvasDidBeginPen() {
-        delegate?.photoDidBeginPen()
+        context.action(.penBeginDraw)
     }
     
     func canvasDidEndPen() {
-        let screenshot = canvas.screenshot()
-        // TODO: Cache
-        penCache.write(screenshot)
-        
-        delegate?.photoDidEndPen()
+        context.action(.penFinishDraw(canvas.drawnPaths.map { PenData(drawnPath: $0) }))
     }
 }
 

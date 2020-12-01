@@ -12,15 +12,11 @@ enum PhotoEditorAction {
     case empty
     case back
     case done
-    
-    case pen
-    case text
-    case crop
-    case mosaic
+    case toolOptionChanged(EditorPhotoToolOption?)
     
     case penBeginDraw
     case penUndo
-    case penChangeColor(Int)
+    case penChangeColor(UIColor)
     case penFinishDraw([PenData])
     
     case mosaicBeginDraw
@@ -28,12 +24,13 @@ enum PhotoEditorAction {
     case mosaicChangeImage(Int)
     case mosaicFinishDraw([MosaicData])
     
-    case cropUpdateOption(Int)
+    case cropUpdateOption(EditorCropOption)
     case cropReset
     case cropCancel
-    case cropDone(CropData)
+    case cropDone
+    case cropFinish(CropData)
     
+    case textWillBeginEdit(TextData)
     case textCancel
     case textDone(TextData)
-    case textUpdateData([TextData])
 }

@@ -72,7 +72,7 @@ extension PhotoEditorContentView {
         didCrop = cropRect.size != scrollView.contentSize
         setCropHidden(true, animated: false)
         layoutEndCrop()
-        setupMosaicView()
+        setupMosaicView() // TODO
         UIView.animate(withDuration: 0.25, animations: {
             self.updateCanvasFrame()
             self.updateTextFrameWhenCropEnd()
@@ -112,7 +112,6 @@ extension PhotoEditorContentView {
             updateScrollViewAndCropRect(position)
         }
     }
-    
 }
 
 // MARK: - Private function
@@ -191,11 +190,13 @@ extension PhotoEditorContentView {
             setCropRect(lastCropData.rect)
             didCrop = cropRect.size != scrollView.contentSize
         } else {
+            lastCropData.didCrop = didCrop
             lastCropData.rect = cropRect
             lastCropData.zoomScale = scrollView.zoomScale
             lastCropData.contentSize = scrollView.contentSize
             lastCropData.contentOffset = scrollView.contentOffset
             lastCropData.imageViewFrame = imageView.frame
+            context.action(.cropFinish(lastCropData))
         }
         
         var contentSize: CGSize = .zero
@@ -273,7 +274,7 @@ extension PhotoEditorContentView {
         scrollView.contentInset = UIEdgeInsets(top: 0.1, left: 0.1, bottom: bottomInset, right: rightInset)
     }
     
-    /// 设置lastCropData
+    /// 设置lastCropData - 未裁剪时，记录初始数据
     func setupLastCropDataIfNeeded() {
         if didCrop { return }
         var cropFrame = self.cropFrame
@@ -493,5 +494,50 @@ extension PhotoEditorContentView {
             newCrop.origin.y = (cropFrame.height - newCrop.height) / 2 + cropFrame.origin.y
             return newCrop
         }
+    }
+}
+
+// MARK: - Getter & Setter
+extension PhotoEditorContentView {
+    
+    /// 正在裁剪
+    fileprivate var isCrop: Bool {
+        get { return cropContext.isCrop }
+        set { cropContext.isCrop = newValue }
+    }
+    /// 图片已经裁剪
+    fileprivate var didCrop: Bool {
+        get { return cropContext.didCrop }
+        set { cropContext.didCrop = newValue }
+    }
+    /// 裁剪框的位置
+    fileprivate var cropRect: CGRect {
+        get { return cropContext.cropRect }
+        set { cropContext.cropRect = newValue }
+    }
+    /// pan手势开始时裁剪框的位置
+    fileprivate var cropStartPanRect: CGRect {
+        get { return cropContext.cropStartPanRect }
+        set { cropContext.cropStartPanRect = newValue }
+    }
+    /// 裁剪框与imageView真实的位置
+    fileprivate var cropRealRect: CGRect {
+        get { return cropContext.cropRealRect }
+        set { cropContext.cropRealRect = newValue }
+    }
+    /// 裁剪尺寸
+    fileprivate var cropOption: EditorCropOption {
+        get { return cropContext.cropOption }
+        set { cropContext.cropOption = newValue }
+    }
+    /// 上次裁剪开始时图片的Bounds
+    fileprivate var lastImageViewBounds: CGRect {
+        get { return cropContext.lastImageViewBounds }
+        set { cropContext.lastImageViewBounds = newValue }
+    }
+    /// 上次裁剪的数据，用于再次进入裁剪
+    fileprivate var lastCropData: CropData {
+        get { return cropContext.lastCropData }
+        set { cropContext.lastCropData = newValue }
     }
 }

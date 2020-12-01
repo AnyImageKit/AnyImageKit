@@ -15,8 +15,8 @@ final class MosaicContentView: DryDrawingView {
     
     let idx: Int
     
-    var brush = Brush()
-    var drawnPaths: [DrawnPath] = [] {
+    private(set) var brush = Brush()
+    private(set) var drawnPaths: [DrawnPath] = [] {
         didSet {
             updateMask()
         }
@@ -80,10 +80,14 @@ final class MosaicContentView: DryDrawingView {
 // MARK: - Public
 extension MosaicContentView {
     
-    public func undo() -> Bool {
+    func undo() -> Bool {
         guard !drawnPaths.isEmpty else { return false }
         drawnPaths.removeLast()
         return true
+    }
+    
+    func setDrawn(paths: [DrawnPath]) {
+        drawnPaths = paths
     }
 }
 

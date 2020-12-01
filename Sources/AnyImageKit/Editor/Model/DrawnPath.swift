@@ -10,7 +10,7 @@ import UIKit
 
 /// 画笔路径
 /// 由于 UIBezierPath 不能遵守 Codable，所以通过 NSKeyedArchiver 存储。
-class DrawnPath: GraphicsDrawing, Codable {
+struct DrawnPath: GraphicsDrawing, Codable {
     
     let brush: Brush
     let bezierPath: UIBezierPath
@@ -34,7 +34,7 @@ class DrawnPath: GraphicsDrawing, Codable {
         saveBezierPath()
     }
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         brush = try values.decode(Brush.self, forKey: .brush)
         uuid = try values.decode(String.self, forKey: .uuid)

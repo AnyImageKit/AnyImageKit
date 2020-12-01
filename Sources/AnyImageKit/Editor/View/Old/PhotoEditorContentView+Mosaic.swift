@@ -11,20 +11,12 @@ import UIKit
 // MARK: - Public function
 extension PhotoEditorContentView {
     
-    func setMosaicImage(_ idx: Int) {
-        mosaic?.setMosaicCoverImage(idx)
-//        imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
-    }
+
     
-    func mosaicUndo() {
-        mosaic?.undo()
-//        imageView.image = mosaicCache.read(deleteMemoryStorage: true) ?? image
-//        mosaic?.reset()
-    }
-    
-    func mosaicCanUndo() -> Bool {
-        return true
-//        return mosaicCache.hasDiskCache()
+    func mosaicUpdateView(with edit: PhotoEditingStack.Edit) {
+        
+//        canvas.drawnPaths = edit.penData.map { $0.drawnPath }
+//        canvas.setNeedsDisplay()
     }
 }
 
@@ -47,8 +39,17 @@ extension PhotoEditorContentView {
                 self.mosaic?.isUserInteractionEnabled = false
                 self.imageView.insertSubview(self.mosaic!, belowSubview: self.canvas)
                 self.updateCanvasFrame()
-                self.delegate?.mosaicDidCreated()
+                self.mosaicDidCreated()
             }
+        }
+    }
+    
+    /// 马赛克图层创建完成
+    private func mosaicDidCreated() {
+        hideHUD()
+        guard let option = context.toolOption else { return }
+        if option == .mosaic {
+            mosaic?.isUserInteractionEnabled = true
         }
     }
 }
@@ -57,19 +58,12 @@ extension PhotoEditorContentView {
 extension PhotoEditorContentView: MosaicDelegate {
     
     func mosaicDidBeginPen() {
-        delegate?.photoDidBeginPen()
+        context.action(.mosaicBeginDraw)
     }
     
     func mosaicDidEndPen() {
-        delegate?.photoDidEndPen()
-//        canvas.isHidden = true // 不能把画笔部分截进去
-//        hiddenAllTextView() // 不能把文本截进去
-//        let screenshot = imageView.screenshot(image.size)
-//        canvas.isHidden = false
-//        restoreHiddenTextView()
-//        imageView.image = screenshot
-//        mosaic?.reset()
-//        mosaicCache.write(screenshot)
+        guard let mosaic = mosaic else { return }
+        context.action(.mosaicFinishDraw(mosaic.contentViews.map { MosaicData(idx: $0.idx, drawnPaths: $0.drawnPaths) }))
     }
 }
 

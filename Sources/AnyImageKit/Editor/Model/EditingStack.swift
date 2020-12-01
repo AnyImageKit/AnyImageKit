@@ -1,5 +1,5 @@
 //
-//  EditingStack.swift
+//  PhotoEditingStack.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2020/11/9.
@@ -8,16 +8,19 @@
 
 import UIKit
 
-class EditingStack {
+final class PhotoEditingStack {
     
     // Load save history
     
     var currentEdit: Edit = .init()
     
+    var isEdited: Bool {
+        return currentEdit.cropData.didCrop || !currentEdit.penData.isEmpty || !currentEdit.mosaicData.isEmpty || !currentEdit.textData.isEmpty
+    }
     
 }
 
-extension EditingStack {
+extension PhotoEditingStack {
     
     struct Edit: Codable {
         

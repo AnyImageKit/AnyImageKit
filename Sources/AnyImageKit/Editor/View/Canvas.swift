@@ -24,8 +24,8 @@ final class Canvas: DryDrawingView {
     weak var delegate: CanvasDelegate?
     weak var dataSource: CanvasDataSource?
     
-    var brush = Brush()
-    var drawnPaths: [DrawnPath] = []
+    private(set) var brush = Brush()
+    private(set) var drawnPaths: [DrawnPath] = []
 
     override func willBeginPan(path: UIBezierPath) {
         delegate?.canvasDidBeginPen()
@@ -53,9 +53,22 @@ final class Canvas: DryDrawingView {
 // MARK: - Public
 extension Canvas {
     
-    public func undo() {
+    func undo() {
         guard !drawnPaths.isEmpty else { return }
         drawnPaths.removeLast()
-        layer.setNeedsDisplay()
+        setNeedsDisplay()
+    }
+    
+    func setBrush(lineWidth: CGFloat) {
+        brush.lineWidth = lineWidth
+    }
+    
+    func setBrush(color: UIColor) {
+        brush.color = color
+    }
+    
+    func updateView(with edit: PhotoEditingStack.Edit) {
+        drawnPaths = edit.penData.map { $0.drawnPath }
+        setNeedsDisplay()
     }
 }

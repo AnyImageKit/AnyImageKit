@@ -8,21 +8,7 @@
 
 import UIKit
 
-protocol PhotoEditorContentViewDelegate: AnyObject {
-    
-    func contentViewTapped()
-    
-    func photoDidBeginPen()
-    func photoDidEndPen()
-    
-    func mosaicDidCreated()
-    
-    func inputTextWillBeginEdit(_ data: TextData)
-}
-
 final class PhotoEditorContentView: UIView {
-
-    weak var delegate: PhotoEditorContentViewDelegate?
     
     private(set) lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -48,7 +34,7 @@ final class PhotoEditorContentView: UIView {
         view.delegate = self
         view.dataSource = self
         view.isUserInteractionEnabled = false
-        view.brush.lineWidth = options.penWidth
+        view.setBrush(lineWidth: options.penWidth)
         return view
     }()
     /// 马赛克，延时加载
@@ -94,53 +80,30 @@ final class PhotoEditorContentView: UIView {
         layer.fillColor = UIColor.black.cgColor
         return layer
     }()
+    /// 文本视图
+    internal var textImageViews: [TextImageView] = []
     
     /// 原始图片
     internal let image: UIImage
+    /// Context
+    internal let context: PhotoEditorContext
     /// 配置项
-    internal let options: EditorPhotoOptionsInfo
-    
-    /// 正在裁剪
-    internal var isCrop: Bool = false
-    /// 图片已经裁剪
-    internal var didCrop: Bool = false
-    /// 裁剪框的位置
-    internal var cropRect: CGRect = .zero
-    /// pan手势开始时裁剪框的位置
-    internal var cropStartPanRect: CGRect = .zero
-    /// 裁剪框与imageView真实的位置
-    internal var cropRealRect: CGRect = .zero
-    /// 上次裁剪的数据，用于再次进入裁剪
-    internal var lastCropData: CropData = CropData()
-    /// 裁剪前的图片
-    internal var imageBeforeCrop: UIImage?
-    /// 裁剪尺寸
-    internal var cropOption: EditorCropOption = .free
-    
-    /// 存储画笔过程的图片
-    internal lazy var penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty))
-    /// 存储马赛克过程图片
-    internal lazy var mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty))
-    
-    internal var textImageViews: [TextImageView] = []
-    internal var lastImageViewBounds: CGRect = .zero
-    
-    /// 是否编辑
-    internal var isEdited: Bool {
-        return didCrop || penCache.hasDiskCache() || mosaicCache.hasDiskCache() || !textImageViews.isEmpty
+    internal var options: EditorPhotoOptionsInfo {
+        return context.options
     }
+    /// 裁剪数据
+    internal var cropContext: PhotoEditorCropContext = .init()
     
-    init(frame: CGRect, image: UIImage, options: EditorPhotoOptionsInfo, cache: ImageEditorCache?) {
+    init(frame: CGRect, image: UIImage, context: PhotoEditorContext) {
         self.image = image
-        self.options = options
+        self.context = context
         super.init(frame: frame)
         backgroundColor = .black
         setupView()
-        
         layout()
-        setup(from: cache)
-        if cropRealRect == .zero {
-            cropRealRect = imageView.frame
+        
+        if cropContext.cropRealRect == .zero {
+            cropContext.cropRealRect = imageView.frame
         }
         updateCanvasFrame()
     }
@@ -156,19 +119,6 @@ final class PhotoEditorContentView: UIView {
         setupCropView()
         setupMosaicView()
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
-    }
-    
-    private func setup(from cache: ImageEditorCache?) {
-        guard let cache = cache else { return }
-        lastCropData = cache.cropData
-        penCache = CacheTool(config: CacheConfig(module: .editor(.pen), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.penCacheList)
-        mosaicCache = CacheTool(config: CacheConfig(module: .editor(.mosaic), useDiskCache: true, autoRemoveDiskCache: options.cacheIdentifier.isEmpty), diskCacheList: cache.mosaicCacheList)
-        imageView.image = mosaicCache.read(deleteMemoryStorage: false) ?? image
-        // TODO: Cache
-        cache.textDataList.forEach {
-            addText(data: $0)
-        }
-        layoutEndCrop(true)
     }
     
     internal func layout() {
@@ -188,13 +138,22 @@ final class PhotoEditorContentView: UIView {
             UIView.animate(withDuration: duration, animations: animations)
         }
     }
+    
+    internal func updateView(with edit: PhotoEditingStack.Edit) {
+        canvas.updateView(with: edit)
+        mosaic?.updateView(with: edit)
+        updateTextView(with: edit)
+        cropContext.lastCropData = edit.cropData
+        layoutEndCrop(true)
+        updateCanvasFrame()
+    }
 }
 
 // MARK: - Target
 extension PhotoEditorContentView {
     
     @objc private func onSingleTapped() {
-        delegate?.contentViewTapped()
+        context.action(.empty)
     }
 }
 
@@ -206,7 +165,7 @@ extension PhotoEditorContentView: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        if !isCrop && !didCrop {
+        if !cropContext.isCrop && !cropContext.didCrop {
             imageView.center = centerOfContentSize
         }
     }

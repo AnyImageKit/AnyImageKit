@@ -28,7 +28,7 @@ final class Mosaic: UIView {
     private let mosaicOptions: [EditorMosaicOption]
     private let originalMosaicImage: UIImage // 原图传统马赛克的图片
     private var mosaicImage: [UIImage] = []
-    private var contentViews: [MosaicContentView] = []
+    private(set) var contentViews: [MosaicContentView] = []
     
     init(mosaicOptions: [EditorMosaicOption], originalMosaicImage: UIImage) {
         self.mosaicOptions = mosaicOptions
@@ -73,6 +73,24 @@ extension Mosaic {
         if let lastContent = contentViews.last, lastContent.idx == idx {
             return
         }
+        createContentView(idx: idx)
+    }
+    
+    func updateView(with edit: PhotoEditingStack.Edit) {
+        contentViews.forEach { $0.removeFromSuperview() }
+        contentViews.removeAll()
+        for data in edit.mosaicData {
+            let contentView = createContentView(idx: data.idx)
+            contentView.setDrawn(paths: data.drawnPaths)
+        }
+    }
+}
+
+// MARK: - Private
+extension Mosaic {
+    
+    @discardableResult
+    private func createContentView(idx: Int) -> MosaicContentView {
         let contentView = MosaicContentView(idx: idx, mosaic: mosaicImage[idx])
         contentView.delegate = delegate
         contentView.dataSource = dataSource
@@ -81,11 +99,8 @@ extension Mosaic {
         contentView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview()
         }
+        return contentView
     }
-}
-
-// MARK: - Private
-extension Mosaic {
     
     private func removeEmptyContent(removeLast: Bool = false) {
         for (i, content) in contentViews.reversed().enumerated() {
