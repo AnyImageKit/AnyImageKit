@@ -136,6 +136,7 @@ extension HomeViewController {
     enum ApplicationRowType: CaseIterable, HomeRowTypeRule {
         case avatarPicker
         case preselectAsset
+        case disableCheckRule
         
         var title: String {
             switch self {
@@ -143,6 +144,8 @@ extension HomeViewController {
                 return "Avatar Picker"
             case .preselectAsset:
                 return "Preselect Asset"
+            case .disableCheckRule:
+                return "Disable Check Rule"
             }
         }
         
@@ -158,6 +161,8 @@ extension HomeViewController {
                 return AvatarPickerController(style: style)
             case .preselectAsset:
                 return PreselectAssetViewController()
+            case .disableCheckRule:
+                return DisableCheckRuleViewController(style: style)
             }
         }
     }

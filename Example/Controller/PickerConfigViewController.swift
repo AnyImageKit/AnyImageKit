@@ -37,7 +37,6 @@ final class PickerConfigViewController: UITableViewController {
     
     @objc private func openPickerTapped() {
         options.enableDebugLog = true
-        options.disableRules = [VideoDurationDisableCheckRule(min: 10, max: 30)]
         let controller = ImagePickerController(options: options, delegate: self)
         controller.trackDelegate = self
         if #available(iOS 13.0, *) {
@@ -288,11 +287,11 @@ extension PickerConfigViewController {
             case .config:
                 return "Options"
             case .editor:
-                return "Editor options"
+                return "Editor Options"
             case .capture:
-                return "Capture options"
+                return "Capture Options"
             case .other:
-                return "Other options"
+                return "UIViewController Options"
             }
         }
         
