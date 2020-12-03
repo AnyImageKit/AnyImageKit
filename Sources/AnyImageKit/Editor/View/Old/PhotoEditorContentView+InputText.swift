@@ -11,22 +11,26 @@ import UIKit
 // MARK: - Internal
 extension PhotoEditorContentView {
     
-    func addText(data: TextData) {
-        if data.text.isEmpty { return }
+    @discardableResult
+    func addText(data: TextData, add: Bool = true) -> TextImageView {
         if data.frame.isEmpty {
             calculateTextFrame(data: data)
         }
         let textView = TextImageView(data: data)
         textView.deleteButton.addTarget(self, action: #selector(textDeletebuttonTapped(_:)), for: .touchUpInside)
         textView.transform = textView.calculateTransform()
-        imageView.addSubview(textView)
-        textImageViews.append(textView)
-        addTextGestureRecognizer(textView)
+        if add {
+            imageView.addSubview(textView)
+            textImageViews.append(textView)
+            addTextGestureRecognizer(textView)
+        }
+        return textView
     }
     
     /// 裁剪结束时更新UI
     func updateTextFrameWhenCropEnd() {
         let scale = imageView.bounds.width / cropContext.lastImageViewBounds.width
+        var newTextImageViews: [TextImageView] = []
         for textView in textImageViews {
             let originPoint = textView.data.point
             let originScale = textView.data.scale
@@ -41,13 +45,23 @@ extension PhotoEditorContentView {
             frame.origin.y *= scale
             frame.size.width *= scale
             frame.size.height *= scale
-            textView.frame = frame
-            textView.layoutIfNeeded()
+            textView.data.frame = frame
+            textView.data.inset *= scale
             
-            textView.data.point = CGPoint(x: originPoint.x * scale, y: originPoint.y * scale)
-            textView.data.scale = originScale
-            textView.data.rotation = originRotation
-            textView.transform = textView.calculateTransform()
+            let newTextView = addText(data: textView.data, add: false)
+            newTextView.data.point = CGPoint(x: originPoint.x * scale, y: originPoint.y * scale)
+            newTextView.data.scale = originScale
+            newTextView.data.rotation = originRotation
+            newTextView.transform = textView.calculateTransform()
+            newTextImageViews.append(newTextView)
+        }
+        
+        textImageViews.forEach { $0.removeFromSuperview() }
+        textImageViews.removeAll()
+        newTextImageViews.forEach {
+            self.imageView.addSubview($0)
+            self.textImageViews.append($0)
+            self.addTextGestureRecognizer($0)
         }
     }
     
@@ -97,6 +111,8 @@ extension PhotoEditorContentView {
     private func calculateTextFrame(data: TextData) {
         let image = data.image
         let scale = scrollView.zoomScale
+        let scale2 = imageView.bounds.width / cropContext.lastImageViewBounds.width
+        print("s:\(scale), s2:\(scale2)")
         let inset: CGFloat = 20
         let size = CGSize(width: (image.size.width + inset * 2) / scale, height: (image.size.height + inset * 2) / scale)
         

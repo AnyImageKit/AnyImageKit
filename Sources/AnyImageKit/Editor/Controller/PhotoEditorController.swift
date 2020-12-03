@@ -41,6 +41,7 @@ final class PhotoEditorController: AnyImageViewController {
     private let resource: EditorPhotoResource
     private let options: EditorPhotoOptionsInfo
     private let context: PhotoEditorContext
+    private let blurContext = CIContext()
     private weak var delegate: PhotoEditorControllerDelegate?
     
     private lazy var stack: PhotoEditingStack = .init(identifier: options.cacheIdentifier)
@@ -203,7 +204,7 @@ extension PhotoEditorController {
     private func didEndCroping() {
         contentView.canvas.isHidden = false
         contentView.mosaic?.isHidden = false
-        contentView.restoreHiddenTextView()
+        contentView.updateTextFrameWhenCropEnd()
         contentView.imageView.image = contentView.image
     }
 }
@@ -222,9 +223,7 @@ extension PhotoEditorController {
     
     /// 获取输入界面的占位图
     private func getInputCoverImage() -> UIImage? {
-        // TODO:
-        return nil
-//        return contentView.screenshot().gaussianImage(context: context, blur: 8)
+        return contentView.screenshot().gaussianImage(context: blurContext, blur: 8)
     }
     
     /// 准备开始输入文本
@@ -343,8 +342,10 @@ extension PhotoEditorController {
         case .textDone(let data):
             didEndInputing()
             contentView.removeHiddenTextView()
-            contentView.addText(data: data)
-            stack.edit.textData = contentView.textImageViews.map { $0.data }
+            if !data.text.isEmpty {
+                contentView.addText(data: data)
+                stack.edit.textData = contentView.textImageViews.map { $0.data }
+            }
         }
     }
     

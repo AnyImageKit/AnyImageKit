@@ -62,7 +62,6 @@ extension PhotoEditorContentView {
                 self.layout()
             }
             self.updateCanvasFrame()
-            self.updateTextFrameWhenCropEnd()
         }, completion: completion)
     }
     
@@ -74,7 +73,6 @@ extension PhotoEditorContentView {
         layoutEndCrop()
         UIView.animate(withDuration: 0.25, animations: {
             self.updateCanvasFrame()
-            self.updateTextFrameWhenCropEnd()
         }, completion: completion)
     }
     

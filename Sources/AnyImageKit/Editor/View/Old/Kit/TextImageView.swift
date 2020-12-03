@@ -59,16 +59,6 @@ final class TextImageView: UIView {
         addSubview(rectView)
         addSubview(deleteButton)
         addSubview(imageView)
-        rectView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview().inset(data.inset*0.6)
-        }
-        deleteButton.snp.makeConstraints { maker in
-            maker.top.right.equalToSuperview()
-            maker.width.height.equalTo(data.inset*1.25)
-        }
-        imageView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview().inset(data.inset)
-        }
     }
     
     func calculateTransform() -> CGAffineTransform {
@@ -76,6 +66,20 @@ final class TextImageView: UIView {
             .translatedBy(x: data.point.x, y: data.point.y)
             .scaledBy(x: data.scale, y: data.scale)
             .rotated(by: data.rotation)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        rectView.snp.remakeConstraints { maker in
+            maker.edges.equalToSuperview().inset(data.inset*0.6)
+        }
+        deleteButton.snp.remakeConstraints { maker in
+            maker.top.right.equalToSuperview()
+            maker.width.height.equalTo(data.inset*1.25)
+        }
+        imageView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview().inset(data.inset)
+        }
     }
 }
 
