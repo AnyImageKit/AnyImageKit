@@ -10,27 +10,21 @@ import UIKit
 
 // MARK: - Public function
 extension PhotoEditorContentView {
-    
 
     
-    func mosaicUpdateView(with edit: PhotoEditingStack.Edit) {
-        
-//        canvas.drawnPaths = edit.penData.map { $0.drawnPath }
-//        canvas.setNeedsDisplay()
-    }
 }
 
 // MARK: - Internal function
 extension PhotoEditorContentView {
     
     /// 在子线程创建马赛克图片
-    internal func setupMosaicView() {
-        guard mosaic == nil else { return }
+    internal func setupMosaicView(completion: @escaping ((Bool) -> Void)) {
+        guard mosaic == nil else { completion(false); return }
         DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
-            guard let mosaicImage = self.image.mosaicImage(level: self.options.mosaicLevel) else { return }
+            guard let self = self else { completion(false); return }
+            guard let mosaicImage = self.image.mosaicImage(level: self.options.mosaicLevel) else { completion(false); return }
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self = self else { completion(false); return }
                 _print("Mosaic created")
                 self.mosaic = Mosaic(mosaicOptions: self.options.mosaicOptions,
                                      originalMosaicImage: mosaicImage)
@@ -39,17 +33,8 @@ extension PhotoEditorContentView {
                 self.mosaic?.isUserInteractionEnabled = false
                 self.imageView.insertSubview(self.mosaic!, belowSubview: self.canvas)
                 self.updateCanvasFrame()
-                self.mosaicDidCreated()
+                completion(true)
             }
-        }
-    }
-    
-    /// 马赛克图层创建完成
-    private func mosaicDidCreated() {
-        hideHUD()
-        guard let option = context.toolOption else { return }
-        if option == .mosaic {
-            mosaic?.isUserInteractionEnabled = true
         }
     }
 }

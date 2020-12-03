@@ -53,6 +53,10 @@ extension PhotoEditingStack {
             return cropData.didCrop || !penData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
         }
     }
+    
+    func setMosaicData(_ dataList: [MosaicData]) {
+        edit.mosaicData = dataList.filter { !$0.drawnPaths.isEmpty }
+    }
 }
 
 extension PhotoEditingStack.Edit {

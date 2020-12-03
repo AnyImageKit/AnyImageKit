@@ -72,7 +72,6 @@ extension PhotoEditorContentView {
         didCrop = cropRect.size != scrollView.contentSize
         setCropHidden(true, animated: false)
         layoutEndCrop()
-        setupMosaicView() // TODO
         UIView.animate(withDuration: 0.25, animations: {
             self.updateCanvasFrame()
             self.updateTextFrameWhenCropEnd()

@@ -25,6 +25,8 @@ final class Mosaic: UIView {
     weak var dataSource: MosaicDataSource?
     weak var delegate: MosaicDelegate?
     
+    var didDraw: (() -> Void)?
+    
     private let mosaicOptions: [EditorMosaicOption]
     private let originalMosaicImage: UIImage // 原图传统马赛克的图片
     private var mosaicImage: [UIImage] = []
@@ -94,6 +96,9 @@ extension Mosaic {
         let contentView = MosaicContentView(idx: idx, mosaic: mosaicImage[idx])
         contentView.delegate = delegate
         contentView.dataSource = dataSource
+        contentView.didDraw = { [weak self] in
+            self?.didDraw?()
+        }
         addSubview(contentView)
         contentViews.append(contentView)
         contentView.snp.makeConstraints { (maker) in

@@ -13,6 +13,12 @@ final class MosaicContentView: DryDrawingView {
     weak var dataSource: MosaicDataSource?
     weak var delegate: MosaicDelegate?
     
+    var didDraw: (() -> Void)? {
+        didSet {
+            maskLayer.didDraw = didDraw
+        }
+    }
+    
     let idx: Int
     
     private(set) var brush = Brush()
@@ -94,6 +100,8 @@ extension MosaicContentView {
 // MARK: - MaskLayer
 private class MaskLayer: CALayer {
     
+    var didDraw: (() -> Void)?
+    
     var drawnPaths: [GraphicsDrawing] = [] {
         didSet {
             setNeedsDisplay()
@@ -102,5 +110,6 @@ private class MaskLayer: CALayer {
     
     override func draw(in ctx: CGContext) {
         drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size) }
+        didDraw?()
     }
 }

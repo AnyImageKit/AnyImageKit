@@ -14,7 +14,7 @@ struct DrawnPath: GraphicsDrawing, Codable {
     
     let brush: Brush
     let bezierPath: UIBezierPath
-    private let uuid: String
+    let uuid: String
     
     enum CodingKeys: String, CodingKey {
         case brush

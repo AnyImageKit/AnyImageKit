@@ -64,12 +64,18 @@ final class PhotoEditorController: AnyImageViewController {
         navigationController?.navigationBar.isHidden = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showHUDIfNeeded()
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         toolView.selectFirstItemIfNeeded()
     }
     
     private func setupView() {
+        view.backgroundColor = .black
         view.addSubview(contentView)
         view.addSubview(toolView)
         view.addSubview(backButton)
@@ -91,17 +97,23 @@ final class PhotoEditorController: AnyImageViewController {
         }
     }
     
+    private func setupMosaicView() {
+        // TODO: 离开后保存截图，再次进入先用截图占位，再加载马赛克，预防显示突兀
+        contentView.setupMosaicView { [weak self] _ in
+            hideHUD()
+            guard let self = self else { return }
+            self.contentView.updateView(with: self.stack.edit)
+        }
+    }
+    
     private func loadData() {
         resource.loadImage { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let image):
-                hideHUD()
                 self.image = image
                 self.setupView()
-                if self.stack.didLoadCache {
-                    self.contentView.updateView(with: self.stack.edit)
-                }
+                self.setupMosaicView()
             case .failure(let error):
                 if error == .cannotFindInLocal {
                     showWaitHUD()
@@ -158,6 +170,17 @@ extension PhotoEditorController {
         contentView.setupLastCropDataIfNeeded()
         stack.edit.cropData = contentView.cropContext.lastCropData
         stack.save()
+    }
+    
+    private func showHUDIfNeeded() {
+        if contentView.mosaic == nil {
+            showWaitHUD()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                if self?.contentView.mosaic != nil {
+                    hideHUD()
+                }
+            }
+        }
     }
 }
 
@@ -264,6 +287,7 @@ extension PhotoEditorController {
             }
         case .penUndo:
             contentView.canvas.undo()
+            stack.edit.penData = contentView.canvas.drawnPaths.map { PenData(drawnPath: $0) }
             toolView.penToolView.undoButton.isEnabled = stack.edit.canvasCanUndo
         case .penChangeColor(let color):
             contentView.canvas.setBrush(color: color)
@@ -276,6 +300,7 @@ extension PhotoEditorController {
             stack.edit.penData = dataList
         case .mosaicUndo:
             contentView.mosaic?.undo()
+            stack.setMosaicData(contentView.mosaic?.contentViews.map { MosaicData(idx: $0.idx, drawnPaths: $0.drawnPaths) } ?? [])
             toolView.mosaicToolView.undoButton.isEnabled = stack.edit.mosaicCanUndo
         case .mosaicChangeImage(let idx):
             contentView.mosaic?.setMosaicCoverImage(idx)
@@ -285,7 +310,7 @@ extension PhotoEditorController {
                 self.backButton.alpha = 1
             }
             toolView.mosaicToolView.undoButton.isEnabled = true
-            stack.edit.mosaicData = dataList
+            stack.setMosaicData(dataList)
         case .cropUpdateOption(let option):
             contentView.setCrop(option)
         case .cropReset:

@@ -24,6 +24,8 @@ final class Canvas: DryDrawingView {
     weak var delegate: CanvasDelegate?
     weak var dataSource: CanvasDataSource?
     
+    var didDraw: (() -> Void)?
+    
     private(set) var brush = Brush()
     private(set) var drawnPaths: [DrawnPath] = []
 
@@ -47,6 +49,7 @@ final class Canvas: DryDrawingView {
     override func draw(_ rect: CGRect) {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
         drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size) }
+        didDraw?()
     }
 }
 

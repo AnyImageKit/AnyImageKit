@@ -117,7 +117,6 @@ final class PhotoEditorContentView: UIView {
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
         setupCropView()
-        setupMosaicView()
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
     }
     
@@ -140,12 +139,32 @@ final class PhotoEditorContentView: UIView {
     }
     
     internal func updateView(with edit: PhotoEditingStack.Edit) {
+        guard edit.isEdited else { return }
+        updateCanvasFrame()
         canvas.updateView(with: edit)
         mosaic?.updateView(with: edit)
         updateTextView(with: edit)
         cropContext.lastCropData = edit.cropData
-        layoutEndCrop(true)
-        updateCanvasFrame()
+        
+        let group = DispatchGroup()
+        if !edit.penData.isEmpty {
+            group.enter()
+            canvas.didDraw = { [weak self] in
+                self?.canvas.didDraw = nil
+                group.leave()
+            }
+        }
+        if !edit.mosaicData.isEmpty {
+            group.enter()
+            mosaic?.didDraw = { [weak self] in
+                self?.mosaic?.didDraw = nil
+                group.leave()
+            }
+        }
+        group.notify(queue: .main) { [weak self] in
+            self?.layoutEndCrop(edit.isEdited)
+            self?.updateCanvasFrame()
+        }
     }
 }
 
