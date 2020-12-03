@@ -31,9 +31,9 @@ func showMessageHUD(_ message: String) {
     }
 }
 
-func hideHUD() {
+func hideHUD(animated: Bool = true) {
     Thread.runOnMain {
-        hud?.hide()
+        hud?.hide(animated: animated)
     }
 }
 
