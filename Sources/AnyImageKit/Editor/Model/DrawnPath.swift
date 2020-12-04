@@ -13,16 +13,19 @@ import UIKit
 struct DrawnPath: GraphicsDrawing, Codable {
     
     let brush: Brush
+    let scale: CGFloat
     let bezierPath: UIBezierPath
     let uuid: String
     
     enum CodingKeys: String, CodingKey {
         case brush
+        case scale
         case uuid
     }
     
-    init(brush: Brush, path: UIBezierPath) {
+    init(brush: Brush, scale: CGFloat, path: UIBezierPath) {
         self.brush = brush
+        self.scale = scale
         self.bezierPath = path
         self.uuid = UUID().uuidString
     }
@@ -30,6 +33,7 @@ struct DrawnPath: GraphicsDrawing, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(brush, forKey: .brush)
+        try container.encode(scale, forKey: .scale)
         try container.encode(uuid, forKey: .uuid)
         saveBezierPath()
     }
@@ -37,6 +41,7 @@ struct DrawnPath: GraphicsDrawing, Codable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         brush = try values.decode(Brush.self, forKey: .brush)
+        scale = try values.decode(CGFloat.self, forKey: .scale)
         uuid = try values.decode(String.self, forKey: .uuid)
         bezierPath = DrawnPath.loadBezierPath(uuid: uuid)
     }
@@ -58,22 +63,27 @@ struct DrawnPath: GraphicsDrawing, Codable {
 extension DrawnPath {
     
     func draw(in context: CGContext, canvasSize: CGSize) {
+        draw(in: context, canvasSize: canvasSize, scale: 1.0)
+    }
+    
+    func draw(in context: CGContext, canvasSize: CGSize, scale: CGFloat) {
         UIGraphicsPushContext(context)
         context.saveGState()
         defer {
             context.restoreGState()
             UIGraphicsPopContext()
         }
-        draw()
+        draw(scale: scale)
     }
     
-    private func draw() {
+    private func draw(scale: CGFloat) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.saveGState()
         defer {
             context.restoreGState()
         }
         
+        context.scaleBy(x: self.scale / scale, y: self.scale / scale)
         brush.color.setStroke()
         let bezierPath = brushedPath()
         bezierPath.stroke()

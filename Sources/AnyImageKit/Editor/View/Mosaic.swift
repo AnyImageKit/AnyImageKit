@@ -29,7 +29,7 @@ final class Mosaic: UIView {
     
     private let mosaicOptions: [EditorMosaicOption]
     private let originalMosaicImage: UIImage // 原图传统马赛克的图片
-    private var mosaicImage: [UIImage] = []
+    private(set) var mosaicImage: [UIImage] = []
     private(set) var contentViews: [MosaicContentView] = []
     
     init(mosaicOptions: [EditorMosaicOption], originalMosaicImage: UIImage) {
@@ -55,6 +55,11 @@ final class Mosaic: UIView {
             mosaicImage.append(image)
         }
         setMosaicCoverImage(0)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentViews.forEach { $0.updateMask() }
     }
 }
 

@@ -15,8 +15,12 @@ class DryDrawingView: UIView {
     private var points: [CGPoint] = Array(repeating: CGPoint(), count: 3)
     private var didCallBegin = false
     
-    // MARK: - Initializers
+    private var originBounds: CGRect = .zero
+    internal var scale: CGFloat {
+        return originBounds.width / bounds.width
+    }
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
@@ -26,6 +30,14 @@ class DryDrawingView: UIView {
         fatalError()
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if originBounds == .zero && bounds != .zero {
+            originBounds = bounds
+        }
+    }
+    
+    // MARK: - Override
     func willBeginPan(path: UIBezierPath) { }
     func panning(path: UIBezierPath) { }
     func didFinishPan(path: UIBezierPath) { }

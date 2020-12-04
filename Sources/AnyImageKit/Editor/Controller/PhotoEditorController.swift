@@ -103,6 +103,7 @@ final class PhotoEditorController: AnyImageViewController {
         contentView.setupMosaicView { [weak self] _ in
             hideHUD()
             guard let self = self else { return }
+            self.setupData()
             self.contentView.updateView(with: self.stack.edit)
         }
     }
@@ -125,6 +126,12 @@ final class PhotoEditorController: AnyImageViewController {
             }
         }
     }
+    
+    private func setupData() {
+        stack.originImage = image
+        stack.mosaicImages = contentView.mosaic?.mosaicImage ?? []
+        stack.originImageViewBounds = contentView.imageView.bounds
+    }
 }
 
 // MARK: - Target
@@ -141,28 +148,16 @@ extension PhotoEditorController {
     
     /// 获取最终的图片
     private func getResultImage() -> UIImage? {
-        guard let source = contentView.imageView.screenshot(image.size).cgImage else { return nil }
-        let size = image.size
-        let cropRect = contentView.cropContext.cropRealRect
-        
-        // 获取原始imageFrame
+        stack.cropRect = contentView.cropContext.cropRealRect
         let tmpScale = contentView.scrollView.zoomScale
         let tmpOffset = contentView.scrollView.contentOffset
         let tmpContentSize = contentView.scrollView.contentSize
         contentView.scrollView.zoomScale = 1.0
-        let imageFrame = contentView.imageView.frame
+        stack.cropImageViewFrame = contentView.imageView.frame
         contentView.scrollView.zoomScale = tmpScale
         contentView.scrollView.contentOffset = tmpOffset
         contentView.scrollView.contentSize = tmpContentSize
-        
-        var rect: CGRect = .zero
-        rect.origin.x = (cropRect.origin.x - imageFrame.origin.x) / imageFrame.width * size.width
-        rect.origin.y = (cropRect.origin.y - imageFrame.origin.y) / imageFrame.height * size.height
-        rect.size.width = size.width * cropRect.width / imageFrame.width
-        rect.size.height = size.height * cropRect.height / imageFrame.height
-        
-        guard let cgImage = source.cropping(to: rect) else { return nil }
-        return UIImage(cgImage: cgImage)
+        return stack.output()
     }
     
     /// 存储编辑记录
@@ -271,7 +266,6 @@ extension PhotoEditorController {
         case .back:
             delegate?.photoEditorDidCancel(self)
         case .done:
-            // TODO:
             contentView.deactivateAllTextView()
             guard let image = getResultImage() else { return }
             saveEditPath()

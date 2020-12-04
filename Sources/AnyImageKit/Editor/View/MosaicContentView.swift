@@ -36,6 +36,9 @@ final class MosaicContentView: DryDrawingView {
     }()
     private lazy var maskLayer: MaskLayer = {
         let layer = MaskLayer()
+        layer.scale = { [weak self] in
+            return self?.scale ?? 1.0
+        }
         layer.contentsScale = UIScreen.main.scale
         layer.drawsAsynchronously = true
         return layer
@@ -55,7 +58,7 @@ final class MosaicContentView: DryDrawingView {
     override func willBeginPan(path: UIBezierPath) {
         delegate?.mosaicDidBeginPen()
         brush.lineWidth = dataSource?.mosaicGetLineWidth() ?? 15.0
-        let drawnPath = DrawnPath(brush: brush, path: path)
+        let drawnPath = DrawnPath(brush: brush, scale: scale, path: path)
         drawnPaths.append(drawnPath)
     }
     
@@ -78,7 +81,7 @@ final class MosaicContentView: DryDrawingView {
         imageView.frame = bounds
     }
     
-    private func updateMask() {
+    func updateMask() {
         maskLayer.drawnPaths = drawnPaths
     }
 }
@@ -101,15 +104,16 @@ extension MosaicContentView {
 private class MaskLayer: CALayer {
     
     var didDraw: (() -> Void)?
+    var scale: (() -> CGFloat)?
     
-    var drawnPaths: [GraphicsDrawing] = [] {
+    var drawnPaths: [DrawnPath] = [] {
         didSet {
             setNeedsDisplay()
         }
     }
     
     override func draw(in ctx: CGContext) {
-        drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size) }
+        drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size, scale: scale?() ?? 1.0) }
         didDraw?()
     }
 }

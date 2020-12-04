@@ -32,7 +32,7 @@ final class Canvas: DryDrawingView {
     override func willBeginPan(path: UIBezierPath) {
         delegate?.canvasDidBeginPen()
         brush.lineWidth = dataSource?.canvasGetLineWidth(self) ?? 5.0
-        let drawnPath = DrawnPath(brush: brush, path: path)
+        let drawnPath = DrawnPath(brush: brush, scale: scale, path: path)
         drawnPaths.append(drawnPath)
         setNeedsDisplay()
     }
@@ -48,7 +48,7 @@ final class Canvas: DryDrawingView {
     
     override func draw(_ rect: CGRect) {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
-        drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size) }
+        drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size, scale: scale) }
         didDraw?()
     }
 }

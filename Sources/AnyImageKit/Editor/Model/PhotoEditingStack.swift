@@ -7,14 +7,22 @@
 //
 
 import UIKit
+import CoreImage
 
 final class PhotoEditingStack {
     
     var edit: Edit = .init()
     
+    var originImage: UIImage = .init()
+    var mosaicImages: [UIImage] = []
+    var originImageViewBounds: CGRect = .zero
+    var cropRect: CGRect = .zero
+    var cropImageViewFrame: CGRect = .zero
+    
     private let identifier: String
     private let cache = CodableCacheTool(config: CacheConfig(module: .editor(.default), useDiskCache: true, autoRemoveDiskCache: false))
     private(set) var didLoadCache = false
+    private var drawer: [GraphicsDrawing] = []
     
     init(identifier: String) {
         self.identifier = identifier
@@ -67,5 +75,91 @@ extension PhotoEditingStack.Edit {
     
     var mosaicCanUndo: Bool {
         return !mosaicData.flatMap { $0.drawnPaths }.isEmpty
+    }
+}
+
+
+// MARK: - Output
+extension PhotoEditingStack {
+    
+    private func prepareOutout() {
+        drawer = []
+        guard let sourceImage = CIImage(image: originImage) else { return }
+        let imageSize = sourceImage.extent.size
+        let size = originImageViewBounds.size
+        let scale = imageSize.width / size.width
+        
+        // 先绘制马赛克，再绘制画笔
+        edit.mosaicData.forEach { data in
+            let bm = BlurredMask(paths: data.drawnPaths, scale: scale, blurImage: mosaicImages[data.idx])
+            self.drawer.append(bm)
+        }
+        let cm = CanvasMask(paths: edit.penData.map { $0.drawnPath }, scale: scale)
+        drawer.append(cm)
+    }
+    
+    private func cropImage(_ image: UIImage) -> UIImage? {
+        guard let source = image.cgImage else { return nil }
+        let size = image.size
+        let imageFrame = cropImageViewFrame
+        
+        var rect: CGRect = .zero
+        rect.origin.x = (cropRect.origin.x - imageFrame.origin.x) / imageFrame.width * size.width
+        rect.origin.y = (cropRect.origin.y - imageFrame.origin.y) / imageFrame.height * size.height
+        rect.size.width = size.width * cropRect.width / imageFrame.width
+        rect.size.height = size.height * cropRect.height / imageFrame.height
+        
+        guard let resultImage = source.cropping(to: rect) else { return nil }
+        return UIImage(cgImage: resultImage)
+    }
+    
+    func output() -> UIImage? {
+        prepareOutout()
+        guard let sourceImage = CIImage(image: originImage) else { return nil }
+        let ciContext = CIContext(options: [.useSoftwareRenderer : false, .highQualityDownsample : true])
+        let canvasSize = sourceImage.extent.size
+//        let size = originImageViewBounds.size
+//        let scale = canvasSize.width / size.width
+//        print("cSize:\(canvasSize), size:\(size), scale:\(scale)")
+        
+        let format: UIGraphicsImageRendererFormat
+        if #available(iOS 11.0, *) {
+            format = UIGraphicsImageRendererFormat.preferred()
+        } else {
+            format = UIGraphicsImageRendererFormat.default()
+        }
+        format.scale = 1
+        format.opaque = true
+        if #available(iOS 12.0, *) {
+            format.preferredRange = .extended
+        } else {
+            format.prefersExtendedRange = false
+        }
+        
+        let image = autoreleasepool { () -> UIImage in
+            UIGraphicsImageRenderer.init(size: canvasSize, format: format).image { c in
+                let cgContext = UIGraphicsGetCurrentContext()!
+                
+                // 绘制原图
+                let cgImage = ciContext.createCGImage(sourceImage, from: sourceImage.extent, format: .RGBA8, colorSpace: sourceImage.colorSpace ?? CGColorSpaceCreateDeviceRGB())!
+                cgContext.saveGState()
+                cgContext.translateBy(x: 0, y: canvasSize.height)
+                cgContext.scaleBy(x: 1, y: -1)
+                cgContext.draw(cgImage, in: CGRect(origin: .zero, size: canvasSize))
+                cgContext.restoreGState()
+                
+                // 绘制马赛克 & 画笔
+                self.drawer.forEach {
+                    $0.draw(in: cgContext, canvasSize: canvasSize)
+                }
+//                self.edit.mosaicData.forEach { data in
+//                    let bm = BlurredMask(paths: data.drawnPaths, scale: scale, blurImage: self.mosaicImages[data.idx])
+//                    bm.draw(in: cgContext, canvasSize: canvasSize)
+//                }
+//                let cm = CanvasMask(paths: self.edit.penData.map { $0.drawnPath }, scale: scale)
+//                cm.draw(in: cgContext, canvasSize: canvasSize)
+            }
+        }
+        return cropImage(image)
     }
 }
