@@ -33,12 +33,15 @@ final class DisableCheckRuleViewController: UITableViewController {
     
     @objc private func openPickerTapped() {
         var options = PickerOptionsInfo()
+        options.selectOptions = [.video]
         options.disableRules = [videoDuration]
         let controller = ImagePickerController(options: options, delegate: self)
+        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
 }
 
+// MARK: - UITableViewDataSource
 extension DisableCheckRuleViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -85,15 +88,63 @@ extension DisableCheckRuleViewController {
         let sectionType = Section.allCases[section]
         return sectionType.title
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 54
+    }
 }
 
+// MARK: - UITableViewDelegate
 extension DisableCheckRuleViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let sectionType = Section.allCases[indexPath.section]
+        switch sectionType {
+        case .videoDuration:
+            let rowType = VideoDurationRow.allCases[indexPath.row]
+            showUpdateDurationAlert(rowType: rowType)
+        }
     }
 }
 
+// MARK: - Private
+extension DisableCheckRuleViewController {
+    
+    private func showUpdateDurationAlert(rowType: VideoDurationRow) {
+        let title: String
+        switch rowType {
+        case .minDuration:
+            title = "Min value"
+        case .maxDuration:
+            title = "Max value"
+        default:
+            return
+        }
+        
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        alert.addTextField { (field) in
+            field.keyboardType = .numberPad
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { [weak self] (_) in
+            guard let self = self else { return }
+            let value = TimeInterval(alert.textFields?.first?.text ?? "")
+            switch rowType {
+            case .minDuration:
+                self.videoDuration = VideoDurationDisableCheckRule(min: value ?? 3, max: self.videoDuration.maxDuration)
+            case .maxDuration:
+                self.videoDuration = VideoDurationDisableCheckRule(min: self.videoDuration.minDuration, max: value ?? 120)
+            default:
+                return
+            }
+            self.tableView.reloadData()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+// MARK: - ImagePickerControllerDelegate
 extension DisableCheckRuleViewController: ImagePickerControllerDelegate {
     
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
