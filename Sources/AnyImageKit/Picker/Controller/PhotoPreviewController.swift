@@ -67,8 +67,6 @@ final class PhotoPreviewController: AnyImageViewController {
     var photoSpacing: CGFloat = 30
     /// 图片缩放模式
     var imageScaleMode: UIView.ContentMode = .scaleAspectFill
-    /// 捏合手势放大图片时的最大允许比例
-    var imageMaximumZoomScale: CGFloat = 2.0
     /// 双击放大图片时的目标比例
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
@@ -407,7 +405,6 @@ extension PhotoPreviewController: UICollectionViewDataSource {
         case .photo:
             let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
             photoCell.imageView.contentMode = imageScaleMode
-            photoCell.imageMaximumZoomScale = imageMaximumZoomScale
             photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
             cell = photoCell
         case .video:
