@@ -87,7 +87,7 @@ final class ConfigCell: UITableViewCell {
         contentLabel.snp.makeConstraints { maker in
             maker.centerY.equalToSuperview()
             maker.left.equalTo(layoutGuide.snp.right).offset(8)
-            maker.right.equalToSuperview().offset(-16)
+            maker.right.equalToSuperview().offset(-20)
         }
     }
     

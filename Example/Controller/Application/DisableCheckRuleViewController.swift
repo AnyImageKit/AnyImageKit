@@ -27,8 +27,8 @@ final class DisableCheckRuleViewController: UITableViewController {
     }
     
     private func setupView() {
-        
-        
+        tableView.register(EnableCell.self, forCellReuseIdentifier: EnableCell.reuseIdentifier)
+        tableView.register(ConfigCell.self, forCellReuseIdentifier: ConfigCell.reuseIdentifier)
     }
     
     @objc private func openPickerTapped() {
@@ -54,7 +54,31 @@ extension DisableCheckRuleViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let sectionType = Section.allCases[indexPath.section]
+        switch sectionType {
+        case .videoDuration:
+            let rowType = VideoDurationRow.allCases[indexPath.row]
+            switch rowType {
+            case .enableCheck:
+                let cell = tableView.dequeueReusableCell(withIdentifier: EnableCell.reuseIdentifier, for: indexPath) as! EnableCell
+                cell.titleLabel.text = "Enable"
+                cell.enableSwitch.isOn = enableVideoDurationCheck
+                cell.enableSwitch.addTarget(self, action: #selector(switchEnableVideoDurationCheck(_:)), for: .valueChanged)
+                return cell
+            case .minDuration:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ConfigCell.reuseIdentifier, for: indexPath) as! ConfigCell
+                cell.titleLabel.text = "Min value"
+                cell.tagsButton.setTitle(".minDuration", for: .normal)
+                cell.contentLabel.text = videoDuration.minDuration.description
+                return cell
+            case .maxDuration:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ConfigCell.reuseIdentifier, for: indexPath) as! ConfigCell
+                cell.titleLabel.text = "Max value"
+                cell.tagsButton.setTitle(".maxDuration", for: .normal)
+                cell.contentLabel.text = videoDuration.maxDuration.description
+                return cell
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -66,7 +90,7 @@ extension DisableCheckRuleViewController {
 extension DisableCheckRuleViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
@@ -99,16 +123,15 @@ extension DisableCheckRuleViewController {
 
 // MARK: - Rows VideoDuration
 extension DisableCheckRuleViewController {
+    
+    @objc private func switchEnableVideoDurationCheck(_ sender: UISwitch) {
+        self.enableVideoDurationCheck = sender.isOn
+    }
      
     private enum VideoDurationRow: CaseIterable {
         
         case enableCheck
         case minDuration
         case maxDuration
-    }
-    
-    private class VideoDurationCell: UITableViewCell {
-        
-        
     }
 }
