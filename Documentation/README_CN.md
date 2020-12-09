@@ -123,11 +123,11 @@ extension ViewController: ImagePickerControllerDelegate {
 
 ## 更新日志
 
-| 版本 | 发布时间 | Xcode | Swift |
-| ---- | ----  | ---- | ---- |
-| [v0.11.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0110) | 2020-12-07 | 12.2 | 5.3 |
-| [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100) | 2020-11-03 | 12.1 | 5.3 |
-| [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090) | 2020-10-09 | 12.0 | 5.3 |
+| 版本 | 发布时间 | Xcode | Swift | iOS |
+| ---- | ----  | ---- | ---- | ---- |
+| [v0.11.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0110) | 2020-12-10 | 12.2 | 5.3 | 10.0+ |
+| [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100) | 2020-11-03 | 12.1 | 5.3 | 10.0+ |
+| [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090) | 2020-10-09 | 12.0 | 5.3 | 10.0+ |
 
 ## 版权协议
 
