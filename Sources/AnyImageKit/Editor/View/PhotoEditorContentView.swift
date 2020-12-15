@@ -30,7 +30,6 @@ final class PhotoEditorContentView: UIView {
         view.delegate = self
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
-        view.maximumZoomScale = 3.0
         if #available(iOS 11.0, *) {
             view.contentInsetAdjustmentBehavior = .never
         }
@@ -173,7 +172,7 @@ final class PhotoEditorContentView: UIView {
     
     internal func layout() {
         scrollView.frame = bounds
-        scrollView.maximumZoomScale = 3.0
+        scrollView.maximumZoomScale = maximumZoomScale
         scrollView.minimumZoomScale = 1.0
         scrollView.zoomScale = 1.0
         scrollView.contentInset = .zero

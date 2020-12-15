@@ -133,7 +133,7 @@ extension PhotoEditorContentView {
         let bottom = cropBottomOffset
         scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
         scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = cropMaximumZoomScale
+        scrollView.maximumZoomScale = maximumZoomScale
         scrollView.zoomScale = 1.0
         
         let cropFrame = self.cropFrame
@@ -154,7 +154,7 @@ extension PhotoEditorContentView {
         let top = cropY
         let bottom = cropBottomOffset
         scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
-        scrollView.maximumZoomScale = cropMaximumZoomScale
+        scrollView.maximumZoomScale = maximumZoomScale
   
         // 加载上次裁剪数据
         scrollView.zoomScale = lastCropData.zoomScale
@@ -214,7 +214,7 @@ extension PhotoEditorContentView {
         
         // Set
         scrollView.minimumZoomScale = didCrop ? scrollView.zoomScale : 1.0
-        scrollView.maximumZoomScale = didCrop ? scrollView.zoomScale : 3.0
+        scrollView.maximumZoomScale = didCrop ? scrollView.zoomScale : maximumZoomScale
         cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)
         animate(withDuration: fromCache ? 0 : 0.25) {
             self.scrollView.frame = self.bounds

@@ -49,6 +49,10 @@ extension PhotoEditorContentView {
             return 0
         }
     }
+    /// 最大缩放比例
+    var maximumZoomScale: CGFloat {
+        return (image.size.width / scrollView.bounds.width) * 2
+    }
 }
 
 // MARK: - Crop
@@ -96,17 +100,5 @@ extension PhotoEditorContentView {
         let x = ((maxSize.width - size.width) > 0 ? (maxSize.width - size.width) * 0.5 : 0) + cropX
         let y = ((maxSize.height - size.height) > 0 ? (maxSize.height - size.height) * 0.5 : 0) + cropY
         return CGRect(origin: CGPoint(x: x, y: y), size: size)
-    }
-    /// 裁剪时最大的缩放比例
-    var cropMaximumZoomScale: CGFloat {
-        let maxSize = cropMaxSize
-        let size = cropSize
-        var zoom: CGFloat = 1.0
-        if size.width > size.height {
-            zoom = maxSize.height / size.height
-        } else {
-            zoom = maxSize.width / size.width
-        }
-        return zoom * 6.0
     }
 }

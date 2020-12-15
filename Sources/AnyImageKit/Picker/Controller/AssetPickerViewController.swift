@@ -521,7 +521,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         if manager.options.quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
             selectButtonTapped(cell.selectButton)
-            if manager.options.selectLimit == 1 {
+            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
         } else if case .disable(let rule) = asset.state {

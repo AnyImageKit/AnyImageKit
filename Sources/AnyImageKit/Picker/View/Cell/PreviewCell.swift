@@ -155,8 +155,11 @@ class PreviewCell: UICollectionViewCell {
         scrollView.frame = contentView.bounds
         scrollView.setZoomScale(1.0, animated: false)
         imageView.frame = fitFrame
-        scrollView.minimumZoomScale = getDefaultScale()
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+        let minZoomScale = getDefaultScale()
+        let maxZoomScale = getMaxZoomScale(with: minZoomScale)
+        scrollView.minimumZoomScale = minZoomScale
+        scrollView.maximumZoomScale = maxZoomScale
+        scrollView.setZoomScale(minZoomScale, animated: false)
     }
     
     /// 设置 iCloud 下载进度
@@ -233,6 +236,13 @@ extension PreviewCell {
             }
         }
         return 1.0
+    }
+    
+    private func getMaxZoomScale(with minZoomScale: CGFloat) -> CGFloat {
+        guard let image = imageView.image else { return 1.0 }
+        var maxZoomScale = (image.size.width / ScreenHelper.mainBounds.width) * 2
+        maxZoomScale = maxZoomScale / (1.0 / minZoomScale)
+        return maxZoomScale < 1.0 ? 1.0 : maxZoomScale
     }
 }
 
