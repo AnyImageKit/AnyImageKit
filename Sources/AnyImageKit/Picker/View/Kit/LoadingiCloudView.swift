@@ -38,7 +38,7 @@ final class LoadingiCloudView: UIView {
         let view = UILabel(frame: .zero)
         view.text = "0%"
         view.textColor = UIColor.white 
-        view.font = UIFont.systemFont(ofSize: 11)
+        view.font = UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular)
         return view
     }()
     
