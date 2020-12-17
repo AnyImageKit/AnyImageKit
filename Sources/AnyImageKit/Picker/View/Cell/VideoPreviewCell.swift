@@ -130,14 +130,14 @@ extension VideoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
-        let id = asset.phAsset.localIdentifier
+        let id = asset.identifier
         if imageView.image == nil { // thumbnail
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
-                    if self.imageView.image == nil && self.asset.phAsset.localIdentifier == id {
+                    if self.imageView.image == nil && self.asset.identifier == id {
                         self.setImage(response.image)
                     }
                 case .failure(let error):
@@ -151,10 +151,9 @@ extension VideoPreviewCell {
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                if !response.isDegraded && self.asset.phAsset.localIdentifier == id {
-                    self.imageView.image = response.image
-                    self.imageView.frame = self.fitFrame
-                }
+                guard !response.isDegraded && self.asset.identifier == id else { return }
+                self.imageView.image = response.image
+                self.imageView.frame = self.fitFrame
             case .failure(let error):
                 _print(error)
             }
@@ -163,12 +162,12 @@ extension VideoPreviewCell {
     
     // 加载视频
     func requestVideo() {
-        let id = asset.phAsset.localIdentifier
+        let id = asset.identifier
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                    guard let self = self, self.asset.identifier == id else { return }
                     _print("Download video from iCloud: \(progress)")
                     self.setDownloadingProgress(progress)
                 }
@@ -177,11 +176,9 @@ extension VideoPreviewCell {
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        if self.asset.phAsset.localIdentifier == id {
-                            self.setPlayerItem(response.playerItem)
-                            self.setDownloadingProgress(1.0)
-                        }
+                        guard let self = self, self.asset.identifier == id else { return }
+                        self.setPlayerItem(response.playerItem)
+                        self.setDownloadingProgress(1.0)
                     }
                 case .failure(let error):
                     _print(error)
