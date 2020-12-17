@@ -2,10 +2,14 @@
 
 ## 0.11.0
 
+### 通用
+
+- 重新支持 Mac Catalyst
+
 ### 新增
 
 - Picker
-  - 新增 `AssetDisableCheckRule`，允许自定义资源禁用规则/文案，框架已自带 `VideoDurationDisableCheckRule` 已实现按最大/最小时长过滤视频。
+  - 新增 `AssetDisableCheckRule`，允许自定义资源禁用规则/文案，框架已自带 `VideoDurationDisableCheckRule` 实现按最大/最小时长过滤视频。
 - Editor
   - 将 `.modalPresentationStyle = .fullScreen` 移至 `ImageEditorController` 的初始化方法中，调用者无需重复设置。
 - Capture
@@ -15,7 +19,7 @@
 
 - Picker
   - 修复 `NSDiffableDataSourceSnapshot` 存在内存泄漏的问题。
-  - 修复内容较少时无法滚动的问题
+  - 修复选中多个需要从 iCloud 下载的资源时进度不正确的问题。
 
 ## 0.10.0
 
