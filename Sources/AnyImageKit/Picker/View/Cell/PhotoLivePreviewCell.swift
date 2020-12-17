@@ -104,12 +104,12 @@ final class PhotoLivePreviewCell: PreviewCell {
 extension PhotoLivePreviewCell {
     
     func requestLivePhoto() {
-        let id = asset.phAsset.localIdentifier
+        let id = asset.identifier
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             let options = PhotoLiveFetchOptions(targetSize: PHImageManagerMaximumSize)  { (progress, error, isAtEnd, info) in
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                    guard let self = self, self.asset.identifier == id else { return }
                     _print("Download live photo from iCloud: \(progress)")
                     self.setDownloadingProgress(progress)
                 }
@@ -118,11 +118,9 @@ extension PhotoLivePreviewCell {
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        if self.asset.phAsset.localIdentifier == id {
-                            self.livePhotoView.livePhoto = response.livePhoto
-                            self.setDownloadingProgress(1.0)
-                        }
+                        guard let self = self, self.asset.identifier == id else { return }
+                        self.livePhotoView.livePhoto = response.livePhoto
+                        self.setDownloadingProgress(1.0)
                     }
                 case .failure(let error):
                     _print(error.localizedDescription)
