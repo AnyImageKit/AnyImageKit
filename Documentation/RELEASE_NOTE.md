@@ -20,6 +20,9 @@
 - Picker
   - Fixed a memory leak when use `NSDiffableDataSourceSnapshot` in iOS 14 and later.
   - Fixed the progress display when selected multiple assets which need download from iCloud.
+  - The maximum zoom scale of the photo during preview is changed from fixed value to calculation based on image size.
+- Editor
+  - The maximum zoom scale of the photo during editor is changed from fixed value to calculation based on image size.
 
 ## 0.10.0
 
