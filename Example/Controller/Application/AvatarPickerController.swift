@@ -75,14 +75,11 @@ final class AvatarPickerController: UITableViewController {
 extension AvatarPickerController: ImagePickerControllerDelegate {
     
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        picker.dismiss(animated: false, completion: nil)
-        
         var options = EditorPhotoOptionsInfo()
         options.toolOptions = [.crop]
         options.cropOptions = [.custom(w: 1, h: 1)]
-        
-        let controller = ImageEditorController(photo: result.assets.first!.image, options: options, delegate: self)
-        present(controller, animated: false, completion: nil)
+        let editor = ImageEditorController(photo: result.assets.first!.image, options: options, delegate: self)
+        picker.present(editor, animated: false, completion: nil)
     }
 }
 
@@ -90,7 +87,7 @@ extension AvatarPickerController: ImagePickerControllerDelegate {
 extension AvatarPickerController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
-        editor.dismiss(animated: true, completion: nil)
+        editor.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
         openPickerTapped()
     }
     
@@ -101,7 +98,7 @@ extension AvatarPickerController: ImageEditorControllerDelegate {
             let controller = EditorResultViewController()
             controller.imageView.image = photo
             show(controller, sender: nil)
-            editor.dismiss(animated: false, completion: nil)
+            editor.presentingViewController?.presentingViewController?.dismiss(animated: false, completion: nil)
         }
     }
 }
