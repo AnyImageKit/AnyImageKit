@@ -12,6 +12,11 @@
 
 ## Features
 
+- [x] Modular design
+    - [x] Picker
+    - [ ] Browser
+    - [x] Editor
+    - [x] Capture
 - [x] Light mode, dark mode or auto mode support
 - [x] Default theme is similar with Wechat 
 - [x] Multiple & mix select support
@@ -34,7 +39,7 @@
     - [x] Mosaic
     - [ ] Rotate
     - [ ] Fliter Support
-- [ ] Multiple platform support
+- [x] Multiple platform support
     - [x] iOS
     - [x] iPadOS
     - [x] Mac Catalyst ( Technical Preview, Not support in editor.)
