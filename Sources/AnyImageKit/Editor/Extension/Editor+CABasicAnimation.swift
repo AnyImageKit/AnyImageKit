@@ -10,7 +10,7 @@ import UIKit
 
 extension CABasicAnimation {
     
-    static func create(keyPath: String = "path", duration: CFTimeInterval, fromValue: CGPath?, toValue: CGPath?) -> CABasicAnimation {
+    static func create(keyPath: String = "path", duration: CFTimeInterval, fromValue: Any?, toValue: Any?) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: keyPath)
         animation.duration = duration
         animation.fromValue = fromValue

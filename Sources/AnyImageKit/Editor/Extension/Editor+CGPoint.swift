@@ -18,4 +18,8 @@ extension CGPoint {
         let p = pow(x - other.x, 2) + pow(y - other.y, 2)
         return sqrt(p)
     }
+    
+    func multipliedBy(_ amount: CGFloat) -> CGPoint {
+        return CGPoint(x: x * amount, y: y * amount)
+    }
 }

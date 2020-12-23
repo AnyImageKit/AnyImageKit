@@ -68,11 +68,19 @@ final class PhotoEditorContentView: UIView {
     /// 裁剪框的矩形
     private(set) lazy var gridView: CropGridView = {
         let view = CropGridView(frame: UIScreen.main.bounds)
-        view.alpha = 0
         return view
     }()
     /// 用于裁剪后把其他区域以黑色layer盖住
-    private(set) lazy var cropLayer: CAShapeLayer = {
+    private(set) lazy var cropLayerLeave: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.frame = bounds
+        layer.fillRule = .evenOdd
+        layer.fillColor = UIColor.black.cgColor
+        return layer
+    }()
+    /// 用于裁剪前进入裁剪时的动画切换时的蒙版
+    /// 不用 `cropLayerLeave` 的原因是切换 path 时会产生不可控的动画
+    private(set) lazy var cropLayerEnter: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.frame = bounds
         layer.fillRule = .evenOdd
@@ -185,6 +193,18 @@ extension PhotoEditorContentView: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if !cropContext.isCrop && !cropContext.didCrop {
             imageView.center = centerOfContentSize
+        } else if !cropContext.isCrop  && cropContext.didCrop {
+            let scale = scrollView.zoomScale / cropContext.lastCropData.zoomScale
+            let contentSize = cropContext.contentSize.multipliedBy(scale)
+            let imageFrame = cropContext.imageViewFrame.multipliedBy(scale)
+            
+            let topOffset = cropContext.croppedHeight * scale
+            let deltaHeight = scrollView.bounds.height - contentSize.height
+            let offsetY = (deltaHeight > 0 ? deltaHeight / 2 : 0) - topOffset
+            let centerY = imageFrame.height / 2 + offsetY
+            
+            imageView.center = CGPoint(x: imageFrame.midX, y: centerY)
+            scrollView.contentSize = contentSize
         }
     }
 }

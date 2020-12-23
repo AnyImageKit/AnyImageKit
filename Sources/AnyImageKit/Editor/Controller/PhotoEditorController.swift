@@ -187,8 +187,10 @@ extension PhotoEditorController {
     private func willBeginCrop() {
         backButton.isHidden = true
         contentView.scrollView.isScrollEnabled = true
+        contentView.cropLayerLeave.isHidden = true
         contentView.deactivateAllTextView()
         let image = contentView.imageView.screenshot(self.image.size)
+        contentView.cropLayerLeave.isHidden = false
         contentView.canvas.isHidden = true
         contentView.mosaic?.isHidden = true
         contentView.hiddenAllTextView()

@@ -23,6 +23,7 @@
 		716FBEDE2578CF3A004E0018 /* CanvasMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716FBEDD2578CF3A004E0018 /* CanvasMask.swift */; };
 		716FBEE22578D1B2004E0018 /* BlurredMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716FBEE12578D1B2004E0018 /* BlurredMask.swift */; };
 		71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71723646249C4CD5003D23DB /* PadCaptureViewController.swift */; };
+		7174392B2588879C000F83AE /* Editor+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7174392A2588879C000F83AE /* Editor+CGSize.swift */; };
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
 		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
@@ -274,6 +275,7 @@
 		716FBEDD2578CF3A004E0018 /* CanvasMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasMask.swift; sourceTree = "<group>"; };
 		716FBEE12578D1B2004E0018 /* BlurredMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredMask.swift; sourceTree = "<group>"; };
 		71723646249C4CD5003D23DB /* PadCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadCaptureViewController.swift; sourceTree = "<group>"; };
+		7174392A2588879C000F83AE /* Editor+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Editor+CGSize.swift"; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
 		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
@@ -1079,6 +1081,7 @@
 				A5DF1E82237AA32C00E3A32E /* Editor+UIImage.swift */,
 				A5DF1E83237AA32C00E3A32E /* Editor+UIBezierPath.swift */,
 				A5DF1E7F237AA32C00E3A32E /* Editor+CGPoint.swift */,
+				7174392A2588879C000F83AE /* Editor+CGSize.swift */,
 				A5DF1E81237AA32C00E3A32E /* Editor+CGRect.swift */,
 				A5DF1E80237AA32C00E3A32E /* Editor+CABasicAnimation.swift */,
 			);
@@ -1416,6 +1419,7 @@
 				71BAF33D25761C48007AE60F /* CodableCacheTool.swift in Sources */,
 				A0B22EA8237AA1B3001F6066 /* Core+UITableView.swift in Sources */,
 				A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */,
+				7174392B2588879C000F83AE /* Editor+CGSize.swift in Sources */,
 				71BAF32825760DE1007AE60F /* PhotoEditorCropContext.swift in Sources */,
 				A56A3C7823306CB700EBFC48 /* PhotoPreviewController.swift in Sources */,
 				A5A27BBE232F83DE00D966B8 /* OriginalButton.swift in Sources */,
