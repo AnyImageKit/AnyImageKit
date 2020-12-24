@@ -617,7 +617,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
         let idx = index + itemOffset
         let indexPath = IndexPath(item: idx, section: 0)
-        return collectionView.cellForItem(at: indexPath)
+        return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
     }
 }
 
