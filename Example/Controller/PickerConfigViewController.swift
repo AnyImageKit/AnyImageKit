@@ -242,6 +242,16 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func saveEditedAssetTapped(_ indexPath: IndexPath) {
+        options.saveEditedAsset = !options.saveEditedAsset
+        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.saveEditedAsset)"
+    }
+    
+    private func openEditorAfterSelectionTapped(_ indexPath: IndexPath) {
+        options.openEditorAfterSelection = !options.openEditorAfterSelection
+        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.openEditorAfterSelection)"
+    }
+    
     private func captureMediaOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Capture Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
@@ -409,11 +419,17 @@ extension PickerConfigViewController {
     // MARK: - Editor Config
     enum EditorConfigRowType: Int, CaseIterable, RowTypeRule {
         case editorOptions = 0
+        case saveEditedAsset
+        case openEditorAfterSelection
         
         var title: String {
             switch self {
             case .editorOptions:
                 return "EditorOptions"
+            case .saveEditedAsset:
+                return "SaveEditedAsset"
+            case .openEditorAfterSelection:
+                return "OpenEditorAfterSelection"
             }
         }
         
@@ -421,6 +437,10 @@ extension PickerConfigViewController {
             switch self {
             case .editorOptions:
                 return ".editorOptions"
+            case .saveEditedAsset:
+                return ".saveEditedAsset"
+            case .openEditorAfterSelection:
+                return ".openEditorAfterSelection"
             }
         }
         
@@ -428,6 +448,10 @@ extension PickerConfigViewController {
             switch self {
             case .editorOptions:
                 return "None"
+            case .saveEditedAsset:
+                return "true"
+            case .openEditorAfterSelection:
+                return "false"
             }
         }
         
@@ -436,6 +460,10 @@ extension PickerConfigViewController {
             switch self {
             case .editorOptions:
                 return controller.editorOptionsTapped
+            case .saveEditedAsset:
+                return controller.saveEditedAssetTapped
+            case .openEditorAfterSelection:
+                return controller.openEditorAfterSelectionTapped
             }
         }
     }

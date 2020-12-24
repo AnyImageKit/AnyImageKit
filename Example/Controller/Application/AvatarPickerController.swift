@@ -35,7 +35,13 @@ final class AvatarPickerController: UITableViewController {
         var options = PickerOptionsInfo()
         options.selectLimit = 1
         options.quickPick = true
+        options.saveEditedAsset = false
+        options.openEditorAfterSelection = true
+        options.editorOptions = [.photo]
+        options.editorPhotoOptions.toolOptions = [.crop]
+        options.editorPhotoOptions.cropOptions = [.custom(w: 1, h: 1)]
         let controller = ImagePickerController(options: options, delegate: self)
+        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
     
@@ -75,31 +81,10 @@ final class AvatarPickerController: UITableViewController {
 extension AvatarPickerController: ImagePickerControllerDelegate {
     
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        var options = EditorPhotoOptionsInfo()
-        options.toolOptions = [.crop]
-        options.cropOptions = [.custom(w: 1, h: 1)]
-        let editor = ImageEditorController(photo: result.assets.first!.image, options: options, delegate: self)
-        picker.present(editor, animated: false, completion: nil)
-    }
-}
-
-// MARK: - ImageEditorPhotoDelegate
-extension AvatarPickerController: ImageEditorControllerDelegate {
-    
-    func imageEditorDidCancel(_ editor: ImageEditorController) {
-        editor.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
-        openPickerTapped()
-    }
-    
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
-        if result.type == .photo {
-            guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
-            guard let photo = UIImage(data: photoData) else { return }
-            let controller = EditorResultViewController()
-            controller.imageView.image = photo
-            show(controller, sender: nil)
-            editor.presentingViewController?.presentingViewController?.dismiss(animated: false, completion: nil)
-        }
+        picker.dismiss(animated: true, completion: nil)
+        let controller = EditorResultViewController()
+        controller.imageView.image = result.assets.first!.image
+        show(controller, sender: nil)
     }
 }
 
@@ -109,14 +94,11 @@ extension AvatarPickerController {
     // MARK: - Section
     enum Section: Int, CaseIterable {
         case pickerConfig = 0
-        case editorConfig
         
         var title: String {
             switch self {
             case .pickerConfig:
                 return "Picker config"
-            case .editorConfig:
-                return "Editor config"
             }
         }
         
@@ -124,8 +106,6 @@ extension AvatarPickerController {
             switch self {
             case .pickerConfig:
                 return PickerConfigRowType.allCases
-            case .editorConfig:
-                return EditorConfigRowType.allCases
             }
         }
     }
@@ -134,6 +114,11 @@ extension AvatarPickerController {
     enum PickerConfigRowType: Int, CaseIterable, RowTypeRule {
         case selectLimit = 0
         case quickPick
+        case editorOptions
+        case saveEditedAsset
+        case openEditorAfterSelection
+        case editorPhotoOptions_editOptions
+        case editorPhotoOptions_cropOptions
         
         var title: String {
             switch self {
@@ -141,6 +126,16 @@ extension AvatarPickerController {
                 return "SelectLimit"
             case .quickPick:
                 return "QuickPick"
+            case .saveEditedAsset:
+                return "SaveEditedAsset"
+            case .openEditorAfterSelection:
+                return "OpenEditorAfterSelection"
+            case .editorOptions:
+                return "EditorOptions"
+            case .editorPhotoOptions_editOptions:
+                return "EditOptions"
+            case .editorPhotoOptions_cropOptions:
+                return "CropOptions"
             }
         }
         
@@ -150,6 +145,16 @@ extension AvatarPickerController {
                 return ".selectLimit"
             case .quickPick:
                 return ".quickPick"
+            case .saveEditedAsset:
+                return ".saveEditedAsset"
+            case .openEditorAfterSelection:
+                return ".openEditorAfterSelection"
+            case .editorOptions:
+                return ".editorOptions"
+            case .editorPhotoOptions_editOptions:
+                return ".editorPhotoOptions.editOptions"
+            case .editorPhotoOptions_cropOptions:
+                return ".editorPhotoOptions.cropOptions"
             }
         }
         
@@ -159,38 +164,15 @@ extension AvatarPickerController {
                 return "1"
             case .quickPick:
                 return "true"
-            }
-        }
-    }
-    
-    // MARK: - Editor Config
-    enum EditorConfigRowType: Int, CaseIterable, RowTypeRule {
-        case editOptions = 0
-        case cropOptions
-        
-        var title: String {
-            switch self {
-            case .editOptions:
-                return "EditOptions"
-            case .cropOptions:
-                return "CropOptions"
-            }
-        }
-        
-        var options: String {
-            switch self {
-            case .editOptions:
-                return ".editOptions"
-            case .cropOptions:
-                return ".cropOptions"
-            }
-        }
-        
-        var defaultValue: String {
-            switch self {
-            case .editOptions:
+            case .saveEditedAsset:
+                return "false"
+            case .openEditorAfterSelection:
+                return "true"
+            case .editorOptions:
+                return "Photo"
+            case .editorPhotoOptions_editOptions:
                 return "Crop"
-            case .cropOptions:
+            case .editorPhotoOptions_cropOptions:
                 return "1:1"
             }
         }

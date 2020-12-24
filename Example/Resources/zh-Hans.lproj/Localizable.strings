@@ -16,6 +16,8 @@
 "SelectOptions" = "选择类型";
 "AlbumOptions" = "相册类型";
 "OrderByDate" = "排序方式";
+"SaveEditedAsset" = "保存编辑后的资源";
+"OpenEditorAfterSelection" = "选择资源后打开编辑器";
 "EditorOptions" = "编辑类型";
 "CaptureOptions" = "拍摄类型";
 "FullScreen" = "是否全屏";

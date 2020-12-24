@@ -16,6 +16,8 @@
 "SelectOptions" = "Select Options";
 "AlbumOptions" = "Album Options";
 "OrderByDate" = "Order By Date";
+"SaveEditedAsset" = "Save edited asset";
+"OpenEditorAfterSelection" = "Open editor after selection";
 "EditorOptions" = "Editor Options";
 "CaptureOptions" = "Capture Options";
 "FullScreen" = "Full Screen";
