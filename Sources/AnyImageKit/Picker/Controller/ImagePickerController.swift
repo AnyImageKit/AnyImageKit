@@ -164,6 +164,10 @@ extension ImagePickerController {
             options.preselectAssets.removeLast(options.preselectAssets.count-options.selectLimit)
         }
         
+        if options.openEditorAfterSelection {
+            options.quickPick = true
+        }
+        
         return options
     }
     
@@ -187,6 +191,11 @@ extension ImagePickerController {
     }
     
     private func saveEditPhotos(_ assets: [Asset], completion: @escaping (([Asset]) -> Void)) {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        guard manager.options.saveEditedAsset else {
+            completion(assets)
+            return
+        }
         var assets = assets
         let selectOptions = manager.options.selectOptions
         let group = DispatchGroup()
@@ -207,6 +216,9 @@ extension ImagePickerController {
         group.notify(queue: workQueue) {
             completion(assets)
         }
+        #else
+        completion(assets)
+        #endif
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {

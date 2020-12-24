@@ -76,6 +76,17 @@ public struct PickerOptionsInfo {
     public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
+    /// Save edited asset when picker dismiss with success
+    /// - Default: true
+    /// - 完成选择后保存编辑过的资源
+    public var saveEditedAsset: Bool = true
+    
+    /// Open editor after selection
+    /// - Default: false
+    /// - It will open Editor instead of show preview controller when you click photo on asset picker controller
+    /// - 点击图片后会进入编辑器，而不会进入预览页面
+    public var openEditorAfterSelection: Bool = false
+    
     /// Editor Options 可编辑资源类型
     /// - Default: []
     public var editorOptions: PickerEditorOption = []

@@ -318,6 +318,40 @@ extension AssetPickerViewController {
             collectionView.scrollToFirst(at: .top, animated: animated)
         }
     }
+    
+    func selectItem(_ idx: Int) {
+        guard let album = album else { return }
+        let asset = album.assets[idx]
+        
+        if case .disable(let rule) = asset.state {
+            let message = rule.alertMessage(for: asset)
+            showAlert(message: message)
+            return
+        }
+        
+        if !asset.isSelected && manager.isUpToLimit {
+            let message: String
+            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS"), manager.options.selectLimit)
+            } else if manager.options.selectOptions.isPhoto {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS"), manager.options.selectLimit)
+            } else {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
+            }
+            showAlert(message: message)
+            return
+        }
+        
+        asset.isSelected.toggle()
+        if asset.isSelected {
+            manager.addSelectedAsset(asset)
+            updateVisibleCellState(idx)
+        } else {
+            manager.removeSelectedAsset(asset)
+            updateVisibleCellState(idx)
+        }
+        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+    }
 }
 
 // MARK: - Notification
@@ -371,39 +405,9 @@ extension AssetPickerViewController {
     }
     
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
-        guard let album = album else { return }
         guard let cell = sender.superview as? AssetCell else { return }
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
-        let asset = album.assets[idx]
-        
-        if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset)
-            showAlert(message: message)
-            return
-        }
-        
-        if !asset.isSelected && manager.isUpToLimit {
-            let message: String
-            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS"), manager.options.selectLimit)
-            } else if manager.options.selectOptions.isPhoto {
-                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS"), manager.options.selectLimit)
-            } else {
-                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
-            }
-            showAlert(message: message)
-            return
-        }
-        
-        asset.isSelected = !sender.isSelected
-        if asset.isSelected {
-            manager.addSelectedAsset(asset)
-            updateVisibleCellState(idx)
-        } else {
-            manager.removeSelectedAsset(asset)
-            updateVisibleCellState(idx)
-        }
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        selectItem(idx)
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
@@ -419,7 +423,7 @@ extension AssetPickerViewController {
         manager.useOriginalImage = sender.isSelected
     }
     
-    @objc private func doneButtonTapped(_ sender: UIButton) {
+    @objc func doneButtonTapped(_ sender: UIButton) {
         stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
     }
@@ -518,6 +522,12 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera { // 点击拍照 Item
             showCapture()
+            return
+        }
+        #endif
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if manager.options.openEditorAfterSelection && canOpenEditor(with: asset) {
+            openEditor(with: asset, indexPath: indexPath)
             return
         }
         #endif
