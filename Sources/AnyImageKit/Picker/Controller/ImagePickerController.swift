@@ -146,12 +146,6 @@ extension ImagePickerController {
         }
         #endif
         
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        if options.openEditorAfterSelection {
-            options.quickPick = true
-        }
-        #endif
-        
         #if DEBUG
         assert(options.selectLimit >= 1, "Select limit should more then 1")
         #else

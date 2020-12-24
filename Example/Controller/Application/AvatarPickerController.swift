@@ -34,9 +34,8 @@ final class AvatarPickerController: UITableViewController {
     @IBAction func openPickerTapped() {
         var options = PickerOptionsInfo()
         options.selectLimit = 1
-        options.quickPick = true
+        options.selectionTapAction = .openEditor
         options.saveEditedAsset = false
-        options.openEditorAfterSelection = true
         options.editorOptions = [.photo]
         options.editorPhotoOptions.toolOptions = [.crop]
         options.editorPhotoOptions.cropOptions = [.custom(w: 1, h: 1)]
@@ -113,10 +112,9 @@ extension AvatarPickerController {
     // MARK: - Picker Config
     enum PickerConfigRowType: Int, CaseIterable, RowTypeRule {
         case selectLimit = 0
-        case quickPick
+        case selectionTapAction
         case editorOptions
         case saveEditedAsset
-        case openEditorAfterSelection
         case editorPhotoOptions_editOptions
         case editorPhotoOptions_cropOptions
         
@@ -124,12 +122,10 @@ extension AvatarPickerController {
             switch self {
             case .selectLimit:
                 return "SelectLimit"
-            case .quickPick:
-                return "QuickPick"
+            case .selectionTapAction:
+                return "SelectionTapAction"
             case .saveEditedAsset:
                 return "SaveEditedAsset"
-            case .openEditorAfterSelection:
-                return "OpenEditorAfterSelection"
             case .editorOptions:
                 return "EditorOptions"
             case .editorPhotoOptions_editOptions:
@@ -143,12 +139,10 @@ extension AvatarPickerController {
             switch self {
             case .selectLimit:
                 return ".selectLimit"
-            case .quickPick:
-                return ".quickPick"
+            case .selectionTapAction:
+                return ".selectionTapAction"
             case .saveEditedAsset:
                 return ".saveEditedAsset"
-            case .openEditorAfterSelection:
-                return ".openEditorAfterSelection"
             case .editorOptions:
                 return ".editorOptions"
             case .editorPhotoOptions_editOptions:
@@ -162,12 +156,10 @@ extension AvatarPickerController {
             switch self {
             case .selectLimit:
                 return "1"
-            case .quickPick:
-                return "true"
+            case .selectionTapAction:
+                return "OpenEditor"
             case .saveEditedAsset:
                 return "false"
-            case .openEditorAfterSelection:
-                return "true"
             case .editorOptions:
                 return "Photo"
             case .editorPhotoOptions_editOptions:

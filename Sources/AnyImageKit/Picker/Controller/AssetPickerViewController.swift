@@ -46,7 +46,7 @@ final class AssetPickerViewController: AnyImageViewController {
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.alwaysBounceVertical = true
-        let hideToolBar = manager.options.quickPick && manager.options.selectLimit == 1
+        let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
@@ -72,7 +72,7 @@ final class AssetPickerViewController: AnyImageViewController {
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
-        view.isHidden = manager.options.quickPick && manager.options.selectLimit == 1
+        view.isHidden = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         return view
     }()
     
@@ -270,7 +270,7 @@ extension AssetPickerViewController {
     
     private func showLimitedView() {
         if #available(iOS 14.0, *) {
-            let hideToolBar = manager.options.quickPick && manager.options.selectLimit == 1
+            let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
             let newToolBarHeight = (hideToolBar ? 0 : toolBarHeight) + toolBar.limitedViewHeight
             toolBar.isHidden = false
             toolBar.contentView.isHidden = hideToolBar
@@ -375,7 +375,7 @@ extension AssetPickerViewController {
     
     @objc private func didSyncAsset(_ sender: Notification) {
         guard let _ = sender.object as? String else { return }
-        guard manager.options.selectLimit == 1 && manager.options.quickPick else { return }
+        guard manager.options.selectLimit == 1 && manager.options.selectionTapAction.hideToolBar else { return }
         guard let asset = manager.selectedAssets.first else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
         selectButtonTapped(cell.selectButton)
@@ -526,13 +526,13 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         }
         #endif
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        if manager.options.openEditorAfterSelection && canOpenEditor(with: asset) {
+        if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
             openEditor(with: asset, indexPath: indexPath)
             return
         }
         #endif
         
-        if manager.options.quickPick {
+        if manager.options.selectionTapAction == .quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
             selectButtonTapped(cell.selectButton)
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {

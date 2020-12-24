@@ -41,11 +41,9 @@ public struct PickerOptionsInfo {
     /// - Default: false
     public var allowUseOriginalImage: Bool = false
     
-    /// Quick pick 快速选择
-    /// - Default: false
-    /// - It will select photo instead of show preview controller when you click photo on asset picker controller
-    /// - 点击图片时会直接选中该图片，而不会进入预览页面
-    public var quickPick: Bool = false
+    /// Selection Tap Action 资源列表点击动作
+    /// - Default: Preview
+    public var selectionTapAction: PickerSelectionTapAction = .preview
     
     /// Album Options 相册类型
     /// - Default: smart album + user create album
@@ -80,12 +78,6 @@ public struct PickerOptionsInfo {
     /// - Default: true
     /// - 完成选择后保存编辑过的资源
     public var saveEditedAsset: Bool = true
-    
-    /// Open editor after selection
-    /// - Default: false
-    /// - It will open Editor instead of show preview controller when you click photo on asset picker controller
-    /// - 点击图片后会进入编辑器，而不会进入预览页面
-    public var openEditorAfterSelection: Bool = false
     
     /// Editor Options 可编辑资源类型
     /// - Default: []
@@ -168,6 +160,21 @@ public struct PickerEditorOption: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+}
+
+/// Picker Pick Mode 选择类型
+public enum PickerSelectionTapAction {
+    /// Preview
+    /// - Default value
+    case preview
+    /// Quick 快速选择
+    /// - It will select photo instead of show preview controller when you click photo on asset picker controller
+    /// - 点击图片时会直接选中该图片，而不会进入预览页面
+    case quickPick
+    /// Editor
+    /// - It will open Editor instead of show preview controller when you click photo on asset picker controller
+    /// - 点击图片后会进入编辑器，而不会进入预览页面
+    case openEditor
 }
 
 /// UI Theme 主题
@@ -259,5 +266,17 @@ extension PickerSelectOption {
             result.append(.video)
         }
         return result
+    }
+}
+
+extension PickerSelectionTapAction {
+    
+    var hideToolBar: Bool {
+        switch self {
+        case .quickPick, .openEditor:
+            return true
+        default:
+            return false
+        }
     }
 }
