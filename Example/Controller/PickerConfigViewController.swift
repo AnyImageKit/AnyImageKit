@@ -161,9 +161,22 @@ extension PickerConfigViewController {
         (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.allowUseOriginalImage)"
     }
     
-    private func quickPickTapped(_ indexPath: IndexPath) {
-        options.quickPick = !options.quickPick
-        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.quickPick)"
+    private func selectionTapActionTapped(_ indexPath: IndexPath) {
+        let alert = UIAlertController(title: "Selection Tap Action", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Preview", style: .default, handler: { [weak self] (action) in
+            self?.options.selectionTapAction = .preview
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Quick Pick", style: .default, handler: { [weak self] (action) in
+            self?.options.selectionTapAction = .quickPick
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Open Editor", style: .default, handler: { [weak self] (action) in
+            self?.options.selectionTapAction = .openEditor
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     private func albumOptionsTapped(_ indexPath: IndexPath) {
@@ -242,6 +255,11 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func saveEditedAssetTapped(_ indexPath: IndexPath) {
+        options.saveEditedAsset = !options.saveEditedAsset
+        (tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = "\(options.saveEditedAsset)"
+    }
+    
     private func captureMediaOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Capture Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
@@ -315,7 +333,7 @@ extension PickerConfigViewController {
         case selectLimit
         case columnNumber
         case allowUseOriginalImage
-        case quickPick
+        case selectionTapAction
         case albumOptions
         case selectOptions
         case orderByDate
@@ -330,8 +348,8 @@ extension PickerConfigViewController {
                 return "ColumnNumber"
             case .allowUseOriginalImage:
                 return "UseOriginalImage"
-            case .quickPick:
-                return "QuickPick"
+            case .selectionTapAction:
+                return "SelectionTapAction"
             case .albumOptions:
                 return "AlbumOptions"
             case .selectOptions:
@@ -351,8 +369,8 @@ extension PickerConfigViewController {
                 return ".columnNumber"
             case .allowUseOriginalImage:
                 return ".allowUseOriginalImage"
-            case .quickPick:
-                return ".quickPick"
+            case .selectionTapAction:
+                return ".selectionTapAction"
             case .albumOptions:
                 return ".albumOptions"
             case .selectOptions:
@@ -372,8 +390,8 @@ extension PickerConfigViewController {
                 return "4"
             case .allowUseOriginalImage:
                 return "false"
-            case .quickPick:
-                return "false"
+            case .selectionTapAction:
+                return "Preview"
             case .albumOptions:
                 return "Smart+User Created"
             case .selectOptions:
@@ -394,8 +412,8 @@ extension PickerConfigViewController {
                 return controller.columnNumberTapped
             case .allowUseOriginalImage:
                 return controller.allowUseOriginalImageTapped
-            case .quickPick:
-                return controller.quickPickTapped
+            case .selectionTapAction:
+                return controller.selectionTapActionTapped
             case .albumOptions:
                 return controller.albumOptionsTapped
             case .selectOptions:
@@ -409,11 +427,14 @@ extension PickerConfigViewController {
     // MARK: - Editor Config
     enum EditorConfigRowType: Int, CaseIterable, RowTypeRule {
         case editorOptions = 0
+        case saveEditedAsset
         
         var title: String {
             switch self {
             case .editorOptions:
                 return "EditorOptions"
+            case .saveEditedAsset:
+                return "SaveEditedAsset"
             }
         }
         
@@ -421,6 +442,8 @@ extension PickerConfigViewController {
             switch self {
             case .editorOptions:
                 return ".editorOptions"
+            case .saveEditedAsset:
+                return ".saveEditedAsset"
             }
         }
         
@@ -428,6 +451,8 @@ extension PickerConfigViewController {
             switch self {
             case .editorOptions:
                 return "None"
+            case .saveEditedAsset:
+                return "true"
             }
         }
         
@@ -436,6 +461,8 @@ extension PickerConfigViewController {
             switch self {
             case .editorOptions:
                 return controller.editorOptionsTapped
+            case .saveEditedAsset:
+                return controller.saveEditedAssetTapped
             }
         }
     }

@@ -41,12 +41,6 @@ public struct PickerOptionsInfo {
     /// - Default: false
     public var allowUseOriginalImage: Bool = false
     
-    /// Quick pick 快速选择
-    /// - Default: false
-    /// - It will select photo instead of show preview controller when you click photo on asset picker controller
-    /// - 点击图片时会直接选中该图片，而不会进入预览页面
-    public var quickPick: Bool = false
-    
     /// Album Options 相册类型
     /// - Default: smart album + user create album
     public var albumOptions: PickerAlbumOption = [.smart, .userCreated]
@@ -56,6 +50,10 @@ public struct PickerOptionsInfo {
     /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
     /// - .photoLive 和 .photoGIF 是 .photo 的子项，当不显式指明时，都会作为 photo 处理，否则会特殊处理（可播放&专有标识）
     public var selectOptions: PickerSelectOption = [.photo]
+    
+    /// Selection Tap Action 资源列表点击动作
+    /// - Default: Preview
+    public var selectionTapAction: PickerSelectionTapAction = .preview
     
     /// Order by date 按日期排序
     /// - Default: ASC
@@ -76,6 +74,11 @@ public struct PickerOptionsInfo {
     public var enableDebugLog: Bool = false
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
+    /// Save edited asset when picker dismiss with success
+    /// - Default: true
+    /// - 完成选择后保存编辑过的资源
+    public var saveEditedAsset: Bool = true
+    
     /// Editor Options 可编辑资源类型
     /// - Default: []
     public var editorOptions: PickerEditorOption = []
@@ -157,6 +160,21 @@ public struct PickerEditorOption: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+}
+
+/// Picker Selection Tap Action 资源列表点击动作
+public enum PickerSelectionTapAction: Equatable {
+    /// Preview 预览
+    /// - Default value
+    case preview
+    /// Quick pick 快速选择
+    /// - It will select photo instead of show preview controller when you click photo on asset picker controller
+    /// - 点击图片时会直接选中该图片，而不会进入预览页面
+    case quickPick
+    /// Open editor 打开编辑器
+    /// - It will open Editor instead of show preview controller when you click photo on asset picker controller
+    /// - 点击图片后会进入编辑器，而不会进入预览页面
+    case openEditor
 }
 
 /// UI Theme 主题
@@ -248,5 +266,17 @@ extension PickerSelectOption {
             result.append(.video)
         }
         return result
+    }
+}
+
+extension PickerSelectionTapAction {
+    
+    var hideToolBar: Bool {
+        switch self {
+        case .quickPick, .openEditor:
+            return true
+        default:
+            return false
+        }
     }
 }
