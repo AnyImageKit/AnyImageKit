@@ -22,8 +22,20 @@ protocol MosaicDataSource: AnyObject {
 /// 马赛克视图容器，马赛克实现方式采用多个马赛克叠加产生，所以最外层是一个容器，管理内部多个马赛克图层
 final class Mosaic: UIView {
 
-    weak var dataSource: MosaicDataSource?
-    weak var delegate: MosaicDelegate?
+    weak var dataSource: MosaicDataSource? {
+        didSet {
+            contentViews.forEach {
+                $0.dataSource = dataSource
+            }
+        }
+    }
+    weak var delegate: MosaicDelegate? {
+        didSet {
+            contentViews.forEach {
+                $0.delegate = delegate
+            }
+        }
+    }
     
     var didDraw: (() -> Void)?
     
