@@ -17,6 +17,7 @@ final class CropLayerView: UIView {
             cropLayer.path = newValue
         }
     }
+    var displayRect: CGRect = .zero
     
     /// 用于裁剪后把其他区域以黑色layer盖住
     private(set) lazy var cropLayer: CAShapeLayer = {

@@ -22,6 +22,8 @@ final class TextData: Codable {
     var point: CGPoint = .zero
     var scale: CGFloat = 1.0
     var rotation: CGFloat = 0.0
+    
+    var pointBeforePan: CGPoint = .zero
 }
 
 extension TextData {

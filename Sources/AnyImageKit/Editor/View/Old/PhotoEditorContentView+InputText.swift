@@ -233,6 +233,10 @@ extension PhotoEditorContentView {
         guard let textView = pan.view as? TextImageView else { return }
         guard activeTextViewIfPossible(textView) else { return }
         
+        if pan.state == .began {
+            textView.data.pointBeforePan = textView.data.point
+        }
+        
         let scale = scrollView.zoomScale
         let point = textView.data.point
         let newPoint = pan.translation(in: self)
@@ -248,14 +252,22 @@ extension PhotoEditorContentView {
         case .changed:
             check(targetView: textView, inTrashView: pan.location(in: self))
         default:
-            if textTrashView.frame.contains(pan.location(in: self)) {
+            if textTrashView.state == .remove && textTrashView.frame.contains(pan.location(in: self)) { // 判断在删除区域
                 guard let idx = textImageViews.firstIndex(where: { $0 == textView }) else { return }
                 textImageViews[idx].removeFromSuperview()
                 textImageViews.remove(at: idx)
+            } else if !cropLayerLeave.displayRect.contains(pan.location(in: cropLayerLeave)) { // 判断超出图片区域
+                UIView.animate(withDuration: 0.25) {
+                    textView.data.point = textView.data.pointBeforePan
+                    textView.transform = textView.calculateTransform()
+                } completion: { (_) in
+                    self.imageView.bringSubviewToFront(self.cropLayerLeave)
+                }
+            } else {
+                imageView.bringSubviewToFront(cropLayerLeave)
             }
             hideTrashView()
             context.action(.textDidFinishMove(textView.data))
-            imageView.bringSubviewToFront(cropLayerLeave)
         }
     }
     
