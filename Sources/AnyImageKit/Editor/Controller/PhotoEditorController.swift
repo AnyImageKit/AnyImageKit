@@ -19,6 +19,24 @@ final class PhotoEditorController: AnyImageViewController {
     private lazy var contentView: PhotoEditorContentView = {
         let view = PhotoEditorContentView(frame: self.view.bounds, image: image, context: context)
         view.canvas.setBrush(color: options.penColors[options.defaultPenIndex].color)
+        view.isHidden = stack.edit.isEdited
+        return view
+    }()
+    private lazy var placeholdImageView: UIImageView = {
+        let view = UIImageView(frame: .zero)
+        view.backgroundColor = .black
+        view.contentMode = .scaleAspectFit
+        view.isHidden = !stack.edit.isEdited
+        if let data = stack.edit.outputImageData, let image = UIImage(data: data) {
+            view.image = image
+            let screen = ScreenHelper.mainBounds.size
+            let h = image.size.height / image.size.width * screen.width
+            if h > screen.height {
+                let offsetY = (h - screen.height) / 2
+                view.contentMode = .scaleAspectFill
+                view.transform = CGAffineTransform.identity.translatedBy(x: 0, y: offsetY)
+            }
+        }
         return view
     }()
     private lazy var toolView: EditorToolView = {
@@ -80,6 +98,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.addSubview(contentView)
         view.addSubview(toolView)
         view.addSubview(backButton)
+        view.addSubview(placeholdImageView)
         
         contentView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview()
@@ -96,6 +115,9 @@ final class PhotoEditorController: AnyImageViewController {
             maker.left.equalToSuperview().offset(10)
             maker.width.height.equalTo(50)
         }
+        placeholdImageView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
     }
     
     private func setupMosaicView() {
@@ -106,6 +128,8 @@ final class PhotoEditorController: AnyImageViewController {
             self.setupData()
             self.contentView.updateView(with: self.stack.edit)
             self.contentView.mosaic?.setMosaicCoverImage(0)
+            self.contentView.isHidden = false
+            self.placeholdImageView.isHidden = true
         }
     }
     
@@ -281,6 +305,7 @@ extension PhotoEditorController {
             contentView.deactivateAllTextView()
             stack.edit.textData = contentView.textImageViews.map { $0.data }
             guard let image = getResultImage() else { return }
+            stack.edit.outputImageData = image.pngData() ?? Data()
             saveEditPath()
             delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
         case .toolOptionChanged(let option):

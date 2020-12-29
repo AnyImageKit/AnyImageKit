@@ -13,6 +13,7 @@ final class PhotoEditingStack {
     
     var edit: Edit = .init()
     
+    // 以下字段是输出时用于计算的临时变量，不需要缓存
     var originImage: UIImage = .init()
     var mosaicImages: [UIImage] = []
     var originImageViewBounds: CGRect = .zero
@@ -56,6 +57,7 @@ extension PhotoEditingStack {
         var mosaicData: [MosaicData] = []
         var cropData: CropData = .init()
         var textData: [TextData] = []
+        var outputImageData: Data?
         
         var isEdited: Bool {
             return cropData.didCrop || !penData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
