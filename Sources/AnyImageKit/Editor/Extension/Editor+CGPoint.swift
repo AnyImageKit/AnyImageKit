@@ -20,6 +20,7 @@ extension CGPoint {
     }
     
     func multipliedBy(_ amount: CGFloat) -> CGPoint {
+        guard amount != 1.0 else { return self }
         return CGPoint(x: x * amount, y: y * amount)
     }
 }

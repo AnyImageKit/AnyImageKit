@@ -157,6 +157,12 @@ extension PhotoEditorController {
         contentView.scrollView.zoomScale = tmpScale
         contentView.scrollView.contentOffset = tmpOffset
         contentView.scrollView.contentSize = tmpContentSize
+        
+        // 由于 TextView 的位置是基于放大后图片的位置，所以在输出时要改回原始比例计算坐标位置
+        let textScale = stack.originImageViewBounds.size.width / contentView.imageView.bounds.width
+        contentView.resetTextView(with: textScale)
+        contentView.calculateFinalFrame()
+        
         return stack.output()
     }
     
@@ -176,6 +182,13 @@ extension PhotoEditorController {
                     hideHUD()
                 }
             }
+        }
+    }
+    
+    private func setTool(hidden: Bool, animated: Bool = true) {
+        UIView.animate(withDuration: animated ? 0.25 : 0) {
+            self.toolView.alpha = hidden ? 0 : 1
+            self.backButton.alpha = hidden ? 0 : 1
         }
     }
 }
@@ -259,16 +272,13 @@ extension PhotoEditorController {
         switch action {
         case .empty:
             if toolView.currentOption != .crop {
-                let hidden = toolView.alpha == 1
-                UIView.animate(withDuration: 0.25) {
-                    self.toolView.alpha = hidden ? 0 : 1
-                    self.backButton.alpha = hidden ? 0 : 1
-                }
+                setTool(hidden: toolView.alpha == 1)
             }
         case .back:
             delegate?.photoEditorDidCancel(self)
         case .done:
             contentView.deactivateAllTextView()
+            stack.edit.textData = contentView.textImageViews.map { $0.data }
             guard let image = getResultImage() else { return }
             saveEditPath()
             delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
@@ -276,10 +286,7 @@ extension PhotoEditorController {
             context.toolOption = option
             toolOptionsDidChanged(option: option)
         case .penBeginDraw, .mosaicBeginDraw:
-            UIView.animate(withDuration: 0.25) {
-                self.toolView.alpha = 0
-                self.backButton.alpha = 0
-            }
+            setTool(hidden: true)
         case .penUndo:
             contentView.canvas.undo()
             stack.edit.penData = contentView.canvas.drawnPaths.map { PenData(drawnPath: $0) }
@@ -287,10 +294,7 @@ extension PhotoEditorController {
         case .penChangeColor(let color):
             contentView.canvas.setBrush(color: color)
         case .penFinishDraw(let dataList):
-            UIView.animate(withDuration: 0.25) {
-                self.toolView.alpha = 1
-                self.backButton.alpha = 1
-            }
+            setTool(hidden: false)
             toolView.penToolView.undoButton.isEnabled = true
             stack.edit.penData = dataList
         case .mosaicUndo:
@@ -300,10 +304,7 @@ extension PhotoEditorController {
         case .mosaicChangeImage(let idx):
             contentView.mosaic?.setMosaicCoverImage(idx)
         case .mosaicFinishDraw(let dataList):
-            UIView.animate(withDuration: 0.25) {
-                self.toolView.alpha = 1
-                self.backButton.alpha = 1
-            }
+            setTool(hidden: false)
             toolView.mosaicToolView.undoButton.isEnabled = true
             stack.setMosaicData(dataList)
         case .cropUpdateOption(let option):
@@ -332,6 +333,10 @@ extension PhotoEditorController {
             stack.edit.cropData = data
         case .textWillBeginEdit(let data):
             openInputController(data)
+        case .textWillBeginMove(_):
+            setTool(hidden: true)
+        case .textDidFinishMove(_):
+            setTool(hidden: false)
         case .textCancel:
             didEndInputing()
             contentView.restoreHiddenTextView()

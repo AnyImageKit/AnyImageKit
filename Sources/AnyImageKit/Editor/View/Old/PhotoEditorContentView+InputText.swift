@@ -20,7 +20,7 @@ extension PhotoEditorContentView {
         textView.deleteButton.addTarget(self, action: #selector(textDeletebuttonTapped(_:)), for: .touchUpInside)
         textView.transform = textView.calculateTransform()
         if add {
-            imageView.addSubview(textView)
+            imageView.insertSubview(textView, belowSubview: cropLayerLeave)
             textImageViews.append(textView)
             addTextGestureRecognizer(textView)
         }
@@ -30,6 +30,11 @@ extension PhotoEditorContentView {
     /// 裁剪结束时更新UI
     func updateTextFrameWhenCropEnd() {
         let scale = imageView.bounds.width / cropContext.lastImageViewBounds.width
+        resetTextView(with: scale)
+    }
+    
+    /// 更新UI
+    func resetTextView(with scale: CGFloat) {
         var newTextImageViews: [TextImageView] = []
         for textView in textImageViews {
             let originPoint = textView.data.point
@@ -59,9 +64,26 @@ extension PhotoEditorContentView {
         textImageViews.forEach { $0.removeFromSuperview() }
         textImageViews.removeAll()
         newTextImageViews.forEach {
-            self.imageView.addSubview($0)
+            imageView.insertSubview($0, belowSubview: cropLayerLeave)
             self.textImageViews.append($0)
             self.addTextGestureRecognizer($0)
+        }
+    }
+    
+    func calculateFinalFrame() {
+        for textView in textImageViews {
+            let data = textView.data
+            let originRotation = data.rotation
+            data.rotation = 0
+            textView.transform = textView.calculateTransform()
+            var frame = textView.frame
+            frame.origin.x += (data.inset * data.scale)
+            frame.origin.y += (data.inset * data.scale)
+            frame.size.width -= (data.inset * 2 * data.scale)
+            frame.size.height -= (data.inset * 2 * data.scale)
+            data.finalFrame = frame
+            data.rotation = originRotation
+            textView.transform = textView.calculateTransform()
         }
     }
     
@@ -111,9 +133,7 @@ extension PhotoEditorContentView {
     private func calculateTextFrame(data: TextData) {
         let image = data.image
         let scale = scrollView.zoomScale
-        let scale2 = imageView.bounds.width / cropContext.lastImageViewBounds.width
-        print("s:\(scale), s2:\(scale2)")
-        let inset: CGFloat = 20
+        let inset: CGFloat = 0
         let size = CGSize(width: (image.size.width + inset * 2) / scale, height: (image.size.height + inset * 2) / scale)
         
         var x: CGFloat
@@ -182,10 +202,11 @@ extension PhotoEditorContentView {
     private func activeTextViewIfPossible(_ textView: TextImageView) -> Bool {
         if !shouldBeginGesture(in: textView) { return false }
         for view in textImageViews {
-            view.setActive(view == textView)
-            if view == textView {
+            if view == textView && !textView.isActive {
                 imageView.bringSubviewToFront(textView)
+                imageView.bringSubviewToFront(cropLayerLeave)
             }
+            view.setActive(view == textView)
         }
         return true
     }
@@ -218,6 +239,24 @@ extension PhotoEditorContentView {
         textView.data.point = CGPoint(x: point.x + newPoint.x / scale, y: point.y + newPoint.y / scale)
         textView.transform = textView.calculateTransform()
         pan.setTranslation(.zero, in: self)
+        
+        switch pan.state {
+        case .began:
+            showTrashView()
+            context.action(.textWillBeginMove(textView.data))
+            imageView.bringSubviewToFront(textView)
+        case .changed:
+            check(targetView: textView, inTrashView: pan.location(in: self))
+        default:
+            if textTrashView.frame.contains(pan.location(in: self)) {
+                guard let idx = textImageViews.firstIndex(where: { $0 == textView }) else { return }
+                textImageViews[idx].removeFromSuperview()
+                textImageViews.remove(at: idx)
+            }
+            hideTrashView()
+            context.action(.textDidFinishMove(textView.data))
+            imageView.bringSubviewToFront(cropLayerLeave)
+        }
     }
     
     /// 捏合手势
@@ -261,5 +300,57 @@ extension PhotoEditorContentView: UIGestureRecognizerDelegate {
             else { return false }
         guard view == otherView, view.isActive else { return false }
         return true
+    }
+}
+
+// MARK: - Trash view
+extension PhotoEditorContentView {
+    
+    private func showTrashView() {
+        textTrashView.snp.remakeConstraints { maker in
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(50)
+            } else {
+                maker.top.equalTo(self.snp.bottom)
+            }
+            maker.centerX.equalToSuperview()
+            maker.size.equalTo(CGSize(width: 160, height: 80))
+        }
+        self.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.25) {
+            self.textTrashView.alpha = 1
+            self.textTrashView.snp.updateConstraints { update in
+                if #available(iOS 11.0, *) {
+                    update.top.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-80-30)
+                } else {
+                    update.top.equalTo(self.snp.bottom).offset(-80-30)
+                }
+            }
+            self.layoutIfNeeded()
+        }
+    }
+    
+    private func hideTrashView() {
+        UIView.animate(withDuration: 0.25) {
+            self.textTrashView.alpha = 0
+        } completion: { _ in
+            self.textTrashView.state = .idle
+        }
+    }
+    
+    private func check(targetView: UIView, inTrashView point: CGPoint) {
+        guard textTrashView.alpha == 1 else { return }
+        if textTrashView.frame.contains(point) { // move in
+            textTrashView.state = .remove
+            UIView.animate(withDuration: 0.25) {
+                targetView.alpha = 0.25
+            }
+        } else if textTrashView.state == .remove { // move out
+            hideTrashView()
+            UIView.animate(withDuration: 0.25) {
+                targetView.alpha = 1.0
+            }
+        }
     }
 }

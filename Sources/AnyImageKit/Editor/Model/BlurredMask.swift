@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct BlurredMask: GraphicsDrawing {
+struct BlurredMask {
     
     let paths: [DrawnPath]
     let scale: CGFloat
@@ -19,6 +19,10 @@ struct BlurredMask: GraphicsDrawing {
         self.scale = scale
         self.blurImage = blurImage
     }
+}
+
+// MARK: - GraphicsDrawing
+extension BlurredMask: GraphicsDrawing {
     
     func draw(in context: CGContext, canvasSize: CGSize) {
         guard !paths.isEmpty else { return }

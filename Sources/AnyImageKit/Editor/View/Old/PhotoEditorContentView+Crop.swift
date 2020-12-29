@@ -28,6 +28,7 @@ extension PhotoEditorContentView {
     func cropStart(with option: EditorCropOption? = nil) {
         isCrop = true
         lastImageViewBounds = imageView.bounds
+        cropLayerEnter.frame = cropLayerLeave.frame
         UIView.animate(withDuration: 0.25, animations: {
             if !self.didCrop {
                 self.layoutStartCrop()
@@ -37,7 +38,7 @@ extension PhotoEditorContentView {
             self.updateCanvasFrame()
         }, completion: { _ in
             self.gridView.bgLayer.opacity = 1.0
-            self.cropLayerEnter.removeFromSuperlayer()
+            self.cropLayerEnter.removeFromSuperview()
             self.setCropHidden(false, animated: true)
             if let cropOption = option {
                 self.setCrop(cropOption)
@@ -176,28 +177,28 @@ extension PhotoEditorContentView {
         setupContentInset()
         
         // CropLayer
-        cropLayerEnter.frame = cropLayerLeave.frame
+        let cropOffsetY = UIScreen.main.bounds.height / 2
         let scale = lastCropData.zoomScale
         let rectPathRect = CGRect(origin: CGPoint(x: (cropRealRect.minX - oldImageViewFrame.minX) / scale,
-                                                  y: (cropRealRect.minY - oldImageViewFrame.minY) / scale),
+                                                  y: (cropRealRect.minY - oldImageViewFrame.minY) / scale + cropOffsetY),
                                   size: CGSize(width: cropRealRect.width / scale,
                                                height: cropRealRect.height / scale))
         let cropPath = UIBezierPath(rect: cropLayerEnter.frame)
         let rectPath = UIBezierPath(rect: rectPathRect)
         cropPath.append(rectPath)
         cropLayerEnter.path = cropPath.cgPath
-        imageView.layer.addSublayer(cropLayerEnter)
-        cropLayerLeave.removeFromSuperlayer()
+        imageView.addSubview(cropLayerEnter)
+        cropLayerLeave.removeFromSuperview()
         
         let newRectPathRect = CGRect(origin: CGPoint(x: lastCropData.contentOffset.x / scale,
-                                                     y: lastCropData.contentOffset.y / scale),
+                                                     y: lastCropData.contentOffset.y / scale + cropOffsetY),
                                      size: CGSize(width: lastCropData.rect.width / scale,
                                                   height: lastCropData.rect.height / scale))
         let newCropPath = UIBezierPath(rect: cropLayerEnter.frame)
         let newRectPath = UIBezierPath(rect: newRectPathRect)
         newCropPath.append(newRectPath)
         let cropAnimation = CABasicAnimation.create(duration: 0.25, fromValue: cropLayerEnter.path, toValue: newCropPath.cgPath)
-        cropLayerEnter.add(cropAnimation, forKey: "path")
+        cropLayerEnter.cropLayer.add(cropAnimation, forKey: "path")
         cropLayerEnter.path = newCropPath.cgPath
     }
     
@@ -255,11 +256,14 @@ extension PhotoEditorContentView {
         
         // CropLayer
         guard didCrop else { return }
-        imageView.layer.addSublayer(cropLayerLeave)
         cropLayerLeave.frame = imageView.bounds
+        let cropOffsetY = UIScreen.main.bounds.height / 2
+        cropLayerLeave.frame.origin.y -= cropOffsetY
+        cropLayerLeave.frame.size.height += cropOffsetY * 4
+        imageView.addSubview(cropLayerLeave)
         
         let rectPathRect = CGRect(origin: CGPoint(x: contentOffset.x / scale,
-                                                  y: contentOffset.y / scale),
+                                                  y: contentOffset.y / scale + cropOffsetY),
                                   size: CGSize(width: cropRect.width / scale,
                                                height: cropRect.height / scale))
         let cropPath = UIBezierPath(rect: cropLayerLeave.frame)
@@ -267,22 +271,36 @@ extension PhotoEditorContentView {
         cropPath.append(rectPath)
         cropLayerLeave.path = cropPath.cgPath
         
-        // 因为精度问题，头尾会有两条细线，所以给 y, height + 0.5
+        // 因为要使 TextVIew 超出 Image 隐藏起来，所以头尾增加一段蒙版
         let newRectPathRect = CGRect(origin: CGPoint(x: (cropRealRect.minX - imageView.frame.minX) / scale,
-                                                     y: (cropRealRect.minY - imageView.frame.minY) / scale + 0.5),
+                                                     y: (cropRealRect.minY - imageView.frame.minY) / scale + cropOffsetY),
                                      size: CGSize(width: cropRealRect.width / scale,
                                                   height: cropRealRect.height / scale))
-        let newCropPath = UIBezierPath(rect: CGRect(x: cropLayerLeave.frame.minX,
-                                                    y: cropLayerLeave.frame.minY-0.5,
-                                                    width: cropLayerLeave.frame.width,
-                                                    height: cropLayerLeave.frame.height+1.0))
+        let newCropPath = UIBezierPath(rect: cropLayerLeave.frame)
         let newRectPath = UIBezierPath(rect: newRectPathRect)
         newCropPath.append(newRectPath)
         if !fromCache {
             let cropAnimation = CABasicAnimation.create(duration: 0.25, fromValue: cropLayerLeave.path, toValue: newCropPath.cgPath)
-            cropLayerLeave.add(cropAnimation, forKey: "path")
+            cropLayerLeave.cropLayer.add(cropAnimation, forKey: "path")
         }
         cropLayerLeave.path = newCropPath.cgPath
+    }
+    
+    /// 设置无裁剪状态时的遮罩
+    func setupCropLayer() {
+        guard !didCrop && cropLayerLeave.superview == nil else { return }
+        cropLayerLeave.frame = imageView.bounds
+        let cropOffsetY = UIScreen.main.bounds.height / 2
+        cropLayerLeave.frame.origin.y -= cropOffsetY
+        cropLayerLeave.frame.size.height += cropOffsetY * 4
+        imageView.addSubview(cropLayerLeave)
+        
+        let rectPathRect = CGRect(origin: CGPoint(x: 0, y: cropOffsetY),
+                                  size: scrollView.contentSize)
+        let cropPath = UIBezierPath(rect: cropLayerLeave.frame)
+        let rectPath = UIBezierPath(rect: rectPathRect)
+        cropPath.append(rectPath)
+        cropLayerLeave.path = cropPath.cgPath
     }
     
     /// 设置白色裁剪框的frame

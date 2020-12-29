@@ -10,7 +10,7 @@ import UIKit
 
 /// 画笔路径
 /// 由于 UIBezierPath 不能遵守 Codable，所以通过 NSKeyedArchiver 存储。
-struct DrawnPath: GraphicsDrawing, Codable {
+struct DrawnPath: Codable {
     
     let brush: Brush
     let scale: CGFloat
@@ -60,7 +60,8 @@ struct DrawnPath: GraphicsDrawing, Codable {
     }
 }
 
-extension DrawnPath {
+// MARK: - GraphicsDrawing
+extension DrawnPath: GraphicsDrawing {
     
     func draw(in context: CGContext, canvasSize: CGSize) {
         draw(in: context, canvasSize: canvasSize, scale: 1.0)
@@ -69,24 +70,19 @@ extension DrawnPath {
     func draw(in context: CGContext, canvasSize: CGSize, scale: CGFloat) {
         UIGraphicsPushContext(context)
         context.saveGState()
-        defer {
-            context.restoreGState()
-            UIGraphicsPopContext()
-        }
         draw(scale: scale)
+        context.restoreGState()
+        UIGraphicsPopContext()
     }
     
     private func draw(scale: CGFloat) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.saveGState()
-        defer {
-            context.restoreGState()
-        }
-        
         context.scaleBy(x: self.scale / scale, y: self.scale / scale)
         brush.color.setStroke()
         let bezierPath = brushedPath()
         bezierPath.stroke()
+        context.restoreGState()
     }
     
     private func brushedPath() -> UIBezierPath {

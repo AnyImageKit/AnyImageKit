@@ -78,7 +78,8 @@ final class TextImageView: UIView {
             maker.width.height.equalTo(data.inset*1.25)
         }
         imageView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview().inset(data.inset)
+//            maker.edges.equalToSuperview().inset(data.inset)
+            maker.edges.equalToSuperview()
         }
     }
 }
@@ -87,12 +88,12 @@ extension TextImageView {
     
     public func setActive(_ isActive: Bool) {
         self.isActive = isActive
-        rectView.isHidden = !isActive
-        deleteButton.isHidden = !isActive
-        if isActive && timer == nil {
-            checkCount = 0
-            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkActive(_:)), userInfo: nil, repeats: true)
-        }
+//        rectView.isHidden = !isActive
+//        deleteButton.isHidden = !isActive
+//        if isActive && timer == nil {
+//            checkCount = 0
+//            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkActive(_:)), userInfo: nil, repeats: true)
+//        }
     }
 }
  

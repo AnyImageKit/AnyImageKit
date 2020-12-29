@@ -89,13 +89,14 @@ extension PhotoEditingStack {
         let size = originImageViewBounds.size
         let scale = imageSize.width / size.width
         
-        // 先绘制马赛克，再绘制画笔
+        // 先绘制马赛克，再绘制画笔，最后绘制文本
         edit.mosaicData.forEach { data in
-            let bm = BlurredMask(paths: data.drawnPaths, scale: scale, blurImage: mosaicImages[data.idx])
-            self.drawer.append(bm)
+            self.drawer.append(BlurredMask(paths: data.drawnPaths, scale: scale, blurImage: mosaicImages[data.idx]))
         }
-        let cm = CanvasMask(paths: edit.penData.map { $0.drawnPath }, scale: scale)
-        drawer.append(cm)
+        drawer.append(CanvasMask(paths: edit.penData.map { $0.drawnPath }, scale: scale))
+        edit.textData.forEach { data in
+            self.drawer.append(TextMask(data: data, scale: scale))
+        }
     }
     
     private func cropImage(_ image: UIImage) -> UIImage? {
@@ -118,9 +119,6 @@ extension PhotoEditingStack {
         guard let sourceImage = CIImage(image: originImage) else { return nil }
         let ciContext = CIContext(options: [.useSoftwareRenderer : false, .highQualityDownsample : true])
         let canvasSize = sourceImage.extent.size
-//        let size = originImageViewBounds.size
-//        let scale = canvasSize.width / size.width
-//        print("cSize:\(canvasSize), size:\(size), scale:\(scale)")
         
         let format: UIGraphicsImageRendererFormat
         if #available(iOS 11.0, *) {
@@ -148,16 +146,10 @@ extension PhotoEditingStack {
                 cgContext.draw(cgImage, in: CGRect(origin: .zero, size: canvasSize))
                 cgContext.restoreGState()
                 
-                // 绘制马赛克 & 画笔
+                // 绘制马赛克 & 画笔 & 文本
                 self.drawer.forEach {
                     $0.draw(in: cgContext, canvasSize: canvasSize)
                 }
-//                self.edit.mosaicData.forEach { data in
-//                    let bm = BlurredMask(paths: data.drawnPaths, scale: scale, blurImage: self.mosaicImages[data.idx])
-//                    bm.draw(in: cgContext, canvasSize: canvasSize)
-//                }
-//                let cm = CanvasMask(paths: self.edit.penData.map { $0.drawnPath }, scale: scale)
-//                cm.draw(in: cgContext, canvasSize: canvasSize)
             }
         }
         return cropImage(image)

@@ -31,6 +31,8 @@ enum PhotoEditorAction {
     case cropFinish(CropData)
     
     case textWillBeginEdit(TextData)
+    case textWillBeginMove(TextData)
+    case textDidFinishMove(TextData)
     case textCancel
     case textDone(TextData)
 }

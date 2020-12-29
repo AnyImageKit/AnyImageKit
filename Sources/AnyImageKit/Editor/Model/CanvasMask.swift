@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct CanvasMask: GraphicsDrawing {
+struct CanvasMask {
     
     let paths: [DrawnPath]
     let scale: CGFloat
@@ -17,6 +17,10 @@ struct CanvasMask: GraphicsDrawing {
         self.paths = paths
         self.scale = scale
     }
+}
+
+// MARK: - GraphicsDrawing
+extension CanvasMask: GraphicsDrawing {
     
     func draw(in context: CGContext, canvasSize: CGSize) {
         guard !paths.isEmpty else { return }

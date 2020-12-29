@@ -23,7 +23,6 @@ final class PhotoEditorContentView: UIView {
     }()
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
-        view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -71,24 +70,26 @@ final class PhotoEditorContentView: UIView {
         return view
     }()
     /// 用于裁剪后把其他区域以黑色layer盖住
-    private(set) lazy var cropLayerLeave: CAShapeLayer = {
-        let layer = CAShapeLayer()
-        layer.frame = bounds
-        layer.fillRule = .evenOdd
-        layer.fillColor = UIColor.black.cgColor
-        return layer
+    private(set) lazy var cropLayerLeave: CropLayerView = {
+        let view = CropLayerView(frame: bounds)
+        return view
     }()
     /// 用于裁剪前进入裁剪时的动画切换时的蒙版
     /// 不用 `cropLayerLeave` 的原因是切换 path 时会产生不可控的动画
-    private(set) lazy var cropLayerEnter: CAShapeLayer = {
-        let layer = CAShapeLayer()
-        layer.frame = bounds
-        layer.fillRule = .evenOdd
-        layer.fillColor = UIColor.black.cgColor
-        return layer
+    private(set) lazy var cropLayerEnter: CropLayerView = {
+        let view = CropLayerView(frame: bounds)
+        return view
     }()
     /// 文本视图
     internal var textImageViews: [TextImageView] = []
+    /// 文本删除视图
+    private(set) lazy var textTrashView: TextTrashView = {
+        let view = TextTrashView(frame: CGRect(x: (bounds.width - 160) / 2, y: bounds.height, width: 160, height: 80))
+        view.alpha = 0
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 16
+        return view
+    }()
     
     /// 原始图片
     internal let image: UIImage
@@ -119,8 +120,14 @@ final class PhotoEditorContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setupCropLayer()
+    }
+    
     private func setupView() {
         addSubview(scrollView)
+        addSubview(textTrashView)
         scrollView.addSubview(imageView)
         imageView.addSubview(canvas)
         setupCropView()

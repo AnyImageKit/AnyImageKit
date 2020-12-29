@@ -26,6 +26,9 @@
 		7174392B2588879C000F83AE /* Editor+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7174392A2588879C000F83AE /* Editor+CGSize.swift */; };
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
 		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
+		718DE32725996E36005C3159 /* CropLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32625996E36005C3159 /* CropLayerView.swift */; };
+		718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32A2599AD82005C3159 /* TextTrashView.swift */; };
+		718DE32F259AC20B005C3159 /* TextMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32E259AC20B005C3159 /* TextMask.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		71BAF32825760DE1007AE60F /* PhotoEditorCropContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF32725760DE1007AE60F /* PhotoEditorCropContext.swift */; };
 		71BAF32D25761990007AE60F /* CacheConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF32C25761990007AE60F /* CacheConfig.swift */; };
@@ -278,6 +281,9 @@
 		7174392A2588879C000F83AE /* Editor+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Editor+CGSize.swift"; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
 		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		718DE32625996E36005C3159 /* CropLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropLayerView.swift; sourceTree = "<group>"; };
+		718DE32A2599AD82005C3159 /* TextTrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTrashView.swift; sourceTree = "<group>"; };
+		718DE32E259AC20B005C3159 /* TextMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMask.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		71BAF32725760DE1007AE60F /* PhotoEditorCropContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorCropContext.swift; sourceTree = "<group>"; };
 		71BAF32C25761990007AE60F /* CacheConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheConfig.swift; sourceTree = "<group>"; };
@@ -1040,6 +1046,7 @@
 				71469B1325592C5E000A8E08 /* DrawnPath.swift */,
 				716FBEDD2578CF3A004E0018 /* CanvasMask.swift */,
 				716FBEE12578D1B2004E0018 /* BlurredMask.swift */,
+				718DE32E259AC20B005C3159 /* TextMask.swift */,
 				7142FF6E25591AD7003FF44D /* PhotoEditingStack.swift */,
 				71208EB1256F876F002C023A /* PhotoEditorAction.swift */,
 				7153EE93257491B900D9EE08 /* PhotoEditorContext.swift */,
@@ -1056,6 +1063,8 @@
 				717DCA8B256CD25100568A6C /* Canvas.swift */,
 				715D6B36256E449B004D9BF1 /* Mosaic.swift */,
 				715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */,
+				718DE32625996E36005C3159 /* CropLayerView.swift */,
+				718DE32A2599AD82005C3159 /* TextTrashView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1406,6 +1415,7 @@
 				A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */,
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
+				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
 				A50B2105237AA24200A894A9 /* TouchState.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
@@ -1462,6 +1472,7 @@
 				A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */,
 				A0B22EA5237AA1B3001F6066 /* Core+UICollectionView.swift in Sources */,
 				A561239D23B5EE400071C3E8 /* EditorPhotoOptionsInfo.swift in Sources */,
+				718DE32F259AC20B005C3159 /* TextMask.swift in Sources */,
 				A02846B424E2E5A5001F1AB1 /* PassThrough.metal in Sources */,
 				A08DF7BC23B1F7F1002B92EE /* CaptureBufferType.swift in Sources */,
 				A531105723544C0D00D457A8 /* LoadingiCloudView.swift in Sources */,
@@ -1527,6 +1538,7 @@
 				A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */,
 				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,
 				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
+				718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */,
 				7142FF6F25591AD7003FF44D /* PhotoEditingStack.swift in Sources */,
 				A513C46023ACB6AC0071D0D5 /* Core+UIImageView.swift in Sources */,
 				A082D24623C2D57B001F3D51 /* Picker+AnyImageMediaType.swift in Sources */,

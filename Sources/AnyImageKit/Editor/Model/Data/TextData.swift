@@ -10,8 +10,9 @@ import UIKit
 
 final class TextData: Codable {
     
-    var frame: CGRect = .zero
     var inset: CGFloat = 0
+    var frame: CGRect = .zero
+    var finalFrame: CGRect = .zero
     
     var text: String = ""
     var colorIdx: Int = 0
