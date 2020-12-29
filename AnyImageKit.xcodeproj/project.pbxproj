@@ -138,7 +138,6 @@
 		A50B2100237AA24200A894A9 /* Editor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A50B20D1237AA24200A894A9 /* Editor.xcassets */; };
 		A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D6237AA24200A894A9 /* PhotoEditorController.swift */; };
 		A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D7237AA24200A894A9 /* ImageEditorController.swift */; };
-		A50B2105237AA24200A894A9 /* TouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20D9237AA24200A894A9 /* TouchState.swift */; };
 		A50B2107237AA24200A894A9 /* CropData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DB237AA24200A894A9 /* CropData.swift */; };
 		A50B2109237AA24300A894A9 /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20DD237AA24200A894A9 /* Brush.swift */; };
 		A50B210B237AA24300A894A9 /* CacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B20E0237AA24200A894A9 /* CacheTool.swift */; };
@@ -412,7 +411,6 @@
 		A50B20D1237AA24200A894A9 /* Editor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Editor.xcassets; sourceTree = "<group>"; };
 		A50B20D6237AA24200A894A9 /* PhotoEditorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorController.swift; sourceTree = "<group>"; };
 		A50B20D7237AA24200A894A9 /* ImageEditorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEditorController.swift; sourceTree = "<group>"; };
-		A50B20D9237AA24200A894A9 /* TouchState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchState.swift; sourceTree = "<group>"; };
 		A50B20DB237AA24200A894A9 /* CropData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropData.swift; sourceTree = "<group>"; };
 		A50B20DD237AA24200A894A9 /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
 		A50B20E0237AA24200A894A9 /* CacheTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheTool.swift; path = "../New Group/CacheTool.swift"; sourceTree = "<group>"; };
@@ -536,17 +534,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		71208EB7256F8D65002C023A /* Old */ = {
-			isa = PBXGroup;
-			children = (
-				A50B20DD237AA24200A894A9 /* Brush.swift */,
-				A50B20D9237AA24200A894A9 /* TouchState.swift */,
-				A01C582823B33C7A00691F11 /* Palette.swift */,
-				A01C583023B33CFD00691F11 /* ImageEditorCache.swift */,
-			);
-			path = Old;
-			sourceTree = "<group>";
-		};
 		71208EB8256F8D72002C023A /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,31 +553,6 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		7142FF7425591DA0003FF44D /* Old */ = {
-			isa = PBXGroup;
-			children = (
-				A50B20EE237AA24200A894A9 /* PhotoEditorContentView.swift */,
-				A50B20EC237AA24200A894A9 /* PhotoEditorContentView+Getter.swift */,
-				A50B20F3237AA24200A894A9 /* PhotoEditorContentView+Pen.swift */,
-				A50B20F4237AA24200A894A9 /* PhotoEditorContentView+Mosaic.swift */,
-				A50B20F5237AA24200A894A9 /* PhotoEditorContentView+Crop.swift */,
-				A5ABEF2B239F793B00B50543 /* PhotoEditorContentView+InputText.swift */,
-				A50B20F1237AA24200A894A9 /* EditorToolView.swift */,
-				A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */,
-				A50B20EB237AA24200A894A9 /* EditorPenToolView.swift */,
-				A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */,
-				A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */,
-				A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */,
-				A54436F823AB193F003C65F9 /* VideoPreview.swift */,
-				A544371D23AB4BA4003C65F9 /* VideoEditorToolView.swift */,
-				A544371F23AB61C9003C65F9 /* VideoEditorCropToolView.swift */,
-				A544372123AB6A60003C65F9 /* VideoEditorCropProgressView.swift */,
-				713E7D9A247BACBE00BF6245 /* Cell */,
-				A50B20E8237AA24200A894A9 /* Kit */,
-			);
-			path = Old;
-			sourceTree = "<group>";
-		};
 		7176B7DF248DD7FE00B607BD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -604,6 +566,83 @@
 				715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		718DE336259B067A005C3159 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				A50B20EE237AA24200A894A9 /* PhotoEditorContentView.swift */,
+				A50B20EC237AA24200A894A9 /* PhotoEditorContentView+Getter.swift */,
+				A50B20F3237AA24200A894A9 /* PhotoEditorContentView+Pen.swift */,
+				A50B20F4237AA24200A894A9 /* PhotoEditorContentView+Mosaic.swift */,
+				A50B20F5237AA24200A894A9 /* PhotoEditorContentView+Crop.swift */,
+				A5ABEF2B239F793B00B50543 /* PhotoEditorContentView+InputText.swift */,
+				718DE346259B0804005C3159 /* Draw */,
+				718DE345259B07EF005C3159 /* ToolBar */,
+				713E7D9A247BACBE00BF6245 /* Cell */,
+				A50B20E8237AA24200A894A9 /* Kit */,
+			);
+			path = Photo;
+			sourceTree = "<group>";
+		};
+		718DE337259B067E005C3159 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				A54436F823AB193F003C65F9 /* VideoPreview.swift */,
+				A544371D23AB4BA4003C65F9 /* VideoEditorToolView.swift */,
+				A544371F23AB61C9003C65F9 /* VideoEditorCropToolView.swift */,
+				A544372123AB6A60003C65F9 /* VideoEditorCropProgressView.swift */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		718DE33A259B070B005C3159 /* Draw */ = {
+			isa = PBXGroup;
+			children = (
+				A50B20DD237AA24200A894A9 /* Brush.swift */,
+				71469B1325592C5E000A8E08 /* DrawnPath.swift */,
+				716FBEDD2578CF3A004E0018 /* CanvasMask.swift */,
+				716FBEE12578D1B2004E0018 /* BlurredMask.swift */,
+				718DE32E259AC20B005C3159 /* TextMask.swift */,
+			);
+			path = Draw;
+			sourceTree = "<group>";
+		};
+		718DE344259B077E005C3159 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				718DE33A259B070B005C3159 /* Draw */,
+				71208EB8256F8D72002C023A /* Data */,
+				7142FF6E25591AD7003FF44D /* PhotoEditingStack.swift */,
+				71208EB1256F876F002C023A /* PhotoEditorAction.swift */,
+				7153EE93257491B900D9EE08 /* PhotoEditorContext.swift */,
+				71BAF32725760DE1007AE60F /* PhotoEditorCropContext.swift */,
+			);
+			path = Photo;
+			sourceTree = "<group>";
+		};
+		718DE345259B07EF005C3159 /* ToolBar */ = {
+			isa = PBXGroup;
+			children = (
+				A50B20F1237AA24200A894A9 /* EditorToolView.swift */,
+				A50B20F2237AA24200A894A9 /* EditorEditOptionsView.swift */,
+				A50B20EB237AA24200A894A9 /* EditorPenToolView.swift */,
+				A50B20ED237AA24200A894A9 /* EditorMosaicToolView.swift */,
+				A50B20E7237AA24200A894A9 /* EditorCropToolView.swift */,
+				A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */,
+			);
+			path = ToolBar;
+			sourceTree = "<group>";
+		};
+		718DE346259B0804005C3159 /* Draw */ = {
+			isa = PBXGroup;
+			children = (
+				7142FF7525591DB0003FF44D /* DryDrawingView.swift */,
+				717DCA8B256CD25100568A6C /* Canvas.swift */,
+				715D6B36256E449B004D9BF1 /* Mosaic.swift */,
+				715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */,
+			);
+			path = Draw;
 			sourceTree = "<group>";
 		};
 		71BAF32B2576197C007AE60F /* Cache */ = {
@@ -1041,16 +1080,9 @@
 		A50B20D8237AA24200A894A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				71208EB8256F8D72002C023A /* Data */,
-				71208EB7256F8D65002C023A /* Old */,
-				71469B1325592C5E000A8E08 /* DrawnPath.swift */,
-				716FBEDD2578CF3A004E0018 /* CanvasMask.swift */,
-				716FBEE12578D1B2004E0018 /* BlurredMask.swift */,
-				718DE32E259AC20B005C3159 /* TextMask.swift */,
-				7142FF6E25591AD7003FF44D /* PhotoEditingStack.swift */,
-				71208EB1256F876F002C023A /* PhotoEditorAction.swift */,
-				7153EE93257491B900D9EE08 /* PhotoEditorContext.swift */,
-				71BAF32725760DE1007AE60F /* PhotoEditorCropContext.swift */,
+				A01C583023B33CFD00691F11 /* ImageEditorCache.swift */,
+				A01C582823B33C7A00691F11 /* Palette.swift */,
+				718DE344259B077E005C3159 /* Photo */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1058,13 +1090,8 @@
 		A50B20E6237AA24200A894A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7142FF7425591DA0003FF44D /* Old */,
-				7142FF7525591DB0003FF44D /* DryDrawingView.swift */,
-				717DCA8B256CD25100568A6C /* Canvas.swift */,
-				715D6B36256E449B004D9BF1 /* Mosaic.swift */,
-				715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */,
-				718DE32625996E36005C3159 /* CropLayerView.swift */,
-				718DE32A2599AD82005C3159 /* TextTrashView.swift */,
+				718DE336259B067A005C3159 /* Photo */,
+				718DE337259B067E005C3159 /* Video */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1079,6 +1106,8 @@
 				71A3D0AA247B9626000A1B24 /* BigButton.swift */,
 				71CBF13425199C0D00F79D19 /* ColorWell.swift */,
 				A0FFB23F25407E86000A7A45 /* GradientView.swift */,
+				718DE32625996E36005C3159 /* CropLayerView.swift */,
+				718DE32A2599AD82005C3159 /* TextTrashView.swift */,
 			);
 			path = Kit;
 			sourceTree = "<group>";
@@ -1416,7 +1445,6 @@
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
-				A50B2105237AA24200A894A9 /* TouchState.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
