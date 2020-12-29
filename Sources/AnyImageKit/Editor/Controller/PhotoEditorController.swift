@@ -105,6 +105,7 @@ final class PhotoEditorController: AnyImageViewController {
             guard let self = self else { return }
             self.setupData()
             self.contentView.updateView(with: self.stack.edit)
+            self.contentView.mosaic?.setMosaicCoverImage(0)
         }
     }
     
