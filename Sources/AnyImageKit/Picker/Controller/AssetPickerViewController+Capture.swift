@@ -37,9 +37,9 @@ extension AssetPickerViewController {
         if !options.captureOptions.mediaOptions.isEmpty {
             switch sortType {
             case .asc:
-                album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), atLast: true)
+                album.addAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), atLast: true)
             case .desc:
-                album.insertAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
+                album.insertAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
             }
         }
     }

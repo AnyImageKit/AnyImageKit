@@ -82,18 +82,19 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private lazy var itemOffset: Int = {
+    private var itemOffset: Int {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         switch manager.options.orderByDate {
         case .asc:
             return 0
         case .desc:
-            return manager.options.captureOptions.mediaOptions.isEmpty ? 0 : 1
+            guard !manager.options.captureOptions.mediaOptions.isEmpty else { return 0 }
+            return ((album?.hasCamera ?? false) ? 1 : 0)
         }
         #else
         return 0
         #endif
-    }()
+    }
     
     let manager: PickerManager
     
