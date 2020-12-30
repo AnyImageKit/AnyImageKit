@@ -33,22 +33,6 @@ class Album: Equatable {
 
 extension Album {
     
-    func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
-        assets.insert(asset, at: at)
-        reloadIndex(sort: sort)
-    }
-    
-    func addAsset(_ asset: Asset, atLast: Bool) {
-        if atLast {
-            assets.append(asset)
-        } else {
-            assets.insert(asset, at: assets.count-1)
-        }
-    }
-}
-
-extension Album {
-    
     private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: PickerSelectOption) {
         var array: [Asset] = []
         let selectPhoto = selectOptions.contains(.photo)
@@ -78,6 +62,23 @@ extension Album {
             }
         }
         assets = array
+    }
+}
+
+// MARK: - Capture
+extension Album {
+    
+    func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
+        assets.insert(asset, at: at)
+        reloadIndex(sort: sort)
+    }
+    
+    func addAsset(_ asset: Asset, atLast: Bool) {
+        if atLast {
+            assets.append(asset)
+        } else {
+            assets.insert(asset, at: assets.count-1)
+        }
     }
     
     private func reloadIndex(sort: Sort) {

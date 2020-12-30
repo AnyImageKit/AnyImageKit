@@ -66,8 +66,10 @@ extension Asset {
     }
     
     var isCamera: Bool {
-        return idx == -1
+        return idx == Asset.cameraItemIdx
     }
+    
+    static let cameraItemIdx: Int = -1
 }
 
 extension Asset: Equatable {
