@@ -5,13 +5,13 @@
 ### New Features
 
 - Picker
-  - Add the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. (#59)
+  - Add the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. ([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
   - Add the `saveEditedAsset` boolean value. Determines whether the Picker save edited assets.
 
 ### Resolved
 
 - Picker
-  - Fix the issue that Picker would crash by array index out of range when `orderByDate = DESC`. (#65)
+  - Fix the issue that Picker would crash by array index out of range when `orderByDate = DESC`. ([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
   - Fix the issue that the `Preview` button cannot be used sometimes.
 
 ### BREAKING CHANGE

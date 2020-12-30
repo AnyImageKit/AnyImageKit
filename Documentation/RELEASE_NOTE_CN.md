@@ -5,13 +5,13 @@
 ### 新增
 
 - Picker
-  - 新增 `selectionTapAction` 枚举字段，用于在资源列表页面点击资源后的动作。(#59)
+  - 新增 `selectionTapAction` 枚举字段，用于在资源列表页面点击资源后的动作。([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
   - 新增 `saveEditedAsset` 布尔字段，用于完成选择后是否保存编辑过的资源。
 
 ### 修复
 
 - Picker
-  - 修复 `DESC` 排序时，获取数据错误和数组越界问题。(#65)
+  - 修复 `DESC` 排序时，获取数据错误和数组越界问题。([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
   - 修复 `预览` 按钮有时无法使用的问题。
 
 ### 不兼容变更
