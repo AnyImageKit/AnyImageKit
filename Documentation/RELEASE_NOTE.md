@@ -1,5 +1,23 @@
 # Release Notes
 
+## 0.12.0
+
+### New Features
+
+- Picker
+  - Add the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. (#59)
+  - Add the `saveEditedAsset` boolean value. Determines whether the Picker save edited assets.
+
+### Resolved
+
+- Picker
+  - Fix the issue that Picker would crash by array index out of range when `orderByDate = DESC`. (#65)
+  - Fix the issue that the `Preview` button cannot be used sometimes.
+
+### BREAKING CHANGE
+
+- Picker remove `quickPick` boolean value, please use `selectionTapAction` enumeration instead.
+
 ## 0.11.0
 
 ### General
@@ -9,7 +27,7 @@
 ### New Features
 
 - Picker
-  - Add a new protoal `AssetDisableCheckRule` to allow custom asset disable check rules. AnyImageKit contains a buildin implement  `VideoDurationDisableCheckRule` to support video duration check.
+  - Add a new protocol `AssetDisableCheckRule` to allow custom asset disable check rules. AnyImageKit contains a buildin implement  `VideoDurationDisableCheckRule` to support video duration check.
 - Editor
   - Auto set `.modalPresentationStyle = .fullScreen` in `ImageEditorController`'s init function.
 - Capture
