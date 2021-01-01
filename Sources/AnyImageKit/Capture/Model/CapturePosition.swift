@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2020/1/10.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
 //
 
 import AVFoundation
