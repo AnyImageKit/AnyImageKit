@@ -283,7 +283,7 @@ extension PhotoEditorContentView {
             let cropAnimation = CABasicAnimation.create(duration: 0.25, fromValue: cropLayerLeave.path, toValue: newCropPath.cgPath)
             cropLayerLeave.cropLayer.add(cropAnimation, forKey: "path")
         }
-        cropLayerEnter.displayRect = newRectPathRect
+        cropLayerLeave.displayRect = newRectPathRect
         cropLayerLeave.path = newCropPath.cgPath
     }
     
