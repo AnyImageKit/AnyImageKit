@@ -113,7 +113,7 @@ private class MaskLayer: CALayer {
     }
     
     override func draw(in ctx: CGContext) {
-        drawnPaths.forEach { $0.draw(in: ctx, canvasSize: bounds.size, scale: scale?() ?? 1.0) }
+        drawnPaths.forEach { $0.draw(in: ctx, size: bounds.size, scale: scale?() ?? 1.0) }
         didDraw?()
     }
 }

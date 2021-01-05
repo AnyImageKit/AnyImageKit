@@ -150,7 +150,7 @@ extension PhotoEditingStack {
                 
                 // 绘制马赛克 & 画笔 & 文本
                 self.drawer.forEach {
-                    $0.draw(in: cgContext, canvasSize: canvasSize)
+                    $0.draw(in: cgContext, size: canvasSize)
                 }
             }
         }

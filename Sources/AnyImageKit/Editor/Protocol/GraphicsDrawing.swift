@@ -10,5 +10,5 @@ import UIKit
 
 protocol GraphicsDrawing {
     
-    func draw(in context: CGContext, canvasSize: CGSize)
+    func draw(in context: CGContext, size: CGSize)
 }

@@ -63,11 +63,11 @@ struct DrawnPath: Codable {
 // MARK: - GraphicsDrawing
 extension DrawnPath: GraphicsDrawing {
     
-    func draw(in context: CGContext, canvasSize: CGSize) {
-        draw(in: context, canvasSize: canvasSize, scale: 1.0)
+    func draw(in context: CGContext, size: CGSize) {
+        draw(in: context, size: size, scale: 1.0)
     }
     
-    func draw(in context: CGContext, canvasSize: CGSize, scale: CGFloat) {
+    func draw(in context: CGContext, size: CGSize, scale: CGFloat) {
         UIGraphicsPushContext(context)
         context.saveGState()
         draw(scale: scale)

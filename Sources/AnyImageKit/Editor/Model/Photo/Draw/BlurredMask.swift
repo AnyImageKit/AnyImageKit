@@ -24,21 +24,17 @@ struct BlurredMask {
 // MARK: - GraphicsDrawing
 extension BlurredMask: GraphicsDrawing {
     
-    func draw(in context: CGContext, canvasSize: CGSize) {
-        guard !paths.isEmpty else { return }
-        let mainContext = context
-        let size = canvasSize
-        
+    func draw(in context: CGContext, size: CGSize) {
         guard
-            let cglayer = CGLayer(mainContext, size: size, auxiliaryInfo: nil),
+            !paths.isEmpty,
+            let cglayer = CGLayer(context, size: size, auxiliaryInfo: nil),
             let layerContext = cglayer.context else {
             assert(false, "Failed to create CGLayer")
             return
         }
         
-        let ciContext = CIContext(cgContext: layerContext, options: [:])
         UIGraphicsPushContext(layerContext)
-        
+        let ciContext = CIContext(cgContext: layerContext, options: [:])
         let ciImage = CIImage(image: blurImage)!
         let blurScale = calculateBlurImageScale(canvasSize: size, imageSize: ciImage.extent.size)
         let offsetX = (ciImage.extent.size.width * blurScale - size.width) / 2
@@ -47,7 +43,7 @@ extension BlurredMask: GraphicsDrawing {
         paths.forEach { path in
             layerContext.saveGState()
             layerContext.scaleBy(x: scale , y: scale)
-            path.draw(in: layerContext, canvasSize: size)
+            path.draw(in: layerContext, size: size)
             layerContext.restoreGState()
         }
         
@@ -57,10 +53,10 @@ extension BlurredMask: GraphicsDrawing {
         layerContext.scaleBy(x: blurScale, y: -blurScale)
         ciContext.draw(ciImage, in: ciImage.extent, from: ciImage.extent)
         layerContext.restoreGState()
-        
         UIGraphicsPopContext()
-        UIGraphicsPushContext(mainContext)
-        mainContext.draw(cglayer, at: .zero)
+        
+        UIGraphicsPushContext(context)
+        context.draw(cglayer, at: .zero)
         UIGraphicsPopContext()
     }
     
