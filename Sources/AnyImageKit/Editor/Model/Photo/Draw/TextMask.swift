@@ -30,20 +30,11 @@ extension TextMask: GraphicsDrawing {
         }
 
         let frame = data.finalFrame.multipliedBy(scale)
-
         context.saveGState()
         context.translateBy(x: frame.midX, y: frame.midY)
         context.rotate(by: data.rotation)
-
-        let clipPath = UIBezierPath(rect: CGRect(origin: CGPoint(x: -(frame.width/2), y: -(frame.height/2)), size: frame.size))
-        context.saveGState()
-        clipPath.addClip()
-        
         context.scaleBy(x: 1, y: -1)
-        context.draw(cgImage, in: CGRect(x: -(frame.width/2), y: frame.height/2, width: frame.width, height: frame.height), byTiling: true)
-        
-        context.restoreGState()
+        context.draw(cgImage, in: CGRect(x: -(frame.width / 2), y: -(frame.height / 2), width: frame.width, height: frame.height))
         context.restoreGState()
     }
 }
-
