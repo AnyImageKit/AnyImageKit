@@ -24,17 +24,26 @@ extension TextMask: GraphicsDrawing {
     
     func draw(in context: CGContext, canvasSize: CGSize) {
         guard
-            let cgImage = data.image.cgImage else {
+            let cgImage = data.image.cgImage,
+            let cglayer = CGLayer(context, size: canvasSize, auxiliaryInfo: nil),
+            let layerContext = cglayer.context else {
             assert(false, "Failed to create CGLayer")
             return
         }
 
         let frame = data.finalFrame.multipliedBy(scale)
-        context.saveGState()
-        context.translateBy(x: frame.midX, y: frame.midY)
-        context.rotate(by: data.rotation)
-        context.scaleBy(x: 1, y: -1)
-        context.draw(cgImage, in: CGRect(x: -(frame.width / 2), y: -(frame.height / 2), width: frame.width, height: frame.height))
-        context.restoreGState()
+        
+        UIGraphicsPushContext(layerContext)
+        layerContext.saveGState()
+        layerContext.translateBy(x: frame.midX, y: frame.midY)
+        layerContext.rotate(by: data.rotation)
+        layerContext.scaleBy(x: 1, y: -1)
+        layerContext.draw(cgImage, in: CGRect(x: -(frame.width / 2), y: -(frame.height / 2), width: frame.width, height: frame.height))
+        layerContext.restoreGState()
+        UIGraphicsPopContext()
+        
+        UIGraphicsPushContext(context)
+        context.draw(cglayer, at: .zero)
+        UIGraphicsPopContext()
     }
 }
