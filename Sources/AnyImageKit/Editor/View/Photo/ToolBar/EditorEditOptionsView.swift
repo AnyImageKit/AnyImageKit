@@ -47,11 +47,11 @@ final class EditorEditOptionsView: UIView {
         stackView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(25)
+            maker.height.equalTo(35)
         }
         buttons.forEach {
             $0.snp.makeConstraints { maker in
-                maker.width.height.equalTo(stackView.snp.height)
+                maker.width.height.equalTo(25)
             }
         }
     }

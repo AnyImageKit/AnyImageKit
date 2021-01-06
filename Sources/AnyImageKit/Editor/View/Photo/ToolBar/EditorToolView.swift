@@ -129,8 +129,8 @@ final class EditorToolView: UIView {
         }
         penToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview().inset(20)
-            maker.bottom.equalTo(editOptionsView.snp.top).offset(-20)
-            maker.height.equalTo(20)
+            maker.bottom.equalTo(editOptionsView.snp.top).offset(-10)
+            maker.height.equalTo(30)
         }
         mosaicToolView.snp.makeConstraints { maker in
             maker.edges.equalTo(penToolView)

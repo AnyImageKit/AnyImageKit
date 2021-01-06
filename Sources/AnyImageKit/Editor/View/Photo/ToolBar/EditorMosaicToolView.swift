@@ -33,6 +33,7 @@ final class EditorMosaicToolView: UIView {
     private let options: EditorPhotoOptionsInfo
     private var mosaicButtons: [UIButton] = []
     private let spacing: CGFloat = 40
+    private let itemWidth: CGFloat = 24
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.options = options
@@ -50,7 +51,7 @@ final class EditorMosaicToolView: UIView {
         undoButton.snp.makeConstraints { maker in
             maker.right.equalToSuperview()
             maker.centerY.equalToSuperview()
-            maker.width.height.equalTo(22)
+            maker.width.height.equalTo(itemWidth)
         }
         setupMosaicView()
         updateState()
@@ -66,17 +67,17 @@ final class EditorMosaicToolView: UIView {
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
-        let width = 20 * CGFloat(mosaicButtons.count) + spacing * CGFloat(mosaicButtons.count-1)
-        let offset = (UIScreen.main.bounds.width - width - 20*2 - 20) / 2
+        let width = itemWidth * CGFloat(mosaicButtons.count) + spacing * CGFloat(mosaicButtons.count - 1)
+        let offset = (UIScreen.main.bounds.width - width - 20 * 2 - 20) / 2
         stackView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(offset)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(20)
+            maker.height.equalTo(itemWidth)
         }
         
         for icon in mosaicButtons {
             icon.snp.makeConstraints { maker in
-                maker.width.height.equalTo(stackView.snp.height)
+                maker.width.height.equalTo(itemWidth)
             }
         }
     }
@@ -94,8 +95,9 @@ final class EditorMosaicToolView: UIView {
         button.tintColor = .white
         button.clipsToBounds = true
         button.setImage(image, for: .normal)
-        button.layer.cornerRadius = option == .default ? 0 : 2
-        button.layer.borderColor = UIColor.white.cgColor
+        button.imageEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+        button.imageView?.layer.cornerRadius = option == .default ? 0 : 2
+        button.imageView?.layer.borderColor = UIColor.white.cgColor
         button.addTarget(self, action: #selector(mosaicButtonTapped(_:)), for: .touchUpInside)
         return button
     }
@@ -108,14 +110,14 @@ extension EditorMosaicToolView {
         let option = options.mosaicOptions[currentIdx]
         switch option {
         case .default:
-            for imageView in mosaicButtons {
-                imageView.tintColor = options.tintColor
-                imageView.layer.borderWidth = 0
+            for button in mosaicButtons {
+                button.tintColor = options.tintColor
+                button.imageView?.layer.borderWidth = 0
             }
         default:
-            for (idx, imageView) in mosaicButtons.enumerated() {
-                imageView.tintColor = .white
-                imageView.layer.borderWidth = idx == currentIdx ? 2 : 0
+            for (idx, button) in mosaicButtons.enumerated() {
+                button.tintColor = .white
+                button.imageView?.layer.borderWidth = idx == currentIdx ? 2 : 0
             }
         }
     }
