@@ -12,10 +12,11 @@
 "SelectLimit" = "Select Limit";
 "ColumnNumber" = "Column Number";
 "UseOriginalImage" = "Use Original Image";
-"QuickPick" = "QuickPick";
+"SelectionTapAction" = "Selection Tap Action";
 "SelectOptions" = "Select Options";
 "AlbumOptions" = "Album Options";
 "OrderByDate" = "Order By Date";
+"SaveEditedAsset" = "Save edited asset";
 "EditorOptions" = "Editor Options";
 "CaptureOptions" = "Capture Options";
 "FullScreen" = "Full Screen";

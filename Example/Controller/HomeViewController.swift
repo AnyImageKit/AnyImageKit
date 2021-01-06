@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 蒋惠 on 2019/11/12.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -136,6 +136,7 @@ extension HomeViewController {
     enum ApplicationRowType: CaseIterable, HomeRowTypeRule {
         case avatarPicker
         case preselectAsset
+        case disableCheckRule
         
         var title: String {
             switch self {
@@ -143,6 +144,8 @@ extension HomeViewController {
                 return "Avatar Picker"
             case .preselectAsset:
                 return "Preselect Asset"
+            case .disableCheckRule:
+                return "Disable Check Rule"
             }
         }
         
@@ -158,6 +161,8 @@ extension HomeViewController {
                 return AvatarPickerController(style: style)
             case .preselectAsset:
                 return PreselectAssetViewController()
+            case .disableCheckRule:
+                return DisableCheckRuleViewController(style: style)
             }
         }
     }

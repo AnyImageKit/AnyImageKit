@@ -1,5 +1,47 @@
 # 更新日志
 
+## 0.12.0
+
+### 新增
+
+- Picker
+  - 新增 `selectionTapAction` 枚举字段，用于在资源列表页面点击资源后的动作。([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
+  - 新增 `saveEditedAsset` 布尔字段，用于完成选择后是否保存编辑过的资源。
+
+### 修复
+
+- Picker
+  - 修复 `DESC` 排序时，获取数据错误和数组越界问题。([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
+  - 修复 `预览` 按钮有时无法使用的问题。
+
+### 不兼容变更
+
+- Picker 移除 `quickPick` 字段，请使用新字段 `selectionTapAction` 代替。
+
+## 0.11.0
+
+### 通用
+
+- 重新支持 Mac Catalyst
+
+### 新增
+
+- Picker
+  - 新增 `AssetDisableCheckRule`，允许自定义资源禁用规则/文案，框架已自带 `VideoDurationDisableCheckRule` 实现按最大/最小时长过滤视频。
+- Editor
+  - 将 `.modalPresentationStyle = .fullScreen` 移至 `ImageEditorController` 的初始化方法中，调用者无需重复设置。
+- Capture
+  - 将 `.modalPresentationStyle = .fullScreen` 移至 `ImageCaptureController` 的初始化方法中，调用者无需重复设置。
+
+### 修复
+
+- Picker
+  - 修复 `NSDiffableDataSourceSnapshot` 存在内存泄漏的问题。
+  - 修复选中多个需要从 iCloud 下载的资源时进度不正确的问题。
+  - 预览时图片最大缩放比例从固定值改为根据图片大小计算。
+- Editor
+  - 编辑时图片最大缩放比例从固定值改为根据图片大小计算。
+
 ## 0.10.0
 
 ### 通用

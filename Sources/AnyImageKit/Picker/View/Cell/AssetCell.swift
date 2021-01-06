@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/17.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -126,10 +126,11 @@ extension AssetCell {
     private func setOptions(_ options: PickerOptionsInfo) {
         boxCoverView.layer.borderColor = options.theme.mainColor.cgColor
         selectButton.setTheme(options.theme)
-        selectButton.isHidden = options.quickPick && options.selectLimit == 1
+        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
     }
     
     func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+        asset.check(disable: manager.options.disableRules)
         setOptions(manager.options)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
         identifier = asset.phAsset.localIdentifier
@@ -140,7 +141,7 @@ extension AssetCell {
                 guard self.identifier == asset.phAsset.localIdentifier else { return }
                 self.imageView.image = asset._image ?? response.image
                 if asset.mediaType == .video && !isPreview {
-                    self.videoView.setVideoTime(asset.videoDuration)
+                    self.videoView.setVideoTime(asset.durationDescription)
                 }
             case .failure(let error):
                 _print(error)
@@ -167,7 +168,11 @@ extension AssetCell {
         if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
-            disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
+            if asset.isDisable {
+                disableCoverView.isHidden = false
+            } else {
+                disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -32,7 +32,7 @@ final class AssetPickerViewController: AnyImageViewController {
     @available(iOS 14.0, *)
     private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
     
-    private lazy var stopReloadAlbum: Bool = false
+    lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
         let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
@@ -45,7 +45,8 @@ final class AssetPickerViewController: AnyImageViewController {
         layout.minimumLineSpacing = defaultAssetSpacing
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        let hideToolBar = manager.options.quickPick && manager.options.selectLimit == 1
+        view.alwaysBounceVertical = true
+        let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
@@ -71,7 +72,7 @@ final class AssetPickerViewController: AnyImageViewController {
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
-        view.isHidden = manager.options.quickPick && manager.options.selectLimit == 1
+        view.isHidden = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         return view
     }()
     
@@ -81,14 +82,19 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private lazy var itemOffset: Int = {
+    private var itemOffset: Int {
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         switch manager.options.orderByDate {
         case .asc:
             return 0
         case .desc:
-            return 1
+            guard !manager.options.captureOptions.mediaOptions.isEmpty else { return 0 }
+            return ((album?.hasCamera ?? false) ? 1 : 0)
         }
-    }()
+        #else
+        return 0
+        #endif
+    }
     
     let manager: PickerManager
     
@@ -201,7 +207,7 @@ extension AssetPickerViewController {
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)
-        album.assets.forEach { $0.isSelected = false }
+        album.assets.forEach { $0.state = .unchecked }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
@@ -265,7 +271,7 @@ extension AssetPickerViewController {
     
     private func showLimitedView() {
         if #available(iOS 14.0, *) {
-            let hideToolBar = manager.options.quickPick && manager.options.selectLimit == 1
+            let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
             let newToolBarHeight = (hideToolBar ? 0 : toolBarHeight) + toolBar.limitedViewHeight
             toolBar.isHidden = false
             toolBar.contentView.isHidden = hideToolBar
@@ -313,6 +319,40 @@ extension AssetPickerViewController {
             collectionView.scrollToFirst(at: .top, animated: animated)
         }
     }
+    
+    func selectItem(_ idx: Int) {
+        guard let album = album else { return }
+        let asset = album.assets[idx]
+        
+        if case .disable(let rule) = asset.state {
+            let message = rule.alertMessage(for: asset)
+            showAlert(message: message)
+            return
+        }
+        
+        if !asset.isSelected && manager.isUpToLimit {
+            let message: String
+            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS"), manager.options.selectLimit)
+            } else if manager.options.selectOptions.isPhoto {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS"), manager.options.selectLimit)
+            } else {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
+            }
+            showAlert(message: message)
+            return
+        }
+        
+        asset.isSelected.toggle()
+        if asset.isSelected {
+            manager.addSelectedAsset(asset)
+            updateVisibleCellState(idx)
+        } else {
+            manager.removeSelectedAsset(asset)
+            updateVisibleCellState(idx)
+        }
+        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+    }
 }
 
 // MARK: - Notification
@@ -336,7 +376,7 @@ extension AssetPickerViewController {
     
     @objc private func didSyncAsset(_ sender: Notification) {
         guard let _ = sender.object as? String else { return }
-        guard manager.options.selectLimit == 1 && manager.options.quickPick else { return }
+        guard manager.options.selectLimit == 1 && manager.options.selectionTapAction.hideToolBar else { return }
         guard let asset = manager.selectedAssets.first else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
         selectButtonTapped(cell.selectButton)
@@ -352,7 +392,7 @@ extension AssetPickerViewController {
         controller.albums = albums
         controller.delegate = self
         let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
-        let isFullScreen = ScreenHelper.mainBounds.height == view.frame.height
+        let isFullScreen = ScreenHelper.mainBounds.height == (navigationController?.view ?? view).frame.height
         presentationController.isFullScreen = isFullScreen
         presentationController.cornerRadius = 8
         presentationController.corners = [.bottomLeft, .bottomRight]
@@ -366,27 +406,9 @@ extension AssetPickerViewController {
     }
     
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
-        guard let album = album else { return }
         guard let cell = sender.superview as? AssetCell else { return }
         guard let idx = collectionView.indexPath(for: cell)?.item else { return }
-        let asset = album.assets[idx]
-        if !asset.isSelected && manager.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.options.selectLimit)
-            let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        asset.isSelected = !sender.isSelected
-        if asset.isSelected {
-            manager.addSelectedAsset(asset)
-            updateVisibleCellState(idx)
-        } else {
-            manager.removeSelectedAsset(asset)
-            updateVisibleCellState(idx)
-        }
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        selectItem(idx)
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
@@ -402,7 +424,7 @@ extension AssetPickerViewController {
         manager.useOriginalImage = sender.isSelected
     }
     
-    @objc private func doneButtonTapped(_ sender: UIButton) {
+    @objc func doneButtonTapped(_ sender: UIButton) {
         stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
     }
@@ -461,6 +483,8 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let asset = album?.assets[indexPath.item] else { return UICollectionViewCell() }
+        
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             cell.isAccessibilityElement = true
@@ -468,6 +492,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
             cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Take photo")
             return cell
         }
+        #endif
         
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         cell.tag = indexPath.row
@@ -501,15 +526,26 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             return
         }
         #endif
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
+            openEditor(with: asset, indexPath: indexPath)
+            return
+        }
+        #endif
         
-        if manager.options.quickPick {
+        if manager.options.selectionTapAction == .quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
             selectButtonTapped(cell.selectButton)
-            if manager.options.selectLimit == 1 {
+            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
+        } else if case .disable(let rule) = asset.state {
+            let message = rule.alertMessage(for: asset)
+            showAlert(message: message)
+            return
+        } else if !asset.isSelected && manager.isUpToLimit {
+            return
         } else {
-            if !asset.isSelected && manager.isUpToLimit { return }
             let controller = PhotoPreviewController(manager: manager)
             controller.currentIndex = indexPath.item - itemOffset
             controller.dataSource = self
@@ -582,7 +618,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
         let idx = index + itemOffset
         let indexPath = IndexPath(item: idx, section: 0)
-        return collectionView.cellForItem(at: indexPath)
+        return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
     }
 }
 
@@ -628,16 +664,17 @@ extension AssetPickerViewController {
     private func reloadData(animated: Bool = true) {
         if #available(iOS 14.0, *) {
             let snapshot = initialSnapshot()
-            dataSource.apply(snapshot, to: .main, animatingDifferences: animated)
+            dataSource.apply(snapshot, animatingDifferences: animated)
         } else {
             collectionView.reloadData()
         }
     }
     
     @available(iOS 14.0, *)
-    private func initialSnapshot() -> NSDiffableDataSourceSectionSnapshot<Asset> {
-        var snapshot = NSDiffableDataSourceSectionSnapshot<Asset>()
-        snapshot.append(album?.assets ?? [])
+    private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, Asset> {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Asset>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(album?.assets ?? [], toSection: .main)
         return snapshot
     }
     

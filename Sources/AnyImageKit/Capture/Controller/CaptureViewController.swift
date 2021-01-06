@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/4.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -260,7 +260,6 @@ extension CaptureViewController: CaptureDelegate {
         var editorOptions = options.editorPhotoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
         let controller = ImageEditorController(photo: image, options: editorOptions, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
@@ -303,7 +302,6 @@ extension CaptureViewController: RecorderDelegate {
         var editorOptions = options.editorVideoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
         let controller = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()

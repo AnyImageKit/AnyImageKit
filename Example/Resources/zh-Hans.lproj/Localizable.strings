@@ -12,10 +12,11 @@
 "SelectLimit" = "最多可选择的资源";
 "ColumnNumber" = "一行的列数";
 "UseOriginalImage" = "是否使用原图";
-"QuickPick" = "快速选择";
-"SelectOptions" = "选择类型";
+"SelectionTapAction" = "资源列表点击动作";
+"SelectOptions" = "资源类型";
 "AlbumOptions" = "相册类型";
 "OrderByDate" = "排序方式";
+"SaveEditedAsset" = "保存编辑后的资源";
 "EditorOptions" = "编辑类型";
 "CaptureOptions" = "拍摄类型";
 "FullScreen" = "是否全屏";

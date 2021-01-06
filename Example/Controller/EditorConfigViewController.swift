@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 蒋惠 on 2019/11/12.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -38,7 +38,6 @@ final class EditorConfigViewController: UITableViewController {
         let image = UIImage(named: "EditorTestImage")!
         let controller = ImageEditorController(photo: image, options: options, delegate: self)
         controller.trackDelegate = self
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
 

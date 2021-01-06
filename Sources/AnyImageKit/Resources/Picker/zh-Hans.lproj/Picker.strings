@@ -13,8 +13,11 @@
 "Select photo" = "选中图片";
 "Unselect photo" = "未选中图片";
 "Take photo" = "拍照";
-"Select a maximum of %zd photos" = "你最多只能选择 %zd 张照片";
+"SELECT_A_MAXIMUM_OF_PHOTOS" = "你最多只能选择 %zd 张照片";
+"SELECT_A_MAXIMUM_OF_VIDEOS" = "你最多只能选择 %zd 个视频";
+"SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS" = "你最多只能选择 %zd 个照片/视频";
 "Downloading from iCloud" = "iCloud 同步中";
 "Fetch failed, please retry" = "获取内容失败，请重试";
 "Switch album, current album is %@" = "切换相册，当前相册是%@";
 "Can't fetch all photos\nClick to select more photos" = "无法查看相册全部照片\n点击选择更多照片";
+"DURATION_OF_SELECTED_VIDEO_RANGE" = "选取视频长度应在 %d-%d 秒之间";

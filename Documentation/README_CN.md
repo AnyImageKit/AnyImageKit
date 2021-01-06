@@ -4,6 +4,11 @@
 
 ## 功能
 
+- [x] 模块化设计
+    - [x] Picker
+    - [ ] Browser
+    - [x] Editor
+    - [x] Capture
 - [x] UI 外观支持浅色/深色/自动 (iOS 13.0+)
 - [x] 默认主题与微信相似
 - [x] 支持多选/混合内容选择
@@ -26,10 +31,10 @@
     - [x] 马赛克
     - [ ] 旋转
     - [ ] 滤镜支持
-- [ ] 多平台支持
+- [x] 多平台支持
     - [x] iOS
     - [x] iPadOS
-    - [ ] Mac Catalyst (技术预览版，暂不支持编辑。由于 Xcode 12.0 不能支持 Mac Catalyst 14.0 的功能，因此从支持中移除。)
+    - [x] Mac Catalyst (技术预览版，暂不支持编辑。)
     - [ ] macOS
     - [ ] tvOS
 
@@ -47,7 +52,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.12.0"))
 ]
 ```
 
@@ -123,9 +128,12 @@ extension ViewController: ImagePickerControllerDelegate {
 
 ## 更新日志
 
-* [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100): 发布于 2020-11-03
-
-* [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090): 发布于 2020-10-09
+| 版本 | 发布时间 | Xcode | Swift | iOS |
+| ---- | ----  | ---- | ---- | ---- |
+| [v0.12.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0120) | 2020-12-30 | 12.2 | 5.3 | 10.0+ |
+| [v0.11.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0110) | 2020-12-18 | 12.2 | 5.3 | 10.0+ |
+| [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100) | 2020-11-03 | 12.1 | 5.3 | 10.0+ |
+| [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090) | 2020-10-09 | 12.0 | 5.3 | 10.0+ |
 
 ## 版权协议
 

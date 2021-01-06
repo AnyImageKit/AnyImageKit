@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2020/1/7.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -32,6 +32,16 @@ class AnyImageViewController: UIViewController {
     override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         setTrackObserverOrDelegate(viewControllerToPresent)
         super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+}
+
+// MARK: - Alert
+extension AnyImageViewController {
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: BundleHelper.coreLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: BundleHelper.coreLocalizedString(key: "OK"), style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
 

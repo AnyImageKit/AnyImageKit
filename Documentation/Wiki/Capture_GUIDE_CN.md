@@ -10,7 +10,6 @@
 
 ```swift
 let controller = ImageCaptureController(options: .init(), delegate: self)
-controller.modalPresentationStyle = .fullScreen
 present(controller, animated: true, completion: nil)
 ```
 

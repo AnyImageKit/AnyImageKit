@@ -13,8 +13,11 @@
 "Select photo" = "Select photo";
 "Unselect photo" = "Unselect photo";
 "Take photo" = "Take photo";
-"Select a maximum of %zd photos" = "Select a maximum of %zd photos";
+"SELECT_A_MAXIMUM_OF_PHOTOS" = "Select a maximum of %zd photos";
+"SELECT_A_MAXIMUM_OF_VIDEOS" = "Select a maximum of %zd videos";
+"SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS" = "Select a maximum of %zd photos or videos";
 "Downloading from iCloud" = "Downloading from iCloud";
 "Fetch failed, please retry" = "Fetch failed, please retry";
 "Switch album, current album is %@" = "Switch album, current album is %@";
 "Can't fetch all photos\nClick to select more photos" = "Can't fetch all photos\nClick to select more photos";
+"DURATION_OF_SELECTED_VIDEO_RANGE" = "The duration of the selected video should be between %d-%d seconds.";

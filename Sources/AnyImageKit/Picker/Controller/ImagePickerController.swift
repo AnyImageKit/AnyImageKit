@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -187,6 +187,11 @@ extension ImagePickerController {
     }
     
     private func saveEditPhotos(_ assets: [Asset], completion: @escaping (([Asset]) -> Void)) {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        guard manager.options.saveEditedAsset else {
+            completion(assets)
+            return
+        }
         var assets = assets
         let selectOptions = manager.options.selectOptions
         let group = DispatchGroup()
@@ -207,6 +212,9 @@ extension ImagePickerController {
         group.notify(queue: workQueue) {
             completion(assets)
         }
+        #else
+        completion(assets)
+        #endif
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {

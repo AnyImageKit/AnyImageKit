@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/14.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -38,7 +38,7 @@ final class LoadingiCloudView: UIView {
         let view = UILabel(frame: .zero)
         view.text = "0%"
         view.textColor = UIColor.white 
-        view.font = UIFont.systemFont(ofSize: 11)
+        view.font = UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular)
         return view
     }()
     

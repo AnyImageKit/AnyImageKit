@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -16,13 +16,6 @@ final class PhotoPreviewCell: PreviewCell {
         doubleTap.numberOfTapsRequired = 2
         return doubleTap
     }()
-    
-    /// 捏合手势放大图片时的最大允许比例
-    var imageMaximumZoomScale: CGFloat = 2.0 {
-        didSet {
-            self.scrollView.maximumZoomScale = imageMaximumZoomScale
-        }
-    }
     
     /// 双击放大图片时的目标比例
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
@@ -38,8 +31,6 @@ final class PhotoPreviewCell: PreviewCell {
     
     private func setupView() {
         scrollView.delegate = self
-        scrollView.maximumZoomScale = imageMaximumZoomScale
-        
         // 双击手势
         contentView.addGestureRecognizer(doubleTap)
         singleTap.require(toFail: doubleTap)
@@ -56,16 +47,15 @@ extension PhotoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
-        let id = asset.phAsset.localIdentifier
+        let id = asset.identifier
         if imageView.image == nil { // thumbnail
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
-                    if self.imageView.image == nil && self.asset.phAsset.localIdentifier == id  {
-                        self.setImage(response.image)
-                    }
+                    guard self.imageView.image == nil && self.asset.identifier == id else { return }
+                    self.setImage(response.image)
                 case .failure(let error):
                     _print(error)
                 }
@@ -74,7 +64,7 @@ extension PhotoPreviewCell {
         
         let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self = self, self.asset.identifier == id else { return }
                 _print("Download photo from iCloud: \(progress)")
                 self.setDownloadingProgress(progress)
             }
@@ -83,10 +73,9 @@ extension PhotoPreviewCell {
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                if !response.isDegraded && self.asset.phAsset.localIdentifier == id {
-                    self.setImage(response.image)
-                    self.setDownloadingProgress(1.0)
-                }
+                guard !response.isDegraded && self.asset.identifier == id else { return }
+                self.setImage(response.image)
+                self.setDownloadingProgress(1.0)
             case .failure(let error):
                 _print(error)
             }

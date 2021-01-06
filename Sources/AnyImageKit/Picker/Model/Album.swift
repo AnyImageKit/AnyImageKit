@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import Foundation
@@ -28,22 +28,6 @@ class Album: Equatable {
     
     static func == (lhs: Album, rhs: Album) -> Bool {
         return lhs.identifier == rhs.identifier
-    }
-}
-
-extension Album {
-    
-    func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
-        assets.insert(asset, at: at)
-        reloadIndex(sort: sort)
-    }
-    
-    func addAsset(_ asset: Asset, atLast: Bool) {
-        if atLast {
-            assets.append(asset)
-        } else {
-            assets.insert(asset, at: assets.count-1)
-        }
     }
 }
 
@@ -78,6 +62,23 @@ extension Album {
             }
         }
         assets = array
+    }
+}
+
+// MARK: - Capture
+extension Album {
+    
+    func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
+        assets.insert(asset, at: at)
+        reloadIndex(sort: sort)
+    }
+    
+    func addAsset(_ asset: Asset, atLast: Bool) {
+        if atLast {
+            assets.append(asset)
+        } else {
+            assets.insert(asset, at: assets.count-1)
+        }
     }
     
     private func reloadIndex(sort: Sort) {

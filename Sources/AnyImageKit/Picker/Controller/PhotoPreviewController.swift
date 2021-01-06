@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -67,8 +67,6 @@ final class PhotoPreviewController: AnyImageViewController {
     var photoSpacing: CGFloat = 30
     /// 图片缩放模式
     var imageScaleMode: UIView.ContentMode = .scaleAspectFill
-    /// 捏合手势放大图片时的最大允许比例
-    var imageMaximumZoomScale: CGFloat = 2.0
     /// 双击放大图片时的目标比例
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
@@ -331,11 +329,22 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        if case .disable(let rule) = data.asset.state {
+            let message = rule.alertMessage(for: data.asset)
+            showAlert(message: message)
+            return
+        }
+        
         if !data.asset.isSelected && manager.isUpToLimit {
-            let message = String(format: BundleHelper.pickerLocalizedString(key: "Select a maximum of %zd photos"), manager.options.selectLimit)
-            let alert = UIAlertController(title: BundleHelper.pickerLocalizedString(key: "Alert"), message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: BundleHelper.pickerLocalizedString(key: "OK"), style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+            let message: String
+            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS"), manager.options.selectLimit)
+            } else if manager.options.selectOptions.isPhoto {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS"), manager.options.selectLimit)
+            } else {
+                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
+            }
+            showAlert(message: message)
             return
         }
         
@@ -367,6 +376,12 @@ extension PhotoPreviewController {
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
+        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        if case .disable(let rule) = data.asset.state {
+            let message = rule.alertMessage(for: data.asset)
+            showAlert(message: message)
+            return
+        }
         if manager.selectedAssets.isEmpty {
             selectButtonTapped(navigationBar.selectButton)
         }
@@ -385,11 +400,11 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
         let cell: PreviewCell
+        data.asset.check(disable: manager.options.disableRules)
         switch data.asset.mediaType {
         case .photo:
             let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
             photoCell.imageView.contentMode = imageScaleMode
-            photoCell.imageMaximumZoomScale = imageMaximumZoomScale
             photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
             cell = photoCell
         case .video:

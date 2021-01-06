@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/20.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -36,7 +36,7 @@ final class PickerPreviewIndexView: UIView {
         layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        view.backgroundColor = options.theme.toolBarColor
+        view.backgroundColor = options.theme.toolBarColor.withAlphaComponent(0.95)
         view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self

@@ -3,12 +3,12 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/12/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
 
-public struct EditorVideoOptionsInfo: Equatable {
+public struct EditorVideoOptionsInfo {
     
     /// 主题色
     /// 默认：green

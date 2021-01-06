@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 刘栋 on 2020/1/16.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -87,7 +87,7 @@ final class ConfigCell: UITableViewCell {
         contentLabel.snp.makeConstraints { maker in
             maker.centerY.equalToSuperview()
             maker.left.equalTo(layoutGuide.snp.right).offset(8)
-            maker.right.equalToSuperview().offset(-16)
+            maker.right.equalToSuperview().offset(-20)
         }
     }
     

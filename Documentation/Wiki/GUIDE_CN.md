@@ -93,7 +93,6 @@ func imagePicker(_ picker: ImagePickerController, didFinishPicking result: Picke
 
 ```swift
 let controller = ImageEditorController(photo: image, delegate: self)
-controller.modalPresentationStyle = .fullScreen
 present(controller, animated: true, completion: nil)
 ```
 
@@ -101,7 +100,6 @@ present(controller, animated: true, completion: nil)
 
 ```swift
 let controller = ImageEditorController(video: fileURL, delegate: self)
-controller.modalPresentationStyle = .fullScreen
 present(controller, animated: true, completion: nil)
 ```
 
@@ -133,7 +131,6 @@ func imageEditor(_ editor: ImageEditorController, didFinishEditing result: Edito
 
 ```swift
 let controller = ImageCaptureController(delegate: self)
-controller.modalPresentationStyle = .fullScreen
 present(controller, animated: true, completion: nil)
 ```
 

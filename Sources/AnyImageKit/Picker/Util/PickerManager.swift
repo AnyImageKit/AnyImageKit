@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -166,32 +166,30 @@ extension PickerManager {
             workQueue.async { [weak self] in
                 guard let self = self else { return }
                 let options = _PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
-                self.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
-                    guard let self = self else { return }
+                self.requestPhoto(for: asset.phAsset, options: options, completion: { result in
                     switch result {
                     case .success(let response):
                         asset._images[.initial] = response.image
                     case .failure:
                         break
                     }
-                    self.workQueue.async { [weak self] in
-                        guard let self = self else { return }
-                        self.requestVideo(for: asset.phAsset) { result in
-                            switch result {
-                            case .success(_):
-                                asset.videoDidDownload = true
-                                self.didSyncAsset()
-                            case .failure(let error):
-                                self.lock.lock()
-                                self.failedAssets.append(asset)
-                                self.lock.unlock()
-                                _print(error)
-                                let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
-                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
-                            }
-                        }
-                    }
                 })
+                // 同步请求图片
+                self.requestVideo(for: asset.phAsset) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(_):
+                        asset.videoDidDownload = true
+                        self.didSyncAsset()
+                    case .failure(let error):
+                        self.lock.lock()
+                        self.failedAssets.append(asset)
+                        self.lock.unlock()
+                        _print(error)
+                        let message = BundleHelper.pickerLocalizedString(key: "Fetch failed, please retry")
+                        NotificationCenter.default.post(name: .didSyncAsset, object: message)
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,47 @@
 # Release Notes
 
+## 0.12.0
+
+### New Features
+
+- Picker
+  - Add the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. ([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
+  - Add the `saveEditedAsset` boolean value. Determines whether the Picker save edited assets.
+
+### Resolved
+
+- Picker
+  - Fix the issue that Picker would crash by array index out of range when `orderByDate = DESC`. ([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
+  - Fix the issue that the `Preview` button cannot be used sometimes.
+
+### BREAKING CHANGE
+
+- Picker remove `quickPick` boolean value, please use `selectionTapAction` enumeration instead.
+
+## 0.11.0
+
+### General
+
+- AnyImageKit now support Mac Catalyst again.
+
+### New Features
+
+- Picker
+  - Add a new protocol `AssetDisableCheckRule` to allow custom asset disable check rules. AnyImageKit contains a buildin implement  `VideoDurationDisableCheckRule` to support video duration check.
+- Editor
+  - Auto set `.modalPresentationStyle = .fullScreen` in `ImageEditorController`'s init function.
+- Capture
+  - Auto set `.modalPresentationStyle = .fullScreen` in `ImageCaptureController`'s init function.
+
+### Resolved
+
+- Picker
+  - Fixed a memory leak when use `NSDiffableDataSourceSnapshot` in iOS 14 and later.
+  - Fixed the progress display when selected multiple assets which need download from iCloud.
+  - The maximum zoom scale of the photo during preview is changed from fixed value to calculation based on image size.
+- Editor
+  - The maximum zoom scale of the photo during editor is changed from fixed value to calculation based on image size.
+
 ## 0.10.0
 
 ### General

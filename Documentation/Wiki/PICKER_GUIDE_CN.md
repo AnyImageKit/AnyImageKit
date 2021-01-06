@@ -4,6 +4,34 @@
 
 
 
+## 目录
+
+- [调用/回调说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%B0%83%E7%94%A8%E5%9B%9E%E8%B0%83%E8%AF%B4%E6%98%8E)
+- [配置项说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E9%85%8D%E7%BD%AE%E9%A1%B9%E8%AF%B4%E6%98%8E)
+  - [Theme](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#theme-pickertheme)
+  - [SelectLimit](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectlimit-int)
+  - [ColumnNumber](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#columnnumber-int)
+  - [AutoCalculateColumnNumber](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#autocalculatecolumnnumber-bool)
+  - [AllowUseOriginalImage](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#allowuseoriginalimage-bool)
+  - [PhotoMaxWidth](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#photomaxwidth-cgfloat)
+  - [LargePhotoMaxWidth](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#largephotomaxwidth-cgfloat)
+  - ~~[QuickPick](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#quickpick-bool)~~
+  - [AlbumOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#albumoptions-pickeralbumoption)
+  - [SelectOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectoptions-pickerselectoption)
+  - [SelectionTapAction](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectiontapaction-pickerselectiontapaction)
+  - [OrderByDate](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#orderbydate-sort)
+  - [PreselectAssets](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#preselectassets-string)
+  - [SaveEditedAsset](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#saveeditedasset-bool)
+  - [EditorOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editoroptions-pickereditoroption)
+  - [EditorPhotoOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editorphotooptions-editorphotooptionsinfo)
+  - [CaptureOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#captureoptions-captureoptionsinfo)
+  - [UseSameEditorOptionsInCapture](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#usesameeditoroptionsincapture-bool)
+- [公开方法](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E5%85%AC%E5%BC%80%E6%96%B9%E6%B3%95)
+  - [获取原始图片](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%8E%B7%E5%8F%96%E5%8E%9F%E5%A7%8B%E5%9B%BE%E7%89%87)
+  - [获取视频](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91)
+
+
+
 ## 调用/回调说明
 
 `ImagePickerController` 的使用方式与 `UIImagePickerController` 非常类似。
@@ -121,13 +149,15 @@ func imagePicker(_ picker: ImagePickerController, didFinishPicking result: Picke
 
 
 
-### QuickPick (Bool)
+### ~~QuickPick (Bool)~~
 
-`quickPick` 是否允许快速选择，默认关闭。
+~~`quickPick` 是否允许快速选择，默认关闭。~~
 
-当开始此属性时，点击图片将直接选中图片，而不会进入预览页面。
+~~当开始此属性时，点击图片将直接选中图片，而不会进入预览页面。~~
 
-当开启此属性且 `selectLimit` 为 1 时，点击图片将直接退出 picker 并触发回调。
+~~当开启此属性且 `selectLimit` 为 1 时，点击图片将直接退出 picker 并触发回调。~~
+
+请使用 `selectionTapAction` 并设置为 `quickPick` 来代替该属性。
 
 
 
@@ -173,6 +203,29 @@ struct PickerSelectOption: OptionSet {
 
 
 
+### SelectionTapAction (PickerSelectionTapAction)
+
+`PickerSelectionTapAction` 是在资源列表点击资源后的动作，默认为 `.preview`。
+
+```swift
+enum PickerSelectionTapAction: Equatable {
+    /// Preview 预览
+    case preview
+    /// Quick pick 快速选择
+    case quickPick
+    /// Open editor 打开编辑器
+    case openEditor
+}
+```
+
+当设置为 `preview` 时，点击会打开预览控制器。
+
+当设置为 `quickPick` 时，点击会直接选中该资源。
+
+当设置为 `openEditor` 时，点击会直接打开编辑器。
+
+
+
 ### OrderByDate (Sort)
 
 `orderByDate` 是排序的类型，默认为 `.asc`。
@@ -199,6 +252,12 @@ enum Sort: Equatable {
 接收 `Asset.identifier` 字符串，设置之后打开 `Picker` 会选中该资源。
 
 具体使用方式可以在 `Example - PreselectAsset` 控制器中查看。
+
+
+
+### SaveEditedAsset (Bool)
+
+`saveEditedAsset` 是否保存编辑后的资源，默认为 `true`。
 
 
 

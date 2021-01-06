@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/12/3.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -28,6 +28,7 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     public required init() {
         super.init(nibName: nil, bundle: nil)
+        self.modalPresentationStyle = .fullScreen
     }
     
     /// Init Capture
@@ -40,6 +41,7 @@ open class ImageCaptureController: AnyImageNavigationController {
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.modalPresentationStyle = .fullScreen
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {

@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/11/14.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -41,7 +41,6 @@ extension PhotoPreviewController {
             videoOptions.enableDebugLog = manager.options.enableDebugLog
             let image = data.asset._images[.initial] ?? data.thumbnail
             let controller = ImageEditorController(video: data.asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
-            controller.modalPresentationStyle = .fullScreen
             present(controller, animated: false, completion: nil)
         }
     }
@@ -79,7 +78,6 @@ extension PhotoPreviewController {
         options.enableDebugLog = manager.options.enableDebugLog
         options.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
         let controller = ImageEditorController(photo: image, options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: false, completion: nil)
     }
 }

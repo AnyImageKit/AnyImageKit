@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
-//  Copyright © 2019 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 //
 
 import Photos
@@ -16,13 +16,5 @@ extension PHAsset {
         } else {
             return false
         }
-    }
-    
-    var videoDuration: String {
-        guard mediaType == .video else { return "" }
-        let time = Int(duration)
-        let min = time / 60
-        let sec = time % 60
-        return String(format: "%02ld:%02ld", min, sec)
     }
 }

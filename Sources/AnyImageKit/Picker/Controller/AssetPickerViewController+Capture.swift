@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2020/1/3.
-//  Copyright © 2020 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
 //
 
 import UIKit
@@ -20,7 +20,6 @@ extension AssetPickerViewController {
         var options = manager.options.captureOptions
         options.enableDebugLog = manager.options.enableDebugLog
         let controller = ImageCaptureController(options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
         #else
         let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
@@ -38,9 +37,9 @@ extension AssetPickerViewController {
         if !options.captureOptions.mediaOptions.isEmpty {
             switch sortType {
             case .asc:
-                album.addAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), atLast: true)
+                album.addAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), atLast: true)
             case .desc:
-                album.insertAsset(Asset(idx: -1, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
+                album.insertAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
             }
         }
     }
@@ -75,6 +74,7 @@ extension AssetPickerViewController {
         if addSuccess {
             /// 拍照结束后，如果 limit=1 直接返回
             if manager.options.selectLimit == 1 {
+                stopReloadAlbum = true
                 delegate?.assetPickerDidFinishPicking(self)
             }
         }
