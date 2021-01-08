@@ -51,7 +51,8 @@ final class EditorEditOptionsView: UIView {
         }
         buttons.forEach {
             $0.snp.makeConstraints { maker in
-                maker.width.height.equalTo(25)
+                maker.width.equalTo(25)
+                maker.height.equalTo(stackView.snp.height)
             }
         }
     }
