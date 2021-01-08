@@ -23,8 +23,8 @@ struct TextMask {
 extension TextMask: GraphicsDrawing {
     
     func draw(in context: CGContext, size: CGSize) {
+        guard let cgImage = data.image.cgImage else { return }
         guard
-            let cgImage = data.image.cgImage,
             let cglayer = CGLayer(context, size: size, auxiliaryInfo: nil),
             let layerContext = cglayer.context else {
             assert(false, "Failed to create CGLayer")

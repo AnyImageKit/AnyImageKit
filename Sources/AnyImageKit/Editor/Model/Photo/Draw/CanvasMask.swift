@@ -23,8 +23,8 @@ struct CanvasMask {
 extension CanvasMask: GraphicsDrawing {
     
     func draw(in context: CGContext, size: CGSize) {
+        guard !paths.isEmpty else { return }
         guard
-            !paths.isEmpty,
             let cglayer = CGLayer(context, size: size, auxiliaryInfo: nil),
             let layerContext = cglayer.context else {
             assert(false, "Failed to create CGLayer")
