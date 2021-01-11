@@ -42,8 +42,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name Install CocoaPods
-      run: sudo gem install cocoapods
     - name: Pod Install
       run: pod install
     - name: Archive for Simulator slice
@@ -63,8 +61,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name Install CocoaPods
-      run: sudo gem install cocoapods
     - name: Pod Install
       run: pod install
     - name: Archive for Mac Catalyst slice
@@ -84,7 +80,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install CocoaPods
-      run: sudo gem install cocoapods
     - name: Library Lint Check
       run: pod lib lint
