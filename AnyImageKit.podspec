@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
         core.source_files = 'Sources/AnyImageKit/Core/**/*.swift'
         core.resources = 'Sources/AnyImageKit/Resources/Core/**/*'
         core.dependency 'SnapKit'
+        core.dependency 'Kingfisher'
     end
     
     s.subspec 'Picker' do |picker|
