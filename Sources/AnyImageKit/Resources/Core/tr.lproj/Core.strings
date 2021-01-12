@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  AnyImageKit
+
+  Created by 刘栋 on 2019/12/24.
+  Copyright © 2019 AnyImageProject.org. All rights reserved.
+*/
+
+"OK" = "Tamam";
+"Back" = "Geri";
+"Done" = "Tamam";
+"Edit" = "Düzenle";
+"Alert" = "Uyarı";
+"Cancel" = "Vazgeç";
+"Preview" = "Önizleme";
+"Photos" = "Fotoğraflar";
+"Camera" = "Kamera";
+"Microphone" = "Mikrofon";
+"Settings" = "Ayarlar";
+"%@ is disabled" = "%@ devredışı";
+"Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "%@, albümüne erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Fotoğraflar\"";
+"Allow %@ to access your camera in \"Settings -> Privacy -> Camera\"" = "%@, kamerana erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Kamera\"";
+"Allow %@ to access your microphone in \"Settings -> Privacy -> Microphone\"" = "%@, mikrofonuna erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Mikrofon\"";
+"Go to Settings" = "Ayarlara git";

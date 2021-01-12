@@ -1,0 +1,13 @@
+/* 
+  Capture.strings
+  AnyImageKit
+
+  Created by 刘栋 on 2019/12/24.
+  Copyright © 2019 AnyImageProject.org. All rights reserved.
+*/
+
+"Switch to front camera" = "Ön kameraya geç";
+"Switch to back camera" = "Arka kameraya geç";
+"Tap to take photo" = "Fotoğraf için dokunun";
+"Hold for video" = "Video için basılı tutun";
+"Hold for video, tap for photo" = "Fotoğraf için dokunun, video için basılı tutun";
