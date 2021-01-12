@@ -36,12 +36,12 @@ extension PhotoEditingStack {
     
     func save() {
         if identifier.isEmpty { return }
-        cache.write(edit, identifier: identifier)
+        cache.store(edit, forKey: identifier)
     }
     
     func load() {
         if identifier.isEmpty { return }
-        if let model = cache.read(identifier: identifier, cls: Edit.self) {
+        if let model = cache.retrieveModel(forKey: identifier, cls: Edit.self) {
             edit = model
             didLoadCache = true
         }

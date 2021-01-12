@@ -19,10 +19,10 @@ extension CodableCacheTool {
     /// - Parameters:
     ///   - model: 模型
     ///   - identifier: 标识符
-    func write<T: Codable>(_ model: T, identifier: String) {
+    func store<T: Codable>(_ model: T, forKey key: String) {
         do {
             let data = try JSONEncoder().encode(model)
-            super.writeToFile(data, identifier: identifier)
+            super.storeDataToDisk(data, forKey: key)
         } catch {
             _print(error.localizedDescription)
         }
@@ -33,12 +33,12 @@ extension CodableCacheTool {
     ///   - identifier: 标识符
     ///   - cls: 类型
     ///   - deleteDiskStorage: 读取缓存后删除磁盘缓存
-    func read<T: Codable>(identifier: String, cls: T.Type, deleteDiskStorage: Bool = false) -> T? {
-        guard let data = super.readFromFile(identifier) else { return nil }
+    func retrieveModel<T: Codable>(forKey key: String, cls: T.Type, deleteDiskStorage: Bool = false) -> T? {
+        guard let data = super.retrieveDataInDisk(forKey: key) else { return nil }
         do {
             let model = try JSONDecoder().decode(cls, from: data)
             if deleteDiskStorage {
-                deleteDiskFile(identifier: identifier)
+                removeData(forKey: key)
             }
             return model
         } catch {

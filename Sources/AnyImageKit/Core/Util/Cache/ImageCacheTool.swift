@@ -7,21 +7,30 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImageCacheTool: CacheTool {
     
-    let memory = NSCache<NSString, UIImage>()
     private(set) var useDiskCache: Bool = false
+    
+    private lazy var cache: ImageCache = {
+        do {
+            return try ImageCache(name: "AnyImageKitImageCache", cacheDirectoryURL: URL(fileURLWithPath: path))
+        } catch {
+            return ImageCache.default
+        }
+    }()
     
     override init(module: CacheModule, path: String = "") {
         super.init(module: module, path: path)
-        self.memory.countLimit = 5
+        cache.memoryStorage.config.countLimit = 5
+        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 100 // Disk cache 100MB
     }
     
     convenience init(module: CacheModule, path: String = "", memoryCountLimit: Int = 5, useDiskCache: Bool = false) {
         self.init(module: module, path: path)
         self.useDiskCache = useDiskCache
-        self.memory.countLimit = memoryCountLimit
+        cache.memoryStorage.config.countLimit = memoryCountLimit
     }
 }
 
@@ -29,38 +38,31 @@ extension ImageCacheTool {
     
     /// 删除所有缓存
     func clearAll() {
-        memory.removeAllObjects()
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
     }
     
     /// 写入缓存
     /// - Parameters:
     ///   - image: 图片
-    ///   - identifier: 标识符
-    func write(_ image: UIImage, identifier: String) {
-        memory.setObject(image, forKey: identifier as NSString)
+    ///   - key: 标识符
+    func store(_ image: UIImage, forKey key: String) {
+        cache.store(image, forKey: key, toDisk: false)
         if useDiskCache {
-            writeImageToFile(image, identifier: identifier)
+            storeImageToDisk(image, forKey: key)
         }
     }
     
     /// 读取缓存
     /// - Parameters:
-    ///   - identifier: 标识符
-    ///   - deleteMemoryStorage: 读取缓存后删除内存缓存
-    ///   - deleteDiskStorage: 读取缓存后删除磁盘缓存
-    func read(identifier: String, deleteMemoryStorage: Bool, deleteDiskStorage: Bool = false) -> UIImage? {
-        var image = memory.object(forKey: identifier as NSString)
-        if image == nil {
-            image = readImageFromFile(identifier)
+    ///   - key: 标识符
+    func retrieveImage(forKey key: String) -> UIImage? {
+        if let image = cache.retrieveImageInMemoryCache(forKey: key) {
+            return image
+        } else if useDiskCache {
+            return retrieveImageInDisk(forKey: key)
         }
-        
-        if deleteDiskStorage {
-            deleteDiskFile(identifier: identifier)
-        }
-        if deleteMemoryStorage {
-            memory.removeObject(forKey: identifier as NSString)
-        }
-        return image
+        return nil
     }
 }
 
@@ -70,16 +72,27 @@ extension ImageCacheTool {
     /// 将图片写入磁盘
     /// - Parameters:
     ///   - image: 图片
-    ///   - identifier: 标识符
-    private func writeImageToFile(_ image: UIImage, identifier: String) {
+    ///   - key: 标识符
+    private func storeImageToDisk(_ image: UIImage, forKey key: String) {
         guard let data = image.pngData() else { return }
-        super.writeToFile(data, identifier: identifier)
+        cache.storeToDisk(data, forKey: key)
     }
     
     /// 从磁盘读取图片
-    /// - Parameter identifier: 标识符
-    private func readImageFromFile(_ identifier: String) -> UIImage? {
-        guard let data = super.readFromFile(identifier) else { return nil }
-        return UIImage(data: data)
+    /// - Parameter key: 标识符
+    private func retrieveImageInDisk(forKey key: String) -> UIImage? {
+        var image: UIImage? = nil
+        let semaphore = DispatchSemaphore(value: 0)
+        cache.retrieveImage(forKey: key) { (result) in
+            switch result {
+            case .success(let res):
+                image = res.image
+            case .failure(let error):
+                _print(error)
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return image
     }
 }

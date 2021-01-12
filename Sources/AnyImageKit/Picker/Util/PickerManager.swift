@@ -137,7 +137,7 @@ extension PickerManager {
         switch asset.mediaType {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载
-            if let image = cache.read(identifier: asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
+            if let image = cache.retrieveImage(forKey: asset.phAsset.localIdentifier) {
                 asset._images[.initial] = image
                 self.didSyncAsset()
             } else {
