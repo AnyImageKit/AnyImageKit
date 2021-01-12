@@ -19,8 +19,7 @@ extension CodableCacheTool {
     /// - Parameters:
     ///   - model: 模型
     ///   - identifier: 标识符
-    func write<T: Codable>(_ model: T, identifier: String = createIdentifier()) {
-        diskCacheList.append(identifier)
+    func write<T: Codable>(_ model: T, identifier: String) {
         do {
             let data = try JSONEncoder().encode(model)
             super.writeToFile(data, identifier: identifier)

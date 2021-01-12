@@ -21,7 +21,7 @@ final class PhotoEditingStack {
     var cropImageViewFrame: CGRect = .zero
     
     private let identifier: String
-    private let cache = CodableCacheTool(config: CacheConfig(module: .editor(.default), useDiskCache: true, autoRemoveDiskCache: false))
+    private let cache = CodableCacheTool(module: .editor(.default))
     private(set) var didLoadCache = false
     private var drawer: [GraphicsDrawing] = []
     

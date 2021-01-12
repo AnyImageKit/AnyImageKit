@@ -18,12 +18,13 @@ extension ImageEditorCache {
     /// 删除磁盘缓存
     /// - Parameter id: 缓存标识符
     public static func clearDiskCache(id: String) {
-        let cache = CodableCacheTool(config: CacheConfig(module: .editor(.default)))
+        let cache = CodableCacheTool(module: .editor(.default))
         guard let model = cache.read(identifier: id, cls: PhotoEditingStack.Edit.self) else { return }
         
         var pathList = model.penData.map { $0.drawnPath.uuid }
         pathList.append(contentsOf: model.mosaicData.flatMap { $0.drawnPaths.map { $0.uuid } })
-        let _ = CacheTool(config: CacheConfig(module: .editor(.bezierPath), useDiskCache: true, autoRemoveDiskCache: true), diskCacheList: pathList)
+        pathList = pathList.map { CacheModule.editor(.bezierPath).path + $0 }
+        CacheTool.deleteDiskFiles(pathList: pathList)
         
         do {
             try FileManager.default.removeItem(atPath: "\(cache.path)\(id)")

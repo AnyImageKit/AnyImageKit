@@ -11,31 +11,34 @@ import UIKit
 final class ImageCacheTool: CacheTool {
     
     let memory = NSCache<NSString, UIImage>()
+    private(set) var useDiskCache: Bool = false
     
-    override init(config: CacheConfig, diskCacheList: [String] = []) {
-        super.init(config: config, diskCacheList: diskCacheList)
-        self.memory.countLimit = config.memoryCountLimit
+    override init(module: CacheModule, path: String = "") {
+        super.init(module: module, path: path)
+        self.memory.countLimit = 5
+    }
+    
+    convenience init(module: CacheModule, path: String = "", memoryCountLimit: Int = 5, useDiskCache: Bool = false) {
+        self.init(module: module, path: path)
+        self.useDiskCache = useDiskCache
+        self.memory.countLimit = memoryCountLimit
     }
 }
 
 extension ImageCacheTool {
     
     /// 删除所有缓存
-    func clearAll(memoryCache: Bool = true, diskCache: Bool = false) {
-        super.clearAll(diskCache: diskCache)
-        if memoryCache {
-            memory.removeAllObjects()
-        }
+    func clearAll() {
+        memory.removeAllObjects()
     }
     
     /// 写入缓存
     /// - Parameters:
     ///   - image: 图片
     ///   - identifier: 标识符
-    func write(_ image: UIImage, identifier: String = createIdentifier()) {
-        diskCacheList.append(identifier)
+    func write(_ image: UIImage, identifier: String) {
         memory.setObject(image, forKey: identifier as NSString)
-        if config.useDiskCache {
+        if useDiskCache {
             writeImageToFile(image, identifier: identifier)
         }
     }
@@ -46,7 +49,11 @@ extension ImageCacheTool {
     ///   - deleteMemoryStorage: 读取缓存后删除内存缓存
     ///   - deleteDiskStorage: 读取缓存后删除磁盘缓存
     func read(identifier: String, deleteMemoryStorage: Bool, deleteDiskStorage: Bool = false) -> UIImage? {
-        let image = readImageFromFile(identifier)
+        var image = memory.object(forKey: identifier as NSString)
+        if image == nil {
+            image = readImageFromFile(identifier)
+        }
+        
         if deleteDiskStorage {
             deleteDiskFile(identifier: identifier)
         }

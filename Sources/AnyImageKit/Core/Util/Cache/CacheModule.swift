@@ -9,8 +9,30 @@
 import UIKit
 
 enum CacheModule {
+    
     case picker(CacheModulePicker)
     case editor(CacheModuleEditor)
+}
+
+enum CacheModulePicker: String {
+    
+    case `default` = "Default"
+}
+
+enum CacheModuleEditor: String {
+    // DEPRECATED: 弃用以下3个module，v1.0时删除
+    @available(*, deprecated, message: "Will be removed in version 1.0")
+    case pen = "Pen"
+    @available(*, deprecated, message: "Will be removed in version 1.0")
+    case mosaic = "Mosaic"
+    @available(*, deprecated, message: "Will be removed in version 1.0")
+    case history = "History"
+    
+    case `default` = "Default"
+    case bezierPath = "BezierPath"
+}
+
+extension CacheModule {
     
     var title: String {
         switch self {
@@ -34,20 +56,6 @@ enum CacheModule {
         let lib = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? ""
         return "\(lib)/AnyImageKitCache/\(title)/\(subTitle)/"
     }
-}
-
-enum CacheModulePicker: String {
-    case `default` = "Default"
-}
-
-enum CacheModuleEditor: String {
-    // DEPRECATED: 弃用以下3个module，v1.0时删除
-    case pen = "Pen"
-    case mosaic = "Mosaic"
-    case history = "History"
-    
-    case `default` = "Default"
-    case bezierPath = "BezierPath"
 }
 
 extension CacheModuleEditor {

@@ -10,40 +10,20 @@ import UIKit
 
 class CacheTool {
     
-    var diskCacheList: [String] = []
-    let config: CacheConfig
-    let workQueue: DispatchQueue
+    let module: CacheModule
     let path: String
+    let workQueue: DispatchQueue
     
-    init(config: CacheConfig, diskCacheList: [String] = []) {
-        self.config = config
-        self.diskCacheList = diskCacheList
-        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(config.module.title).\(config.module.subTitle)")
-        
-        path = config.module.path
+    init(module: CacheModule, path: String = "") {
+        self.module = module
+        self.path = path.isEmpty ? module.path : path
+        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
         FileHelper.createDirectory(at: path)
-    }
-    
-    deinit {
-        if config.autoRemoveDiskCache {
-            diskCacheList.forEach { deleteDiskFile(identifier: $0 ) }
-        }
     }
 }
 
+// MARK: - Function
 extension CacheTool {
-    
-    /// 是否有磁盘缓存
-    func hasDiskCache() -> Bool {
-        return !diskCacheList.isEmpty
-    }
-    
-    /// 删除所有缓存
-    func clearAll(diskCache: Bool = false) {
-        if diskCache {
-            diskCacheList.forEach { deleteDiskFile(identifier: $0 ) }
-        }
-    }
     
     /// 删除磁盘文件
     /// - Parameter identifier: 标识符
@@ -51,19 +31,9 @@ extension CacheTool {
         let url = URL(fileURLWithPath: self.path + identifier)
         do {
             try FileManager.default.removeItem(at: url)
-            if let idx = diskCacheList.firstIndex(of: identifier) {
-                diskCacheList.remove(at: idx)
-            }
         } catch {
             _print(error.localizedDescription)
         }
-    }
-    
-    /// 创建缓存标识符
-    static func createIdentifier() -> String {
-        let timestamp = String(format: "%.0lf", Date().timeIntervalSince1970*100)
-        let random = (arc4random() % 8999) + 1000
-        return "\(timestamp)_\(random)"
     }
     
     /// 写入磁盘
@@ -71,7 +41,6 @@ extension CacheTool {
     ///   - data: 数据
     ///   - identifier: 标识符
     func writeToFile(_ data: Data, identifier: String) {
-        if !config.useDiskCache { return }
         workQueue.async { [weak self] in
             guard let self = self else { return }
             let url = URL(fileURLWithPath: self.path + identifier)
@@ -86,7 +55,6 @@ extension CacheTool {
     /// 从磁盘读取
     /// - Parameter identifier: 标识符
     func readFromFile(_ identifier: String) -> Data? {
-        if !config.useDiskCache { return nil }
         let url = URL(fileURLWithPath: path + identifier)
         if !FileManager.default.fileExists(atPath: url.path) { return nil }
         do {
@@ -96,5 +64,21 @@ extension CacheTool {
             _print(error.localizedDescription)
         }
         return nil
+    }
+}
+
+// MARK: - Static function
+extension CacheTool {
+    
+    static func deleteDiskFiles(pathList: [String]) {
+        let manager = FileManager.default
+        for path in pathList {
+            let url = URL(fileURLWithPath: path)
+            do {
+                try manager.removeItem(at: url)
+            } catch {
+                _print(error.localizedDescription)
+            }
+        }
     }
 }
