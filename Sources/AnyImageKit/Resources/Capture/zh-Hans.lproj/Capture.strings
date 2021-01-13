@@ -8,6 +8,6 @@
 
 "Switch to front camera" = "切换至前置摄像头";
 "Switch to back camera" = "切换至后置摄像头";
-"Tap to take photo" = "轻触拍照";
-"Hode to record video" = "按住摄像";
-"Tap to take photo and hode to record video" = "轻触拍照 按住摄像";
+"Tap for photo" = "轻触拍照";
+"Hold for video" = "按住摄像";
+"Hold for video, tap for photo" = "轻触拍照 按住摄像";
