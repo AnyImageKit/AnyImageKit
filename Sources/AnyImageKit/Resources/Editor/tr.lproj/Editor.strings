@@ -1,0 +1,20 @@
+/* 
+  Editor.strings
+  AnyImageKit
+
+  Created by 蒋惠 on 2019/11/12.
+  Copyright © 2019 AnyImageProject.org. All rights reserved.
+*/
+
+"Undo" = "Geri Al";
+"Play" = "Oynat";
+"Pause" = "Duraklat";
+"Reset" = "Sıfırla";
+"Downloading" = "İndiriliyor";
+
+"Pen" = "Kalem";
+"Crop" = "Kırp";
+"Mosaic" = "Mozaik";
+"Input text" = "Metin ekle";
+
+"Free" = "Serbest";
