@@ -48,7 +48,7 @@
 - [x] Internationalization support
     - [x] English (en)
     - [x] Chinese, Simplified (zh-Hans)
-    - [x] Turkish (tk)
+    - [x] Turkish (tr)
     - [ ] and more... (Pull requests welcome)
 
 ## Requirements
