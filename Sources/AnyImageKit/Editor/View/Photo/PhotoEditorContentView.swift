@@ -144,14 +144,6 @@ final class PhotoEditorContentView: UIView {
         scrollView.contentSize = imageView.bounds.size
     }
     
-    internal func animate(withDuration duration: TimeInterval, animations: @escaping () -> Void) {
-        if duration <= 0 {
-            animations()
-        } else {
-            UIView.animate(withDuration: duration, animations: animations)
-        }
-    }
-    
     internal func updateView(with edit: PhotoEditingStack.Edit) {
         guard edit.isEdited else { return }
         updateCanvasFrame()

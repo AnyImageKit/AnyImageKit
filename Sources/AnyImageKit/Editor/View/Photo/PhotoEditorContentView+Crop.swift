@@ -243,7 +243,7 @@ extension PhotoEditorContentView {
         scrollView.minimumZoomScale = didCrop ? scale : 1.0
         cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)
         cropContext.contentSize = contentSize
-        animate(withDuration: fromCache ? 0 : 0.25) {
+        UIView.animate(withDuration: fromCache ? 0 : 0.25) {
             self.scrollView.frame = self.bounds
             self.scrollView.contentInset = .zero
             
@@ -320,7 +320,7 @@ extension PhotoEditorContentView {
     /// 显示/隐藏白色裁剪框
     private func setCropHidden(_ hidden: Bool, animated: Bool) {
         gridView.setHidden(hidden, animated: animated)
-        animate(withDuration: animated ? 0.25 : 0) {
+        UIView.animate(withDuration: animated ? 0.25 : 0) {
             self.topLeftCorner.alpha = hidden ? 0 : 1
             self.topRightCorner.alpha = hidden ? 0 : 1
             self.bottomLeftCorner.alpha = hidden ? 0 : 1

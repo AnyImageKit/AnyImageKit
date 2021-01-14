@@ -202,12 +202,8 @@ extension VideoPreviewCell {
     
     /// 设置播放按钮的展示状态
     private func setPlayButton(hidden: Bool, animated: Bool = false) {
-        if animated {
-            UIView.animate(withDuration: 0.25) {
-                self.playImageView.alpha = hidden ? 0 : 1
-            }
-        } else {
-            playImageView.alpha = hidden ? 0 : 1
+        UIView.animate(withDuration: animated ? 0.25 : 0) {
+            self.playImageView.alpha = hidden ? 0 : 1
         }
     }
 }
