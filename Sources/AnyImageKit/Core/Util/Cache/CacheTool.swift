@@ -18,7 +18,7 @@ class CacheTool {
         self.module = module
         self.path = path.isEmpty ? module.path : path
         self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
-        FileHelper.createDirectory(at: path)
+        FileHelper.createDirectory(at: self.path)
     }
 }
 
