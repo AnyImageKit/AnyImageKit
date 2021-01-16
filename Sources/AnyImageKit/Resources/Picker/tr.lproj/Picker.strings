@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  AnyImageKit
+
+  Created by Hamza Öztürk on 2021/1/13.
+  Copyright © 2021 AnyImageProject.org. All rights reserved.
+*/
+
+"Photo" = "Fotoğraf";
+"Video" = "Video";
+"Live photo" = "CANLI";
+"Original image" = "Orijinal resim";
+"Select photo" = "Fotoğraf seç";
+"Unselect photo" = "Seçimi kaldır";
+"Take photo" = "Fotoğraf çek";
+"SELECT_A_MAXIMUM_OF_PHOTOS" = "Maximum %zd fotoğraf seçin";
+"SELECT_A_MAXIMUM_OF_VIDEOS" = "Maksimum %zd video seçin";
+"SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS" = "Maksimum %zd fotoğraf ya da video seçin";
+"Downloading from iCloud" = "iCloud'dan İndiriliyor";
+"Fetch failed, please retry" = "İndirme başarısız, tekrar deneyin";
+"Switch album, current album is %@" = "Albümü değiştir. Mevcut albüm %@";
+"Can't fetch all photos\nClick to select more photos" = "Tüm fotoğraflar getirilemiyor\nDaha fazla fotoğraf seçmek için tıklayın";
+"DURATION_OF_SELECTED_VIDEO_RANGE" = "Seçilen videonun süresi %d-%d saniye arasında olmalıdır.";

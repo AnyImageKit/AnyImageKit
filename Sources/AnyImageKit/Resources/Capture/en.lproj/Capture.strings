@@ -8,6 +8,6 @@
 
 "Switch to front camera" = "Switch to front camera";
 "Switch to back camera" = "Switch to back camera";
-"Tap to take photo" = "Tap to take photo";
-"Hode to record video" = "Hode to record video";
-"Tap to take photo and hode to record video" = "Tap to take photo and hode to record video";
+"Tap to take photo" = "Tap for photo";
+"Hold for video" = "Hold for video";
+"Hold for video, tap for photo" = "Hold for video, tap for photo";

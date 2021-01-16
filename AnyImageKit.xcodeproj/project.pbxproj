@@ -259,6 +259,10 @@
 		713C206525AD32D800BB0F66 /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
 		713C206625AD32D800BB0F66 /* PhotoEditorCropContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorCropContext.swift; sourceTree = "<group>"; };
 		713C207725AD330600BB0F66 /* GraphicsDrawing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicsDrawing.swift; sourceTree = "<group>"; };
+		67A8466225AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Core.strings; sourceTree = "<group>"; };
+		67A8466325AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Picker.strings; sourceTree = "<group>"; };
+		67A8466425AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Editor.strings; sourceTree = "<group>"; };
+		67A8466525AE30A70066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Capture.strings; sourceTree = "<group>"; };
 		713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCropOptionCell.swift; sourceTree = "<group>"; };
 		7142FF7525591DB0003FF44D /* DryDrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DryDrawingView.swift; sourceTree = "<group>"; };
 		715D6B36256E449B004D9BF1 /* Mosaic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
@@ -1377,6 +1381,7 @@
 				en,
 				"zh-Hans",
 				Base,
+				tr,
 			);
 			mainGroup = A099CC56232F3BF70023CC3D;
 			packageReferences = (
@@ -1739,6 +1744,7 @@
 			children = (
 				A04B044823B1A54F00DA4D47 /* en */,
 				A04B044A23B1A55000DA4D47 /* zh-Hans */,
+				67A8466525AE30A70066BC51 /* tr */,
 			);
 			name = Capture.strings;
 			sourceTree = "<group>";
@@ -1748,6 +1754,7 @@
 			children = (
 				A04B045123B1AB7500DA4D47 /* en */,
 				A04B045223B1AB8D00DA4D47 /* zh-Hans */,
+				67A8466225AE30A60066BC51 /* tr */,
 			);
 			name = Core.strings;
 			sourceTree = "<group>";
@@ -1757,6 +1764,7 @@
 			children = (
 				A52E1D81237AA5A80002174A /* en */,
 				A52E1D83237AA5A90002174A /* zh-Hans */,
+				67A8466425AE30A60066BC51 /* tr */,
 			);
 			name = Editor.strings;
 			sourceTree = "<group>";
@@ -1783,6 +1791,7 @@
 			children = (
 				A5A27BC7232F874500D966B8 /* en */,
 				A0DBD4F12334A20700121FC0 /* zh-Hans */,
+				67A8466325AE30A60066BC51 /* tr */,
 			);
 			name = Picker.strings;
 			sourceTree = "<group>";
