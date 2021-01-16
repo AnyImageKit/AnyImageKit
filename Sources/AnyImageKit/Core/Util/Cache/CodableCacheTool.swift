@@ -33,10 +33,10 @@ extension CodableCacheTool {
     ///   - identifier: 标识符
     ///   - cls: 类型
     ///   - deleteDiskStorage: 读取缓存后删除磁盘缓存
-    func retrieveModel<T: Codable>(forKey key: String, cls: T.Type, deleteDiskStorage: Bool = false) -> T? {
+    func retrieveModel<T: Codable>(forKey key: String, deleteDiskStorage: Bool = false) -> T? {
         guard let data = super.retrieveDataInDisk(forKey: key) else { return nil }
         do {
-            let model = try JSONDecoder().decode(cls, from: data)
+            let model = try JSONDecoder().decode(T.self, from: data)
             if deleteDiskStorage {
                 removeData(forKey: key)
             }

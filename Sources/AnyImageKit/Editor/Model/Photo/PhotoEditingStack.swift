@@ -41,7 +41,7 @@ extension PhotoEditingStack {
     
     func load() {
         if identifier.isEmpty { return }
-        if let model = cache.retrieveModel(forKey: identifier, cls: Edit.self) {
+        if let model: Edit = cache.retrieveModel(forKey: identifier) {
             edit = model
             didLoadCache = true
         }

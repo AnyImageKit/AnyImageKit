@@ -26,7 +26,7 @@ extension ImageEditorCache {
     /// - Parameter identifier: 缓存标识符
     public static func removeCache(identifier: String) {
         let cache = CodableCacheTool(module: .editor(.default))
-        guard let model = cache.retrieveModel(forKey: identifier, cls: PhotoEditingStack.Edit.self) else { return }
+        guard let model: PhotoEditingStack.Edit = cache.retrieveModel(forKey: identifier) else { return }
         
         var pathList = model.penData.map { $0.drawnPath.uuid }
         pathList.append(contentsOf: model.mosaicData.flatMap { $0.drawnPaths.map { $0.uuid } })
