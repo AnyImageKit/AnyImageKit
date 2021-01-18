@@ -9,28 +9,27 @@
 import UIKit
 import Kingfisher
 
-final class ImageCacheTool: CacheTool {
+struct ImageCacheTool: Cacheable {
     
-    private(set) var useDiskCache: Bool = false
+    let module: CacheModule
+    let path: String
+    let workQueue: DispatchQueue
+    let useDiskCache: Bool
+    let cache: ImageCache
     
-    private lazy var cache: ImageCache = {
-        do {
-            return try ImageCache(name: "AnyImageKitImageCache", cacheDirectoryURL: URL(fileURLWithPath: path))
-        } catch {
-            return ImageCache.default
-        }
-    }()
-    
-    override init(module: CacheModule, path: String = "") {
-        super.init(module: module, path: path)
-        cache.memoryStorage.config.countLimit = 5
-        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 100 // Disk cache 100MB
-    }
-    
-    convenience init(module: CacheModule, path: String = "", memoryCountLimit: Int = 5, useDiskCache: Bool = false) {
-        self.init(module: module, path: path)
+    init(module: CacheModule, path: String = "", memoryCountLimit: Int = 5, useDiskCache: Bool = false) {
+        self.module = module
+        self.path = path.isEmpty ? module.path : path
+        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
         self.useDiskCache = useDiskCache
+        do {
+            self.cache = try ImageCache(name: "AnyImageKitImageCache", cacheDirectoryURL: URL(fileURLWithPath: path))
+        } catch {
+            self.cache = ImageCache.default
+        }
+        FileHelper.createDirectory(at: self.path)
         cache.memoryStorage.config.countLimit = memoryCountLimit
+        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 100 // Disk cache 100MB
     }
 }
 

@@ -8,9 +8,18 @@
 
 import UIKit
 
-final class CodableCacheTool: CacheTool {
+struct CodableCacheTool: Cacheable {
     
-    // None memory cache
+    let module: CacheModule
+    let path: String
+    let workQueue: DispatchQueue
+    
+    init(module: CacheModule, path: String = "") {
+        self.module = module
+        self.path = path.isEmpty ? module.path : path
+        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
+        FileHelper.createDirectory(at: self.path)
+    }
 }
 
 extension CodableCacheTool {
@@ -22,7 +31,7 @@ extension CodableCacheTool {
     func store<T: Codable>(_ model: T, forKey key: String) {
         do {
             let data = try JSONEncoder().encode(model)
-            super.storeDataToDisk(data, forKey: key)
+            storeDataToDisk(data, forKey: key)
         } catch {
             _print(error.localizedDescription)
         }
@@ -34,7 +43,7 @@ extension CodableCacheTool {
     ///   - cls: 类型
     ///   - deleteDiskStorage: 读取缓存后删除磁盘缓存
     func retrieveModel<T: Codable>(forKey key: String, deleteDiskStorage: Bool = false) -> T? {
-        guard let data = super.retrieveDataInDisk(forKey: key) else { return nil }
+        guard let data = retrieveDataInDisk(forKey: key) else { return nil }
         do {
             let model = try JSONDecoder().decode(T.self, from: data)
             if deleteDiskStorage {

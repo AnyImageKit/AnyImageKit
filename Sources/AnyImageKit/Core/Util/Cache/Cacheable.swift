@@ -1,5 +1,5 @@
 //
-//  CacheTool.swift
+//  Cacheable.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/11/6.
@@ -8,21 +8,14 @@
 
 import UIKit
 
-class CacheTool {
+protocol Cacheable {
     
-    let module: CacheModule
-    let path: String
-    let workQueue: DispatchQueue
-    
-    init(module: CacheModule, path: String = "") {
-        self.module = module
-        self.path = path.isEmpty ? module.path : path
-        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
-        FileHelper.createDirectory(at: self.path)
-    }
+    var module: CacheModule { get }
+    var path: String { get }
+    var workQueue: DispatchQueue { get }
 }
 
-extension CacheTool {
+extension Cacheable {
     
     /// 删除磁盘数据
     /// - Parameter key: 标识符
@@ -40,9 +33,8 @@ extension CacheTool {
     ///   - data: 数据
     ///   - key: 标识符
     func storeDataToDisk(_ data: Data, forKey key: String) {
-        workQueue.async { [weak self] in
-            guard let self = self else { return }
-            let url = URL(fileURLWithPath: self.path + key)
+        workQueue.async {
+            let url = URL(fileURLWithPath: path + key)
             do {
                 try data.write(to: url)
             } catch {
