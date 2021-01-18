@@ -185,7 +185,6 @@ extension CaptureViewController: CaptureButtonDelegate {
     func captureButtonDidTapped(_ button: CaptureButton) {
         guard !capture.isSwitchingCamera else { return }
         impactFeedback()
-        button.startProcessing()
         capture.capturePhoto()
     }
     
