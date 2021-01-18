@@ -20,14 +20,7 @@ enum CacheModulePicker: String {
 }
 
 enum CacheModuleEditor: String {
-    // DEPRECATED: 弃用以下3个module，v1.0时删除
-    @available(*, deprecated, message: "Will be removed in version 1.0")
-    case pen = "Pen"
-    @available(*, deprecated, message: "Will be removed in version 1.0")
-    case mosaic = "Mosaic"
-    @available(*, deprecated, message: "Will be removed in version 1.0")
-    case history = "History"
-    
+
     case `default` = "Default"
     case bezierPath = "BezierPath"
 }
@@ -61,6 +54,6 @@ extension CacheModule {
 extension CacheModuleEditor {
     
     static var imageModule: [CacheModuleEditor] {
-        return [.pen, .mosaic, .history, .default, .bezierPath]
+        return [.default, .bezierPath]
     }
 }
