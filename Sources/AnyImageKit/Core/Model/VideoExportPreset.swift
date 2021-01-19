@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import VideoToolbox
 
 public enum VideoExportPreset: RawRepresentable, Equatable {
     /// H.264/AVC 640x480
@@ -40,13 +41,13 @@ public enum VideoExportPreset: RawRepresentable, Equatable {
         case .h264_3840x2160:
             return AVAssetExportPreset3840x2160
         case .h265_1920x1080:
-            if #available(iOS 11.0, *) {
+            if #available(iOS 11.0, *), VideoExportPreset.isH265ExportPresetSupported() {
                 return AVAssetExportPresetHEVC1920x1080
             } else {
                 return AVAssetExportPreset1920x1080
             }
         case .h265_3840x2160:
-            if #available(iOS 11.0, *) {
+            if #available(iOS 11.0, *), VideoExportPreset.isH265ExportPresetSupported() {
                 return AVAssetExportPresetHEVC3840x2160
             } else {
                 return AVAssetExportPreset3840x2160
@@ -89,6 +90,17 @@ public enum VideoExportPreset: RawRepresentable, Equatable {
             default:
                 return nil
             }
+        }
+    }
+}
+
+extension VideoExportPreset {
+    
+    public static func isH265ExportPresetSupported() -> Bool {
+        if #available(iOS 11.0, *) {
+            return VTIsHardwareDecodeSupported(kCMVideoCodecType_HEVC)
+        } else {
+            return false
         }
     }
 }
