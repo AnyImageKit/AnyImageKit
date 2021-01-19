@@ -41,6 +41,7 @@ final class Mosaic: UIView {
     
     private let mosaicOptions: [EditorMosaicOption]
     private let originalMosaicImage: UIImage // 原图传统马赛克的图片
+    private var originBounds: CGRect = .zero
     private(set) var mosaicImage: [UIImage] = []
     private(set) var contentViews: [MosaicContentView] = []
     
@@ -71,7 +72,13 @@ final class Mosaic: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentViews.forEach { $0.updateMask() }
+        if originBounds == .zero && bounds != .zero {
+            originBounds = bounds
+        }
+        contentViews.forEach {
+            $0.originBounds = originBounds
+            $0.updateMask()
+        }
     }
 }
 

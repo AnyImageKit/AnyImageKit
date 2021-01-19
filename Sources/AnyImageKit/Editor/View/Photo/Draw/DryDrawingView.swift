@@ -15,7 +15,7 @@ class DryDrawingView: UIView {
     private var points: [CGPoint] = Array(repeating: CGPoint(), count: 3)
     private var didCallBegin = false
     
-    private var originBounds: CGRect = .zero
+    internal var originBounds: CGRect = .zero
     internal var scale: CGFloat {
         return originBounds.width / bounds.width
     }
