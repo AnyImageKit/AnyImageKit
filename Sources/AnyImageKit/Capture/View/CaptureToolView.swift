@@ -21,7 +21,7 @@ final class CaptureToolView: UIView {
     
     private(set) lazy var cancelButton: UIButton = {
         let view = UIButton(frame: .zero)
-        let title = BundleHelper.captureLocalizedString(key: "Cancel")
+        let title = BundleHelper.coreLocalizedString(key: "Cancel")
         view.setTitle(title, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         view.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)

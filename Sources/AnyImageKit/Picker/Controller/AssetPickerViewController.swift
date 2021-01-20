@@ -133,7 +133,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: BundleHelper.pickerLocalizedString(key: "Cancel"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: BundleHelper.coreLocalizedString(key: "Cancel"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
