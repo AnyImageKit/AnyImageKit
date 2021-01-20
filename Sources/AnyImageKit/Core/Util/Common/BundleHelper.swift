@@ -29,62 +29,134 @@ struct BundleHelper {
 // MARK: - Styled Image
 extension BundleHelper {
     
-    static func image(named: String) -> UIImage? {
-        return UIImage(named: named, in: .current, compatibleWith: nil)
+    private static func image(named: String, bundle: Bundle) -> UIImage? {
+        return UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
-    static func image(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName: String
+    static func coreImage(named: String) -> UIImage? {
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return image(named: named, bundle: .module)
+        #else
+        return image(named: named, bundle: .anyImageKitCore)
+        #endif
+    }
+    
+    #if ANYIMAGEKIT_ENABLE_PICKER
+    static func pickerImage(named: String) -> UIImage? {
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return image(named: named, bundle: .module)
+        #else
+        return image(named: named, bundle: .anyImageKitPicker)
+        #endif
+    }
+    #endif
+    
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    static func editorImage(named: String) -> UIImage? {
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return image(named: named, bundle: .module)
+        #else
+        return image(named: named, bundle: .anyImageKitEditor)
+        #endif
+    }
+    #endif
+    
+    #if ANYIMAGEKIT_ENABLE_CAPTURE
+    static func captureImage(named: String) -> UIImage? {
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return image(named: named, bundle: .module)
+        #else
+        return image(named: named, bundle: .anyImageKitCapture)
+        #endif
+    }
+    #endif
+    
+    private static func styledName(_ named: String, style: UserInterfaceStyle) -> String {
         switch style {
         case .auto:
-            imageName = named + "Auto"
+            return named + "Auto"
         case .light:
-            imageName = named + "Light"
+            return named + "Light"
         case .dark:
-            imageName = named + "Dark"
+            return named + "Dark"
         }
-        return UIImage(named: imageName, in: .current, compatibleWith: nil)
     }
+    
+    static func coreImage(named: String, style: UserInterfaceStyle) -> UIImage? {
+        let imageName = styledName(named, style: style)
+        return coreImage(named: imageName)
+    }
+    
+    #if ANYIMAGEKIT_ENABLE_PICKER
+    static func pickerImage(named: String, style: UserInterfaceStyle) -> UIImage? {
+        let imageName = styledName(named, style: style)
+        return pickerImage(named: imageName)
+    }
+    #endif
+    
+    
+    #if ANYIMAGEKIT_ENABLE_EDITOR
+    static func editorImage(named: String, style: UserInterfaceStyle) -> UIImage? {
+        let imageName = styledName(named, style: style)
+        return editorImage(named: imageName)
+    }
+    #endif
+    
+    #if ANYIMAGEKIT_ENABLE_CAPTURE
+    static func captureImage(named: String, style: UserInterfaceStyle) -> UIImage? {
+        let imageName = styledName(named, style: style)
+        return captureImage(named: imageName)
+    }
+    #endif
 }
 
 // MARK: - Localized String
 extension BundleHelper {
     
-    static func localizedString(key: String, value: String?, table: String) -> String {
-        let currentTableResult = Bundle.current.localizedString(forKey: key, value: value, table: table)
-        if currentTableResult != key {
-            return currentTableResult
+    private static func localizedString(key: String, value: String?, table: String, bundle: Bundle) -> String {
+        let result = bundle.localizedString(forKey: key, value: value, table: table)
+        if result != key {
+            return result
+        } else {
+            return Bundle.main.localizedString(forKey: key, value: value, table: nil)
         }
-        
-        if table != "Core" {
-            let coreTableResult = Bundle.current.localizedString(forKey: key, value: value, table: "Core")
-            if coreTableResult != key {
-                return coreTableResult
-            }
-        }
-        
-        return Bundle.main.localizedString(forKey: key, value: value, table: nil)
     }
     
     static func coreLocalizedString(key: String) -> String {
-        localizedString(key: key, value: nil, table: "Core")
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return localizedString(key: key, value: nil, table: "Core", bundle: .module)
+        #else
+        return localizedString(key: key, value: nil, table: "Core", bundle: .anyImageKitCore)
+        #endif
     }
     
     #if ANYIMAGEKIT_ENABLE_PICKER
     static func pickerLocalizedString(key: String) -> String {
-        return localizedString(key: key, value: nil, table: "Picker")
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return localizedString(key: key, value: nil, table: "Picker", bundle: .module)
+        #else
+        return localizedString(key: key, value: nil, table: "Picker", bundle: .anyImageKitPicker)
+        #endif
     }
     #endif
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     static func editorLocalizedString(key: String) -> String {
-        return localizedString(key: key, value: nil, table: "Editor")
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return localizedString(key: key, value: nil, table: "Editor", bundle: .module)
+        #else
+        return localizedString(key: key, value: nil, table: "Editor", bundle: .anyImageKitEditor)
+        #endif
     }
     #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     static func captureLocalizedString(key: String) -> String {
-        return localizedString(key: key, value: nil, table: "Capture")
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return localizedString(key: key, value: nil, table: "Capture", bundle: .module)
+        #else
+        return localizedString(key: key, value: nil, table: "Capture", bundle: .anyImageKitCapture)
+        #endif
     }
     #endif
 }

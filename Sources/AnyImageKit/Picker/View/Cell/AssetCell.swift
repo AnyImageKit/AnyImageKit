@@ -183,7 +183,7 @@ private class VideoView: UIView {
     
     private lazy var videoImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Video")
+        view.image = BundleHelper.pickerImage(named: "Video")
         return view
     }()
     private lazy var videoLabel: UILabel = {
@@ -299,7 +299,7 @@ private class EditedView: UIView {
 
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "PhotoEdited")
+        view.image = BundleHelper.editorImage(named: "PhotoEdited")
         return view
     }()
     private lazy var coverLayer: CAGradientLayer = {

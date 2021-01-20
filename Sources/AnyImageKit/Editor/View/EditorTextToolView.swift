@@ -23,8 +23,8 @@ final class EditorTextToolView: UIView {
     private lazy var textButton: UIButton = {
         let view = UIButton(type: .custom)
         view.isSelected = true
-        view.setImage(BundleHelper.image(named: "TextNormalIcon"), for: .normal)
-        view.setImage(BundleHelper.image(named: "PhotoToolText"), for: .selected)
+        view.setImage(BundleHelper.editorImage(named: "TextNormalIcon"), for: .normal)
+        view.setImage(BundleHelper.editorImage(named: "PhotoToolText"), for: .selected)
         view.addTarget(self, action: #selector(textButtonTapped(_:)), for: .touchUpInside)
         return view
     }()

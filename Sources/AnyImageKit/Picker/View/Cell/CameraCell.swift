@@ -12,7 +12,7 @@ final class CameraCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Camera")
+        view.image = BundleHelper.pickerImage(named: "Camera")
         view.contentMode = .scaleAspectFill
         return view
     }()

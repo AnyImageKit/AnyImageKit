@@ -61,14 +61,14 @@ final class EditorCropToolView: UIView {
     }()
     private(set) lazy var cancelButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setImage(BundleHelper.image(named: "XMark"), for: .normal)
+        view.setImage(BundleHelper.editorImage(named: "XMark"), for: .normal)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Cancel")
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setImage(BundleHelper.image(named: "CheckMark"), for: .normal)
+        view.setImage(BundleHelper.editorImage(named: "CheckMark"), for: .normal)
         view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Done")
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view

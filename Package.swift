@@ -16,7 +16,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "AnyImageKit",
-                dependencies: ["SnapKit"],
+                dependencies: ["SnapKit", "Kingfisher"],
                 resources: [
                     .process("Resources"),
                 ],

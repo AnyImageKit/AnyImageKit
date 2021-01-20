@@ -25,7 +25,7 @@ public enum EditorMosaicOption: Equatable {
     case custom(icon: UIImage?, mosaic: UIImage)
     
     public static var colorful: EditorMosaicOption {
-        return .custom(icon: nil, mosaic: BundleHelper.image(named: "CustomMosaic")!)
+        return .custom(icon: nil, mosaic: BundleHelper.editorImage(named: "CustomMosaic")!)
     }
 }
 

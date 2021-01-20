@@ -21,7 +21,7 @@ final class PickerArrowButton: UIControl {
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         let style = options.theme.style
-        view.image = BundleHelper.image(named: "AlbumArrow", style: style)
+        view.image = BundleHelper.pickerImage(named: "AlbumArrow", style: style)
         return view
     }()
     
