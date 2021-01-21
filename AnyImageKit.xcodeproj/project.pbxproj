@@ -14,7 +14,7 @@
 		71208EBA256F8D88002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		71208EC0256F8D93002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		713C204E25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */; };
-		713C205025AD32AA00BB0F66 /* CacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204F25AD32AA00BB0F66 /* CacheTool.swift */; };
+		713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204F25AD32AA00BB0F66 /* Cacheable.swift */; };
 		713C206725AD32D800BB0F66 /* PhotoEditorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */; };
 		713C206825AD32D800BB0F66 /* PhotoEditorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C205925AD32D800BB0F66 /* PhotoEditorAction.swift */; };
 		713C206925AD32D800BB0F66 /* PenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C205B25AD32D800BB0F66 /* PenData.swift */; };
@@ -245,8 +245,12 @@
 
 /* Begin PBXFileReference section */
 		083356F0E32AE83F60A59E06 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		67A8466225AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Core.strings; sourceTree = "<group>"; };
+		67A8466325AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Picker.strings; sourceTree = "<group>"; };
+		67A8466425AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Editor.strings; sourceTree = "<group>"; };
+		67A8466525AE30A70066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Capture.strings; sourceTree = "<group>"; };
 		713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetPickerViewController+Editor.swift"; sourceTree = "<group>"; };
-		713C204F25AD32AA00BB0F66 /* CacheTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTool.swift; sourceTree = "<group>"; };
+		713C204F25AD32AA00BB0F66 /* Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
 		713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorContext.swift; sourceTree = "<group>"; };
 		713C205925AD32D800BB0F66 /* PhotoEditorAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorAction.swift; sourceTree = "<group>"; };
 		713C205B25AD32D800BB0F66 /* PenData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PenData.swift; sourceTree = "<group>"; };
@@ -259,10 +263,6 @@
 		713C206525AD32D800BB0F66 /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
 		713C206625AD32D800BB0F66 /* PhotoEditorCropContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorCropContext.swift; sourceTree = "<group>"; };
 		713C207725AD330600BB0F66 /* GraphicsDrawing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicsDrawing.swift; sourceTree = "<group>"; };
-		67A8466225AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Core.strings; sourceTree = "<group>"; };
-		67A8466325AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Picker.strings; sourceTree = "<group>"; };
-		67A8466425AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Editor.strings; sourceTree = "<group>"; };
-		67A8466525AE30A70066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Capture.strings; sourceTree = "<group>"; };
 		713E7D9B247BACE300BF6245 /* EditorCropOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCropOptionCell.swift; sourceTree = "<group>"; };
 		7142FF7525591DB0003FF44D /* DryDrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DryDrawingView.swift; sourceTree = "<group>"; };
 		715D6B36256E449B004D9BF1 /* Mosaic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
@@ -650,7 +650,7 @@
 			isa = PBXGroup;
 			children = (
 				71BAF334257619A3007AE60F /* CacheModule.swift */,
-				713C204F25AD32AA00BB0F66 /* CacheTool.swift */,
+				713C204F25AD32AA00BB0F66 /* Cacheable.swift */,
 				71BAF33825761A35007AE60F /* ImageCacheTool.swift */,
 				71BAF33C25761C48007AE60F /* CodableCacheTool.swift */,
 			);
@@ -1307,8 +1307,6 @@
 			dependencies = (
 			);
 			name = AnyImageKit;
-			packageProductDependencies = (
-			);
 			productName = AnyImagePicker;
 			productReference = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1384,8 +1382,6 @@
 				tr,
 			);
 			mainGroup = A099CC56232F3BF70023CC3D;
-			packageReferences = (
-			);
 			productRefGroup = A099CC61232F3BF70023CC3D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1461,11 +1457,9 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1633,7 +1627,7 @@
 				71208EBA256F8D88002C023A /* (null) in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,
 				A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */,
-				713C205025AD32AA00BB0F66 /* CacheTool.swift in Sources */,
+				713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */,
 				A561239F23B5EE4F0071C3E8 /* EditorVideoOptionsInfo.swift in Sources */,
 				A0B22EA7237AA1B3001F6066 /* Core+UIColor.swift in Sources */,
 				71CBF1592519E5BF00F79D19 /* PermissionLimitedView.swift in Sources */,

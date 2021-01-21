@@ -75,13 +75,9 @@ final class PhotoEditorController: AnyImageViewController {
         navigationController?.navigationBar.isHidden = true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        showHUDIfNeeded()
-    }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        showHUDIfNeeded()
         toolView.selectFirstItemIfNeeded()
     }
     

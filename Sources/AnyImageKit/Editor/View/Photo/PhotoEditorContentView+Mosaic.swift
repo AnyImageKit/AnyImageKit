@@ -22,7 +22,7 @@ extension PhotoEditorContentView {
         guard mosaic == nil else { completion(false); return }
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { completion(false); return }
-            guard let mosaicImage = self.image.mosaicImage(level: self.options.mosaicLevel) else { completion(false); return }
+            guard let mosaicImage = self.createMosaicImage() else { completion(false); return }
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { completion(false); return }
                 _print("Mosaic created")
@@ -34,8 +34,29 @@ extension PhotoEditorContentView {
                 self.imageView.insertSubview(self.mosaic!, belowSubview: self.canvas)
                 self.updateCanvasFrame()
                 completion(true)
+                self.cacheMosaicImageIfNeeded(mosaicImage)
             }
         }
+    }
+    
+    private func cacheMosaicImageIfNeeded(_ image: UIImage) {
+        guard
+            !options.cacheIdentifier.isEmpty,
+            let data = image.jpegData(compressionQuality: 1.0) else { return }
+        let filename = options.cacheIdentifier
+        let queue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheMosaicImage")
+        queue.async {
+            FileHelper.write(photoData: data, fileType: .jpeg, filename: filename)
+        }
+    }
+    
+    private func createMosaicImage() -> UIImage? {
+        if !options.cacheIdentifier.isEmpty {
+            if let data = FileHelper.read(fileType: .jpeg, filename: options.cacheIdentifier) {
+                return UIImage(data: data)
+            }
+        }
+        return image.mosaicImage(level: options.mosaicLevel)
     }
 }
 
