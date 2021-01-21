@@ -92,11 +92,11 @@ extension PhotoEditorContentView {
             let newTextView = TextImageView(data: data)
             data.point = originPoint.multipliedBy(scale)
             data.scale = originScale
-            data.rotation = originRotation
             data.frame = originFrame
             newTextView.transform = textView.calculateTransform()
             data.finalFrame = newTextView.frame
             data.point = originPoint
+            data.rotation = originRotation
         }
     }
     
