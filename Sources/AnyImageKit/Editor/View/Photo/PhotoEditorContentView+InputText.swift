@@ -70,20 +70,33 @@ extension PhotoEditorContentView {
         }
     }
     
-    func calculateFinalFrame() {
+    func calculateFinalFrame(with scale: CGFloat) {
         for textView in textImageViews {
             let data = textView.data
+            let originPoint = data.point
+            let originScale = data.scale
             let originRotation = data.rotation
-            data.rotation = 0
+            let originFrame = data.frame
+            data.point = .zero
+            data.scale = 1.0
+            data.rotation = 0.0
             textView.transform = textView.calculateTransform()
             var frame = textView.frame
-            frame.origin.x += (data.inset * data.scale)
-            frame.origin.y += (data.inset * data.scale)
-            frame.size.width -= (data.inset * 2 * data.scale)
-            frame.size.height -= (data.inset * 2 * data.scale)
-            data.finalFrame = frame
+            frame.origin.x *= scale
+            frame.origin.y *= scale
+            frame.size.width *= scale
+            frame.size.height *= scale
+            data.frame = frame
+            data.inset *= scale
+            
+            let newTextView = TextImageView(data: data)
+            data.point = originPoint.multipliedBy(scale)
+            data.scale = originScale
             data.rotation = originRotation
-            textView.transform = textView.calculateTransform()
+            data.frame = originFrame
+            newTextView.transform = textView.calculateTransform()
+            data.finalFrame = newTextView.frame
+            data.point = originPoint
         }
     }
     

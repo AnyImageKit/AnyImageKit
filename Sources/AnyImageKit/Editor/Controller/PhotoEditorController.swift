@@ -185,8 +185,7 @@ extension PhotoEditorController {
         
         // 由于 TextView 的位置是基于放大后图片的位置，所以在输出时要改回原始比例计算坐标位置
         let textScale = stack.originImageViewBounds.size.width / contentView.imageView.bounds.width
-        contentView.resetTextView(with: textScale)
-        contentView.calculateFinalFrame()
+        contentView.calculateFinalFrame(with: textScale)
         
         return stack.output()
     }
@@ -303,7 +302,6 @@ extension PhotoEditorController {
             delegate?.photoEditorDidCancel(self)
         case .done:
             contentView.deactivateAllTextView()
-            stack.edit.textData = contentView.textImageViews.map { $0.data }
             guard let image = getResultImage() else { return }
             stack.edit.outputImageData = image.pngData() ?? Data()
             saveEditPath()
