@@ -80,6 +80,17 @@ extension PhotoEditingStack.Edit {
     }
 }
 
+extension PhotoEditingStack.Edit: Equatable {
+    
+    static func == (lhs: PhotoEditingStack.Edit, rhs: PhotoEditingStack.Edit) -> Bool {
+        return lhs.penData == rhs.penData
+            && lhs.mosaicData == rhs.mosaicData
+            && lhs.cropData == rhs.cropData
+            && lhs.textData == rhs.textData
+            && lhs.outputImageData == rhs.outputImageData
+    }
+}
+
 
 // MARK: - Output
 extension PhotoEditingStack {

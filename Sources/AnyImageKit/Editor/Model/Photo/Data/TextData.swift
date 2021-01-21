@@ -32,3 +32,14 @@ extension TextData {
         return UIImage(data: imageData, scale: UIScreen.main.scale) ?? UIImage()
     }
 }
+
+extension TextData: Equatable {
+    
+    static func == (lhs: TextData, rhs: TextData) -> Bool {
+        return lhs.text == rhs.text
+            && lhs.colorIdx == rhs.colorIdx
+            && lhs.point == rhs.point
+            && lhs.scale == rhs.scale
+            && lhs.rotation == rhs.rotation
+    }
+}

@@ -16,3 +16,10 @@ struct PenData: Codable {
         self.drawnPath = drawnPath
     }
 }
+
+extension PenData: Equatable {
+    
+    static func == (lhs: PenData, rhs: PenData) -> Bool {
+        return lhs.drawnPath == rhs.drawnPath
+    }
+}

@@ -19,3 +19,10 @@ struct MosaicData: Codable {
         self.drawnPaths = drawnPaths
     }
 }
+
+extension MosaicData: Equatable {
+    
+    static func == (lhs: MosaicData, rhs: MosaicData) -> Bool {
+        return lhs.idx == rhs.idx && lhs.drawnPaths == rhs.drawnPaths
+    }
+}

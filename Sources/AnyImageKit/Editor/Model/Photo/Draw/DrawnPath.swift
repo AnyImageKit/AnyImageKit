@@ -93,3 +93,10 @@ extension DrawnPath: GraphicsDrawing {
         return _bezierPath
     }
 }
+
+extension DrawnPath: Equatable {
+    
+    static func == (lhs: DrawnPath, rhs: DrawnPath) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+}
