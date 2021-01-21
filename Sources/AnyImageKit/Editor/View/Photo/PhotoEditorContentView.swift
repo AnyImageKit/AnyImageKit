@@ -144,13 +144,11 @@ final class PhotoEditorContentView: UIView {
         scrollView.contentSize = imageView.bounds.size
     }
     
-    internal func updateView(with edit: PhotoEditingStack.Edit) {
-        guard edit.isEdited else { return }
+    internal func updateView(with edit: PhotoEditingStack.Edit, completion: (() -> Void)? = nil) {
         updateCanvasFrame()
         canvas.updateView(with: edit)
         mosaic?.updateView(with: edit)
         updateTextView(with: edit)
-        cropContext.lastCropData = edit.cropData
         
         let group = DispatchGroup()
         if !edit.penData.isEmpty {
@@ -168,8 +166,13 @@ final class PhotoEditorContentView: UIView {
             }
         }
         group.notify(queue: .main) { [weak self] in
-            self?.layoutEndCrop(edit.isEdited)
-            self?.updateCanvasFrame()
+            guard let self = self else { completion?(); return }
+            if edit.cropData.didCrop && self.cropContext.lastCropData != edit.cropData {
+                self.cropContext.lastCropData = edit.cropData
+                self.layoutEndCrop(edit.isEdited)
+                self.updateCanvasFrame()
+            }
+            completion?()
         }
     }
 }

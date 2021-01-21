@@ -85,15 +85,6 @@ final class Mosaic: UIView {
 // MARK: - Public
 extension Mosaic {
     
-    func undo(last: Int = 0) {
-        guard last < contentViews.count else { return }
-        let contentView = contentViews.reversed()[last]
-        if !contentView.undo() {
-            removeEmptyContent(removeLast: false)
-            undo(last: 1)
-        }
-    }
-    
     func setMosaicCoverImage(_ idx: Int) {
         removeEmptyContent()
         if let lastContent = contentViews.last, lastContent.idx == idx {
@@ -103,11 +94,27 @@ extension Mosaic {
     }
     
     func updateView(with edit: PhotoEditingStack.Edit) {
-        contentViews.forEach { $0.removeFromSuperview() }
-        contentViews.removeAll()
-        for data in edit.mosaicData {
-            let contentView = createContentView(idx: data.idx)
-            contentView.setDrawn(paths: data.drawnPaths)
+        let lastImageIdx = contentViews.last?.idx ?? 0
+        var sameIdx = 0
+        for i in 0..<edit.mosaicData.count {
+            if i < contentViews.count {
+                if edit.mosaicData[i].idx == contentViews[i].idx && edit.mosaicData[i].drawnPaths == contentViews[i].drawnPaths {
+                    sameIdx = i
+                } else {
+                    break
+                }
+            }
+        }
+        for _ in sameIdx..<contentViews.count {
+            let contentView = contentViews.removeLast()
+            contentView.removeFromSuperview()
+        }
+        for i in sameIdx..<edit.mosaicData.count {
+            let contentView = createContentView(idx: edit.mosaicData[i].idx)
+            contentView.setDrawn(paths: edit.mosaicData[i].drawnPaths)
+        }
+        if contentViews.last?.idx != lastImageIdx {
+            createContentView(idx: lastImageIdx)
         }
     }
 }

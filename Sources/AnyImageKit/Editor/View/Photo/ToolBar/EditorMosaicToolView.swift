@@ -103,6 +103,15 @@ final class EditorMosaicToolView: UIView {
     }
 }
 
+// MARK: - Public function
+extension EditorMosaicToolView {
+    
+    func setMosaicIdx(_ idx: Int) {
+        guard idx < mosaicButtons.count else { return }
+        mosaicButtonTapped(mosaicButtons[idx])
+    }
+}
+
 // MARK: - Private function
 extension EditorMosaicToolView {
     

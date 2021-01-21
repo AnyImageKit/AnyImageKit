@@ -132,6 +132,7 @@ extension PhotoEditorContentView {
     }
     
     func updateTextView(with edit: PhotoEditingStack.Edit) {
+        guard edit.textData != (textImageViews.map { $0.data }) else { return }
         removeAllTextView()
         for data in edit.textData {
             addText(data: data)
@@ -265,10 +266,12 @@ extension PhotoEditorContentView {
         case .changed:
             check(targetView: textView, inTrashView: pan.location(in: self))
         default:
+            var delete = false
             if textTrashView.state == .remove && textTrashView.frame.contains(pan.location(in: self)) { // 判断在删除区域
                 guard let idx = textImageViews.firstIndex(where: { $0 == textView }) else { return }
                 textImageViews[idx].removeFromSuperview()
                 textImageViews.remove(at: idx)
+                delete = true
             } else if !cropLayerLeave.displayRect.contains(pan.location(in: cropLayerLeave)) { // 判断超出图片区域
                 UIView.animate(withDuration: 0.25) {
                     textView.data.point = textView.data.pointBeforePan
@@ -280,7 +283,7 @@ extension PhotoEditorContentView {
                 imageView.bringSubviewToFront(cropLayerLeave)
             }
             hideTrashView()
-            context.action(.textDidFinishMove(textView.data))
+            context.action(.textDidFinishMove(data: textView.data, delete: delete))
         }
     }
     

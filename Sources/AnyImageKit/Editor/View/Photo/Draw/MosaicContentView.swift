@@ -89,12 +89,6 @@ final class MosaicContentView: DryDrawingView {
 // MARK: - Public
 extension MosaicContentView {
     
-    func undo() -> Bool {
-        guard !drawnPaths.isEmpty else { return false }
-        drawnPaths.removeLast()
-        return true
-    }
-    
     func setDrawn(paths: [DrawnPath]) {
         drawnPaths = paths
     }

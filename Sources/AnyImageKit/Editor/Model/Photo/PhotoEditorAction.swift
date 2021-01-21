@@ -32,7 +32,7 @@ enum PhotoEditorAction {
     
     case textWillBeginEdit(TextData)
     case textWillBeginMove(TextData)
-    case textDidFinishMove(TextData)
+    case textDidFinishMove(data: TextData, delete: Bool)
     case textCancel
     case textDone(TextData)
 }

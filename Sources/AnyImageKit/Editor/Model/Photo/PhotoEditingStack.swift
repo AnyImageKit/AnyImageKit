@@ -9,9 +9,16 @@
 import UIKit
 import CoreImage
 
+protocol PhotoEditingStackDelegate: AnyObject {
+    
+    func editingStack(_ stack: PhotoEditingStack, needUpdatePreview edit: PhotoEditingStack.Edit)
+}
+
 final class PhotoEditingStack {
     
-    var edit: Edit = .init()
+    weak var delegate: PhotoEditingStackDelegate?
+    
+    private(set) var edit: Edit = .init()
     
     // 以下字段是输出时用于计算的临时变量，不需要缓存
     var originImage: UIImage = .init()
@@ -22,7 +29,6 @@ final class PhotoEditingStack {
     
     private let identifier: String
     private let cache = CodableCacheTool(module: .editor(.default))
-    private(set) var didLoadCache = false
     private var drawer: [GraphicsDrawing] = []
     
     init(identifier: String) {
@@ -43,7 +49,6 @@ extension PhotoEditingStack {
         if identifier.isEmpty { return }
         if let model: Edit = cache.retrieveModel(forKey: identifier) {
             edit = model
-            didLoadCache = true
         }
     }
 }
@@ -58,18 +63,61 @@ extension PhotoEditingStack {
         var cropData: CropData = .init()
         var textData: [TextData] = []
         var outputImageData: Data?
-        
-        var isEdited: Bool {
-            return cropData.didCrop || !penData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
-        }
+    }
+    
+    func setPenData(_ dataList: [PenData]) {
+        edit.penData = dataList
+        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
     func setMosaicData(_ dataList: [MosaicData]) {
         edit.mosaicData = dataList.filter { !$0.drawnPaths.isEmpty }
+        delegate?.editingStack(self, needUpdatePreview: edit)
+    }
+    
+    func setCropData(_ data: CropData) {
+        edit.cropData = data
+    }
+    
+    func addTextData(_ data: TextData) {
+        edit.textData.append(data)
+    }
+    
+    func removeTextData(_ data: TextData) {
+        if let idx = edit.textData.firstIndex(of: data) {
+            edit.textData.remove(at: idx)
+        }
+    }
+    
+    func setOutputImage(_ image: UIImage) {
+        guard let data = image.pngData() else { return }
+        edit.outputImageData = data
+    }
+    
+    func canvasUndo() {
+        guard !edit.penData.isEmpty else { return }
+        edit.penData.removeLast()
+        delegate?.editingStack(self, needUpdatePreview: edit)
+    }
+    
+    func mosaicUndo() {
+        guard let data = edit.mosaicData.last else { return }
+        if data.drawnPaths.count == 1 {
+            edit.mosaicData.removeLast()
+        } else {
+            var paths = data.drawnPaths
+            paths.removeLast()
+            edit.mosaicData[edit.mosaicData.count-1] = MosaicData(idx: data.idx, drawnPaths: paths)
+        }
+        delegate?.editingStack(self, needUpdatePreview: edit)
     }
 }
 
 extension PhotoEditingStack.Edit {
+    
+    var isEdited: Bool {
+        return cropData.didCrop || !penData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
+    }
     
     var canvasCanUndo: Bool {
         return !penData.isEmpty

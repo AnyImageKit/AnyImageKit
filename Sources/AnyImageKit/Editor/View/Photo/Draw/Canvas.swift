@@ -56,12 +56,6 @@ final class Canvas: DryDrawingView {
 // MARK: - Public
 extension Canvas {
     
-    func undo() {
-        guard !drawnPaths.isEmpty else { return }
-        drawnPaths.removeLast()
-        setNeedsDisplay()
-    }
-    
     func setBrush(lineWidth: CGFloat) {
         brush.lineWidth = lineWidth
     }
@@ -71,7 +65,9 @@ extension Canvas {
     }
     
     func updateView(with edit: PhotoEditingStack.Edit) {
-        drawnPaths = edit.penData.map { $0.drawnPath }
+        let newDrawnPaths = edit.penData.map { $0.drawnPath }
+        guard drawnPaths != newDrawnPaths else { return }
+        drawnPaths = newDrawnPaths
         setNeedsDisplay()
     }
 }
