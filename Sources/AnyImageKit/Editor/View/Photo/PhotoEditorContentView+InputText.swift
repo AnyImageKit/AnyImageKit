@@ -106,6 +106,7 @@ extension PhotoEditorContentView {
             if textView.isHidden {
                 textView.removeFromSuperview()
                 textImageViews.remove(at: idx)
+                context.action(.textDidFinishMove(data: textView.data, delete: true))
             }
         }
     }
@@ -132,10 +133,26 @@ extension PhotoEditorContentView {
     }
     
     func updateTextView(with edit: PhotoEditingStack.Edit) {
-        guard edit.textData != (textImageViews.map { $0.data }) else { return }
-        removeAllTextView()
-        for data in edit.textData {
-            addText(data: data)
+        let textData = textImageViews.map { $0.data }
+        if textData == edit.textData {
+            return
+        } else if textData.count < edit.textData.count {
+            if textData == Array(edit.textData[0..<textImageViews.count]) {
+                for i in textData.count..<edit.textData.count {
+                    addText(data: edit.textData[i])
+                }
+            }
+        } else {
+            if edit.textData == Array(textData[0..<edit.textData.count]) {
+                for _ in edit.textData.count..<textData.count {
+                    let textView = textImageViews.removeLast()
+                    textView.removeFromSuperview()
+                }
+            }
+        }
+        if textData != edit.textData { // Just in case
+            removeAllTextView()
+            edit.textData.forEach { addText(data: $0) }
         }
     }
 }
@@ -217,12 +234,21 @@ extension PhotoEditorContentView {
         if !shouldBeginGesture(in: textView) { return false }
         for view in textImageViews {
             if view == textView && !textView.isActive {
-                imageView.bringSubviewToFront(textView)
+                bringTextViewToFront(textView)
                 imageView.bringSubviewToFront(cropLayerLeave)
             }
             view.setActive(view == textView)
         }
         return true
+    }
+    
+    private func bringTextViewToFront(_ textView: TextImageView) {
+        imageView.bringSubviewToFront(textView)
+        context.action(.textBringToFront(textView.data))
+        if let idx = textImageViews.firstIndex(of: textView) {
+            textImageViews.remove(at: idx)
+            textImageViews.append(textView)
+        }
     }
 }
 
@@ -261,16 +287,13 @@ extension PhotoEditorContentView {
         switch pan.state {
         case .began:
             showTrashView()
+            bringTextViewToFront(textView)
             context.action(.textWillBeginMove(textView.data))
-            imageView.bringSubviewToFront(textView)
         case .changed:
             check(targetView: textView, inTrashView: pan.location(in: self))
         default:
             var delete = false
             if textTrashView.state == .remove && textTrashView.frame.contains(pan.location(in: self)) { // 判断在删除区域
-                guard let idx = textImageViews.firstIndex(where: { $0 == textView }) else { return }
-                textImageViews[idx].removeFromSuperview()
-                textImageViews.remove(at: idx)
                 delete = true
             } else if !cropLayerLeave.displayRect.contains(pan.location(in: cropLayerLeave)) { // 判断超出图片区域
                 UIView.animate(withDuration: 0.25) {

@@ -81,11 +81,20 @@ extension PhotoEditingStack {
     
     func addTextData(_ data: TextData) {
         edit.textData.append(data)
+        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
     func removeTextData(_ data: TextData) {
         if let idx = edit.textData.firstIndex(of: data) {
             edit.textData.remove(at: idx)
+            delegate?.editingStack(self, needUpdatePreview: edit)
+        }
+    }
+    
+    func moveTextDataToTop(_ data: TextData) {
+        if let idx = edit.textData.firstIndex(of: data) {
+            edit.textData.remove(at: idx)
+            edit.textData.append(data)
         }
     }
     

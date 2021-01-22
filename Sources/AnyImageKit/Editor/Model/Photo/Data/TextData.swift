@@ -36,7 +36,8 @@ extension TextData {
 extension TextData: Equatable {
     
     static func == (lhs: TextData, rhs: TextData) -> Bool {
-        return lhs.text == rhs.text
+        return lhs.frame == rhs.frame
+            && lhs.text == rhs.text
             && lhs.colorIdx == rhs.colorIdx
             && lhs.point == rhs.point
             && lhs.scale == rhs.scale

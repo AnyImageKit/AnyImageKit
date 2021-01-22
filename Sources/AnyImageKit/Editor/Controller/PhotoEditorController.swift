@@ -360,6 +360,8 @@ extension PhotoEditorController {
             stack.setCropData(data)
         case .textWillBeginEdit(let data):
             openInputController(data)
+        case .textBringToFront(let data):
+            stack.moveTextDataToTop(data)
         case .textWillBeginMove(_):
             setTool(hidden: true)
         case .textDidFinishMove(let data, let delete):
@@ -374,7 +376,6 @@ extension PhotoEditorController {
             didEndInputing()
             contentView.removeHiddenTextView()
             if !data.text.isEmpty {
-                contentView.addText(data: data)
                 stack.addTextData(data)
             }
         }
