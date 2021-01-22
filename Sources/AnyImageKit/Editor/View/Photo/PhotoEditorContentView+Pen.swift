@@ -8,16 +8,6 @@
 
 import UIKit
 
-// MARK: - Public function
-extension PhotoEditorContentView {
-    
-    func updateCanvasFrame() {
-        canvas.frame = CGRect(origin: .zero, size: imageView.bounds.size)
-        mosaic?.frame = CGRect(origin: .zero, size: imageView.bounds.size)
-        mosaic?.layoutSubviews()
-    }
-}
-
 // MARK: - CanvasDelegate
 extension PhotoEditorContentView: CanvasDelegate {
     

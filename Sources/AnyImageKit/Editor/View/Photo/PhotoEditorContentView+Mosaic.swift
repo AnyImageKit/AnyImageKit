@@ -8,12 +8,6 @@
 
 import UIKit
 
-// MARK: - Public function
-extension PhotoEditorContentView {
-
-    
-}
-
 // MARK: - Internal function
 extension PhotoEditorContentView {
     
@@ -32,7 +26,7 @@ extension PhotoEditorContentView {
                 self.mosaic?.dataSource = self
                 self.mosaic?.isUserInteractionEnabled = false
                 self.imageView.insertSubview(self.mosaic!, belowSubview: self.canvas)
-                self.updateCanvasFrame()
+                self.updateSubviewFrame()
                 completion(true)
                 self.cacheMosaicImageIfNeeded(mosaicImage)
             }

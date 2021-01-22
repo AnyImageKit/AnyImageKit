@@ -113,7 +113,7 @@ final class PhotoEditorContentView: UIView {
         if cropContext.cropRealRect == .zero {
             cropContext.cropRealRect = imageView.frame
         }
-        updateCanvasFrame()
+        updateSubviewFrame()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -144,8 +144,14 @@ final class PhotoEditorContentView: UIView {
         scrollView.contentSize = imageView.bounds.size
     }
     
+    internal func updateSubviewFrame() {
+        canvas.frame = CGRect(origin: .zero, size: imageView.bounds.size)
+        mosaic?.frame = CGRect(origin: .zero, size: imageView.bounds.size)
+        mosaic?.layoutSubviews()
+    }
+    
     internal func updateView(with edit: PhotoEditingStack.Edit, completion: (() -> Void)? = nil) {
-        updateCanvasFrame()
+        updateSubviewFrame()
         canvas.updateView(with: edit)
         mosaic?.updateView(with: edit)
         updateTextView(with: edit)
@@ -170,7 +176,7 @@ final class PhotoEditorContentView: UIView {
             if edit.cropData.didCrop && self.cropContext.lastCropData != edit.cropData {
                 self.cropContext.lastCropData = edit.cropData
                 self.layoutEndCrop(edit.isEdited)
-                self.updateCanvasFrame()
+                self.updateSubviewFrame()
             }
             completion?()
         }

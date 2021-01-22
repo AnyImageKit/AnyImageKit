@@ -35,7 +35,7 @@ extension PhotoEditorContentView {
             } else {
                 self.layoutStartCroped()
             }
-            self.updateCanvasFrame()
+            self.updateSubviewFrame()
         }, completion: { _ in
             self.gridView.bgLayer.opacity = 1.0
             self.cropLayerEnter.removeFromSuperview()
@@ -63,7 +63,7 @@ extension PhotoEditorContentView {
             } else {
                 self.layout()
             }
-            self.updateCanvasFrame()
+            self.updateSubviewFrame()
         }, completion: completion)
     }
     
@@ -74,7 +74,7 @@ extension PhotoEditorContentView {
         setCropHidden(true, animated: false)
         layoutEndCrop()
         UIView.animate(withDuration: 0.25, animations: {
-            self.updateCanvasFrame()
+            self.updateSubviewFrame()
         }, completion: completion)
     }
     
@@ -82,7 +82,7 @@ extension PhotoEditorContentView {
     func cropReset() {
         UIView.animate(withDuration: 0.5, animations: {
             self.layoutStartCrop(animated: true)
-            self.updateCanvasFrame()
+            self.updateSubviewFrame()
         })
     }
 }
