@@ -202,6 +202,7 @@ extension InputTextViewController {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         updateTextCoverView()
         textView.resignFirstResponder()
+        data.frame = .zero
         data.text = textView.text
         data.imageData = textCoverView.screenshot().pngData() ?? Data()
         context.action(.textDone(data))
