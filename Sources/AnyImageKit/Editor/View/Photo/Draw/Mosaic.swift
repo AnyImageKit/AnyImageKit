@@ -99,7 +99,7 @@ extension Mosaic {
         for i in 0..<edit.mosaicData.count {
             if i < contentViews.count {
                 if edit.mosaicData[i].idx == contentViews[i].idx && edit.mosaicData[i].drawnPaths == contentViews[i].drawnPaths {
-                    sameIdx = i
+                    sameIdx = i + 1
                 } else {
                     break
                 }
