@@ -51,7 +51,7 @@ extension PhotoEditorContentView {
     }
     /// 最大缩放比例
     var maximumZoomScale: CGFloat {
-        return (image.size.width / scrollView.bounds.width) * 2
+        return (image.size.width / scrollView.bounds.width) * 4
     }
 }
 

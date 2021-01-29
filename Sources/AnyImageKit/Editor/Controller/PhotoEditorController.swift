@@ -17,17 +17,21 @@ protocol PhotoEditorControllerDelegate: AnyObject {
 final class PhotoEditorController: AnyImageViewController {
     
     private lazy var contentView: PhotoEditorContentView = {
-        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, options: options, cache: cache)
-        view.delegate = self
-        view.canvas.brush.color = options.penColors[options.defaultPenIndex].color
+        let view = PhotoEditorContentView(frame: self.view.bounds, image: image, context: context)
+        view.canvas.setBrush(color: options.penColors[options.defaultPenIndex].color)
+        return view
+    }()
+    private lazy var placeholdImageView: UIImageView = {
+        let view = UIImageView(frame: .zero)
+        view.backgroundColor = .black
+        view.isHidden = true
         return view
     }()
     private lazy var toolView: EditorToolView = {
-        let view = EditorToolView(frame: self.view.bounds, options: options)
-        view.delegate = self
-        view.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
-        view.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
-        view.cropToolView.currentOptionIdx = cache?.cropOptionIdx ?? 0
+        let view = EditorToolView(frame: self.view.bounds, context: context)
+        view.penToolView.undoButton.isEnabled = stack.edit.canvasCanUndo
+        view.mosaicToolView.undoButton.isEnabled = stack.edit.mosaicCanUndo
+        view.cropToolView.currentOptionIdx = stack.edit.cropData.cropOptionIdx
         return view
     }()
     private lazy var backButton: UIButton = {
@@ -42,14 +46,20 @@ final class PhotoEditorController: AnyImageViewController {
     private var image: UIImage = UIImage()
     private let resource: EditorPhotoResource
     private let options: EditorPhotoOptionsInfo
+    private let context: PhotoEditorContext
+    private let blurContext = CIContext()
     private weak var delegate: PhotoEditorControllerDelegate?
     
-    private lazy var context = CIContext()
-    private lazy var cache = ImageEditorCache(id: options.cacheIdentifier)
+    private lazy var stack: PhotoEditingStack = {
+        let stack = PhotoEditingStack(identifier: options.cacheIdentifier)
+        stack.delegate = self
+        return stack
+    }()
     
     init(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo, delegate: PhotoEditorControllerDelegate) {
         self.resource = resource
         self.options = options
+        self.context = .init(options: options)
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -60,29 +70,15 @@ final class PhotoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindAction()
         loadData()
         navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        showHUDIfNeeded()
         toolView.selectFirstItemIfNeeded()
-    }
-    
-    private func setupView() {
-        view.addSubview(contentView)
-        view.addSubview(toolView)
-        view.addSubview(backButton)
-        
-        backButton.snp.makeConstraints { maker in
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            } else {
-                maker.top.equalToSuperview().offset(30)
-            }
-            maker.left.equalToSuperview().offset(10)
-            maker.width.height.equalTo(50)
-        }
     }
     
     private func loadData() {
@@ -90,9 +86,9 @@ final class PhotoEditorController: AnyImageViewController {
             guard let self = self else { return }
             switch result {
             case .success(let image):
-                hideHUD()
                 self.image = image
                 self.setupView()
+                self.setupMosaicView()
             case .failure(let error):
                 if error == .cannotFindInLocal {
                     showWaitHUD()
@@ -103,187 +99,81 @@ final class PhotoEditorController: AnyImageViewController {
             }
         }
     }
+    
+    private func setupView() {
+        view.backgroundColor = .black
+        view.addSubview(contentView)
+        view.addSubview(toolView)
+        view.addSubview(backButton)
+        view.addSubview(placeholdImageView)
+        
+        contentView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
+        }
+        toolView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
+        }
+        backButton.snp.makeConstraints { maker in
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            } else {
+                maker.top.equalToSuperview().offset(30)
+            }
+            maker.left.equalToSuperview().offset(10)
+            maker.width.height.equalTo(50)
+        }
+        placeholdImageView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
+        
+        if let data = stack.edit.outputImageData, let image = UIImage(data: data) {
+            setPlaceholdImage(image)
+        }
+    }
+    
+    private func setupMosaicView() {
+        contentView.setupMosaicView { [weak self] _ in
+            guard let self = self else { return }
+            self.setupData()
+            self.contentView.updateView(with: self.stack.edit) { [weak self] in
+                self?.toolView.mosaicToolView.setMosaicIdx(self?.stack.edit.mosaicData.last?.idx ?? 0)
+                let delay = (self?.stack.edit.mosaicData.isEmpty ?? true) ? 0.0 : 0.25
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in // 这里稍微延迟一下，给马赛克图层创建留点时间
+                    self?.contentView.isHidden = false
+                    self?.placeholdImageView.isHidden = true
+                    hideHUD()
+                }
+            }
+        }
+    }
+    
+    private func setupData() {
+        stack.originImage = image
+        stack.mosaicImages = contentView.mosaic?.mosaicImage ?? []
+        stack.originImageViewBounds = contentView.imageView.bounds
+    }
+    
+    private func setPlaceholdImage(_ image: UIImage) {
+        contentView.isHidden = true
+        placeholdImageView.image = image
+        placeholdImageView.isHidden = false
+        placeholdImageView.contentMode = .scaleAspectFit
+        let screen = ScreenHelper.mainBounds.size
+        let h = image.size.height / image.size.width * screen.width
+        if h > screen.height {
+            let offsetY = (h - screen.height) / 2
+            placeholdImageView.contentMode = .scaleAspectFill
+            placeholdImageView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: offsetY)
+        }
+    }
 }
 
 // MARK: - Target
 extension PhotoEditorController {
     
-    /// 返回按钮触发
+    /// 返回按钮
     @objc private func backButtonTapped(_ sender: UIButton) {
-        delegate?.photoEditorDidCancel(self)
-    }
-}
-
-// MARK: - PhotoEditorContentViewDelegate
-extension PhotoEditorController: PhotoEditorContentViewDelegate {
-    
-    func contentViewTapped() {
-        if toolView.currentOption != .crop {
-            let hidden = toolView.alpha == 1
-            UIView.animate(withDuration: 0.25) {
-                self.toolView.alpha = hidden ? 0 : 1
-                self.backButton.alpha = hidden ? 0 : 1
-            }
-        }
-    }
-    
-    /// 开始涂鸦
-    func photoDidBeginPen() {
-        UIView.animate(withDuration: 0.25) {
-            self.toolView.alpha = 0
-            self.backButton.alpha = 0
-        }
-    }
-    
-    /// 结束涂鸦
-    func photoDidEndPen() {
-        if let option = toolView.currentOption {
-            switch option {
-            case .pen:
-                toolView.penToolView.undoButton.isEnabled = true
-            case .mosaic:
-                toolView.mosaicToolView.undoButton.isEnabled = true
-            default:
-                break
-            }
-        }
-        UIView.animate(withDuration: 0.25) {
-            self.toolView.alpha = 1
-            self.backButton.alpha = 1
-        }
-    }
-    
-    /// 马赛克图层创建完成
-    func mosaicDidCreated() {
-        hideHUD()
-        guard let option = toolView.currentOption else { return }
-        if option == .mosaic {
-            contentView.mosaic?.isUserInteractionEnabled = true
-        }
-    }
-    
-    /// 开始编辑文本
-    func inputTextWillBeginEdit(_ data: TextData) {
-        openInputController(data)
-    }
-}
-
-// MARK: - EditorToolViewDelegate
-extension PhotoEditorController: EditorToolViewDelegate {
-    
-    /// 点击了功能按钮
-    func toolView(_ toolView: EditorToolView, optionDidChange option: EditorPhotoToolOption?) {
-        contentView.canvas.isUserInteractionEnabled = false
-        contentView.mosaic?.isUserInteractionEnabled = false
-        contentView.scrollView.isScrollEnabled = option == nil
-        guard let option = option else { return }
-        switch option {
-        case .pen:
-            contentView.canvas.isUserInteractionEnabled = true
-            trackObserver?.track(event: .photoPen, userInfo: [:])
-        case .text:
-            openInputController()
-            trackObserver?.track(event: .photoText, userInfo: [:])
-        case .crop:
-            willBeginCrop()
-            if let option = options.cropOptions.first, !contentView.didCrop {
-                toolView.cropToolView.currentOption = option
-                contentView.cropStart(with: option)
-            } else {
-                contentView.cropStart()
-            }
-            trackObserver?.track(event: .photoCrop, userInfo: [:])
-        case .mosaic:
-            if contentView.mosaic == nil {
-                showWaitHUD()
-            }
-            contentView.mosaic?.isUserInteractionEnabled = true
-            trackObserver?.track(event: .photoMosaic, userInfo: [:])
-        }
-    }
-    
-    /// 画笔切换颜色
-    func toolView(_ toolView: EditorToolView, colorDidChange color: UIColor) {
-        contentView.canvas.brush.color = color
-    }
-    
-    /// 马赛克切换类型
-    func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int) {
-        contentView.setMosaicImage(idx)
-    }
-    
-    /// 撤销 - 仅用于画笔和马赛克
-    func toolViewUndoButtonTapped(_ toolView: EditorToolView) {
-        guard let option = toolView.currentOption else { return }
-        switch option {
-        case .pen:
-            contentView.canvasUndo()
-            toolView.penToolView.undoButton.isEnabled = contentView.canvasCanUndo()
-        case .mosaic:
-            contentView.mosaicUndo()
-            toolView.mosaicToolView.undoButton.isEnabled = contentView.mosaicCanUndo()
-        default:
-            break
-        }
-    }
-    
-    /// 设置裁剪尺寸
-    func toolViewCrop(_ toolView: EditorToolView, didClickCropOption option: EditorCropOption) {
-        contentView.setCrop(option)
-    }
-    
-    /// 取消裁剪
-    func toolViewCropCancelButtonTapped(_ toolView: EditorToolView) {
-        if options.toolOptions.count == 1 {
-            backButtonTapped(backButton)
-            return
-        }
-        
-        backButton.isHidden = false
-        contentView.cropCancel { [weak self] (_) in
-            self?.didEndCroping()
-        }
-    }
-    
-    /// 完成裁剪
-    func toolViewCropDoneButtonTapped(_ toolView: EditorToolView) {
-        backButton.isHidden = false
-        contentView.cropDone { [weak self] (_) in
-            self?.didEndCroping()
-            if self?.options.toolOptions.count == 1 {
-                self?.toolViewDoneButtonTapped(toolView)
-            }
-        }
-    }
-    
-    /// 还原裁剪
-    func toolViewCropResetButtonTapped(_ toolView: EditorToolView) {
-        contentView.cropReset()
-    }
-    
-    /// 最终完成按钮
-    func toolViewDoneButtonTapped(_ toolView: EditorToolView) {
-        contentView.deactivateAllTextView()
-        guard let image = getResultImage() else { return }
-        saveEditPath()
-        delegate?.photoEditor(self, didFinishEditing: image, isEdited: contentView.isEdited)
-    }
-}
-
-// MARK: - InputTextViewControllerDelegate
-extension PhotoEditorController: InputTextViewControllerDelegate {
-    
-    /// 取消输入
-    func inputTextDidCancel(_ controller: InputTextViewController) {
-        didEndInputing()
-        contentView.restoreHiddenTextView()
-    }
-    
-    /// 完成输入
-    func inputText(_ controller: InputTextViewController, didFinishInput data: TextData) {
-        didEndInputing()
-        contentView.removeHiddenTextView()
-        contentView.addText(data: data)
+        context.action(.back)
     }
 }
 
@@ -292,42 +182,45 @@ extension PhotoEditorController {
     
     /// 获取最终的图片
     private func getResultImage() -> UIImage? {
-        guard let source = contentView.imageView.screenshot(image.size).cgImage else { return nil }
-        let size = image.size
-        let cropRect = contentView.cropRealRect
-        
-        // 获取原始imageFrame
+        stack.cropRect = contentView.cropContext.cropRealRect
         let tmpScale = contentView.scrollView.zoomScale
         let tmpOffset = contentView.scrollView.contentOffset
         let tmpContentSize = contentView.scrollView.contentSize
         contentView.scrollView.zoomScale = 1.0
-        let imageFrame = contentView.imageView.frame
+        stack.cropImageViewFrame = contentView.imageView.frame
         contentView.scrollView.zoomScale = tmpScale
         contentView.scrollView.contentOffset = tmpOffset
         contentView.scrollView.contentSize = tmpContentSize
         
-        var rect: CGRect = .zero
-        rect.origin.x = (cropRect.origin.x - imageFrame.origin.x) / imageFrame.width * size.width
-        rect.origin.y = (cropRect.origin.y - imageFrame.origin.y) / imageFrame.height * size.height
-        rect.size.width = size.width * cropRect.width / imageFrame.width
-        rect.size.height = size.height * cropRect.height / imageFrame.height
+        // 由于 TextView 的位置是基于放大后图片的位置，所以在输出时要改回原始比例计算坐标位置
+        let textScale = stack.originImageViewBounds.size.width / contentView.imageView.bounds.width
+        contentView.calculateFinalFrame(with: textScale)
         
-        guard let cgImage = source.cropping(to: rect) else { return nil }
-        return UIImage(cgImage: cgImage)
+        return stack.output()
     }
     
     /// 存储编辑记录
     private func saveEditPath() {
         if options.cacheIdentifier.isEmpty { return }
-        contentView.setupLastCropDataIfNeeded()
-        let textDataList = contentView.textImageViews.map{ $0.data }
-        let cache = ImageEditorCache(id: options.cacheIdentifier,
-                                     cropData: contentView.lastCropData,
-                                     cropOptionIdx: toolView.cropToolView.currentOptionIdx,
-                                     textDataList: textDataList,
-                                     penCacheList: contentView.penCache.diskCacheList,
-                                     mosaicCacheList: contentView.mosaicCache.diskCacheList)
-        cache.save()
+        stack.save()
+    }
+    
+    private func showHUDIfNeeded() {
+        if contentView.mosaic == nil {
+            showWaitHUD()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                if self?.contentView.mosaic != nil {
+                    hideHUD()
+                }
+            }
+        }
+    }
+    
+    private func setTool(hidden: Bool, animated: Bool = true) {
+        UIView.animate(withDuration: animated ? 0.25 : 0) {
+            self.toolView.alpha = hidden ? 0 : 1
+            self.backButton.alpha = hidden ? 0 : 1
+        }
     }
 }
 
@@ -338,19 +231,22 @@ extension PhotoEditorController {
     private func willBeginCrop() {
         backButton.isHidden = true
         contentView.scrollView.isScrollEnabled = true
+        contentView.cropLayerLeave.isHidden = true
         contentView.deactivateAllTextView()
         let image = contentView.imageView.screenshot(self.image.size)
+        contentView.cropLayerLeave.isHidden = false
         contentView.canvas.isHidden = true
+        contentView.mosaic?.isHidden = true
         contentView.hiddenAllTextView()
-        contentView.imageBeforeCrop = contentView.imageView.image
         contentView.imageView.image = image
     }
     
     /// 已经结束裁剪
     private func didEndCroping() {
         contentView.canvas.isHidden = false
-        contentView.restoreHiddenTextView()
-        contentView.imageView.image = contentView.imageBeforeCrop
+        contentView.mosaic?.isHidden = false
+        contentView.updateTextFrameWhenCropEnd()
+        contentView.imageView.image = contentView.image
     }
 }
 
@@ -361,13 +257,14 @@ extension PhotoEditorController {
     private func openInputController(_ data: TextData = TextData()) {
         willBeginInput()
         let coverImage = getInputCoverImage()
-        let controller = InputTextViewController(options: options, data: data, coverImage: coverImage, delegate: self)
+        let controller = InputTextViewController(context: context, data: data, coverImage: coverImage)
+        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
     
     /// 获取输入界面的占位图
     private func getInputCoverImage() -> UIImage? {
-        return contentView.screenshot().gaussianImage(context: context, blur: 8)
+        return contentView.screenshot().gaussianImage(context: blurContext, blur: 8)
     }
     
     /// 准备开始输入文本
@@ -389,5 +286,136 @@ extension PhotoEditorController {
         toolView.doneButton.isHidden = false
         toolView.editOptionsView.isHidden = false
         contentView.scrollView.isScrollEnabled = true
+    }
+}
+
+// MARK: - Action
+
+extension PhotoEditorController {
+    
+    private func bindAction() {
+        context.didReceiveAction { [weak self] (action) in
+            self?.didReceive(action: action)
+        }
+    }
+    
+    private func didReceive(action: PhotoEditorAction) {
+        switch action {
+        case .empty:
+            if toolView.currentOption != .crop {
+                setTool(hidden: toolView.alpha == 1)
+            }
+        case .back:
+            delegate?.photoEditorDidCancel(self)
+        case .done:
+            contentView.deactivateAllTextView()
+            guard let image = getResultImage() else { return }
+            setPlaceholdImage(image)
+            stack.setOutputImage(image)
+            saveEditPath()
+            delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
+        case .toolOptionChanged(let option):
+            context.toolOption = option
+            toolOptionsDidChanged(option: option)
+        case .penBeginDraw, .mosaicBeginDraw:
+            setTool(hidden: true)
+        case .penUndo:
+            stack.canvasUndo()
+        case .penChangeColor(let color):
+            contentView.canvas.setBrush(color: color)
+        case .penFinishDraw(let dataList):
+            setTool(hidden: false)
+            stack.setPenData(dataList)
+        case .mosaicUndo:
+            stack.mosaicUndo()
+        case .mosaicChangeImage(let idx):
+            contentView.mosaic?.setMosaicCoverImage(idx)
+        case .mosaicFinishDraw(let dataList):
+            setTool(hidden: false)
+            stack.setMosaicData(dataList)
+        case .cropUpdateOption(let option):
+            contentView.setCrop(option)
+        case .cropReset:
+            contentView.cropReset()
+        case .cropCancel:
+            if options.toolOptions.count == 1 {
+                context.action(.back)
+                return
+            }
+            backButton.isHidden = false
+            contentView.cropCancel { [weak self] (_) in
+                self?.didEndCroping()
+            }
+        case .cropDone:
+            backButton.isHidden = false
+            contentView.cropDone { [weak self] (_) in
+                guard let self = self else { return }
+                self.didEndCroping()
+                if self.options.toolOptions.count == 1 {
+                    self.context.action(.done)
+                }
+            }
+        case .cropFinish(let data):
+            stack.setCropData(data)
+        case .textWillBeginEdit(let data):
+            openInputController(data)
+        case .textBringToFront(let data):
+            stack.moveTextDataToTop(data)
+        case .textWillBeginMove(_):
+            setTool(hidden: true)
+        case .textDidFinishMove(let data, let delete):
+            setTool(hidden: false)
+            if delete {
+                stack.removeTextData(data)
+            }
+        case .textCancel:
+            didEndInputing()
+            contentView.restoreHiddenTextView()
+        case .textDone(let data):
+            didEndInputing()
+            contentView.removeHiddenTextView()
+            if !data.text.isEmpty {
+                stack.addTextData(data)
+            }
+        }
+    }
+    
+    private func toolOptionsDidChanged(option: EditorPhotoToolOption?) {
+        contentView.canvas.isUserInteractionEnabled = false
+        contentView.mosaic?.isUserInteractionEnabled = false
+        contentView.scrollView.isScrollEnabled = option == nil
+        guard let option = option else { return }
+        switch option {
+        case .pen:
+            contentView.canvas.isUserInteractionEnabled = true
+            trackObserver?.track(event: .photoPen, userInfo: [:])
+        case .text:
+            openInputController()
+            trackObserver?.track(event: .photoText, userInfo: [:])
+        case .crop:
+            willBeginCrop()
+            if let option = options.cropOptions.first, !contentView.cropContext.didCrop {
+                toolView.cropToolView.currentOption = option
+                contentView.cropStart(with: option)
+            } else {
+                contentView.cropStart()
+            }
+            trackObserver?.track(event: .photoCrop, userInfo: [:])
+        case .mosaic:
+            if contentView.mosaic == nil {
+                showWaitHUD()
+            }
+            contentView.mosaic?.isUserInteractionEnabled = true
+            trackObserver?.track(event: .photoMosaic, userInfo: [:])
+        }
+    }
+}
+
+extension PhotoEditorController: PhotoEditingStackDelegate {
+    
+    func editingStack(_ stack: PhotoEditingStack, needUpdatePreview edit: PhotoEditingStack.Edit) {
+        toolView.penToolView.undoButton.isEnabled = edit.canvasCanUndo
+        toolView.mosaicToolView.undoButton.isEnabled = edit.mosaicCanUndo
+        contentView.updateView(with: edit)
     }
 }

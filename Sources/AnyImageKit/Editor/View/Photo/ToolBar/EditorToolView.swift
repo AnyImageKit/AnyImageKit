@@ -8,26 +8,7 @@
 
 import UIKit
 
-protocol EditorToolViewDelegate: AnyObject {
-    
-    func toolView(_ toolView: EditorToolView, optionDidChange option: EditorPhotoToolOption?)
-    
-    func toolView(_ toolView: EditorToolView, colorDidChange color: UIColor)
-    func toolView(_ toolView: EditorToolView, mosaicDidChange idx: Int)
-    
-    func toolViewUndoButtonTapped(_ toolView: EditorToolView)
-    
-    func toolViewCrop(_ toolView: EditorToolView, didClickCropOption option: EditorCropOption)
-    func toolViewCropCancelButtonTapped(_ toolView: EditorToolView)
-    func toolViewCropDoneButtonTapped(_ toolView: EditorToolView)
-    func toolViewCropResetButtonTapped(_ toolView: EditorToolView)
-    
-    func toolViewDoneButtonTapped(_ toolView: EditorToolView)
-}
-
 final class EditorToolView: UIView {
-    
-    weak var delegate: EditorToolViewDelegate?
     
     var currentOption: EditorPhotoToolOption? {
         editOptionsView.currentOption
@@ -95,10 +76,15 @@ final class EditorToolView: UIView {
         return view
     }()
     
-    private let options: EditorPhotoOptionsInfo
+    /// Context
+    private let context: PhotoEditorContext
+    /// 配置项
+    private var options: EditorPhotoOptionsInfo {
+        return context.options
+    }
     
-    init(frame: CGRect, options: EditorPhotoOptionsInfo) {
-        self.options = options
+    init(frame: CGRect, context: PhotoEditorContext) {
+        self.context = context
         super.init(frame: frame)
         setupView()
     }
@@ -143,8 +129,8 @@ final class EditorToolView: UIView {
         }
         penToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview().inset(20)
-            maker.bottom.equalTo(editOptionsView.snp.top).offset(-20)
-            maker.height.equalTo(20)
+            maker.bottom.equalTo(editOptionsView.snp.top).offset(-10)
+            maker.height.equalTo(30)
         }
         mosaicToolView.snp.makeConstraints { maker in
             maker.edges.equalTo(penToolView)
@@ -173,7 +159,7 @@ extension EditorToolView {
 extension EditorToolView {
     
     @objc private func doneButtonTapped() {
-        delegate?.toolViewDoneButtonTapped(self)
+        context.action(.done)
     }
 }
 
@@ -181,7 +167,7 @@ extension EditorToolView {
 extension EditorToolView: EditorEditOptionsViewDelegate {
     
     func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: EditorPhotoToolOption?) {
-        delegate?.toolView(self, optionDidChange: option)
+        context.action(.toolOptionChanged(option))
         
         guard let option = option else {
             penToolView.isHidden = true
@@ -212,11 +198,23 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
 extension EditorToolView: EditorPenToolViewDelegate {
     
     func penToolView(_ penToolView: EditorPenToolView, colorDidChange color: UIColor) {
-        delegate?.toolView(self, colorDidChange: color)
+        context.action(.penChangeColor(color))
     }
     
     func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView) {
-        delegate?.toolViewUndoButtonTapped(self)
+        context.action(.penUndo)
+    }
+}
+
+// MARK: - EditorMosaicToolViewDelegate
+extension EditorToolView: EditorMosaicToolViewDelegate {
+    
+    func mosaicToolView(_ mosaicToolView: EditorMosaicToolView, mosaicDidChange idx: Int) {
+        context.action(.mosaicChangeImage(idx))
+    }
+    
+    func mosaicToolViewUndoButtonTapped(_ mosaicToolView: EditorMosaicToolView) {
+        context.action(.mosaicUndo)
     }
 }
 
@@ -224,11 +222,11 @@ extension EditorToolView: EditorPenToolViewDelegate {
 extension EditorToolView: EditorCropToolViewDelegate {
     
     func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) {
-        delegate?.toolViewCrop(self, didClickCropOption: option)
+        context.action(.cropUpdateOption(option))
     }
     
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView) {
-        delegate?.toolViewCropCancelButtonTapped(self)
+        context.action(.cropCancel)
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
@@ -237,7 +235,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
     }
     
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView) {
-        delegate?.toolViewCropDoneButtonTapped(self)
+        context.action(.cropDone)
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
@@ -246,19 +244,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
     }
     
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView) {
-        delegate?.toolViewCropResetButtonTapped(self)
-    }
-}
-
-// MARK: - EditorMosaicToolViewDelegate
-extension EditorToolView: EditorMosaicToolViewDelegate {
-    
-    func mosaicToolView(_ mosaicToolView: EditorMosaicToolView, mosaicDidChange idx: Int) {
-        delegate?.toolView(self, mosaicDidChange: idx)
-    }
-    
-    func mosaicToolViewUndoButtonTapped(_ mosaicToolView: EditorMosaicToolView) {
-        delegate?.toolViewUndoButtonTapped(self)
+        context.action(.cropReset)
     }
 }
 

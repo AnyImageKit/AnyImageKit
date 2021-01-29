@@ -8,8 +8,10 @@
 
 import UIKit
 
-final class CropData: Codable {
+struct CropData: Codable, Equatable {
     
+    var cropOptionIdx: Int = 0
+    var didCrop: Bool = false
     var rect: CGRect = .zero
     var zoomScale: CGFloat = 1.0
     var contentSize: CGSize = .zero

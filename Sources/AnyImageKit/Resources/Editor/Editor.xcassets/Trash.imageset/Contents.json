@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "PhotoToolMosaicDefault.png",
+      "filename" : "Trash.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "PhotoToolMosaicDefault@2x.png",
+      "filename" : "Trash@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "PhotoToolMosaicDefault@3x.png",
+      "filename" : "Trash@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

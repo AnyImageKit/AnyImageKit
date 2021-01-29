@@ -259,16 +259,10 @@ extension PhotoPreviewController {
             scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : color
         }
         
-        if animated {
-            UIView.animate(withDuration: 0.25) {
-                self.navigationBar.alpha = hidden ? 0 : 1
-                self.toolBar.alpha = hidden ? 0 : 1
-                self.indexView.alpha = hidden ? 0 : 1
-            }
-        } else {
-            navigationBar.alpha = hidden ? 0 : 1
-            toolBar.alpha = hidden ? 0 : 1
-            indexView.alpha = hidden ? 0 : 1
+        UIView.animate(withDuration: animated ? 0.25 : 0) {
+            self.navigationBar.alpha = hidden ? 0 : 1
+            self.toolBar.alpha = hidden ? 0 : 1
+            self.indexView.alpha = hidden ? 0 : 1
         }
     }
     
@@ -435,7 +429,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.setImage(data.asset._image)
                 cell.setDownloadingProgress(1.0)
             } else {
-                if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
+                if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.phAsset.localIdentifier) {
                     cell.setImage(originalImage)
                     cell.setDownloadingProgress(1.0)
                 } else {
@@ -444,7 +438,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 }
             }
         case let cell as VideoPreviewCell:
-            if let originalImage = manager.cache.read(identifier: cell.asset.phAsset.localIdentifier, deleteMemoryStorage: false) {
+            if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.phAsset.localIdentifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)

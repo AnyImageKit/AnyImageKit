@@ -81,4 +81,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Library Lint Check
-      run: pod lib lint
+      run: pod lib lint --allow-warnings
