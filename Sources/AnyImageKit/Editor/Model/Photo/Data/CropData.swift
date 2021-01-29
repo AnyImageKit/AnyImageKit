@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CropData: Codable {
+struct CropData: Codable, Equatable {
     
     var cropOptionIdx: Int = 0
     var didCrop: Bool = false
@@ -17,17 +17,4 @@ final class CropData: Codable {
     var contentSize: CGSize = .zero
     var contentOffset: CGPoint = .zero
     var imageViewFrame: CGRect = .zero
-}
-
-extension CropData: Equatable {
-    
-    static func == (lhs: CropData, rhs: CropData) -> Bool {
-        return lhs.cropOptionIdx == rhs.cropOptionIdx
-            && lhs.didCrop == rhs.didCrop
-            && lhs.rect == rhs.rect
-            && lhs.zoomScale == rhs.zoomScale
-            && lhs.contentSize == rhs.contentSize
-            && lhs.contentOffset == rhs.contentOffset
-            && lhs.imageViewFrame == rhs.imageViewFrame
-    }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct MosaicData: Codable {
+struct MosaicData: Codable, Equatable {
     
     let idx: Int
     let drawnPaths: [DrawnPath]
@@ -17,12 +17,5 @@ struct MosaicData: Codable {
          drawnPaths: [DrawnPath]) {
         self.idx = idx
         self.drawnPaths = drawnPaths
-    }
-}
-
-extension MosaicData: Equatable {
-    
-    static func == (lhs: MosaicData, rhs: MosaicData) -> Bool {
-        return lhs.idx == rhs.idx && lhs.drawnPaths == rhs.drawnPaths
     }
 }
