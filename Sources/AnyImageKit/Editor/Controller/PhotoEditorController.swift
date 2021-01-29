@@ -202,7 +202,6 @@ extension PhotoEditorController {
     /// 存储编辑记录
     private func saveEditPath() {
         if options.cacheIdentifier.isEmpty { return }
-        contentView.setupLastCropDataIfNeeded()
         stack.save()
     }
     

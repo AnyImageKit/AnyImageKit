@@ -334,19 +334,6 @@ extension PhotoEditorContentView {
         let bottomInset = scrollView.bounds.height - cropRect.height + 0.1
         scrollView.contentInset = UIEdgeInsets(top: 0.1, left: 0.1, bottom: bottomInset, right: rightInset)
     }
-    
-    /// 设置lastCropData - 未裁剪时，记录初始数据
-    func setupLastCropDataIfNeeded() {
-        if didCrop { return }
-        var cropFrame = self.cropFrame
-        lastCropData.rect = cropFrame
-        lastCropData.zoomScale = 1.0
-        cropFrame.origin.x -= cropX
-        cropFrame.origin.y -= cropY
-        lastCropData.contentSize = cropFrame.size
-        lastCropData.contentOffset = .zero
-        lastCropData.imageViewFrame = cropFrame
-    }
 }
 
 // MARK: - Calculate
