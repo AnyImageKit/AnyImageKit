@@ -23,13 +23,14 @@ extension PhotoPreviewController {
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth))
                 manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
                     guard let self = self else { return }
-                    hideHUD()
                     switch result {
                     case .success(let response):
                         if !response.isDegraded {
+                            hideHUD(animated: false)
                             self.showEditor(response.image, identifier: data.asset.phAsset.localIdentifier)
                         }
                     case .failure(let error):
+                        hideHUD()
                         _print(error)
                     }
                 }

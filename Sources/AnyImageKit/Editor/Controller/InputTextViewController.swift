@@ -8,12 +8,6 @@
 
 import UIKit
 
-protocol InputTextViewControllerDelegate: AnyObject {
-    
-    func inputTextDidCancel(_ controller: InputTextViewController)
-    func inputText(_ controller: InputTextViewController, didFinishInput data: TextData)
-}
-
 final class InputTextViewController: AnyImageViewController {
     
     private lazy var coverImageView: UIImageView = {
@@ -77,8 +71,10 @@ final class InputTextViewController: AnyImageViewController {
         return view
     }()
     
-    private weak var delegate: InputTextViewControllerDelegate?
-    private let options: EditorPhotoOptionsInfo
+    private let context: PhotoEditorContext
+    private var options: EditorPhotoOptionsInfo {
+        return context.options
+    }
     private let coverImage: UIImage?
     private let data: TextData
     
@@ -86,9 +82,8 @@ final class InputTextViewController: AnyImageViewController {
     private var isBegin: Bool = true
     private var containerSize: CGSize = .zero
     
-    init(options: EditorPhotoOptionsInfo, data: TextData, coverImage: UIImage?, delegate: InputTextViewControllerDelegate) {
-        self.delegate = delegate
-        self.options = options
+    init(context: PhotoEditorContext, data: TextData, coverImage: UIImage?) {
+        self.context = context
         self.coverImage = coverImage
         self.data = data
         super.init(nibName: nil, bundle: nil)
@@ -200,16 +195,17 @@ final class InputTextViewController: AnyImageViewController {
 extension InputTextViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIButton) {
-        delegate?.inputTextDidCancel(self)
+        context.action(.textCancel)
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         updateTextCoverView()
         textView.resignFirstResponder()
+        data.frame = .zero
         data.text = textView.text
         data.imageData = textCoverView.screenshot().pngData() ?? Data()
-        delegate?.inputText(self, didFinishInput: data)
+        context.action(.textDone(data))
         dismiss(animated: true, completion: nil)
     }
 }

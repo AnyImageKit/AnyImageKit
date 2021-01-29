@@ -10,15 +10,17 @@ import UIKit
 
 final class CropGridView: UIView {
 
-    private lazy var bgLayer: CAShapeLayer = {
+    private(set) lazy var bgLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
+        layer.opacity = 0
         layer.frame = bounds
         layer.fillRule = .evenOdd
-        layer.fillColor = UIColor.black.withAlphaComponent(0.8).cgColor
+        layer.fillColor = UIColor.black.cgColor
         return layer
     }()
     private lazy var rectLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
+        layer.opacity = 0
         layer.lineWidth = 1
         layer.strokeColor = UIColor.white.cgColor
         layer.fillColor = UIColor.clear.cgColor
@@ -26,8 +28,9 @@ final class CropGridView: UIView {
     }()
     private lazy var lineLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
+        layer.opacity = 0
         layer.lineWidth = 1
-        layer.strokeColor = UIColor.white.withAlphaComponent(0.7).cgColor
+        layer.strokeColor = UIColor.white.cgColor
         layer.fillColor = UIColor.clear.cgColor
         return layer
     }()
@@ -93,5 +96,29 @@ extension CropGridView {
         self.animated = animated
         cropRect = rect
         setNeedsDisplay()
+    }
+    
+    func setHidden(_ hidden: Bool, animated: Bool) {
+        bgLayer.opacity = hidden ? 0.0 : 0.8
+        rectLayer.opacity = hidden ? 0.0 : 1.0
+        lineLayer.opacity = hidden ? 0.0 : 0.7
+        
+        guard animated else { return }
+        let duration = 0.25
+        let bgAnimation = CABasicAnimation.create(keyPath: "opacity",
+                                                  duration: duration,
+                                                  fromValue: hidden ? 0.8 : 1.0,
+                                                  toValue: hidden ? 0.0 : 0.8)
+        bgLayer.add(bgAnimation, forKey: "opacity")
+        let rectAnimation = CABasicAnimation.create(keyPath: "opacity",
+                                                    duration: duration,
+                                                    fromValue: hidden ? 1.0 : 0.0,
+                                                    toValue: hidden ? 0.0 : 1.0)
+        rectLayer.add(rectAnimation, forKey: "opacity")
+        let lineAnimation = CABasicAnimation.create(keyPath: "opacity",
+                                                    duration: duration,
+                                                    fromValue: hidden ? 0.7 : 0.0,
+                                                    toValue: hidden ? 0.0 : 0.7)
+        lineLayer.add(lineAnimation, forKey: "opacity")
     }
 }

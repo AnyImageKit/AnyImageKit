@@ -102,7 +102,7 @@ extension PickerManager {
                         let resizedImage = UIImage.resize(from: response.image, limitSize: options.targetSize, isExact: true)
                         self.resizeSemaphore.signal()
                         if !response.isDegraded && options.needCache {
-                            self.cache.write(resizedImage, identifier: asset.localIdentifier)
+                            self.cache.store(resizedImage, forKey: asset.localIdentifier)
                         }
                         DispatchQueue.main.async {
                             completion(.success(.init(image: resizedImage, isDegraded: response.isDegraded)))
@@ -110,7 +110,7 @@ extension PickerManager {
                     }
                 case .thumbnail:
                     if !response.isDegraded && options.needCache {
-                        self.cache.write(response.image, identifier: asset.localIdentifier)
+                        self.cache.store(response.image, forKey: asset.localIdentifier)
                     }
                     completion(.success(.init(image: response.image, isDegraded: response.isDegraded)))
                 }
@@ -150,7 +150,7 @@ extension PickerManager {
                                     return
                                 }
                                 self.resizeSemaphore.signal()
-                                self.cache.write(resizedImage, identifier: asset.localIdentifier)
+                                self.cache.store(resizedImage, forKey: asset.localIdentifier)
                                 DispatchQueue.main.async {
                                     completion(.success(.init(image: resizedImage, isDegraded: false)))
                                 }

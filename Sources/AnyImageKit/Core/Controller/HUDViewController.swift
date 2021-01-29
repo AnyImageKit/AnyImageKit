@@ -98,8 +98,8 @@ extension HUDViewController {
         }
     }
     
-    func hide() {
-        UIView.animate(withDuration: 0.25, animations: {
+    func hide(animated: Bool = true) {
+        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
             self.indicatorCoverView.alpha = 0
             self.labelCoverView.alpha = 0
         }) { _ in
