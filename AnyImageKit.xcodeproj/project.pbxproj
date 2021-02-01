@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7117A24425A5959C000D493F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		7117A24825A595A8000D493F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		7117A25025A59753000D493F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		71208EB2256F876F002C023A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		71208EBA256F8D88002C023A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		71208EC0256F8D93002C023A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		7117A24425A5959C000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		7117A24825A595A8000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		7117A25025A59753000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		71208EB2256F876F002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		71208EBA256F8D88002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		71208EC0256F8D93002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		713C204E25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */; };
 		713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204F25AD32AA00BB0F66 /* Cacheable.swift */; };
 		713C206725AD32D800BB0F66 /* PhotoEditorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */; };
@@ -1516,7 +1516,7 @@
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
-				7117A24825A595A8000D493F /* BuildFile in Sources */,
+				7117A24825A595A8000D493F /* (null) in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
 				716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */,
@@ -1568,7 +1568,7 @@
 				A0839B6D23C2DBD700FF8FDE /* VideoExportPreset.swift in Sources */,
 				A507CD8223C4228F00E55A6B /* EditorPhotoResource.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
-				71208EC0256F8D93002C023A /* BuildFile in Sources */,
+				71208EC0256F8D93002C023A /* (null) in Sources */,
 				A005C30D253D33180021E323 /* AnyImageEvent.swift in Sources */,
 				A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */,
 				A0B22EA5237AA1B3001F6066 /* Core+UICollectionView.swift in Sources */,
@@ -1601,7 +1601,7 @@
 				A561239B23B5EDA90071C3E8 /* UserInterfaceStyle.swift in Sources */,
 				A5DF1E86237AA32C00E3A32E /* Editor+CABasicAnimation.swift in Sources */,
 				A561239923B5E8550071C3E8 /* Sort.swift in Sources */,
-				7117A24425A5959C000D493F /* BuildFile in Sources */,
+				7117A24425A5959C000D493F /* (null) in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
 				A0839B7623C44C5A00FF8FDE /* Permission+Photos.swift in Sources */,
 				A56A3C7B2330747A00EBFC48 /* ScalePresentationController.swift in Sources */,
@@ -1626,7 +1626,7 @@
 				713C206C25AD32D800BB0F66 /* MosaicData.swift in Sources */,
 				A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */,
 				A5ABEF2A239F76EC00B50543 /* TextImageView.swift in Sources */,
-				71208EBA256F8D88002C023A /* BuildFile in Sources */,
+				71208EBA256F8D88002C023A /* (null) in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,
 				A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */,
 				713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */,
@@ -1647,7 +1647,7 @@
 				A5347D2A23AA1B9A00C93874 /* ExportTool+PhotoURL.swift in Sources */,
 				A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */,
 				A50B2113237AA24300A894A9 /* CropGridView.swift in Sources */,
-				7117A25025A59753000D493F /* BuildFile in Sources */,
+				7117A25025A59753000D493F /* (null) in Sources */,
 				715D6B37256E449B004D9BF1 /* Mosaic.swift in Sources */,
 				A0831E1923B0A33100B7E70F /* Capture+CIImage.swift in Sources */,
 				A01F15CF23CC38A800F41097 /* DeviceIOComponent.swift in Sources */,
@@ -1677,7 +1677,7 @@
 				A50B211E237AA24300A894A9 /* PhotoEditorContentView+Crop.swift in Sources */,
 				A0E14CBD251B8FAB00A9FC32 /* Core+Bundle.swift in Sources */,
 				A5DF1E85237AA32C00E3A32E /* Editor+CGPoint.swift in Sources */,
-				71208EB2256F876F002C023A /* BuildFile in Sources */,
+				71208EB2256F876F002C023A /* (null) in Sources */,
 				A01C583123B33CFD00691F11 /* ImageEditorCache.swift in Sources */,
 				A50B2104237AA24200A894A9 /* ImageEditorController.swift in Sources */,
 				71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */,
