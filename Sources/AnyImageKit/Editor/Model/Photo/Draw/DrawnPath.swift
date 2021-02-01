@@ -35,7 +35,7 @@ struct DrawnPath: Codable {
         try container.encode(brush, forKey: .brush)
         try container.encode(scale, forKey: .scale)
         try container.encode(uuid, forKey: .uuid)
-        saveBezierPath()
+        try saveBezierPath()
     }
     
     init(from decoder: Decoder) throws {
@@ -43,20 +43,32 @@ struct DrawnPath: Codable {
         brush = try values.decode(Brush.self, forKey: .brush)
         scale = try values.decode(CGFloat.self, forKey: .scale)
         uuid = try values.decode(String.self, forKey: .uuid)
-        bezierPath = DrawnPath.loadBezierPath(uuid: uuid)
+        bezierPath = try DrawnPath.loadBezierPath(uuid: uuid)
     }
     
-    private func saveBezierPath() {
+    private func saveBezierPath() throws {
         let path = CacheModule.editor(.bezierPath).path
         let file = "\(path)\(uuid)"
         FileHelper.createDirectory(at: path)
-        NSKeyedArchiver.archiveRootObject(bezierPath, toFile: file)
+        if #available(iOS 11.0, macCatalyst 13.0, *) {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: bezierPath, requiringSecureCoding: true)
+            let url = URL(fileURLWithPath: file)
+            try data.write(to: url)
+        } else {
+            NSKeyedArchiver.archiveRootObject(bezierPath, toFile: file)
+        }
     }
     
-    static private func loadBezierPath(uuid: String) -> UIBezierPath {
+    static private func loadBezierPath(uuid: String) throws -> UIBezierPath {
         let path = CacheModule.editor(.bezierPath).path
         let file = "\(path)\(uuid)"
-        return (NSKeyedUnarchiver.unarchiveObject(withFile: file) as? UIBezierPath) ?? UIBezierPath()
+        if #available(iOS 11.0, macCatalyst 13.0, *) {
+            let url = URL(fileURLWithPath: file)
+            let data = try Data(contentsOf: url)
+            return try NSKeyedUnarchiver.unarchivedObject(ofClass: UIBezierPath.self, from: data) ?? UIBezierPath()
+        } else {
+            return (NSKeyedUnarchiver.unarchiveObject(withFile: file) as? UIBezierPath) ?? UIBezierPath()
+        }
     }
 }
 
