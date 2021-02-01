@@ -186,6 +186,12 @@ final class PhotoPreviewController: AnyImageViewController {
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
     }
+    
+    override func setStatusBar(hidden: Bool) {
+        if let controller = (presentingViewController as? AnyImageNavigationController)?.topViewController as? AssetPickerViewController {
+            controller.setStatusBar(hidden: hidden)
+        }
+    }
 }
 
 // MARK: - Private function
@@ -252,7 +258,7 @@ extension PhotoPreviewController {
         if navigationBar.alpha == 0 && hidden { return }
         if navigationBar.alpha == 1 && !hidden { return }
         if isNormal {
-            NotificationCenter.default.post(name: .setupStatusBarHidden, object: hidden)
+            setStatusBar(hidden: hidden)
             let color = UIColor.create(style: manager.options.theme.style,
                                        light: .white,
                                        dark: .black)
@@ -317,7 +323,7 @@ extension PhotoPreviewController {
     @objc private func backButtonTapped(_ sender: UIButton) {
         delegate?.previewControllerWillDisappear(self)
         dismiss(animated: true, completion: nil)
-        NotificationCenter.default.post(name: .setupStatusBarHidden, object: false)
+        setStatusBar(hidden: false)
     }
     
     /// NavigationBar - Select
@@ -515,7 +521,7 @@ extension PhotoPreviewController: PreviewCellDelegate {
     func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool) {
         if isExit {
             dismiss(animated: true, completion: nil)
-            NotificationCenter.default.post(name: .setupStatusBarHidden, object: false)
+            setStatusBar(hidden: false)
         } else if !toolBarHiddenStateBeforePan {
             setBar(hidden: false, isNormal: false)
         }

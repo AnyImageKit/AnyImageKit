@@ -11,6 +11,11 @@ import UIKit
 class AnyImageViewController: UIViewController {
     
     private var page: AnyImagePage = .undefined
+    private var isStatusBarHidden: Bool = false {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
     
     weak var trackObserver: DataTrackObserver?
     
@@ -33,9 +38,29 @@ class AnyImageViewController: UIViewController {
         setTrackObserverOrDelegate(viewControllerToPresent)
         super.present(viewControllerToPresent, animated: flag, completion: completion)
     }
+    
+    override var prefersStatusBarHidden: Bool {
+        return isStatusBarHidden
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait]
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
+    
+    func setStatusBar(hidden: Bool) {
+        isStatusBarHidden = hidden
+    }
 }
 
-// MARK: - Alert
+// MARK: - Function
 extension AnyImageViewController {
     
     func showAlert(message: String) {

@@ -74,6 +74,7 @@ final class CaptureViewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setStatusBar(hidden: true)
         setupNavigation()
         setupView()
         var permissions: [Permission] = [.camera]

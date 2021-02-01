@@ -10,7 +10,6 @@ import Foundation
 
 extension Notification.Name {
     
-    static let setupStatusBarHidden = Notification.Name("org.AnyImageProject.AnyImageKit.Notification.Name.SetupStatusBar")
     static let containerSizeDidChange = Notification.Name("org.AnyImageProject.AnyImageKit.Notification.Name.ContainerSizeDidChange")
     static let didSyncAsset = Notification.Name("org.AnyImageProject.AnyImageKit.Notification.Name.DidSyncAsset")
 }

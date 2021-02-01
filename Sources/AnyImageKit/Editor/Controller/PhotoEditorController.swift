@@ -70,6 +70,7 @@ final class PhotoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setStatusBar(hidden: true)
         bindAction()
         loadData()
         navigationController?.navigationBar.isHidden = true
@@ -115,7 +116,8 @@ final class PhotoEditorController: AnyImageViewController {
         }
         backButton.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+                let topOffset = ScreenHelper.statusBarFrame.height <= 20 ? 20 : 10
+                maker.top.equalTo(view.safeAreaLayoutGuide).offset(topOffset)
             } else {
                 maker.top.equalToSuperview().offset(30)
             }
