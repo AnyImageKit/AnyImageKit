@@ -135,6 +135,9 @@ final class PhotoEditorController: AnyImageViewController {
         contentView.setupMosaicView { [weak self] _ in
             guard let self = self else { return }
             self.setupData()
+            if let toolOption = self.context.toolOption, toolOption == .mosaic {
+                self.contentView.mosaic?.isUserInteractionEnabled = true
+            }            
             self.contentView.updateView(with: self.stack.edit) { [weak self] in
                 self?.toolView.mosaicToolView.setMosaicIdx(self?.stack.edit.mosaicData.last?.idx ?? 0)
                 let delay = (self?.stack.edit.mosaicData.isEmpty ?? true) ? 0.0 : 0.25
