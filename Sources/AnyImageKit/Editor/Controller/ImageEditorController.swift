@@ -71,10 +71,6 @@ open class ImageEditorController: AnyImageNavigationController {
         }
         containerSize = newSize
     }
-    
-    open override var prefersStatusBarHidden: Bool {
-        return true
-    }
 }
 
 extension ImageEditorController {

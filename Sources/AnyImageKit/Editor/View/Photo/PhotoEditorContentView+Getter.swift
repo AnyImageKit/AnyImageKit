@@ -63,7 +63,8 @@ extension PhotoEditorContentView {
     }
     /// 裁剪 Y 的偏移量
     var cropY: CGFloat {
-        return topMargin + 15
+        let topOffset: CGFloat = ScreenHelper.statusBarFrame.height == 0 ? 25 : 0
+        return topMargin + topOffset + 15
     }
     /// 裁剪底部的偏移量
     var cropBottomOffset: CGFloat {

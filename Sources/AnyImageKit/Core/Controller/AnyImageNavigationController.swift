@@ -11,7 +11,7 @@ import SnapKit
 
 open class AnyImageNavigationController: UINavigationController {
     
-    private var hasOverrideGeneratingDeviceOrientation = false
+    private var hasOverrideGeneratingDeviceOrientation: Bool = false
     
     open weak var trackDelegate: ImageKitDataTrackDelegate?
     
@@ -19,20 +19,24 @@ open class AnyImageNavigationController: UINavigationController {
     
     open var enableForceUpdate: Bool = false
     
-    open override var shouldAutorotate: Bool {
-        return false
+    open override var childForStatusBarHidden: UIViewController? {
+        return topViewController
     }
     
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        return .fade
+    open override var childForStatusBarStyle: UIViewController? {
+        return topViewController
+    }
+    
+    open override var shouldAutorotate: Bool {
+        return topViewController?.shouldAutorotate ?? false
     }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
+        return topViewController?.supportedInterfaceOrientations ?? [.portrait]
     }
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
+        return topViewController?.preferredInterfaceOrientationForPresentation ?? .portrait
     }
 }
 

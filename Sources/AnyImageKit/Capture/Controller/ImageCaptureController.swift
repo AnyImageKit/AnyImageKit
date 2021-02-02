@@ -60,10 +60,6 @@ open class ImageCaptureController: AnyImageNavigationController {
             }
         }
     }
-    
-    open override var prefersStatusBarHidden: Bool {
-        return true
-    }
 }
 
 extension ImageCaptureController {

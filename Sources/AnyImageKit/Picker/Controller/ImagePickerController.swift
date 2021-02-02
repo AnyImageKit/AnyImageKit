@@ -27,7 +27,6 @@ open class ImagePickerController: AnyImageNavigationController {
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
     private var containerSize: CGSize = .zero
-    private var hiddenStatusBar: Bool = false
     private var didFinishSelect: Bool = false
     private let workQueue = DispatchQueue.init(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.ImagePickerController")
     
@@ -81,10 +80,6 @@ open class ImagePickerController: AnyImageNavigationController {
         } else {
             super.dismiss(animated: flag, completion: completion)
         }
-    }
-    
-    open override var prefersStatusBarHidden: Bool {
-        return hiddenStatusBar
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -258,20 +253,12 @@ extension ImagePickerController {
     
     private func addNotifications() {
         beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(setupStatusBarHidden(_:)), name: .setupStatusBarHidden, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
     }
     
     private func removeNotifications() {
         NotificationCenter.default.removeObserver(self)
         endGeneratingDeviceOrientationNotifications()
-    }
-    
-    @objc private func setupStatusBarHidden(_ sender: Notification) {
-        if let hidden = sender.object as? Bool {
-            hiddenStatusBar = hidden
-            setNeedsStatusBarAppearanceUpdate()
-        }
     }
     
     @objc private func didSyncAsset(_ sender: Notification) {
