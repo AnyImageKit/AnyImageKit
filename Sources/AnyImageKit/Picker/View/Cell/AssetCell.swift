@@ -299,7 +299,7 @@ private class EditedView: UIView {
 
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.editorImage(named: "PhotoEdited")
+        view.image = BundleHelper.pickerImage(named: "PhotoEdited")
         return view
     }()
     private lazy var coverLayer: CAGradientLayer = {
