@@ -64,7 +64,7 @@ jobs:
     - name: Pod Install
       run: pod install
     - name: Archive for Mac Catalyst slice
-      run: xcrun xcodebuild archive -quiet -workspace AnyImageKit.xcworkspace -scheme AnyImageKit -configuration Release -destination "generic/platform=macOS,variant=Mac Catalyst" -archivePath "Build/AnyImageKit-catalyst.xcarchive" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+      run: xcrun xcodebuild archive -quiet -workspace AnyImageKit.xcworkspace -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit-catalyst.xcarchive" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
   CocoaPods:
     name: CocoaPods Library Lint
