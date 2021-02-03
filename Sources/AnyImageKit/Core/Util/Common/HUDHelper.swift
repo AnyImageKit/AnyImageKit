@@ -17,10 +17,10 @@ private var hud: HUDViewController? {
     return _hud
 }
 
-func showWaitHUD() {
+func showWaitHUD(_ message: String = "") {
     Thread.runOnMain {
         createHUDWindowIfNeeded()
-        hud?.wait()
+        hud?.wait(message: message)
     }
 }
 
