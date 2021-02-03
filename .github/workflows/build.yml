@@ -25,8 +25,16 @@ jobs:
     - uses: actions/checkout@v2
     - name: Pod Install
       run: pod install
-    - name: Archive for Device slice
-      run: xcodebuild archive -workspace AnyImageKit.xcworkspace -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS"  -archivePath "Build/AnyImageKit.framework-iphoneos.xcarchive" SKIP_INSTALL=NO
+    - name: Archive for iOS evice slice
+      run: xcrun xcodebuild archive \
+        -quiet \
+        -workspace AnyImageKit.xcworkspace \
+        -scheme AnyImageKit \
+        -configuration Release \
+        -destination "generic/platform=iOS" \
+        -archivePath "Build/AnyImageKit.framework-iphoneos.xcarchive" \
+        SKIP_INSTALL=NO \
+        BUILD_LIBRARY_FOR_DISTRIBUTION=YES
     
   iOS_Simulator:
     name: Test iOS Simulator
@@ -44,8 +52,16 @@ jobs:
     - uses: actions/checkout@v2
     - name: Pod Install
       run: pod install
-    - name: Archive for Simulator slice
-      run: xcodebuild archive -workspace AnyImageKit.xcworkspace -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS Simulator" -archivePath "Build/AnyImageKit.framework-iphonesimulator.xcarchive" SKIP_INSTALL=NO
+    - name: Archive for iOS Simulator slice
+      run: xcrun xcodebuild archive \
+      -quiet \
+      -workspace AnyImageKit.xcworkspace \
+      -scheme AnyImageKit \
+      -configuration Release \
+      -destination "generic/platform=iOS Simulator" \
+      -archivePath "Build/AnyImageKit.framework-iphonesimulator.xcarchive" \
+      SKIP_INSTALL=NO \
+      BUILD_LIBRARY_FOR_DISTRIBUTION=YES
     
   Mac_Catalyst:
     name: Test Mac Catalys
@@ -64,7 +80,15 @@ jobs:
     - name: Pod Install
       run: pod install
     - name: Archive for Mac Catalyst slice
-      run: xcodebuild archive -workspace AnyImageKit.xcworkspace -scheme AnyImageKit -configuration Release -destination "platform=macOS,arch=x86_64,variant=Mac Catalyst" -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" SKIP_INSTALL=NO
+      run: xcrun xcodebuild archive \
+      -quiet \
+      -workspace AnyImageKit.xcworkspace \
+      -scheme AnyImageKit \
+      -configuration Release \
+      -destination "generic/platform=macOS,variant=Mac Catalyst" \
+      -archivePath "Build/AnyImageKit.framework-catalyst.xcarchive" \
+      SKIP_INSTALL=NO \
+      BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
   CocoaPods:
     name: CocoaPods Library Lint
@@ -81,4 +105,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Library Lint Check
-      run: pod lib lint --allow-warnings
+      run: pod lib lint
