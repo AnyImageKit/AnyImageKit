@@ -14,7 +14,7 @@ jobs:
     runs-on: macOS-latest
     
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
       
     strategy:
       matrix:
@@ -33,7 +33,7 @@ jobs:
     runs-on: macOS-latest
 
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
     
     strategy:
       matrix:
@@ -52,7 +52,7 @@ jobs:
     runs-on: macOS-latest
 
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
       
     strategy:
       matrix:
@@ -71,7 +71,7 @@ jobs:
     runs-on: macOS-latest
 
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
 
     strategy:
       matrix:
