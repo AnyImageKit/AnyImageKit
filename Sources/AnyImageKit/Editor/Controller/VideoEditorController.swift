@@ -28,9 +28,9 @@ final class VideoEditorController: AnyImageViewController {
     private lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
         view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-        view.setImage(BundleHelper.image(named: "ReturnBackButton"), for: .normal)
+        view.setImage(BundleHelper.editorImage(named: "ReturnBackButton"), for: .normal)
         view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Back")
+        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "Back")
         return view
     }()
     private lazy var videoPreview: VideoPreview = {

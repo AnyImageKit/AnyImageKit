@@ -22,7 +22,7 @@ final class VideoEditorToolView: UIView {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
         view.backgroundColor = options.tintColor
-        view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
+        view.setTitle(BundleHelper.coreLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
@@ -74,7 +74,7 @@ final class VideoEditorToolView: UIView {
     
     private func createButton(tag: Int, option: EditorVideoToolOption) -> UIButton {
         let button = UIButton(type: .custom)
-        let image = BundleHelper.image(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
+        let image = BundleHelper.editorImage(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white

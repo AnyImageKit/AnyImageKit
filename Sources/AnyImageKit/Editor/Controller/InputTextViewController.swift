@@ -22,7 +22,7 @@ final class InputTextViewController: AnyImageViewController {
     }()
     private lazy var cancelButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setTitle(BundleHelper.editorLocalizedString(key: "Cancel"), for: .normal)
+        view.setTitle(BundleHelper.coreLocalizedString(key: "Cancel"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
@@ -32,7 +32,7 @@ final class InputTextViewController: AnyImageViewController {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 4
         view.backgroundColor = options.tintColor
-        view.setTitle(BundleHelper.editorLocalizedString(key: "Done"), for: .normal)
+        view.setTitle(BundleHelper.coreLocalizedString(key: "Done"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)

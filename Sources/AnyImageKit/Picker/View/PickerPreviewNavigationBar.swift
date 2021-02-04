@@ -12,10 +12,10 @@ final class PickerPreviewNavigationBar: UIView {
     
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
-        let image = BundleHelper.image(named: "ReturnButton", style: options.theme.style)
+        let image = BundleHelper.pickerImage(named: "ReturnButton", style: options.theme.style)
         view.setImage(image, for: .normal)
         view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
-        view.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Back")
+        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "Back")
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
