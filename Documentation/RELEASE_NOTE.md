@@ -1,5 +1,23 @@
 # Release Notes
 
+## 0.13.0
+
+### General
+
+- AnyImageKit now support `resource_bundles` for CocoaPods.([#79](https://github.com/AnyImageProject/AnyImageKit/pull/79))
+- Added `Tr` internationalization support.([#70](https://github.com/AnyImageProject/AnyImageKit/pull/70))
+
+### New Features
+
+- Editor
+  - The output workflow has been refactored so that editing now does not reduce the resolution of the original image.([#67](https://github.com/AnyImageProject/AnyImageKit/pull/67))
+
+### Resolved
+
+- Core
+  - Fix the problem that `AnyImageError.invalidExportPreset` is thrown when setting HEVC/H.265 output with devices below A10 chip, and the unsupported devices will be downgraded to AVC/H.264 solution automatically.([#75](https://github.com/AnyImageProject/AnyImageKit/pull/75))
+  - Fix the issue that the status bar is not hidden correctly on iPhone8/8 Plus and older device.([#68](https://github.com/AnyImageProject/AnyImageKit/pull/68))
+
 ## 0.12.0
 
 ### New Features
