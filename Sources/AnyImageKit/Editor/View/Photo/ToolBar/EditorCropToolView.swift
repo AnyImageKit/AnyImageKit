@@ -62,20 +62,20 @@ final class EditorCropToolView: UIView {
     private(set) lazy var cancelButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.editorImage(named: "XMark"), for: .normal)
-        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "Cancel")
+        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "CANCEL")
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.editorImage(named: "CheckMark"), for: .normal)
-        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "Done")
+        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "DONE")
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var resetbutton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setTitle(BundleHelper.editorLocalizedString(key: "Reset"), for: .normal)
+        view.setTitle(BundleHelper.coreLocalizedString(key: "RESET"), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         view.addTarget(self, action: #selector(resetButtonTapped(_:)), for: .touchUpInside)

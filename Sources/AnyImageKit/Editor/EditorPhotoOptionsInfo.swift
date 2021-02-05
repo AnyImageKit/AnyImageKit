@@ -100,13 +100,13 @@ extension EditorPhotoToolOption: CustomStringConvertible {
     public var description: String {
         switch self {
         case .pen:
-            return "Pen"
+            return "PEN"
         case .text:
-            return "Input text"
+            return "INPUT_TEXT"
         case .crop:
-            return "Crop"
+            return "CROP"
         case .mosaic:
-            return "Mosaic"
+            return "MOSAIC"
         }
     }
 }

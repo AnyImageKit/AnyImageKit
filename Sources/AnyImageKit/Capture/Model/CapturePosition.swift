@@ -48,9 +48,9 @@ extension CapturePosition {
     var localizedTips: String {
         switch self {
         case .back:
-            return BundleHelper.captureLocalizedString(key: "Switch to front camera")
+            return BundleHelper.captureLocalizedString(key: "SWITCH_TO_FRONT_CAMERA")
         case .front:
-            return BundleHelper.captureLocalizedString(key: "Switch to back camera")
+            return BundleHelper.captureLocalizedString(key: "SWITCH_TO_BACK_CAMERA")
         }
     }
 }

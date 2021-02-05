@@ -47,7 +47,7 @@ extension EditorVideoToolOption: CustomStringConvertible {
     public var description: String {
         switch self {
         case .clip:
-            return "Crop"
+            return "CROP"
         }
     }
 }

@@ -6,19 +6,15 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"Photo" = "Photo";
-"Video" = "Video";
-"Live photo" = "LIVE";
-"Original image" = "Original image";
-"Select photo" = "Select photo";
-"Unselect photo" = "Unselect photo";
-"Take photo" = "Take photo";
+"ORIGINAL_IMAGE" = "Original image";
+"SELECT_PHOTO" = "Select photo";
+"UNSELECT_PHOTO" = "Unselect photo";
+"TAKE_PHOTO" = "Take photo";
 "SELECT_A_MAXIMUM_OF_PHOTOS" = "Select a maximum of %zd photos";
 "SELECT_A_MAXIMUM_OF_VIDEOS" = "Select a maximum of %zd videos";
 "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS" = "Select a maximum of %zd photos or videos";
-"LOADING" = "Loading";
-"Downloading from iCloud" = "Downloading from iCloud";
-"Fetch failed, please retry" = "Fetch failed, please retry";
-"Switch album, current album is %@" = "Switch album, current album is %@";
-"Can't fetch all photos\nClick to select more photos" = "Can't fetch all photos\nClick to select more photos";
+"DOWNLOADING_FROM_ICLOUD" = "Downloading from iCloud";
+"FETCH_FAILED_PLEASE_RETRY" = "Fetch failed, please retry";
+"A11Y_SWITCH_ALBUM_TIPS" = "Switch album, current album is %@";
+"LIMITED_PHOTOS_PERMISSION_TIPS" = "Can't fetch all photos\nClick to select more photos";
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "The duration of the selected video should be between %d-%d seconds.";

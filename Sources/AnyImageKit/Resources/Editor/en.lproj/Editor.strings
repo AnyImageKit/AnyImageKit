@@ -6,18 +6,12 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"Undo" = "Undo";
-"Play" = "Play";
-"Pause" = "Pause";
-"Reset" = "Reset";
-"Downloading" = "Downloading";
+"PEN" = "Pen";
+"CROP" = "Crop";
+"MOSAIC" = "Mosaic";
+"INPUT_TEXT" = "Input text";
 
-"Pen" = "Pen";
-"Crop" = "Crop";
-"Mosaic" = "Mosaic";
-"Input text" = "Input text";
+"FREE" = "Free";
 
-"Free" = "Free";
-
-"Drag here to remove" = "Drag here to remove";
-"Release to remove" = "Release to remove";
+"DRAG_HERE_TO_REMOVE" = "Drag here to remove";
+"RELEASE_TO_REMOVE" = "Release to remove";

@@ -7,18 +7,30 @@
 */
 
 "OK" = "OK";
-"Back" = "Back";
-"Done" = "Done";
-"Edit" = "Edit";
-"Alert" = "Alert";
-"Cancel" = "Cancel";
-"Preview" = "Preview";
-"Photos" = "Photos";
-"Camera" = "Camera";
-"Microphone" = "Microphone";
-"Settings" = "Settings";
-"%@ is disabled" = "%@ is disabled";
-"Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "Allow %@ to access your album in \"Settings > Privacy > Photos\"";
-"Allow %@ to access your camera in \"Settings -> Privacy -> Camera\"" = "Allow %@ to access your album in \"Settings > Privacy > Camera\"";
-"Allow %@ to access your microphone in \"Settings -> Privacy -> Microphone\"" = "Allow %@ to access your microphone in \"Settings > Privacy > Microphone\"";
-"Go to Settings" = "Go to Settings";
+"BACK" = "Back";
+"DONE" = "Done";
+"EDIT" = "Edit";
+"ALERT" = "Alert";
+"CANCEL" = "Cancel";
+"PREVIEW" = "Preview";
+"PHOTOS" = "Photos";
+"CAMERA" = "Camera";
+"MICROPHONE" = "Microphone";
+"SETTINGS" = "Settings";
+
+"PHOTO" = "Photo";
+"VIDEO" = "Video";
+"LIVE_PHOTO" = "LIVE";
+"LOADING" = "Loading";
+
+"UNDO" = "Undo";
+"PLAY" = "Play";
+"PAUSE" = "Pause";
+"RESET" = "Reset";
+"DOWNLOADING" = "Downloading";
+
+"GO_TO_SETTINGS" = "Go to Settings";
+"PERMISSION_IS_DISABLED" = "%@ is disabled";
+"NO_PHOTOS_PERMISSION_TIPS" = "Allow %@ to access your album in \"Settings > Privacy > Photos\"";
+"NO_CAMERA_PERMISSION_TIPS" = "Allow %@ to access your camera in \"Settings > Privacy > Camera\"";
+"NO_MICROPHONE_PERMISSION_TIPS" = "Allow %@ to access your microphone in \"Settings > Privacy > Microphone\"";

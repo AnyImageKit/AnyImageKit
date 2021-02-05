@@ -48,7 +48,7 @@ final class VideoPreviewCell: PreviewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Video")
+        accessibilityLabel = BundleHelper.coreLocalizedString(key: "VIDEO")
     }
     
     required init?(coder aDecoder: NSCoder) {

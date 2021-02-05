@@ -6,8 +6,8 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"Switch to front camera" = "切换至前置摄像头";
-"Switch to back camera" = "切换至后置摄像头";
-"Tap for photo" = "轻触拍照";
-"Hold for video" = "按住摄像";
-"Hold for video, tap for photo" = "轻触拍照 按住摄像";
+"SWITCH_TO_FRONT_CAMERA" = "切换至前置摄像头";
+"SWITCH_TO_BACK_CAMERA" = "切换至后置摄像头";
+"TAP_FOR_PHOTO" = "轻触拍照";
+"HOLD_FOR_VIDEO" = "按住摄像";
+"HOLD_FOR_VIDEO_TAP_FOR_PHOTO" = "轻触拍照 按住摄像";

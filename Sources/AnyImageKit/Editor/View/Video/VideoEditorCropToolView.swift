@@ -25,7 +25,7 @@ final class VideoEditorCropToolView: UIView {
         view.setImage(BundleHelper.editorImage(named: "VideoPlayFill"), for: .normal)
         view.setImage(BundleHelper.editorImage(named: "VideoPauseFill"), for: .selected)
         view.addTarget(self, action: #selector(playButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Play") + BundleHelper.editorLocalizedString(key: "Pause")
+        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "PLAY") + BundleHelper.coreLocalizedString(key: "PAUSE")
         return view
     }()
     private lazy var splitLine: UIView = {

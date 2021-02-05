@@ -22,7 +22,7 @@ final class PermissionDeniedView: UIView {
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
-        view.setTitle(BundleHelper.coreLocalizedString(key: "Go to Settings"), for: .normal)
+        view.setTitle(BundleHelper.coreLocalizedString(key: "GO_TO_SETTINGS"), for: .normal)
         view.setTitleColor(options.theme.mainColor, for: .normal)
         view.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
         return view

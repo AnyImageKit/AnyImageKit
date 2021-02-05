@@ -133,7 +133,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: BundleHelper.coreLocalizedString(key: "Cancel"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: BundleHelper.coreLocalizedString(key: "CANCEL"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
@@ -489,7 +489,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Take photo")
+            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "TAKE_PHOTO")
             return cell
         }
         #endif
@@ -501,7 +501,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.white
         cell.isAccessibilityElement = true
         cell.accessibilityTraits = .button
-        let accessibilityLabel = BundleHelper.pickerLocalizedString(key: asset.mediaType == .video ? "Video" : "Photo")
+        let accessibilityLabel = BundleHelper.coreLocalizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO")
         cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         return cell
     }
@@ -683,7 +683,7 @@ extension AssetPickerViewController {
         let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { cell, indexPath, asset in
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Take photo")
+            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "TAKE_PHOTO")
         }
         
         let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
@@ -694,7 +694,7 @@ extension AssetPickerViewController {
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            let accessibilityLabel = BundleHelper.pickerLocalizedString(key: asset.mediaType == .video ? "Video" : "Photo")
+            let accessibilityLabel = BundleHelper.coreLocalizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO")
             cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         }
         

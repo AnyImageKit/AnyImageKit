@@ -7,18 +7,30 @@
 */
 
 "OK" = "好的";
-"Back" = "返回";
-"Done" = "完成";
-"Edit" = "编辑";
-"Alert" = "提示";
-"Cancel" = "取消";
-"Preview" = "预览";
-"Photos" = "相册";
-"Camera" = "相机";
-"Microphone" = "麦克风";
-"Settings" = "设置";
-"%@ is disabled" = "%@被禁用";
-"Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "请在您设备的\"设置-隐私-照片\"选项中，\n允许%@访问手机相册。";
-"Allow %@ to access your camera in \"Settings -> Privacy -> Camera\"" = "请在您设备的\"设置-隐私-相机\"选项中，\n允许%@访问相机。";
-"Allow %@ to access your microphone in \"Settings -> Privacy -> Microphone\"" = "请在您设备的\"设置-隐私-麦克风\"选项中，\n允许%@访问麦克风。";
-"Go to Settings" = "前往设置";
+"BACK" = "返回";
+"DONE" = "完成";
+"EDIT" = "编辑";
+"ALERT" = "提示";
+"CANCEL" = "取消";
+"PREVIEW" = "预览";
+"PHOTOS" = "相册";
+"CAMERA" = "相机";
+"MICROPHONE" = "麦克风";
+"SETTINGS" = "设置";
+
+"PHOTO" = "照片";
+"VIDEO" = "视频";
+"LIVE_PHOTO" = "实况";
+"LOADING" = "正在加载";
+
+"UNDO" = "撤销";
+"PLAY" = "播放";
+"PAUSE" = "暂停";
+"RESET" = "还原";
+"DOWNLOADING" = "正在下载";
+
+"GO_TO_SETTINGS" = "前往设置";
+"PERMISSION_IS_DISABLED" = "%@被禁用";
+"NO_PHOTOS_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-照片\"选项中，\n允许%@访问手机相册。";
+"NO_CAMERA_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-相机\"选项中，\n允许%@访问相机。";
+"NO_MICROPHONE_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-麦克风\"选项中，\n允许%@访问麦克风。";
