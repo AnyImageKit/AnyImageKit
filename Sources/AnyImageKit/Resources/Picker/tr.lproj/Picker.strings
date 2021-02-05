@@ -16,6 +16,7 @@
 "SELECT_A_MAXIMUM_OF_PHOTOS" = "Maximum %zd fotoğraf seçin";
 "SELECT_A_MAXIMUM_OF_VIDEOS" = "Maksimum %zd video seçin";
 "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS" = "Maksimum %zd fotoğraf ya da video seçin";
+"LOADING" = "Loading";
 "Downloading from iCloud" = "iCloud'dan İndiriliyor";
 "Fetch failed, please retry" = "İndirme başarısız, tekrar deneyin";
 "Switch album, current album is %@" = "Albümü değiştir. Mevcut albüm %@";
