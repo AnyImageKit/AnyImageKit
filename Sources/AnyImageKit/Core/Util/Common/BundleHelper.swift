@@ -67,10 +67,6 @@ extension BundleHelper {
 // MARK: - Styled Image
 extension BundleHelper {
     
-    private static func image(named: String, bundle: Bundle) -> UIImage? {
-        return UIImage(named: named, in: bundle, compatibleWith: nil)
-    }
-    
     static func image(named: String, module: Module) -> UIImage? {
         return UIImage(named: named, in: bundle(for: module), compatibleWith: nil)
     }
@@ -79,16 +75,6 @@ extension BundleHelper {
         let imageName = styledName(named, style: style)
         return image(named: imageName, module: module)
     }
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    static func captureImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitCapture)
-        #endif
-    }
-    #endif
     
     private static func styledName(_ named: String, style: UserInterfaceStyle) -> String {
         switch style {
@@ -100,13 +86,6 @@ extension BundleHelper {
             return named + "Dark"
         }
     }
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    static func captureImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return captureImage(named: imageName)
-    }
-    #endif
 }
 
 // MARK: - Localized String
