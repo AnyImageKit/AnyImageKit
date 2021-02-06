@@ -53,12 +53,21 @@ extension BundleHelper {
         switch module {
         case .core:
             return Bundle.anyImageKitCore
+            
+        #if ANYIMAGEKIT_ENABLE_PICKER
         case .picker:
             return Bundle.anyImageKitPicker
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
         case .editor:
             return Bundle.anyImageKitEditor
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
         case .capture:
             return Bundle.anyImageKitCapture
+        #endif
         }
         #endif
     }
