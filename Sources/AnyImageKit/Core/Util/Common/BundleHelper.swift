@@ -26,10 +26,53 @@ struct BundleHelper {
     }
 }
 
+// MARK: - Module
+extension BundleHelper {
+    
+    enum Module: String, Equatable {
+        
+        case core = "Core"
+        
+        #if ANYIMAGEKIT_ENABLE_PICKER
+        case picker = "Picker"
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        case editor = "Editor"
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        case capture = "Capture"
+        #endif
+    }
+    
+    static func bundle(for module: Module) -> Bundle {
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return Bundle.module
+        #else
+        switch module {
+        case .core:
+            return Bundle.anyImageKitCore
+        case .picker:
+            return Bundle.anyImageKitPicker
+        case .editor:
+            return Bundle.anyImageKitEditor
+        case .capture:
+            return Bundle.anyImageKitCapture
+        }
+        #endif
+    }
+}
+
 // MARK: - Styled Image
 extension BundleHelper {
     
     private static func image(named: String, bundle: Bundle) -> UIImage? {
+        return UIImage(named: named, in: bundle, compatibleWith: nil)
+    }
+    
+    static func image(named: String, module: Module) -> UIImage? {
+        let bundle = bundle(for: module)
         return UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
