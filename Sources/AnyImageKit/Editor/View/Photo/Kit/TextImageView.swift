@@ -34,7 +34,7 @@ final class TextImageView: UIView {
     private(set) lazy var deleteButton: UIButton = {
         let view = UIButton(type: .custom)
         view.isHidden = true
-        view.setImage(BundleHelper.editorImage(named: "Delete"), for: .normal)
+        view.setImage(BundleHelper.image(named: "Delete", module: .editor), for: .normal)
         return view
     }()
     private(set) lazy var imageView: UIImageView = {

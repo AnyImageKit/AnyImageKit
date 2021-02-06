@@ -80,16 +80,6 @@ extension BundleHelper {
         return image(named: imageName, module: module)
     }
     
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    static func editorImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitEditor)
-        #endif
-    }
-    #endif
-    
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     static func captureImage(named: String) -> UIImage? {
         #if ANYIMAGEKIT_ENABLE_SPM
@@ -110,14 +100,6 @@ extension BundleHelper {
             return named + "Dark"
         }
     }
-    
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    static func editorImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return editorImage(named: imageName)
-    }
-    #endif
     
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     static func captureImage(named: String, style: UserInterfaceStyle) -> UIImage? {
