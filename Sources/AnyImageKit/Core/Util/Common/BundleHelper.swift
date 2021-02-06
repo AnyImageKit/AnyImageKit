@@ -72,27 +72,13 @@ extension BundleHelper {
     }
     
     static func image(named: String, module: Module) -> UIImage? {
-        let bundle = bundle(for: module)
-        return UIImage(named: named, in: bundle, compatibleWith: nil)
+        return UIImage(named: named, in: bundle(for: module), compatibleWith: nil)
     }
     
-    static func coreImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitCore)
-        #endif
+    static func image(named: String, style: UserInterfaceStyle, module: Module) -> UIImage? {
+        let imageName = styledName(named, style: style)
+        return image(named: imageName, module: module)
     }
-    
-    #if ANYIMAGEKIT_ENABLE_PICKER
-    static func pickerImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitPicker)
-        #endif
-    }
-    #endif
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
     static func editorImage(named: String) -> UIImage? {
@@ -124,18 +110,6 @@ extension BundleHelper {
             return named + "Dark"
         }
     }
-    
-    static func coreImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return coreImage(named: imageName)
-    }
-    
-    #if ANYIMAGEKIT_ENABLE_PICKER
-    static func pickerImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return pickerImage(named: imageName)
-    }
-    #endif
     
     
     #if ANYIMAGEKIT_ENABLE_EDITOR
