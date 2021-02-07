@@ -58,7 +58,7 @@ extension EditorCropOptionCell {
         setupLayer()
         switch option {
         case .free:
-            label.text = BundleHelper.editorLocalizedString(key: "FREE")
+            label.text = BundleHelper.localizedString(key: "FREE", module: .editor)
         case .custom(let w, let h):
             label.text = "\(w):\(h)"
         }

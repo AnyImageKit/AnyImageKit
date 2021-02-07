@@ -64,7 +64,7 @@ final class EditorEditOptionsView: UIView {
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white
         button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        button.accessibilityLabel = BundleHelper.editorLocalizedString(key: option.description)
+        button.accessibilityLabel = BundleHelper.localizedString(key: option.description, module: .editor)
         return button
     }
     
