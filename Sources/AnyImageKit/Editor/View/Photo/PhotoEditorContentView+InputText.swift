@@ -365,7 +365,8 @@ extension PhotoEditorContentView {
                 maker.top.equalTo(self.snp.bottom)
             }
             maker.centerX.equalToSuperview()
-            maker.size.equalTo(CGSize(width: 160, height: 80))
+            maker.width.greaterThanOrEqualTo(160)
+            maker.height.equalTo(80)
         }
         self.layoutIfNeeded()
         

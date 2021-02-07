@@ -56,7 +56,7 @@ final class TextTrashView: UIView {
         }
         label.snp.makeConstraints { maker in
             maker.top.equalTo(imageView.snp.bottom).offset(15)
-            maker.left.right.equalToSuperview()
+            maker.left.right.equalToSuperview().inset(10)
         }
     }
     
