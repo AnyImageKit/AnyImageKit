@@ -113,16 +113,6 @@ extension BundleHelper {
         }
     }
     
-    #if ANYIMAGEKIT_ENABLE_PICKER
-    static func pickerLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Picker", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Picker", bundle: .anyImageKitPicker)
-        #endif
-    }
-    #endif
-    
     #if ANYIMAGEKIT_ENABLE_EDITOR
     static func editorLocalizedString(key: String) -> String {
         #if ANYIMAGEKIT_ENABLE_SPM

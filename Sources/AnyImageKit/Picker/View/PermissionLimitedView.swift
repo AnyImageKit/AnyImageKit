@@ -21,7 +21,7 @@ final class PermissionLimitedView: UIView {
         view.numberOfLines = 2
         view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 14)
-        view.text = BundleHelper.pickerLocalizedString(key: "LIMITED_PHOTOS_PERMISSION_TIPS")
+        view.text = BundleHelper.localizedString(key: "LIMITED_PHOTOS_PERMISSION_TIPS", module: .picker)
         return view
     }()
     

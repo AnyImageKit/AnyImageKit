@@ -31,7 +31,7 @@ final class NumberCircleButton: UIControl {
         setupView()
         isAccessibilityElement = true
         accessibilityTraits = .button
-        accessibilityLabel = BundleHelper.pickerLocalizedString(key: "UNSELECT_PHOTO")
+        accessibilityLabel = BundleHelper.localizedString(key: "UNSELECT_PHOTO", module: .picker)
     }
     
     required init?(coder: NSCoder) {
@@ -93,7 +93,7 @@ extension NumberCircleButton {
         self.isSelected = isSelected
         numLabel.text = num.description
         showNumber(animated)
-        accessibilityLabel = BundleHelper.pickerLocalizedString(key: isSelected ? "SELECT_PHOTO" : "UNSELECT_PHOTO")
+        accessibilityLabel = BundleHelper.localizedString(key: isSelected ? "SELECT_PHOTO" : "UNSELECT_PHOTO", module: .picker)
     }
 }
 

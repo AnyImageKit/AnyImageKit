@@ -30,7 +30,7 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
     }
     
     public func alertMessage(for asset: Asset) -> String {
-        let message = BundleHelper.pickerLocalizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE")
+        let message = BundleHelper.localizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE", module: .picker)
         return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }
 }

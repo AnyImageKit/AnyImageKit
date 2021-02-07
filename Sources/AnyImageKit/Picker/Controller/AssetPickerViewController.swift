@@ -333,11 +333,11 @@ extension AssetPickerViewController {
         if !asset.isSelected && manager.isUpToLimit {
             let message: String
             if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS"), manager.options.selectLimit)
+                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS", module: .picker), manager.options.selectLimit)
             } else if manager.options.selectOptions.isPhoto {
-                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS"), manager.options.selectLimit)
+                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS", module: .picker), manager.options.selectLimit)
             } else {
-                message = String(format: BundleHelper.pickerLocalizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS"), manager.options.selectLimit)
+                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS", module: .picker), manager.options.selectLimit)
             }
             showAlert(message: message)
             return
@@ -489,7 +489,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "TAKE_PHOTO")
+            cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
             return cell
         }
         #endif
@@ -683,7 +683,7 @@ extension AssetPickerViewController {
         let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { cell, indexPath, asset in
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = BundleHelper.pickerLocalizedString(key: "TAKE_PHOTO")
+            cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
         }
         
         let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in

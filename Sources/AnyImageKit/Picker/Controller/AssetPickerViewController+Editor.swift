@@ -36,7 +36,7 @@ extension AssetPickerViewController {
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
                     DispatchQueue.main.async {
                         _print("Downloading photo from iCloud: \(progress)")
-                        showWaitHUD(BundleHelper.pickerLocalizedString(key: "DOWNLOADING_FROM_ICLOUD") + "\(Int(progress * 100))%")
+                        showWaitHUD(BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker) + "\(Int(progress * 100))%")
                     }
                 }
                 manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in

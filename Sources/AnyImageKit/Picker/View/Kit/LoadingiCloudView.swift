@@ -28,7 +28,7 @@ final class LoadingiCloudView: UIView {
     
     private lazy var tipLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.pickerLocalizedString(key: "DOWNLOADING_FROM_ICLOUD")
+        view.text = BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker)
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 11)
         return view

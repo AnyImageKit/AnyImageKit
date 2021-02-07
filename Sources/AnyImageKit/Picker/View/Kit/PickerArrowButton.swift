@@ -113,7 +113,7 @@ extension PickerArrowButton {
             self.label.text = title
             self.layoutIfNeeded()
         }
-        accessibilityLabel = String(format: BundleHelper.pickerLocalizedString(key: "A11Y_SWITCH_ALBUM_TIPS"), title)
+        accessibilityLabel = String(format: BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker), title)
     }
 }
 
