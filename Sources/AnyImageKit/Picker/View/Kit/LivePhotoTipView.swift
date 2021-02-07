@@ -17,7 +17,7 @@ final class LivePhotoTipView: UIView {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.coreLocalizedString(key: "LIVE_PHOTO")
+        view.text = BundleHelper.localizedString(key: "LIVE_PHOTO", module: .core)
         view.font = UIFont.systemFont(ofSize: 13)
         return view
     }()

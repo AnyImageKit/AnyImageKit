@@ -12,7 +12,7 @@ final class PickerArrowButton: UIControl {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.coreLocalizedString(key: "PHOTO")
+        view.text = BundleHelper.localizedString(key: "PHOTO", module: .core)
         view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view

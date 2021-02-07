@@ -100,6 +100,10 @@ extension BundleHelper {
 // MARK: - Localized String
 extension BundleHelper {
     
+    static func localizedString(key: String, module: Module) -> String {
+        return localizedString(key: key, value: nil, table: module.rawValue, bundle: bundle(for: module))
+    }
+    
     private static func localizedString(key: String, value: String?, table: String, bundle: Bundle) -> String {
         let result = bundle.localizedString(forKey: key, value: value, table: table)
         if result != key {
@@ -107,14 +111,6 @@ extension BundleHelper {
         } else {
             return Bundle.main.localizedString(forKey: key, value: value, table: nil)
         }
-    }
-    
-    static func coreLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Core", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Core", bundle: .anyImageKitCore)
-        #endif
     }
     
     #if ANYIMAGEKIT_ENABLE_PICKER

@@ -44,26 +44,26 @@ extension Permission {
     var localizedTitle: String {
         switch self {
         case .photos:
-            return BundleHelper.coreLocalizedString(key: "PHOTOS")
+            return BundleHelper.localizedString(key: "PHOTOS", module: .core)
         case .camera:
-            return BundleHelper.coreLocalizedString(key: "CAMERA")
+            return BundleHelper.localizedString(key: "CAMERA", module: .core)
         case .microphone:
-            return BundleHelper.coreLocalizedString(key: "MICROPHONE")
+            return BundleHelper.localizedString(key: "MICROPHONE", module: .core)
         }
     }
     
     var localizedAlertTitle: String {
-        return String(format: BundleHelper.coreLocalizedString(key: "PERMISSION_IS_DISABLED"), localizedTitle)
+        return String(format: BundleHelper.localizedString(key: "PERMISSION_IS_DISABLED", module: .core), localizedTitle)
     }
     
     var localizedAlertMessage: String {
         switch self {
         case .photos:
-            return BundleHelper.coreLocalizedString(key: "NO_PHOTOS_PERMISSION_TIPS")
+            return BundleHelper.localizedString(key: "NO_PHOTOS_PERMISSION_TIPS", module: .core)
         case .camera:
-            return BundleHelper.coreLocalizedString(key: "NO_CAMERA_PERMISSION_TIPS")
+            return BundleHelper.localizedString(key: "NO_CAMERA_PERMISSION_TIPS", module: .core)
         case .microphone:
-            return BundleHelper.coreLocalizedString(key: "NO_MICROPHONE_PERMISSION_TIPS")
+            return BundleHelper.localizedString(key: "NO_MICROPHONE_PERMISSION_TIPS", module: .core)
         }
     }
 }

@@ -64,8 +64,8 @@ class AnyImageViewController: UIViewController {
 extension AnyImageViewController {
     
     func showAlert(message: String) {
-        let alert = UIAlertController(title: BundleHelper.coreLocalizedString(key: "ALERT"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: BundleHelper.coreLocalizedString(key: "OK"), style: .default, handler: nil))
+        let alert = UIAlertController(title: BundleHelper.localizedString(key: "ALERT", module: .core), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK", module: .core), style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 }
@@ -171,14 +171,14 @@ extension AnyImageViewController {
             let title = permission.localizedAlertTitle
             let message = String(format: permission.localizedAlertMessage, BundleHelper.appName)
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let settings = BundleHelper.coreLocalizedString(key: "SETTINGS")
+            let settings = BundleHelper.localizedString(key: "SETTINGS", module: .core)
             alert.addAction(UIAlertAction(title: settings, style: .default, handler: { _ in
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 UIApplication.shared.open(url, options: [:]) { _ in
                     canceled(permission)
                 }
             }))
-            let cancel = BundleHelper.coreLocalizedString(key: "CANCEL")
+            let cancel = BundleHelper.localizedString(key: "CANCEL", module: .core)
             alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: { _ in
                 canceled(permission)
             }))

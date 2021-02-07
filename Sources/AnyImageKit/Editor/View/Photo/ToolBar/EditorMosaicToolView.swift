@@ -25,7 +25,7 @@ final class EditorMosaicToolView: UIView {
         let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo", module: .editor), for: .normal)
-        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "UNDO")
+        view.accessibilityLabel = BundleHelper.localizedString(key: "UNDO", module: .core)
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
         return view
     }()

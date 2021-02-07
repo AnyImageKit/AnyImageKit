@@ -133,7 +133,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: BundleHelper.coreLocalizedString(key: "CANCEL"), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: BundleHelper.localizedString(key: "CANCEL", module: .core), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
@@ -501,7 +501,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.white
         cell.isAccessibilityElement = true
         cell.accessibilityTraits = .button
-        let accessibilityLabel = BundleHelper.coreLocalizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO")
+        let accessibilityLabel = BundleHelper.localizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO", module: .core)
         cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         return cell
     }
@@ -694,7 +694,7 @@ extension AssetPickerViewController {
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            let accessibilityLabel = BundleHelper.coreLocalizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO")
+            let accessibilityLabel = BundleHelper.localizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO", module: .core)
             cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         }
         

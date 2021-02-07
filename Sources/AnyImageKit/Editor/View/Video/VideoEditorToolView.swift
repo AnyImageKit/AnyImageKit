@@ -22,7 +22,7 @@ final class VideoEditorToolView: UIView {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
         view.backgroundColor = options.tintColor
-        view.setTitle(BundleHelper.coreLocalizedString(key: "DONE"), for: .normal)
+        view.setTitle(BundleHelper.localizedString(key: "DONE", module: .core), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
