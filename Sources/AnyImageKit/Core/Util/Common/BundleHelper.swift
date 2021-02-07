@@ -104,11 +104,18 @@ extension BundleHelper {
         return localizedString(key: key, value: nil, table: module.rawValue, bundle: bundle(for: module))
     }
     
-    private static func localizedString(key: String, value: String?, table: String, bundle: Bundle) -> String {
-        let result = bundle.localizedString(forKey: key, value: value, table: table)
+    private static func localizedString(key: String, value: String?, table: String, bundle current: Bundle) -> String {
+        let result = current.localizedString(forKey: key, value: value, table: table)
         if result != key {
             return result
-        } else {
+        } else { // Just in case
+            let coreBundle = bundle(for: .core)
+            if current != coreBundle {
+                let coreResult = coreBundle.localizedString(forKey: key, value: value, table: Module.core.rawValue)
+                if coreResult != key {
+                    return coreResult
+                }
+            }
             return Bundle.main.localizedString(forKey: key, value: value, table: nil)
         }
     }
