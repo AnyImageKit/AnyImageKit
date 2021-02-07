@@ -76,13 +76,13 @@ extension CaptureMediaOption {
     
     var localizedTips: String {
         if contains(.photo) && contains(.video) {
-            return BundleHelper.captureLocalizedString(key: "HOLD_FOR_VIDEO_TAP_FOR_PHOTO")
+            return BundleHelper.localizedString(key: "HOLD_FOR_VIDEO_TAP_FOR_PHOTO", module: .capture)
         }
         if contains(.photo) {
-            return BundleHelper.captureLocalizedString(key: "TAP_FOR_PHOTO")
+            return BundleHelper.localizedString(key: "TAP_FOR_PHOTO", module: .capture)
         }
         if contains(.video) {
-            return BundleHelper.captureLocalizedString(key: "HOLD_FOR_VIDEO")
+            return BundleHelper.localizedString(key: "HOLD_FOR_VIDEO", module: .capture)
         }
         return ""
     }

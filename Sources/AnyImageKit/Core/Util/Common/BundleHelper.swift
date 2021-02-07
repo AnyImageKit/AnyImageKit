@@ -112,14 +112,4 @@ extension BundleHelper {
             return Bundle.main.localizedString(forKey: key, value: value, table: nil)
         }
     }
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    static func captureLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Capture", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Capture", bundle: .anyImageKitCapture)
-        #endif
-    }
-    #endif
 }
