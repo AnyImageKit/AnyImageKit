@@ -74,7 +74,7 @@ final class VideoEditorToolView: UIView {
     
     private func createButton(tag: Int, option: EditorVideoToolOption) -> UIButton {
         let button = UIButton(type: .custom)
-        let image = BundleHelper.editorImage(named: option.imageName)?.withRenderingMode(.alwaysTemplate)
+        let image = BundleHelper.image(named: option.imageName, module: .editor)?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white

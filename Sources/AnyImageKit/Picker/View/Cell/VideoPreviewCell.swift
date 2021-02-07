@@ -42,7 +42,9 @@ final class VideoPreviewCell: PreviewCell {
     private var playerLayer: AVPlayerLayer?
     
     private lazy var playImageView: UIImageView = {
-        return UIImageView(image: BundleHelper.pickerImage(named: "VideoPlay"))
+        let view = UIImageView(frame: .zero)
+        view.image = BundleHelper.image(named: "VideoPlay", module: .picker)
+        return view
     }()
     
     override init(frame: CGRect) {

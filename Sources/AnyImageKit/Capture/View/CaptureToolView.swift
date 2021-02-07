@@ -30,7 +30,7 @@ final class CaptureToolView: UIView {
     
     private(set) lazy var switchButton: UIButton = {
         let view = UIButton(frame: .zero)
-        let image = BundleHelper.captureImage(named: "CameraSwitch")
+        let image = BundleHelper.image(named: "CameraSwitch", module: .capture)
         view.setImage(image, for: .normal)
         return view
     }()

@@ -21,7 +21,7 @@ final class LoadingiCloudView: UIView {
     }()
     
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.pickerImage(named: "iCloud")
+        let image = BundleHelper.image(named: "iCloud", module: .picker)
         let view = UIImageView(image: image)
         return view
     }()

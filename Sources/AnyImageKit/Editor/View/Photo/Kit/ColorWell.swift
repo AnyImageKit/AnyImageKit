@@ -34,7 +34,7 @@ final class ColorWell: UIControl {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.image = BundleHelper.editorImage(named: "ColorWell")
+        view.image = BundleHelper.image(named: "ColorWell", module: .editor)
         view.contentMode = .scaleAspectFit
         return view
     }()

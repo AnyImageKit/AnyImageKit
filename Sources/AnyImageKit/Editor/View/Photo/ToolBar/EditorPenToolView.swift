@@ -24,7 +24,7 @@ final class EditorPenToolView: UIView {
     private(set) lazy var undoButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         view.isEnabled = false
-        view.setImage(BundleHelper.editorImage(named: "PhotoToolUndo"), for: .normal)
+        view.setImage(BundleHelper.image(named: "PhotoToolUndo", module: .editor), for: .normal)
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
         view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "UNDO")
         return view

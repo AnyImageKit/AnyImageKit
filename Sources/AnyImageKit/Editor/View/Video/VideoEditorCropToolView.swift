@@ -22,8 +22,8 @@ final class VideoEditorCropToolView: UIView {
     
     private(set) lazy var playButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.editorImage(named: "VideoPlayFill"), for: .normal)
-        view.setImage(BundleHelper.editorImage(named: "VideoPauseFill"), for: .selected)
+        view.setImage(BundleHelper.image(named: "VideoPlayFill", module: .editor), for: .normal)
+        view.setImage(BundleHelper.image(named: "VideoPauseFill", module: .editor), for: .selected)
         view.addTarget(self, action: #selector(playButtonTapped(_:)), for: .touchUpInside)
         view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "PLAY") + BundleHelper.coreLocalizedString(key: "PAUSE")
         return view
