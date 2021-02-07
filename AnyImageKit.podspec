@@ -47,6 +47,7 @@ Pod::Spec.new do |s|
         capture.resource_bundles = {
             'AnyImageKit_Capture' => ['Sources/AnyImageKit/Resources/Capture/**/*']
         }
+        capture.ios.pod_target_xcconfig = { 'METAL_LIBRARY_OUTPUT_DIR' => '${TARGET_BUILD_DIR}/AnyImageKit_Capture.bundle/' }
         capture.dependency 'AnyImageKit/Core'
         capture.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_CAPTURE' }
     end

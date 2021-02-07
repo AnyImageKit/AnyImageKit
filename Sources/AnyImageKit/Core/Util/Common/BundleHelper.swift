@@ -26,50 +26,64 @@ struct BundleHelper {
     }
 }
 
+// MARK: - Module
+extension BundleHelper {
+    
+    enum Module: String, Equatable {
+        
+        case core = "Core"
+        
+        #if ANYIMAGEKIT_ENABLE_PICKER
+        case picker = "Picker"
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        case editor = "Editor"
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        case capture = "Capture"
+        #endif
+    }
+    
+    static func bundle(for module: Module) -> Bundle {
+        #if ANYIMAGEKIT_ENABLE_SPM
+        return Bundle.module
+        #else
+        switch module {
+        case .core:
+            return Bundle.anyImageKitCore
+            
+        #if ANYIMAGEKIT_ENABLE_PICKER
+        case .picker:
+            return Bundle.anyImageKitPicker
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        case .editor:
+            return Bundle.anyImageKitEditor
+        #endif
+        
+        #if ANYIMAGEKIT_ENABLE_CAPTURE
+        case .capture:
+            return Bundle.anyImageKitCapture
+        #endif
+        }
+        #endif
+    }
+}
+
 // MARK: - Styled Image
 extension BundleHelper {
     
-    private static func image(named: String, bundle: Bundle) -> UIImage? {
-        return UIImage(named: named, in: bundle, compatibleWith: nil)
+    static func image(named: String, module: Module) -> UIImage? {
+        return UIImage(named: named, in: bundle(for: module), compatibleWith: nil)
     }
     
-    static func coreImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitCore)
-        #endif
+    static func image(named: String, style: UserInterfaceStyle, module: Module) -> UIImage? {
+        let imageName = styledName(named, style: style)
+        return image(named: imageName, module: module)
     }
-    
-    #if ANYIMAGEKIT_ENABLE_PICKER
-    static func pickerImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitPicker)
-        #endif
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    static func editorImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitEditor)
-        #endif
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    static func captureImage(named: String) -> UIImage? {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return image(named: named, bundle: .module)
-        #else
-        return image(named: named, bundle: .anyImageKitCapture)
-        #endif
-    }
-    #endif
     
     private static func styledName(_ named: String, style: UserInterfaceStyle) -> String {
         switch style {
@@ -81,33 +95,6 @@ extension BundleHelper {
             return named + "Dark"
         }
     }
-    
-    static func coreImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return coreImage(named: imageName)
-    }
-    
-    #if ANYIMAGEKIT_ENABLE_PICKER
-    static func pickerImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return pickerImage(named: imageName)
-    }
-    #endif
-    
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    static func editorImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return editorImage(named: imageName)
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    static func captureImage(named: String, style: UserInterfaceStyle) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return captureImage(named: imageName)
-    }
-    #endif
 }
 
 // MARK: - Localized String

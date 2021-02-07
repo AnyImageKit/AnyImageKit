@@ -8,9 +8,9 @@
 
 import Foundation
 
+#if !ANYIMAGEKIT_ENABLE_SPM
 extension Bundle {
     
-    #if !ANYIMAGEKIT_ENABLE_SPM
     private class _BundleClass { }
     
     static let anyImageKitCore: Bundle = {
@@ -50,14 +50,5 @@ extension Bundle {
         return core
     }()
     #endif
-    
-    #endif
-    
-    static var current: Bundle {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return Bundle.module
-        #else
-        return Bundle(for: _BundleClass.self)
-        #endif
-    }
 }
+#endif

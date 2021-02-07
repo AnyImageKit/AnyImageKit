@@ -48,14 +48,14 @@ final class VideoEditorCropProgressView: UIView {
     }()
     private lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.editorImage(named: "VideoCropLeft"), for: .normal)
+        view.setImage(BundleHelper.image(named: "VideoCropLeft", module: .editor), for: .normal)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(leftButtonPan(_:)))
         view.addGestureRecognizer(pan)
         return view
     }()
     private lazy var rightButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.editorImage(named: "VideoCropRight"), for: .normal)
+        view.setImage(BundleHelper.image(named: "VideoCropRight", module: .editor), for: .normal)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(rightButtonPan(_:)))
         view.addGestureRecognizer(pan)
         return view

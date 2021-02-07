@@ -31,7 +31,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  AnyImageKit: 098445dc31adfac7efd98b7c8649855bb895e8f1
+  AnyImageKit: 2b2abc74f857e010c4bed09d40526bc4ad632f39
   Kingfisher: f5d8d60a0ef3edd642fd781bae60918599901aff
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
