@@ -13,5 +13,5 @@
 
 "FREE" = "Serbest";
 
-"DRAG_HERE_TO_REMOVE" = "KALDıRMAK IÇIN BURAYA SÜRÜKLEYIN";
-"RELEASE_TO_REMOVE" = "Kaldırılacak sürüm";
+"DRAG_HERE_TO_REMOVE" = "Silmek için sürükle";
+"RELEASE_TO_REMOVE" = "Silmek için bırak";

@@ -21,7 +21,7 @@
 "PHOTO" = "Fotoğraf";
 "VIDEO" = "Video";
 "LIVE_PHOTO" = "CANLI";
-"LOADING" = "Yükleme";
+"LOADING" = "Yükleniyor";
 
 "UNDO" = "Geri Al";
 "PLAY" = "Oynat";
