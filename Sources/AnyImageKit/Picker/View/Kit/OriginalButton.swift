@@ -23,7 +23,7 @@ final class OriginalButton: UIControl {
     }()
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.pickerLocalizedString(key: "Original image")
+        view.text = BundleHelper.localizedString(key: "ORIGINAL_IMAGE", module: .picker)
         view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16)
         return view
@@ -38,7 +38,7 @@ final class OriginalButton: UIControl {
         addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         isAccessibilityElement = true
         accessibilityTraits = .button
-        accessibilityLabel = BundleHelper.pickerLocalizedString(key: "Original image")
+        accessibilityLabel = BundleHelper.localizedString(key: "ORIGINAL_IMAGE", module: .picker)
     }
     
     required init?(coder aDecoder: NSCoder) {

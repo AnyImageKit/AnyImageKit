@@ -100,50 +100,23 @@ extension BundleHelper {
 // MARK: - Localized String
 extension BundleHelper {
     
-    private static func localizedString(key: String, value: String?, table: String, bundle: Bundle) -> String {
-        let result = bundle.localizedString(forKey: key, value: value, table: table)
+    static func localizedString(key: String, module: Module) -> String {
+        return localizedString(key: key, value: nil, table: module.rawValue, bundle: bundle(for: module))
+    }
+    
+    private static func localizedString(key: String, value: String?, table: String, bundle current: Bundle) -> String {
+        let result = current.localizedString(forKey: key, value: value, table: table)
         if result != key {
             return result
-        } else {
+        } else { // Just in case
+            let coreBundle = bundle(for: .core)
+            if current != coreBundle {
+                let coreResult = coreBundle.localizedString(forKey: key, value: value, table: Module.core.rawValue)
+                if coreResult != key {
+                    return coreResult
+                }
+            }
             return Bundle.main.localizedString(forKey: key, value: value, table: nil)
         }
     }
-    
-    static func coreLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Core", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Core", bundle: .anyImageKitCore)
-        #endif
-    }
-    
-    #if ANYIMAGEKIT_ENABLE_PICKER
-    static func pickerLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Picker", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Picker", bundle: .anyImageKitPicker)
-        #endif
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_EDITOR
-    static func editorLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Editor", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Editor", bundle: .anyImageKitEditor)
-        #endif
-    }
-    #endif
-    
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    static func captureLocalizedString(key: String) -> String {
-        #if ANYIMAGEKIT_ENABLE_SPM
-        return localizedString(key: key, value: nil, table: "Capture", bundle: .module)
-        #else
-        return localizedString(key: key, value: nil, table: "Capture", bundle: .anyImageKitCapture)
-        #endif
-    }
-    #endif
 }

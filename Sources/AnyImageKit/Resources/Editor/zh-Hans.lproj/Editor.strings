@@ -6,18 +6,12 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"Undo" = "撤销";
-"Play" = "播放";
-"Pause" = "暂停";
-"Reset" = "还原";
-"Downloading" = "正在下载";
+"PEN" = "画笔";
+"CROP" = "裁剪";
+"MOSAIC" = "马赛克";
+"INPUT_TEXT" = "输入文本";
 
-"Pen" = "画笔";
-"Crop" = "裁剪";
-"Mosaic" = "马赛克";
-"Input text" = "输入文本";
+"FREE" = "自由";
 
-"Free" = "自由";
-
-"Drag here to remove" = "拖到此处删除";
-"Release to remove" = "松手即可删除";
+"DRAG_HERE_TO_REMOVE" = "拖到此处删除";
+"RELEASE_TO_REMOVE" = "松手即可删除";

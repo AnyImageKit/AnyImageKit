@@ -7,18 +7,30 @@
 */
 
 "OK" = "Tamam";
-"Back" = "Geri";
-"Done" = "Tamam";
-"Edit" = "Düzenle";
-"Alert" = "Uyarı";
-"Cancel" = "Vazgeç";
-"Preview" = "Önizleme";
-"Photos" = "Fotoğraflar";
-"Camera" = "Kamera";
-"Microphone" = "Mikrofon";
-"Settings" = "Ayarlar";
-"%@ is disabled" = "%@ devredışı";
-"Allow %@ to access your album in \"Settings -> Privacy -> Photos\"" = "%@, albümüne erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Fotoğraflar\"";
-"Allow %@ to access your camera in \"Settings -> Privacy -> Camera\"" = "%@, kamerana erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Kamera\"";
-"Allow %@ to access your microphone in \"Settings -> Privacy -> Microphone\"" = "%@, mikrofonuna erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Mikrofon\"";
-"Go to Settings" = "Ayarlara git";
+"BACK" = "Geri";
+"DONE" = "Tamam";
+"EDIT" = "Düzenle";
+"ALERT" = "Uyarı";
+"CANCEL" = "Vazgeç";
+"PREVIEW" = "Önizleme";
+"PHOTOS" = "Fotoğraflar";
+"CAMERA" = "Kamera";
+"MICROPHONE" = "Mikrofon";
+"SETTINGS" = "Ayarlar";
+
+"PHOTO" = "Fotoğraf";
+"VIDEO" = "Video";
+"LIVE_PHOTO" = "CANLI";
+"LOADING" = "Yükleniyor";
+
+"UNDO" = "Geri Al";
+"PLAY" = "Oynat";
+"PAUSE" = "Duraklat";
+"RESET" = "Sıfırla";
+"DOWNLOADING" = "İndiriliyor";
+
+"GO_TO_SETTINGS" = "Ayarlara git";
+"PERMISSION_IS_DISABLED" = "%@ devredışı";
+"NO_PHOTOS_PERMISSION_TIPS" = "%@, albümüne erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Fotoğraflar\"";
+"NO_CAMERA_PERMISSION_TIPS" = "%@, kamerana erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Kamera\"";
+"NO_MICROPHONE_PERMISSION_TIPS" = "%@, mikrofonuna erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Mikrofon\"";

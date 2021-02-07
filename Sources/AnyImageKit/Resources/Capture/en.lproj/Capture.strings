@@ -6,8 +6,8 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"Switch to front camera" = "Switch to front camera";
-"Switch to back camera" = "Switch to back camera";
-"Tap to take photo" = "Tap for photo";
-"Hold for video" = "Hold for video";
-"Hold for video, tap for photo" = "Hold for video, tap for photo";
+"SWITCH_TO_FRONT_CAMERA" = "Switch to front camera";
+"SWITCH_TO_BACK_CAMERA" = "Switch to back camera";
+"TAP_FOR_PHOTO" = "Tap for photo";
+"HOLD_FOR_VIDEO" = "Hold for video";
+"HOLD_FOR_VIDEO_TAP_FOR_PHOTO" = "Hold for video, tap for photo";

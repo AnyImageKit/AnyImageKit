@@ -26,7 +26,7 @@ final class EditorPenToolView: UIView {
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo", module: .editor), for: .normal)
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.editorLocalizedString(key: "Undo")
+        view.accessibilityLabel = BundleHelper.localizedString(key: "UNDO", module: .core)
         return view
     }()
     

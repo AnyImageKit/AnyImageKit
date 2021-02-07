@@ -12,7 +12,7 @@ final class PickerArrowButton: UIControl {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.pickerLocalizedString(key: "Photo")
+        view.text = BundleHelper.localizedString(key: "PHOTO", module: .core)
         view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
@@ -113,7 +113,7 @@ extension PickerArrowButton {
             self.label.text = title
             self.layoutIfNeeded()
         }
-        accessibilityLabel = String(format: BundleHelper.pickerLocalizedString(key: "Switch album current album is %@"), title)
+        accessibilityLabel = String(format: BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker), title)
     }
 }
 

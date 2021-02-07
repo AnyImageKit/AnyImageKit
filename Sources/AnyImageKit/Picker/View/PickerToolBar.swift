@@ -46,7 +46,7 @@ final class PickerToolBar: UIView {
                                       dark: normal.withAlphaComponent(0.3))
         view.setTitleColor(normal, for: .normal)
         view.setTitleColor(disabled, for: .disabled)
-        view.setTitle(BundleHelper.coreLocalizedString(key: "Done"), for: .normal)
+        view.setTitle(BundleHelper.localizedString(key: "DONE", module: .core), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
@@ -86,10 +86,10 @@ final class PickerToolBar: UIView {
                 maker.top.left.right.equalToSuperview()
                 maker.height.equalTo(limitedViewHeight)
             }
-            leftButton.setTitle(BundleHelper.coreLocalizedString(key: "Preview"), for: .normal)
+            leftButton.setTitle(BundleHelper.localizedString(key: "PREVIEW", module: .core), for: .normal)
         case .preview:
             backgroundColor = options.theme.toolBarColor.withAlphaComponent(0.95)
-            leftButton.setTitle(BundleHelper.coreLocalizedString(key: "Edit"), for: .normal)
+            leftButton.setTitle(BundleHelper.localizedString(key: "EDIT", module: .core), for: .normal)
         }
         
         addSubview(contentView)

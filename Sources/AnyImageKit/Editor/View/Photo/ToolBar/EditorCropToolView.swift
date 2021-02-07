@@ -62,20 +62,20 @@ final class EditorCropToolView: UIView {
     private(set) lazy var cancelButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.image(named: "XMark", module: .editor), for: .normal)
-        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "Cancel")
+        view.accessibilityLabel = BundleHelper.localizedString(key: "CANCEL", module: .core)
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.image(named: "CheckMark", module: .editor), for: .normal)
-        view.accessibilityLabel = BundleHelper.coreLocalizedString(key: "Done")
+        view.accessibilityLabel = BundleHelper.localizedString(key: "DONE", module: .core)
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var resetbutton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setTitle(BundleHelper.editorLocalizedString(key: "Reset"), for: .normal)
+        view.setTitle(BundleHelper.localizedString(key: "RESET", module: .core), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         view.addTarget(self, action: #selector(resetButtonTapped(_:)), for: .touchUpInside)

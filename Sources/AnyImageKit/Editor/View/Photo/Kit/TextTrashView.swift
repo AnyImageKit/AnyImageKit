@@ -28,7 +28,7 @@ final class TextTrashView: UIView {
     }()
     private(set) lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.editorLocalizedString(key: "Drag here to remove")
+        view.text = BundleHelper.localizedString(key: "DRAG_HERE_TO_REMOVE", module: .editor)
         view.textColor = UIColor.white
         view.textAlignment = .center
         view.font = UIFont.systemFont(ofSize: 12)
@@ -56,7 +56,7 @@ final class TextTrashView: UIView {
         }
         label.snp.makeConstraints { maker in
             maker.top.equalTo(imageView.snp.bottom).offset(15)
-            maker.left.right.equalToSuperview()
+            maker.left.right.equalToSuperview().inset(10)
         }
     }
     
@@ -64,10 +64,10 @@ final class TextTrashView: UIView {
         switch state {
         case .idle:
             backgroundColor = Palette.black.withAlphaComponent(0.9)
-            label.text = BundleHelper.editorLocalizedString(key: "Drag here to remove")
+            label.text = BundleHelper.localizedString(key: "DRAG_HERE_TO_REMOVE", module: .editor)
         case .remove:
             backgroundColor = Palette.red.withAlphaComponent(0.9)
-            label.text = BundleHelper.editorLocalizedString(key: "Release to remove")
+            label.text = BundleHelper.localizedString(key: "RELEASE_TO_REMOVE", module: .editor)
         }
     }
 }

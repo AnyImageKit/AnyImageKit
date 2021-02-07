@@ -6,8 +6,8 @@
   Copyright © 2021 AnyImageProject.org. All rights reserved.
 */
 
-"Switch to front camera" = "Ön kameraya geç";
-"Switch to back camera" = "Arka kameraya geç";
-"Tap to take photo" = "Fotoğraf için dokunun";
-"Hold for video" = "Video için basılı tutun";
-"Hold for video, tap for photo" = "Fotoğraf için dokunun, video için basılı tutun";
+"SWITCH_TO_FRONT_CAMERA" = "Ön kameraya geç";
+"SWITCH_TO_BACK_CAMERA" = "Arka kameraya geç";
+"TAP_FOR_PHOTO" = "Fotoğraf için dokunun";
+"HOLD_FOR_VIDEO" = "Video için basılı tutun";
+"HOLD_FOR_VIDEO_TAP_FOR_PHOTO" = "Fotoğraf için dokunun, video için basılı tutun";
