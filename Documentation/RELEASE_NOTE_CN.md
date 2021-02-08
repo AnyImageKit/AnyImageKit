@@ -16,8 +16,7 @@
 
 - Core
   - 修复使用 A10 以下设备设置 HEVC/H.265 输出时抛出 AnyImageError.invalidExportPreset 的问题，不支持的设备会自动降级到 AVC/H.264 方案。([#75](https://github.com/AnyImageProject/AnyImageKit/pull/75))
-  - 修复状态栏在非全面屏上隐藏不正确的问题。([#68](https://github.com/AnyImageProject/AnyImageKit/pull/68))
- 
+  - 修复状态栏在非全面屏上隐藏不正确的问题。([#78](https://github.com/AnyImageProject/AnyImageKit/pull/78))
 - Capture
   - 修复使用 CocoaPods 作为静态库依赖时不会拷贝 Metal 资源文件的问题。([#81](https://github.com/AnyImageProject/AnyImageKit/pull/81))
 

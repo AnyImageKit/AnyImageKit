@@ -15,25 +15,24 @@
 ### Resolved
 
 - Core
-  - Fix the issue that `AnyImageError.invalidExportPreset` is thrown when setting HEVC/H.265 output with devices below A10 chip, and the unsupported devices will be downgraded to AVC/H.264 solution automatically.([#75](https://github.com/AnyImageProject/AnyImageKit/pull/75))
-  - Fix the issue that the status bar is not hidden correctly on iPhone8/8 Plus and older device.([#68](https://github.com/AnyImageProject/AnyImageKit/pull/68))
-
+  - Fixed the issue that `AnyImageError.invalidExportPreset` is thrown when setting HEVC/H.265 output with devices below A10 chip, and the unsupported devices will be downgraded to AVC/H.264 solution automatically.([#75](https://github.com/AnyImageProject/AnyImageKit/pull/75))
+  - Fixed the issue that the status bar is not hidden correctly on iPhone8/8 Plus and older device.([#78](https://github.com/AnyImageProject/AnyImageKit/pull/78))
 - Capture
-  - Fix the issue that Swift Static Libraries mode when use CocoaPods.([#81](https://github.com/AnyImageProject/AnyImageKit/pull/81))
+  - Fixed the issue that Metal resource files were not copied when using CocoaPods as a static library dependency.([#81](https://github.com/AnyImageProject/AnyImageKit/pull/81))
 
 ## 0.12.0
 
 ### New Features
 
 - Picker
-  - Add the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. ([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
-  - Add the `saveEditedAsset` boolean value. Determines whether the Picker save edited assets.
+  - Added the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. ([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
+  - Added the `saveEditedAsset` boolean value. Determines whether the Picker save edited assets.
 
 ### Resolved
 
 - Picker
-  - Fix the issue that Picker would crash by array index out of range when `orderByDate = DESC`. ([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
-  - Fix the issue that the `Preview` button cannot be used sometimes.
+  - Fixed the issue that Picker would crash by array index out of range when `orderByDate = DESC`. ([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
+  - Fixed the issue that the `Preview` button cannot be used sometimes.
 
 ### BREAKING CHANGE
 
