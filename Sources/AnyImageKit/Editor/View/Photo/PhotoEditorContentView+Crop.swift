@@ -177,9 +177,10 @@ extension PhotoEditorContentView {
         setupContentInset()
         
         // CropLayer
-        let cropOffsetY = UIScreen.main.bounds.height / 2
+        let cropOffsetX = UIScreen.main.bounds.width
+        let cropOffsetY = UIScreen.main.bounds.height
         let scale = lastCropData.zoomScale
-        let rectPathRect = CGRect(origin: CGPoint(x: (cropRealRect.minX - oldImageViewFrame.minX) / scale,
+        let rectPathRect = CGRect(origin: CGPoint(x: (cropRealRect.minX - oldImageViewFrame.minX) / scale + cropOffsetX,
                                                   y: (cropRealRect.minY - oldImageViewFrame.minY) / scale + cropOffsetY),
                                   size: CGSize(width: cropRealRect.width / scale,
                                                height: cropRealRect.height / scale))
@@ -190,7 +191,7 @@ extension PhotoEditorContentView {
         imageView.addSubview(cropLayerEnter)
         cropLayerLeave.removeFromSuperview()
         
-        let newRectPathRect = CGRect(origin: CGPoint(x: lastCropData.contentOffset.x / scale,
+        let newRectPathRect = CGRect(origin: CGPoint(x: lastCropData.contentOffset.x / scale + cropOffsetX,
                                                      y: lastCropData.contentOffset.y / scale + cropOffsetY),
                                      size: CGSize(width: lastCropData.rect.width / scale,
                                                   height: lastCropData.rect.height / scale))
@@ -257,12 +258,15 @@ extension PhotoEditorContentView {
         // CropLayer
         guard didCrop else { return }
         cropLayerLeave.frame = imageView.bounds
-        let cropOffsetY = UIScreen.main.bounds.height / 2
+        let cropOffsetX = UIScreen.main.bounds.width
+        let cropOffsetY = UIScreen.main.bounds.height
+        cropLayerLeave.frame.origin.x -= cropOffsetX
         cropLayerLeave.frame.origin.y -= cropOffsetY
+        cropLayerLeave.frame.size.width += cropOffsetX * 4
         cropLayerLeave.frame.size.height += cropOffsetY * 4
         imageView.addSubview(cropLayerLeave)
         
-        let rectPathRect = CGRect(origin: CGPoint(x: contentOffset.x / scale,
+        let rectPathRect = CGRect(origin: CGPoint(x: contentOffset.x / scale + cropOffsetX,
                                                   y: contentOffset.y / scale + cropOffsetY),
                                   size: CGSize(width: cropRect.width / scale,
                                                height: cropRect.height / scale))
@@ -271,8 +275,8 @@ extension PhotoEditorContentView {
         cropPath.append(rectPath)
         cropLayerLeave.path = cropPath.cgPath
         
-        // 因为要使 TextVIew 超出 Image 隐藏起来，所以头尾增加一段蒙版
-        let newRectPathRect = CGRect(origin: CGPoint(x: (cropRealRect.minX - imageView.frame.minX) / scale,
+        // 因为要使 TextView 超出 Image 隐藏起来，所以四周增加一段蒙版
+        let newRectPathRect = CGRect(origin: CGPoint(x: (cropRealRect.minX - imageView.frame.minX) / scale + cropOffsetX,
                                                      y: (cropRealRect.minY - imageView.frame.minY) / scale + cropOffsetY),
                                      size: CGSize(width: cropRealRect.width / scale,
                                                   height: cropRealRect.height / scale))
@@ -291,12 +295,15 @@ extension PhotoEditorContentView {
     func setupCropLayer() {
         guard !didCrop && cropLayerLeave.superview == nil else { return }
         cropLayerLeave.frame = imageView.bounds
-        let cropOffsetY = UIScreen.main.bounds.height / 2
+        let cropOffsetX = UIScreen.main.bounds.width
+        let cropOffsetY = UIScreen.main.bounds.height
+        cropLayerLeave.frame.origin.x -= cropOffsetX
         cropLayerLeave.frame.origin.y -= cropOffsetY
+        cropLayerLeave.frame.size.width += cropOffsetX * 4
         cropLayerLeave.frame.size.height += cropOffsetY * 4
         imageView.addSubview(cropLayerLeave)
         
-        let rectPathRect = CGRect(origin: CGPoint(x: 0, y: cropOffsetY),
+        let rectPathRect = CGRect(origin: CGPoint(x: cropOffsetX, y: cropOffsetY),
                                   size: scrollView.contentSize)
         let cropPath = UIBezierPath(rect: cropLayerLeave.frame)
         let rectPath = UIBezierPath(rect: rectPathRect)
