@@ -81,21 +81,6 @@ open class ImagePickerController: AnyImageNavigationController {
             super.dismiss(animated: flag, completion: completion)
         }
     }
-    
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch manager.options.theme.style {
-        case .light:
-            if #available(iOS 13.0, *) {
-                return .darkContent
-            } else {
-                return .default
-            }
-        case .dark:
-            return .lightContent
-        case .auto:
-            return .default
-        }
-    }
 }
 
 extension ImagePickerController {
