@@ -26,11 +26,11 @@ extension PhotoPreviewController {
                     switch result {
                     case .success(let response):
                         if !response.isDegraded {
-                            hideHUD(animated: false)
+                            self.hideHUD(animated: false)
                             self.showEditor(response.image, identifier: data.asset.phAsset.localIdentifier)
                         }
                     case .failure(let error):
-                        hideHUD()
+                        self.hideHUD()
                         _print(error)
                     }
                 }

@@ -17,22 +17,25 @@ private var hud: HUDViewController? {
     return _hud
 }
 
-func showWaitHUD(_ message: String = "") {
+func _showWaitHUD(_ controller: UIViewController, _ message: String = "") {
     Thread.runOnMain {
         createHUDWindowIfNeeded()
+        hud?.setStatusBar(with: controller)
         hud?.wait(message: message)
     }
 }
 
-func showMessageHUD(_ message: String) {
+func _showMessageHUD(_ controller: UIViewController, _ message: String) {
     Thread.runOnMain {
         createHUDWindowIfNeeded()
+        hud?.setStatusBar(with: controller)
         hud?.show(message: message)
     }
 }
 
-func hideHUD(animated: Bool = true) {
+func _hideHUD(_ controller: UIViewController, animated: Bool = true) {
     Thread.runOnMain {
+        hud?.setStatusBar(with: controller)
         hud?.hide(animated: animated)
     }
 }

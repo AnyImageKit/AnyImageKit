@@ -34,9 +34,9 @@ extension AssetPickerViewController {
             } else {
                 showWaitHUD(BundleHelper.localizedString(key: "LOADING", module: .core))
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
                         _print("Downloading photo from iCloud: \(progress)")
-                        showWaitHUD(BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker) + "\(Int(progress * 100))%")
+                        self?.showWaitHUD(BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker) + "\(Int(progress * 100))%")
                     }
                 }
                 manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
@@ -44,11 +44,11 @@ extension AssetPickerViewController {
                     switch result {
                     case .success(let response):
                         if !response.isDegraded {
-                            hideHUD()
+                            self.hideHUD()
                             self.showEditor(response.image, identifier: asset.phAsset.localIdentifier, tag: indexPath.item)
                         }
                     case .failure(let error):
-                        hideHUD()
+                        self.hideHUD()
                         _print(error)
                     }
                 }
