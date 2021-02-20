@@ -97,7 +97,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
-                hideHUD()
+                self?.hideHUD()
             }
         case .video:
             trackObserver?.track(event: .takeVideo, userInfo: [:])
@@ -108,7 +108,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
-                hideHUD()
+                self?.hideHUD()
             }
         case .photoLive, .photoGIF:
             // Not support yet

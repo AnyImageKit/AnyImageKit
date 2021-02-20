@@ -124,7 +124,7 @@ final class VideoEditorController: AnyImageViewController {
             guard let self = self else { return }
             switch result {
             case .success(let url):
-                hideHUD()
+                self.hideHUD()
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.url = url
@@ -140,7 +140,7 @@ final class VideoEditorController: AnyImageViewController {
                 }
             case .failure(let error):
                 if error == .cannotFindInLocal {
-                    showWaitHUD()
+                    self.showWaitHUD()
                     return
                 }
                 _print("Fetch URL failed: \(error.localizedDescription)")

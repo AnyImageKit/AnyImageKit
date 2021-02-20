@@ -114,8 +114,28 @@ final class HUDViewController: UIViewController {
         let constraintRect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: height)
         return attr.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil).integral.width
     }
+    
+    // MARK: - StatusBar
+    
+    private var isStatusBarHidden: Bool = false
+    private var statusBarStyle: UIStatusBarStyle = .default
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return isStatusBarHidden
+    }
+    
+    func setStatusBar(with controller: UIViewController) {
+        isStatusBarHidden = controller.prefersStatusBarHidden
+        statusBarStyle = controller.preferredStatusBarStyle
+        setNeedsStatusBarAppearanceUpdate()
+    }
 }
 
+// MARK: - Function
 extension HUDViewController {
     
     func wait(message: String = "") {
