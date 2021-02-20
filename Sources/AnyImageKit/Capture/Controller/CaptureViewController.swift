@@ -74,7 +74,6 @@ final class CaptureViewController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBar(hidden: true)
         setupNavigation()
         setupView()
         var permissions: [Permission] = [.camera]
@@ -142,6 +141,10 @@ final class CaptureViewController: AnyImageViewController {
             maker.centerX.equalToSuperview()
             maker.bottom.equalTo(toolView.snp.top).offset(-8)
         }
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 

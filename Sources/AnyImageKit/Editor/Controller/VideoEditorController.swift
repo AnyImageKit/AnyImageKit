@@ -68,7 +68,6 @@ final class VideoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBar(hidden: true)
         setupView()
         loadData()
         navigationController?.navigationBar.isHidden = true
@@ -148,6 +147,10 @@ final class VideoEditorController: AnyImageViewController {
                 self.delegate?.videoEditorDidCancel(self)
             }
         }
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 
