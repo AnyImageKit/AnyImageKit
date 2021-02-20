@@ -70,7 +70,6 @@ final class PhotoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setStatusBar(hidden: true)
         bindAction()
         loadData()
         navigationController?.navigationBar.isHidden = true
@@ -170,6 +169,10 @@ final class PhotoEditorController: AnyImageViewController {
             placeholdImageView.contentMode = .scaleAspectFill
             placeholdImageView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: offsetY)
         }
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 
