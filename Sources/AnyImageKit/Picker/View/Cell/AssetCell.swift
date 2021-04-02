@@ -154,12 +154,14 @@ extension AssetCell {
     func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         if asset._images[.edited] != nil {
             editedView.isHidden = false
+            editedView.update(options: manager.options)
         } else {
             switch asset.mediaType {
             case .photoGIF:
                 gifView.isHidden = false
             case .video:
                 videoView.isHidden = false
+                videoView.update(options: manager.options)
             default:
                 break
             }
@@ -183,7 +185,6 @@ private class VideoView: UIView {
     
     private lazy var videoImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Video", module: .picker)
         return view
     }()
     private lazy var videoLabel: UILabel = {
@@ -244,6 +245,10 @@ extension VideoView {
         videoLabel.isHidden = false
         videoLabel.text = time
     }
+    
+    func update(options: PickerOptionsInfo) {
+        videoImageView.image = options.theme[icon: .video]
+    }
 }
 
 
@@ -299,9 +304,9 @@ private class EditedView: UIView {
 
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "PhotoEdited", module: .picker)
         return view
     }()
+    
     private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
@@ -336,6 +341,10 @@ private class EditedView: UIView {
             maker.left.bottom.equalToSuperview().inset(6)
             maker.width.height.equalTo(15)
         }
+    }
+    
+    func update(options: PickerOptionsInfo) {
+        imageView.image = options.theme[icon: .photoEdited]
     }
 }
 

@@ -34,7 +34,7 @@ class PreviewCell: UICollectionViewCell {
     var manager: PickerManager! {
         didSet {
             if oldValue == nil {
-                updateOptions(manager.options)
+                update(options: manager.options)
             }
         }
     }
@@ -192,8 +192,8 @@ class PreviewCell: UICollectionViewCell {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
     
-    func updateOptions(_ options: PickerOptionsInfo) {
-        
+    func update(options: PickerOptionsInfo) {
+        iCloudView.update(options: options)
     }
 }
 

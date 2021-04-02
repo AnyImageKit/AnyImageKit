@@ -502,6 +502,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
+            cell.update(options: manager.options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
             cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)

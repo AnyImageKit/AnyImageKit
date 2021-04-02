@@ -17,6 +17,9 @@ public struct PickerTheme: Equatable {
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]
     
+    /// Custom icon storage
+    private var icons: [IconConfigKey: UIImage] = [:]
+    
     public init(style: UserInterfaceStyle) {
         self.style = style
     }
@@ -24,6 +27,11 @@ public struct PickerTheme: Equatable {
     public subscript(color key: ColorConfigKey) -> UIColor {
         get { colors[key] ?? key.defaultValue(for: style) }
         set { colors[key] = newValue }
+    }
+    
+    public subscript(icon key: IconConfigKey) -> UIImage? {
+        get { icons[key] ?? key.defaultValue(for: style) }
+        set { icons[key] = newValue }
     }
 }
 
@@ -34,18 +42,25 @@ extension PickerTheme {
         
         /// Main Color
         case main
+        
         /// Text Color
         case text
+        
         /// Sub Text Color
         case subText
+        
         /// ToolBar Color
         case toolBar
+        
         /// Background Color
         case background
+        
         /// TableView Cell Selected Background Color
         case selectedCell
+        
         /// Separator Line Color
         case separatorLine
+        
         /// Button Disable Color
         case buttonDisable
         
@@ -84,6 +99,82 @@ extension PickerTheme {
                 case .separatorLine: return UIColor.separatorLineDark
                 case .buttonDisable: return UIColor.buttonDisableDark
                 }
+            }
+        }
+    }
+}
+
+extension PickerTheme {
+    
+    public enum IconConfigKey: Hashable {
+        
+        /// 20*20, Light/Dark
+        case albumArrow
+        
+        /// 20*20, Light/Dark
+        case arrowRight
+        
+        /// 50*50
+        case camera
+        
+        /// 16*16
+        case checkOff
+        
+        /// 16*16, Template
+        case checkOn
+        
+        /// 20*20
+        case iCloud
+        
+        /// 20*20, Light/Dark
+        case livePhoto
+        
+        /// 24*24
+        case photoEdited
+        
+        /// 24*24, Light/Dark
+        case pickerCircle
+        
+        /// 14*24, Light/Dark
+        case returnButton
+        
+        /// 24*15
+        case video
+        
+        /// 80*80
+        case videoPlay
+        
+        /// 20*20, Light/Dark
+        case warning
+        
+        func defaultValue(for style: UserInterfaceStyle) -> UIImage? {
+            switch self {
+            case .albumArrow:
+                return BundleHelper.image(named: "AlbumArrow", style: style, module: .picker)
+            case .arrowRight:
+                return BundleHelper.image(named: "ArrowRight", style: style, module: .picker)
+            case .camera:
+                return BundleHelper.image(named: "Camera", module: .picker)
+            case .checkOff:
+                return BundleHelper.image(named: "CheckOff", module: .picker)
+            case .checkOn:
+                return BundleHelper.image(named: "CheckOn", module: .picker)?.withRenderingMode(.alwaysTemplate)
+            case .iCloud:
+                return BundleHelper.image(named: "iCloud", module: .picker)
+            case .livePhoto:
+                return BundleHelper.image(named: "LivePhoto", style: style, module: .picker)
+            case .photoEdited:
+                return BundleHelper.image(named: "PhotoEdited", module: .picker)
+            case .pickerCircle:
+                return BundleHelper.image(named: "PickerCircle", style: style, module: .picker)
+            case .returnButton:
+                return BundleHelper.image(named: "ReturnButton", style: style, module: .picker)
+            case .video:
+                return BundleHelper.image(named: "Video", module: .picker)
+            case .videoPlay:
+                return BundleHelper.image(named: "VideoPlay", module: .picker)
+            case .warning:
+                return BundleHelper.image(named: "Warning", style: style, module: .picker)
             }
         }
     }

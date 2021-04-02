@@ -21,8 +21,7 @@ final class LoadingiCloudView: UIView {
     }()
     
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "iCloud", module: .picker)
-        let view = UIImageView(image: image)
+        let view = UIImageView(frame: .zero)
         return view
     }()
     
@@ -41,7 +40,6 @@ final class LoadingiCloudView: UIView {
         view.font = UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular)
         return view
     }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,5 +86,9 @@ extension LoadingiCloudView {
     
     func setProgress(_ progress: Double) {
         progressLabel.text = "\(Int(progress * 100))%"
+    }
+    
+    func update(options: PickerOptionsInfo) {
+        imageView.image = options.theme[icon: .iCloud]
     }
 }

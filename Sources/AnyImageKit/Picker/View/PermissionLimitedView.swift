@@ -12,7 +12,7 @@ final class PermissionLimitedView: UIView {
 
     private lazy var warningImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Warning", style: options.theme.style, module: .picker)
+        view.image = options.theme[icon: .warning]
         return view
     }()
     
@@ -27,7 +27,7 @@ final class PermissionLimitedView: UIView {
     
     private lazy var arrowImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "ArrowRight", style: options.theme.style, module: .picker)
+        view.image = options.theme[icon: .arrowRight]
         return view
     }()
     

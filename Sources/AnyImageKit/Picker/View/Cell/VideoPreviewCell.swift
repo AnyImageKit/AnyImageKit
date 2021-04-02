@@ -43,7 +43,6 @@ final class VideoPreviewCell: PreviewCell {
     
     private lazy var playImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "VideoPlay", module: .picker)
         return view
     }()
     
@@ -118,6 +117,11 @@ final class VideoPreviewCell: PreviewCell {
         if !exit && !isPlaying {
             self.setPlayButton(hidden: false, animated: true)
         }
+    }
+    
+    override func update(options: PickerOptionsInfo) {
+        super.update(options: options)
+        playImageView.image = options.theme[icon: .videoPlay]
     }
 }
 

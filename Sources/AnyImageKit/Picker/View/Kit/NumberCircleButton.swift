@@ -141,8 +141,7 @@ extension NumberCircleButton {
         }
         
         func setTheme(_ theme: PickerTheme) {
-            let image = BundleHelper.image(named: "PickerCircle", style: theme.style, module: .picker)
-            imageView.image = image
+            imageView.image = theme[icon: .pickerCircle]
         }
     }
 }

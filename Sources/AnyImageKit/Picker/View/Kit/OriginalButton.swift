@@ -13,11 +13,9 @@ final class OriginalButton: UIControl {
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                let image = BundleHelper.image(named: "CheckOn", module: .picker)
-                checkImageView.image = image?.withRenderingMode(.alwaysTemplate)
+                checkImageView.image = options.theme[icon: .checkOn]
             } else {
-                let image = BundleHelper.image(named: "CheckOff", module: .picker)
-                checkImageView.image = image
+                checkImageView.image = options.theme[icon: .checkOff]
             }
         }
     }
@@ -25,11 +23,11 @@ final class OriginalButton: UIControl {
     private lazy var checkImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         view.isUserInteractionEnabled = false
-        let image = BundleHelper.image(named: "CheckOff", module: .picker)
-        view.image = image
+        view.image = options.theme[icon: .checkOff]
         view.tintColor = options.theme[color: .main]
         return view
     }()
+    
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
         view.text = BundleHelper.localizedString(key: "ORIGINAL_IMAGE", module: .picker)
