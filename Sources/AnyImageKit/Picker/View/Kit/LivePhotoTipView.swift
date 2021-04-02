@@ -53,7 +53,7 @@ final class LivePhotoTipView: UIView {
                                    light: UIColor.color(hex: 0x666666),
                                    dark: UIColor.color(hex: 0x999999))
         label.textColor = color
-        backgroundColor = options.theme.backgroundColor.withAlphaComponent(0.7)
+        backgroundColor = options.theme[color: .background].withAlphaComponent(0.7)
     }
 
 }

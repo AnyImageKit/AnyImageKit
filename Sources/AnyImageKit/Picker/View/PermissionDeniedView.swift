@@ -16,14 +16,14 @@ final class PermissionDeniedView: UIView {
         view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
-        view.textColor = options.theme.textColor
+        view.textColor = options.theme[color: .text]
         return view
     }()
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
         view.setTitle(BundleHelper.localizedString(key: "GO_TO_SETTINGS", module: .core), for: .normal)
-        view.setTitleColor(options.theme.mainColor, for: .normal)
+        view.setTitleColor(options.theme[color: .main], for: .normal)
         view.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -41,7 +41,7 @@ final class PermissionDeniedView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = options.theme.backgroundColor
+        backgroundColor = options.theme[color: .background]
         addSubview(label)
         addSubview(button)
         label.snp.makeConstraints { maker in

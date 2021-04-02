@@ -15,15 +15,15 @@ final class PickerToolBar: UIView {
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = options.theme.toolBarColor.withAlphaComponent(0.7)
+        view.contentView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.7)
         return view
     }()
     
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitleColor(options.theme.textColor, for: .normal)
-        view.setTitleColor(options.theme.textColor.withAlphaComponent(0.3), for: .disabled)
+        view.setTitleColor(options.theme[color: .text], for: .normal)
+        view.setTitleColor(options.theme[color: .text].withAlphaComponent(0.3), for: .disabled)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
@@ -37,10 +37,10 @@ final class PickerToolBar: UIView {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
-        view.backgroundColor = options.theme.mainColor
+        view.backgroundColor = options.theme[color: .main]
         let normal = UIColor.create(style: options.theme.style,
                                     light: .white,
-                                    dark: options.theme.textColor)
+                                    dark: options.theme[color: .text])
         let disabled = UIColor.create(style: options.theme.style,
                                       light: normal.withAlphaComponent(0.7),
                                       dark: normal.withAlphaComponent(0.3))
@@ -88,7 +88,7 @@ final class PickerToolBar: UIView {
             }
             leftButton.setTitle(BundleHelper.localizedString(key: "PREVIEW", module: .core), for: .normal)
         case .preview:
-            backgroundColor = options.theme.toolBarColor.withAlphaComponent(0.95)
+            backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
             leftButton.setTitle(BundleHelper.localizedString(key: "EDIT", module: .core), for: .normal)
         }
         
@@ -125,7 +125,7 @@ extension PickerToolBar {
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
-        doneButton.backgroundColor = enable ? options.theme.mainColor : options.theme.buttonDisableColor
+        doneButton.backgroundColor = enable ? options.theme[color: .main] : options.theme[color: .buttonDisable]
     }
     
     func showLimitedView() {

@@ -19,7 +19,7 @@ final class PermissionLimitedView: UIView {
     private lazy var tipsLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.numberOfLines = 2
-        view.textColor = options.theme.textColor
+        view.textColor = options.theme[color: .text]
         view.font = UIFont.systemFont(ofSize: 14)
         view.text = BundleHelper.localizedString(key: "LIMITED_PHOTOS_PERMISSION_TIPS", module: .picker)
         return view

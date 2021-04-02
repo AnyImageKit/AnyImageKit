@@ -124,7 +124,7 @@ extension AssetCell {
 extension AssetCell {
     
     private func setOptions(_ options: PickerOptionsInfo) {
-        boxCoverView.layer.borderColor = options.theme.mainColor.cgColor
+        boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
         selectButton.setTheme(options.theme)
         selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
     }

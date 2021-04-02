@@ -98,8 +98,8 @@ extension ImagePickerController {
         rootViewController.trackObserver = self
         viewControllers = [rootViewController]
         
-        navigationBar.barTintColor = manager.options.theme.backgroundColor
-        navigationBar.tintColor = manager.options.theme.textColor
+        navigationBar.barTintColor = manager.options.theme[color: .background]
+        navigationBar.tintColor = manager.options.theme[color: .text]
     }
 }
 

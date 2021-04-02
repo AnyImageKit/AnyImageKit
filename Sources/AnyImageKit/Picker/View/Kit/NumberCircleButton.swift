@@ -85,7 +85,7 @@ final class NumberCircleButton: UIControl {
 extension NumberCircleButton {
     
     func setTheme(_ theme: PickerTheme) {
-        numLabel.backgroundColor = theme.mainColor
+        numLabel.backgroundColor = theme[color: .main]
         circleView.setTheme(theme)
     }
     

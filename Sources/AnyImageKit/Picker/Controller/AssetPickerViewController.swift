@@ -51,7 +51,7 @@ final class AssetPickerViewController: AnyImageViewController {
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
-        view.backgroundColor = manager.options.theme.backgroundColor
+        view.backgroundColor = manager.options.theme[color: .background]
         if #available(iOS 14.0, *) {
             
         } else {
