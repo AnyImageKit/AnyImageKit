@@ -105,6 +105,7 @@ extension PickerTheme {
     }
 }
 
+// MARK: - Icon
 extension PickerTheme {
     
     public enum IconConfigKey: Hashable {

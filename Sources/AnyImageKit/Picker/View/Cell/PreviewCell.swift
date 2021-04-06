@@ -133,7 +133,7 @@ class PreviewCell: UICollectionViewCell {
         iCloudView.reset()
     }
     
-    // MARK: - function
+    // MARK: - Function
     
     /// 设置图片
     func setImage(_ image: UIImage?) {

@@ -124,7 +124,7 @@ final class VideoPreviewCell: PreviewCell {
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension VideoPreviewCell {
     
     /// 暂停

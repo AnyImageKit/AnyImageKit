@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+// MARK: - PickerOptionsInfo
 public struct PickerOptionsInfo {
     
     /// Theme
@@ -102,15 +103,16 @@ public struct PickerOptionsInfo {
     }
 }
 
-/// Select Options
+// MARK: - Select Options
 public struct PickerSelectOption: OptionSet {
-    /// Photo 照片
+    
+    /// Photo
     public static let photo = PickerSelectOption(rawValue: 1 << 0)
-    /// Video 视频
+    /// Video
     public static let video = PickerSelectOption(rawValue: 1 << 1)
-    /// GIF 动图
+    /// GIF
     public static let photoGIF = PickerSelectOption(rawValue: 1 << 2)
-    /// Live Photo 实况照片
+    /// Live Photo
     public static let photoLive = PickerSelectOption(rawValue: 1 << 3)
     
     public let rawValue: Int
@@ -142,8 +144,9 @@ extension PickerSelectOption {
     }
 }
 
-/// Album Options
+// MARK: - Album Options
 public struct PickerAlbumOption: OptionSet {
+    
     /// Smart Album, managed by system
     public static let smart = PickerAlbumOption(rawValue: 1 << 0)
     /// User Created Album
@@ -156,12 +159,13 @@ public struct PickerAlbumOption: OptionSet {
     }
 }
 
-/// Editor Options
+// MARK: - Editor Options
 public struct PickerEditorOption: OptionSet {
+    
     /// Photo
     public static let photo = PickerEditorOption(rawValue: 1 << 0)
     /// Video: - TODO
-    static let video = PickerEditorOption(rawValue: 1 << 1)
+    /*public*/ static let video = PickerEditorOption(rawValue: 1 << 1)
 
     public let rawValue: Int
 
@@ -170,8 +174,9 @@ public struct PickerEditorOption: OptionSet {
     }
 }
 
-/// Picker Selection Tap Action
+// MARK: - Picker Selection Tap Action
 public enum PickerSelectionTapAction: Equatable {
+    
     /// Preview
     /// - Default value
     case preview

@@ -85,7 +85,7 @@ extension LoadingiCloudView: PickerOptionsConfigurable {
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension LoadingiCloudView {
     
     func reset() {

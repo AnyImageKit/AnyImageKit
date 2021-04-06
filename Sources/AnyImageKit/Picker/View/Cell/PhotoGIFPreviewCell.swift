@@ -48,7 +48,7 @@ final class PhotoGIFPreviewCell: PreviewCell {
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension PhotoGIFPreviewCell {
     
     /// 加载 GIF
