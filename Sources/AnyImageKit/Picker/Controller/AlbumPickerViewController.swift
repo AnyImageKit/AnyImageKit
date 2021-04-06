@@ -143,7 +143,7 @@ extension AlbumPickerViewController: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         tableView.backgroundColor = options.theme[color: .background]
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 

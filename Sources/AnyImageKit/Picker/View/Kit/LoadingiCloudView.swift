@@ -81,7 +81,7 @@ extension LoadingiCloudView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         imageView.image = options.theme[icon: .iCloud]
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 

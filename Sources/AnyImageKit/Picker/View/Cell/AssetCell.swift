@@ -120,7 +120,7 @@ extension AssetCell: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
         selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 
@@ -254,7 +254,7 @@ extension VideoView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         videoImageView.image = options.theme[icon: .video]
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 
@@ -356,7 +356,7 @@ extension EditedView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         imageView.image = options.theme[icon: .photoEdited]
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 

@@ -87,7 +87,7 @@ extension NumberCircleButton: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         numLabel.backgroundColor = options.theme[color: .main]
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 
@@ -146,7 +146,7 @@ extension NumberCircleButton {
         
         func update(options: PickerOptionsInfo) {
             imageView.image = options.theme[icon: .pickerCircle]
-            updateChildConfigurable(options: options)
+            updateChildrenConfigurable(options: options)
         }
     }
 }

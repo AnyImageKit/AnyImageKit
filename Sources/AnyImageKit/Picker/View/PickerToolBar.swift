@@ -139,7 +139,7 @@ extension PickerToolBar: PickerOptionsConfigurable {
         originalButton.setTitleColor(options.theme[color: .text], for: .normal)
         originalButton.tintColor = options.theme[color: .main]
         originalButton.isHidden = !options.allowUseOriginalImage
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 

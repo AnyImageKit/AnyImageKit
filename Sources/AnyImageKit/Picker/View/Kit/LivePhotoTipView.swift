@@ -58,6 +58,6 @@ extension LivePhotoTipView: PickerOptionsConfigurable {
                                    dark: UIColor.color(hex: 0x999999))
         label.textColor = color
         backgroundColor = options.theme[color: .background].withAlphaComponent(0.7)
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }

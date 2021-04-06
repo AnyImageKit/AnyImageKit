@@ -10,23 +10,23 @@ import Foundation
 
 public protocol PickerOptionsConfigurable {
     
-    var childConfigurable: [PickerOptionsConfigurable] { get }
+    var childrenConfigurable: [PickerOptionsConfigurable] { get }
     func update(options: PickerOptionsInfo)
-    func updateChildConfigurable(options: PickerOptionsInfo)
+    func updateChildrenConfigurable(options: PickerOptionsInfo)
 }
 
 extension PickerOptionsConfigurable {
     
-    var childConfigurable: [PickerOptionsConfigurable] {
+    var childrenConfigurable: [PickerOptionsConfigurable] {
         return []
     }
     
     func update(options: PickerOptionsInfo) {
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
     
-    func updateChildConfigurable(options: PickerOptionsInfo)  {
-        for child in childConfigurable {
+    func updateChildrenConfigurable(options: PickerOptionsInfo)  {
+        for child in childrenConfigurable {
             child.update(options: options)
         }
     }
@@ -34,7 +34,7 @@ extension PickerOptionsConfigurable {
 
 extension PickerOptionsConfigurable where Self: UIViewController {
     
-    var childConfigurable: [PickerOptionsConfigurable] {
+    var childrenConfigurable: [PickerOptionsConfigurable] {
         return suggestChildConfigurable
     }
     
@@ -45,7 +45,7 @@ extension PickerOptionsConfigurable where Self: UIViewController {
 
 extension PickerOptionsConfigurable where Self: UIView {
     
-    var childConfigurable: [PickerOptionsConfigurable] {
+    var childrenConfigurable: [PickerOptionsConfigurable] {
         return suggestChildConfigurable
     }
     

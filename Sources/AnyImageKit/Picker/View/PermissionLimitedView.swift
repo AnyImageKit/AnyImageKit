@@ -74,6 +74,6 @@ extension PermissionLimitedView: PickerOptionsConfigurable {
         warningImageView.image = options.theme[icon: .warning]
         tipsLabel.textColor = options.theme[color: .text]
         arrowImageView.image = options.theme[icon: .arrowRight]
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }

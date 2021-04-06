@@ -202,7 +202,7 @@ extension PreviewCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         optionsDidUpdate(options: options)
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 

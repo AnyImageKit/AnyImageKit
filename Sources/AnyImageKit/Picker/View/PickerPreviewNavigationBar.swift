@@ -58,6 +58,6 @@ extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
         backButton.setImage(options.theme[icon: .returnButton], for: .normal)
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }

@@ -89,7 +89,7 @@ extension PickerPreviewIndexView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         collectionView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
-        updateChildConfigurable(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 
