@@ -31,3 +31,33 @@ extension PickerOptionsConfigurable {
         }
     }
 }
+
+extension PickerOptionsConfigurable where Self: UIViewController {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return suggestChildConfigurable
+    }
+    
+    var suggestChildConfigurable: [PickerOptionsConfigurable] {
+        return view.getSubviews().compactMap { $0 as? PickerOptionsConfigurable }
+    }
+}
+
+extension PickerOptionsConfigurable where Self: UIView {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return suggestChildConfigurable
+    }
+    
+    var suggestChildConfigurable: [PickerOptionsConfigurable] {
+        return getSubviews().compactMap { $0 as? PickerOptionsConfigurable }
+    }
+}
+
+extension UIView {
+    
+    fileprivate func getSubviews() -> [UIView] {
+        if subviews.isEmpty { return [] }
+        return ((subviews.flatMap { $0.getSubviews() }) + subviews)
+    }
+}
