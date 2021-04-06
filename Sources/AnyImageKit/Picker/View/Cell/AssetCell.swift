@@ -114,6 +114,20 @@ final class AssetCell: UICollectionViewCell {
     }
 }
 
+// MARK: - PickerOptionsConfigurable
+extension AssetCell: PickerOptionsConfigurable {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return [selectButton, editedView, videoView]
+    }
+    
+    func update(options: PickerOptionsInfo) {
+        boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
+        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+        updateChildConfigurable(options: options)
+    }
+}
+
 extension AssetCell {
     
     var image: UIImage? {
@@ -123,15 +137,8 @@ extension AssetCell {
 
 extension AssetCell {
     
-    private func setOptions(_ options: PickerOptionsInfo) {
-        boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
-        selectButton.update(options: options)
-        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
-    }
-    
     func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         asset.check(disable: manager.options.disableRules)
-        setOptions(manager.options)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
         identifier = asset.phAsset.localIdentifier
         manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
@@ -152,16 +159,15 @@ extension AssetCell {
     }
     
     func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+        update(options: manager.options)
         if asset._images[.edited] != nil {
             editedView.isHidden = false
-            editedView.update(options: manager.options)
         } else {
             switch asset.mediaType {
             case .photoGIF:
                 gifView.isHidden = false
             case .video:
                 videoView.isHidden = false
-                videoView.update(options: manager.options)
             default:
                 break
             }

@@ -391,6 +391,7 @@ extension PhotoPreviewController {
     }
 }
 
+// MARK: - PickerOptionsConfigurable
 extension PhotoPreviewController: PickerOptionsConfigurable {
     
     var childConfigurable: [PickerOptionsConfigurable] {
