@@ -52,7 +52,7 @@ extension PhotoPreviewControllerDelegate {
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
 }
 
-final class PhotoPreviewController: AnyImageViewController {
+final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigurable {
     
     weak var delegate: PhotoPreviewControllerDelegate?
     weak var dataSource: PhotoPreviewControllerDataSource?
@@ -388,14 +388,6 @@ extension PhotoPreviewController {
         }
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
-    }
-}
-
-// MARK: - PickerOptionsConfigurable
-extension PhotoPreviewController: PickerOptionsConfigurable {
-    
-    var childConfigurable: [PickerOptionsConfigurable] {
-        return [navigationBar, toolBar, indexView]
     }
 }
 

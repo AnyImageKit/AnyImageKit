@@ -94,10 +94,6 @@ final class PhotoLivePreviewCell: PreviewCell {
         super.setDownloadingProgress(progress)
         livePhotoTipView.isHidden = progress != 1
     }
-    
-    override var _childConfigurable: [PickerOptionsConfigurable] {
-        return super._childConfigurable + [livePhotoTipView]
-    }
 }
 
 extension PhotoLivePreviewCell {

@@ -174,10 +174,6 @@ class PreviewCell: UICollectionViewCell {
     
     // MARK: - Override
     
-    var _childConfigurable: [PickerOptionsConfigurable] {
-        return [iCloudView]
-    }
-    
     func reset() { }
     
     func singleTapped() {
@@ -200,8 +196,6 @@ class PreviewCell: UICollectionViewCell {
 // MARK: - PickerOptionsConfigurable
 extension PreviewCell: PickerOptionsConfigurable {
     
-    var childConfigurable: [PickerOptionsConfigurable] {
-        return _childConfigurable
     }
 }
 

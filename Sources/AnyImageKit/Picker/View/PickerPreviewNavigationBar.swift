@@ -55,10 +55,6 @@ final class PickerPreviewNavigationBar: UIView {
 // MARK: - PickerOptionsConfigurable
 extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
     
-    var childConfigurable: [PickerOptionsConfigurable] {
-        return [selectButton]
-    }
-    
     func update(options: PickerOptionsInfo) {
         backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
         backButton.setImage(options.theme[icon: .returnButton], for: .normal)

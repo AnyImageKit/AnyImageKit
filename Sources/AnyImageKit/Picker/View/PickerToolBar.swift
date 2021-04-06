@@ -114,10 +114,6 @@ final class PickerToolBar: UIView {
 // MARK: - PickerOptionsConfigurable
 extension PickerToolBar: PickerOptionsConfigurable {
     
-    var childConfigurable: [PickerOptionsConfigurable] {
-        return [permissionLimitedView]
-    }
-    
     func update(options: PickerOptionsInfo) {
         backgroundView.contentView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.7)
         switch style {
