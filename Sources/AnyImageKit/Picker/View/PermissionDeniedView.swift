@@ -16,22 +16,17 @@ final class PermissionDeniedView: UIView {
         view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
-        view.textColor = options.theme[color: .text]
         return view
     }()
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
         view.setTitle(BundleHelper.localizedString(key: "GO_TO_SETTINGS", module: .core), for: .normal)
-        view.setTitleColor(options.theme[color: .main], for: .normal)
         view.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
-    private let options: PickerOptionsInfo
-    
-    init(frame: CGRect, options: PickerOptionsInfo) {
-        self.options = options
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
@@ -41,7 +36,6 @@ final class PermissionDeniedView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = options.theme[color: .background]
         addSubview(label)
         addSubview(button)
         label.snp.makeConstraints { maker in
@@ -61,5 +55,15 @@ extension PermissionDeniedView {
     @objc private func settingsButtonTapped(_ sender: UIButton) {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension PermissionDeniedView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        label.textColor = options.theme[color: .text]
+        button.setTitleColor(options.theme[color: .main], for: .normal)
+        backgroundColor = options.theme[color: .background]
     }
 }

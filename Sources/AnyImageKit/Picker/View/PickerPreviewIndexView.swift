@@ -123,6 +123,7 @@ extension PickerPreviewIndexView {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension PickerPreviewIndexView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -139,6 +140,7 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension PickerPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

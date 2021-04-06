@@ -118,7 +118,7 @@ extension PickerToolBar: PickerOptionsConfigurable {
         backgroundView.contentView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.7)
         switch style {
         case .picker:
-            break
+            isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
         case .preview:
             backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
         }

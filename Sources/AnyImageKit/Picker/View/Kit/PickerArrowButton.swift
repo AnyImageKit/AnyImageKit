@@ -13,30 +13,24 @@ final class PickerArrowButton: UIControl {
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
         view.text = BundleHelper.localizedString(key: "PHOTO", module: .core)
-        view.textColor = options.theme[color: .text]
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
     }()
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = options.theme[icon: .albumArrow]
         return view
     }()
     
     private lazy var effectView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: loadBlurEffectStyle())
+        let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        let color = UIColor.create(style: options.theme.style,
-                                   light: UIColor.black.withAlphaComponent(0.1),
-                                   dark: UIColor.white.withAlphaComponent(0.9))
-        view.backgroundColor = color
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         return view
     }()
     
-    let options: PickerOptionsInfo
+    private var options: PickerOptionsInfo?
     
     override var isSelected: Bool {
         didSet {
@@ -47,8 +41,7 @@ final class PickerArrowButton: UIControl {
         }
     }
     
-    init(frame: CGRect, options: PickerOptionsInfo) {
-        self.options = options
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
@@ -89,10 +82,11 @@ final class PickerArrowButton: UIControl {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13.0, *) {
+            guard let options = options else { return }
             guard options.theme.style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
             
-            effectView.effect = UIBlurEffect(style: loadBlurEffectStyle())
+            effectView.effect = UIBlurEffect(style: loadBlurEffectStyle(options: options))
             let color = UIColor.create(style: options.theme.style,
                                        light: UIColor.black.withAlphaComponent(0.1),
                                        dark: UIColor.white.withAlphaComponent(0.9))
@@ -101,7 +95,7 @@ final class PickerArrowButton: UIControl {
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension PickerArrowButton {
     
     func setTitle(_ title: String) {
@@ -127,7 +121,7 @@ extension PickerArrowButton {
 // MARK: - Private function
 extension PickerArrowButton {
     
-    private func loadBlurEffectStyle() -> UIBlurEffect.Style {
+    private func loadBlurEffectStyle(options: PickerOptionsInfo) -> UIBlurEffect.Style {
         let style: UIBlurEffect.Style
         switch options.theme.style {
         case .auto:
@@ -146,5 +140,20 @@ extension PickerArrowButton {
             style = .dark
         }
         return style
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension PickerArrowButton: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        self.options = options
+        label.textColor = options.theme[color: .text]
+        imageView.image = options.theme[icon: .albumArrow]
+        effectView.effect = UIBlurEffect(style: loadBlurEffectStyle(options: options))
+        let effectViewColor = UIColor.create(style: options.theme.style,
+                                   light: UIColor.black.withAlphaComponent(0.1),
+                                   dark: UIColor.white.withAlphaComponent(0.9))
+        effectView.backgroundColor = effectViewColor
     }
 }

@@ -35,7 +35,7 @@ final class AssetPickerViewController: AnyImageViewController {
     lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
-        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
+        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
         view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -71,12 +71,11 @@ final class AssetPickerViewController: AnyImageViewController {
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
-        view.isHidden = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         return view
     }()
     
     private lazy var permissionView: PermissionDeniedView = {
-        let view = PermissionDeniedView(frame: .zero, options: manager.options)
+        let view = PermissionDeniedView(frame: .zero)
         view.isHidden = true
         return view
     }()
@@ -120,6 +119,7 @@ final class AssetPickerViewController: AnyImageViewController {
             setupDataSource()
         }
         checkPermission()
+        update(options: manager.options)
     }
     
     override func viewDidLayoutSubviews() {
@@ -174,6 +174,14 @@ final class AssetPickerViewController: AnyImageViewController {
         case .auto:
             return .default
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension AssetPickerViewController: PickerOptionsConfigurable {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return suggestChildConfigurable + [titleView]
     }
 }
 

@@ -118,14 +118,9 @@ final class VideoPreviewCell: PreviewCell {
             self.setPlayButton(hidden: false, animated: true)
         }
     }
-}
-
-// MARK: - PickerOptionsConfigurable
-extension VideoPreviewCell {
     
-    func update(options: PickerOptionsInfo) {
+    override func optionsDidUpdate(options: PickerOptionsInfo) {
         playImageView.image = options.theme[icon: .videoPlay]
-        updateChildConfigurable(options: options)
     }
 }
 

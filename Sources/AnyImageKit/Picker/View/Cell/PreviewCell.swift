@@ -191,11 +191,18 @@ class PreviewCell: UICollectionViewCell {
     func panEnded(_ exit: Bool) {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
+    
+    /// 通知子类更新配置
+    /// 由于 update options 方法来自协议，无法在子类重载，所以需要这个方法通知子类
+    func optionsDidUpdate(options: PickerOptionsInfo) { }
 }
 
 // MARK: - PickerOptionsConfigurable
 extension PreviewCell: PickerOptionsConfigurable {
     
+    func update(options: PickerOptionsInfo) {
+        optionsDidUpdate(options: options)
+        updateChildConfigurable(options: options)
     }
 }
 
