@@ -7,44 +7,26 @@
 //
 
 import UIKit
-
-final class OriginalButton: UIControl {
-    
-    override var isSelected: Bool {
-        didSet {
-            if isSelected {
-                checkImageView.image = options.theme[icon: .checkOn]
-            } else {
-                checkImageView.image = options.theme[icon: .checkOff]
-            }
-        }
-    }
+/*
+final class OriginalButton: UIButton {
     
     private lazy var checkImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         view.isUserInteractionEnabled = false
-        view.image = options.theme[icon: .checkOff]
-        view.tintColor = options.theme[color: .main]
         return view
     }()
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
+        view.isUserInteractionEnabled = false
         view.text = BundleHelper.localizedString(key: "ORIGINAL_IMAGE", module: .picker)
-        view.textColor = options.theme[color: .text]
         view.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     
-    private let options: PickerOptionsInfo
-    
-    init(frame: CGRect, options: PickerOptionsInfo) {
-        self.options = options
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        isAccessibilityElement = true
-        accessibilityTraits = .button
         accessibilityLabel = BundleHelper.localizedString(key: "ORIGINAL_IMAGE", module: .picker)
     }
     
@@ -66,8 +48,18 @@ final class OriginalButton: UIControl {
             maker.centerY.equalToSuperview()
         }
     }
+}
+ 
+// MARK: - PickerOptionsConfigurable
+extension OriginalButton: PickerOptionsInfoConfigurable {
     
-    @objc private func buttonTapped(_ sender: UIButton) {
-        isSelected.toggle()
+    func update(options: PickerOptionsInfo) {
+        setImage(options.theme[icon: .checkOn], for: .selected)
+        setImage(options.theme[icon: .checkOff], for: .normal)
+        checkImageView.image = options.theme[icon: .checkOff]
+        checkImageView.tintColor = options.theme[color: .main]
+        label.textColor = options.theme[color: .text]
+        updateChildConfigurable(options: options)
     }
 }
+*/

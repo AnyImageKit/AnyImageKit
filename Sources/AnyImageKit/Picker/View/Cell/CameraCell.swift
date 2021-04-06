@@ -35,9 +35,11 @@ final class CameraCell: UICollectionViewCell {
     }
 }
 
-extension CameraCell {
+// MARK: - PickerOptionsConfigurable
+extension CameraCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         imageView.image = options.theme[icon: .camera]
+        updateChildConfigurable(options: options)
     }
 }

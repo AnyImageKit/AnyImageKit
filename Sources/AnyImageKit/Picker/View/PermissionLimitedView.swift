@@ -12,14 +12,12 @@ final class PermissionLimitedView: UIView {
 
     private lazy var warningImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = options.theme[icon: .warning]
         return view
     }()
     
     private lazy var tipsLabel: UILabel = {
         let view = UILabel(frame: .zero)
         view.numberOfLines = 2
-        view.textColor = options.theme[color: .text]
         view.font = UIFont.systemFont(ofSize: 14)
         view.text = BundleHelper.localizedString(key: "LIMITED_PHOTOS_PERMISSION_TIPS", module: .picker)
         return view
@@ -27,7 +25,6 @@ final class PermissionLimitedView: UIView {
     
     private lazy var arrowImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = options.theme[icon: .arrowRight]
         return view
     }()
     
@@ -36,11 +33,8 @@ final class PermissionLimitedView: UIView {
         return view
     }()
     
-    private let options: PickerOptionsInfo
-    
-    init(options: PickerOptionsInfo) {
-        self.options = options
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupView()
     }
     
@@ -70,5 +64,16 @@ final class PermissionLimitedView: UIView {
         limitedButton.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension PermissionLimitedView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        warningImageView.image = options.theme[icon: .warning]
+        tipsLabel.textColor = options.theme[color: .text]
+        arrowImageView.image = options.theme[icon: .arrowRight]
+        updateChildConfigurable(options: options)
     }
 }

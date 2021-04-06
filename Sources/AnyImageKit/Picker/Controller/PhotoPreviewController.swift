@@ -54,8 +54,8 @@ extension PhotoPreviewControllerDelegate {
 
 final class PhotoPreviewController: AnyImageViewController {
     
-    weak var delegate: PhotoPreviewControllerDelegate? = nil
-    weak var dataSource: PhotoPreviewControllerDataSource? = nil
+    weak var delegate: PhotoPreviewControllerDelegate?
+    weak var dataSource: PhotoPreviewControllerDataSource?
     
     /// 图片索引
     var currentIndex: Int = 0 {
@@ -104,14 +104,13 @@ final class PhotoPreviewController: AnyImageViewController {
         return view
     }()
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
-        let view = PickerPreviewNavigationBar(frame: .zero, options: manager.options)
+        let view = PickerPreviewNavigationBar(frame: .zero)
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .preview, options: manager.options)
-        view.originalButton.isHidden = !manager.options.allowUseOriginalImage
+        let view = PickerToolBar(style: .preview)
         view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
@@ -122,7 +121,7 @@ final class PhotoPreviewController: AnyImageViewController {
         return view
     }()
     private lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView(frame: .zero, options: manager.options)
+        let view = PickerPreviewIndexView(frame: .zero)
         view.setManager(manager)
         view.isHidden = true
         view.delegate = self
@@ -156,6 +155,7 @@ final class PhotoPreviewController: AnyImageViewController {
         super.viewDidLoad()
         addNotifications()
         setupViews()
+        update(options: manager.options)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -361,7 +361,8 @@ extension PhotoPreviewController {
     }
     
     /// ToolBar - Original
-    @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
+    @objc private func originalImageButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
         manager.useOriginalImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
@@ -387,6 +388,13 @@ extension PhotoPreviewController {
         }
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
+    }
+}
+
+extension PhotoPreviewController: PickerOptionsConfigurable {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return [navigationBar, toolBar, indexView]
     }
 }
 

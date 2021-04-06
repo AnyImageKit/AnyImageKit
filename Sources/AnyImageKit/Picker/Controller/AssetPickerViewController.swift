@@ -64,11 +64,10 @@ final class AssetPickerViewController: AnyImageViewController {
     }()
     
     private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .picker, options: manager.options)
+        let view = PickerToolBar(style: .picker)
         view.setEnable(false)
-        view.originalButton.isHidden = !manager.options.allowUseOriginalImage
-        view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.isSelected = manager.useOriginalImage
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
@@ -435,7 +434,8 @@ extension AssetPickerViewController {
         present(controller, animated: true, completion: nil)
     }
     
-    @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
+    @objc private func originalImageButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
         manager.useOriginalImage = sender.isSelected
     }
     

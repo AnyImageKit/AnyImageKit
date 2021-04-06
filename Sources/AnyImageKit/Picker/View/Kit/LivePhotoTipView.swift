@@ -46,6 +46,10 @@ final class LivePhotoTipView: UIView {
             maker.centerY.equalToSuperview()
         }
     }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension LivePhotoTipView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         imageView.image = options.theme[icon: .livePhoto]
@@ -54,5 +58,6 @@ final class LivePhotoTipView: UIView {
                                    dark: UIColor.color(hex: 0x999999))
         label.textColor = color
         backgroundColor = options.theme[color: .background].withAlphaComponent(0.7)
+        updateChildConfigurable(options: options)
     }
 }

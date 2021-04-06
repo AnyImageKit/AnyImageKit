@@ -76,6 +76,15 @@ final class LoadingiCloudView: UIView {
     }
 }
 
+// MARK: - PickerOptionsConfigurable
+extension LoadingiCloudView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        imageView.image = options.theme[icon: .iCloud]
+        updateChildConfigurable(options: options)
+    }
+}
+
 // MARK: - function
 extension LoadingiCloudView {
     
@@ -86,9 +95,5 @@ extension LoadingiCloudView {
     
     func setProgress(_ progress: Double) {
         progressLabel.text = "\(Int(progress * 100))%"
-    }
-    
-    func update(options: PickerOptionsInfo) {
-        imageView.image = options.theme[icon: .iCloud]
     }
 }

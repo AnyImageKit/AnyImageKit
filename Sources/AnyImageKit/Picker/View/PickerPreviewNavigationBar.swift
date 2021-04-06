@@ -12,8 +12,6 @@ final class PickerPreviewNavigationBar: UIView {
     
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
-        let image = options.theme[icon: .returnButton]
-        view.setImage(image, for: .normal)
         view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
         view.accessibilityLabel = BundleHelper.localizedString(key: "BACK", module: .core)
         return view
@@ -23,13 +21,9 @@ final class PickerPreviewNavigationBar: UIView {
         return view
     }()
     
-    private let options: PickerOptionsInfo
-    
-    init(frame: CGRect, options: PickerOptionsInfo) {
-        self.options = options
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        selectButton.setTheme(options.theme)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,7 +31,6 @@ final class PickerPreviewNavigationBar: UIView {
     }
     
     private func setupView() {
-        backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
         let contentView = UILayoutGuide()
         addLayoutGuide(contentView)
         addSubview(backButton)
@@ -56,5 +49,19 @@ final class PickerPreviewNavigationBar: UIView {
             maker.centerY.equalTo(contentView)
             maker.width.height.equalTo(45)
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return [selectButton]
+    }
+    
+    func update(options: PickerOptionsInfo) {
+        backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
+        backButton.setImage(options.theme[icon: .returnButton], for: .normal)
+        updateChildConfigurable(options: options)
     }
 }

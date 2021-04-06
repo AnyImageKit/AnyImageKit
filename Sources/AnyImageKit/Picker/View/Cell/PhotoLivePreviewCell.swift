@@ -49,11 +49,6 @@ final class PhotoLivePreviewCell: PreviewCell {
         livePhotoView.frame = CGRect(origin: .zero, size: fitSize)
     }
     
-    override func update(options: PickerOptionsInfo) {
-        super.update(options: options)
-        livePhotoTipView.update(options: options)
-    }
-    
     private func setupView() {
         scrollView.delegate = self
         
@@ -98,6 +93,10 @@ final class PhotoLivePreviewCell: PreviewCell {
     override func setDownloadingProgress(_ progress: Double) {
         super.setDownloadingProgress(progress)
         livePhotoTipView.isHidden = progress != 1
+    }
+    
+    override var _childConfigurable: [PickerOptionsConfigurable] {
+        return super._childConfigurable + [livePhotoTipView]
     }
 }
 

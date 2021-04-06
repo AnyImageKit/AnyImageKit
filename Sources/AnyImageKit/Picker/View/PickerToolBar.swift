@@ -15,21 +15,25 @@ final class PickerToolBar: UIView {
     private lazy var backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        view.contentView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.7)
         return view
     }()
     
     private(set) lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
         view.backgroundColor = UIColor.clear
-        view.setTitleColor(options.theme[color: .text], for: .normal)
-        view.setTitleColor(options.theme[color: .text].withAlphaComponent(0.3), for: .disabled)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     
-    private(set) lazy var originalButton: OriginalButton = {
-        let view = OriginalButton(frame: .zero, options: options)
+    private(set) lazy var originalButton: UIButton = {
+        let view = UIButton(frame: .zero)
+        let title = BundleHelper.localizedString(key: "ORIGINAL_IMAGE", module: .picker)
+        view.setTitle(title, for: .normal)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        let spacing: CGFloat = 8
+        view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -spacing/2, bottom: 0, right: spacing/2)
+        view.titleEdgeInsets = UIEdgeInsets(top: 0, left: spacing/2, bottom: 0, right: -spacing/2)
+        view.contentEdgeInsets = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
         return view
     }()
     
@@ -37,22 +41,13 @@ final class PickerToolBar: UIView {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.layer.cornerRadius = 4
-        view.backgroundColor = options.theme[color: .main]
-        let normal = UIColor.create(style: options.theme.style,
-                                    light: .white,
-                                    dark: options.theme[color: .text])
-        let disabled = UIColor.create(style: options.theme.style,
-                                      light: normal.withAlphaComponent(0.7),
-                                      dark: normal.withAlphaComponent(0.3))
-        view.setTitleColor(normal, for: .normal)
-        view.setTitleColor(disabled, for: .disabled)
         view.setTitle(BundleHelper.localizedString(key: "DONE", module: .core), for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return view
     }()
     
     private(set) lazy var permissionLimitedView: PermissionLimitedView = {
-        let view = PermissionLimitedView(options: options)
+        let view = PermissionLimitedView(frame: .zero)
         view.isHidden = true
         return view
     }()
@@ -61,11 +56,9 @@ final class PickerToolBar: UIView {
     let toolBarHeight: CGFloat = 56
     
     private let style: Style
-    private let options: PickerOptionsInfo
     
-    init(style: Style, options: PickerOptionsInfo) {
+    init(style: Style) {
         self.style = style
-        self.options = options
         super.init(frame: .zero)
         setupView()
     }
@@ -88,7 +81,6 @@ final class PickerToolBar: UIView {
             }
             leftButton.setTitle(BundleHelper.localizedString(key: "PREVIEW", module: .core), for: .normal)
         case .preview:
-            backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
             leftButton.setTitle(BundleHelper.localizedString(key: "EDIT", module: .core), for: .normal)
         }
         
@@ -119,13 +111,49 @@ final class PickerToolBar: UIView {
     }
 }
 
+// MARK: - PickerOptionsConfigurable
+extension PickerToolBar: PickerOptionsConfigurable {
+    
+    var childConfigurable: [PickerOptionsConfigurable] {
+        return [permissionLimitedView]
+    }
+    
+    func update(options: PickerOptionsInfo) {
+        backgroundView.contentView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.7)
+        switch style {
+        case .picker:
+            break
+        case .preview:
+            backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
+        }
+        leftButton.setTitleColor(options.theme[color: .text], for: .normal)
+        leftButton.setTitleColor(options.theme[color: .text].withAlphaComponent(0.3), for: .disabled)
+        doneButton.backgroundColor = options.theme[color: .main]
+        let normal = UIColor.create(style: options.theme.style,
+                                    light: .white,
+                                    dark: options.theme[color: .text])
+        let disabled = UIColor.create(style: options.theme.style,
+                                      light: UIColor.white.withAlphaComponent(0.7),
+                                      dark: options.theme[color: .text].withAlphaComponent(0.3))
+        doneButton.setTitleColor(normal, for: .normal)
+        doneButton.setTitleColor(disabled, for: .disabled)
+        originalButton.setImage(options.theme[icon: .checkOn], for: .selected)
+        originalButton.setImage(options.theme[icon: .checkOff], for: .normal)
+        originalButton.setTitleColor(options.theme[color: .text], for: .selected)
+        originalButton.setTitleColor(options.theme[color: .text], for: .normal)
+        originalButton.tintColor = options.theme[color: .main]
+        originalButton.isHidden = !options.allowUseOriginalImage
+        updateChildConfigurable(options: options)
+    }
+}
+
 // MARK: - Function
 extension PickerToolBar {
     
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
         doneButton.isEnabled = enable
-        doneButton.backgroundColor = enable ? options.theme[color: .main] : options.theme[color: .buttonDisable]
+        doneButton.alpha = enable ? 1.0 : 0.5
     }
     
     func showLimitedView() {

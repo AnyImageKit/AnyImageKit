@@ -36,7 +36,6 @@ final class PickerPreviewIndexView: UIView {
         layout.itemSize = CGSize(width: 64, height: 64)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        view.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
         view.showsHorizontalScrollIndicator = false
         view.registerCell(AssetCell.self)
         view.dataSource = self
@@ -44,12 +43,9 @@ final class PickerPreviewIndexView: UIView {
         return view
     }()
     
-    private let options: PickerOptionsInfo
-    
     private var manager: PickerManager!
     
-    init(frame: CGRect, options: PickerOptionsInfo) {
-        self.options = options
+     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
@@ -85,6 +81,15 @@ final class PickerPreviewIndexView: UIView {
         if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == lastIdx }) {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension PickerPreviewIndexView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        collectionView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
+        updateChildConfigurable(options: options)
     }
 }
 
