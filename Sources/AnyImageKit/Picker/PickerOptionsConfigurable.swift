@@ -35,29 +35,43 @@ extension PickerOptionsConfigurable {
 extension PickerOptionsConfigurable where Self: UIViewController {
     
     var childrenConfigurable: [PickerOptionsConfigurable] {
-        return suggestChildrenConfigurable
+        return preferredChildrenConfigurable
     }
     
-    var suggestChildrenConfigurable: [PickerOptionsConfigurable] {
-        return view.getSubviews().compactMap { $0 as? PickerOptionsConfigurable }
+    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+        return view.subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }
 
 extension PickerOptionsConfigurable where Self: UIView {
     
     var childrenConfigurable: [PickerOptionsConfigurable] {
-        return suggestChildConfigurable
+        return preferredChildrenConfigurable
     }
     
-    var suggestChildConfigurable: [PickerOptionsConfigurable] {
-        return getSubviews().compactMap { $0 as? PickerOptionsConfigurable }
+    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+        return subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }
 
-extension UIView {
+extension PickerOptionsConfigurable where Self: UICollectionViewCell {
     
-    fileprivate func getSubviews() -> [UIView] {
-        if subviews.isEmpty { return [] }
-        return ((subviews.flatMap { $0.getSubviews() }) + subviews)
+    var childrenConfigurable: [PickerOptionsConfigurable] {
+        return preferredChildrenConfigurable
+    }
+    
+    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+        return contentView.subviews.compactMap { $0 as? PickerOptionsConfigurable }
+    }
+}
+
+extension PickerOptionsConfigurable where Self: UITableViewCell {
+    
+    var childrenConfigurable: [PickerOptionsConfigurable] {
+        return preferredChildrenConfigurable
+    }
+    
+    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+        return contentView.subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }
