@@ -35,10 +35,10 @@ extension PickerOptionsConfigurable {
 extension PickerOptionsConfigurable where Self: UIViewController {
     
     var childrenConfigurable: [PickerOptionsConfigurable] {
-        return suggestChildConfigurable
+        return suggestChildrenConfigurable
     }
     
-    var suggestChildConfigurable: [PickerOptionsConfigurable] {
+    var suggestChildrenConfigurable: [PickerOptionsConfigurable] {
         return view.getSubviews().compactMap { $0 as? PickerOptionsConfigurable }
     }
 }

@@ -181,7 +181,7 @@ final class AssetPickerViewController: AnyImageViewController {
 extension AssetPickerViewController: PickerOptionsConfigurable {
     
     var childrenConfigurable: [PickerOptionsConfigurable] {
-        return suggestChildConfigurable + [titleView]
+        return suggestChildrenConfigurable + [titleView]
     }
 }
 
