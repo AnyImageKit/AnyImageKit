@@ -30,7 +30,7 @@ final class PickerArrowButton: UIControl {
         return view
     }()
     
-    private var options: PickerOptionsInfo?
+    private var preferredStyle: UserInterfaceStyle?
     
     override var isSelected: Bool {
         didSet {
@@ -82,12 +82,12 @@ final class PickerArrowButton: UIControl {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13.0, *) {
-            guard let options = options else { return }
-            guard options.theme.style == .auto else { return }
+            guard let style = preferredStyle else { return }
+            guard style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
             
-            effectView.effect = UIBlurEffect(style: loadBlurEffectStyle(options: options))
-            let color = UIColor.create(style: options.theme.style,
+            effectView.effect = UIBlurEffect(style: .init(uiStyle: style, traitCollection: traitCollection))
+            let color = UIColor.create(style: style,
                                        light: UIColor.black.withAlphaComponent(0.1),
                                        dark: UIColor.white.withAlphaComponent(0.9))
             effectView.backgroundColor = color
@@ -118,40 +118,15 @@ extension PickerArrowButton {
     }
 }
 
-// MARK: - Private function
-extension PickerArrowButton {
-    
-    private func loadBlurEffectStyle(options: PickerOptionsInfo) -> UIBlurEffect.Style {
-        let style: UIBlurEffect.Style
-        switch options.theme.style {
-        case .auto:
-            if #available(iOS 13.0, *) {
-                if self.traitCollection.userInterfaceStyle == .dark {
-                    style = .dark
-                } else {
-                    style = .light
-                }
-            } else {
-                style = .light
-            }
-        case .light:
-            style = .light
-        case .dark:
-            style = .dark
-        }
-        return style
-    }
-}
-
 // MARK: - PickerOptionsConfigurable
 extension PickerArrowButton: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
-        self.options = options
+        preferredStyle = options.theme.style
         label.textColor = options.theme[color: .text]
         imageView.image = options.theme[icon: .albumArrow]
-        effectView.effect = UIBlurEffect(style: loadBlurEffectStyle(options: options))
-        let effectViewColor = UIColor.create(style: options.theme.style,
+        effectView.effect = UIBlurEffect(style: .init(uiStyle: preferredStyle!, traitCollection: traitCollection))
+        let effectViewColor = UIColor.create(style: preferredStyle!,
                                    light: UIColor.black.withAlphaComponent(0.1),
                                    dark: UIColor.white.withAlphaComponent(0.9))
         effectView.backgroundColor = effectViewColor

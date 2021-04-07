@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */; };
 		7117A24425A5959C000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7117A24825A595A8000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7117A25025A59753000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -250,6 +251,7 @@
 		67A8466325AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Picker.strings; sourceTree = "<group>"; };
 		67A8466425AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Editor.strings; sourceTree = "<group>"; };
 		67A8466525AE30A70066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Capture.strings; sourceTree = "<group>"; };
+		7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIBlurEffect.swift"; sourceTree = "<group>"; };
 		713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetPickerViewController+Editor.swift"; sourceTree = "<group>"; };
 		713C204F25AD32AA00BB0F66 /* Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
 		713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorContext.swift; sourceTree = "<group>"; };
@@ -831,6 +833,7 @@
 				A0604E7023307ABD00D9AA01 /* Picker+PHFetchResult.swift */,
 				A0C03C192331D426005F742C /* Picker+UIColor.swift */,
 				A082D24523C2D57B001F3D51 /* Picker+MediaType.swift */,
+				7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1460,11 +1463,9 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1556,6 +1557,7 @@
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */,
 				A01A59372522206A00FABD22 /* EditorResult.swift in Sources */,
+				7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */,

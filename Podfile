@@ -1,5 +1,7 @@
 platform :ios, '10.0'
 
+install! 'cocoapods', disable_input_output_paths: true
+
 target 'AnyImageKit' do
   use_frameworks!
 
