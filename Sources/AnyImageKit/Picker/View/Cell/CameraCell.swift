@@ -27,7 +27,7 @@ final class CameraCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        addSubview(imageView)
+        contentView.addSubview(imageView)
         imageView.snp.makeConstraints { maker in
             maker.center.equalToSuperview()
             maker.width.height.equalTo(self.snp.width).multipliedBy(0.5)

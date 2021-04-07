@@ -77,14 +77,14 @@ final class AssetCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        addSubview(imageView)
-        addSubview(selectdCoverView)
-        addSubview(gifView)
-        addSubview(videoView)
-        addSubview(editedView)
-        addSubview(disableCoverView)
-        addSubview(boxCoverView)
-        addSubview(selectButton)
+        contentView.addSubview(imageView)
+        contentView.addSubview(selectdCoverView)
+        contentView.addSubview(gifView)
+        contentView.addSubview(videoView)
+        contentView.addSubview(editedView)
+        contentView.addSubview(disableCoverView)
+        contentView.addSubview(boxCoverView)
+        contentView.addSubview(selectButton)
         
         imageView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
