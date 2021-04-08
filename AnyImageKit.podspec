@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
             'AnyImageKit_Core' => ['Sources/AnyImageKit/Resources/Core/**/*']
         }
         core.dependency 'SnapKit'
-        core.dependency 'Kingfisher'
+        core.dependency 'Kingfisher', '~> 6.0'
     end
     
     s.subspec 'Picker' do |picker|

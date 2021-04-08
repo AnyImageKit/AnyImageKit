@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class AssetCell: UICollectionViewCell {
+    
+    let selectEvent: Delegate<Void, Void> = .init()
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
@@ -51,6 +54,7 @@ final class AssetCell: UICollectionViewCell {
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
         let view = NumberCircleButton(frame: .zero, style: .default)
+        view.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -128,6 +132,14 @@ extension AssetCell {
     
     var image: UIImage? {
         return imageView.image
+    }
+}
+
+// MARK: - Action
+extension AssetCell {
+    
+    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
+        selectEvent.call()
     }
 }
 

@@ -390,7 +390,7 @@ extension AssetPickerViewController {
         guard manager.options.selectLimit == 1 && manager.options.selectionTapAction.hideToolBar else { return }
         guard let asset = manager.selectedAssets.first else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
-        selectButtonTapped(cell.selectButton)
+        cell.selectEvent.call()
     }
 }
 
@@ -414,12 +414,6 @@ extension AssetPickerViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         delegate?.assetPickerDidCancel(self)
-    }
-    
-    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
-        guard let cell = sender.superview as? AssetCell else { return }
-        guard let idx = collectionView.indexPath(for: cell)?.item else { return }
-        selectItem(idx)
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
@@ -510,7 +504,9 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         cell.tag = indexPath.row
         cell.setContent(asset, manager: manager)
-        cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
+        cell.selectEvent.delegate(on: self) { (self, _) in
+            self.selectItem(indexPath.row)
+        }
         cell.backgroundColor = UIColor.white
         cell.isAccessibilityElement = true
         cell.accessibilityTraits = .button
@@ -548,7 +544,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         
         if manager.options.selectionTapAction == .quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-            selectButtonTapped(cell.selectButton)
+            cell.selectEvent.call()
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
@@ -703,7 +699,9 @@ extension AssetPickerViewController {
             guard let self = self else { return }
             cell.tag = indexPath.row
             cell.setContent(asset, manager: self.manager)
-            cell.selectButton.addTarget(self, action: #selector(self.selectButtonTapped(_:)), for: .touchUpInside)
+            cell.selectEvent.delegate(on: self) { (self, _) in
+                self.selectItem(indexPath.row)
+            }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
