@@ -92,18 +92,4 @@ extension UIColor {
     static var separatorLineDark: UIColor {
         return UIColor.color(hex: 0x454444)
     }
-    
-    // MARK: - button disable
-    static var buttonDisable: UIColor {
-        return UIColor.create(light: buttonDisableLight, dark: buttonDisableDark)
-    }
-    
-    static var buttonDisableLight: UIColor {
-        return UIColor.color(hex: 0x57BE6A).withAlphaComponent(0.3)
-    }
-    
-    static var buttonDisableDark: UIColor {
-        return UIColor.color(hex: 0x515253)
-    }
-    
 }

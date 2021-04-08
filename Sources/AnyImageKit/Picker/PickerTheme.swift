@@ -61,10 +61,6 @@ extension PickerTheme {
         /// Separator Line Color
         case separatorLine
         
-        // TODO: DEPRECATED and REMOVE
-        /// Button Disable Color
-        case buttonDisable
-        
         func defaultValue(for style: UserInterfaceStyle) -> UIColor {
             switch style {
             case .auto:
@@ -76,7 +72,6 @@ extension PickerTheme {
                 case .background: return UIColor.background
                 case .selectedCell: return UIColor.selectedCell
                 case .separatorLine: return UIColor.separatorLine
-                case .buttonDisable: return UIColor.buttonDisable
                 }
             case .light:
                 switch self {
@@ -87,7 +82,6 @@ extension PickerTheme {
                 case .background: return UIColor.backgroundLight
                 case .selectedCell: return UIColor.selectedCellLight
                 case .separatorLine: return UIColor.separatorLineLight
-                case .buttonDisable: return UIColor.buttonDisableLight
                 }
             case .dark:
                 switch self {
@@ -98,7 +92,6 @@ extension PickerTheme {
                 case .background: return UIColor.backgroundDark
                 case .selectedCell: return UIColor.selectedCellDark
                 case .separatorLine: return UIColor.separatorLineDark
-                case .buttonDisable: return UIColor.buttonDisableDark
                 }
             }
         }
