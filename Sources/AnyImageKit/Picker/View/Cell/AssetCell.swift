@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class AssetCell: UICollectionViewCell {
+    
+    let selectEvent: Delegate<Void, Void> = .init()
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
@@ -51,6 +54,7 @@ final class AssetCell: UICollectionViewCell {
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
         let view = NumberCircleButton(frame: .zero, style: .default)
+        view.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -77,14 +81,14 @@ final class AssetCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        addSubview(imageView)
-        addSubview(selectdCoverView)
-        addSubview(gifView)
-        addSubview(videoView)
-        addSubview(editedView)
-        addSubview(disableCoverView)
-        addSubview(boxCoverView)
-        addSubview(selectButton)
+        contentView.addSubview(imageView)
+        contentView.addSubview(selectdCoverView)
+        contentView.addSubview(gifView)
+        contentView.addSubview(videoView)
+        contentView.addSubview(editedView)
+        contentView.addSubview(disableCoverView)
+        contentView.addSubview(boxCoverView)
+        contentView.addSubview(selectButton)
         
         imageView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
@@ -114,6 +118,16 @@ final class AssetCell: UICollectionViewCell {
     }
 }
 
+// MARK: - PickerOptionsConfigurable
+extension AssetCell: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
+        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+        updateChildrenConfigurable(options: options)
+    }
+}
+
 extension AssetCell {
     
     var image: UIImage? {
@@ -121,17 +135,18 @@ extension AssetCell {
     }
 }
 
+// MARK: - Action
 extension AssetCell {
     
-    private func setOptions(_ options: PickerOptionsInfo) {
-        boxCoverView.layer.borderColor = options.theme.mainColor.cgColor
-        selectButton.setTheme(options.theme)
-        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
+        selectEvent.call()
     }
+}
+
+extension AssetCell {
     
     func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         asset.check(disable: manager.options.disableRules)
-        setOptions(manager.options)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
         identifier = asset.phAsset.localIdentifier
         manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
@@ -152,6 +167,7 @@ extension AssetCell {
     }
     
     func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+        update(options: manager.options)
         if asset._images[.edited] != nil {
             editedView.isHidden = false
         } else {
@@ -183,7 +199,6 @@ private class VideoView: UIView {
     
     private lazy var videoImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Video", module: .picker)
         return view
     }()
     private lazy var videoLabel: UILabel = {
@@ -246,6 +261,15 @@ extension VideoView {
     }
 }
 
+// MARK: - PickerOptionsConfigurable
+extension VideoView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        videoImageView.image = options.theme[icon: .video]
+        updateChildrenConfigurable(options: options)
+    }
+}
+
 
 // MARK: - GIF View
 private class GIFView: UIView {
@@ -299,9 +323,9 @@ private class EditedView: UIView {
 
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "PhotoEdited", module: .picker)
         return view
     }()
+    
     private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
@@ -336,6 +360,15 @@ private class EditedView: UIView {
             maker.left.bottom.equalToSuperview().inset(6)
             maker.width.height.equalTo(15)
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension EditedView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        imageView.image = options.theme[icon: .photoEdited]
+        updateChildrenConfigurable(options: options)
     }
 }
 

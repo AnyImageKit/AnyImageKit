@@ -42,7 +42,7 @@ final class PhotoPreviewCell: PreviewCell {
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension PhotoPreviewCell {
     
     /// 加载图片

@@ -76,16 +76,12 @@ extension BundleHelper {
 // MARK: - Styled Image
 extension BundleHelper {
     
-    static func image(named: String, module: Module) -> UIImage? {
-        return UIImage(named: named, in: bundle(for: module), compatibleWith: nil)
+    static func image(named: String, style: UserInterfaceStyle? = nil, module: Module) -> UIImage? {
+        let nameStyled = styledName(named, style: style)
+        return UIImage(named: nameStyled, in: bundle(for: module), compatibleWith: nil)
     }
     
-    static func image(named: String, style: UserInterfaceStyle, module: Module) -> UIImage? {
-        let imageName = styledName(named, style: style)
-        return image(named: imageName, module: module)
-    }
-    
-    private static func styledName(_ named: String, style: UserInterfaceStyle) -> String {
+    private static func styledName(_ named: String, style: UserInterfaceStyle?) -> String {
         switch style {
         case .auto:
             return named + "Auto"
@@ -93,6 +89,8 @@ extension BundleHelper {
             return named + "Light"
         case .dark:
             return named + "Dark"
+        case .none:
+            return named
         }
     }
 }

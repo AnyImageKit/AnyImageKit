@@ -21,8 +21,7 @@ final class LoadingiCloudView: UIView {
     }()
     
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "iCloud", module: .picker)
-        let view = UIImageView(image: image)
+        let view = UIImageView(frame: .zero)
         return view
     }()
     
@@ -41,7 +40,6 @@ final class LoadingiCloudView: UIView {
         view.font = UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular)
         return view
     }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -78,7 +76,16 @@ final class LoadingiCloudView: UIView {
     }
 }
 
-// MARK: - function
+// MARK: - PickerOptionsConfigurable
+extension LoadingiCloudView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        imageView.image = options.theme[icon: .iCloud]
+        updateChildrenConfigurable(options: options)
+    }
+}
+
+// MARK: - Function
 extension LoadingiCloudView {
     
     func reset() {

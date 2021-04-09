@@ -25,7 +25,6 @@ final class AlbumPickerViewController: AnyImageViewController {
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.registerCell(AlbumCell.self)
-        view.backgroundColor = manager.options.theme.backgroundColor
         view.separatorStyle = .none
         view.dataSource = self
         view.delegate = self
@@ -52,6 +51,7 @@ final class AlbumPickerViewController: AnyImageViewController {
         addNotifications()
         updatePreferredContentSize(with: traitCollection)
         setupView()
+        update(options: manager.options)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,6 +135,15 @@ extension AlbumPickerViewController {
             let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
             preferredContentSize = CGSize(width: preferredWidth, height: preferredHeight)
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension AlbumPickerViewController: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        tableView.backgroundColor = options.theme[color: .background]
+        updateChildrenConfigurable(options: options)
     }
 }
 

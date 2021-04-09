@@ -13,31 +13,24 @@ final class PickerArrowButton: UIControl {
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
         view.text = BundleHelper.localizedString(key: "PHOTO", module: .core)
-        view.textColor = options.theme.textColor
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
     }()
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        let style = options.theme.style
-        view.image = BundleHelper.image(named: "AlbumArrow", style: style, module: .picker)
         return view
     }()
     
     private lazy var effectView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: loadBlurEffectStyle())
+        let effect = UIBlurEffect(style: .light)
         let view = UIVisualEffectView(effect: effect)
-        let color = UIColor.create(style: options.theme.style,
-                                   light: UIColor.black.withAlphaComponent(0.1),
-                                   dark: UIColor.white.withAlphaComponent(0.9))
-        view.backgroundColor = color
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         return view
     }()
     
-    let options: PickerOptionsInfo
+    private var preferredStyle: UserInterfaceStyle?
     
     override var isSelected: Bool {
         didSet {
@@ -48,8 +41,7 @@ final class PickerArrowButton: UIControl {
         }
     }
     
-    init(frame: CGRect, options: PickerOptionsInfo) {
-        self.options = options
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
@@ -90,11 +82,12 @@ final class PickerArrowButton: UIControl {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13.0, *) {
-            guard options.theme.style == .auto else { return }
+            guard let style = preferredStyle else { return }
+            guard style == .auto else { return }
             guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
             
-            effectView.effect = UIBlurEffect(style: loadBlurEffectStyle())
-            let color = UIColor.create(style: options.theme.style,
+            effectView.effect = UIBlurEffect(style: .init(uiStyle: style, traitCollection: traitCollection))
+            let color = UIColor.create(style: style,
                                        light: UIColor.black.withAlphaComponent(0.1),
                                        dark: UIColor.white.withAlphaComponent(0.9))
             effectView.backgroundColor = color
@@ -102,7 +95,7 @@ final class PickerArrowButton: UIControl {
     }
 }
 
-// MARK: - function
+// MARK: - Function
 extension PickerArrowButton {
     
     func setTitle(_ title: String) {
@@ -125,27 +118,17 @@ extension PickerArrowButton {
     }
 }
 
-// MARK: - Private function
-extension PickerArrowButton {
+// MARK: - PickerOptionsConfigurable
+extension PickerArrowButton: PickerOptionsConfigurable {
     
-    private func loadBlurEffectStyle() -> UIBlurEffect.Style {
-        let style: UIBlurEffect.Style
-        switch options.theme.style {
-        case .auto:
-            if #available(iOS 13.0, *) {
-                if self.traitCollection.userInterfaceStyle == .dark {
-                    style = .dark
-                } else {
-                    style = .light
-                }
-            } else {
-                style = .light
-            }
-        case .light:
-            style = .light
-        case .dark:
-            style = .dark
-        }
-        return style
+    func update(options: PickerOptionsInfo) {
+        preferredStyle = options.theme.style
+        label.textColor = options.theme[color: .text]
+        imageView.image = options.theme[icon: .albumArrow]
+        effectView.effect = UIBlurEffect(style: .init(uiStyle: preferredStyle!, traitCollection: traitCollection))
+        let effectViewColor = UIColor.create(style: preferredStyle!,
+                                   light: UIColor.black.withAlphaComponent(0.1),
+                                   dark: UIColor.white.withAlphaComponent(0.9))
+        effectView.backgroundColor = effectViewColor
     }
 }

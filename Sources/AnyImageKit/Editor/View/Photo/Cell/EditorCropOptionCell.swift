@@ -41,7 +41,7 @@ final class EditorCropOptionCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        addSubview(label)
+        contentView.addSubview(label)
         label.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }

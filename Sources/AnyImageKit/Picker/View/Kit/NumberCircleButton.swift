@@ -81,13 +81,17 @@ final class NumberCircleButton: UIControl {
         }
     }
 }
+ 
+// MARK: - PickerOptionsConfigurable
+extension NumberCircleButton: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        numLabel.backgroundColor = options.theme[color: .main]
+        updateChildrenConfigurable(options: options)
+    }
+}
 
 extension NumberCircleButton {
-    
-    func setTheme(_ theme: PickerTheme) {
-        numLabel.backgroundColor = theme.mainColor
-        circleView.setTheme(theme)
-    }
     
     func setNum(_ num: Int, isSelected: Bool, animated: Bool) {
         self.isSelected = isSelected
@@ -107,7 +111,7 @@ extension NumberCircleButton {
 
 extension NumberCircleButton {
     
-    private class CircleView: UIView {
+    private class CircleView: UIView, PickerOptionsConfigurable {
         
         private lazy var imageView: UIImageView = {
             let view = UIImageView(frame: .zero)
@@ -140,9 +144,9 @@ extension NumberCircleButton {
             layer.cornerRadius = bounds.size.width/2
         }
         
-        func setTheme(_ theme: PickerTheme) {
-            let image = BundleHelper.image(named: "PickerCircle", style: theme.style, module: .picker)
-            imageView.image = image
+        func update(options: PickerOptionsInfo) {
+            imageView.image = options.theme[icon: .pickerCircle]
+            updateChildrenConfigurable(options: options)
         }
     }
 }

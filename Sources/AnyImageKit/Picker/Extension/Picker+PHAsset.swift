@@ -10,9 +10,13 @@ import Photos
 
 extension PHAsset {
     
+    var isLivePhoto: Bool {
+        return mediaSubtypes.contains(.photoLive)
+    }
+    
     var isGIF: Bool {
         if let fileName = value(forKey: "filename") as? String {
-            return fileName.hasSuffix("GIF")
+            return fileName.uppercased().hasSuffix("GIF")
         } else {
             return false
         }

@@ -35,7 +35,7 @@ final class AssetPickerViewController: AnyImageViewController {
     lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
-        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32), options: manager.options)
+        let view = PickerArrowButton(frame: CGRect(x: 0, y: 0, width: 180, height: 32))
         view.addTarget(self, action: #selector(titleViewTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -51,7 +51,7 @@ final class AssetPickerViewController: AnyImageViewController {
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
-        view.backgroundColor = manager.options.theme.backgroundColor
+        view.backgroundColor = manager.options.theme[color: .background]
         if #available(iOS 14.0, *) {
             
         } else {
@@ -64,20 +64,18 @@ final class AssetPickerViewController: AnyImageViewController {
     }()
     
     private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .picker, options: manager.options)
+        let view = PickerToolBar(style: .picker)
         view.setEnable(false)
-        view.originalButton.isHidden = !manager.options.allowUseOriginalImage
-        view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
+        view.originalButton.isSelected = manager.useOriginalImage
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
-        view.isHidden = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         return view
     }()
     
     private lazy var permissionView: PermissionDeniedView = {
-        let view = PermissionDeniedView(frame: .zero, options: manager.options)
+        let view = PermissionDeniedView(frame: .zero)
         view.isHidden = true
         return view
     }()
@@ -121,6 +119,7 @@ final class AssetPickerViewController: AnyImageViewController {
             setupDataSource()
         }
         checkPermission()
+        update(options: manager.options)
     }
     
     override func viewDidLayoutSubviews() {
@@ -163,18 +162,15 @@ final class AssetPickerViewController: AnyImageViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch manager.options.theme.style {
-        case .light:
-            if #available(iOS 13.0, *) {
-                return .darkContent
-            } else {
-                return .default
-            }
-        case .dark:
-            return .lightContent
-        case .auto:
-            return .default
-        }
+        return UIStatusBarStyle(style: manager.options.theme.style)
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension AssetPickerViewController: PickerOptionsConfigurable {
+    
+    var childrenConfigurable: [PickerOptionsConfigurable] {
+        return preferredChildrenConfigurable + [titleView]
     }
 }
 
@@ -394,7 +390,7 @@ extension AssetPickerViewController {
         guard manager.options.selectLimit == 1 && manager.options.selectionTapAction.hideToolBar else { return }
         guard let asset = manager.selectedAssets.first else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
-        selectButtonTapped(cell.selectButton)
+        cell.selectEvent.call()
     }
 }
 
@@ -420,12 +416,6 @@ extension AssetPickerViewController {
         delegate?.assetPickerDidCancel(self)
     }
     
-    @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
-        guard let cell = sender.superview as? AssetCell else { return }
-        guard let idx = collectionView.indexPath(for: cell)?.item else { return }
-        selectItem(idx)
-    }
-    
     @objc private func previewButtonTapped(_ sender: UIButton) {
         guard let asset = manager.selectedAssets.first else { return }
         let controller = PhotoPreviewController(manager: manager)
@@ -435,7 +425,8 @@ extension AssetPickerViewController {
         present(controller, animated: true, completion: nil)
     }
     
-    @objc private func originalImageButtonTapped(_ sender: OriginalButton) {
+    @objc private func originalImageButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
         manager.useOriginalImage = sender.isSelected
     }
     
@@ -502,6 +493,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera {
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
+            cell.update(options: manager.options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
             cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
@@ -512,7 +504,9 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         cell.tag = indexPath.row
         cell.setContent(asset, manager: manager)
-        cell.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
+        cell.selectEvent.delegate(on: self) { (self, _) in
+            self.selectItem(indexPath.row)
+        }
         cell.backgroundColor = UIColor.white
         cell.isAccessibilityElement = true
         cell.accessibilityTraits = .button
@@ -550,7 +544,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         
         if manager.options.selectionTapAction == .quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-            selectButtonTapped(cell.selectButton)
+            cell.selectEvent.call()
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
@@ -705,7 +699,9 @@ extension AssetPickerViewController {
             guard let self = self else { return }
             cell.tag = indexPath.row
             cell.setContent(asset, manager: self.manager)
-            cell.selectButton.addTarget(self, action: #selector(self.selectButtonTapped(_:)), for: .touchUpInside)
+            cell.selectEvent.delegate(on: self) { (self, _) in
+                self.selectItem(indexPath.row)
+            }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button

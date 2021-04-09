@@ -12,7 +12,6 @@ final class CameraCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Camera", module: .picker)
         view.contentMode = .scaleAspectFill
         return view
     }()
@@ -28,10 +27,19 @@ final class CameraCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        addSubview(imageView)
+        contentView.addSubview(imageView)
         imageView.snp.makeConstraints { maker in
             maker.center.equalToSuperview()
             maker.width.height.equalTo(self.snp.width).multipliedBy(0.5)
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension CameraCell: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        imageView.image = options.theme[icon: .camera]
+        updateChildrenConfigurable(options: options)
     }
 }

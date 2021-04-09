@@ -34,7 +34,7 @@ class PreviewCell: UICollectionViewCell {
     var manager: PickerManager! {
         didSet {
             if oldValue == nil {
-                updateOptions(manager.options)
+                update(options: manager.options)
             }
         }
     }
@@ -133,7 +133,7 @@ class PreviewCell: UICollectionViewCell {
         iCloudView.reset()
     }
     
-    // MARK: - function
+    // MARK: - Function
     
     /// 设置图片
     func setImage(_ image: UIImage?) {
@@ -192,8 +192,17 @@ class PreviewCell: UICollectionViewCell {
         delegate?.previewCell(self, didEndPanWithExit: exit)
     }
     
-    func updateOptions(_ options: PickerOptionsInfo) {
-        
+    /// 通知子类更新配置
+    /// 由于 update options 方法来自协议，无法在子类重载，所以需要这个方法通知子类
+    func optionsDidUpdate(options: PickerOptionsInfo) { }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension PreviewCell: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        optionsDidUpdate(options: options)
+        updateChildrenConfigurable(options: options)
     }
 }
 
