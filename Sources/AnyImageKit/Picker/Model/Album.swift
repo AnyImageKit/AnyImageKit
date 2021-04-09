@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-class Album: Equatable {
+class Album: IdentifiableResource {
     
     let fetchResult: PHFetchResult<PHAsset>
     
@@ -24,10 +24,6 @@ class Album: Equatable {
         self.title = title ?? ""
         self.isCameraRoll = isCameraRoll
         fetchAssets(result: fetchResult, selectOptions: selectOptions)
-    }
-    
-    static func == (lhs: Album, rhs: Album) -> Bool {
-        return lhs.identifier == rhs.identifier
     }
 }
 

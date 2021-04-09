@@ -53,6 +53,7 @@
 		9C4A015EF226D73F0F2E2749 /* Pods_AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC7B151F7AF152BFF11B5EF /* Pods_AnyImageKit.framework */; };
 		A005C309253D306C0021E323 /* AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005C308253D306C0021E323 /* AnyImagePage.swift */; };
 		A005C30D253D33180021E323 /* AnyImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005C30C253D33180021E323 /* AnyImageEvent.swift */; };
+		A012D2D226203B2D006B5261 /* IdentifiableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012D2D126203B2D006B5261 /* IdentifiableResource.swift */; };
 		A0147E0223C458BF0071E9D5 /* Core+Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0123C458BF0071E9D5 /* Core+Thread.swift */; };
 		A0147E0423C45A200071E9D5 /* Permission+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0323C45A200071E9D5 /* Permission+Camera.swift */; };
 		A0147E0623C45A2C0071E9D5 /* Permission+Microphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0523C45A2C0071E9D5 /* Permission+Microphone.swift */; };
@@ -294,6 +295,7 @@
 		A005C308253D306C0021E323 /* AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImagePage.swift; sourceTree = "<group>"; };
 		A005C30C253D33180021E323 /* AnyImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageEvent.swift; sourceTree = "<group>"; };
 		A005F8E823973FC8006BE028 /* CaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
+		A012D2D126203B2D006B5261 /* IdentifiableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableResource.swift; sourceTree = "<group>"; };
 		A0147E0123C458BF0071E9D5 /* Core+Thread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+Thread.swift"; sourceTree = "<group>"; };
 		A0147E0323C45A200071E9D5 /* Permission+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permission+Camera.swift"; sourceTree = "<group>"; };
 		A0147E0523C45A2C0071E9D5 /* Permission+Microphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permission+Microphone.swift"; sourceTree = "<group>"; };
@@ -1055,6 +1057,7 @@
 			children = (
 				A0F4753B232F7DE500BB117B /* Album.swift */,
 				A0F4753D232F7DFA00BB117B /* Asset.swift */,
+				A012D2D126203B2D006B5261 /* IdentifiableResource.swift */,
 				A0950B7F2563C42B00213AD2 /* AssetDisableCheckRule.swift */,
 			);
 			path = Model;
@@ -1512,6 +1515,7 @@
 				A519FA3223AB11ED0028CCC8 /* MediaType.swift in Sources */,
 				A561239723B5E7B90071C3E8 /* PickerOptionsInfo.swift in Sources */,
 				717DCADA256CEEC700568A6C /* Canvas.swift in Sources */,
+				A012D2D226203B2D006B5261 /* IdentifiableResource.swift in Sources */,
 				71BAF33925761A35007AE60F /* ImageCacheTool.swift in Sources */,
 				A05C8DA7233DFC71005B0F3C /* PickerManager+Album.swift in Sources */,
 				71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */,

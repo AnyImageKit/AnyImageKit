@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public class Asset {
+public class Asset: IdentifiableResource {
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
@@ -22,6 +22,10 @@ public class Asset {
     var state: State = .unchecked
     var selectedNum: Int = 1
     
+    public var identifier: String {
+        return phAsset.localIdentifier
+    }
+    
     init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
         self.idx = idx
         self.phAsset = asset
@@ -30,11 +34,6 @@ public class Asset {
 }
 
 extension Asset {
-    
-    /// Identifier PHAsset.localIdentifier
-    public var identifier: String {
-        return phAsset.localIdentifier
-    }
     
     /// 输出图像
     public var image: UIImage {
@@ -70,20 +69,6 @@ extension Asset {
     }
     
     static let cameraItemIdx: Int = -1
-}
-
-extension Asset: Equatable {
-    
-    public static func == (lhs: Asset, rhs: Asset) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
-}
-
-extension Asset: Hashable {
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
 }
 
 extension Asset: CustomStringConvertible {
