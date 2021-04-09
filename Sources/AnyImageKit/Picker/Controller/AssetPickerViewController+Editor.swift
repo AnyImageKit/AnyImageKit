@@ -30,7 +30,7 @@ extension AssetPickerViewController {
     func openEditor(with asset: Asset, indexPath: IndexPath) {
         if asset.phAsset.mediaType == .image {
             if let image = asset._images[.initial] {
-                showEditor(image, identifier: asset.phAsset.localIdentifier, tag: indexPath.item)
+                showEditor(image, identifier: asset.identifier, tag: indexPath.item)
             } else {
                 showWaitHUD(BundleHelper.localizedString(key: "LOADING", module: .core))
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
@@ -45,7 +45,7 @@ extension AssetPickerViewController {
                     case .success(let response):
                         if !response.isDegraded {
                             self.hideHUD()
-                            self.showEditor(response.image, identifier: asset.phAsset.localIdentifier, tag: indexPath.item)
+                            self.showEditor(response.image, identifier: asset.identifier, tag: indexPath.item)
                         }
                     case .failure(let error):
                         self.hideHUD()
@@ -54,7 +54,7 @@ extension AssetPickerViewController {
                 }
             }
         } else if asset.phAsset.mediaType == .video {
-            manager.cancelFetch(for: asset.phAsset.localIdentifier)
+            manager.cancelFetch(for: asset.identifier)
             var videoOptions = manager.options.editorVideoOptions
             videoOptions.enableDebugLog = manager.options.enableDebugLog
             let image = asset._images[.initial]

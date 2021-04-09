@@ -144,7 +144,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     deinit {
         for cell in collectionView.visibleCells {
             if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+                manager.cancelFetch(for: cell.asset.identifier)
             }
         }
     }
@@ -436,7 +436,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 cell.setImage(data.asset._image)
                 cell.setDownloadingProgress(1.0)
             } else {
-                if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.phAsset.localIdentifier) {
+                if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
                     cell.setImage(originalImage)
                     cell.setDownloadingProgress(1.0)
                 } else {
@@ -445,7 +445,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                 }
             }
         case let cell as VideoPreviewCell:
-            if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.phAsset.localIdentifier) {
+            if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
                 cell.setImage(originalImage)
             } else {
                 cell.setImage(data.thumbnail)
@@ -469,7 +469,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         case let cell as PreviewCell:
             cell.reset()
             if !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.phAsset.localIdentifier)
+                manager.cancelFetch(for: cell.asset.identifier)
             }
         default:
             break

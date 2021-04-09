@@ -17,7 +17,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if data.asset.phAsset.mediaType == .image {
             if let image = data.asset._images[.initial] {
-                showEditor(image, identifier: data.asset.phAsset.localIdentifier)
+                showEditor(image, identifier: data.asset.identifier)
             } else {
                 showWaitHUD()
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth))
@@ -27,7 +27,7 @@ extension PhotoPreviewController {
                     case .success(let response):
                         if !response.isDegraded {
                             self.hideHUD(animated: false)
-                            self.showEditor(response.image, identifier: data.asset.phAsset.localIdentifier)
+                            self.showEditor(response.image, identifier: data.asset.identifier)
                         }
                     case .failure(let error):
                         self.hideHUD()
@@ -36,7 +36,7 @@ extension PhotoPreviewController {
                 }
             }
         } else if data.asset.phAsset.mediaType == .video {
-            manager.cancelFetch(for: data.asset.phAsset.localIdentifier)
+            manager.cancelFetch(for: data.asset.identifier)
             var videoOptions = manager.options.editorVideoOptions
             videoOptions.enableDebugLog = manager.options.enableDebugLog
             let image = data.asset._images[.initial] ?? data.thumbnail
