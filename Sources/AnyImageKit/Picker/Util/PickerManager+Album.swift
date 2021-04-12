@@ -1,5 +1,5 @@
 //
-//  PickerManager+Album.swift
+//  PickerManager+PhotoAssetCollection.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/27.
@@ -25,7 +25,7 @@ extension PickerManager {
         return fetchOptions
     }
     
-    func fetchCameraRollAlbum(completion: @escaping (Album) -> Void) {
+    func fetchCameraRollAlbum(completion: @escaping (PhotoAssetCollection) -> Void) {
         let fetchOptions = createFetchOptions()
         let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         let assetCollections = FetchResult(assetCollectionsFetchResult)
@@ -33,10 +33,10 @@ extension PickerManager {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                let result = Album(fetchResult: FetchResult(assetsfetchResult),
-                                   identifier: assetCollection.localIdentifier,
-                                   localizedTitle: assetCollection.localizedTitle,
-                                   isCameraRoll: true)
+                let result = PhotoAssetCollection(fetchResult: FetchResult(assetsfetchResult),
+                                                  identifier: assetCollection.localIdentifier,
+                                                  localizedTitle: assetCollection.localizedTitle,
+                                                  isCameraRoll: true)
                 result.fetchAssets(selectOptions: options.selectOptions)
                 completion(result)
                 return
@@ -44,7 +44,7 @@ extension PickerManager {
         }
     }
     
-    func fetchAlbum(_ album: Album, completion: @escaping (Album) -> Void) {
+    func fetchAlbum(_ album: PhotoAssetCollection, completion: @escaping (PhotoAssetCollection) -> Void) {
         workQueue.async { [weak self] in
             guard let self = self else { return }
             let fetchOptions = self.createFetchOptions()
@@ -54,10 +54,10 @@ extension PickerManager {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
                     let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                    let result = Album(fetchResult: FetchResult(assetsfetchResult),
-                                       identifier: assetCollection.localIdentifier,
-                                       localizedTitle: assetCollection.localizedTitle,
-                                       isCameraRoll: assetCollection.isCameraRoll)
+                    let result = PhotoAssetCollection(fetchResult: FetchResult(assetsfetchResult),
+                                                      identifier: assetCollection.localIdentifier,
+                                                      localizedTitle: assetCollection.localizedTitle,
+                                                      isCameraRoll: assetCollection.isCameraRoll)
                     result.fetchAssets(selectOptions: self.options.selectOptions)
                     DispatchQueue.main.async {
                         completion(result)
@@ -68,10 +68,10 @@ extension PickerManager {
         }
     }
     
-    func fetchAllAlbums(completion: @escaping ([Album]) -> Void) {
+    func fetchAllAlbums(completion: @escaping ([PhotoAssetCollection]) -> Void) {
         workQueue.async { [weak self] in
             guard let self = self else { return }
-            var results = [Album]()
+            var results = [PhotoAssetCollection]()
             let options = self.createFetchOptions()
             
             func load(assetCollection: PHAssetCollection) {
@@ -87,17 +87,17 @@ extension PickerManager {
                 if assetFetchResult.count <= 0 && !isCameraRoll { return }
                 
                 if isCameraRoll {
-                    let result = Album(fetchResult: FetchResult(assetFetchResult),
-                                       identifier: assetCollection.localIdentifier,
-                                       localizedTitle: assetCollection.localizedTitle,
-                                       isCameraRoll: true)
+                    let result = PhotoAssetCollection(fetchResult: FetchResult(assetFetchResult),
+                                                      identifier: assetCollection.localIdentifier,
+                                                      localizedTitle: assetCollection.localizedTitle,
+                                                      isCameraRoll: true)
                     result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.insert(result, at: 0)
                 } else {
-                    let result = Album(fetchResult: FetchResult(assetFetchResult),
-                                       identifier: assetCollection.localIdentifier,
-                                       localizedTitle: assetCollection.localizedTitle,
-                                       isCameraRoll: false)
+                    let result = PhotoAssetCollection(fetchResult: FetchResult(assetFetchResult),
+                                                      identifier: assetCollection.localIdentifier,
+                                                      localizedTitle: assetCollection.localizedTitle,
+                                                      isCameraRoll: false)
                     result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.append(result)
                 }

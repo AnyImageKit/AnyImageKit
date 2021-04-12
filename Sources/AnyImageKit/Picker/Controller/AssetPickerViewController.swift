@@ -23,8 +23,8 @@ final class AssetPickerViewController: AnyImageViewController {
     weak var delegate: AssetPickerViewControllerDelegate?
     
     private(set) var albumsPicker: AlbumPickerViewController?
-    private(set) var album: Album?
-    private(set) var albums = [Album]()
+    private(set) var album: PhotoAssetCollection?
+    private(set) var albums = [PhotoAssetCollection]()
     
     private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
@@ -211,7 +211,7 @@ extension AssetPickerViewController {
         }
     }
     
-    private func setAlbum(_ album: Album) {
+    private func setAlbum(_ album: PhotoAssetCollection) {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.localizedTitle)
@@ -224,7 +224,7 @@ extension AssetPickerViewController {
         #endif
     }
     
-    private func setAlbums(_ albums: [Album]) {
+    private func setAlbums(_ albums: [PhotoAssetCollection]) {
         self.albums = albums.filter{ !$0.assets.isEmpty }
         if let albumsPicker = albumsPicker {
             albumsPicker.albums = albums
@@ -244,7 +244,7 @@ extension AssetPickerViewController {
         }
     }
     
-    private func reloadAlbum(_ album: Album) {
+    private func reloadAlbum(_ album: PhotoAssetCollection) {
         guard !stopReloadAlbum else { return }
         manager.fetchAlbum(album) { [weak self] newAlbum in
             guard let self = self else { return }
@@ -253,7 +253,7 @@ extension AssetPickerViewController {
         }
     }
     
-    private func updateAlbum(_ album: Album) {
+    private func updateAlbum(_ album: PhotoAssetCollection) {
         // Update selected assets
         for asset in manager.selectedAssets.reversed() {
             if !(album.assets.contains { $0 == asset }) {
@@ -592,7 +592,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - AlbumPickerViewControllerDelegate
 extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
-    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
+    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: PhotoAssetCollection) {
         setAlbum(album)
         reloadData(animated: false)
         scrollToEnd()

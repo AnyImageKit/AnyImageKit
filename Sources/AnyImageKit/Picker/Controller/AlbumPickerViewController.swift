@@ -12,15 +12,15 @@ private let rowHeight: CGFloat = 55
 
 protocol AlbumPickerViewControllerDelegate: AnyObject {
     
-    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album)
+    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: PhotoAssetCollection)
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController)
 }
 
 final class AlbumPickerViewController: AnyImageViewController {
     
     weak var delegate: AlbumPickerViewControllerDelegate?
-    var album: Album?
-    var albums = [Album]()
+    var album: PhotoAssetCollection?
+    var albums = [PhotoAssetCollection]()
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)

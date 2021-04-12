@@ -1,5 +1,5 @@
 //
-//  Album.swift
+//  PhotoAssetCollection.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
@@ -9,23 +9,25 @@
 import Foundation
 import Photos
 
-class Album: AssetCollection {
+/// A wrapper for system photo smart album or user create album
+class PhotoAssetCollection: AssetCollection {
     
     let fetchResult: FetchResult<PHAsset>
     let identifier: String
     let localizedTitle: String
     let isCameraRoll: Bool
-    private(set) var assets: [Asset] = []
+    private(set) var assets: [Asset]
     
     init(fetchResult: FetchResult<PHAsset>, identifier: String, localizedTitle: String?, isCameraRoll: Bool) {
         self.fetchResult = fetchResult
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? identifier
         self.isCameraRoll = isCameraRoll
+        self.assets = []
     }
 }
 
-extension Album {
+extension PhotoAssetCollection {
     
     func fetchAssets(selectOptions: PickerSelectOption) {
         var array: [Asset] = []
@@ -55,7 +57,7 @@ extension Album {
 }
 
 // MARK: - Capture
-extension Album {
+extension PhotoAssetCollection {
     
     func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
         assets.insert(asset, at: at)
@@ -86,7 +88,7 @@ extension Album {
     }
 }
 
-extension Album {
+extension PhotoAssetCollection {
     
     var count: Int {
         if hasCamera {
@@ -101,9 +103,9 @@ extension Album {
     }
 }
 
-extension Album: CustomStringConvertible {
+extension PhotoAssetCollection: CustomStringConvertible {
     
     var description: String {
-        return "Album<\(localizedTitle)>"
+        return "PhotoAssetCollection<\(localizedTitle)>"
     }
 }
