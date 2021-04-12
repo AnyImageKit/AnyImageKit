@@ -39,6 +39,7 @@ extension PhotoEditorContentView {
         }, completion: { _ in
             self.gridView.bgLayer.opacity = 1.0
             self.cropLayerEnter.removeFromSuperview()
+            self.cropLayerLeave.removeFromSuperview()
             self.setCropHidden(false, animated: true)
             if let cropOption = option {
                 self.setCrop(cropOption)
@@ -293,7 +294,7 @@ extension PhotoEditorContentView {
     
     /// 设置无裁剪状态时的遮罩
     func setupCropLayer() {
-        guard !didCrop && cropLayerLeave.superview == nil else { return }
+        guard !didCrop && !cropContext.isCrop && cropLayerLeave.superview == nil else { return }
         cropLayerLeave.frame = imageView.bounds
         let cropOffsetX = UIScreen.main.bounds.width
         let cropOffsetY = UIScreen.main.bounds.height
