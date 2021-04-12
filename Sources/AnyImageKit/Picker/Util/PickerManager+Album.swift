@@ -28,7 +28,7 @@ extension PickerManager {
     func fetchCameraRollAlbum(completion: @escaping (Album) -> Void) {
         let fetchOptions = createFetchOptions()
         let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        let assetCollections = assetCollectionsFetchResult.objects()
+        let assetCollections = FetchResult(assetCollectionsFetchResult)
         for assetCollection in assetCollections {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
@@ -49,7 +49,7 @@ extension PickerManager {
             guard let self = self else { return }
             let fetchOptions = self.createFetchOptions()
             let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-            let assetCollections = assetCollectionsFetchResult.objects()
+            let assetCollections = FetchResult(assetCollectionsFetchResult)
             for assetCollection in assetCollections {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
@@ -74,34 +74,32 @@ extension PickerManager {
             var results = [Album]()
             let options = self.createFetchOptions()
             
-            func load(assetCollections: [PHAssetCollection]) {
-                for assetCollection in assetCollections {
-                    let isCameraRoll = assetCollection.isCameraRoll
-                    
-                    if assetCollection.estimatedAssetCount <= 0 && !isCameraRoll { continue }
-                    
-                    if assetCollection.isAllHidden { continue }
-                    if assetCollection.isRecentlyDeleted  { continue }
-                    if results.contains(where: { assetCollection.localIdentifier == $0.identifier }) { continue }
-                    
-                    let assetFetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
-                    if assetFetchResult.count <= 0 && !isCameraRoll { continue }
-                    
-                    if isCameraRoll {
-                        let result = Album(fetchResult: assetFetchResult,
-                                           identifier: assetCollection.localIdentifier,
-                                           title: assetCollection.localizedTitle,
-                                           isCameraRoll: true,
-                                           selectOptions: self.options.selectOptions)
-                        results.insert(result, at: 0)
-                    } else {
-                        let result = Album(fetchResult: assetFetchResult,
-                                           identifier: assetCollection.localIdentifier,
-                                           title: assetCollection.localizedTitle,
-                                           isCameraRoll: false,
-                                           selectOptions: self.options.selectOptions)
-                        results.append(result)
-                    }
+            func load(assetCollection: PHAssetCollection) {
+                let isCameraRoll = assetCollection.isCameraRoll
+                
+                if assetCollection.estimatedAssetCount <= 0 && !isCameraRoll { return }
+                
+                if assetCollection.isAllHidden { return }
+                if assetCollection.isRecentlyDeleted  { return }
+                if results.contains(where: { assetCollection.localIdentifier == $0.identifier }) { return }
+                
+                let assetFetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
+                if assetFetchResult.count <= 0 && !isCameraRoll { return }
+                
+                if isCameraRoll {
+                    let result = Album(fetchResult: assetFetchResult,
+                                       identifier: assetCollection.localIdentifier,
+                                       title: assetCollection.localizedTitle,
+                                       isCameraRoll: true,
+                                       selectOptions: self.options.selectOptions)
+                    results.insert(result, at: 0)
+                } else {
+                    let result = Album(fetchResult: assetFetchResult,
+                                       identifier: assetCollection.localIdentifier,
+                                       title: assetCollection.localizedTitle,
+                                       isCameraRoll: false,
+                                       selectOptions: self.options.selectOptions)
+                    results.append(result)
                 }
             }
             
@@ -113,16 +111,20 @@ extension PickerManager {
                                                                     .albumCloudShared]
                 let assetCollectionsfetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
                 for assetCollectionsFetchResult in assetCollectionsfetchResults {
-                    let smartCollections = assetCollectionsFetchResult.objects()
-                    load(assetCollections: smartCollections)
+                    let smartCollections = FetchResult(assetCollectionsFetchResult)
+                    for assetCollection in smartCollections {
+                        load(assetCollection: assetCollection)
+                    }
                 }
             }
             
             // Load User Albums
             if self.options.albumOptions.contains(.userCreated) {
                 let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
-                let userCollections = topLevelUserCollections.objects().compactMap { $0 as? PHAssetCollection }
-                load(assetCollections: userCollections)
+                let userCollections = FetchResult(topLevelUserCollections).compactMap { $0 as? PHAssetCollection }
+                for assetCollection in userCollections {
+                    load(assetCollection: assetCollection)
+                }
             }
             
             // Export results

@@ -36,7 +36,7 @@ extension Album {
         let selectPhotoGIF = selectOptions.contains(.photoGIF)
         let selectPhotoLive = selectOptions.contains(.photoLive)
         
-        for phAsset in result.objects() {
+        for phAsset in FetchResult(result) {
             let asset = Asset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
             switch asset.mediaType {
             case .photo:
