@@ -214,7 +214,7 @@ extension AssetPickerViewController {
     private func setAlbum(_ album: Album) {
         guard self.album != album else { return }
         self.album = album
-        titleView.setTitle(album.title)
+        titleView.setTitle(album.localizedTitle)
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)
@@ -446,7 +446,7 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        guard let album = album, let changeDetails = changeInstance.changeDetails(for: album.fetchResult) else { return }
+        guard let album = album, let changeDetails = changeInstance.changeDetails(for: album.fetchResult.phFetchResult) else { return }
         
         if #available(iOS 14.0, *), Permission.photos.status == .limited {
             reloadAlbum(album)

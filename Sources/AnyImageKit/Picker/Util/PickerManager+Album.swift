@@ -33,11 +33,11 @@ extension PickerManager {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                let result = Album(fetchResult: assetsfetchResult,
+                let result = Album(fetchResult: FetchResult(assetsfetchResult),
                                    identifier: assetCollection.localIdentifier,
-                                   title: assetCollection.localizedTitle,
-                                   isCameraRoll: true,
-                                   selectOptions: options.selectOptions)
+                                   localizedTitle: assetCollection.localizedTitle,
+                                   isCameraRoll: true)
+                result.fetchAssets(selectOptions: options.selectOptions)
                 completion(result)
                 return
             }
@@ -54,11 +54,11 @@ extension PickerManager {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
                     let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                    let result = Album(fetchResult: assetsfetchResult,
+                    let result = Album(fetchResult: FetchResult(assetsfetchResult),
                                        identifier: assetCollection.localIdentifier,
-                                       title: assetCollection.localizedTitle,
-                                       isCameraRoll: assetCollection.isCameraRoll,
-                                       selectOptions: self.options.selectOptions)
+                                       localizedTitle: assetCollection.localizedTitle,
+                                       isCameraRoll: assetCollection.isCameraRoll)
+                    result.fetchAssets(selectOptions: self.options.selectOptions)
                     DispatchQueue.main.async {
                         completion(result)
                         return
@@ -87,18 +87,18 @@ extension PickerManager {
                 if assetFetchResult.count <= 0 && !isCameraRoll { return }
                 
                 if isCameraRoll {
-                    let result = Album(fetchResult: assetFetchResult,
+                    let result = Album(fetchResult: FetchResult(assetFetchResult),
                                        identifier: assetCollection.localIdentifier,
-                                       title: assetCollection.localizedTitle,
-                                       isCameraRoll: true,
-                                       selectOptions: self.options.selectOptions)
+                                       localizedTitle: assetCollection.localizedTitle,
+                                       isCameraRoll: true)
+                    result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.insert(result, at: 0)
                 } else {
-                    let result = Album(fetchResult: assetFetchResult,
+                    let result = Album(fetchResult: FetchResult(assetFetchResult),
                                        identifier: assetCollection.localIdentifier,
-                                       title: assetCollection.localizedTitle,
-                                       isCameraRoll: false,
-                                       selectOptions: self.options.selectOptions)
+                                       localizedTitle: assetCollection.localizedTitle,
+                                       isCameraRoll: false)
+                    result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.append(result)
                 }
             }

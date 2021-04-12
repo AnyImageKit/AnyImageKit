@@ -9,50 +9,43 @@
 import Foundation
 import Photos
 
-class Album: IdentifiableResource {
+class Album: AssetCollection {
     
-    let fetchResult: PHFetchResult<PHAsset>
-    
+    let fetchResult: FetchResult<PHAsset>
     let identifier: String
-    let title: String
+    let localizedTitle: String
     let isCameraRoll: Bool
     private(set) var assets: [Asset] = []
     
-    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
+    init(fetchResult: FetchResult<PHAsset>, identifier: String, localizedTitle: String?, isCameraRoll: Bool) {
         self.fetchResult = fetchResult
         self.identifier = identifier
-        self.title = title ?? ""
+        self.localizedTitle = localizedTitle ?? identifier
         self.isCameraRoll = isCameraRoll
-        fetchAssets(result: fetchResult, selectOptions: selectOptions)
     }
 }
 
 extension Album {
     
-    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: PickerSelectOption) {
+    func fetchAssets(selectOptions: PickerSelectOption) {
         var array: [Asset] = []
-        let selectPhoto = selectOptions.contains(.photo)
-        let selectVideo = selectOptions.contains(.video)
-        let selectPhotoGIF = selectOptions.contains(.photoGIF)
-        let selectPhotoLive = selectOptions.contains(.photoLive)
-        
-        for phAsset in FetchResult(result) {
+        for phAsset in fetchResult {
             let asset = Asset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
             switch asset.mediaType {
             case .photo:
-                if selectPhoto {
+                if selectOptions.contains(.photo) {
                     array.append(asset)
                 }
             case .video:
-                if selectVideo {
+                if selectOptions.contains(.video) {
                     array.append(asset)
                 }
             case .photoGIF:
-                if selectPhotoGIF {
+                if selectOptions.contains(.photoGIF) {
                     array.append(asset)
                 }
             case .photoLive:
-                if selectPhotoLive {
+                if selectOptions.contains(.photoLive) {
                     array.append(asset)
                 }
             }
@@ -111,6 +104,6 @@ extension Album {
 extension Album: CustomStringConvertible {
     
     var description: String {
-        return "Album<\(title)>"
+        return "Album<\(localizedTitle)>"
     }
 }
