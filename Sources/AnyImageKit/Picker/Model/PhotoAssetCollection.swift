@@ -11,18 +11,26 @@ import Photos
 
 /// A wrapper for system photo smart album or user create album
 class PhotoAssetCollection: AssetCollection {
-    
-    let fetchResult: FetchResult<PHAsset>
+    /// Unique identification
     let identifier: String
+    /// Localized title
     let localizedTitle: String
-    let isCameraRoll: Bool
+    /// Fetch result from system photo library object PHAssetCollection
+    let fetchResult: FetchResult<PHAsset>
+    /// Fetch result order
+    let fetchOrder: Sort
+    /// The main user photo library flag, now it known as ‘Recent’, and in old version PhotoKit, it was called 'Camera Roll'
+    let isUserLibrary: Bool
+    
+    /// Elements in asset collection
     private(set) var assets: [Asset]
     
-    init(fetchResult: FetchResult<PHAsset>, identifier: String, localizedTitle: String?, isCameraRoll: Bool) {
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool) {
         self.fetchResult = fetchResult
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? identifier
-        self.isCameraRoll = isCameraRoll
+        self.fetchOrder = fetchOrder
+        self.isUserLibrary = isUserLibrary
         self.assets = []
     }
 }

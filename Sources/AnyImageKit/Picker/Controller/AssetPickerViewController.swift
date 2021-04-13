@@ -610,7 +610,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if album.isCameraRoll && !manager.options.captureOptions.mediaOptions.isEmpty {
+        if album.isUserLibrary && !manager.options.captureOptions.mediaOptions.isEmpty {
             return album.assets.count - 1
         }
         #endif

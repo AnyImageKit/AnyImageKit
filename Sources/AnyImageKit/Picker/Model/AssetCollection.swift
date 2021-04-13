@@ -9,7 +9,8 @@
 import Foundation
 
 protocol AssetCollection: IdentifiableResource {
-    
+    /// Localized title
     var localizedTitle: String { get }
+    /// Elements in asset collection
     var assets: [Asset] { get }
 }

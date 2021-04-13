@@ -31,12 +31,13 @@ extension PickerManager {
         let assetCollections = FetchResult(assetCollectionsFetchResult)
         for assetCollection in assetCollections {
             if assetCollection.estimatedAssetCount <= 0 { continue }
-            if assetCollection.isCameraRoll {
+            if assetCollection.isUserLibrary {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                let result = PhotoAssetCollection(fetchResult: FetchResult(assetsfetchResult),
-                                                  identifier: assetCollection.localIdentifier,
+                let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
                                                   localizedTitle: assetCollection.localizedTitle,
-                                                  isCameraRoll: true)
+                                                  fetchResult: FetchResult(assetsfetchResult),
+                                                  fetchOrder: options.orderByDate,
+                                                  isUserLibrary: true)
                 result.fetchAssets(selectOptions: options.selectOptions)
                 completion(result)
                 return
@@ -54,10 +55,11 @@ extension PickerManager {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
                     let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                    let result = PhotoAssetCollection(fetchResult: FetchResult(assetsfetchResult),
-                                                      identifier: assetCollection.localIdentifier,
+                    let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
                                                       localizedTitle: assetCollection.localizedTitle,
-                                                      isCameraRoll: assetCollection.isCameraRoll)
+                                                      fetchResult: FetchResult(assetsfetchResult),
+                                                      fetchOrder: self.options.orderByDate,
+                                                      isUserLibrary: assetCollection.isUserLibrary)
                     result.fetchAssets(selectOptions: self.options.selectOptions)
                     DispatchQueue.main.async {
                         completion(result)
@@ -75,29 +77,31 @@ extension PickerManager {
             let options = self.createFetchOptions()
             
             func load(assetCollection: PHAssetCollection) {
-                let isCameraRoll = assetCollection.isCameraRoll
+                let isUserLibrary = assetCollection.isUserLibrary
                 
-                if assetCollection.estimatedAssetCount <= 0 && !isCameraRoll { return }
+                if assetCollection.estimatedAssetCount <= 0 && !isUserLibrary { return }
                 
                 if assetCollection.isAllHidden { return }
                 if assetCollection.isRecentlyDeleted  { return }
                 if results.contains(where: { assetCollection.localIdentifier == $0.identifier }) { return }
                 
                 let assetFetchResult = PHAsset.fetchAssets(in: assetCollection, options: options)
-                if assetFetchResult.count <= 0 && !isCameraRoll { return }
+                if assetFetchResult.count <= 0 && !isUserLibrary { return }
                 
-                if isCameraRoll {
-                    let result = PhotoAssetCollection(fetchResult: FetchResult(assetFetchResult),
-                                                      identifier: assetCollection.localIdentifier,
+                if isUserLibrary {
+                    let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
                                                       localizedTitle: assetCollection.localizedTitle,
-                                                      isCameraRoll: true)
+                                                      fetchResult: FetchResult(assetFetchResult),
+                                                      fetchOrder: self.options.orderByDate,
+                                                      isUserLibrary: true)
                     result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.insert(result, at: 0)
                 } else {
-                    let result = PhotoAssetCollection(fetchResult: FetchResult(assetFetchResult),
-                                                      identifier: assetCollection.localIdentifier,
+                    let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
                                                       localizedTitle: assetCollection.localizedTitle,
-                                                      isCameraRoll: false)
+                                                      fetchResult: FetchResult(assetFetchResult),
+                                                      fetchOrder: self.options.orderByDate,
+                                                      isUserLibrary: false)
                     result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.append(result)
                 }

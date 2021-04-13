@@ -8,10 +8,10 @@
 
 import Foundation
 
-/// Sort 排序规则
+/// Sort
 public enum Sort: Equatable {
-    /// ASC 升序
+    /// ASC
     case asc
-    /// DESC 降序
+    /// DESC
     case desc
 }
