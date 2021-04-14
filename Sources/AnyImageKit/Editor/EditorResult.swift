@@ -10,8 +10,13 @@ import Foundation
 
 public struct EditorResult: Equatable {
     
+    /// Local media url
     public let mediaURL: URL
+    
+    /// Media type
     public let type: MediaType
+    
+    /// Media is edited or not
     public let isEdited: Bool
     
     init(mediaURL: URL, type: MediaType, isEdited: Bool) {

@@ -8,20 +8,35 @@
 
 import UIKit
 
-/// 画笔颜色样式
+// MARK: - Common
+
+/// Pen color option
 public enum EditorPenColorOption: Equatable {
-    /// 自定义颜色
+    
+    /// Static color.
     case custom(color: UIColor)
-    /// UIColorWell
+    
+    /// Dynamic color (UIColorWell).
     @available(iOS 14.0, *)
     case colorWell(color: UIColor)
 }
 
-/// 马赛克样式
+/// Mosaic option
 public enum EditorMosaicOption: Equatable {
-    /// 默认马赛克
+    
+    /// Default mosaic.
+    /// Blurring the original image.
     case `default`
-    /// 自定义马赛克
+    
+    /// Custom mosaic.
+    ///
+    /// The principle of mosaic is to superimpose a transparent mosaic image on the original image.
+    /// After the user gestures slip, the sliding part is displayed.
+    /// Based on that you can customize your own mosaic.
+    ///
+    /// icon: Image on mosaic tool bar, it will use mosaic image as icon image if icon image is nil.
+    ///
+    /// mosaic: Custom mosaic image.
     case custom(icon: UIImage?, mosaic: UIImage)
     
     public static var colorful: EditorMosaicOption {
@@ -29,21 +44,49 @@ public enum EditorMosaicOption: Equatable {
     }
 }
 
-/// 输入文本颜色
+/// Text color
+///
+/// There are two display styles for each text color element.
+/// One is no background color, the text color is main color.
+/// The other is that the background color is main color, and the text color is sub color(usually is white).
 public struct EditorTextColor: Equatable {
-    /// 主色
+    
+    /// Main color
     public let color: UIColor
-    /// 辅色
+    
+    /// Sub color
     public let subColor: UIColor
 }
 
-/// 裁剪比例
+/// Crop option
 public enum EditorCropOption: Equatable {
-    /// 自由裁剪
+    
+    /// Free crop, there is no crop size limit.
     case free
-    /// 自定义裁剪 宽高比
+    
+    /// Limit crop size, limit the cropping width and height ratio. Eg. w:3 h:4
     case custom(w: UInt, h: UInt)
 }
+
+// MARK: - Photo
+
+/// Photo tool option
+public enum EditorPhotoToolOption: Equatable, CaseIterable {
+    
+    case pen
+    case text
+    case crop
+    case mosaic
+}
+
+// MARK: - Video
+
+/// Video tool option
+public enum EditorVideoToolOption: Equatable, CaseIterable {
+    
+    case clip
+}
+
 
 // MARK: - CaseIterable
 extension EditorPenColorOption: CaseIterable {
@@ -72,6 +115,7 @@ extension EditorCropOption: CaseIterable {
         return [.free, .custom(w: 1, h: 1), .custom(w: 3, h: 4), .custom(w: 4, h: 3), .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
     }
 }
+
 
 // MARK: - Extension
 extension EditorPenColorOption {
@@ -103,6 +147,58 @@ extension EditorCropOption {
             return 1
         case .custom(let w, let h):
             return CGFloat(h)/CGFloat(w)
+        }
+    }
+}
+
+extension EditorPhotoToolOption {
+    
+    var imageName: String {
+        switch self {
+        case .pen:
+            return "PhotoToolPen"
+        case .text:
+            return "PhotoToolText"
+        case .crop:
+            return "PhotoToolCrop"
+        case .mosaic:
+            return "PhotoToolMosaic"
+        }
+    }
+}
+
+extension EditorPhotoToolOption: CustomStringConvertible {
+    
+    public var description: String {
+        switch self {
+        case .pen:
+            return "PEN"
+        case .text:
+            return "INPUT_TEXT"
+        case .crop:
+            return "CROP"
+        case .mosaic:
+            return "MOSAIC"
+        }
+    }
+}
+
+extension EditorVideoToolOption {
+    
+    var imageName: String {
+        switch self {
+        case .clip:
+            return "VideoToolVideo"
+        }
+    }
+}
+
+extension EditorVideoToolOption: CustomStringConvertible {
+    
+    public var description: String {
+        switch self {
+        case .clip:
+            return "CROP"
         }
     }
 }

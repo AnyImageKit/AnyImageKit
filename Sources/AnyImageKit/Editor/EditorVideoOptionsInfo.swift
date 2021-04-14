@@ -10,44 +10,19 @@ import UIKit
 
 public struct EditorVideoOptionsInfo {
     
-    /// 主题色
-    /// 默认：green
+    /// Tint color.
+    /// - Default: Green
     public var tintColor: UIColor = Palette.main
     
-    /// 编辑功能，会按顺序排布
-    /// 默认：[.clip]
+    /// Tool options for the Video Editor, displayed at the bottom of the editor.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// - Default: [.clip]
     public var toolOptions: [EditorVideoToolOption] = [.clip]
     
-    /// 启用调试日志
-    /// 默认：false
+    /// Enable debug log
+    /// - Default: false
     public var enableDebugLog: Bool = false
 
     public init() { }
-}
-
-/// 视频编辑功能
-public enum EditorVideoToolOption: Equatable {
-    /// 剪辑
-    case clip
-}
-
-// MARK: - Extension
-extension EditorVideoToolOption {
-    
-    var imageName: String {
-        switch self {
-        case .clip:
-            return "VideoToolVideo"
-        }
-    }
-}
-
-extension EditorVideoToolOption: CustomStringConvertible {
-    
-    public var description: String {
-        switch self {
-        case .clip:
-            return "CROP"
-        }
-    }
 }
