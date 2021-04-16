@@ -8,9 +8,31 @@
 
 import Foundation
 
-protocol AssetCollection: IdentifiableResource {
+public protocol AssetCollection: IdentifiableResource {
     /// Localized title
     var localizedTitle: String { get }
     /// Elements in asset collection
-    var assets: [Asset] { get }
+    var elements: [Asset] { get }
+    /// Extra elements in asset collection
+    var extraElements: AssetCollectionExtraElements { get }
 }
+
+public struct AssetCollectionExtraElements: OptionSet {
+
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public init(_ rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+#if ANYIMAGEKIT_ENABLE_CAPTURE
+extension AssetCollectionExtraElements {
+    
+    public static let camera: AssetCollectionExtraElements = .init(1 << 1)
+}
+#endif
