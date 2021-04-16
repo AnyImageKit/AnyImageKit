@@ -10,7 +10,10 @@ import Foundation
 
 public struct CaptureResult: Equatable {
     
+    /// Local media url
     public let mediaURL: URL
+    
+    /// Media type
     public let type: MediaType
     
     init(mediaURL: URL, type: MediaType) {

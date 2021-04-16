@@ -8,6 +8,7 @@
 
 import AVFoundation
 
+/// Preferred position of capture.
 public enum CapturePosition: RawRepresentable, Equatable {
     
     case front

@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 
+/// Flash mode
 public enum CaptureFlashMode: RawRepresentable, Equatable {
     
     case auto

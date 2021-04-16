@@ -41,6 +41,8 @@
 		718DE32725996E36005C3159 /* CropLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32625996E36005C3159 /* CropLayerView.swift */; };
 		718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32A2599AD82005C3159 /* TextTrashView.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
+		71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9112629784400710A7F /* CaptureMediaOption.swift */; };
+		71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */; };
 		71BAF335257619A3007AE60F /* CacheModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF334257619A3007AE60F /* CacheModule.swift */; };
 		71BAF33925761A35007AE60F /* ImageCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33825761A35007AE60F /* ImageCacheTool.swift */; };
 		71BAF33D25761C48007AE60F /* CodableCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33C25761C48007AE60F /* CodableCacheTool.swift */; };
@@ -281,6 +283,8 @@
 		718DE32625996E36005C3159 /* CropLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropLayerView.swift; sourceTree = "<group>"; };
 		718DE32A2599AD82005C3159 /* TextTrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTrashView.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
+		71B3E9112629784400710A7F /* CaptureMediaOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureMediaOption.swift; sourceTree = "<group>"; };
+		71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAspectRatio.swift; sourceTree = "<group>"; };
 		71BAF334257619A3007AE60F /* CacheModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheModule.swift; sourceTree = "<group>"; };
 		71BAF33825761A35007AE60F /* ImageCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheTool.swift; sourceTree = "<group>"; };
 		71BAF33C25761C48007AE60F /* CodableCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableCacheTool.swift; sourceTree = "<group>"; };
@@ -654,6 +658,18 @@
 			path = Draw;
 			sourceTree = "<group>";
 		};
+		71B3E9102629780200710A7F /* Option */ = {
+			isa = PBXGroup;
+			children = (
+				71B3E9112629784400710A7F /* CaptureMediaOption.swift */,
+				71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */,
+				A067AC1C23C81B8C00FF681B /* CapturePosition.swift */,
+				A067AC1E23C81D8F00FF681B /* CaptureFlashMode.swift */,
+				A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */,
+			);
+			path = Option;
+			sourceTree = "<group>";
+		};
 		71BAF32B2576197C007AE60F /* Cache */ = {
 			isa = PBXGroup;
 			children = (
@@ -779,6 +795,7 @@
 			children = (
 				A56123A223B5F43B0071C3E8 /* CaptureOptionsInfo.swift */,
 				A0513A142521A0030069C5CB /* CaptureResult.swift */,
+				71B3E9102629780200710A7F /* Option */,
 				A076999823963D3B0006AC9B /* Controller */,
 				A08DF7BA23B1F7BA002B92EE /* Model */,
 				A07699A123963F560006AC9B /* View */,
@@ -894,9 +911,6 @@
 			children = (
 				A08DF7BB23B1F7F1002B92EE /* CaptureBufferType.swift */,
 				A08DF7BD23B1F814002B92EE /* DeviceOrientation.swift */,
-				A0839B6E23C32E5700FF8FDE /* CapturePreset.swift */,
-				A067AC1C23C81B8C00FF681B /* CapturePosition.swift */,
-				A067AC1E23C81D8F00FF681B /* CaptureFlashMode.swift */,
 				A0E8F5EC23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift */,
 			);
 			path = Model;
@@ -1524,6 +1538,7 @@
 				A0FFB24025407E86000A7A45 /* GradientView.swift in Sources */,
 				A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */,
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
+				71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
@@ -1652,6 +1667,7 @@
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
 				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
 				A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */,
+				71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */,
 				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,
 				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
 				718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */,
