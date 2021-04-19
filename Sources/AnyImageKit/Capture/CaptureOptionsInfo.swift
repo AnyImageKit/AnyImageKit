@@ -50,7 +50,7 @@ public struct CaptureOptionsInfo {
     
     /// The preferred presets of the camera.
     ///
-    /// Capture will use the best preset in `preferredPresets` as the camera preset.
+    /// Capture will check camera's support formats and chose the best one form `preferredPresets`
     ///
     /// - Note: Invalid on iPad.
     /// - Default: [hd1920x1080_60, hd1280x720_60, hd1920x1080_30, hd1280x720_30]

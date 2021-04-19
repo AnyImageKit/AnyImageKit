@@ -17,7 +17,7 @@ public struct EditorVideoOptionsInfo {
     /// Tool options for the Video Editor, displayed at the bottom of the editor.
     /// Option sorting is arranged in a given array.
     ///
-    /// - Default: [.clip]
+    /// - Default: [clip]
     public var toolOptions: [EditorVideoToolOption] = [.clip]
     
     /// Enable debug log

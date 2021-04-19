@@ -17,7 +17,7 @@ public struct EditorPhotoOptionsInfo {
     /// Tool options for the Photo Editor, displayed at the bottom of the editor.
     /// Option sorting is arranged in a given array.
     ///
-    /// - Default: [.pen, .text, .crop, .mosaic]
+    /// - Default: [pen, text, crop, mosaic]
     public var toolOptions: [EditorPhotoToolOption] = EditorPhotoToolOption.allCases
     
     /// Colors of pen tool options, displayed at the top of the toolbar.
@@ -25,7 +25,7 @@ public struct EditorPhotoOptionsInfo {
     ///
     /// For iOS 14 and later, the last color element will use dynamic color(UIColorWell) instead of static color.
     ///
-    /// For small-screen phones(Eg. iPhone 5), if the last color element cannot be displayed, it will be hidden automatically.
+    /// For the 320pt screen, the last color element will be hidden automatically.
     ///
     /// - Default: [white, black, red, yellow, green, blue, purple]
     public var penColors: [EditorPenColorOption] = EditorPenColorOption.allCases
@@ -46,7 +46,7 @@ public struct EditorPhotoOptionsInfo {
     ///
     /// You can customize your own mosaic style if you want. See `EditorMosaicOption` for more details.
     ///
-    /// - Default: [.default, .colorful]
+    /// - Default: [default, colorful]
     public var mosaicOptions: [EditorMosaicOption] = EditorMosaicOption.allCases
     
     /// Preferred mosaic style index of mosaic.
@@ -79,7 +79,7 @@ public struct EditorPhotoOptionsInfo {
     ///
     /// You can customize crop size if you want.
     ///
-    /// - Default: [.free, 1:1, 3:4, 4:3, 9:16, 16:9]
+    /// - Default: [free, 1:1, 3:4, 4:3, 9:16, 16:9]
     public var cropOptions: [EditorCropOption] = EditorCropOption.allCases
     
     /// Setting the cache identifier will cache the edit records.
