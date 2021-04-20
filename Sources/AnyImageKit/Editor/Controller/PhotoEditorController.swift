@@ -18,7 +18,7 @@ final class PhotoEditorController: AnyImageViewController {
     
     private lazy var contentView: PhotoEditorContentView = {
         let view = PhotoEditorContentView(frame: self.view.bounds, image: image, context: context)
-        view.canvas.setBrush(color: options.penColors[options.defaultPenIndex].color)
+        view.canvas.setBrush(color: options.brushColors[options.defaultBrushIndex].color)
         return view
     }()
     private lazy var placeholdImageView: UIImageView = {
@@ -29,7 +29,7 @@ final class PhotoEditorController: AnyImageViewController {
     }()
     private lazy var toolView: EditorToolView = {
         let view = EditorToolView(frame: self.view.bounds, context: context)
-        view.penToolView.undoButton.isEnabled = stack.edit.canvasCanUndo
+        view.brushToolView.undoButton.isEnabled = stack.edit.canvasCanUndo
         view.mosaicToolView.undoButton.isEnabled = stack.edit.mosaicCanUndo
         view.cropToolView.currentOptionIdx = stack.edit.cropData.cropOptionIdx
         return view
@@ -325,15 +325,15 @@ extension PhotoEditorController {
         case .toolOptionChanged(let option):
             context.toolOption = option
             toolOptionsDidChanged(option: option)
-        case .penBeginDraw, .mosaicBeginDraw:
+        case .brushBeginDraw, .mosaicBeginDraw:
             setTool(hidden: true)
-        case .penUndo:
+        case .brushUndo:
             stack.canvasUndo()
-        case .penChangeColor(let color):
+        case .brushChangeColor(let color):
             contentView.canvas.setBrush(color: color)
-        case .penFinishDraw(let dataList):
+        case .brushFinishDraw(let dataList):
             setTool(hidden: false)
-            stack.setPenData(dataList)
+            stack.setBrushData(dataList)
         case .mosaicUndo:
             stack.mosaicUndo()
         case .mosaicChangeImage(let idx):
@@ -394,7 +394,7 @@ extension PhotoEditorController {
         contentView.scrollView.isScrollEnabled = option == nil
         guard let option = option else { return }
         switch option {
-        case .pen:
+        case .brush:
             contentView.canvas.isUserInteractionEnabled = true
             trackObserver?.track(event: .photoPen, userInfo: [:])
         case .text:
@@ -422,7 +422,7 @@ extension PhotoEditorController {
 extension PhotoEditorController: PhotoEditingStackDelegate {
     
     func editingStack(_ stack: PhotoEditingStack, needUpdatePreview edit: PhotoEditingStack.Edit) {
-        toolView.penToolView.undoButton.isEnabled = edit.canvasCanUndo
+        toolView.brushToolView.undoButton.isEnabled = edit.canvasCanUndo
         toolView.mosaicToolView.undoButton.isEnabled = edit.mosaicCanUndo
         contentView.updateView(with: edit)
     }

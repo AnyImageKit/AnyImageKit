@@ -17,10 +17,10 @@ public struct EditorPhotoOptionsInfo {
     /// Tool options for the Photo Editor, displayed at the bottom of the editor.
     /// Option sorting is arranged in a given array.
     ///
-    /// - Default: [pen, text, crop, mosaic]
+    /// - Default: [brush, text, crop, mosaic]
     public var toolOptions: [EditorPhotoToolOption] = EditorPhotoToolOption.allCases
     
-    /// Colors of pen tool options, displayed at the top of the toolbar.
+    /// Colors of brush tool options, displayed at the top of the toolbar.
     /// Option sorting is arranged in a given array.
     ///
     /// For iOS 14 and later, the last color element will use dynamic color(UIColorWell) instead of static color.
@@ -28,18 +28,18 @@ public struct EditorPhotoOptionsInfo {
     /// For the 320pt screen, the last color element will be hidden automatically.
     ///
     /// - Default: [white, black, red, yellow, green, blue, purple]
-    public var penColors: [EditorPenColorOption] = EditorPenColorOption.allCases
+    public var brushColors: [EditorBrushColorOption] = EditorBrushColorOption.allCases
     
-    /// Preferred color index of pen.
+    /// Preferred color index of brush.
     ///
-    /// If the given subscript out of the `penColors` bounds, it will use first color element as preferred color.
+    /// If the given subscript out of the `brushColors` bounds, it will use first color element as preferred color.
     ///
     /// - Default: 2
-    public var defaultPenIndex: Int = 2
+    public var defaultBrushIndex: Int = 2
     
-    /// Width of pen.
+    /// Width of brush.
     /// - Default: 5.0
-    public var penWidth: CGFloat = 5.0
+    public var brushWidth: CGFloat = 5.0
     
     /// Mosaic style of mosaic tool options, displayed at the top of the toolbar.
     /// Option sorting is arranged in a given array.
@@ -97,6 +97,36 @@ public struct EditorPhotoOptionsInfo {
     /// Enable debug log
     /// - Default: false
     public var enableDebugLog: Bool = false
+    
+     
+    /// Deprecated
+    
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `EditorBrushColorOption` instead.")
+    public var penColors: [EditorPenColorOption] {
+        get {
+            return EditorPenColorOption.convertBrushToPen(brushColors)
+        } set {
+            brushColors = EditorPenColorOption.convertPenToBrush(newValue)
+        }
+    }
+    
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `defaultBrushIndex` instead.")
+    public var defaultPenIndex: Int {
+        get {
+            return defaultBrushIndex
+        } set {
+            defaultBrushIndex = newValue
+        }
+    }
+    
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `brushWidth` instead.")
+    public var penWidth: CGFloat {
+        get {
+            return brushWidth
+        } set {
+            brushWidth = newValue
+        }
+    }
     
     public init() { }
 }

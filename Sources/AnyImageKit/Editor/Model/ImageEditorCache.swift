@@ -28,7 +28,7 @@ extension ImageEditorCache {
         let cache = CodableCacheTool(module: .editor(.default))
         guard let model: PhotoEditingStack.Edit = cache.retrieveModel(forKey: identifier) else { return }
         
-        var pathList = model.penData.map { $0.drawnPath.uuid }
+        var pathList = model.brushData.map { $0.drawnPath.uuid }
         pathList.append(contentsOf: model.mosaicData.flatMap { $0.drawnPaths.map { $0.uuid } })
         pathList = pathList.map { CacheModule.editor(.bezierPath).path + $0 }
         let manager = FileManager.default

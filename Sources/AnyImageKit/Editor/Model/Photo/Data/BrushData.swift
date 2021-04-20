@@ -1,5 +1,5 @@
 //
-//  PenData.swift
+//  BrushData.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2020/11/26.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PenData: Codable, Equatable {
+struct BrushData: Codable, Equatable {
     
     let drawnPath: DrawnPath
     

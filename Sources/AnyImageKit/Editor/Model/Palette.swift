@@ -42,7 +42,7 @@ public struct Palette {
         return UIColor.color(hex: 0x6467EF)
     }
     
-    public static var penColors: [UIColor] {
+    public static var brushColors: [UIColor] {
         return [Palette.white,
                 Palette.black,
                 Palette.red,

@@ -6,7 +6,7 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"PEN" = "画笔";
+"BRUSH" = "画笔";
 "CROP" = "裁剪";
 "MOSAIC" = "马赛克";
 "INPUT_TEXT" = "输入文本";

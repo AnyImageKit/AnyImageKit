@@ -1,5 +1,5 @@
 //
-//  EditorPenToolView.swift
+//  EditorBrushToolView.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/24.
@@ -8,16 +8,16 @@
 
 import UIKit
 
-protocol EditorPenToolViewDelegate: AnyObject {
+protocol EditorBrushToolViewDelegate: AnyObject {
     
-    func penToolView(_ penToolView: EditorPenToolView, colorDidChange color: UIColor)
+    func brushToolView(_ brushToolView: EditorBrushToolView, colorDidChange color: UIColor)
     
-    func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView)
+    func brushToolViewUndoButtonTapped(_ brushToolView: EditorBrushToolView)
 }
 
-final class EditorPenToolView: UIView {
+final class EditorBrushToolView: UIView {
     
-    weak var delegate: EditorPenToolViewDelegate?
+    weak var delegate: EditorBrushToolViewDelegate?
     
     private(set) var currentIdx: Int
     
@@ -30,14 +30,14 @@ final class EditorPenToolView: UIView {
         return view
     }()
     
-    private let colorOptions: [EditorPenColorOption]
+    private let colorOptions: [EditorBrushColorOption]
     private var colorButtons: [UIControl] = []
     private let spacing: CGFloat = 20
     private let itemWidth: CGFloat = 24
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
-        self.colorOptions = options.penColors
-        self.currentIdx = options.defaultPenIndex
+        self.colorOptions = options.brushColors
+        self.currentIdx = options.defaultBrushIndex
         super.init(frame: frame)
         setupView()
     }
@@ -98,7 +98,7 @@ final class EditorPenToolView: UIView {
         }
     }
     
-    private func createColorButton(by option: EditorPenColorOption, idx: Int) -> UIControl {
+    private func createColorButton(by option: EditorBrushColorOption, idx: Int) -> UIControl {
         switch option {
         case .custom(let color):
             let button = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
@@ -123,10 +123,10 @@ final class EditorPenToolView: UIView {
 }
 
 // MARK: - Target
-extension EditorPenToolView {
+extension EditorBrushToolView {
     
     @objc private func undoButtonTapped(_ sender: UIButton) {
-        delegate?.penToolViewUndoButtonTapped(self)
+        delegate?.brushToolViewUndoButtonTapped(self)
     }
     
     @objc private func colorButtonTapped(_ sender: UIButton) {
@@ -134,7 +134,7 @@ extension EditorPenToolView {
             currentIdx = sender.tag
             layoutSubviews()
         }
-        delegate?.penToolView(self, colorDidChange: colorOptions[currentIdx].color)
+        delegate?.brushToolView(self, colorDidChange: colorOptions[currentIdx].color)
     }
     
     @available(iOS 14, *)
@@ -143,17 +143,17 @@ extension EditorPenToolView {
             currentIdx = sender.tag
             layoutSubviews()
         }
-        delegate?.penToolView(self, colorDidChange: sender.selectedColor ?? .white)
+        delegate?.brushToolView(self, colorDidChange: sender.selectedColor ?? .white)
     }
     
     @available(iOS 14, *)
     @objc private func colorWellValueChanged(_ sender: ColorWell) {
-        delegate?.penToolView(self, colorDidChange: sender.selectedColor ?? .white)
+        delegate?.brushToolView(self, colorDidChange: sender.selectedColor ?? .white)
     }
 }
 
 // MARK: - Event
-extension EditorPenToolView {
+extension EditorBrushToolView {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
