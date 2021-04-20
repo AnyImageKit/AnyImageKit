@@ -8,6 +8,7 @@
 
 import AVFoundation
 
+/// Preferred position of capture, also a wrapper for AVCaptureDevice.Position.
 public enum CapturePosition: RawRepresentable, Equatable {
     
     case front
