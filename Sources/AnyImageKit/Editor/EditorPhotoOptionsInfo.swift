@@ -98,8 +98,11 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: false
     public var enableDebugLog: Bool = false
     
-     
-    /// Deprecated
+    public init() { }
+}
+
+// MARK: - Deprecated
+extension EditorPhotoOptionsInfo {
     
     @available(*, deprecated, message: "Will be removed in version 1.0, Please use `EditorBrushColorOption` instead.")
     public var penColors: [EditorPenColorOption] {
@@ -127,6 +130,4 @@ public struct EditorPhotoOptionsInfo {
             brushWidth = newValue
         }
     }
-    
-    public init() { }
 }

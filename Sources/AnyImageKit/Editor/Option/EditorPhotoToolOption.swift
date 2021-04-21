@@ -15,11 +15,6 @@ public enum EditorPhotoToolOption: Equatable {
     case text
     case crop
     case mosaic
-    
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `.brush` instead.")
-    public static var pen: EditorPhotoToolOption {
-        return .brush
-    }
 }
 
 extension EditorPhotoToolOption: CaseIterable {
@@ -58,5 +53,14 @@ extension EditorPhotoToolOption: CustomStringConvertible {
         case .mosaic:
             return "MOSAIC"
         }
+    }
+}
+
+// MARK: - Deprecated
+extension EditorPhotoToolOption {
+    
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `.brush` instead.")
+    public static var pen: EditorPhotoToolOption {
+        return .brush
     }
 }
