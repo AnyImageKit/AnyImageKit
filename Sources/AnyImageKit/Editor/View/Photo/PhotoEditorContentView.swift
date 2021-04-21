@@ -26,13 +26,13 @@ final class PhotoEditorContentView: UIView {
         view.isUserInteractionEnabled = true
         return view
     }()
-    /// 画板 - pen
+    /// 画板 - Brush
     private(set) lazy var canvas: Canvas = {
         let view = Canvas(frame: .zero)
         view.delegate = self
         view.dataSource = self
         view.isUserInteractionEnabled = false
-        view.setBrush(lineWidth: options.penWidth)
+        view.setBrush(lineWidth: options.brushWidth)
         return view
     }()
     /// 马赛克，延时加载
@@ -157,7 +157,7 @@ final class PhotoEditorContentView: UIView {
         updateTextView(with: edit)
         
         let group = DispatchGroup()
-        if !edit.penData.isEmpty {
+        if !edit.brushData.isEmpty {
             group.enter()
             canvas.didDraw = { [weak self] in
                 self?.canvas.didDraw = nil

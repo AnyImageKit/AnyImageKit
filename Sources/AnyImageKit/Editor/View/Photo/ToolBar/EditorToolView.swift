@@ -46,8 +46,8 @@ final class EditorToolView: UIView {
         view.delegate = self
         return view
     }()
-    private(set) lazy var penToolView: EditorPenToolView = {
-        let view = EditorPenToolView(frame: .zero, options: options)
+    private(set) lazy var brushToolView: EditorBrushToolView = {
+        let view = EditorBrushToolView(frame: .zero, options: options)
         view.delegate = self
         view.isHidden = true
         return view
@@ -97,7 +97,7 @@ final class EditorToolView: UIView {
         addSubview(topCoverView)
         addSubview(bottomCoverView)
         addSubview(editOptionsView)
-        addSubview(penToolView)
+        addSubview(brushToolView)
         addSubview(cropToolView)
         addSubview(mosaicToolView)
         addSubview(doneButton)
@@ -127,13 +127,13 @@ final class EditorToolView: UIView {
             }
             maker.height.equalTo(50)
         }
-        penToolView.snp.makeConstraints { maker in
+        brushToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview().inset(20)
             maker.bottom.equalTo(editOptionsView.snp.top).offset(-10)
             maker.height.equalTo(30)
         }
         mosaicToolView.snp.makeConstraints { maker in
-            maker.edges.equalTo(penToolView)
+            maker.edges.equalTo(brushToolView)
         }
         cropToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
@@ -170,13 +170,13 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         context.action(.toolOptionChanged(option))
         
         guard let option = option else {
-            penToolView.isHidden = true
+            brushToolView.isHidden = true
             cropToolView.isHidden = true
             mosaicToolView.isHidden = true
             return
         }
         
-        penToolView.isHidden = option != .pen
+        brushToolView.isHidden = option != .brush
         cropToolView.isHidden = option != .crop
         mosaicToolView.isHidden = option != .mosaic
         
@@ -194,15 +194,15 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
     }
 }
 
-// MARK: - EditorPenToolViewDelegate
-extension EditorToolView: EditorPenToolViewDelegate {
+// MARK: - EditorBrushToolViewDelegate
+extension EditorToolView: EditorBrushToolViewDelegate {
     
-    func penToolView(_ penToolView: EditorPenToolView, colorDidChange color: UIColor) {
-        context.action(.penChangeColor(color))
+    func brushToolView(_ brushToolView: EditorBrushToolView, colorDidChange color: UIColor) {
+        context.action(.brushChangeColor(color))
     }
     
-    func penToolViewUndoButtonTapped(_ penToolView: EditorPenToolView) {
-        context.action(.penUndo)
+    func brushToolViewUndoButtonTapped(_ brushToolView: EditorBrushToolView) {
+        context.action(.brushUndo)
     }
 }
 
@@ -255,7 +255,7 @@ extension EditorToolView {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
             return nil
         }
-        let subViews = [editOptionsView, penToolView, cropToolView, mosaicToolView, doneButton]
+        let subViews = [editOptionsView, brushToolView, cropToolView, mosaicToolView, doneButton]
         for subView in subViews {
             if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
                 return hitView

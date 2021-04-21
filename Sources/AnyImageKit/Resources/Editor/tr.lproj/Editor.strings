@@ -6,7 +6,7 @@
   Copyright © 2021 AnyImageProject.org. All rights reserved.
 */
 
-"PEN" = "Kalem";
+"BRUSH" = "Kalem";
 "CROP" = "Kırp";
 "MOSAIC" = "Mozaik";
 "INPUT_TEXT" = "Metin ekle";

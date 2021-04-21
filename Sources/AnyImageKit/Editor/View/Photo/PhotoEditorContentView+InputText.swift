@@ -203,16 +203,16 @@ extension PhotoEditorContentView {
     /// 添加手势
     private func addTextGestureRecognizer(_ textView: TextImageView) {
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTextSingleTap(_:)))
-        let pen = UIPanGestureRecognizer(target: self, action: #selector(onTextPan(_:)))
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(onTextPan(_:)))
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(onTextPinch(_:)))
         let rotation = UIRotationGestureRecognizer(target: self, action: #selector(onTextRotation(_:)))
-        tap.require(toFail: pen)
+        tap.require(toFail: pan)
         tap.delegate = self
-        pen.delegate = self
+        pan.delegate = self
         pinch.delegate = self
         rotation.delegate = self
         textView.addGestureRecognizer(tap)
-        textView.addGestureRecognizer(pen)
+        textView.addGestureRecognizer(pan)
         textView.addGestureRecognizer(pinch)
         textView.addGestureRecognizer(rotation)
     }

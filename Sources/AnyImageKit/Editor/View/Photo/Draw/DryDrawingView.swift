@@ -38,9 +38,9 @@ class DryDrawingView: UIView {
     }
     
     // MARK: - Override
-    func willBeginPan(path: UIBezierPath) { }
+    func willBeginDraw(path: UIBezierPath) { }
     func panning(path: UIBezierPath) { }
-    func didFinishPan(path: UIBezierPath) { }
+    func didFinishDraw(path: UIBezierPath) { }
     
     // MARK: - Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -56,7 +56,7 @@ class DryDrawingView: UIView {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if step > 3 && !didCallBegin {
             didCallBegin = true
-            willBeginPan(path: bezierPath)
+            willBeginDraw(path: bezierPath)
         }
         draw(touches, finish: false)
     }
@@ -77,7 +77,7 @@ extension DryDrawingView {
         defer {
             if finish {
                 if step >= 3 {
-                    didFinishPan(path: bezierPath)
+                    didFinishDraw(path: bezierPath)
                 }
                 step = 0
                 points.removeAll()

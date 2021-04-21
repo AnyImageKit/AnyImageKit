@@ -14,10 +14,10 @@ enum PhotoEditorAction {
     case done
     case toolOptionChanged(EditorPhotoToolOption?)
     
-    case penBeginDraw
-    case penUndo
-    case penChangeColor(UIColor)
-    case penFinishDraw([PenData])
+    case brushBeginDraw
+    case brushUndo
+    case brushChangeColor(UIColor)
+    case brushFinishDraw([BrushData])
     
     case mosaicBeginDraw
     case mosaicUndo

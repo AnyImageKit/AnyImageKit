@@ -55,8 +55,8 @@ final class MosaicContentView: DryDrawingView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func willBeginPan(path: UIBezierPath) {
-        delegate?.mosaicDidBeginPen()
+    override func willBeginDraw(path: UIBezierPath) {
+        delegate?.mosaicDidBeginDraw()
         brush.lineWidth = dataSource?.mosaicGetLineWidth() ?? 15.0
         let drawnPath = DrawnPath(brush: brush, scale: scale, path: path)
         drawnPaths.append(drawnPath)
@@ -66,8 +66,8 @@ final class MosaicContentView: DryDrawingView {
         updateMask()
     }
     
-    override func didFinishPan(path: UIBezierPath) {
-        delegate?.mosaicDidEndPen()
+    override func didFinishDraw(path: UIBezierPath) {
+        delegate?.mosaicDidEndDraw()
         updateMask()
     }
     

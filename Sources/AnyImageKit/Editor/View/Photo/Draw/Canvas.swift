@@ -10,8 +10,8 @@ import UIKit
 
 protocol CanvasDelegate: AnyObject {
     
-    func canvasDidBeginPen()
-    func canvasDidEndPen()
+    func canvasDidBeginDraw()
+    func canvasDidEndDraw()
 }
 
 protocol CanvasDataSource: AnyObject {
@@ -29,8 +29,8 @@ final class Canvas: DryDrawingView {
     private(set) var brush = Brush()
     private(set) var drawnPaths: [DrawnPath] = []
 
-    override func willBeginPan(path: UIBezierPath) {
-        delegate?.canvasDidBeginPen()
+    override func willBeginDraw(path: UIBezierPath) {
+        delegate?.canvasDidBeginDraw()
         brush.lineWidth = dataSource?.canvasGetLineWidth(self) ?? 5.0
         let drawnPath = DrawnPath(brush: brush, scale: scale, path: path)
         drawnPaths.append(drawnPath)
@@ -41,8 +41,8 @@ final class Canvas: DryDrawingView {
         setNeedsDisplay()
     }
     
-    override func didFinishPan(path: UIBezierPath) {
-        delegate?.canvasDidEndPen()
+    override func didFinishDraw(path: UIBezierPath) {
+        delegate?.canvasDidEndDraw()
         setNeedsDisplay()
     }
     
@@ -65,7 +65,7 @@ extension Canvas {
     }
     
     func updateView(with edit: PhotoEditingStack.Edit) {
-        let newDrawnPaths = edit.penData.map { $0.drawnPath }
+        let newDrawnPaths = edit.brushData.map { $0.drawnPath }
         guard drawnPaths != newDrawnPaths else { return }
         drawnPaths = newDrawnPaths
         setNeedsDisplay()

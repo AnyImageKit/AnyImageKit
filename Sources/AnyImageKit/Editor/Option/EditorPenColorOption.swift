@@ -9,6 +9,7 @@
 import UIKit
 
 /// Pen color option
+@available(*, deprecated, message: "Will be removed in version 1.0, Please use `EditorBrushColorOption` instead.")
 public enum EditorPenColorOption: Equatable {
     
     /// Static color.
@@ -19,12 +20,13 @@ public enum EditorPenColorOption: Equatable {
     case colorWell(color: UIColor)
 }
 
+@available(*, deprecated, message: "Will be removed in version 1.0, Please use `EditorBrushColorOption` instead.")
 extension EditorPenColorOption: CaseIterable {
     
     public static var allCases: [EditorPenColorOption] {
-        var cases: [EditorPenColorOption] = Palette.penColors.map { .custom(color: $0) }
+        var cases: [EditorPenColorOption] = Palette.brushColors.map { .custom(color: $0) }
         if #available(iOS 14.0, *) {
-            cases[cases.count-1] = .colorWell(color: Palette.penColors.last!)
+            cases[cases.count-1] = .colorWell(color: Palette.brushColors.last!)
             return cases
         } else {
             return cases
@@ -32,14 +34,36 @@ extension EditorPenColorOption: CaseIterable {
     }
 }
 
+@available(*, deprecated, message: "Will be removed in version 1.0, Please use `EditorBrushColorOption` instead.")
 extension EditorPenColorOption {
     
-    var color: UIColor {
-        switch self {
-        case .custom(let color):
-            return color
-        case .colorWell(let color):
-            return color
+    static func convertPenToBrush(_ penOptions: [EditorPenColorOption]) -> [EditorBrushColorOption] {
+        return penOptions.map { options -> EditorBrushColorOption in
+            switch options {
+            case .custom(let color):
+                return .custom(color: color)
+            case .colorWell(let color):
+                if #available(iOS 14.0, *) {
+                    return .colorWell(color: color)
+                } else {
+                    fatalError()
+                }
+            }
+        }
+    }
+    
+    static func convertBrushToPen(_ brushOptions: [EditorBrushColorOption]) -> [EditorPenColorOption] {
+        return brushOptions.map { options -> EditorPenColorOption in
+            switch options {
+            case .custom(let color):
+                return .custom(color: color)
+            case .colorWell(let color):
+                if #available(iOS 14.0, *) {
+                    return .colorWell(color: color)
+                } else {
+                    fatalError()
+                }
+            }
         }
     }
 }

@@ -57,11 +57,11 @@ extension PhotoEditorContentView {
 // MARK: - MosaicDelegate
 extension PhotoEditorContentView: MosaicDelegate {
     
-    func mosaicDidBeginPen() {
+    func mosaicDidBeginDraw() {
         context.action(.mosaicBeginDraw)
     }
     
-    func mosaicDidEndPen() {
+    func mosaicDidEndDraw() {
         guard let mosaic = mosaic else { return }
         context.action(.mosaicFinishDraw(mosaic.contentViews.map { MosaicData(idx: $0.idx, drawnPaths: $0.drawnPaths) }))
     }

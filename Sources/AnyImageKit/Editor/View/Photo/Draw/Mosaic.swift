@@ -10,8 +10,8 @@ import UIKit
 
 protocol MosaicDelegate: AnyObject {
     
-    func mosaicDidBeginPen()
-    func mosaicDidEndPen()
+    func mosaicDidBeginDraw()
+    func mosaicDidEndDraw()
 }
 
 protocol MosaicDataSource: AnyObject {
