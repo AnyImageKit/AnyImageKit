@@ -104,7 +104,7 @@ public struct EditorPhotoOptionsInfo {
 // MARK: - Deprecated
 extension EditorPhotoOptionsInfo {
     
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `EditorBrushColorOption` instead.")
+    @available(*, deprecated, renamed: "brushColors", message: "Will be removed in version 1.0, Please use `brushColors` instead.")
     public var penColors: [EditorPenColorOption] {
         get {
             return EditorPenColorOption.convertBrushToPen(brushColors)
@@ -113,7 +113,7 @@ extension EditorPhotoOptionsInfo {
         }
     }
     
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `defaultBrushIndex` instead.")
+    @available(*, deprecated, renamed: "defaultBrushIndex", message: "Will be removed in version 1.0, Please use `defaultBrushIndex` instead.")
     public var defaultPenIndex: Int {
         get {
             return defaultBrushIndex
@@ -122,7 +122,7 @@ extension EditorPhotoOptionsInfo {
         }
     }
     
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `brushWidth` instead.")
+    @available(*, deprecated, renamed: "brushWidth", message: "Will be removed in version 1.0, Please use `brushWidth` instead.")
     public var penWidth: CGFloat {
         get {
             return brushWidth

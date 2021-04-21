@@ -59,7 +59,7 @@ extension EditorPhotoToolOption: CustomStringConvertible {
 // MARK: - Deprecated
 extension EditorPhotoToolOption {
     
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please use `.brush` instead.")
+    @available(*, deprecated, renamed: "brush", message: "Will be removed in version 1.0, Please use `.brush` instead.")
     public static var pen: EditorPhotoToolOption {
         return .brush
     }
