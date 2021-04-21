@@ -106,28 +106,19 @@ extension EditorPhotoOptionsInfo {
     
     @available(*, deprecated, renamed: "brushColors", message: "Will be removed in version 1.0, Please use `brushColors` instead.")
     public var penColors: [EditorPenColorOption] {
-        get {
-            return EditorPenColorOption.convertBrushToPen(brushColors)
-        } set {
-            brushColors = EditorPenColorOption.convertPenToBrush(newValue)
-        }
+        get { brushColors }
+        set { brushColors = newValue }
     }
     
     @available(*, deprecated, renamed: "defaultBrushIndex", message: "Will be removed in version 1.0, Please use `defaultBrushIndex` instead.")
     public var defaultPenIndex: Int {
-        get {
-            return defaultBrushIndex
-        } set {
-            defaultBrushIndex = newValue
-        }
+        get { defaultBrushIndex }
+        set { defaultBrushIndex = newValue }
     }
     
     @available(*, deprecated, renamed: "brushWidth", message: "Will be removed in version 1.0, Please use `brushWidth` instead.")
     public var penWidth: CGFloat {
-        get {
-            return brushWidth
-        } set {
-            brushWidth = newValue
-        }
+        get { brushWidth }
+        set { brushWidth = newValue }
     }
 }
