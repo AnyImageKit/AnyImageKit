@@ -1,5 +1,5 @@
 //
-//  PhotoEditorContentView+Pen.swift
+//  PhotoEditorContentView+Brush.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/29.
@@ -11,12 +11,12 @@ import UIKit
 // MARK: - CanvasDelegate
 extension PhotoEditorContentView: CanvasDelegate {
     
-    func canvasDidBeginPen() {
-        context.action(.penBeginDraw)
+    func canvasDidBeginDraw() {
+        context.action(.brushBeginDraw)
     }
     
-    func canvasDidEndPen() {
-        context.action(.penFinishDraw(canvas.drawnPaths.map { PenData(drawnPath: $0) }))
+    func canvasDidEndDraw() {
+        context.action(.brushFinishDraw(canvas.drawnPaths.map { BrushData(drawnPath: $0) }))
     }
 }
 
@@ -25,6 +25,6 @@ extension PhotoEditorContentView: CanvasDataSource {
     
     func canvasGetLineWidth(_ canvas: Canvas) -> CGFloat {
         let scale = scrollView.zoomScale
-        return options.penWidth / scale
+        return options.brushWidth / scale
     }
 }

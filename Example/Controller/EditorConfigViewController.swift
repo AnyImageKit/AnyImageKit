@@ -110,12 +110,12 @@ extension EditorConfigViewController {
     
     private func editOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Edit Options", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Pen+Text+Crop+Mosaic", style: .default, handler: { [weak self] (action) in
+        alert.addAction(UIAlertAction(title: "Brush+Text+Crop+Mosaic", style: .default, handler: { [weak self] (action) in
             self?.options.toolOptions = EditorPhotoToolOption.allCases
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
-        alert.addAction(UIAlertAction(title: "Pen", style: .default, handler: { [weak self] (action) in
-            self?.options.toolOptions = [.pen]
+        alert.addAction(UIAlertAction(title: "Brush", style: .default, handler: { [weak self] (action) in
+            self?.options.toolOptions = [.brush]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Text", style: .default, handler: { [weak self] (action) in
@@ -135,21 +135,21 @@ extension EditorConfigViewController {
     }
     
     private func penWidthTapped(_ indexPath: IndexPath) {
-        let alert = UIAlertController(title: "Pen Width", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Brush Width", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "2.5", style: .default, handler: { [weak self] (action) in
-            self?.options.penWidth = 2.5
+            self?.options.brushWidth = 2.5
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "5.0", style: .default, handler: { [weak self] (action) in
-            self?.options.penWidth = 5.0
+            self?.options.brushWidth = 5.0
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "7.5", style: .default, handler: { [weak self] (action) in
-            self?.options.penWidth = 7.5
+            self?.options.brushWidth = 7.5
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "10.0", style: .default, handler: { [weak self] (action) in
-            self?.options.penWidth = 10.0
+            self?.options.brushWidth = 10.0
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -274,7 +274,7 @@ extension EditorConfigViewController {
             case .editOptions:
                 return ".editOptions"
             case .penWidth:
-                return ".penWidth"
+                return ".brushWidth"
             case .mosaicOptions:
                 return ".mosaicOptions"
             case .mosaicWidth:

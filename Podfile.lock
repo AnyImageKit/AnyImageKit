@@ -13,7 +13,7 @@ PODS:
     - AnyImageKit/Core
   - AnyImageKit/Picker (0.13.0):
     - AnyImageKit/Core
-  - Kingfisher (6.2.1)
+  - Kingfisher (6.3.0)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
@@ -32,7 +32,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AnyImageKit: e5065d9853448a2c5de7b12f8924421292372f34
-  Kingfisher: e71c6fac2aebb1262888cabc2cb13d313362a48f
+  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
 PODFILE CHECKSUM: 31e19bbbb4420a12fee177951569560ffd3bcd31

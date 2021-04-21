@@ -6,7 +6,7 @@
   Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
 */
 
-"PEN" = "Pen";
+"BRUSH" = "Brush";
 "CROP" = "Crop";
 "MOSAIC" = "Mosaic";
 "INPUT_TEXT" = "Input text";

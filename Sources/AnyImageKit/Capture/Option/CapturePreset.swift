@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The preferred presets of the camera.
 public struct CapturePreset: Equatable {
     
     public let width: Int32

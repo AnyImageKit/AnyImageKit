@@ -58,15 +58,15 @@ extension PhotoEditingStack {
     
     struct Edit: Codable {
         
-        var penData: [PenData] = []
+        var brushData: [BrushData] = []
         var mosaicData: [MosaicData] = []
         var cropData: CropData = .init()
         var textData: [TextData] = []
         var outputImageData: Data?
     }
     
-    func setPenData(_ dataList: [PenData]) {
-        edit.penData = dataList
+    func setBrushData(_ dataList: [BrushData]) {
+        edit.brushData = dataList
         delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
@@ -104,8 +104,8 @@ extension PhotoEditingStack {
     }
     
     func canvasUndo() {
-        guard !edit.penData.isEmpty else { return }
-        edit.penData.removeLast()
+        guard !edit.brushData.isEmpty else { return }
+        edit.brushData.removeLast()
         delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
@@ -125,11 +125,11 @@ extension PhotoEditingStack {
 extension PhotoEditingStack.Edit {
     
     var isEdited: Bool {
-        return cropData.didCrop || !penData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
+        return cropData.didCrop || !brushData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
     }
     
     var canvasCanUndo: Bool {
-        return !penData.isEmpty
+        return !brushData.isEmpty
     }
     
     var mosaicCanUndo: Bool {
@@ -140,7 +140,7 @@ extension PhotoEditingStack.Edit {
 extension PhotoEditingStack.Edit: Equatable {
     
     static func == (lhs: PhotoEditingStack.Edit, rhs: PhotoEditingStack.Edit) -> Bool {
-        return lhs.penData == rhs.penData
+        return lhs.brushData == rhs.brushData
             && lhs.mosaicData == rhs.mosaicData
             && lhs.cropData == rhs.cropData
             && lhs.textData == rhs.textData
@@ -163,7 +163,7 @@ extension PhotoEditingStack {
         edit.mosaicData.forEach { data in
             self.drawer.append(BlurredMask(paths: data.drawnPaths, scale: scale, blurImage: mosaicImages[data.idx]))
         }
-        drawer.append(CanvasMask(paths: edit.penData.map { $0.drawnPath }, scale: scale))
+        drawer.append(CanvasMask(paths: edit.brushData.map { $0.drawnPath }, scale: scale))
         edit.textData.forEach { data in
             self.drawer.append(TextMask(data: data, scale: scale))
         }

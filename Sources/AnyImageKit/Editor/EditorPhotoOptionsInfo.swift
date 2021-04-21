@@ -10,103 +10,124 @@ import UIKit
 
 public struct EditorPhotoOptionsInfo {
     
-    /// 主题色
-    /// 默认：green
+    /// Tint color.
+    /// - Default: Green
     public var tintColor: UIColor = Palette.main
     
-    /// 编辑功能，会按顺序排布
-    /// 默认：[.pen, .text, .crop, .mosaic]
+    /// Tool options for the Photo Editor, displayed at the bottom of the editor.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// - Default: [brush, text, crop, mosaic]
     public var toolOptions: [EditorPhotoToolOption] = EditorPhotoToolOption.allCases
     
-    /// 画笔颜色，会按顺序排布
-    /// 默认：[white, black, red, yellow, green, blue, purple]
-    public var penColors: [EditorPenColorOption] = EditorPenColorOption.allCases
+    /// Colors of brush tool options, displayed at the top of the toolbar.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// For iOS 14 and later, the last color element will use dynamic color(UIColorWell) instead of static color.
+    ///
+    /// For the 320pt screen, the last color element will be hidden automatically.
+    ///
+    /// - Default: [white, black, red, yellow, green, blue, purple]
+    public var brushColors: [EditorBrushColorOption] = EditorBrushColorOption.allCases
     
-    /// 默认选中画笔的下标
-    /// 默认：2
-    public var defaultPenIndex: Int = 2
+    /// Preferred color index of brush.
+    ///
+    /// If the given subscript out of the `brushColors` bounds, it will use first color element as preferred color.
+    ///
+    /// - Default: 2
+    public var defaultBrushIndex: Int = 2
     
-    /// 画笔宽度
-    /// 默认：5.0
-    public var penWidth: CGFloat = 5.0
+    /// Width of brush.
+    /// - Default: 5.0
+    public var brushWidth: CGFloat = 5.0
     
-    /// 马赛克的种类，会按顺序排布
-    /// 默认：[.default, .colorful]
+    /// Mosaic style of mosaic tool options, displayed at the top of the toolbar.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// You can customize your own mosaic style if you want. See `EditorMosaicOption` for more details.
+    ///
+    /// - Default: [default, colorful]
     public var mosaicOptions: [EditorMosaicOption] = EditorMosaicOption.allCases
     
-    /// 默认选中马赛克的下标
-    /// 默认：0
+    /// Preferred mosaic style index of mosaic.
+    ///
+    /// If the given subscript out of the `mosaicOptions` bounds, it will use first mosaic element as preferred mosaic style.
+    ///
+    /// - Default: 2
     public var defaultMosaicIndex: Int = 0
     
-    /// 马赛克线条宽度
-    /// 默认：15.0
+    /// Width of mosaic.
+    /// - Default: 15.0
     public var mosaicWidth: CGFloat = 15.0
     
-    /// 马赛克模糊度，仅用于默认马赛克样式
-    /// 默认：30
+    /// Mosaic blur level, only for default mosaic style.
+    /// - Default: 30
     public var mosaicLevel: Int = 30
     
-    /// 文字颜色，会按顺序排布
-    /// 默认：[white, black, red, yellow, green, blue, purple]
+    /// Colors of input text.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// There are two display styles for each color element.
+    /// One is no background color, the text color is main color.
+    /// The other is that the background color is main color, and the text color is sub color(usually is white).
+    ///
+    /// - Default: [white, black, red, yellow, green, blue, purple]
     public var textColors: [EditorTextColor] = Palette.textColors
     
-    /// 裁剪尺寸，会按顺序排布
-    /// 默认：[.free, 1:1, 3:4, 4:3, 9:16, 16:9]
+    /// Crop size of crop tool options.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// You can customize crop size if you want.
+    ///
+    /// - Default: [free, 1:1, 3:4, 4:3, 9:16, 16:9]
     public var cropOptions: [EditorCropOption] = EditorCropOption.allCases
     
-    /// 缓存ID
-    /// 默认："" 不启用
+    /// Setting the cache identifier will cache the edit records.
+    /// The next time you open the editor, it will load the edit records and restore it.
+    ///
+    /// If you try to edit a photo from the ImagePicker, you will see that the last edited content can be undo, which means that the editor has restored the last edit records.
+    ///
+    /// Use `ImageEditorCache` to remove cache.
+    ///
+    /// - Note: The '/' character is not allowed in the cache identifier.
+    ///
+    /// - Default: "" that means DO NOT cache the edit records.
     public var cacheIdentifier: String = ""
     
-    /// 启用调试日志
-    /// 默认：false
+    /// Enable debug log
+    /// - Default: false
     public var enableDebugLog: Bool = false
     
     public init() { }
 }
 
-/// 图片编辑功能
-public enum EditorPhotoToolOption: Equatable, CaseIterable {
-    /// 画笔
-    case pen
-    /// 文字
-    case text
-    /// 裁剪
-    case crop
-    /// 马赛克
-    case mosaic
-}
-
-// MARK: - Extension
-extension EditorPhotoToolOption {
+// MARK: - Deprecated
+extension EditorPhotoOptionsInfo {
     
-    var imageName: String {
-        switch self {
-        case .pen:
-            return "PhotoToolPen"
-        case .text:
-            return "PhotoToolText"
-        case .crop:
-            return "PhotoToolCrop"
-        case .mosaic:
-            return "PhotoToolMosaic"
+    @available(*, deprecated, renamed: "brushColors", message: "Will be removed in version 1.0, Please use `brushColors` instead.")
+    public var penColors: [EditorPenColorOption] {
+        get {
+            return EditorPenColorOption.convertBrushToPen(brushColors)
+        } set {
+            brushColors = EditorPenColorOption.convertPenToBrush(newValue)
         }
     }
     
-}
-
-extension EditorPhotoToolOption: CustomStringConvertible {
+    @available(*, deprecated, renamed: "defaultBrushIndex", message: "Will be removed in version 1.0, Please use `defaultBrushIndex` instead.")
+    public var defaultPenIndex: Int {
+        get {
+            return defaultBrushIndex
+        } set {
+            defaultBrushIndex = newValue
+        }
+    }
     
-    public var description: String {
-        switch self {
-        case .pen:
-            return "PEN"
-        case .text:
-            return "INPUT_TEXT"
-        case .crop:
-            return "CROP"
-        case .mosaic:
-            return "MOSAIC"
+    @available(*, deprecated, renamed: "brushWidth", message: "Will be removed in version 1.0, Please use `brushWidth` instead.")
+    public var penWidth: CGFloat {
+        get {
+            return brushWidth
+        } set {
+            brushWidth = newValue
         }
     }
 }
