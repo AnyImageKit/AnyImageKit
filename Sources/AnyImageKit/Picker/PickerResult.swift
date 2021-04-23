@@ -10,10 +10,10 @@ import Foundation
 
 public struct PickerResult: Equatable {
     
-    public let assets: [Asset]
+    public let assets: [PhotoAsset]
     public let useOriginalImage: Bool
     
-    init(assets: [Asset], useOriginalImage: Bool) {
+    init(assets: [PhotoAsset], useOriginalImage: Bool) {
         self.assets = assets
         self.useOriginalImage = useOriginalImage
     }

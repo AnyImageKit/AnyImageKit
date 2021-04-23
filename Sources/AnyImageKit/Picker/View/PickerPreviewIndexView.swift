@@ -26,7 +26,7 @@ final class PickerPreviewIndexView: UIView {
     
     private var isFirst = true
     private var lastIdx: Int = 0
-    private var lastAssetList: [Asset] = []
+    private var lastAssetList: [PhotoAsset] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

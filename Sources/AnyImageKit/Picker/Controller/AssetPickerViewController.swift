@@ -30,7 +30,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private var autoScrollToLatest: Bool = false
     
     @available(iOS 14.0, *)
-    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
+    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, PhotoAsset>()
     
     lazy var stopReloadAlbum: Bool = false
     
@@ -300,7 +300,7 @@ extension AssetPickerViewController {
     
     private func preselectAssets() {
         let preselectAssets = manager.options.preselectAssets
-        var selectedAssets: [Asset] = []
+        var selectedAssets: [PhotoAsset] = []
         if preselectAssets.isEmpty { return }
         for asset in (album?.elements ?? []).reversed() {
             if preselectAssets.contains(asset.identifier) {
@@ -515,7 +515,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
 extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let asset: Asset
+        let asset: PhotoAsset
         if #available(iOS 14.0, *) {
             guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
             asset = item
@@ -675,8 +675,8 @@ extension AssetPickerViewController {
     }
     
     @available(iOS 14.0, *)
-    private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, Asset> {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Asset>()
+    private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, PhotoAsset> {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, PhotoAsset>()
         snapshot.appendSections([.main])
         snapshot.appendItems(album?.elements ?? [], toSection: .main)
         return snapshot
@@ -684,7 +684,7 @@ extension AssetPickerViewController {
     
     @available(iOS 14.0, *)
     private func setupDataSource() {
-        let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { [weak self] cell, indexPath, asset in
+        let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, PhotoAsset> { [weak self] cell, indexPath, asset in
             guard let self = self else { return }
             cell.update(options: self.manager.options)
             cell.isAccessibilityElement = true
@@ -692,7 +692,7 @@ extension AssetPickerViewController {
             cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
         }
         
-        let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
+        let cellRegistration = UICollectionView.CellRegistration<AssetCell, PhotoAsset> { [weak self] cell, indexPath, asset in
             guard let self = self else { return }
             cell.tag = indexPath.row
             cell.setContent(asset, manager: self.manager)
@@ -706,7 +706,7 @@ extension AssetPickerViewController {
             cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         }
         
-        dataSource = UICollectionViewDiffableDataSource<Section, Asset>(collectionView: collectionView) { (collectionView, indexPath, asset) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, PhotoAsset>(collectionView: collectionView) { (collectionView, indexPath, asset) -> UICollectionViewCell? in
             if asset.isCamera {
                 return collectionView.dequeueConfiguredReusableCell(using: cameraCellRegistration, for: indexPath, item: asset)
             } else {

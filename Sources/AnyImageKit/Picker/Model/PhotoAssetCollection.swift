@@ -22,34 +22,34 @@ class PhotoAssetCollection: AssetCollection {
     /// The main user photo library flag, now it known as ‘Recent’, and in old version PhotoKit, it was called 'Camera Roll'
     let isUserLibrary: Bool
     /// Elements in asset collection
-    private(set) var elements: [Asset]
-    /// Extra elements in asset collection
-    let extraElements: AssetCollectionExtraElements
+    private(set) var elements: [PhotoAsset]
+    /// Addition elements in asset collection
+    let additionOption: AssetCollectionAdditionOption
     
-    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, extraElements: AssetCollectionExtraElements) {
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, additionOption: AssetCollectionAdditionOption) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? identifier
         self.fetchResult = fetchResult
         self.fetchOrder = fetchOrder
         self.isUserLibrary = isUserLibrary
         self.elements = []
-        self.extraElements = extraElements
+        self.additionOption = additionOption
     }
 }
 
 extension PhotoAssetCollection {
     
     func fetchAssets(selectOptions: PickerSelectOption) {
-        var array: [Asset] = []
+        var array: [PhotoAsset] = []
         
         #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if extraElements.contains(.camera), fetchOrder == .desc {
-            array.append(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: selectOptions))
+        if additionOption.contains(.camera), fetchOrder == .desc {
+            array.append(PhotoAsset(idx: PhotoAsset.cameraItemIdx, asset: .init(), selectOptions: selectOptions))
         }
         #endif
         
         for phAsset in fetchResult {
-            let asset = Asset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
+            let asset = PhotoAsset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
             switch asset.mediaType {
             case .photo:
                 if selectOptions.contains(.photo) {
@@ -71,8 +71,8 @@ extension PhotoAssetCollection {
         }
         
         #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if extraElements.contains(.camera), fetchOrder == .asc {
-            array.append(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: selectOptions))
+        if additionOption.contains(.camera), fetchOrder == .asc {
+            array.append(PhotoAsset(idx: PhotoAsset.cameraItemIdx, asset: .init(), selectOptions: selectOptions))
         }
         #endif
         
@@ -91,7 +91,7 @@ extension PhotoAssetCollection {
     }
     
     var hasCamera: Bool {
-        return extraElements.contains(.camera)
+        return additionOption.contains(.camera)
     }
 }
 

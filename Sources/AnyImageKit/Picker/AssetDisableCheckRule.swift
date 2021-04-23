@@ -10,8 +10,8 @@ import Foundation
 
 public protocol AssetDisableCheckRule {
     
-    func isDisable(for asset: Asset) -> Bool
-    func alertMessage(for asset: Asset) -> String
+    func isDisable(for asset: PhotoAsset) -> Bool
+    func alertMessage(for asset: PhotoAsset) -> String
 }
 
 public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
@@ -24,12 +24,12 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
         self.maxDuration = max
     }
     
-    public func isDisable(for asset: Asset) -> Bool {
+    public func isDisable(for asset: PhotoAsset) -> Bool {
         guard asset.mediaType.isVideo else { return false }
         return asset.duration < minDuration || asset.duration > maxDuration
     }
     
-    public func alertMessage(for asset: Asset) -> String {
+    public func alertMessage(for asset: PhotoAsset) -> String {
         let message = BundleHelper.localizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE", module: .picker)
         return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }

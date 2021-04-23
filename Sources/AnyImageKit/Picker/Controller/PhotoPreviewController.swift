@@ -11,7 +11,7 @@ import Photos
 
 protocol PhotoPreviewControllerDataSource: AnyObject {
     
-    typealias PreviewData = (thumbnail: UIImage?, asset: Asset)
+    typealias PreviewData = (thumbnail: UIImage?, asset: PhotoAsset)
     
     /// 获取需要展示图片的数量
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int

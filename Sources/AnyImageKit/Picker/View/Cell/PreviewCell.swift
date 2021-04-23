@@ -30,7 +30,7 @@ class PreviewCell: UICollectionViewCell {
     
     weak var delegate: PreviewCellDelegate?
     
-    var asset: Asset!
+    var asset: PhotoAsset!
     var manager: PickerManager! {
         didSet {
             if oldValue == nil {

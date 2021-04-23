@@ -12,7 +12,7 @@ import UIKit
 
 extension AssetPickerViewController {
     
-    func canOpenEditor(with asset: Asset) -> Bool {
+    func canOpenEditor(with asset: PhotoAsset) -> Bool {
         asset.check(disable: manager.options.disableRules)
         if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset)
@@ -27,7 +27,7 @@ extension AssetPickerViewController {
         return false
     }
     
-    func openEditor(with asset: Asset, indexPath: IndexPath) {
+    func openEditor(with asset: PhotoAsset, indexPath: IndexPath) {
         if asset.phAsset.mediaType == .image {
             if let image = asset._images[.initial] {
                 showEditor(image, identifier: asset.identifier, tag: indexPath.item)

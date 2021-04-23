@@ -32,12 +32,12 @@ extension AssetPickerViewController {
     func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
         let sortType = manager.options.orderByDate
-        let asset: Asset
+        let asset: PhotoAsset
         switch sortType {
         case .asc:
-            asset = Asset(idx: album.elements.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = PhotoAsset(idx: album.elements.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
         case .desc:
-            asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = PhotoAsset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
         }
         let addSuccess = manager.addSelectedAsset(asset)
         updateVisibleCellState()
