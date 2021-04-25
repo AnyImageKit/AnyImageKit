@@ -9,11 +9,7 @@
 import UIKit
 import Photos
 
-public class PhotoAsset: Asset {
-    /// 对应的 PHAsset
-    public let phAsset: PHAsset
-    /// 媒体类型
-    public let mediaType: MediaType
+public class PhotoAsset: Asset<PHAsset> {
     
     var _images: [ImageKey: UIImage] = [:]
     var videoDidDownload: Bool = false
@@ -22,14 +18,9 @@ public class PhotoAsset: Asset {
     var state: State = .unchecked
     var selectedNum: Int = 1
     
-    public var identifier: String {
-        return phAsset.localIdentifier
-    }
-    
     init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
         self.idx = idx
-        self.phAsset = asset
-        self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)
+        super.init(resource: asset, mediaType: MediaType(asset: asset, selectOptions: selectOptions))
     }
 }
 
@@ -42,17 +33,6 @@ extension PhotoAsset {
     
     var _image: UIImage? {
         return (_images[.output] ?? _images[.edited]) ?? _images[.initial]
-    }
-    
-    var duration: TimeInterval {
-        return phAsset.duration
-    }
-    
-    var durationDescription: String {
-        let time = Int(duration)
-        let min = time / 60
-        let sec = time % 60
-        return String(format: "%02ld:%02ld", min, sec)
     }
     
     var isReady: Bool {
@@ -69,13 +49,6 @@ extension PhotoAsset {
     }
     
     static let cameraItemIdx: Int = -1
-}
-
-extension PhotoAsset: CustomStringConvertible {
-    
-    public var description: String {
-        return "<Asset> \(identifier) mediaType=\(mediaType) image=\(image)"
-    }
 }
 
 // MARK: - State

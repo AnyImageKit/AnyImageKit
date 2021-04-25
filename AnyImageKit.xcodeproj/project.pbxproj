@@ -1105,8 +1105,8 @@
 				A012D2D126203B2D006B5261 /* IdentifiableResource.swift */,
 				A07DDD1A26248CC4003D6B4E /* AssetCollection.swift */,
 				A0360487263316BB009387D3 /* AssetCollectionAdditionOption.swift */,
-				A03604DD2633196A009387D3 /* Asset.swift */,
 				A0F4753B232F7DE500BB117B /* PhotoAssetCollection.swift */,
+				A03604DD2633196A009387D3 /* Asset.swift */,
 				A0F4753D232F7DFA00BB117B /* PhotoAsset.swift */,
 			);
 			path = Model;
