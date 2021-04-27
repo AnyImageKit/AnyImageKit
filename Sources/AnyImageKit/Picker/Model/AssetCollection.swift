@@ -11,8 +11,6 @@ import Foundation
 public protocol AssetCollection: IdentifiableResource {
     /// Localized title
     var localizedTitle: String { get }
-    /// Elements in asset collection
-    var elements: [PhotoAsset] { get }
     /// Addition elements in asset collection
     var additionOption: AssetCollectionAdditionOption { get }
 }

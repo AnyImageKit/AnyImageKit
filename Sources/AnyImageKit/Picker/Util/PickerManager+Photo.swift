@@ -63,13 +63,7 @@ typealias _PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, AnyImageEr
 extension PickerManager {
     
     func requestPhoto(for album: PhotoAssetCollection, completion: @escaping _PhotoFetchCompletion) {
-        if let asset = options.orderByDate == .asc ? album.elements.last : album.elements.first {
-            let phAsset: PHAsset
-            if asset.isCamera, let secondAsset = options.orderByDate == .asc ? album.elements.dropLast().last : album.elements.dropFirst().first {
-                phAsset = secondAsset.phAsset
-            } else {
-                phAsset = asset.phAsset
-            }
+        if let phAsset = options.orderByDate == .asc ? album.fetchResult.last : album.fetchResult.first {
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
             requestPhoto(for: phAsset, options: options, completion: completion)
         }

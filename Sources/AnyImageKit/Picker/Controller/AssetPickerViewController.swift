@@ -80,20 +80,6 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private var itemOffset: Int {
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        switch manager.options.orderByDate {
-        case .asc:
-            return 0
-        case .desc:
-            guard !manager.options.captureOptions.mediaOptions.isEmpty else { return 0 }
-            return ((album?.hasCamera ?? false) ? 1 : 0)
-        }
-        #else
-        return 0
-        #endif
-    }
-    
     let manager: PickerManager
     
     init(manager: PickerManager) {
@@ -218,11 +204,12 @@ extension AssetPickerViewController {
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)
-        album.elements.forEach { $0.state = .unchecked }
+        // TODO: remove
+        album.forEach { $0.state = .unchecked }
     }
     
     private func setAlbums(_ albums: [PhotoAssetCollection]) {
-        self.albums = albums.filter{ !$0.elements.isEmpty }
+        self.albums = albums.filter{ !$0.isEmpty }
         if let albumsPicker = albumsPicker {
             albumsPicker.albums = albums
             albumsPicker.reloadData()
@@ -253,14 +240,14 @@ extension AssetPickerViewController {
     private func updateAlbum(_ album: PhotoAssetCollection) {
         // Update selected assets
         for asset in manager.selectedAssets.reversed() {
-            if !(album.elements.contains { $0 == asset }) {
+            if !(album.contains { $0 == asset }) {
                 manager.removeSelectedAsset(asset)
             }
         }
         for asset in manager.selectedAssets {
-            if let idx = (album.elements.firstIndex { $0 == asset }) {
+            if let idx = (album.firstIndex { $0 == asset }) {
                 manager.removeSelectedAsset(asset)
-                manager.addSelectedAsset(album.elements[idx])
+                manager.addSelectedAsset(album[idx])
             }
         }
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
@@ -293,7 +280,7 @@ extension AssetPickerViewController {
         guard let album = album else { return }
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                cell.updateState(album.elements[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
+                cell.updateState(album[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
             }
         }
     }
@@ -302,14 +289,15 @@ extension AssetPickerViewController {
         let preselectAssets = manager.options.preselectAssets
         var selectedAssets: [PhotoAsset] = []
         if preselectAssets.isEmpty { return }
-        for asset in (album?.elements ?? []).reversed() {
-            if preselectAssets.contains(asset.identifier) {
-                selectedAssets.append(asset)
-                if selectedAssets.count == preselectAssets.count {
-                    break
-                }
-            }
-        }
+        // TODO:
+//        for asset in (album ?? []).reversed() {
+//            if preselectAssets.contains(asset.identifier) {
+//                selectedAssets.append(asset)
+//                if selectedAssets.count == preselectAssets.count {
+//                    break
+//                }
+//            }
+//        }
         for identifier in preselectAssets {
             if let asset = (selectedAssets.filter{ $0.identifier == identifier }).first {
                 manager.addSelectedAsset(asset)
@@ -328,7 +316,7 @@ extension AssetPickerViewController {
     
     func selectItem(_ idx: Int) {
         guard let album = album else { return }
-        let asset = album.elements[idx]
+        let asset = album[idx]
         
         if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset)
@@ -479,11 +467,11 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return album?.elements.count ?? 0
+        return album?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let asset = album?.elements[indexPath.item] else { return UICollectionViewCell() }
+        guard let asset = album?[indexPath.item] else { return UICollectionViewCell() }
         
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera {
@@ -521,7 +509,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             asset = item
         } else {
             guard let album = album else { return }
-            asset = album.elements[indexPath.item]
+            asset = album[indexPath.item]
         }
         
         #if ANYIMAGEKIT_ENABLE_CAPTURE
@@ -551,7 +539,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             return
         } else {
             let controller = PhotoPreviewController(manager: manager)
-            controller.currentIndex = indexPath.item - itemOffset
+            controller.currentIndex = indexPath.item
             controller.dataSource = self
             controller.delegate = self
             present(controller, animated: true, completion: nil)
@@ -559,7 +547,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let asset = album?.elements[indexPath.item], !asset.isCamera else { return }
+        guard let asset = album?[indexPath.item], !asset.isCamera else { return }
         if let cell = cell as? AssetCell {
             cell.updateState(asset, manager: manager, animated: false)
         }
@@ -606,22 +594,20 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
         guard let album = album else { return 0 }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if album.isUserLibrary && !manager.options.captureOptions.mediaOptions.isEmpty {
-            return album.elements.count - 1
+            return album.count - 1
         }
         #endif
-        return album.elements.count
+        return album.count
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
-        let idx = index + itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
+        let indexPath = IndexPath(item: index, section: 0)
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-        return (cell?.image, album!.elements[idx])
+        return (cell?.image, album![index])
     }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
-        let idx = index + itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
+        let indexPath = IndexPath(item: index, section: 0)
         return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
     }
 }
@@ -649,10 +635,9 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
-        let idx = controller.currentIndex + itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
+        let indexPath = IndexPath(item: controller.currentIndex, section: 0)
         reloadData(animated: false)
-        if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
+        if !(collectionView.visibleCells.map{ $0.tag }).contains(controller.currentIndex) {
             collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
         }
     }
@@ -678,7 +663,9 @@ extension AssetPickerViewController {
     private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, PhotoAsset> {
         var snapshot = NSDiffableDataSourceSnapshot<Section, PhotoAsset>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(album?.elements ?? [], toSection: .main)
+        if let album = album {
+            snapshot.appendItems(Array(album), toSection: .main)
+        }
         return snapshot
     }
     

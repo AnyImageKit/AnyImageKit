@@ -45,7 +45,6 @@ extension PickerManager {
                                                   fetchOrder: options.orderByDate,
                                                   isUserLibrary: true,
                                                   additionOption: additionOption)
-                result.fetchAssets(selectOptions: options.selectOptions)
                 completion(result)
                 return
             }
@@ -74,7 +73,6 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: assetCollection.isUserLibrary,
                                                       additionOption: additionOption)
-                    result.fetchAssets(selectOptions: self.options.selectOptions)
                     DispatchQueue.main.async {
                         completion(result)
                         return
@@ -115,7 +113,6 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
                                                       additionOption: additionOption)
-                    result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.insert(result, at: 0)
                 } else {
                     let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -124,7 +121,6 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
                                                       additionOption: [])
-                    result.fetchAssets(selectOptions: self.options.selectOptions)
                     results.append(result)
                 }
             }

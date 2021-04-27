@@ -18,9 +18,9 @@ public class PhotoAsset: Asset<PHAsset> {
     var state: State = .unchecked
     var selectedNum: Int = 1
     
-    init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
+    init(idx: Int, phAsset: PHAsset, selectOptions: PickerSelectOption) {
         self.idx = idx
-        super.init(resource: asset, mediaType: MediaType(asset: asset, selectOptions: selectOptions))
+        super.init(resource: phAsset, mediaType: MediaType(phAsset: phAsset, selectOptions: selectOptions))
     }
 }
 

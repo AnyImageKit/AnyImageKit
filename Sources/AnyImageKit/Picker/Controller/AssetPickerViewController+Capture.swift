@@ -35,9 +35,9 @@ extension AssetPickerViewController {
         let asset: PhotoAsset
         switch sortType {
         case .asc:
-            asset = PhotoAsset(idx: album.elements.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = PhotoAsset(idx: album.count-1, phAsset: phAsset, selectOptions: manager.options.selectOptions)
         case .desc:
-            asset = PhotoAsset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = PhotoAsset(idx: 0, phAsset: phAsset, selectOptions: manager.options.selectOptions)
         }
         let addSuccess = manager.addSelectedAsset(asset)
         updateVisibleCellState()

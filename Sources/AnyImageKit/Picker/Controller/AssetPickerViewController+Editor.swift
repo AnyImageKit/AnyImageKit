@@ -88,7 +88,7 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
         guard let album = album else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? AssetCell else { return }
         
-        let asset = album.elements[editor.tag]
+        let asset = album[editor.tag]
         asset._images[.edited] = result.isEdited ? photo : nil
         cell.setContent(asset, manager: manager)
         if !asset.isSelected { // Select
