@@ -33,21 +33,3 @@ extension Asset: CustomStringConvertible {
         return "Asset<\(Resource.self)> id=\(identifier) mediaType=\(mediaType)\n"
     }
 }
-
-extension Asset where Resource == PHAsset {
-    
-    public var phAsset: PHAsset {
-        return resource
-    }
-    
-    var duration: TimeInterval {
-        return phAsset.duration
-    }
-    
-    var durationDescription: String {
-        let time = Int(duration)
-        let min = time / 60
-        let sec = time % 60
-        return String(format: "%02ld:%02ld", min, sec)
-    }
-}
