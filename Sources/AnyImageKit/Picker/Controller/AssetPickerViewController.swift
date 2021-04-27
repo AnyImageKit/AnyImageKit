@@ -372,8 +372,9 @@ extension AssetPickerViewController {
         guard let _ = sender.object as? String else { return }
         guard manager.options.selectLimit == 1 && manager.options.selectionTapAction.hideToolBar else { return }
         guard let asset = manager.selectedAssets.first else { return }
-        guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
-        cell.selectEvent.call()
+        // TODO
+//        guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
+//        cell.selectEvent.call()
     }
 }
 
@@ -402,7 +403,7 @@ extension AssetPickerViewController {
     @objc private func previewButtonTapped(_ sender: UIButton) {
         guard let asset = manager.selectedAssets.first else { return }
         let controller = PhotoPreviewController(manager: manager)
-        controller.currentIndex = asset.idx
+//        controller.currentIndex = asset.idx
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)

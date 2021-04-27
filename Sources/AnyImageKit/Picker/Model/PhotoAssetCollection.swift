@@ -46,7 +46,7 @@ extension PhotoAssetCollection: Sequence {
             defer { count += 1 }
             if count < self.fetchResult.count {
                 let phAsset = self.fetchResult[count]
-                return PhotoAsset(idx: 0, phAsset: phAsset, selectOption: selectOption)
+                return PhotoAsset(phAsset: phAsset, selectOption: selectOption)
             } else {
                 return nil
             }
@@ -71,12 +71,12 @@ extension PhotoAssetCollection: Collection {
 
     subscript(position: Int) -> PhotoAsset {
         let phAsset = fetchResult[position]
-        return PhotoAsset(idx: 0, phAsset: phAsset, selectOption: selectOption)
+        return PhotoAsset(phAsset: phAsset, selectOption: selectOption)
     }
 
     subscript(bounds: IndexSet) -> [PhotoAsset] {
         return fetchResult[bounds].map {
-            PhotoAsset(idx: 0, phAsset: $0, selectOption: selectOption)
+            PhotoAsset(phAsset: $0, selectOption: selectOption)
         }
     }
 }

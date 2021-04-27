@@ -14,12 +14,10 @@ public class PhotoAsset: Asset<PHAsset> {
     var _images: [ImageKey: UIImage] = [:]
     var videoDidDownload: Bool = false
     
-    var idx: Int
     var state: State = .unchecked
     var selectedNum: Int = 1
     
-    init(idx: Int, phAsset: PHAsset, selectOption: PickerSelectOption) {
-        self.idx = idx
+    init(phAsset: PHAsset, selectOption: PickerSelectOption) {
         super.init(resource: phAsset, mediaType: MediaType(phAsset: phAsset, selectOption: selectOption))
     }
 }
@@ -45,7 +43,7 @@ extension PhotoAsset {
     }
     
     var isCamera: Bool {
-        return idx == PhotoAsset.cameraItemIdx
+        return false
     }
     
     static let cameraItemIdx: Int = -1

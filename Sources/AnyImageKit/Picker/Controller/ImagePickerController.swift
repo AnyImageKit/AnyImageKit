@@ -181,7 +181,7 @@ extension ImagePickerController {
             manager.savePhoto(image: editedImage) { result in
                 switch result {
                 case .success(let newAsset):
-                    assets[idx] = PhotoAsset(idx: asset.idx, phAsset: newAsset, selectOption: selectOptions)
+                    assets[idx] = PhotoAsset(phAsset: newAsset, selectOption: selectOptions)
                     assets[idx]._images[.initial] = editedImage
                 case .failure(let error):
                     _print(error)
