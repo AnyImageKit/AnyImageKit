@@ -21,15 +21,18 @@ struct PhotoAssetCollection: AssetCollection {
     let fetchOrder: Sort
     /// The main user photo library flag, now it known as ‘Recent’, and in old version PhotoKit, it was called 'Camera Roll'
     let isUserLibrary: Bool
+    /// Select Option
+    let selectOption: PickerSelectOption
     /// Addition elements in asset collection
     let additionOption: AssetCollectionAdditionOption
     
-    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, additionOption: AssetCollectionAdditionOption) {
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: PickerSelectOption, additionOption: AssetCollectionAdditionOption) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? identifier
         self.fetchResult = fetchResult
         self.fetchOrder = fetchOrder
         self.isUserLibrary = isUserLibrary
+        self.selectOption = selectOption
         self.additionOption = additionOption
     }
 }
@@ -43,7 +46,7 @@ extension PhotoAssetCollection: Sequence {
             defer { count += 1 }
             if count < self.fetchResult.count {
                 let phAsset = self.fetchResult[count]
-                return PhotoAsset(idx: 0, phAsset: phAsset, selectOptions: .init())
+                return PhotoAsset(idx: 0, phAsset: phAsset, selectOption: selectOption)
             } else {
                 return nil
             }
@@ -68,12 +71,12 @@ extension PhotoAssetCollection: Collection {
 
     subscript(position: Int) -> PhotoAsset {
         let phAsset = fetchResult[position]
-        return PhotoAsset(idx: 0, phAsset: phAsset, selectOptions: .init())
+        return PhotoAsset(idx: 0, phAsset: phAsset, selectOption: selectOption)
     }
 
     subscript(bounds: IndexSet) -> [PhotoAsset] {
         return fetchResult[bounds].map {
-            PhotoAsset(idx: 0, phAsset: $0, selectOptions: .init())
+            PhotoAsset(idx: 0, phAsset: $0, selectOption: selectOption)
         }
     }
 }

@@ -44,6 +44,7 @@ extension PickerManager {
                                                   fetchResult: FetchResult(assetsfetchResult),
                                                   fetchOrder: options.orderByDate,
                                                   isUserLibrary: true,
+                                                  selectOption: options.selectOptions,
                                                   additionOption: additionOption)
                 completion(result)
                 return
@@ -72,6 +73,7 @@ extension PickerManager {
                                                       fetchResult: FetchResult(assetsfetchResult),
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: assetCollection.isUserLibrary,
+                                                      selectOption: self.options.selectOptions,
                                                       additionOption: additionOption)
                     DispatchQueue.main.async {
                         completion(result)
@@ -112,6 +114,7 @@ extension PickerManager {
                                                       fetchResult: FetchResult(assetFetchResult),
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
+                                                      selectOption: self.options.selectOptions,
                                                       additionOption: additionOption)
                     results.insert(result, at: 0)
                 } else {
@@ -120,6 +123,7 @@ extension PickerManager {
                                                       fetchResult: FetchResult(assetFetchResult),
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
+                                                      selectOption: self.options.selectOptions,
                                                       additionOption: [])
                     results.append(result)
                 }
