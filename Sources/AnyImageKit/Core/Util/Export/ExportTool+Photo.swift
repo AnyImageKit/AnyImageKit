@@ -30,8 +30,9 @@ public struct PhotoFetchOptions {
     }
 }
 
-public struct PhotoFetchResponse {
-
+public struct PhotoFetchResponse: IdentifiableResource {
+    
+    public let identifier: String
     public let image: UIImage
     public let isDegraded: Bool
 }
@@ -50,7 +51,7 @@ extension ExportTool {
         requestOptions.version = options.version
         requestOptions.resizeMode = options.resizeMode
         requestOptions.isSynchronous = false
-
+        let identifier = asset.identifier
         let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.size, contentMode: .aspectFill, options: requestOptions) { (image, info) in
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             guard let info = info else {
@@ -62,7 +63,7 @@ extension ExportTool {
             let isDegraded = info[PHImageResultIsDegradedKey] as? Bool ?? false
             let isDownload = !isCancelled && error == nil
             if isDownload, let image = image {
-                completion(.success(.init(image: image, isDegraded: isDegraded)), requestID)
+                completion(.success(.init(identifier: identifier, image: image, isDegraded: isDegraded)), requestID)
             } else {
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud {

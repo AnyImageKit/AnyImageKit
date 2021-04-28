@@ -83,12 +83,13 @@ extension PickerManager {
     
     func requestPhoto(for asset: PHAsset, options: _PhotoFetchOptions = .init(), completion: @escaping _PhotoFetchCompletion) {
         let fetchOptions = PhotoFetchOptions(size: options.targetSize, resizeMode: options.resizeMode, version: options.version, isNetworkAccessAllowed: options.isNetworkAccessAllowed, progressHandler: options.progressHandler)
+        let identifier = asset.identifier
         let requestID = ExportTool.requestPhoto(for: asset, options: fetchOptions) { (result, requestID) in
             switch result {
             case .success(let response):
                 switch options.sizeMode {
                 case .original:
-                    completion(.success(.init(image: response.image, isDegraded: response.isDegraded)))
+                    completion(.success(.init(identifier: identifier, image: response.image, isDegraded: response.isDegraded)))
                 case .preview:
                     self.workQueue.async { [weak self] in
                         guard let self = self else { return }
@@ -99,14 +100,14 @@ extension PickerManager {
                             self.cache.store(resizedImage, forKey: asset.localIdentifier)
                         }
                         DispatchQueue.main.async {
-                            completion(.success(.init(image: resizedImage, isDegraded: response.isDegraded)))
+                            completion(.success(.init(identifier: identifier, image: resizedImage, isDegraded: response.isDegraded)))
                         }
                     }
                 case .thumbnail:
                     if !response.isDegraded && options.needCache {
                         self.cache.store(response.image, forKey: asset.localIdentifier)
                     }
-                    completion(.success(.init(image: response.image, isDegraded: response.isDegraded)))
+                    completion(.success(.init(identifier: identifier, image: response.image, isDegraded: response.isDegraded)))
                 }
             case .failure(let error):
                 guard error == .cannotFindInLocal && options.isNetworkAccessAllowed else {
@@ -132,7 +133,7 @@ extension PickerManager {
                                     return
                                 }
                                 DispatchQueue.main.async {
-                                    completion(.success(.init(image: image, isDegraded: false)))
+                                    completion(.success(.init(identifier: identifier, image: image, isDegraded: false)))
                                 }
                             case .preview:
                                 self.resizeSemaphore.wait()
@@ -146,7 +147,7 @@ extension PickerManager {
                                 self.resizeSemaphore.signal()
                                 self.cache.store(resizedImage, forKey: asset.localIdentifier)
                                 DispatchQueue.main.async {
-                                    completion(.success(.init(image: resizedImage, isDegraded: false)))
+                                    completion(.success(.init(identifier: identifier, image: resizedImage, isDegraded: false)))
                                 }
                             case .thumbnail:
                                 guard let resizedImage = UIImage.resize(from: response.data, limitSize: options.targetSize) else {
@@ -156,7 +157,7 @@ extension PickerManager {
                                     return
                                 }
                                 DispatchQueue.main.async {
-                                    completion(.success(.init(image: resizedImage, isDegraded: false)))
+                                    completion(.success(.init(identifier: identifier, image: resizedImage, isDegraded: false)))
                                 }
                             }
                         case .failure(let error):

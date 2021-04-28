@@ -145,12 +145,11 @@ extension AssetCell {
     func setContent(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         asset.check(disable: manager.options.disableRules)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-        let identifier = asset.identifier
         manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                guard identifier == asset.identifier else { return }
+                guard asset.identifier == response.identifier else { return }
                 self.imageView.image = asset._image ?? response.image
                 if asset.mediaType == .video && !isPreview {
                     self.videoView.setVideoTime(asset.durationDescription)
