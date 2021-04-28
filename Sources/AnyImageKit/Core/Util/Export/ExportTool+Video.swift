@@ -26,8 +26,9 @@ public struct VideoFetchOptions {
     }
 }
 
-public struct VideoFetchResponse {
+public struct VideoFetchResponse: IdentifiableResource {
     
+    public let identifier: String
     public let playerItem: AVPlayerItem
 }
 
@@ -45,10 +46,11 @@ extension ExportTool {
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.progressHandler
         
+        let identifier = asset.identifier
         return PHImageManager.default().requestAVAsset(forVideo: asset, options: requestOptions) { (avAsset, _, info) in
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             if let avAsset = avAsset {
-                completion(.success(.init(playerItem: AVPlayerItem(asset: avAsset))), requestID)
+                completion(.success(.init(identifier: identifier, playerItem: AVPlayerItem(asset: avAsset))), requestID)
             } else {
                 completion(.failure(.invalidVideo), requestID)
             }

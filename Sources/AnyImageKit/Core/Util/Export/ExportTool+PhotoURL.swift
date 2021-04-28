@@ -30,8 +30,9 @@ public struct PhotoURLFetchOptions {
     }
 }
 
-public struct PhotoURLFetchResponse {
+public struct PhotoURLFetchResponse: IdentifiableResource {
     
+    public let identifier: String
     public let url: URL
     public let dataUTI: String
     public let orientation: CGImagePropertyOrientation
@@ -47,6 +48,8 @@ extension ExportTool {
         let photoDataOptions = PhotoDataFetchOptions(version: options.version,
                                                      isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                      progressHandler: options.progressHandler)
+        
+        let identifier = asset.identifier
         return ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { result, requestID in
             switch result {
             case .success(let response):
@@ -54,7 +57,7 @@ extension ExportTool {
                     completion(.failure(.fileWriteFailed), requestID)
                     return
                 }
-                completion(.success(.init(url: outputURL, dataUTI: response.dataUTI, orientation: response.orientation)), requestID)
+                completion(.success(.init(identifier: identifier, url: outputURL, dataUTI: response.dataUTI, orientation: response.orientation)), requestID)
             case .failure(let error):
                 completion(.failure(error), requestID)
             }

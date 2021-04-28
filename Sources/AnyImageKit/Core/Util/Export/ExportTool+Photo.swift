@@ -51,6 +51,7 @@ extension ExportTool {
         requestOptions.version = options.version
         requestOptions.resizeMode = options.resizeMode
         requestOptions.isSynchronous = false
+        
         let identifier = asset.identifier
         let requestID = PHImageManager.default().requestImage(for: asset, targetSize: options.size, contentMode: .aspectFill, options: requestOptions) { (image, info) in
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0

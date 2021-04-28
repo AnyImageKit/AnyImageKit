@@ -23,8 +23,9 @@ public struct PhotoDataFetchOptions {
     }
 }
 
-public struct PhotoDataFetchResponse {
-
+public struct PhotoDataFetchResponse: IdentifiableResource {
+    
+    public let identifier: String
     public let data: Data
     public let dataUTI: String
     public let orientation: CGImagePropertyOrientation
@@ -43,6 +44,7 @@ extension ExportTool {
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         requestOptions.isSynchronous = false
         
+        let identifier = asset.identifier
         func handle(data: Data?, dataUTI: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable: Any]?, completion: @escaping PhotoDataFetchCompletion) {
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             guard let data = data else {
@@ -53,7 +55,7 @@ extension ExportTool {
                 completion(.failure(.invalidDataUTI), requestID)
                 return
             }
-            completion(.success(.init(data: data, dataUTI: dataUTI, orientation: orientation)), requestID)
+            completion(.success(.init(identifier: identifier, data: data, dataUTI: dataUTI, orientation: orientation)), requestID)
         }
         
         if #available(iOS 13.0, *) {

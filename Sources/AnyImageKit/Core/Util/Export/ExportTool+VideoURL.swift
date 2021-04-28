@@ -42,8 +42,9 @@ public struct VideoURLFetchOptions {
     }
 }
 
-public struct VideoURLFetchResponse {
+public struct VideoURLFetchResponse: IdentifiableResource {
     
+    public let identifier: String
     public let url: URL
 }
 
@@ -66,10 +67,11 @@ extension ExportTool {
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.fetchProgressHandler
         
+        let identifier = asset.identifier
         return PHImageManager.default().requestExportSession(forVideo: asset, options: requestOptions, exportPreset: options.exportPreset.rawValue) { (exportSession, info) in
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             if let exportSession = exportSession {
-                ExportTool.exportVideoData(for: exportSession, options: options) { (result) in
+                ExportTool.exportVideoData(for: identifier, exportSession: exportSession, options: options) { (result) in
                     switch result {
                     case .success(let response):
                         completion(.success(response), requestID)
@@ -83,7 +85,7 @@ extension ExportTool {
         }
     }
     
-    private static  func exportVideoData(for exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping (Result<VideoURLFetchResponse, AnyImageError>) -> Void) {
+    private static func exportVideoData(for identifier: String, exportSession: AVAssetExportSession, options: VideoURLFetchOptions, completion: @escaping (Result<VideoURLFetchResponse, AnyImageError>) -> Void) {
         // Check Path
         FileHelper.createDirectory(at: options.preferredOutputPath)
         // Check File Type
@@ -110,7 +112,7 @@ extension ExportTool {
                 case .exporting:
                     break
                 case .completed:
-                    completion(.success(VideoURLFetchResponse(url: outputURL)))
+                    completion(.success(VideoURLFetchResponse(identifier: identifier, url: outputURL)))
                 case .failed:
                     completion(.failure(.exportFailed))
                 case .cancelled:

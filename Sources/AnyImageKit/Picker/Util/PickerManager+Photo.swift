@@ -201,7 +201,9 @@ struct PhotoGIFFetchOptions {
     }
 }
 
-struct PhotoGIFFetchResponse {
+struct PhotoGIFFetchResponse: IdentifiableResource {
+    
+    let identifier: String
     let image: UIImage
 }
 
@@ -211,6 +213,7 @@ extension PickerManager {
         let photoDataOptions = PhotoDataFetchOptions(version: .unadjusted,
                                                      isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                      progressHandler: options.progressHandler)
+        let identifier = asset.identifier
         let requestID = ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { result, requestID in
             switch result {
             case .success(let response):
@@ -223,7 +226,7 @@ extension PickerManager {
                     completion(.failure(.invalidImage))
                     return
                 }
-                completion(.success(.init(image: image)))
+                completion(.success(.init(identifier: identifier, image: image)))
             case .failure(let error):
                 completion(.failure(error))
             }

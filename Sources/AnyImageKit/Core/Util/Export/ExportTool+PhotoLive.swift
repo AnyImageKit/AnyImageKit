@@ -31,8 +31,9 @@ public struct PhotoLiveFetchOptions {
 
 }
 
-public struct PhotoLiveFetchResponse {
+public struct PhotoLiveFetchResponse: IdentifiableResource {
     
+    public let identifier: String
     public let livePhoto: PHLivePhoto
 }
 
@@ -49,10 +50,11 @@ extension ExportTool {
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         requestOptions.progressHandler = options.progressHandler
         
+        let identifier = asset.identifier
         return PHImageManager.default().requestLivePhoto(for: asset, targetSize: options.targetSize, contentMode: .aspectFill, options: requestOptions) { (livePhoto, info) in
             let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) ?? 0
             if let livePhoto = livePhoto {
-                completion(.success(.init(livePhoto: livePhoto)), requestID)
+                completion(.success(.init(identifier: identifier, livePhoto: livePhoto)), requestID)
             } else {
                 completion(.failure(.invalidLivePhoto), requestID)
             }
