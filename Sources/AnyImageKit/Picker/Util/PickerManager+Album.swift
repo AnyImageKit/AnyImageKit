@@ -12,10 +12,10 @@ extension PickerManager {
     
     private func createFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
-        if !options.selectOptions.mediaTypes.contains(.video) {
+        if !options.selectOptions.phAssetMediaTypes.contains(.video) {
             fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
-        if !options.selectOptions.mediaTypes.contains(.image) {
+        if !options.selectOptions.phAssetMediaTypes.contains(.image) {
             fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
         }
         if options.orderByDate == .desc {
@@ -25,7 +25,7 @@ extension PickerManager {
         return fetchOptions
     }
     
-    func fetchCameraRollAlbum(completion: @escaping (PhotoAssetCollection) -> Void) {
+    func fetchUserLibraryAlbum(completion: @escaping (PhotoAssetCollection) -> Void) {
         let fetchOptions = createFetchOptions()
         let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         let assetCollections = FetchResult(assetCollectionsFetchResult)

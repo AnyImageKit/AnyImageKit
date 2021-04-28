@@ -17,7 +17,7 @@
   - [LargePhotoMaxWidth](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#largephotomaxwidth-cgfloat)
   - ~~[QuickPick](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#quickpick-bool)~~
   - [AlbumOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#albumoptions-pickeralbumoption)
-  - [SelectOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectoptions-pickerselectoption)
+  - [SelectOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectoptions-MediaSelectOption)
   - [SelectionTapAction](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectiontapaction-pickerselectiontapaction)
   - [OrderByDate](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#orderbydate-sort)
   - [PreselectAssets](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#preselectassets-string)
@@ -176,20 +176,20 @@ struct PickerAlbumOption: OptionSet {
 
 
 
-### SelectOptions (PickerSelectOption)
+### SelectOptions (MediaSelectOption)
 
-`PickerSelectOption` 是可选择资源的类型，默认为 `[.photo]`。
+`MediaSelectOption` 是可选择资源的类型，默认为 `[.photo]`。
 
 ```swift
-struct PickerSelectOption: OptionSet {
+struct MediaSelectOption: OptionSet {
     /// Photo 照片
-    static let photo = PickerSelectOption(rawValue: 1 << 0)
+    static let photo = MediaSelectOption(rawValue: 1 << 0)
     /// Video 视频
-    static let video = PickerSelectOption(rawValue: 1 << 1)
+    static let video = MediaSelectOption(rawValue: 1 << 1)
     /// GIF 动图
-    static let photoGIF = PickerSelectOption(rawValue: 1 << 2)
+    static let photoGIF = MediaSelectOption(rawValue: 1 << 2)
     /// Live photo 实况照片
-    static let photoLive = PickerSelectOption(rawValue: 1 << 3)
+    static let photoLive = MediaSelectOption(rawValue: 1 << 3)
 }
 ```
 

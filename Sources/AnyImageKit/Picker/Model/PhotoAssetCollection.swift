@@ -22,11 +22,11 @@ struct PhotoAssetCollection: AssetCollection {
     /// The main user photo library flag, now it known as ‘Recent’, and in old version PhotoKit, it was called 'Camera Roll'
     let isUserLibrary: Bool
     /// Select Option
-    let selectOption: PickerSelectOption
+    let selectOption: MediaSelectOption
     /// Addition elements in asset collection
     let additionOption: AssetCollectionAdditionOption
     
-    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: PickerSelectOption, additionOption: AssetCollectionAdditionOption) {
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additionOption: AssetCollectionAdditionOption) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? identifier
         self.fetchResult = fetchResult
@@ -81,10 +81,10 @@ extension PhotoAssetCollection: Collection {
     }
 }
 
-extension PhotoAssetCollection {
-
-    var hasCamera: Bool {
-        return additionOption.contains(.camera)
+extension PhotoAssetCollection: BidirectionalCollection {
+    
+    func index(before i: Int) -> Int {
+        return i - 1
     }
 }
 

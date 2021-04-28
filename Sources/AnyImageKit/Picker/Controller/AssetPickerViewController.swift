@@ -179,7 +179,7 @@ extension AssetPickerViewController {
     
     private func loadDefaultAlbumIfNeeded() {
         guard album == nil else { return }
-        manager.fetchCameraRollAlbum { [weak self] album in
+        manager.fetchUserLibraryAlbum { [weak self] album in
             guard let self = self else { return }
             self.setAlbum(album)
             self.preselectAssets()

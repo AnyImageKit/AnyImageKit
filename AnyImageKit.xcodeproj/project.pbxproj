@@ -151,6 +151,8 @@
 		A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C192331D426005F742C /* Picker+UIColor.swift */; };
 		A0C03C1D233208D8005F742C /* MenuDropDownPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */; };
 		A0C452E623D007D90087B412 /* ConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C452E523D007D90087B412 /* ConfigCell.swift */; };
+		A0DA12FE26395F280035A3FE /* MediaSelectOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA12FD26395F280035A3FE /* MediaSelectOption.swift */; };
+		A0DA1302263962470035A3FE /* Picker+MediaSelectOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA1301263962470035A3FE /* Picker+MediaSelectOption.swift */; };
 		A0DA72C4261EF8F50038A7A1 /* Picker+UIStatusBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA72C3261EF8F50038A7A1 /* Picker+UIStatusBarStyle.swift */; };
 		A0E14CBD251B8FAB00A9FC32 /* Core+Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E14CBC251B8FAB00A9FC32 /* Core+Bundle.swift */; };
 		A0E8F5ED23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E8F5EC23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift */; };
@@ -424,6 +426,8 @@
 		A0C03C192331D426005F742C /* Picker+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Picker+UIColor.swift"; sourceTree = "<group>"; };
 		A0C03C1C233208D8005F742C /* MenuDropDownPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDropDownPresentationController.swift; sourceTree = "<group>"; };
 		A0C452E523D007D90087B412 /* ConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCell.swift; sourceTree = "<group>"; };
+		A0DA12FD26395F280035A3FE /* MediaSelectOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSelectOption.swift; sourceTree = "<group>"; };
+		A0DA1301263962470035A3FE /* Picker+MediaSelectOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+MediaSelectOption.swift"; sourceTree = "<group>"; };
 		A0DA72C3261EF8F50038A7A1 /* Picker+UIStatusBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIStatusBarStyle.swift"; sourceTree = "<group>"; };
 		A0DBD4F12334A20700121FC0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Picker.strings"; sourceTree = "<group>"; };
 		A0E14CBC251B8FAB00A9FC32 /* Core+Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+Bundle.swift"; sourceTree = "<group>"; };
@@ -888,6 +892,7 @@
 				A0F475412330736200BB117B /* Picker+PHAssetCollection.swift */,
 				A0C03C192331D426005F742C /* Picker+UIColor.swift */,
 				A082D24523C2D57B001F3D51 /* Picker+MediaType.swift */,
+				A0DA1301263962470035A3FE /* Picker+MediaSelectOption.swift */,
 				7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */,
 				A0DA72C3261EF8F50038A7A1 /* Picker+UIStatusBarStyle.swift */,
 			);
@@ -1071,6 +1076,7 @@
 				A068533423B596C00042A031 /* FileType.swift */,
 				A561239A23B5EDA90071C3E8 /* UserInterfaceStyle.swift */,
 				A05C8DAA233E0F56005B0F3C /* MediaType.swift */,
+				A0DA12FD26395F280035A3FE /* MediaSelectOption.swift */,
 				A0839B6C23C2DBD700FF8FDE /* VideoExportPreset.swift */,
 			);
 			path = Model;
@@ -1731,6 +1737,7 @@
 				A0513A152521A0030069C5CB /* CaptureResult.swift in Sources */,
 				71B3E94D2629898D00710A7F /* EditorCropOption.swift in Sources */,
 				A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */,
+				A0DA1302263962470035A3FE /* Picker+MediaSelectOption.swift in Sources */,
 				A09D15A3239E0FEF00F3FE77 /* CaptureButton.swift in Sources */,
 				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
 				7142FF7625591DB0003FF44D /* DryDrawingView.swift in Sources */,
@@ -1746,6 +1753,7 @@
 				A0B3A0BE253D83A4003F7134 /* DataTrackObserver.swift in Sources */,
 				A01C582D23B33CCA00691F11 /* DebugHelper.swift in Sources */,
 				A067AC1923C8105B00FF681B /* Core+CGImageSource.swift in Sources */,
+				A0DA12FE26395F280035A3FE /* MediaSelectOption.swift in Sources */,
 				A56123A323B5F43B0071C3E8 /* CaptureOptionsInfo.swift in Sources */,
 				A0839B7423C44B1A00FF8FDE /* Permission.swift in Sources */,
 				A076999E23963F270006AC9B /* Capture.swift in Sources */,
