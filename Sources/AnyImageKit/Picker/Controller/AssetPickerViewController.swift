@@ -194,14 +194,12 @@ extension AssetPickerViewController {
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)
-//        // TODO: remove
-//        album.forEach { $0.state = .unchecked }
     }
     
     private func setAlbums(_ albums: [PhotoAssetCollection]) {
         self.albums = albums.filter{ !$0.isEmpty }
         if let albumsPicker = albumsPicker {
-            albumsPicker.albums = albums
+            albumsPicker.albums = self.albums
             albumsPicker.reloadData()
         }
     }
@@ -306,13 +304,14 @@ extension AssetPickerViewController {
         guard let album = album else { return }
         let asset = album[idx]
         
-        if case .disable(let rule) = asset.state {
+        let state = manager.checkState(for: asset)
+        if case .disable(let rule) = state {
             let message = rule.alertMessage(for: asset)
             showAlert(message: message)
             return
         }
         
-        if !asset.isSelected && manager.isUpToLimit {
+        if !state.isSelected && manager.isUpToLimit {
             let message: String
             if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
                 message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS", module: .picker), manager.options.selectLimit)
@@ -325,8 +324,8 @@ extension AssetPickerViewController {
             return
         }
         
-        asset.isSelected.toggle()
-        if asset.isSelected {
+        asset.setState(.selected, manager: manager)
+        if state.isSelected {
             manager.addSelectedAsset(asset)
             updateVisibleCellState(idx)
         } else {
@@ -508,17 +507,18 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         }
         #endif
         
+        let state = manager.checkState(for: asset)
         if manager.options.selectionTapAction == .quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
             cell.selectEvent.call()
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
-        } else if case .disable(let rule) = asset.state {
+        } else if case .disable(let rule) = state {
             let message = rule.alertMessage(for: asset)
             showAlert(message: message)
             return
-        } else if !asset.isSelected && manager.isUpToLimit {
+        } else if !state.isSelected && manager.isUpToLimit {
             return
         } else {
             let controller = PhotoPreviewController(manager: manager)

@@ -13,8 +13,6 @@ public class PhotoAsset: Asset<PHAsset> {
     
     var _images: [ImageKey: UIImage] = [:]
     var videoDidDownload: Bool = false
-    
-    var state: State = .unchecked
     var selectedNum: Int = 1
 }
 
@@ -43,70 +41,6 @@ extension PhotoAsset {
     }
     
     static let cameraItemIdx: Int = -1
-}
-
-// MARK: - State
-extension PhotoAsset {
-    
-    enum State: Equatable {
-        
-        case unchecked
-        case normal
-        case selected
-        case disable(AssetDisableCheckRule)
-        
-        static func == (lhs: Self, rhs: Self) -> Bool {
-            switch (lhs, rhs) {
-            case (.unchecked, unchecked):
-                return true
-            case (.normal, normal):
-                return true
-            case (.selected, selected):
-                return true
-            case (.disable, disable):
-                return true
-            default:
-                return false
-            }
-        }
-    }
-    
-    var isUnchecked: Bool {
-        return state == .unchecked
-    }
-    
-    var isSelected: Bool {
-        get {
-            return state == .selected
-        }
-        set {
-            state = newValue ? .selected : .normal
-        }
-    }
-    
-    var isDisable: Bool {
-        switch state {
-        case .disable(_):
-            return true
-        default:
-            return false
-        }
-    }
-}
-
-// MARK: - Disable Check
-extension PhotoAsset {
-
-    func check(disable rules: [AssetDisableCheckRule]) {
-        guard isUnchecked else { return }
-        for rule in rules {
-            if rule.isDisable(for: self) {
-                state = .disable(rule)
-                return
-            }
-        }
-        state = .normal
-    }
 }
 
 extension PhotoAsset {

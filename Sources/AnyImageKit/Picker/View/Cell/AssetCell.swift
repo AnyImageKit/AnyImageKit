@@ -143,7 +143,7 @@ extension AssetCell {
 extension AssetCell {
     
     func setContent(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
-        asset.check(disable: manager.options.disableRules)
+        manager.checkState(for: asset)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
         manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
@@ -178,12 +178,13 @@ extension AssetCell {
         }
         
         if !isPreview {
-            selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
-            selectdCoverView.isHidden = !asset.isSelected
-            if asset.isDisable {
+            let state = manager.checkState(for: asset)
+            selectButton.setNum(asset.selectedNum, isSelected: state.isSelected, animated: animated)
+            selectdCoverView.isHidden = !state.isSelected
+            if state.isDisable {
                 disableCoverView.isHidden = false
             } else {
-                disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
+                disableCoverView.isHidden = !(manager.isUpToLimit && !state.isSelected)
             }
         }
     }

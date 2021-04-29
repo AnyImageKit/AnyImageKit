@@ -104,10 +104,8 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         cell.setImage(photo)
         
         // 选择当前照片
-        if !manager.isUpToLimit {
-            if !data.asset.isSelected {
-                selectButtonTapped(navigationBar.selectButton)
-            }
+        if !manager.isUpToLimit, !manager.checkState(for: data.asset).isSelected {
+            selectButtonTapped(navigationBar.selectButton)
         }
     }
 }

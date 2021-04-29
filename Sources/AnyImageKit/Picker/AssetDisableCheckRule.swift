@@ -6,12 +6,12 @@
 //  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
 //
 
-import Foundation
+import Photos
 
 public protocol AssetDisableCheckRule {
     
-    func isDisable(for asset: PhotoAsset) -> Bool
-    func alertMessage(for asset: PhotoAsset) -> String
+    func isDisable(for asset: Asset<PHAsset>) -> Bool
+    func alertMessage(for asset: Asset<PHAsset>) -> String
 }
 
 public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
@@ -24,12 +24,12 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
         self.maxDuration = max
     }
     
-    public func isDisable(for asset: PhotoAsset) -> Bool {
+    public func isDisable(for asset: Asset<PHAsset>) -> Bool {
         guard asset.mediaType.isVideo else { return false }
         return asset.duration < minDuration || asset.duration > maxDuration
     }
     
-    public func alertMessage(for asset: PhotoAsset) -> String {
+    public func alertMessage(for asset: Asset<PHAsset>) -> String {
         let message = BundleHelper.localizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE", module: .picker)
         return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }

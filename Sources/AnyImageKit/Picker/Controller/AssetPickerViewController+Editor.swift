@@ -13,8 +13,8 @@ import UIKit
 extension AssetPickerViewController {
     
     func canOpenEditor(with asset: PhotoAsset) -> Bool {
-        asset.check(disable: manager.options.disableRules)
-        if case .disable(let rule) = asset.state {
+        let state = manager.checkState(for: asset)
+        if case .disable(let rule) = state {
             let message = rule.alertMessage(for: asset)
             showAlert(message: message)
             return false
@@ -91,7 +91,8 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
         let asset = album[editor.tag]
         asset._images[.edited] = result.isEdited ? photo : nil
         cell.setContent(asset, manager: manager)
-        if !asset.isSelected { // Select
+        let state = manager.checkState(for: asset)
+        if !state.isSelected { // Select
             selectItem(editor.tag)
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)

@@ -146,6 +146,8 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     deinit {
+        let indexPaths = collectionView.indexPathsForVisibleItems
+        
         for cell in collectionView.visibleCells {
             if let cell = cell as? PreviewCell, !cell.asset.isSelected {
                 manager.cancelFetch(for: cell.asset.identifier)
