@@ -9,9 +9,13 @@
 import UIKit
 import Photos
 
-protocol PhotoPreviewControllerDataSource: AnyObject {
+struct PreviewData {
     
-    typealias PreviewData = (thumbnail: UIImage?, asset: PhotoAsset)
+    let thumbnail: UIImage?
+    let asset: PhotoAsset
+}
+
+protocol PhotoPreviewControllerDataSource: AnyObject {
     
     /// 获取需要展示图片的数量
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int

@@ -31,7 +31,7 @@ extension FetchResult: Sequence {
 }
 
 // MARK: - Collection
-extension FetchResult: Collection {
+extension FetchResult: Collection, BidirectionalCollection {
     
     var startIndex: Int {
         return 0
@@ -41,8 +41,12 @@ extension FetchResult: Collection {
         return phFetchResult.count
     }
     
+    func index(before i: Int) -> Int {
+        return i - 1
+    }
+    
     func index(after i: Int) -> Int {
-        return  i + 1
+        return i + 1
     }
     
     subscript(position: Int) -> Element {
@@ -51,13 +55,5 @@ extension FetchResult: Collection {
     
     subscript(bounds: IndexSet) -> [Element] {
         return phFetchResult.objects(at: bounds)
-    }
-}
-
-// MARK: - BidirectionalCollection
-extension FetchResult: BidirectionalCollection {
-    
-    func index(before i: Int) -> Int {
-        return i - 1
     }
 }

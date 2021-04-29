@@ -28,7 +28,7 @@ struct PhotoAssetCollection: AssetCollection {
     
     init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additionOption: AssetCollectionAdditionOption) {
         self.identifier = identifier
-        self.localizedTitle = localizedTitle ?? identifier
+        self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
         self.fetchOrder = fetchOrder
         self.isUserLibrary = isUserLibrary
@@ -55,7 +55,7 @@ extension PhotoAssetCollection: Sequence {
 }
 
 // MARK: - Collection
-extension PhotoAssetCollection: Collection {
+extension PhotoAssetCollection: Collection, BidirectionalCollection {
 
     var startIndex: Int {
         return 0
@@ -64,9 +64,13 @@ extension PhotoAssetCollection: Collection {
     var endIndex: Int {
         return fetchResult.count
     }
+    
+    func index(before i: Int) -> Int {
+        return i - 1
+    }
 
     func index(after i: Int) -> Int {
-        return  i + 1
+        return i + 1
     }
 
     subscript(position: Int) -> PhotoAsset {
@@ -78,13 +82,6 @@ extension PhotoAssetCollection: Collection {
         return fetchResult[bounds].map {
             PhotoAsset(phAsset: $0, selectOption: selectOption)
         }
-    }
-}
-
-extension PhotoAssetCollection: BidirectionalCollection {
-    
-    func index(before i: Int) -> Int {
-        return i - 1
     }
 }
 

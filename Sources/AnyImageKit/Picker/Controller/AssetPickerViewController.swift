@@ -29,9 +29,6 @@ final class AssetPickerViewController: AnyImageViewController {
     private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
     
-    @available(iOS 14.0, *)
-    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, PhotoAsset>()
-    
     lazy var stopReloadAlbum: Bool = false
     
     private lazy var titleView: PickerArrowButton = {
@@ -52,13 +49,9 @@ final class AssetPickerViewController: AnyImageViewController {
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
         view.backgroundColor = manager.options.theme[color: .background]
-        if #available(iOS 14.0, *) {
-            
-        } else {
-            view.registerCell(AssetCell.self)
-            view.registerCell(CameraCell.self)
-            view.dataSource = self
-        }
+        view.registerCell(AssetCell.self)
+        view.registerCell(CameraCell.self)
+        view.dataSource = self
         view.delegate = self
         return view
     }()
@@ -101,9 +94,6 @@ final class AssetPickerViewController: AnyImageViewController {
         addNotifications()
         setupNavigation()
         setupView()
-        if #available(iOS 14.0, *) {
-            setupDataSource()
-        }
         checkPermission()
         update(options: manager.options)
     }
@@ -183,7 +173,7 @@ extension AssetPickerViewController {
             guard let self = self else { return }
             self.setAlbum(album)
             self.preselectAssets()
-            self.reloadData(animated: false)
+            self.collectionView.reloadData()
             self.scrollToEnd()
             self.autoScrollToLatest = true
             self.preLoadAlbums()
@@ -252,7 +242,7 @@ extension AssetPickerViewController {
         
         self.album = album
         
-        reloadData()
+        collectionView.reloadData()
         if manager.options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: true)
         } else {
@@ -360,7 +350,7 @@ extension AssetPickerViewController {
         let visibleCellRows = collectionView.visibleCells.map{ $0.tag }.sorted()
         let row = visibleCellRows[visibleCellRows.count / 2]
         let indexPath = IndexPath(row: row, section: 0)
-        reloadData(animated: false)
+        collectionView.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
         }
@@ -502,14 +492,8 @@ extension AssetPickerViewController: UICollectionViewDataSource {
 extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let asset: PhotoAsset
-        if #available(iOS 14.0, *) {
-            guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-            asset = item
-        } else {
-            guard let album = album else { return }
-            asset = album[indexPath.item]
-        }
+        guard let album = album else { return }
+        let asset = album[indexPath.item]
         
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera { // 点击拍照 Item
@@ -576,7 +560,7 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: PhotoAssetCollection) {
         setAlbum(album)
-        reloadData(animated: false)
+        collectionView.reloadData()
         scrollToEnd()
     }
     
@@ -591,18 +575,13 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if album.isUserLibrary && !manager.options.captureOptions.mediaOptions.isEmpty {
-            return album.count - 1
-        }
-        #endif
-        return album.count
+        return album.fetchResult.count
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
         let indexPath = IndexPath(item: index, section: 0)
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-        return (cell?.image, album![index])
+        return PreviewData(thumbnail: cell?.image, asset: album![index])
     }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
@@ -635,13 +614,14 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
         let indexPath = IndexPath(item: controller.currentIndex, section: 0)
-        reloadData(animated: false)
+        collectionView.reloadData()
         if !(collectionView.visibleCells.map{ $0.tag }).contains(controller.currentIndex) {
             collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
         }
     }
 }
 
+/*
 // MARK: - UICollectionViewDiffable
 extension AssetPickerViewController {
     
@@ -701,3 +681,4 @@ extension AssetPickerViewController {
         }
     }
 }
+*/
