@@ -204,8 +204,8 @@ extension AssetPickerViewController {
         manager.removeAllSelectedAsset()
         manager.cancelAllFetch()
         toolBar.setEnable(false)
-        // TODO: remove
-        album.forEach { $0.state = .unchecked }
+//        // TODO: remove
+//        album.forEach { $0.state = .unchecked }
     }
     
     private func setAlbums(_ albums: [PhotoAssetCollection]) {
@@ -220,10 +220,8 @@ extension AssetPickerViewController {
         manager.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
             self.setAlbums(albums)
-            if let identifier = self.album?.identifier {
-                if let idx = (albums.firstIndex { $0.identifier == identifier }) {
-                    self.updateAlbum(albums[idx])
-                }
+            if let album = self.album {
+                self.updateAlbum(album)
             }
         }
     }
@@ -240,7 +238,7 @@ extension AssetPickerViewController {
     private func updateAlbum(_ album: PhotoAssetCollection) {
         // Update selected assets
         for asset in manager.selectedAssets.reversed() {
-            if !(album.contains { $0 == asset }) {
+            if !album.contains(where: { $0 == asset }) {
                 manager.removeSelectedAsset(asset)
             }
         }
