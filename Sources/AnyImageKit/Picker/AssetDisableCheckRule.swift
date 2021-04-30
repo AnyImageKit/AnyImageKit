@@ -26,7 +26,7 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
     
     public func isDisable(for asset: Asset<PHAsset>) -> Bool {
         guard asset.mediaType.isVideo else { return false }
-        return asset.duration < minDuration || asset.duration > maxDuration
+        return asset.phAsset.duration < minDuration || asset.phAsset.duration > maxDuration
     }
     
     public func alertMessage(for asset: Asset<PHAsset>) -> String {

@@ -152,7 +152,11 @@ extension AssetCell {
                 guard asset.identifier == response.identifier else { return }
                 self.imageView.image = asset._image ?? response.image
                 if asset.mediaType == .video && !isPreview {
-                    self.videoView.setVideoTime(asset.durationDescription)
+                    let time = Int(asset.phAsset.duration)
+                    let min = time / 60
+                    let sec = time % 60
+                    let description = String(format: "%02ld:%02ld", min, sec)
+                    self.videoView.setVideoTime(description)
                 }
             case .failure(let error):
                 _print(error)
