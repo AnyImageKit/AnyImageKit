@@ -37,4 +37,8 @@ extension PickerManager {
         states[asset.identifier] = newState
         return newState
     }
+    
+    func selectedNum(for asset: PhotoAsset) -> Int {
+        return selectedAssets.firstIndex(of: asset) ?? 0
+    }
 }

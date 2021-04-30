@@ -304,7 +304,8 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         let state = manager.checkState(for: data.asset)
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: state.isSelected, animated: false)
+        let selectedNum = manager.selectedNum(for: data.asset)
+        navigationBar.selectButton.setNum(selectedNum, isSelected: state.isSelected, animated: false)
         indexView.currentIndex = currentIndex
         
         if manager.options.allowUseOriginalImage {
@@ -356,14 +357,15 @@ extension PhotoPreviewController {
         }
         
         let newState = manager.updateState(for: data.asset, isSelected: !sender.isSelected)
-        if state.isSelected {
+        if newState.isSelected {
             manager.addSelectedAsset(data.asset)
             delegate?.previewController(self, didSelected: currentIndex)
         } else {
             manager.removeSelectedAsset(data.asset)
             delegate?.previewController(self, didDeselected: currentIndex)
         }
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: state.isSelected, animated: true)
+        let selectedNum = manager.selectedNum(for: data.asset)
+        navigationBar.selectButton.setNum(selectedNum, isSelected: newState.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
     }
     

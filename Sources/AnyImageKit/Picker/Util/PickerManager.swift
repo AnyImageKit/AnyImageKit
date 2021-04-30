@@ -112,7 +112,6 @@ extension PickerManager {
         if selectedAssets.count == options.selectLimit { return false }
         selectedAssets.append(asset)
         updateState(for: asset, isSelected: true)
-        asset.selectedNum = selectedAssets.count
         syncAsset(asset)
         return true
     }
@@ -120,11 +119,6 @@ extension PickerManager {
     @discardableResult
     func removeSelectedAsset(_ asset: PhotoAsset) -> Bool {
         guard let idx = selectedAssets.firstIndex(where: { $0 == asset }) else { return false }
-        for item in selectedAssets {
-            if item.selectedNum > asset.selectedNum {
-                item.selectedNum -= 1
-            }
-        }
         selectedAssets.remove(at: idx)
         updateState(for: asset, isSelected: false)
         asset._images[.initial] = nil

@@ -183,7 +183,8 @@ extension AssetCell {
         
         if !isPreview {
             let state = manager.checkState(for: asset)
-            selectButton.setNum(asset.selectedNum, isSelected: state.isSelected, animated: animated)
+            let selectedNum = manager.selectedNum(for: asset)
+            selectButton.setNum(selectedNum, isSelected: state.isSelected, animated: animated)
             selectdCoverView.isHidden = !state.isSelected
             if state.isDisable {
                 disableCoverView.isHidden = false

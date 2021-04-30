@@ -13,7 +13,6 @@ public class PhotoAsset: Asset<PHAsset> {
     
     var _images: [ImageKey: UIImage] = [:]
     var videoDidDownload: Bool = false
-    var selectedNum: Int = 1
 }
 
 extension PhotoAsset {
