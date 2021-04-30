@@ -61,7 +61,7 @@ extension PickerResultViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as! PickerPreviewCell
-        cell.imageView.image = assets[indexPath.item].image
+//        cell.imageView.image = assets[indexPath.item].image
         cell.titleLabel.text = assets[indexPath.item].mediaType.description
         return cell
     }

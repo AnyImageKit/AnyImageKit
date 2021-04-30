@@ -18,6 +18,10 @@ extension Asset where Resource == PHAsset {
     public var phAsset: PHAsset {
         return resource
     }
+    
+    var isCamera: Bool {
+        return false
+    }
 }
 
 // MARK: - Image

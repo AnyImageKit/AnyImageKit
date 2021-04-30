@@ -152,17 +152,17 @@ extension ImagePickerController {
         workQueue.async { [weak self] in
             guard let self = self else { return }
             let assets = self.manager.selectedAssets
-            let isReady = assets.filter{ !$0.isReady }.isEmpty
-            if !isReady && !assets.isEmpty { return }
-            self.saveEditPhotos(assets) { newAssets in
-                self.resizeImagesIfNeeded(newAssets)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    _hideHUD(self)
-                    let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
-                    self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
-                }
-            }
+//            let isReady = assets.filter{ !$0.isReady }.isEmpty
+//            if !isReady && !assets.isEmpty { return }
+//            self.saveEditPhotos(assets) { newAssets in
+//                self.resizeImagesIfNeeded(newAssets)
+//                DispatchQueue.main.async { [weak self] in
+//                    guard let self = self else { return }
+//                    _hideHUD(self)
+//                    let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
+//                    self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
+//                }
+//            }
         }
     }
     
@@ -176,18 +176,18 @@ extension ImagePickerController {
         let selectOptions = manager.options.selectOptions
         let group = DispatchGroup()
         for (idx, asset) in assets.enumerated() {
-            guard let editedImage = asset._images[.edited] else { continue }
-            group.enter()
-            manager.savePhoto(image: editedImage) { result in
-                switch result {
-                case .success(let newAsset):
-                    assets[idx] = PhotoAsset(phAsset: newAsset, selectOption: selectOptions)
-                    assets[idx]._images[.initial] = editedImage
-                case .failure(let error):
-                    _print(error)
-                }
-                group.leave()
-            }
+//            guard let editedImage = asset._images[.edited] else { continue }
+//            group.enter()
+//            manager.savePhoto(image: editedImage) { result in
+//                switch result {
+//                case .success(let newAsset):
+//                    assets[idx] = PhotoAsset(phAsset: newAsset, selectOption: selectOptions)
+//                    assets[idx]._images[.initial] = editedImage
+//                case .failure(let error):
+//                    _print(error)
+//                }
+//                group.leave()
+//            }
         }
         group.notify(queue: workQueue) {
             completion(assets)
@@ -201,20 +201,20 @@ extension ImagePickerController {
         if !manager.useOriginalImage {
             let limitSize = CGSize(width: manager.options.photoMaxWidth,
                                    height: manager.options.photoMaxWidth)
-            assets.forEach {
-                if let image = $0._image, image.size != .zero  {
-                    let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
-                    $0._images[.output] = resizedImage
-                    $0._images[.edited] = nil
-                    $0._images[.initial] = nil
-                }
-            }
+//            assets.forEach {
+//                if let image = $0._image, image.size != .zero  {
+//                    let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
+//                    $0._images[.output] = resizedImage
+//                    $0._images[.edited] = nil
+//                    $0._images[.initial] = nil
+//                }
+//            }
         } else {
-            assets.forEach {
-                $0._images[.output] = $0._image
-                $0._images[.edited] = nil
-                $0._images[.initial] = nil
-            }
+//            assets.forEach {
+//                $0._images[.output] = $0._image
+//                $0._images[.edited] = nil
+//                $0._images[.initial] = nil
+//            }
         }
     }
 }

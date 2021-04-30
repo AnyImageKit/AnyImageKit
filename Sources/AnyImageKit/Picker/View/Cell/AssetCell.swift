@@ -150,7 +150,7 @@ extension AssetCell {
             switch result {
             case .success(let response):
                 guard asset.identifier == response.identifier else { return }
-                self.imageView.image = asset._image ?? response.image
+                self.imageView.image = response.image
                 if asset.mediaType == .video && !isPreview {
                     let time = Int(asset.phAsset.duration)
                     let min = time / 60
@@ -168,9 +168,9 @@ extension AssetCell {
     
     func updateState(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         update(options: manager.options)
-        if asset._images[.edited] != nil {
-            editedView.isHidden = false
-        } else {
+//        if asset._images[.edited] != nil {
+//            editedView.isHidden = false
+//        } else {
             switch asset.mediaType {
             case .photoGIF:
                 gifView.isHidden = false
@@ -179,7 +179,7 @@ extension AssetCell {
             default:
                 break
             }
-        }
+//        }
         
         if !isPreview {
             let state = manager.checkState(for: asset)

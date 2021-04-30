@@ -121,7 +121,6 @@ extension PickerManager {
         guard let idx = selectedAssets.firstIndex(where: { $0 == asset }) else { return false }
         selectedAssets.remove(at: idx)
         updateState(for: asset, isSelected: false)
-        asset._images[.initial] = nil
         return true
     }
     
@@ -134,7 +133,6 @@ extension PickerManager {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载
             if let image = cache.retrieveImage(forKey: asset.identifier) {
-                asset._images[.initial] = image
                 self.didSyncAsset()
             } else {
                 workQueue.async { [weak self] in
@@ -144,7 +142,6 @@ extension PickerManager {
                         switch result {
                         case .success(let response):
                             if !response.isDegraded {
-                                asset._images[.initial] = response.image
                                 self.didSyncAsset()
                             }
                         case .failure(let error):
@@ -163,19 +160,21 @@ extension PickerManager {
                 guard let self = self else { return }
                 let options = _PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
                 self.requestPhoto(for: asset.phAsset, options: options, completion: { result in
-                    switch result {
-                    case .success(let response):
-                        asset._images[.initial] = response.image
-                    case .failure:
-                        break
-                    }
+//                    switch result {
+//                    case .success(let response):
+//                        break
+//                        // TODO:
+////                        asset._images[.initial] = response.image
+//                    case .failure:
+//                        break
+//                    }
                 })
                 // 同步请求图片
                 self.requestVideo(for: asset.phAsset) { [weak self] result in
                     guard let self = self else { return }
                     switch result {
                     case .success(_):
-                        asset.videoDidDownload = true
+//                        asset.videoDidDownload = true
                         self.didSyncAsset()
                     case .failure(let error):
                         self.lock.lock()
@@ -203,9 +202,9 @@ extension PickerManager {
 extension PickerManager {
     
     private func didSyncAsset() {
-        let isReady = selectedAssets.filter{ !$0.isReady }.isEmpty
-        if isReady {
-            NotificationCenter.default.post(name: .didSyncAsset, object: nil)
-        }
+//        let isReady = selectedAssets.filter{ !$0.isReady }.isEmpty
+//        if isReady {
+//            NotificationCenter.default.post(name: .didSyncAsset, object: nil)
+//        }
     }
 }

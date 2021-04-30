@@ -82,7 +82,7 @@ extension AvatarPickerController: ImagePickerControllerDelegate {
     func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
         picker.dismiss(animated: true, completion: nil)
         let controller = EditorResultViewController()
-        controller.imageView.image = result.assets.first!.image
+//        controller.imageView.image = result.assets.first!.image
         show(controller, sender: nil)
     }
 }

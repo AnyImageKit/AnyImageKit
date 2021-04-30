@@ -29,9 +29,9 @@ extension AssetPickerViewController {
     
     func openEditor(with asset: PhotoAsset, indexPath: IndexPath) {
         if asset.phAsset.mediaType == .image {
-            if let image = asset._images[.initial] {
-                showEditor(image, identifier: asset.identifier, tag: indexPath.item)
-            } else {
+//            if let image = asset._images[.initial] {
+//                showEditor(image, identifier: asset.identifier, tag: indexPath.item)
+//            } else {
                 showWaitHUD(BundleHelper.localizedString(key: "LOADING", module: .core))
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
                     DispatchQueue.main.async { [weak self] in
@@ -52,13 +52,13 @@ extension AssetPickerViewController {
                         _print(error)
                     }
                 }
-            }
+//            }
         } else if asset.phAsset.mediaType == .video {
             manager.cancelFetch(for: asset.identifier)
             var videoOptions = manager.options.editorVideoOptions
             videoOptions.enableDebugLog = manager.options.enableDebugLog
-            let image = asset._images[.initial]
-            let controller = ImageEditorController(video: asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
+//            let image = asset._images[.initial]
+            let controller = ImageEditorController(video: asset.phAsset, placeholderImage: nil, options: videoOptions, delegate: self)
             present(controller, animated: false, completion: nil)
         }
     }
@@ -89,7 +89,7 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
         guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? AssetCell else { return }
         
         let asset = album[editor.tag]
-        asset._images[.edited] = result.isEdited ? photo : nil
+//        asset._images[.edited] = result.isEdited ? photo : nil
         cell.setContent(asset, manager: manager)
         let state = manager.checkState(for: asset)
         if !state.isSelected { // Select

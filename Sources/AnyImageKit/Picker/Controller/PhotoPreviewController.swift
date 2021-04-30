@@ -443,17 +443,12 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
         switch cell {
         case let cell as PhotoPreviewCell:
-            if data.asset._image != nil {
-                cell.setImage(data.asset._image)
+            if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
+                cell.setImage(originalImage)
                 cell.setDownloadingProgress(1.0)
             } else {
-                if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
-                    cell.setImage(originalImage)
-                    cell.setDownloadingProgress(1.0)
-                } else {
-                    cell.setImage(data.thumbnail)
-                    cell.requestPhoto()
-                }
+                cell.setImage(data.thumbnail)
+                cell.requestPhoto()
             }
         case let cell as VideoPreviewCell:
             if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {

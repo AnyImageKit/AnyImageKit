@@ -16,9 +16,9 @@ extension PhotoPreviewController {
     @objc func editButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if data.asset.phAsset.mediaType == .image {
-            if let image = data.asset._images[.initial] {
-                showEditor(image, identifier: data.asset.identifier)
-            } else {
+//            if let image = data.asset._images[.initial] {
+//                showEditor(image, identifier: data.asset.identifier)
+//            } else {
                 showWaitHUD()
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth))
                 manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
@@ -34,13 +34,13 @@ extension PhotoPreviewController {
                         _print(error)
                     }
                 }
-            }
+//            }
         } else if data.asset.phAsset.mediaType == .video {
             manager.cancelFetch(for: data.asset.identifier)
             var videoOptions = manager.options.editorVideoOptions
             videoOptions.enableDebugLog = manager.options.enableDebugLog
-            let image = data.asset._images[.initial] ?? data.thumbnail
-            let controller = ImageEditorController(video: data.asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
+//            let image = data.asset._images[.initial] ?? data.thumbnail
+            let controller = ImageEditorController(video: data.asset.phAsset, placeholderImage: nil, options: videoOptions, delegate: self)
             present(controller, animated: false, completion: nil)
         }
     }
@@ -100,7 +100,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         guard let photo = UIImage(data: photoData) else { return }
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PhotoPreviewCell else { return }
-        data.asset._images[.edited] = result.isEdited ? photo : nil
+//        data.asset._images[.edited] = result.isEdited ? photo : nil
         cell.setImage(photo)
         
         // 选择当前照片
