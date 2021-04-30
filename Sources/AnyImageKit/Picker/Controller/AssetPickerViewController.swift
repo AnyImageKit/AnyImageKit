@@ -324,8 +324,8 @@ extension AssetPickerViewController {
             return
         }
         
-        asset.setState(.selected, manager: manager)
-        if state.isSelected {
+        let newState = manager.updateState(for: asset, isSelected: true)
+        if newState.isSelected {
             manager.addSelectedAsset(asset)
             updateVisibleCellState(idx)
         } else {

@@ -146,12 +146,11 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     deinit {
-        let indexPaths = collectionView.indexPathsForVisibleItems
-        
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.identifier)
-            }
+        let assets = collectionView.indexPathsForVisibleItems
+            .compactMap { dataSource?.previewController(self, assetOfIndex: $0.item).asset }
+            .filter { !manager.checkState(for: $0).isSelected }
+        assets.forEach {
+            manager.cancelFetch(for: $0.identifier)
         }
     }
     
@@ -304,7 +303,8 @@ extension PhotoPreviewController {
     private func didSetCurrentIdx() {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
+        let state = manager.checkState(for: data.asset)
+        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: state.isSelected, animated: false)
         indexView.currentIndex = currentIndex
         
         if manager.options.allowUseOriginalImage {
@@ -335,13 +335,14 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if case .disable(let rule) = data.asset.state {
+        let state = manager.checkState(for: data.asset)
+        if case .disable(let rule) = state {
             let message = rule.alertMessage(for: data.asset)
             showAlert(message: message)
             return
         }
         
-        if !data.asset.isSelected && manager.isUpToLimit {
+        if !state.isSelected && manager.isUpToLimit {
             let message: String
             if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
                 message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS", module: .picker), manager.options.selectLimit)
@@ -354,15 +355,15 @@ extension PhotoPreviewController {
             return
         }
         
-        data.asset.isSelected = !sender.isSelected
-        if data.asset.isSelected {
+        let newState = manager.updateState(for: data.asset, isSelected: !sender.isSelected)
+        if state.isSelected {
             manager.addSelectedAsset(data.asset)
             delegate?.previewController(self, didSelected: currentIndex)
         } else {
             manager.removeSelectedAsset(data.asset)
             delegate?.previewController(self, didDeselected: currentIndex)
         }
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
+        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: state.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
     }
     
@@ -375,7 +376,8 @@ extension PhotoPreviewController {
         // 选择当前照片
         if manager.useOriginalImage && !manager.isUpToLimit {
             guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-            if !data.asset.isSelected {
+            let state = manager.checkState(for: data.asset)
+            if !state.isSelected {
                 selectButtonTapped(navigationBar.selectButton)
             }
         }
@@ -384,7 +386,8 @@ extension PhotoPreviewController {
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if case .disable(let rule) = data.asset.state {
+        let state = manager.checkState(for: data.asset)
+        if case .disable(let rule) = state {
             let message = rule.alertMessage(for: data.asset)
             showAlert(message: message)
             return
@@ -407,7 +410,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
         let cell: PreviewCell
-        data.asset.check(disable: manager.options.disableRules)
+        manager.checkState(for: data.asset)
         switch data.asset.mediaType {
         case .photo:
             let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
@@ -474,7 +477,9 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         switch cell {
         case let cell as PreviewCell:
             cell.reset()
-            if !cell.asset.isSelected {
+            guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.item) else { return }
+            let state = manager.checkState(for: data.asset)
+            if !state.isSelected {
                 manager.cancelFetch(for: cell.asset.identifier)
             }
         default:

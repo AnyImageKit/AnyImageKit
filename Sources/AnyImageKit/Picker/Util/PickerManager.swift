@@ -111,7 +111,7 @@ extension PickerManager {
         if selectedAssets.contains(asset) { return false }
         if selectedAssets.count == options.selectLimit { return false }
         selectedAssets.append(asset)
-        asset.isSelected = true
+        updateState(for: asset, isSelected: true)
         asset.selectedNum = selectedAssets.count
         syncAsset(asset)
         return true
@@ -126,7 +126,7 @@ extension PickerManager {
             }
         }
         selectedAssets.remove(at: idx)
-        asset.isSelected = false
+        updateState(for: asset, isSelected: false)
         asset._images[.initial] = nil
         return true
     }

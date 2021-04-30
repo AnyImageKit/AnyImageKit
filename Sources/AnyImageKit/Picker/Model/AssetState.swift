@@ -10,7 +10,6 @@ import Foundation
 
 enum AssetState {
     
-    case unchecked
     case normal
     case selected
     case disable(AssetDisableCheckRule)
@@ -20,8 +19,6 @@ extension AssetState: Equatable {
     
     static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
-        case (.unchecked, unchecked):
-            return true
         case (.normal, normal):
             return true
         case (.selected, selected):
@@ -35,10 +32,6 @@ extension AssetState: Equatable {
 }
 
 extension AssetState {
-    
-    var isUnchecked: Bool {
-        return self == .unchecked
-    }
     
     var isSelected: Bool {
         return self == .selected

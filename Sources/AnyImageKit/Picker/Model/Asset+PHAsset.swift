@@ -31,13 +31,6 @@ extension Asset where Resource == PHAsset {
     }
 }
 
-extension Asset where Resource == PHAsset {
-    
-    func setState(_ state: AssetState, manager: PickerManager) {
-        manager.states[identifier] = state
-    }
-}
-
 // MARK: - Image
 extension Asset where Resource == PHAsset {
     

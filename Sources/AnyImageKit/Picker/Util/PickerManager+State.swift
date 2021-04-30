@@ -17,12 +17,24 @@ extension PickerManager {
         } else {
             for rule in options.disableRules {
                 if rule.isDisable(for: asset) {
-                    states[asset.identifier] = .disable(rule)
-                    return .disable(rule)
+                    return updateState(for: asset, disable: rule)
                 }
             }
-            states[asset.identifier] = .normal
-            return .normal
+            return updateState(for: asset, isSelected: false)
         }
+    }
+    
+    @discardableResult
+    func updateState(for asset: Asset<PHAsset>, isSelected: Bool) -> AssetState {
+        let newState: AssetState = isSelected ? .selected : .normal
+        states[asset.identifier] = newState
+        return newState
+    }
+    
+    @discardableResult
+    func updateState(for asset: Asset<PHAsset>, disable rule: AssetDisableCheckRule) -> AssetState {
+        let newState: AssetState = .disable(rule)
+        states[asset.identifier] = newState
+        return newState
     }
 }
