@@ -324,7 +324,7 @@ extension AssetPickerViewController {
             return
         }
         
-        let newState = manager.updateState(for: asset, isSelected: true)
+        let newState = manager.updateState(for: asset, isSelected: !state.isSelected)
         if newState.isSelected {
             manager.addSelectedAsset(asset)
             updateVisibleCellState(idx)
@@ -551,7 +551,6 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
         }
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
-            
     }
 }
 

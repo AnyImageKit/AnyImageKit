@@ -39,6 +39,6 @@ extension PickerManager {
     }
     
     func selectedNum(for asset: PhotoAsset) -> Int {
-        return selectedAssets.firstIndex(of: asset) ?? 0
+        return (selectedAssets.firstIndex(of: asset) ?? 0) + 1
     }
 }
