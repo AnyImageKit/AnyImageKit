@@ -28,9 +28,9 @@ final class PickerManager {
     var states: [String: AssetState] = [:]
     
     /// 已选中的资源
-    private(set) var selectedAssets: [PhotoAsset] = []
+    private(set) var selectedAssets: [Asset<PHAsset>] = []
     /// 获取失败的资源
-    private var failedAssets: [PhotoAsset] = []
+    private var failedAssets: [Asset<PHAsset>] = []
     /// 管理 failedAssets 队列的锁
     private let lock: NSLock = .init()
     
@@ -107,7 +107,7 @@ extension PickerManager {
 extension PickerManager {
     
     @discardableResult
-    func addSelectedAsset(_ asset: PhotoAsset) -> Bool {
+    func addSelectedAsset(_ asset: Asset<PHAsset>) -> Bool {
         if selectedAssets.contains(asset) { return false }
         if selectedAssets.count == options.selectLimit { return false }
         selectedAssets.append(asset)
@@ -117,7 +117,7 @@ extension PickerManager {
     }
     
     @discardableResult
-    func removeSelectedAsset(_ asset: PhotoAsset) -> Bool {
+    func removeSelectedAsset(_ asset: Asset<PHAsset>) -> Bool {
         guard let idx = selectedAssets.firstIndex(where: { $0 == asset }) else { return false }
         selectedAssets.remove(at: idx)
         updateState(for: asset, isSelected: false)
@@ -128,7 +128,7 @@ extension PickerManager {
         selectedAssets.removeAll()
     }
     
-    func syncAsset(_ asset: PhotoAsset) {
+    func syncAsset(_ asset: Asset<PHAsset>) {
         switch asset.mediaType {
         case .photo, .photoGIF, .photoLive:
             // 勾选图片就开始加载

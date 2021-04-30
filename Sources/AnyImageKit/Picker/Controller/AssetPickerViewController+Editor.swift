@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import Photos
 
 #if ANYIMAGEKIT_ENABLE_EDITOR
 
 extension AssetPickerViewController {
     
-    func canOpenEditor(with asset: PhotoAsset) -> Bool {
+    func canOpenEditor(with asset: Asset<PHAsset>) -> Bool {
         let state = manager.checkState(for: asset)
         if case .disable(let rule) = state {
             let message = rule.alertMessage(for: asset)
@@ -27,7 +28,7 @@ extension AssetPickerViewController {
         return false
     }
     
-    func openEditor(with asset: PhotoAsset, indexPath: IndexPath) {
+    func openEditor(with asset: Asset<PHAsset>, indexPath: IndexPath) {
         if asset.phAsset.mediaType == .image {
 //            if let image = asset._images[.initial] {
 //                showEditor(image, identifier: asset.identifier, tag: indexPath.item)

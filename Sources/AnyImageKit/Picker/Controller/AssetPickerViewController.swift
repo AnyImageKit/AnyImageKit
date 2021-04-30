@@ -273,7 +273,7 @@ extension AssetPickerViewController {
     
     private func preselectAssets() {
         let preselectAssets = manager.options.preselectAssets
-        var selectedAssets: [PhotoAsset] = []
+        var selectedAssets: [Asset<PHAsset>] = []
         if preselectAssets.isEmpty { return }
         // TODO:
 //        for asset in (album ?? []).reversed() {

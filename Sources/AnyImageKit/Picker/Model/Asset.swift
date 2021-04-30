@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-public class Asset<Resource: IdentifiableResource> {
+public struct Asset<Resource: IdentifiableResource> {
     
     public let resource: Resource
     public let mediaType: MediaType

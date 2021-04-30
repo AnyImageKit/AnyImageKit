@@ -10,7 +10,7 @@ import Photos
 
 extension Asset where Resource == PHAsset {
     
-    convenience init(phAsset: PHAsset, selectOption: MediaSelectOption) {
+    init(phAsset: PHAsset, selectOption: MediaSelectOption) {
         let mediaType = MediaType(phAsset: phAsset, selectOption: selectOption)
         self.init(resource: phAsset, mediaType: mediaType)
     }

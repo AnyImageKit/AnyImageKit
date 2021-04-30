@@ -12,7 +12,7 @@ import Photos
 struct PreviewData {
     
     let thumbnail: UIImage?
-    let asset: PhotoAsset
+    let asset: Asset<PHAsset>
 }
 
 protocol PhotoPreviewControllerDataSource: AnyObject {

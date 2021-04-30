@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 import Kingfisher
 
 final class AssetCell: UICollectionViewCell {
@@ -142,7 +143,7 @@ extension AssetCell {
 
 extension AssetCell {
     
-    func setContent(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+    func setContent(_ asset: Asset<PHAsset>, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         manager.checkState(for: asset)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
         manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
@@ -166,7 +167,7 @@ extension AssetCell {
         updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+    func updateState(_ asset: Asset<PHAsset>, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         update(options: manager.options)
 //        if asset._images[.edited] != nil {
 //            editedView.isHidden = false

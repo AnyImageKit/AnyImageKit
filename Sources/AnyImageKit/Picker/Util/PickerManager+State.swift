@@ -38,7 +38,7 @@ extension PickerManager {
         return newState
     }
     
-    func selectedNum(for asset: PhotoAsset) -> Int {
+    func selectedNum(for asset: Asset<PHAsset>) -> Int {
         return (selectedAssets.firstIndex(of: asset) ?? 0) + 1
     }
 }

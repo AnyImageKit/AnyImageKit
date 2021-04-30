@@ -40,13 +40,13 @@ struct PhotoAssetCollection: AssetCollection {
 // MARK: - Sequence
 extension PhotoAssetCollection: Sequence {
 
-    func makeIterator() -> AnyIterator<PhotoAsset> {
+    func makeIterator() -> AnyIterator<Asset<PHAsset>> {
         var count = 0
-        return AnyIterator<PhotoAsset> {
+        return AnyIterator<Asset<PHAsset>> {
             defer { count += 1 }
             if count < self.fetchResult.count {
                 let phAsset = self.fetchResult[count]
-                return PhotoAsset(phAsset: phAsset, selectOption: selectOption)
+                return Asset(phAsset: phAsset, selectOption: selectOption)
             } else {
                 return nil
             }
@@ -73,14 +73,14 @@ extension PhotoAssetCollection: Collection, BidirectionalCollection {
         return i + 1
     }
 
-    subscript(position: Int) -> PhotoAsset {
+    subscript(position: Int) -> Asset<PHAsset> {
         let phAsset = fetchResult[position]
-        return PhotoAsset(phAsset: phAsset, selectOption: selectOption)
+        return Asset(phAsset: phAsset, selectOption: selectOption)
     }
 
-    subscript(bounds: IndexSet) -> [PhotoAsset] {
+    subscript(bounds: IndexSet) -> [Asset<PHAsset>] {
         return fetchResult[bounds].map {
-            PhotoAsset(phAsset: $0, selectOption: selectOption)
+            Asset(phAsset: $0, selectOption: selectOption)
         }
     }
 }

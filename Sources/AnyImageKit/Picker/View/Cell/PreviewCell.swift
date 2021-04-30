@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 protocol PreviewCellDelegate: AnyObject {
     
@@ -30,7 +31,7 @@ class PreviewCell: UICollectionViewCell {
     
     weak var delegate: PreviewCellDelegate?
     
-    var asset: PhotoAsset!
+    var asset: Asset<PHAsset>!
     var manager: PickerManager! {
         didSet {
             if oldValue == nil {

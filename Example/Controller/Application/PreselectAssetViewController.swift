@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import Photos
 import AnyImageKit
 
 final class PreselectAssetViewController: UIViewController {
 
-    private var assets: [PhotoAsset] = []
+    private var assets: [Asset<PHAsset>] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

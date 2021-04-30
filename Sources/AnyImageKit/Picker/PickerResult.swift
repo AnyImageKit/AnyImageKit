@@ -6,14 +6,14 @@
 //  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
 //
 
-import Foundation
+import Photos
 
 public struct PickerResult: Equatable {
     
-    public let assets: [PhotoAsset]
+    public let assets: [Asset<PHAsset>]
     public let useOriginalImage: Bool
     
-    init(assets: [PhotoAsset], useOriginalImage: Bool) {
+    init(assets: [Asset<PHAsset>], useOriginalImage: Bool) {
         self.assets = assets
         self.useOriginalImage = useOriginalImage
     }

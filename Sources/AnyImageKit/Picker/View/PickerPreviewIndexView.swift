@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 protocol PickerPreviewIndexViewDelegate: AnyObject {
     
@@ -26,7 +27,7 @@ final class PickerPreviewIndexView: UIView {
     
     private var isFirst = true
     private var lastIdx: Int = 0
-    private var lastAssetList: [PhotoAsset] = []
+    private var lastAssetList: [Asset<PHAsset>] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

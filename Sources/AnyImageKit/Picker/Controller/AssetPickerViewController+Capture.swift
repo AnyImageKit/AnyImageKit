@@ -30,7 +30,7 @@ extension AssetPickerViewController {
     
     /// 拍照结束后，插入 PHAsset
     func addPHAsset(_ phAsset: PHAsset) {
-        let asset = PhotoAsset(phAsset: phAsset, selectOption: manager.options.selectOptions)
+        let asset = Asset(phAsset: phAsset, selectOption: manager.options.selectOptions)
         let addSuccess = manager.addSelectedAsset(asset)
         updateVisibleCellState()
         toolBar.setEnable(true)

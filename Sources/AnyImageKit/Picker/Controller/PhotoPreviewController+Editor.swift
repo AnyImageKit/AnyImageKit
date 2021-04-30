@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 #if ANYIMAGEKIT_ENABLE_EDITOR
 
@@ -46,7 +47,7 @@ extension PhotoPreviewController {
     }
     
     @objc func previewCellDidDownloadResource(_ notification: Notification) {
-        guard let asset = notification.object as? PhotoAsset else { return }
+        guard let asset = notification.object as? Asset<PHAsset> else { return }
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard asset == data.asset else { return }
         autoSetEditorButtonHidden()
