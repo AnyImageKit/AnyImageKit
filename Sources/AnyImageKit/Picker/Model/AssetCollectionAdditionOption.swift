@@ -24,6 +24,6 @@ public struct AssetCollectionAdditionOption: OptionSet {
 #if ANYIMAGEKIT_ENABLE_CAPTURE
 extension AssetCollectionAdditionOption {
     
-    public static let camera: AssetCollectionAdditionOption = .init(1 << 1)
+    public static let camera: AssetCollectionAdditionOption = .init(1 << 0)
 }
 #endif

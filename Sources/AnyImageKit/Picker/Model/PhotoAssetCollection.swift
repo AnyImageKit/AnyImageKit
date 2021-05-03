@@ -11,18 +11,25 @@ import Photos
 
 /// A wrapper for system photo smart album or user create album
 struct PhotoAssetCollection: AssetCollection {
+    
     /// Unique identification
     let identifier: String
+    
     /// Localized title
     let localizedTitle: String
+    
     /// Fetch result from system photo library object PHAssetCollection
     let fetchResult: FetchResult<PHAsset>
+    
     /// Fetch result order
     let fetchOrder: Sort
+    
     /// The main user photo library flag, now it known as ‘Recent’, and in old version PhotoKit, it was called 'Camera Roll'
     let isUserLibrary: Bool
+    
     /// Select Option
     let selectOption: MediaSelectOption
+    
     /// Addition elements in asset collection
     let additionOption: AssetCollectionAdditionOption
     
