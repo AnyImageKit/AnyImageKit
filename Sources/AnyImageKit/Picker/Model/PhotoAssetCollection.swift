@@ -30,31 +30,67 @@ struct PhotoAssetCollection: AssetCollection {
     /// Select Option
     let selectOption: MediaSelectOption
     
-    /// Addition elements in asset collection
-    let additionOption: AssetCollectionAdditionOption
+    /// Addition elements before asset collection
+    let prefixAdditions: [AssetCollectionAddition]
     
-    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additionOption: AssetCollectionAdditionOption) {
+    /// Addition elements after asset collection
+    let suffixAdditions: [AssetCollectionAddition]
+    
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additions: [AssetCollectionAddition]) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
         self.fetchOrder = fetchOrder
         self.isUserLibrary = isUserLibrary
         self.selectOption = selectOption
-        self.additionOption = additionOption
+        switch fetchOrder {
+        case .asc:
+            self.prefixAdditions = []
+            self.suffixAdditions = additions
+        case .desc:
+            self.prefixAdditions = additions
+            self.suffixAdditions = []
+        }
+    }
+}
+
+extension PhotoAssetCollection {
+    
+    var prefixCount: Int {
+        return prefixAdditions.count
+    }
+    
+    var assetCount: Int {
+        return fetchResult.count
+    }
+    
+    var suffixCount: Int {
+        return suffixAdditions.count
+    }
+}
+
+extension PhotoAssetCollection {
+    
+    func asset(for index: Int) -> Asset<PHAsset> {
+        return Asset(phAsset: fetchResult[index], selectOption: selectOption)
     }
 }
 
 // MARK: - Sequence
 extension PhotoAssetCollection: Sequence {
 
-    func makeIterator() -> AnyIterator<Asset<PHAsset>> {
+    func makeIterator() -> AnyIterator<AssetCollectionElement<Asset<PHAsset>>> {
         var count = 0
-        return AnyIterator<Asset<PHAsset>> {
+        return AnyIterator<AssetCollectionElement<Asset<PHAsset>>> {
             defer { count += 1 }
-            if count < self.fetchResult.count {
-                let phAsset = self.fetchResult[count]
-                return Asset(phAsset: phAsset, selectOption: selectOption)
-            } else {
+            switch count {
+            case 0 ..< prefixCount:
+                return .prefixAddition(prefixAdditions[count])
+            case prefixCount ..< (assetCount + prefixCount):
+                return .asset(Asset(phAsset: fetchResult[count - prefixCount], selectOption: selectOption))
+            case (assetCount + prefixCount) ..< (prefixCount + assetCount + suffixCount):
+                return .suffixAddition(suffixAdditions[count - prefixCount - assetCount])
+            default:
                 return nil
             }
         }
@@ -69,7 +105,7 @@ extension PhotoAssetCollection: Collection, BidirectionalCollection {
     }
 
     var endIndex: Int {
-        return fetchResult.count
+        return prefixAdditions.count + fetchResult.count + suffixAdditions.count
     }
     
     func index(before i: Int) -> Int {
@@ -80,15 +116,19 @@ extension PhotoAssetCollection: Collection, BidirectionalCollection {
         return i + 1
     }
 
-    subscript(position: Int) -> Asset<PHAsset> {
-        let phAsset = fetchResult[position]
-        return Asset(phAsset: phAsset, selectOption: selectOption)
+    subscript(position: Int) -> AssetCollectionElement<Asset<PHAsset>> {
+        switch position {
+        case 0 ..< prefixCount:
+            return .prefixAddition(prefixAdditions[position])
+        case prefixCount ..< (assetCount + prefixCount):
+            return .asset(Asset(phAsset: fetchResult[position - prefixCount], selectOption: selectOption))
+        default:
+            return .suffixAddition(suffixAdditions[position - prefixCount - assetCount])
+        }
     }
 
-    subscript(bounds: IndexSet) -> [Asset<PHAsset>] {
-        return fetchResult[bounds].map {
-            Asset(phAsset: $0, selectOption: selectOption)
-        }
+    subscript(bounds: IndexSet) -> [AssetCollectionElement<Asset<PHAsset>>] {
+        return bounds.map { self[$0] }
     }
 }
 

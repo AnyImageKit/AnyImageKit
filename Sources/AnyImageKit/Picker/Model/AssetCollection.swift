@@ -8,9 +8,11 @@
 
 import Foundation
 
-public protocol AssetCollection: Collection, IdentifiableResource {
+public protocol AssetCollection: BidirectionalCollection, IdentifiableResource {
     /// Localized title
     var localizedTitle: String { get }
-    /// Addition elements in asset collection
-    var additionOption: AssetCollectionAdditionOption { get }
+    /// Addition elements before asset collection
+    var prefixAdditions: [AssetCollectionAddition] { get }
+    /// Addition elements after asset collection
+    var suffixAdditions: [AssetCollectionAddition] { get }
 }

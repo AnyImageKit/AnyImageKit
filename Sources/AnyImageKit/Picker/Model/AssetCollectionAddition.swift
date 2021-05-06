@@ -1,5 +1,5 @@
 //
-//  AssetCollectionAdditionOption.swift
+//  AssetCollectionAddition.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2021/4/23.
@@ -8,22 +8,18 @@
 
 import Foundation
 
-public struct AssetCollectionAdditionOption: OptionSet {
+public struct AssetCollectionAddition: RawRepresentable, Hashable {
 
     public let rawValue: Int
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
-
-    public init(_ rawValue: Int) {
-        self.rawValue = rawValue
-    }
 }
 
 #if ANYIMAGEKIT_ENABLE_CAPTURE
-extension AssetCollectionAdditionOption {
+extension AssetCollectionAddition {
     
-    public static let camera: AssetCollectionAdditionOption = .init(1 << 0)
+    public static let camera: AssetCollectionAddition = .init(rawValue: 1)
 }
 #endif

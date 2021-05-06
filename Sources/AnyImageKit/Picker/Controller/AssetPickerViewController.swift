@@ -225,15 +225,16 @@ extension AssetPickerViewController {
     
     private func updateAlbum(_ album: PhotoAssetCollection) {
         // Update selected assets
+        // TODO
         for asset in manager.selectedAssets.reversed() {
-            if !album.contains(where: { $0 == asset }) {
+            if !album.contains(where: { $0 == .asset(asset) }) {
                 manager.removeSelectedAsset(asset)
             }
         }
         for asset in manager.selectedAssets {
-            if let idx = (album.firstIndex { $0 == asset }) {
+            if let idx = (album.firstIndex { $0 == .asset(asset) }) {
                 manager.removeSelectedAsset(asset)
-                manager.addSelectedAsset(album[idx])
+                manager.addSelectedAsset(asset)
             }
         }
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
@@ -265,8 +266,8 @@ extension AssetPickerViewController {
     func updateVisibleCellState(_ animatedItem: Int = -1) {
         guard let album = album else { return }
         for cell in collectionView.visibleCells {
-            if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                cell.updateState(album[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
+            if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell, let asset = album[indexPath.item].asset {
+                cell.updateState(asset, manager: manager, animated: animatedItem == indexPath.item)
             }
         }
     }
@@ -301,8 +302,7 @@ extension AssetPickerViewController {
     }
     
     func selectItem(_ idx: Int) {
-        guard let album = album else { return }
-        let asset = album[idx]
+        guard let album = album, let asset = album[idx].asset else { return }
         
         let state = manager.checkState(for: asset)
         if case .disable(let rule) = state {
@@ -459,31 +459,29 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let asset = album?[indexPath.item] else { return UICollectionViewCell() }
-        
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if asset.isCamera {
+        guard let element = album?[indexPath.item] else { return UICollectionViewCell() }
+        switch element {
+        case .prefixAddition, .suffixAddition:
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             cell.update(options: manager.options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
             cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
             return cell
+        case .asset(let asset):
+            let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
+            cell.tag = indexPath.row
+            cell.setContent(asset, manager: manager)
+            cell.selectEvent.delegate(on: self) { (self, _) in
+                self.selectItem(indexPath.row)
+            }
+            cell.backgroundColor = UIColor.white
+            cell.isAccessibilityElement = true
+            cell.accessibilityTraits = .button
+            let accessibilityLabel = BundleHelper.localizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO", module: .core)
+            cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
+            return cell
         }
-        #endif
-        
-        let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        cell.tag = indexPath.row
-        cell.setContent(asset, manager: manager)
-        cell.selectEvent.delegate(on: self) { (self, _) in
-            self.selectItem(indexPath.row)
-        }
-        cell.backgroundColor = UIColor.white
-        cell.isAccessibilityElement = true
-        cell.accessibilityTraits = .button
-        let accessibilityLabel = BundleHelper.localizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO", module: .core)
-        cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
-        return cell
     }
 }
 
@@ -492,45 +490,47 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let album = album else { return }
-        let asset = album[indexPath.item]
-        
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if asset.isCamera { // 点击拍照 Item
+        let element = album[indexPath.item]
+        switch element {
+        case .prefixAddition, .suffixAddition:
+            #if ANYIMAGEKIT_ENABLE_CAPTURE
             showCapture()
-            return
-        }
-        #endif
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
-            openEditor(with: asset, indexPath: indexPath)
-            return
-        }
-        #endif
-        
-        let state = manager.checkState(for: asset)
-        if manager.options.selectionTapAction == .quickPick {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-            cell.selectEvent.call()
-            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
-                doneButtonTapped(toolBar.doneButton)
+            #else
+            break
+            #endif
+        case .asset(let asset):
+            #if ANYIMAGEKIT_ENABLE_EDITOR
+            if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
+                openEditor(with: asset, indexPath: indexPath)
+                return
             }
-        } else if case .disable(let rule) = state {
-            let message = rule.alertMessage(for: asset)
-            showAlert(message: message)
-            return
-        } else if !state.isSelected && manager.isUpToLimit {
-            return
-        } else {
-            let controller = PhotoPreviewController(manager: manager)
-            controller.currentIndex = indexPath.item
-            controller.dataSource = self
-            controller.delegate = self
-            present(controller, animated: true, completion: nil)
+            #endif
+            
+            let state = manager.checkState(for: asset)
+            if manager.options.selectionTapAction == .quickPick {
+                guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
+                cell.selectEvent.call()
+                if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
+                    doneButtonTapped(toolBar.doneButton)
+                }
+            } else if case .disable(let rule) = state {
+                let message = rule.alertMessage(for: asset)
+                showAlert(message: message)
+                return
+            } else if !state.isSelected && manager.isUpToLimit {
+                return
+            } else {
+                let controller = PhotoPreviewController(manager: manager)
+                controller.currentIndex = indexPath.item
+                controller.dataSource = self
+                controller.delegate = self
+                present(controller, animated: true, completion: nil)
+            }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let asset = album?[indexPath.item], !asset.isCamera else { return }
+        guard let asset = album?[indexPath.item].asset else { return }
         if let cell = cell as? AssetCell {
             cell.updateState(asset, manager: manager, animated: false)
         }
@@ -574,13 +574,13 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
         guard let album = album else { return 0 }
-        return album.fetchResult.count
+        return album.assetCount
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
         let indexPath = IndexPath(item: index, section: 0)
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-        return PreviewData(thumbnail: cell?.image, asset: album![index])
+        return PreviewData(thumbnail: cell?.image, asset: album!.asset(for: index))
     }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {

@@ -33,10 +33,10 @@ extension PickerManager {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isUserLibrary {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                var additionOption: AssetCollectionAdditionOption = []
+                var additions: [AssetCollectionAddition] = []
                 #if ANYIMAGEKIT_ENABLE_CAPTURE
                 if !options.captureOptions.mediaOptions.isEmpty {
-                    additionOption.insert(.camera)
+                    additions.append(.camera)
                 }
                 #endif
                 let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -45,7 +45,7 @@ extension PickerManager {
                                                   fetchOrder: options.orderByDate,
                                                   isUserLibrary: true,
                                                   selectOption: options.selectOptions,
-                                                  additionOption: additionOption)
+                                                  additions: additions)
                 completion(result)
                 return
             }
@@ -61,10 +61,10 @@ extension PickerManager {
             for assetCollection in assetCollections {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
-                    var additionOption: AssetCollectionAdditionOption = []
+                    var additions: [AssetCollectionAddition] = []
                     #if ANYIMAGEKIT_ENABLE_CAPTURE
                     if assetCollection.isUserLibrary && !self.options.captureOptions.mediaOptions.isEmpty {
-                        additionOption.insert(.camera)
+                        additions.append(.camera)
                     }
                     #endif
                     let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
@@ -74,7 +74,7 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: assetCollection.isUserLibrary,
                                                       selectOption: self.options.selectOptions,
-                                                      additionOption: additionOption)
+                                                      additions: additions)
                     DispatchQueue.main.async {
                         completion(result)
                         return
@@ -103,10 +103,10 @@ extension PickerManager {
                 if assetFetchResult.count <= 0 && !isUserLibrary { return }
                 
                 if isUserLibrary {
-                    var additionOption: AssetCollectionAdditionOption = []
+                    var additions: [AssetCollectionAddition] = []
                     #if ANYIMAGEKIT_ENABLE_CAPTURE
                     if !self.options.captureOptions.mediaOptions.isEmpty {
-                        additionOption.insert(.camera)
+                        additions.append(.camera)
                     }
                     #endif
                     let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -115,7 +115,7 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
-                                                      additionOption: additionOption)
+                                                      additions: additions)
                     results.insert(result, at: 0)
                 } else {
                     let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -124,7 +124,7 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
-                                                      additionOption: [])
+                                                      additions: [])
                     results.append(result)
                 }
             }
