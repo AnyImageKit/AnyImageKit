@@ -56,11 +56,8 @@ struct PhotoAssetCollection: AssetCollection {
     var assetCount: Int {
         return fetchResult.count
     }
-}
-
-extension PhotoAssetCollection {
     
-    func asset(for index: Int) -> Asset<PHAsset> {
+    func asset(at index: Int) -> Asset<PHAsset> {
         return Asset(phAsset: fetchResult[index], selectOption: selectOption)
     }
 }

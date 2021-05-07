@@ -25,10 +25,31 @@ extension AssetCollectionElement {
             return nil
         }
     }
+}
+
+extension AssetCollectionElement {
     
     public var addition: AssetCollectionAddition? {
         switch self {
         case .prefixAddition(let addition), .suffixAddition(let addition):
+            return addition
+        default:
+            return nil
+        }
+    }
+    
+    public var prefixAddition: AssetCollectionAddition? {
+        switch self {
+        case .prefixAddition(let addition):
+            return addition
+        default:
+            return nil
+        }
+    }
+    
+    public var suffixAddition: AssetCollectionAddition? {
+        switch self {
+        case .suffixAddition(let addition):
             return addition
         default:
             return nil
