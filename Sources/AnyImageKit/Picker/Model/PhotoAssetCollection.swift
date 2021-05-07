@@ -52,20 +52,9 @@ struct PhotoAssetCollection: AssetCollection {
             self.suffixAdditions = []
         }
     }
-}
-
-extension PhotoAssetCollection {
-    
-    var prefixCount: Int {
-        return prefixAdditions.count
-    }
     
     var assetCount: Int {
         return fetchResult.count
-    }
-    
-    var suffixCount: Int {
-        return suffixAdditions.count
     }
 }
 
@@ -97,24 +86,8 @@ extension PhotoAssetCollection: Sequence {
     }
 }
 
-// MARK: - Collection
-extension PhotoAssetCollection: Collection, BidirectionalCollection {
-
-    var startIndex: Int {
-        return 0
-    }
-
-    var endIndex: Int {
-        return prefixAdditions.count + fetchResult.count + suffixAdditions.count
-    }
-    
-    func index(before i: Int) -> Int {
-        return i - 1
-    }
-
-    func index(after i: Int) -> Int {
-        return i + 1
-    }
+// MARK: - Collection, BidirectionalCollection
+extension PhotoAssetCollection: BidirectionalCollection {
 
     subscript(position: Int) -> AssetCollectionElement<Asset<PHAsset>> {
         switch position {
@@ -132,6 +105,7 @@ extension PhotoAssetCollection: Collection, BidirectionalCollection {
     }
 }
 
+// MARK: - CustomStringConvertible
 extension PhotoAssetCollection: CustomStringConvertible {
     
     var description: String {

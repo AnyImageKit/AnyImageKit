@@ -13,6 +13,9 @@ public enum AssetCollectionElement<Element: IdentifiableResource>: Equatable {
     case prefixAddition(AssetCollectionAddition)
     case asset(Element)
     case suffixAddition(AssetCollectionAddition)
+}
+
+extension AssetCollectionElement {
     
     public var asset: Element? {
         switch self {
