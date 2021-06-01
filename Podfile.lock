@@ -1,19 +1,19 @@
 PODS:
-  - AnyImageKit (0.12.0):
-    - AnyImageKit/Capture (= 0.12.0)
-    - AnyImageKit/Core (= 0.12.0)
-    - AnyImageKit/Editor (= 0.12.0)
-    - AnyImageKit/Picker (= 0.12.0)
-  - AnyImageKit/Capture (0.12.0):
+  - AnyImageKit (0.13.1):
+    - AnyImageKit/Capture (= 0.13.1)
+    - AnyImageKit/Core (= 0.13.1)
+    - AnyImageKit/Editor (= 0.13.1)
+    - AnyImageKit/Picker (= 0.13.1)
+  - AnyImageKit/Capture (0.13.1):
     - AnyImageKit/Core
-  - AnyImageKit/Core (0.12.0):
+  - AnyImageKit/Core (0.13.1):
     - Kingfisher
     - SnapKit
-  - AnyImageKit/Editor (0.12.0):
+  - AnyImageKit/Editor (0.13.1):
     - AnyImageKit/Core
-  - AnyImageKit/Picker (0.12.0):
+  - AnyImageKit/Picker (0.13.1):
     - AnyImageKit/Core
-  - Kingfisher (6.1.0)
+  - Kingfisher (6.3.0)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
@@ -31,8 +31,8 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  AnyImageKit: 2b2abc74f857e010c4bed09d40526bc4ad632f39
-  Kingfisher: f5d8d60a0ef3edd642fd781bae60918599901aff
+  AnyImageKit: a59b01cc4e6e8fac89726dbe756c1ef1e6a1abef
+  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
 PODFILE CHECKSUM: f797279c867b19084ff61df3f6a2c99391049a80
