@@ -10,9 +10,9 @@ import Foundation
 
 public enum AssetCollectionElement<Element: IdentifiableResource>: Equatable {
     
-    case prefixAddition(AssetCollectionAddition)
+    case prefix(AssetCollectionAddition)
     case asset(Element)
-    case suffixAddition(AssetCollectionAddition)
+    case suffix(AssetCollectionAddition)
 }
 
 extension AssetCollectionElement {
@@ -31,25 +31,25 @@ extension AssetCollectionElement {
     
     public var addition: AssetCollectionAddition? {
         switch self {
-        case .prefixAddition(let addition), .suffixAddition(let addition):
+        case .prefix(let addition), .suffix(let addition):
             return addition
         default:
             return nil
         }
     }
     
-    public var prefixAddition: AssetCollectionAddition? {
+    public var prefix: AssetCollectionAddition? {
         switch self {
-        case .prefixAddition(let addition):
+        case .prefix(let addition):
             return addition
         default:
             return nil
         }
     }
     
-    public var suffixAddition: AssetCollectionAddition? {
+    public var suffix: AssetCollectionAddition? {
         switch self {
-        case .suffixAddition(let addition):
+        case .suffix(let addition):
             return addition
         default:
             return nil

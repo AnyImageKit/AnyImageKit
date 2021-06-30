@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Photos
 
 public protocol IdentifiableResource: Hashable {
     
@@ -27,12 +26,5 @@ extension IdentifiableResource {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
-    }
-}
-
-extension PHAsset: IdentifiableResource {
-    
-    public var identifier: String {
-        return localIdentifier
     }
 }

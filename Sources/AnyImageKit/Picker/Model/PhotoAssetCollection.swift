@@ -64,18 +64,20 @@ struct PhotoAssetCollection: AssetCollection {
 
 // MARK: - Sequence
 extension PhotoAssetCollection: Sequence {
+    
+    typealias Element = AssetCollectionElement<Asset<PHAsset>>
 
-    func makeIterator() -> AnyIterator<AssetCollectionElement<Asset<PHAsset>>> {
+    func makeIterator() -> AnyIterator<Element> {
         var count = 0
-        return AnyIterator<AssetCollectionElement<Asset<PHAsset>>> {
+        return AnyIterator<Element> {
             defer { count += 1 }
             switch count {
             case 0 ..< prefixCount:
-                return .prefixAddition(prefixAdditions[count])
+                return .prefix(prefixAdditions[count])
             case prefixCount ..< (assetCount + prefixCount):
                 return .asset(Asset(phAsset: fetchResult[count - prefixCount], selectOption: selectOption))
             case (assetCount + prefixCount) ..< (prefixCount + assetCount + suffixCount):
-                return .suffixAddition(suffixAdditions[count - prefixCount - assetCount])
+                return .suffix(suffixAdditions[count - prefixCount - assetCount])
             default:
                 return nil
             }
@@ -86,14 +88,14 @@ extension PhotoAssetCollection: Sequence {
 // MARK: - Collection, BidirectionalCollection
 extension PhotoAssetCollection: BidirectionalCollection {
 
-    subscript(position: Int) -> AssetCollectionElement<Asset<PHAsset>> {
+    subscript(position: Int) -> Element {
         switch position {
         case 0 ..< prefixCount:
-            return .prefixAddition(prefixAdditions[position])
+            return .prefix(prefixAdditions[position])
         case prefixCount ..< (assetCount + prefixCount):
             return .asset(Asset(phAsset: fetchResult[position - prefixCount], selectOption: selectOption))
         default:
-            return .suffixAddition(suffixAdditions[position - prefixCount - assetCount])
+            return .suffix(suffixAdditions[position - prefixCount - assetCount])
         }
     }
 

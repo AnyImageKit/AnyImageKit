@@ -30,6 +30,7 @@ extension AssetPickerViewController {
     
     func openEditor(with asset: Asset<PHAsset>, indexPath: IndexPath) {
         if asset.phAsset.mediaType == .image {
+            
 //            if let image = asset._images[.initial] {
 //                showEditor(image, identifier: asset.identifier, tag: indexPath.item)
 //            } else {

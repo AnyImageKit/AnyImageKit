@@ -461,7 +461,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let element = album?[indexPath.item] else { return UICollectionViewCell() }
         switch element {
-        case .prefixAddition, .suffixAddition:
+        case .prefix, .suffix:
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
             cell.update(options: manager.options)
             cell.isAccessibilityElement = true
@@ -492,7 +492,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         guard let album = album else { return }
         let element = album[indexPath.item]
         switch element {
-        case .prefixAddition, .suffixAddition:
+        case .prefix, .suffix:
             #if ANYIMAGEKIT_ENABLE_CAPTURE
             showCapture()
             #else
