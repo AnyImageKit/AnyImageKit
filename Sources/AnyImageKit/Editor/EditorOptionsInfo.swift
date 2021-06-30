@@ -12,9 +12,15 @@ import UIKit
 public enum EditorPenColorOption: Equatable {
     /// 自定义颜色
     case custom(color: UIColor)
+    
+    #if swift(>=5.5)
+    /// Fix Xcode 13 beta bug.
+    case colorWell(color: UIColor)
+    #else
     /// UIColorWell
     @available(iOS 14.0, *)
     case colorWell(color: UIColor)
+    #endif
 }
 
 /// 马赛克样式
