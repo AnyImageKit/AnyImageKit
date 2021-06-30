@@ -1,5 +1,13 @@
 # 更新日志
 
+## 0.13.2
+
+### 修复
+
+Xcode 13 beta 无法编译错误。([#95](https://github.com/AnyImageProject/AnyImageKit/issues/95))
+
+
+
 ## 0.13.0
 
 ### 通用

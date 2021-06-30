@@ -1,5 +1,13 @@
 # Release Notes
 
+## 0.13.2
+
+### Resolved
+
+Fix Xcode 13 beta can not build bug.
+
+
+
 ## 0.13.0
 
 ### General
