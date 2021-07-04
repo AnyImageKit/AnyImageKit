@@ -47,14 +47,14 @@ extension PhotoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
-        let id = asset.identifier
+        let identifier = asset.identifier
         if imageView.image == nil { // thumbnail
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-            manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+            manager.requestPhoto(for: asset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
-                    guard self.imageView.image == nil && self.asset.identifier == id else { return }
+                    guard self.imageView.image == nil && self.asset.identifier == identifier else { return }
                     self.setImage(response.image)
                 case .failure(let error):
                     _print(error)
@@ -64,16 +64,16 @@ extension PhotoPreviewCell {
         
         let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
             DispatchQueue.main.async { [weak self] in
-                guard let self = self, self.asset.identifier == id else { return }
+                guard let self = self, self.asset.identifier == identifier else { return }
                 _print("Download photo from iCloud: \(progress)")
                 self.setDownloadingProgress(progress)
             }
         }
-        manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+        manager.requestPhoto(for: asset, options: options) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                guard !response.isDegraded && self.asset.identifier == id else { return }
+                guard !response.isDegraded && self.asset.identifier == identifier else { return }
                 self.setImage(response.image)
                 self.setDownloadingProgress(1.0)
             case .failure(let error):

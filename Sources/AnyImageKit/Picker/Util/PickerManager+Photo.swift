@@ -63,9 +63,9 @@ typealias _PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, AnyImageEr
 extension PickerManager {
     
     func requestPhoto(for album: PhotoAssetCollection, completion: @escaping _PhotoFetchCompletion) {
-        if let phAsset = options.orderByDate == .asc ? album.fetchResult.last : album.fetchResult.first {
+        if let asset = options.orderByDate == .asc ? album.lastAsset : album.firstAsset {
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-            requestPhoto(for: phAsset, options: options, completion: completion)
+            requestPhoto(for: asset, options: options, completion: completion)
         }
     }
     
@@ -81,10 +81,10 @@ extension PickerManager {
 // MARK: - Request photo
 extension PickerManager {
     
-    func requestPhoto(for asset: PHAsset, options: _PhotoFetchOptions = .init(), completion: @escaping _PhotoFetchCompletion) {
+    func requestPhoto(for asset: Asset<PHAsset>, options: _PhotoFetchOptions = .init(), completion: @escaping _PhotoFetchCompletion) {
         let fetchOptions = PhotoFetchOptions(size: options.targetSize, resizeMode: options.resizeMode, version: options.version, isNetworkAccessAllowed: options.isNetworkAccessAllowed, progressHandler: options.progressHandler)
         let identifier = asset.identifier
-        let requestID = ExportTool.requestPhoto(for: asset, options: fetchOptions) { (result, requestID) in
+        let requestID = ExportTool.requestPhoto(for: asset.phAsset, options: fetchOptions) { (result, requestID) in
             switch result {
             case .success(let response):
                 switch options.sizeMode {
@@ -97,7 +97,7 @@ extension PickerManager {
                         let resizedImage = UIImage.resize(from: response.image, limitSize: options.targetSize, isExact: true)
                         self.resizeSemaphore.signal()
                         if !response.isDegraded && options.needCache {
-                            self.cache.store(resizedImage, forKey: asset.localIdentifier)
+                            self.cache.store(resizedImage, forKey: asset.phAsset.localIdentifier)
                         }
                         DispatchQueue.main.async {
                             completion(.success(.init(identifier: identifier, image: resizedImage, isDegraded: response.isDegraded)))
@@ -105,7 +105,7 @@ extension PickerManager {
                     }
                 case .thumbnail:
                     if !response.isDegraded && options.needCache {
-                        self.cache.store(response.image, forKey: asset.localIdentifier)
+                        self.cache.store(response.image, forKey: asset.phAsset.localIdentifier)
                     }
                     completion(.success(.init(identifier: identifier, image: response.image, isDegraded: response.isDegraded)))
                 }
@@ -120,7 +120,7 @@ extension PickerManager {
                                                              progressHandler: options.progressHandler)
                 self.workQueue.async { [weak self] in
                     guard let self = self else { return }
-                    self.requestPhotoData(for: asset, options: photoDataOptions) { [weak self] result in
+                    self.requestPhotoData(for: asset.phAsset, options: photoDataOptions) { [weak self] result in
                         guard let self = self else { return }
                         switch result {
                         case .success(let response):
@@ -145,7 +145,7 @@ extension PickerManager {
                                     return
                                 }
                                 self.resizeSemaphore.signal()
-                                self.cache.store(resizedImage, forKey: asset.localIdentifier)
+                                self.cache.store(resizedImage, forKey: identifier)
                                 DispatchQueue.main.async {
                                     completion(.success(.init(identifier: identifier, image: resizedImage, isDegraded: false)))
                                 }
@@ -168,9 +168,9 @@ extension PickerManager {
                     }
                 }
             }
-            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
+            self.dequeueFetch(for: identifier, requestID: requestID)
         }
-        enqueueFetch(for: asset.localIdentifier, requestID: requestID)
+        enqueueFetch(for: identifier, requestID: requestID)
     }
 }
 

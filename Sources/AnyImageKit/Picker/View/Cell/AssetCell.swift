@@ -146,7 +146,7 @@ extension AssetCell {
     func setContent(_ asset: Asset<PHAsset>, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         manager.checkState(for: asset)
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-        manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+        manager.requestPhoto(for: asset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):

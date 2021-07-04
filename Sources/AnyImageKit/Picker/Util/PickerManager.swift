@@ -138,7 +138,7 @@ extension PickerManager {
                 workQueue.async { [weak self] in
                     guard let self = self else { return }
                     let options = _PhotoFetchOptions(sizeMode: .preview(self.options.largePhotoMaxWidth))
-                    self.requestPhoto(for: asset.phAsset, options: options) { result in
+                    self.requestPhoto(for: asset, options: options) { result in
                         switch result {
                         case .success(let response):
                             if !response.isDegraded {
@@ -159,7 +159,7 @@ extension PickerManager {
             workQueue.async { [weak self] in
                 guard let self = self else { return }
                 let options = _PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
-                self.requestPhoto(for: asset.phAsset, options: options, completion: { result in
+                self.requestPhoto(for: asset, options: options, completion: { result in
 //                    switch result {
 //                    case .success(let response):
 //                        break

@@ -138,7 +138,7 @@ extension VideoPreviewCell {
         let id = asset.identifier
         if imageView.image == nil { // thumbnail
             let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-            manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+            manager.requestPhoto(for: asset, options: options, completion: { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let response):
@@ -152,7 +152,7 @@ extension VideoPreviewCell {
         }
         
         let options = _PhotoFetchOptions(sizeMode: .preview(500), needCache: true)
-        manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+        manager.requestPhoto(for: asset, options: options) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):

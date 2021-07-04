@@ -80,6 +80,8 @@
 		A03806B423BF2DF2002873A9 /* AssetPickerViewController+Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03806B323BF2DF2002873A9 /* AssetPickerViewController+Capture.swift */; };
 		A03806B723BF358A002873A9 /* Core.strings in Resources */ = {isa = PBXBuildFile; fileRef = A04B045023B1AB7400DA4D47 /* Core.strings */; };
 		A038F0452624435800D1B25B /* FetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A038F0442624435800D1B25B /* FetchResult.swift */; };
+		A046306B2691EC130041084A /* CachableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A046306A2691EC130041084A /* CachableResource.swift */; };
+		A046306D2691EC200041084A /* CachableResource+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A046306C2691EC200041084A /* CachableResource+PHAsset.swift */; };
 		A04B044723B1A54F00DA4D47 /* Capture.strings in Resources */ = {isa = PBXBuildFile; fileRef = A04B044923B1A54F00DA4D47 /* Capture.strings */; };
 		A04B045423B1B1E700DA4D47 /* Capture.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A04B045323B1B1E700DA4D47 /* Capture.xcassets */; };
 		A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04EACCA2385250D004A9795 /* Core+Notification.swift */; };
@@ -351,6 +353,8 @@
 		A038F0442624435800D1B25B /* FetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchResult.swift; sourceTree = "<group>"; };
 		A03AC1322616B8220001F150 /* PickerTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerTheme.swift; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A046306A2691EC130041084A /* CachableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachableResource.swift; sourceTree = "<group>"; };
+		A046306C2691EC200041084A /* CachableResource+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachableResource+PHAsset.swift"; sourceTree = "<group>"; };
 		A04B044823B1A54F00DA4D47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Capture.strings; sourceTree = "<group>"; };
 		A04B044A23B1A55000DA4D47 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Capture.strings"; sourceTree = "<group>"; };
 		A04B045123B1AB7500DA4D47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Core.strings; sourceTree = "<group>"; };
@@ -1113,6 +1117,8 @@
 				A038F0442624435800D1B25B /* FetchResult.swift */,
 				A012D2D126203B2D006B5261 /* IdentifiableResource.swift */,
 				A06225FF268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift */,
+				A046306A2691EC130041084A /* CachableResource.swift */,
+				A046306C2691EC200041084A /* CachableResource+PHAsset.swift */,
 				A07DDD1A26248CC4003D6B4E /* AssetCollection.swift */,
 				A0AEF02B26443F9000043B5A /* AssetCollectionElement.swift */,
 				A0360487263316BB009387D3 /* AssetCollectionAddition.swift */,
@@ -1623,6 +1629,7 @@
 				A029D04F2330856C00BC6720 /* PhotoAssetCollection.swift in Sources */,
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
 				A0622600268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift in Sources */,
+				A046306D2691EC200041084A /* CachableResource+PHAsset.swift in Sources */,
 				A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */,
 				A0147E0423C45A200071E9D5 /* Permission+Camera.swift in Sources */,
 				A08DF7C523B3326C002B92EE /* CaptureToolView.swift in Sources */,
@@ -1701,6 +1708,7 @@
 				A01866F1239F8740002E623D /* CapturePreviewMaskView.swift in Sources */,
 				A08DF7BE23B1F814002B92EE /* DeviceOrientation.swift in Sources */,
 				A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */,
+				A046306B2691EC130041084A /* CachableResource.swift in Sources */,
 				A076999F23963F270006AC9B /* AudioIOComponent.swift in Sources */,
 				A50B2115237AA24300A894A9 /* PhotoEditorContentView+Getter.swift in Sources */,
 				A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */,

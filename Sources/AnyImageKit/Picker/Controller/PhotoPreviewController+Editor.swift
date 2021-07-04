@@ -22,7 +22,7 @@ extension PhotoPreviewController {
 //            } else {
                 showWaitHUD()
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth))
-                manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
+                manager.requestPhoto(for: data.asset, options: options) { [weak self] result in
                     guard let self = self else { return }
                     switch result {
                     case .success(let response):

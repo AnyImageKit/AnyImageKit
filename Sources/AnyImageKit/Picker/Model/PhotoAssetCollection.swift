@@ -52,13 +52,30 @@ struct PhotoAssetCollection: AssetCollection {
             self.suffixAdditions = []
         }
     }
+}
+
+extension PhotoAssetCollection {
     
     var assetCount: Int {
         return fetchResult.count
     }
     
-    func asset(at index: Int) -> Asset<PHAsset> {
+    subscript(asset index: Int) -> Asset<PHAsset> {
         return Asset(phAsset: fetchResult[index], selectOption: selectOption)
+    }
+    
+    var firstAsset: Asset<PHAsset>? {
+        guard let first = fetchResult.first else {
+            return nil
+        }
+        return Asset(phAsset: first, selectOption: selectOption)
+    }
+    
+    var lastAsset: Asset<PHAsset>? {
+        guard let last = fetchResult.last else {
+            return nil
+        }
+        return Asset(phAsset: last, selectOption: selectOption)
     }
 }
 

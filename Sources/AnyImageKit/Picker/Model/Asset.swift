@@ -27,6 +27,11 @@ extension Asset: IdentifiableResource {
     }
 }
 
+//extension Asset: CachableResource {
+//    
+//    
+//}
+
 extension Asset: CustomStringConvertible {
     
     public var description: String {

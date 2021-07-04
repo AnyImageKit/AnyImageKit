@@ -41,7 +41,7 @@ extension AssetPickerViewController {
                         self?.showWaitHUD(BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker) + "\(Int(progress * 100))%")
                     }
                 }
-                manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+                manager.requestPhoto(for: asset, options: options) { [weak self] result in
                     guard let self = self else { return }
                     switch result {
                     case .success(let response):
