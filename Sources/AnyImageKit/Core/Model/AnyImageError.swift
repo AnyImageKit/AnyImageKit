@@ -29,4 +29,6 @@ public enum AnyImageError: Error {
     
     case savePhotoFailed
     case saveVideoFailed
+    
+    case cacheNotExist
 }
