@@ -7,12 +7,13 @@
 //
 
 import Photos
+import Kingfisher
 
 extension Asset where Resource == PHAsset {
     
-    init(phAsset: PHAsset, selectOption: MediaSelectOption) {
+    init(phAsset: PHAsset, selectOption: MediaSelectOption /* , FIXME: cache: ImageCache*/) {
         let mediaType = MediaType(phAsset: phAsset, selectOption: selectOption)
-        self.init(resource: phAsset, mediaType: mediaType)
+        self.init(resource: phAsset, mediaType: mediaType, cache: ImageCache.default)
     }
     
     public var phAsset: PHAsset {

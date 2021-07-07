@@ -6,7 +6,7 @@
 //  Copyright © 2021 AnyImageProject.org. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Kingfisher
 
 protocol CachableResource: IdentifiableResource {
@@ -16,7 +16,7 @@ protocol CachableResource: IdentifiableResource {
     func removeCache(type: CachedResourceStorageType)
     func writeCache(storage: CachedResourceStorage, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void)
     func loadCache(type: CachedResourceStorageType, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void)
-    func loadCacheURL(type: CachedResourceStorageType, completion: @escaping (Result<URL, Error>) -> Void)
+    func loadCacheURL(type: CachedResourceStorageType) -> URL
 }
 
 extension CachableResource {
@@ -78,9 +78,11 @@ extension CachableResource {
         }
     }
     
-    func loadCacheURL(type: CachedResourceStorageType, completion: @escaping (Result<URL, Error>) -> Void) {
-        
-    }
+    func loadCacheURL(type: CachedResourceStorageType) -> URL {
+            let processor = CachedResourceImageProcessor(type: type)
+            let path = cache.cachePath(forKey: identifier, processorIdentifier: processor.identifier)
+            return URL(fileURLWithPath: path)
+        }
 }
 
 enum CachedResourceStorageType {
