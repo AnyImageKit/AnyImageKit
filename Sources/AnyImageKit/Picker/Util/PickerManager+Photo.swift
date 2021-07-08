@@ -9,7 +9,6 @@
 import UIKit
 import Photos
 import MobileCoreServices
-import Kingfisher
 
 struct _PhotoFetchOptions {
     
@@ -221,8 +220,7 @@ extension PickerManager {
                     completion(.failure(.invalidDataUTI))
                     return
                 }
-                let creatingOptions = ImageCreatingOptions()
-                guard let image = KingfisherWrapper<UIImage>.animatedImage(data: response.data, options: creatingOptions) else {
+                guard let image = UIImage.animatedImage(data: response.data) else {
                     completion(.failure(.invalidImage))
                     return
                 }

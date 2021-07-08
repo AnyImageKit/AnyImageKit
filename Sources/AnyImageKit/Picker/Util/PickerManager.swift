@@ -17,6 +17,8 @@ struct FetchRecord {
 
 final class PickerManager {
     
+    let imageCache: AnyImageCache
+    
     var options: PickerOptionsInfo = .init()
     
     var isUpToLimit: Bool {
@@ -40,7 +42,10 @@ final class PickerManager {
     /// 缓存
     let cache = ImageCacheTool(module: .picker(.default), memoryCountLimit: 10, useDiskCache: false)
     
-    init() { }
+    init() {
+        // FIXME:
+        imageCache = AnyImageCache(name: "org.AnyImageProject.AnyImageKit")
+    }
     
     let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.PickerManager")
     let resizeSemaphore = DispatchSemaphore(value: 3)

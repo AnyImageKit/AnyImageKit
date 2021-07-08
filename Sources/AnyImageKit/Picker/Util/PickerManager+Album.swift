@@ -45,7 +45,8 @@ extension PickerManager {
                                                   fetchOrder: options.orderByDate,
                                                   isUserLibrary: true,
                                                   selectOption: options.selectOptions,
-                                                  additions: additions)
+                                                  additions: additions,
+                                                  cache: imageCache)
                 completion(result)
                 return
             }
@@ -74,7 +75,8 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: assetCollection.isUserLibrary,
                                                       selectOption: self.options.selectOptions,
-                                                      additions: additions)
+                                                      additions: additions,
+                                                      cache: self.imageCache)
                     DispatchQueue.main.async {
                         completion(result)
                         return
@@ -115,7 +117,8 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
-                                                      additions: additions)
+                                                      additions: additions,
+                                                      cache: self.imageCache)
                     results.insert(result, at: 0)
                 } else {
                     let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -124,7 +127,8 @@ extension PickerManager {
                                                       fetchOrder: self.options.orderByDate,
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
-                                                      additions: [])
+                                                      additions: [],
+                                                      cache: self.imageCache)
                     results.append(result)
                 }
             }

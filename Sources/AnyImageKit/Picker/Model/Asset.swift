@@ -7,15 +7,14 @@
 //
 
 import Photos
-import Kingfisher
 
 public struct Asset<Resource: IdentifiableResource>: IdentifiableResource, CachableResource {
     
     public let resource: Resource
     public let mediaType: MediaType
-    public let cache: ImageCache
+    public let cache: AnyImageCache
     
-    public init(resource: Resource, mediaType: MediaType, cache: ImageCache) {
+    public init(resource: Resource, mediaType: MediaType, cache: AnyImageCache) {
         self.resource = resource
         self.mediaType = mediaType
         self.cache = cache

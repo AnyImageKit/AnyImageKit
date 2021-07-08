@@ -28,6 +28,7 @@ extension AssetPickerViewController {
         #endif
     }
     
+    /* 由于监控了相册变化，该方法实际已经不需要了
     /// 拍照结束后，插入 PHAsset
     func addPHAsset(_ phAsset: PHAsset) {
         let asset = Asset(phAsset: phAsset, selectOption: manager.options.selectOptions)
@@ -41,7 +42,7 @@ extension AssetPickerViewController {
                 delegate?.assetPickerDidFinishPicking(self)
             }
         }
-    }
+    }*/
 }
 
 // MARK: - ImageCaptureControllerDelegate
@@ -56,7 +57,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
             manager.savePhoto(url: result.mediaURL) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
-                    self?.addPHAsset(asset)
+                    print(asset) // FIXME: self?.addPHAsset(asset)
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
@@ -67,7 +68,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
             manager.saveVideo(url: result.mediaURL) { [weak self] (result) in
                 switch result {
                 case .success(let asset):
-                    self?.addPHAsset(asset)
+                    print(asset) // FIXME: self?.addPHAsset(asset)
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }

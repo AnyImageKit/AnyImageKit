@@ -9,9 +9,11 @@
 import UIKit
 import Kingfisher
 
+public typealias AnyImageCache = ImageCache
+
 protocol CachableResource: IdentifiableResource {
     
-    var cache: ImageCache { get }
+    var cache: AnyImageCache { get }
     func isCached(type: CachedResourceStorageType) -> Bool
     func removeCache(type: CachedResourceStorageType)
     func writeCache(storage: CachedResourceStorage, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void)
