@@ -52,6 +52,17 @@ enum PhotoSizeMode: Equatable {
     case preview(CGFloat)
     /// Original Size
     case original
+    
+    var cacheType: CachedResourceStorageType {
+        switch self {
+        case .thumbnail:
+            return .thumbnail
+        case .preview:
+            return .preview
+        case .original:
+            return .original
+        }
+    }
 }
 
 typealias _PhotoFetchCompletion = (Result<PhotoFetchResponse, AnyImageError>) -> Void
@@ -96,7 +107,7 @@ extension PickerManager {
                         let resizedImage = UIImage.resize(from: response.image, limitSize: options.targetSize, isExact: true)
                         self.resizeSemaphore.signal()
                         if !response.isDegraded && options.needCache {
-                            self.cache.store(resizedImage, forKey: asset.phAsset.localIdentifier)
+                            self.cache.store(resizedImage, forKey: asset.identifier)
                         }
                         DispatchQueue.main.async {
                             completion(.success(.init(identifier: identifier, image: resizedImage, isDegraded: response.isDegraded)))
@@ -104,7 +115,7 @@ extension PickerManager {
                     }
                 case .thumbnail:
                     if !response.isDegraded && options.needCache {
-                        self.cache.store(response.image, forKey: asset.phAsset.localIdentifier)
+                        self.cache.store(response.image, forKey: asset.identifier)
                     }
                     completion(.success(.init(identifier: identifier, image: response.image, isDegraded: response.isDegraded)))
                 }
@@ -119,7 +130,7 @@ extension PickerManager {
                                                              progressHandler: options.progressHandler)
                 self.workQueue.async { [weak self] in
                     guard let self = self else { return }
-                    self.requestPhotoData(for: asset.phAsset, options: photoDataOptions) { [weak self] result in
+                    self.requestPhotoData(for: asset, options: photoDataOptions) { [weak self] result in
                         guard let self = self else { return }
                         switch result {
                         case .success(let response):
@@ -176,12 +187,12 @@ extension PickerManager {
 // MARK: - Request photo data
 extension PickerManager {
     
-    func requestPhotoData(for asset: PHAsset, options: PhotoDataFetchOptions = .init(), completion: @escaping (_PhotoDataFetchCompletion)) {
-        let requestID = ExportTool.requestPhotoData(for: asset, options: options) { (result, requestID) in
+    func requestPhotoData(for asset: Asset<PHAsset>, options: PhotoDataFetchOptions = .init(), completion: @escaping (_PhotoDataFetchCompletion)) {
+        let requestID = ExportTool.requestPhotoData(for: asset.phAsset, options: options) { (result, requestID) in
             completion(result)
-            self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
+            self.dequeueFetch(for: asset.identifier, requestID: requestID)
         }
-        enqueueFetch(for: asset.localIdentifier, requestID: requestID)
+        enqueueFetch(for: asset.identifier, requestID: requestID)
     }
 }
 

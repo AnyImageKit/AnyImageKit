@@ -10,7 +10,7 @@ import Foundation
 import Photos
 
 /// A wrapper for system photo smart album or user create album
-struct PhotoAssetCollection: AssetCollection, CachableResource {
+struct PhotoAssetCollection: AssetCollection, IdentifiableResource, CachableResource {
     
     /// Unique identification
     let identifier: String

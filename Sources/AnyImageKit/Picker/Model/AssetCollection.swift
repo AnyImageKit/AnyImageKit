@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AssetCollection: BidirectionalCollection, IdentifiableResource {
+public protocol AssetCollection: BidirectionalCollection {
     /// Localized title
     var localizedTitle: String { get }
     /// Addition elements before asset collection

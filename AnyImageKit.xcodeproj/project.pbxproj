@@ -154,6 +154,7 @@
 		A0E8F5ED23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E8F5EC23CD9BBA00CF0A6A /* CaptureWhiteBalance.swift */; };
 		A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */; };
 		A0F475422330736200BB117B /* Picker+PHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F475412330736200BB117B /* Picker+PHAssetCollection.swift */; };
+		A0F6539926993C6200013573 /* CachableResource+IdentifiableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F6539826993C6200013573 /* CachableResource+IdentifiableResource.swift */; };
 		A0F93B0F263AE83400D09263 /* PickerManager+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F93B0E263AE83400D09263 /* PickerManager+State.swift */; };
 		A0F93B11263AEAD800D09263 /* AssetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F93B10263AEAD800D09263 /* AssetState.swift */; };
 		A0FDB2CE255268A500FDE93E /* TitleMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FDB2CD255268A400FDE93E /* TitleMapCell.swift */; };
@@ -457,6 +458,7 @@
 		A0F4753B232F7DE500BB117B /* PhotoAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetCollection.swift; sourceTree = "<group>"; };
 		A0F4753F232F89C600BB117B /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
 		A0F475412330736200BB117B /* Picker+PHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+PHAssetCollection.swift"; sourceTree = "<group>"; };
+		A0F6539826993C6200013573 /* CachableResource+IdentifiableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachableResource+IdentifiableResource.swift"; sourceTree = "<group>"; };
 		A0F93B0E263AE83400D09263 /* PickerManager+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+State.swift"; sourceTree = "<group>"; };
 		A0F93B10263AEAD800D09263 /* AssetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetState.swift; sourceTree = "<group>"; };
 		A0FDB2CD255268A400FDE93E /* TitleMapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleMapCell.swift; sourceTree = "<group>"; };
@@ -1127,6 +1129,7 @@
 				A012D2D126203B2D006B5261 /* IdentifiableResource.swift */,
 				A06225FF268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift */,
 				A046306A2691EC130041084A /* CachableResource.swift */,
+				A0F6539826993C6200013573 /* CachableResource+IdentifiableResource.swift */,
 				A07DDD1A26248CC4003D6B4E /* AssetCollection.swift */,
 				A0AEF02B26443F9000043B5A /* AssetCollectionElement.swift */,
 				A0360487263316BB009387D3 /* AssetCollectionAddition.swift */,
@@ -1591,6 +1594,7 @@
 				A01A59372522206A00FABD22 /* EditorResult.swift in Sources */,
 				7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */,
 				71B3E952262989A600710A7F /* EditorPhotoToolOption.swift in Sources */,
+				A0F6539926993C6200013573 /* CachableResource+IdentifiableResource.swift in Sources */,
 				A0F93B0F263AE83400D09263 /* PickerManager+State.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
