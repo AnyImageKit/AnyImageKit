@@ -12,12 +12,12 @@ public struct Asset<Resource: IdentifiableResource>: IdentifiableResource, Cacha
     
     public let resource: Resource
     public let mediaType: MediaType
-    public let cache: AnyImageCache
+    public let cacher: AnyImageCacher
     
-    public init(resource: Resource, mediaType: MediaType, cache: AnyImageCache) {
+    public init(resource: Resource, mediaType: MediaType, cacher: AnyImageCacher) {
         self.resource = resource
         self.mediaType = mediaType
-        self.cache = cache
+        self.cacher = cacher
     }
     
     public var identifier: String {

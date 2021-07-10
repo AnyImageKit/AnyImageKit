@@ -36,7 +36,7 @@ extension PHAsset: EditorVideoResource {
             if let avAsset = asset as? AVURLAsset {
                 completion(.success(avAsset.url))
             } else { // Load from network
-                completion(.failure(.cannotFindInLocal))
+                completion(.failure(.resourceIsInCloud))
                 self?.loadURLFromNetwork(completion: completion)
             }
         }

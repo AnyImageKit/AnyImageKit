@@ -9,11 +9,11 @@
 import UIKit
 import Kingfisher
 
-public typealias AnyImageCache = ImageCache
+public typealias AnyImageCacher = ImageCache
 
 protocol CachableResource {
     
-    var cache: AnyImageCache { get }
+    var cacher: AnyImageCacher { get }
     var cahceIdentifier: String { get }
     func isCached(type: CachedResourceStorageType) -> Bool
     func removeCache(type: CachedResourceStorageType)
@@ -26,12 +26,12 @@ extension CachableResource {
     
     func isCached(type: CachedResourceStorageType) -> Bool {
         let processor = CachedResourceImageProcessor(type: type)
-        return cache.isCached(forKey: cahceIdentifier, processorIdentifier: processor.identifier)
+        return cacher.isCached(forKey: cahceIdentifier, processorIdentifier: processor.identifier)
     }
     
     func removeCache(type: CachedResourceStorageType) {
         let processor = CachedResourceImageProcessor(type: type)
-        cache.removeImage(forKey: cahceIdentifier, processorIdentifier: processor.identifier, fromMemory: true, fromDisk: true)
+        cacher.removeImage(forKey: cahceIdentifier, processorIdentifier: processor.identifier, fromMemory: true, fromDisk: true)
     }
     
     func writeCache(storage: CachedResourceStorage, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void) {
@@ -42,7 +42,7 @@ extension CachableResource {
                                                    .cacheSerializer(cacheSerializer)])
         switch storage {
         case .thumbnail(let image), .preview(let image):
-            cache.store(image, forKey: cahceIdentifier, options: options, toDisk: true) { result in
+            cacher.store(image, forKey: cahceIdentifier, options: options, toDisk: true) { result in
                 switch result.diskCacheResult {
                 case .success:
                     _print("✅ Cahce Write [\(storage.type.identifier)]<\(self.cahceIdentifier)>")
@@ -55,7 +55,7 @@ extension CachableResource {
         case .original(let image, let data):
             var cacheSerializer = DefaultCacheSerializer()
             cacheSerializer.preferCacheOriginalData = true
-            cache.store(image, original: data, forKey: cahceIdentifier, options: options, toDisk: true) { result in
+            cacher.store(image, original: data, forKey: cahceIdentifier, options: options, toDisk: true) { result in
                 switch result.diskCacheResult {
                 case .success:
                     _print("✅ Cahce Write [\(storage.type.identifier)]<\(self.cahceIdentifier)>")
@@ -70,7 +70,7 @@ extension CachableResource {
     
     func loadCache(type: CachedResourceStorageType, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void) {
         let processor = CachedResourceImageProcessor(type: type)
-        cache.retrieveImage(forKey: cahceIdentifier, options: [.processor(processor)]) { result in
+        cacher.retrieveImage(forKey: cahceIdentifier, options: [.processor(processor)]) { result in
             switch result {
             case .success(let imageResult):
                 switch imageResult {
@@ -93,7 +93,7 @@ extension CachableResource {
     
     func loadCacheURL(type: CachedResourceStorageType) -> URL {
         let processor = CachedResourceImageProcessor(type: type)
-        let path = cache.cachePath(forKey: cahceIdentifier, processorIdentifier: processor.identifier)
+        let path = cacher.cachePath(forKey: cahceIdentifier, processorIdentifier: processor.identifier)
         return URL(fileURLWithPath: path)
     }
 }

@@ -120,7 +120,7 @@ extension PickerManager {
                     completion(.success(.init(identifier: identifier, image: response.image, isDegraded: response.isDegraded)))
                 }
             case .failure(let error):
-                guard error == .cannotFindInLocal && options.isNetworkAccessAllowed else {
+                guard error == .resourceIsInCloud && options.isNetworkAccessAllowed else {
                     completion(.failure(error))
                     return
                 }

@@ -139,7 +139,7 @@ final class VideoEditorController: AnyImageViewController {
                     }
                 }
             case .failure(let error):
-                if error == .cannotFindInLocal {
+                if error == .resourceIsInCloud {
                     self.showWaitHUD()
                     return
                 }

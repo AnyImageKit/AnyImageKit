@@ -10,9 +10,9 @@ import Photos
 
 extension Asset where Resource == PHAsset {
     
-    init(phAsset: PHAsset, selectOption: MediaSelectOption, cache: AnyImageCache) {
+    init(phAsset: PHAsset, selectOption: MediaSelectOption, cache: AnyImageCacher) {
         let mediaType = MediaType(phAsset: phAsset, selectOption: selectOption)
-        self.init(resource: phAsset, mediaType: mediaType, cache: cache)
+        self.init(resource: phAsset, mediaType: mediaType, cacher: cache)
     }
     
     public var phAsset: PHAsset {

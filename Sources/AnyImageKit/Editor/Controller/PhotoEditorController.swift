@@ -90,7 +90,7 @@ final class PhotoEditorController: AnyImageViewController {
                 self.setupView()
                 self.setupMosaicView()
             case .failure(let error):
-                if error == .cannotFindInLocal {
+                if error == .resourceIsInCloud {
                     self.showWaitHUD()
                     return
                 }

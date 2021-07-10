@@ -46,7 +46,7 @@ extension PickerManager {
                                                   isUserLibrary: true,
                                                   selectOption: options.selectOptions,
                                                   additions: additions,
-                                                  cache: imageCache)
+                                                  cacher: imageCache)
                 completion(result)
                 return
             }
@@ -76,7 +76,7 @@ extension PickerManager {
                                                       isUserLibrary: assetCollection.isUserLibrary,
                                                       selectOption: self.options.selectOptions,
                                                       additions: additions,
-                                                      cache: self.imageCache)
+                                                      cacher: self.imageCache)
                     DispatchQueue.main.async {
                         completion(result)
                         return
@@ -118,7 +118,7 @@ extension PickerManager {
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
                                                       additions: additions,
-                                                      cache: self.imageCache)
+                                                      cacher: self.imageCache)
                     results.insert(result, at: 0)
                 } else {
                     let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -128,7 +128,7 @@ extension PickerManager {
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
                                                       additions: [],
-                                                      cache: self.imageCache)
+                                                      cacher: self.imageCache)
                     results.append(result)
                 }
             }

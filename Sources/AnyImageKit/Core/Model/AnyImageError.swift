@@ -25,7 +25,7 @@ public enum AnyImageError: Error {
     case exportFailed
     case exportCanceled
     
-    case cannotFindInLocal
+    case resourceIsInCloud
     
     case savePhotoFailed
     case saveVideoFailed

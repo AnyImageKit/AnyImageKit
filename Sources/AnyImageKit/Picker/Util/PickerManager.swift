@@ -17,7 +17,7 @@ struct FetchRecord {
 
 final class PickerManager {
     
-    let imageCache: AnyImageCache
+    let imageCache: AnyImageCacher
     
     var options: PickerOptionsInfo = .init()
     
@@ -44,7 +44,7 @@ final class PickerManager {
     
     init() {
         // FIXME:
-        imageCache = AnyImageCache(name: "org.AnyImageProject.AnyImageKit")
+        imageCache = AnyImageCacher(name: "org.AnyImageProject.AnyImageKit")
     }
     
     let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.PickerManager")

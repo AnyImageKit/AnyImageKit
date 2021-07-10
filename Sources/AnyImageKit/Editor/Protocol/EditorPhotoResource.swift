@@ -56,7 +56,7 @@ extension PHAsset: EditorPhotoResource {
                 }
             case .failure(let error):
                 completion(.failure(error))
-                if error == .cannotFindInLocal {
+                if error == .resourceIsInCloud {
                     self?.loadImageFromNetwork(completion: completion)
                 }
             }

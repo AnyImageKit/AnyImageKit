@@ -68,7 +68,7 @@ extension ExportTool {
             } else {
                 let isInCloud = info[PHImageResultIsInCloudKey] as? Bool ?? false
                 if isInCloud {
-                    completion(.failure(AnyImageError.cannotFindInLocal), requestID)
+                    completion(.failure(AnyImageError.resourceIsInCloud), requestID)
                 } else {
                     completion(.failure(AnyImageError.invalidData), requestID)
                 }

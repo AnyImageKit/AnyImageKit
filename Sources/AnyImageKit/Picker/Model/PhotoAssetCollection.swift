@@ -37,9 +37,9 @@ struct PhotoAssetCollection: AssetCollection, IdentifiableResource, CachableReso
     let suffixAdditions: [AssetCollectionAddition]
     
     /// A shared image cache for all assets
-    let cache: AnyImageCache
+    let cacher: AnyImageCacher
     
-    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additions: [AssetCollectionAddition], cache: AnyImageCache) {
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additions: [AssetCollectionAddition], cacher: AnyImageCacher) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
@@ -54,7 +54,7 @@ struct PhotoAssetCollection: AssetCollection, IdentifiableResource, CachableReso
             self.prefixAdditions = additions
             self.suffixAdditions = []
         }
-        self.cache = cache
+        self.cacher = cacher
     }
 }
 
@@ -65,21 +65,21 @@ extension PhotoAssetCollection {
     }
     
     subscript(asset index: Int) -> Asset<PHAsset> {
-        return Asset(phAsset: fetchResult[index], selectOption: selectOption, cache: cache)
+        return Asset(phAsset: fetchResult[index], selectOption: selectOption, cache: cacher)
     }
     
     var firstAsset: Asset<PHAsset>? {
         guard let first = fetchResult.first else {
             return nil
         }
-        return Asset(phAsset: first, selectOption: selectOption, cache: cache)
+        return Asset(phAsset: first, selectOption: selectOption, cache: cacher)
     }
     
     var lastAsset: Asset<PHAsset>? {
         guard let last = fetchResult.last else {
             return nil
         }
-        return Asset(phAsset: last, selectOption: selectOption, cache: cache)
+        return Asset(phAsset: last, selectOption: selectOption, cache: cacher)
     }
 }
 
@@ -96,7 +96,7 @@ extension PhotoAssetCollection: Sequence {
             case 0 ..< prefixCount:
                 return .prefix(prefixAdditions[count])
             case prefixCount ..< (assetCount + prefixCount):
-                return .asset(Asset(phAsset: fetchResult[count - prefixCount], selectOption: selectOption, cache: cache))
+                return .asset(Asset(phAsset: fetchResult[count - prefixCount], selectOption: selectOption, cache: cacher))
             case (assetCount + prefixCount) ..< (prefixCount + assetCount + suffixCount):
                 return .suffix(suffixAdditions[count - prefixCount - assetCount])
             default:
@@ -114,7 +114,7 @@ extension PhotoAssetCollection: BidirectionalCollection {
         case 0 ..< prefixCount:
             return .prefix(prefixAdditions[position])
         case prefixCount ..< (assetCount + prefixCount):
-            return .asset(Asset(phAsset: fetchResult[position - prefixCount], selectOption: selectOption, cache: cache))
+            return .asset(Asset(phAsset: fetchResult[position - prefixCount], selectOption: selectOption, cache: cacher))
         default:
             return .suffix(suffixAdditions[position - prefixCount - assetCount])
         }
