@@ -7,9 +7,6 @@
 //
 
 import UIKit
-import Kingfisher
-
-public typealias AnyImageCacher = ImageCache
 
 protocol CachableResource {
     
@@ -17,84 +14,31 @@ protocol CachableResource {
     var cahceIdentifier: String { get }
     func isCached(type: CachedResourceStorageType) -> Bool
     func removeCache(type: CachedResourceStorageType)
-    func writeCache(storage: CachedResourceStorage, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void)
-    func loadCache(type: CachedResourceStorageType, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void)
+    func writeCache(storage: CachedResourceStorage, completion: @escaping CacheResourceStorageCompletion)
+    func loadCache(type: CachedResourceStorageType, completion: @escaping CacheResourceStorageCompletion)
     func loadCacheURL(type: CachedResourceStorageType) -> URL
 }
 
 extension CachableResource {
     
     func isCached(type: CachedResourceStorageType) -> Bool {
-        let processor = CachedResourceImageProcessor(type: type)
-        return cacher.isCached(forKey: cahceIdentifier, processorIdentifier: processor.identifier)
+        return cacher.isCached(key: cahceIdentifier, type: type)
     }
     
     func removeCache(type: CachedResourceStorageType) {
-        let processor = CachedResourceImageProcessor(type: type)
-        cacher.removeImage(forKey: cahceIdentifier, processorIdentifier: processor.identifier, fromMemory: true, fromDisk: true)
+        cacher.remove(key: cahceIdentifier, type: type)
     }
     
     func writeCache(storage: CachedResourceStorage, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void) {
-        let processor = CachedResourceImageProcessor(type: storage.type)
-        var cacheSerializer = DefaultCacheSerializer()
-        cacheSerializer.preferCacheOriginalData = true
-        let options = KingfisherParsedOptionsInfo([.processor(processor),
-                                                   .cacheSerializer(cacheSerializer)])
-        switch storage {
-        case .thumbnail(let image), .preview(let image):
-            cacher.store(image, forKey: cahceIdentifier, options: options, toDisk: true) { result in
-                switch result.diskCacheResult {
-                case .success:
-                    _print("✅ Cahce Write [\(storage.type.identifier)]<\(self.cahceIdentifier)>")
-                    completion(.success(storage))
-                case .failure(let error):
-                    _print("❌ Cahce Write [\(storage.type.identifier)]<\(self.cahceIdentifier)>, error=\(error)")
-                    completion(.failure(error))
-                }
-            }
-        case .original(let image, let data):
-            var cacheSerializer = DefaultCacheSerializer()
-            cacheSerializer.preferCacheOriginalData = true
-            cacher.store(image, original: data, forKey: cahceIdentifier, options: options, toDisk: true) { result in
-                switch result.diskCacheResult {
-                case .success:
-                    _print("✅ Cahce Write [\(storage.type.identifier)]<\(self.cahceIdentifier)>")
-                    completion(.success(storage))
-                case .failure(let error):
-                    _print("❌ Cahce Write [\(storage.type.identifier)]<\(self.cahceIdentifier)>, error=\(error)")
-                    completion(.failure(error))
-                }
-            }
-        }
+        cacher.write(key: cahceIdentifier, storage: storage, completion: completion)
     }
     
     func loadCache(type: CachedResourceStorageType, completion: @escaping (Result<CachedResourceStorage, Error>) -> Void) {
-        let processor = CachedResourceImageProcessor(type: type)
-        cacher.retrieveImage(forKey: cahceIdentifier, options: [.processor(processor)]) { result in
-            switch result {
-            case .success(let imageResult):
-                switch imageResult {
-                case .memory(let image):
-                    _print("✅ Cahce Load [MEMORY] [\(type.identifier)]<\(self.cahceIdentifier)>")
-                    completion(.success(.init(type: type, image: image, data: nil)))
-                case .disk(let image):
-                    _print("✅ Cahce Load [DISK] [\(type.identifier)]<\(self.cahceIdentifier)>")
-                    completion(.success(.init(type: type, image: image, data: nil)))
-                case .none:
-                    _print("⚠️ Cahce Load [\(type.identifier)]<\(self.cahceIdentifier)>, Cahce not exist")
-                    completion(.failure(AnyImageError.cacheNotExist))
-                }
-            case .failure(let error):
-                _print("❌ Cahce Load [\(type.identifier)]<\(self.cahceIdentifier)>, error=\(error)")
-                completion(.failure(error))
-            }
-        }
+        cacher.load(key: cahceIdentifier, type: type, completion: completion)
     }
     
     func loadCacheURL(type: CachedResourceStorageType) -> URL {
-        let processor = CachedResourceImageProcessor(type: type)
-        let path = cacher.cachePath(forKey: cahceIdentifier, processorIdentifier: processor.identifier)
-        return URL(fileURLWithPath: path)
+        cacher.loadURL(key: cahceIdentifier, type: type)
     }
 }
 
@@ -116,24 +60,7 @@ public enum CachedResourceStorageType: IdentifiableResource {
     }
 }
 
-struct CachedResourceImageProcessor: ImageProcessor {
-    
-    var identifier: String {
-        return type.identifier
-    }
-    
-    let type: CachedResourceStorageType
-    
-    init(type: CachedResourceStorageType) {
-        self.type = type
-    }
-    
-    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
-        DefaultImageProcessor.default.process(item: item, options: options)
-    }
-}
-
-enum CachedResourceStorage {
+public enum CachedResourceStorage {
     
     case thumbnail(UIImage)
     case preview(UIImage)
@@ -150,7 +77,7 @@ enum CachedResourceStorage {
         }
     }
     
-    var type: CachedResourceStorageType {
+    public var type: CachedResourceStorageType {
         switch self {
         case .thumbnail:
             return .thumbnail
@@ -161,7 +88,7 @@ enum CachedResourceStorage {
         }
     }
     
-    var image: UIImage {
+    public var image: UIImage {
         switch self {
         case .thumbnail(let image):
             return image

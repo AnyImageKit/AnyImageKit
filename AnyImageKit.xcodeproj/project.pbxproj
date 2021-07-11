@@ -158,6 +158,8 @@
 		A0F6539B269963D500013573 /* LoadableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F6539A269963D500013573 /* LoadableResource.swift */; };
 		A0F6539D26996A1A00013573 /* AnyImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F6539C26996A1A00013573 /* AnyImageLoader.swift */; };
 		A0F653C42699816A00013573 /* AnyImageLoader+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F653C32699816A00013573 /* AnyImageLoader+PHAsset.swift */; };
+		A0F653C62699921D00013573 /* AnyImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F653C52699921D00013573 /* AnyImageCacher.swift */; };
+		A0F653C8269A8D4200013573 /* AnyImageCacher+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F653C7269A8D4200013573 /* AnyImageCacher+Kingfisher.swift */; };
 		A0F93B0F263AE83400D09263 /* PickerManager+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F93B0E263AE83400D09263 /* PickerManager+State.swift */; };
 		A0F93B11263AEAD800D09263 /* AssetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F93B10263AEAD800D09263 /* AssetState.swift */; };
 		A0FDB2CE255268A500FDE93E /* TitleMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FDB2CD255268A400FDE93E /* TitleMapCell.swift */; };
@@ -465,6 +467,8 @@
 		A0F6539A269963D500013573 /* LoadableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableResource.swift; sourceTree = "<group>"; };
 		A0F6539C26996A1A00013573 /* AnyImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageLoader.swift; sourceTree = "<group>"; };
 		A0F653C32699816A00013573 /* AnyImageLoader+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyImageLoader+PHAsset.swift"; sourceTree = "<group>"; };
+		A0F653C52699921D00013573 /* AnyImageCacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageCacher.swift; sourceTree = "<group>"; };
+		A0F653C7269A8D4200013573 /* AnyImageCacher+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyImageCacher+Kingfisher.swift"; sourceTree = "<group>"; };
 		A0F93B0E263AE83400D09263 /* PickerManager+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+State.swift"; sourceTree = "<group>"; };
 		A0F93B10263AEAD800D09263 /* AssetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetState.swift; sourceTree = "<group>"; };
 		A0FDB2CD255268A400FDE93E /* TitleMapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleMapCell.swift; sourceTree = "<group>"; };
@@ -1137,6 +1141,8 @@
 				A012D2D126203B2D006B5261 /* IdentifiableResource.swift */,
 				A06225FF268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift */,
 				A0F6539A269963D500013573 /* LoadableResource.swift */,
+				A0F653C52699921D00013573 /* AnyImageCacher.swift */,
+				A0F653C7269A8D4200013573 /* AnyImageCacher+Kingfisher.swift */,
 				A046306A2691EC130041084A /* CachableResource.swift */,
 				A0F6539826993C6200013573 /* CachableResource+IdentifiableResource.swift */,
 				A07DDD1A26248CC4003D6B4E /* AssetCollection.swift */,
@@ -1560,6 +1566,7 @@
 				71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
+				A0F653C62699921D00013573 /* AnyImageCacher.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
@@ -1698,6 +1705,7 @@
 				A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */,
 				71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */,
 				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,
+				A0F653C8269A8D4200013573 /* AnyImageCacher+Kingfisher.swift in Sources */,
 				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
 				718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */,
 				A513C46023ACB6AC0071D0D5 /* Core+UIImageView.swift in Sources */,
