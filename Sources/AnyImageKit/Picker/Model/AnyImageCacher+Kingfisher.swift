@@ -10,22 +10,22 @@ import Kingfisher
 
 struct KFBasedMixCacher: AnyImageCacher {
     
-    static let `default` = KFBasedMixCacher(imageCahce: .default)
+    static let `default` = KFBasedMixCacher(imageCache: .default)
     
-    private let imageCahce: Kingfisher.ImageCache
+    private let imageCache: Kingfisher.ImageCache
     
-    init(imageCahce: Kingfisher.ImageCache) {
-        self.imageCahce = imageCahce
+    init(imageCache: Kingfisher.ImageCache) {
+        self.imageCache = imageCache
     }
     
     func isCached(key: String, type: CachedResourceStorageType) -> Bool {
         let processor = CachedResourceImageProcessor(type: type)
-        return imageCahce.isCached(forKey: key, processorIdentifier: processor.identifier)
+        return imageCache.isCached(forKey: key, processorIdentifier: processor.identifier)
     }
     
     func remove(key: String, type: CachedResourceStorageType) {
         let processor = CachedResourceImageProcessor(type: type)
-        imageCahce.removeImage(forKey: key, processorIdentifier: processor.identifier, fromMemory: true, fromDisk: true)
+        imageCache.removeImage(forKey: key, processorIdentifier: processor.identifier, fromMemory: true, fromDisk: true)
     }
     
     func write(key: String, storage: CachedResourceStorage, completion: @escaping CacheResourceStorageCompletion) {
@@ -36,7 +36,7 @@ struct KFBasedMixCacher: AnyImageCacher {
                                                    .cacheSerializer(cacheSerializer)])
         switch storage {
         case .thumbnail(let image), .preview(let image):
-            imageCahce.store(image, forKey: key, options: options, toDisk: true) { result in
+            imageCache.store(image, forKey: key, options: options, toDisk: true) { result in
                 switch result.diskCacheResult {
                 case .success:
                     _print("✅ Cahce Write [\(storage.type.identifier)]<\(key)>")
@@ -49,7 +49,7 @@ struct KFBasedMixCacher: AnyImageCacher {
         case .original(let image, let data):
             var cacheSerializer = DefaultCacheSerializer()
             cacheSerializer.preferCacheOriginalData = true
-            imageCahce.store(image, original: data, forKey: key, options: options, toDisk: true) { result in
+            imageCache.store(image, original: data, forKey: key, options: options, toDisk: true) { result in
                 switch result.diskCacheResult {
                 case .success:
                     _print("✅ Cahce Write [\(storage.type.identifier)]<\(key)>")
@@ -64,7 +64,7 @@ struct KFBasedMixCacher: AnyImageCacher {
     
     func load(key: String, type: CachedResourceStorageType, completion: @escaping CacheResourceStorageCompletion) {
         let processor = CachedResourceImageProcessor(type: type)
-        imageCahce.retrieveImage(forKey: key, options: [.processor(processor)]) { result in
+        imageCache.retrieveImage(forKey: key, options: [.processor(processor)]) { result in
             switch result {
             case .success(let imageResult):
                 switch imageResult {
@@ -87,7 +87,7 @@ struct KFBasedMixCacher: AnyImageCacher {
     
     func loadURL(key: String, type: CachedResourceStorageType) -> URL {
         let processor = CachedResourceImageProcessor(type: type)
-        let path = imageCahce.cachePath(forKey: key, processorIdentifier: processor.identifier)
+        let path = imageCache.cachePath(forKey: key, processorIdentifier: processor.identifier)
         return URL(fileURLWithPath: path)
     }
 }
