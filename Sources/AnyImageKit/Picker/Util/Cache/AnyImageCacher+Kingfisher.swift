@@ -8,9 +8,9 @@
 
 import Kingfisher
 
-struct KFBasedMixCacher: AnyImageCacher {
+struct KFMixedCacher: AnyImageCacher {
     
-    static let `default` = KFBasedMixCacher(imageCache: .default)
+    static let `default` = KFMixedCacher(imageCache: .default)
     
     private let imageCache: Kingfisher.ImageCache
     
@@ -92,7 +92,7 @@ struct KFBasedMixCacher: AnyImageCacher {
     }
 }
 
-extension KFBasedMixCacher {
+extension KFMixedCacher {
     
     private struct CachedResourceImageProcessor: ImageProcessor {
         

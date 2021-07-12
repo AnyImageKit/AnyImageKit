@@ -8,6 +8,8 @@
 
 import UIKit
 
+public typealias ImageResourceLoadCompletion = (Result<ImageResourceStorage, Error>) -> Void
+
 public enum ImageResourceStorage {
     
     case thumbnail(UIImage)

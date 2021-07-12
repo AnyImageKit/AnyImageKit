@@ -44,7 +44,7 @@ final class PickerManager {
     
     init() {
         // FIXME:
-        imageCache = KFBasedMixCacher.default
+        imageCache = KFMixedCacher.default
     }
     
     let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.PickerManager")

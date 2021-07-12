@@ -12,5 +12,5 @@ protocol LoadableResource {
     
     var loader: AnyImageLoader { get }
     var loadIdentifier: String { get }
-//    func loadImage
+    func loadImage(type: ImageResourceStorageType, completion: ImageResourceLoadCompletion)
 }

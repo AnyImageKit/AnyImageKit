@@ -8,8 +8,6 @@
 
 import Foundation
 
-public typealias ImageResourceLoadCompletion = (Result<ImageResourceStorage, Error>) -> Void
-
 public protocol AnyImageCacher {
     
     func isCached(key: String, type: ImageResourceStorageType) -> Bool
