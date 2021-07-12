@@ -18,17 +18,17 @@ struct KFBasedMixCacher: AnyImageCacher {
         self.imageCache = imageCache
     }
     
-    func isCached(key: String, type: CachedResourceStorageType) -> Bool {
+    func isCached(key: String, type: ImageResourceStorageType) -> Bool {
         let processor = CachedResourceImageProcessor(type: type)
         return imageCache.isCached(forKey: key, processorIdentifier: processor.identifier)
     }
     
-    func remove(key: String, type: CachedResourceStorageType) {
+    func remove(key: String, type: ImageResourceStorageType) {
         let processor = CachedResourceImageProcessor(type: type)
         imageCache.removeImage(forKey: key, processorIdentifier: processor.identifier, fromMemory: true, fromDisk: true)
     }
     
-    func write(key: String, storage: CachedResourceStorage, completion: @escaping CacheResourceStorageCompletion) {
+    func write(key: String, storage: ImageResourceStorage, completion: @escaping ImageResourceLoadCompletion) {
         let processor = CachedResourceImageProcessor(type: storage.type)
         var cacheSerializer = DefaultCacheSerializer()
         cacheSerializer.preferCacheOriginalData = true
@@ -62,7 +62,7 @@ struct KFBasedMixCacher: AnyImageCacher {
         }
     }
     
-    func load(key: String, type: CachedResourceStorageType, completion: @escaping CacheResourceStorageCompletion) {
+    func load(key: String, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
         let processor = CachedResourceImageProcessor(type: type)
         imageCache.retrieveImage(forKey: key, options: [.processor(processor)]) { result in
             switch result {
@@ -85,7 +85,7 @@ struct KFBasedMixCacher: AnyImageCacher {
         }
     }
     
-    func loadURL(key: String, type: CachedResourceStorageType) -> URL {
+    func loadURL(key: String, type: ImageResourceStorageType) -> URL {
         let processor = CachedResourceImageProcessor(type: type)
         let path = imageCache.cachePath(forKey: key, processorIdentifier: processor.identifier)
         return URL(fileURLWithPath: path)
@@ -100,9 +100,9 @@ extension KFBasedMixCacher {
             return type.identifier
         }
         
-        let type: CachedResourceStorageType
+        let type: ImageResourceStorageType
         
-        init(type: CachedResourceStorageType) {
+        init(type: ImageResourceStorageType) {
             self.type = type
         }
         

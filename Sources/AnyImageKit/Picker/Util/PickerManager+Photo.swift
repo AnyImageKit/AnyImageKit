@@ -53,7 +53,7 @@ enum PhotoSizeMode: Equatable {
     /// Original Size
     case original
     
-    var cacheType: CachedResourceStorageType {
+    var cacheType: ImageResourceStorageType {
         switch self {
         case .thumbnail:
             return .thumbnail

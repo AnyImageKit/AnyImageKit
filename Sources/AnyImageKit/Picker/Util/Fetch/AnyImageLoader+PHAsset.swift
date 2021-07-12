@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+/*
 struct PhotoLoadOptions {
     
     let size: CGSize
@@ -79,3 +80,4 @@ extension AnyImageLoader {
         self.startResuest(id: requestInID, for: identifier)
     }
 }
+*/
