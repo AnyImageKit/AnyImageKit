@@ -8,7 +8,27 @@
 
 import Foundation
 
-protocol AnyImageStater {
+final class AnyImageStater<Resource: IdentifiableResource> {
     
+    private var stateStroage: [String: ResourceState<Resource>] = [:]
+    private var selectedStroage: [String] = []
+     
+    var disableCheckRules: [AnyResourceDisableCheckRule<Resource>] = []
     
+    func loadState(key: String) -> ResourceState<Resource> {
+        return stateStroage[key] ?? .initialize
+    }
+    
+    func updateState(_ state: ResourceState<Resource>, key: String) {
+        if let index = selectedStroage.firstIndex(of: key), state != .selected {
+            selectedStroage.remove(at: index)
+        } else if state == .selected {
+            selectedStroage.append(key)
+        }
+        stateStroage[key] = state
+    }
+    
+    func selectedIndex(key: String) -> Int? {
+        return selectedStroage.firstIndex(of: key)
+    }
 }

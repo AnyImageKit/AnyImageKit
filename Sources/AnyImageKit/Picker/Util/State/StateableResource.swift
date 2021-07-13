@@ -12,59 +12,40 @@ protocol StateableResource {
     
     associatedtype Resource: IdentifiableResource
     
-    var stater: AnyImageStater { get }
+    var stater: AnyImageStater<Resource> { get }
     var stateIdentifier: String { get }
     var state: ResourceState<Resource> { get nonmutating set }
+    var disableCheckRules: [AnyResourceDisableCheckRule<Resource>] { get nonmutating set }
+}
+
+extension StateableResource {
+    
+    var state: ResourceState<Resource> {
+        get {
+            stater.loadState(key: stateIdentifier)
+        }
+        nonmutating set {
+            stater.updateState(newValue, key: stateIdentifier)
+        }
+    }
+    
+    var disableCheckRules: [AnyResourceDisableCheckRule<Resource>] {
+        get {
+            return stater.disableCheckRules
+        }
+        set {
+            stater.disableCheckRules = newValue
+        }
+    }
 }
 
 enum ResourceState<Resource: IdentifiableResource>: Equatable {
     
+    case initialize
     case normal
     case selected
     case edited
     case disabled(AnyResourceDisableCheckRule<Resource>)
-    
-    static func == (lhs: ResourceState<Resource>, rhs: ResourceState<Resource>) -> Bool {
-        switch (lhs, rhs) {
-        case (.normal, .normal):
-            return true
-        case (.selected, .selected):
-            return true
-        case (.edited, .edited):
-            return true
-        case (.disabled, .disabled):
-            return true
-        default:
-            return false
-        }
-    }
-    
-    var isNormal: Bool {
-        switch self {
-        case .normal:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    var isSelected: Bool {
-        switch self {
-        case .selected:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    var isEdited: Bool {
-        switch self {
-        case .edited:
-            return true
-        default:
-            return false
-        }
-    }
     
     var isDisabled: Bool {
         switch self {
@@ -76,24 +57,43 @@ enum ResourceState<Resource: IdentifiableResource>: Equatable {
     }
 }
 
-struct AnyResourceDisableCheckRule<Resource: IdentifiableResource> {
+public struct AnyResourceDisableCheckRule<Resource: IdentifiableResource>: IdentifiableResource, ResourceDisableCheckRule {
     
-    typealias CheckResultCompletion = (Asset<Resource>) -> Bool
-    typealias DisabledMessageCompletion = (Asset<Resource>) -> String
+    public typealias CheckResultCompletion = (Asset<Resource>) -> Bool
+    public typealias DisabledMessageCompletion = (Asset<Resource>) -> String
+    
+    public let identifier: String
     
     private let checkResult: CheckResultCompletion
     private let disabledMessage: DisabledMessageCompletion
     
-    init(checkResult: @escaping CheckResultCompletion, disabledMessage: @escaping DisabledMessageCompletion) {
+    public init(identifier: String, checkResult: @escaping CheckResultCompletion, disabledMessage: @escaping DisabledMessageCompletion) {
+        self.identifier = identifier
         self.checkResult = checkResult
         self.disabledMessage = disabledMessage
     }
     
-    func isDisabled(for asset: Asset<Resource>) -> Bool {
+    public init<Rule: ResourceDisableCheckRule>(_ rule: Rule) where Rule.Resource == Resource {
+        self.init(identifier: rule.identifier) { asset in
+            rule.isDisabled(for: asset)
+        } disabledMessage: { asset in
+            rule.disabledMessage(for: asset)
+        }
+    }
+    
+    public func isDisabled(for asset: Asset<Resource>) -> Bool {
         return self.checkResult(asset)
     }
     
-    func disabledMessage(for asset: Asset<Resource>) -> String {
+    public func disabledMessage(for asset: Asset<Resource>) -> String {
         return self.disabledMessage(asset)
     }
+}
+
+public protocol ResourceDisableCheckRule: IdentifiableResource {
+    
+    associatedtype Resource: IdentifiableResource
+    
+    func isDisabled(for asset: Asset<Resource>) -> Bool
+    func disabledMessage(for asset: Asset<Resource>) -> String
 }

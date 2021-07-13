@@ -89,6 +89,7 @@
 		A058846826358DB30095D424 /* Asset+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058846726358DB30095D424 /* Asset+PHAsset.swift */; };
 		A05982F9269C90620041CAD5 /* StateableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05982F8269C90620041CAD5 /* StateableResource.swift */; };
 		A05982FB269C91F40041CAD5 /* AnyImageStater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05982FA269C91F40041CAD5 /* AnyImageStater.swift */; };
+		A05982FD269DC9480041CAD5 /* StateableResource+IdentifiableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05982FC269DC9480041CAD5 /* StateableResource+IdentifiableResource.swift */; };
 		A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA2233DEFD7005B0F3C /* PickerManager+Photo.swift */; };
 		A05C8DA7233DFC71005B0F3C /* PickerManager+Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05C8DA6233DFC71005B0F3C /* PickerManager+Album.swift */; };
 		A0622600268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06225FF268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift */; };
@@ -398,6 +399,7 @@
 		A058846726358DB30095D424 /* Asset+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+PHAsset.swift"; sourceTree = "<group>"; };
 		A05982F8269C90620041CAD5 /* StateableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateableResource.swift; sourceTree = "<group>"; };
 		A05982FA269C91F40041CAD5 /* AnyImageStater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageStater.swift; sourceTree = "<group>"; };
+		A05982FC269DC9480041CAD5 /* StateableResource+IdentifiableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StateableResource+IdentifiableResource.swift"; sourceTree = "<group>"; };
 		A05C8DA2233DEFD7005B0F3C /* PickerManager+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+Photo.swift"; sourceTree = "<group>"; };
 		A05C8DA6233DFC71005B0F3C /* PickerManager+Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+Album.swift"; sourceTree = "<group>"; };
 		A05C8DAA233E0F56005B0F3C /* MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
@@ -867,6 +869,7 @@
 			isa = PBXGroup;
 			children = (
 				A05982F8269C90620041CAD5 /* StateableResource.swift */,
+				A05982FC269DC9480041CAD5 /* StateableResource+IdentifiableResource.swift */,
 				A05982FA269C91F40041CAD5 /* AnyImageStater.swift */,
 			);
 			path = State;
@@ -1647,6 +1650,7 @@
 				A0800411232F4EE4006B4711 /* ImagePickerController.swift in Sources */,
 				A50B2116237AA24300A894A9 /* EditorMosaicToolView.swift in Sources */,
 				A0F93B11263AEAD800D09263 /* AssetState.swift in Sources */,
+				A05982FD269DC9480041CAD5 /* StateableResource+IdentifiableResource.swift in Sources */,
 				A01A59372522206A00FABD22 /* EditorResult.swift in Sources */,
 				7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */,
 				71B3E952262989A600710A7F /* EditorPhotoToolOption.swift in Sources */,
