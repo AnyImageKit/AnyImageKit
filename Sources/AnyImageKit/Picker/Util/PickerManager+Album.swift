@@ -46,7 +46,9 @@ extension PickerManager {
                                                   isUserLibrary: true,
                                                   selectOption: options.selectOptions,
                                                   additions: additions,
-                                                  cacher: imageCache)
+                                                  stater: imageStater,
+                                                  loader: imageLoader,
+                                                  cacher: imageCacher)
                 completion(result)
                 return
             }
@@ -76,7 +78,9 @@ extension PickerManager {
                                                       isUserLibrary: assetCollection.isUserLibrary,
                                                       selectOption: self.options.selectOptions,
                                                       additions: additions,
-                                                      cacher: self.imageCache)
+                                                      stater: self.imageStater,
+                                                      loader: self.imageLoader,
+                                                      cacher: self.imageCacher)
                     DispatchQueue.main.async {
                         completion(result)
                         return
@@ -118,7 +122,9 @@ extension PickerManager {
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
                                                       additions: additions,
-                                                      cacher: self.imageCache)
+                                                      stater: self.imageStater,
+                                                      loader: self.imageLoader,
+                                                      cacher: self.imageCacher)
                     results.insert(result, at: 0)
                 } else {
                     let result = PhotoAssetCollection(identifier: assetCollection.localIdentifier,
@@ -128,7 +134,9 @@ extension PickerManager {
                                                       isUserLibrary: isUserLibrary,
                                                       selectOption: self.options.selectOptions,
                                                       additions: [],
-                                                      cacher: self.imageCache)
+                                                      stater: self.imageStater,
+                                                      loader: self.imageLoader,
+                                                      cacher: self.imageCacher)
                     results.append(result)
                 }
             }

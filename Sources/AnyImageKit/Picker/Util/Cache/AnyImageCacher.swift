@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AnyImageCacher {
+protocol AnyImageCacher {
     
     func isCached(key: String, type: ImageResourceStorageType) -> Bool
     func remove(key: String, type: ImageResourceStorageType)

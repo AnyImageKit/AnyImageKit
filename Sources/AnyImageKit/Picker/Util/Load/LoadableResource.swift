@@ -8,9 +8,8 @@
 
 import Foundation
 
-protocol LoadableResource {
+protocol LoadableResource: IdentifiableResource {
     
     var loader: AnyImageLoader { get }
-    var loadIdentifier: String { get }
     func loadImage(type: ImageResourceStorageType, completion: ImageResourceLoadCompletion)
 }

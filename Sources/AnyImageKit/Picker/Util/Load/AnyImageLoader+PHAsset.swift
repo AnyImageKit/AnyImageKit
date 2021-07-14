@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-/*
+
 struct PhotoLoadOptions {
     
     let size: CGSize
@@ -60,7 +60,7 @@ extension AnyImageLoader {
                 return
             }
             defer {
-                self.endRequest(id: requestOutID, for: identifier)
+                self.endRequest(id: Int(requestOutID), identifier: identifier)
             }
             let isCancelled = info[PHImageCancelledKey] as? Bool ?? false
             let error = info[PHImageErrorKey] as? Error // FIXME: throw error out
@@ -77,7 +77,6 @@ extension AnyImageLoader {
                 }
             }
         }
-        self.startResuest(id: requestInID, for: identifier)
+        self.startRequest(id: Int(requestInID), identifier: identifier)
     }
 }
-*/

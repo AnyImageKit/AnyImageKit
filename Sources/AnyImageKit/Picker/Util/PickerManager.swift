@@ -17,7 +17,9 @@ struct FetchRecord {
 
 final class PickerManager {
     
-    let imageCache: AnyImageCacher
+    let imageStater: AnyImageStater<PHAsset>
+    let imageLoader: AnyImageLoader
+    let imageCacher: AnyImageCacher
     
     var options: PickerOptionsInfo = .init()
     
@@ -44,7 +46,9 @@ final class PickerManager {
     
     init() {
         // FIXME:
-        imageCache = KFMixedCacher.default
+        imageStater = AnyImageStater<PHAsset>()
+        imageLoader = DefaultImageLoader()
+        imageCacher = KFMixedCacher.default
     }
     
     let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.PickerManager")

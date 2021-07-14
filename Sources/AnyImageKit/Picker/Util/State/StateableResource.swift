@@ -8,26 +8,17 @@
 
 import Foundation
 
-protocol StateableResource {
+protocol StateableResource: IdentifiableResource {
     
     associatedtype Resource: IdentifiableResource
     
     var stater: AnyImageStater<Resource> { get }
-    var stateIdentifier: String { get }
     var state: ResourceState<Resource> { get nonmutating set }
     var disableCheckRules: [AnyResourceDisableCheckRule<Resource>] { get nonmutating set }
 }
 
 extension StateableResource {
-    
-    var state: ResourceState<Resource> {
-        get {
-            stater.loadState(key: stateIdentifier)
-        }
-        nonmutating set {
-            stater.updateState(newValue, key: stateIdentifier)
-        }
-    }
+
     
     var disableCheckRules: [AnyResourceDisableCheckRule<Resource>] {
         get {

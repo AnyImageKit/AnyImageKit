@@ -10,7 +10,7 @@ import Foundation
 import Photos
 
 /// A wrapper for system photo smart album or user create album
-struct PhotoAssetCollection: AssetCollection, IdentifiableResource, CachableResource {
+struct PhotoAssetCollection: AssetCollection, IdentifiableResource {
     
     /// Unique identification
     let identifier: String
@@ -36,10 +36,16 @@ struct PhotoAssetCollection: AssetCollection, IdentifiableResource, CachableReso
     /// Addition elements after asset collection
     let suffixAdditions: [AssetCollectionAddition]
     
-    /// A shared image cache for all assets
+    /// A SHARED image STATER for all assets
+    let stater: AnyImageStater<PHAsset>
+    
+    /// A SHARED image LOADER for all assets
+    let loader: AnyImageLoader
+    
+    /// A SHARED image CACHER for all assets
     let cacher: AnyImageCacher
     
-    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additions: [AssetCollectionAddition], cacher: AnyImageCacher) {
+    init(identifier: String, localizedTitle: String?, fetchResult: FetchResult<PHAsset>, fetchOrder: Sort, isUserLibrary: Bool, selectOption: MediaSelectOption, additions: [AssetCollectionAddition], stater: AnyImageStater<PHAsset>, loader: AnyImageLoader, cacher: AnyImageCacher) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
@@ -54,6 +60,8 @@ struct PhotoAssetCollection: AssetCollection, IdentifiableResource, CachableReso
             self.prefixAdditions = additions
             self.suffixAdditions = []
         }
+        self.stater = stater
+        self.loader = loader
         self.cacher = cacher
     }
 }
@@ -65,21 +73,21 @@ extension PhotoAssetCollection {
     }
     
     subscript(asset index: Int) -> Asset<PHAsset> {
-        return Asset(phAsset: fetchResult[index], selectOption: selectOption, cache: cacher)
+        return Asset(phAsset: fetchResult[index], selectOption: selectOption, stater: stater, loader: loader, cacher: cacher)
     }
     
     var firstAsset: Asset<PHAsset>? {
         guard let first = fetchResult.first else {
             return nil
         }
-        return Asset(phAsset: first, selectOption: selectOption, cache: cacher)
+        return Asset(phAsset: first, selectOption: selectOption, stater: stater, loader: loader, cacher: cacher)
     }
     
     var lastAsset: Asset<PHAsset>? {
         guard let last = fetchResult.last else {
             return nil
         }
-        return Asset(phAsset: last, selectOption: selectOption, cache: cacher)
+        return Asset(phAsset: last, selectOption: selectOption, stater: stater, loader: loader, cacher: cacher)
     }
 }
 
@@ -96,7 +104,7 @@ extension PhotoAssetCollection: Sequence {
             case 0 ..< prefixCount:
                 return .prefix(prefixAdditions[count])
             case prefixCount ..< (assetCount + prefixCount):
-                return .asset(Asset(phAsset: fetchResult[count - prefixCount], selectOption: selectOption, cache: cacher))
+                return .asset(Asset(phAsset: fetchResult[count - prefixCount], selectOption: selectOption, stater: stater, loader: loader, cacher: cacher))
             case (assetCount + prefixCount) ..< (prefixCount + assetCount + suffixCount):
                 return .suffix(suffixAdditions[count - prefixCount - assetCount])
             default:
@@ -114,7 +122,7 @@ extension PhotoAssetCollection: BidirectionalCollection {
         case 0 ..< prefixCount:
             return .prefix(prefixAdditions[position])
         case prefixCount ..< (assetCount + prefixCount):
-            return .asset(Asset(phAsset: fetchResult[position - prefixCount], selectOption: selectOption, cache: cacher))
+            return .asset(Asset(phAsset: fetchResult[position - prefixCount], selectOption: selectOption, stater: stater, loader: loader, cacher: cacher))
         default:
             return .suffix(suffixAdditions[position - prefixCount - assetCount])
         }

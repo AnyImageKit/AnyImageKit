@@ -10,9 +10,9 @@ import Photos
 
 extension Asset where Resource == PHAsset {
     
-    init(phAsset: PHAsset, selectOption: MediaSelectOption, cache: AnyImageCacher) {
+    init(phAsset: PHAsset, selectOption: MediaSelectOption, stater: AnyImageStater<PHAsset>, loader: AnyImageLoader, cacher: AnyImageCacher) {
         let mediaType = MediaType(phAsset: phAsset, selectOption: selectOption)
-        self.init(resource: phAsset, mediaType: mediaType, cacher: cache)
+        self.init(resource: phAsset, mediaType: mediaType, stater: stater, loader: loader, cacher: cacher)
     }
     
     public var phAsset: PHAsset {
@@ -20,6 +20,7 @@ extension Asset where Resource == PHAsset {
     }
 }
 
+// FIXME: Prepare to REMOVE
 // MARK: - Image
 extension Asset where Resource == PHAsset {
     

@@ -12,11 +12,16 @@ public struct Asset<Resource: IdentifiableResource>: IdentifiableResource, Cacha
     
     public let resource: Resource
     public let mediaType: MediaType
+    
+    let stater: AnyImageStater<Resource>
+    let loader: AnyImageLoader
     let cacher: AnyImageCacher
     
-    init(resource: Resource, mediaType: MediaType, cacher: AnyImageCacher) {
+    init(resource: Resource, mediaType: MediaType, stater: AnyImageStater<Resource>, loader: AnyImageLoader, cacher: AnyImageCacher) {
         self.resource = resource
         self.mediaType = mediaType
+        self.stater = stater
+        self.loader = loader
         self.cacher = cacher
     }
     

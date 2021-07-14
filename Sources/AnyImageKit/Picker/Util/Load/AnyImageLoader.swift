@@ -8,7 +8,20 @@
 
 import UIKit
 
-protocol AnyImageLoader {
+protocol AnyImageLoader: AnyObject {
+    
+    func startRequest(id: Int, identifier: String)
+    func endRequest(id: Int, identifier: String)
+}
+
+final class DefaultImageLoader: AnyImageLoader {
     
     
+    func startRequest(id: Int, identifier: String) {
+        
+    }
+    
+    func endRequest(id: Int, identifier: String) {
+        
+    }
 }
