@@ -11,5 +11,5 @@ import Foundation
 protocol LoadableResource: IdentifiableResource {
     
     var loader: AnyImageLoader { get }
-    func loadImage(type: ImageResourceStorageType, completion: ImageResourceLoadCompletion)
+    func loadImage(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion)
 }

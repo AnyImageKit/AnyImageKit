@@ -20,6 +20,42 @@ extension Asset where Resource == PHAsset {
     }
 }
 
+extension Asset: LoadableResource where Resource == PHAsset {
+    
+    func loadImage(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
+        if isCached(type: type) {
+            loadCache(type: type, completion: completion)
+        } else {
+            let loadOptions: PhotoLoadOptions = .init()
+            loader.loadPhoto(asset: resource, loadOptions: loadOptions) { result in
+                switch result {
+                case .success(let response):
+                    self.writeCache(storage: .init(type: type, image: response.image, data: nil), completion: { _ in })
+                    completion(.success(.init(type: type, image: response.image, data: nil)))
+                case .failure(let error):
+                    switch error {
+                    case AnyImageError.resourceIsInCloud:
+                        self.loadImageData(type: type, completion: completion)
+                    default:
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadImageData(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
+        if isCached(type: type) {
+            loadCache(type: type, completion: completion)
+        } else {
+            let loadOptions: PhotoLoadOptions = .init()
+            loader.loadPhotoData(asset: resource, loadOptions: loadOptions) { result in
+                
+            }
+        }
+    }
+}
+
 // FIXME: Prepare to REMOVE
 // MARK: - Image
 extension Asset where Resource == PHAsset {

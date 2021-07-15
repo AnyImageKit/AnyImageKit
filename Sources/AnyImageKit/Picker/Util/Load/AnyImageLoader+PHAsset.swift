@@ -9,7 +9,6 @@
 import UIKit
 import Photos
 
-
 struct PhotoLoadOptions {
     
     let size: CGSize
@@ -78,5 +77,14 @@ extension AnyImageLoader {
             }
         }
         self.startRequest(id: Int(requestInID), identifier: identifier)
+    }
+}
+
+
+extension AnyImageLoader {
+    
+    func loadPhotoData(asset: PHAsset, loadOptions: PhotoLoadOptions = .init(), completion: @escaping PhotoLoadCompletion) {
+        
+        
     }
 }
