@@ -168,8 +168,8 @@
 		A0FE36C0269C49B2007A3799 /* ImageResourceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE36BF269C49B2007A3799 /* ImageResourceStorage.swift */; };
 		A0FE36C2269C49D7007A3799 /* ImageResourceStorageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE36C1269C49D7007A3799 /* ImageResourceStorageType.swift */; };
 		A0FEB4F526972F7A00DB0FF4 /* Picker+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FEB4F426972F7A00DB0FF4 /* Picker+UIImage.swift */; };
-		A0FEB4F826988DA000DB0FF4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A0FEB4F726988DA000DB0FF4 /* Kingfisher */; };
-		A0FEB5042698968700DB0FF4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A0FEB5032698968700DB0FF4 /* SnapKit */; };
+		A0FEB4F826988DA000DB0FF4 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = A0FEB4F726988DA000DB0FF4 /* SwiftPackageProductDependency */; };
+		A0FEB5042698968700DB0FF4 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = A0FEB5032698968700DB0FF4 /* SwiftPackageProductDependency */; };
 		A0FEB50D269899F300DB0FF4 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
 		A0FEB50E269899F300DB0FF4 /* AnyImageKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0FFB24025407E86000A7A45 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FFB23F25407E86000A7A45 /* GradientView.swift */; };
@@ -579,8 +579,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0FEB4F826988DA000DB0FF4 /* Kingfisher in Frameworks */,
-				A0FEB5042698968700DB0FF4 /* SnapKit in Frameworks */,
+				A0FEB4F826988DA000DB0FF4 /* BuildFile in Frameworks */,
+				A0FEB5042698968700DB0FF4 /* BuildFile in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1012,7 +1012,6 @@
 				A5A27BA7232F82AE00D966B8 /* Example */,
 				A5B835B323BED26D00D10F85 /* Tests */,
 				A099CC61232F3BF70023CC3D /* Products */,
-				A0FEB4FC26988E1200DB0FF4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1187,13 +1186,6 @@
 				A0F653C32699816A00013573 /* AnyImageLoader+PHAsset.swift */,
 			);
 			path = Load;
-			sourceTree = "<group>";
-		};
-		A0FEB4FC26988E1200DB0FF4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		A50B20CC237AA22900A894A9 /* Editor */ = {
@@ -1443,8 +1435,8 @@
 			);
 			name = AnyImageKit;
 			packageProductDependencies = (
-				A0FEB4F726988DA000DB0FF4 /* Kingfisher */,
-				A0FEB5032698968700DB0FF4 /* SnapKit */,
+				A0FEB4F726988DA000DB0FF4 /* SwiftPackageProductDependency */,
+				A0FEB5032698968700DB0FF4 /* SwiftPackageProductDependency */,
 			);
 			productName = AnyImagePicker;
 			productReference = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */;
@@ -1465,8 +1457,6 @@
 				A0FEB510269899F300DB0FF4 /* PBXTargetDependency */,
 			);
 			name = Example;
-			packageProductDependencies = (
-			);
 			productName = Example;
 			productReference = A5A27BA6232F82AE00D966B8 /* Example.app */;
 			productType = "com.apple.product-type.application";
@@ -1524,8 +1514,8 @@
 			);
 			mainGroup = A099CC56232F3BF70023CC3D;
 			packageReferences = (
-				A0FEB4F626988DA000DB0FF4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				A0FEB5022698968700DB0FF4 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A0FEB4F626988DA000DB0FF4 /* RemoteSwiftPackageReference */,
+				A0FEB5022698968700DB0FF4 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = A099CC61232F3BF70023CC3D /* Products */;
 			projectDirPath = "";
@@ -2052,7 +2042,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.13.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -2085,7 +2075,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.13.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -2110,7 +2100,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.13.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
 				PRODUCT_NAME = Example;
 				SUPPORTS_MACCATALYST = YES;
@@ -2133,7 +2123,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.13.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
 				PRODUCT_NAME = Example;
 				SUPPORTS_MACCATALYST = YES;
@@ -2225,7 +2215,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A0FEB4F626988DA000DB0FF4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+		A0FEB4F626988DA000DB0FF4 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
@@ -2233,7 +2223,7 @@
 				minimumVersion = 6.3.0;
 			};
 		};
-		A0FEB5022698968700DB0FF4 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		A0FEB5022698968700DB0FF4 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -2244,14 +2234,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A0FEB4F726988DA000DB0FF4 /* Kingfisher */ = {
+		A0FEB4F726988DA000DB0FF4 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A0FEB4F626988DA000DB0FF4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			package = A0FEB4F626988DA000DB0FF4 /* RemoteSwiftPackageReference */;
 			productName = Kingfisher;
 		};
-		A0FEB5032698968700DB0FF4 /* SnapKit */ = {
+		A0FEB5032698968700DB0FF4 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A0FEB5022698968700DB0FF4 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = A0FEB5022698968700DB0FF4 /* RemoteSwiftPackageReference */;
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
