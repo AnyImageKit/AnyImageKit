@@ -1,5 +1,5 @@
 //
-//  AnyImageLoader+PHAsset.swift
+//  AnyImageFetcher+PHAsset.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2021/7/10.
@@ -8,8 +8,9 @@
 
 import UIKit
 import Photos
+import ImageIO
 
-struct PhotoLoadOptions {
+struct ImagePhotoLoadOptions {
     
     let size: CGSize
     let resizeMode: PHImageRequestOptionsResizeMode
@@ -30,7 +31,44 @@ struct PhotoLoadOptions {
     }
 }
 
+struct ImagePhotoDataLoadOptions {
+    
+    let version: PHImageRequestOptionsVersion
+    let isNetworkAccessAllowed: Bool
+    let progressHandler: PHAssetImageProgressHandler?
+    
+    init(version: PHImageRequestOptionsVersion = .current,
+         isNetworkAccessAllowed: Bool = true,
+         progressHandler: PHAssetImageProgressHandler? = nil) {
+        self.version = version
+        self.isNetworkAccessAllowed = isNetworkAccessAllowed
+        self.progressHandler = progressHandler
+    }
+}
+
+struct ImageLivePhotoLoadOptions {
+    
+    let targetSize: CGSize
+    let version: PHImageRequestOptionsVersion
+    let deliveryMode: PHImageRequestOptionsDeliveryMode
+    let isNetworkAccessAllowed: Bool
+    let progressHandler: PHAssetImageProgressHandler?
+    
+    init(targetSize: CGSize = .init(width: 500, height: 500),
+         version: PHImageRequestOptionsVersion = .current,
+         deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat,
+         isNetworkAccessAllowed: Bool = true,
+         progressHandler: PHAssetImageProgressHandler? = nil) {
+        self.targetSize = targetSize
+        self.version = version
+        self.deliveryMode = deliveryMode
+        self.isNetworkAccessAllowed = isNetworkAccessAllowed
+        self.progressHandler = progressHandler
+    }
+}
 typealias PhotoLoadCompletion = (Result<PhotoLoadResponse, AnyImageError>) -> Void
+typealias PhotoDataLoadCompletion = (Result<PhotoDataLoadResponse, AnyImageError>) -> Void
+typealias LivePhotoLoadCompletion = (Result<LivePhotoLoadResponse, AnyImageError>) -> Void
 
 struct PhotoLoadResponse: IdentifiableResource {
     
@@ -39,16 +77,30 @@ struct PhotoLoadResponse: IdentifiableResource {
     let isDegraded: Bool
 }
 
-extension AnyImageLoader {
+struct PhotoDataLoadResponse: IdentifiableResource {
     
-    func loadPhoto(asset: PHAsset, loadOptions: PhotoLoadOptions = .init(), completion: @escaping PhotoLoadCompletion) {
+    let identifier: String
+    let data: Data
+    let dataUTI: String
+    let orientation: CGImagePropertyOrientation
+}
+
+struct LivePhotoLoadResponse: IdentifiableResource {
+    
+    let identifier: String
+    let livePhoto: PHLivePhoto
+}
+
+extension AnyImageFetcher {
+    
+    func loadPhoto(resource: PHAsset, loadOptions: ImagePhotoLoadOptions = .init(), completion: @escaping PhotoLoadCompletion) {
         let phRequestOptions = PHImageRequestOptions()
         phRequestOptions.version = loadOptions.version
         phRequestOptions.resizeMode = loadOptions.resizeMode
         phRequestOptions.isSynchronous = false
         phRequestOptions.isNetworkAccessAllowed = loadOptions.isNetworkAccessAllowed
-        let identifier = asset.identifier
-        let requestInID = PHImageManager.default().requestImage(for: asset,
+        let identifier = resource.identifier
+        let requestInID = PHImageManager.default().requestImage(for: resource,
                                                                 targetSize: loadOptions.size,
                                                                 contentMode: .aspectFill,
                                                                 options: phRequestOptions)
@@ -78,13 +130,13 @@ extension AnyImageLoader {
         }
         self.startRequest(id: Int(requestInID), identifier: identifier)
     }
-}
-
-
-extension AnyImageLoader {
     
-    func loadPhotoData(asset: PHAsset, loadOptions: PhotoLoadOptions = .init(), completion: @escaping PhotoLoadCompletion) {
+    func loadPhotoData(resource: PHAsset, loadOptions: ImagePhotoDataLoadOptions = .init(), completion: @escaping PhotoDataLoadCompletion) {
         
+        
+    }
+    
+    func loadLivePhoto(resource: PHAsset, loadOptions: ImageLivePhotoLoadOptions = .init(), completion: @escaping LivePhotoLoadCompletion) {
         
     }
 }

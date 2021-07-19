@@ -62,7 +62,7 @@ struct KFMixedCacher: AnyImageCacher {
         }
     }
     
-    func load(key: String, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
+    func read(key: String, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
         let processor = CachedResourceImageProcessor(type: type)
         imageCache.retrieveImage(forKey: key, options: [.processor(processor)]) { result in
             switch result {
@@ -85,7 +85,7 @@ struct KFMixedCacher: AnyImageCacher {
         }
     }
     
-    func loadURL(key: String, type: ImageResourceStorageType) -> URL {
+    func readURL(key: String, type: ImageResourceStorageType) -> URL {
         let processor = CachedResourceImageProcessor(type: type)
         let path = imageCache.cachePath(forKey: key, processorIdentifier: processor.identifier)
         return URL(fileURLWithPath: path)

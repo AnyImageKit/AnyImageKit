@@ -18,7 +18,7 @@ struct FetchRecord {
 final class PickerManager {
     
     let imageStater: AnyImageStater<PHAsset>
-    let imageLoader: AnyImageLoader
+    let imageFetcher: AnyImageFetcher<PHAsset>
     let imageCacher: AnyImageCacher
     
     var options: PickerOptionsInfo = .init()
@@ -47,7 +47,7 @@ final class PickerManager {
     init() {
         // FIXME:
         imageStater = AnyImageStater<PHAsset>()
-        imageLoader = DefaultImageLoader()
+        imageFetcher = AnyImageFetcher<PHAsset>()
         imageCacher = KFMixedCacher.default
     }
     

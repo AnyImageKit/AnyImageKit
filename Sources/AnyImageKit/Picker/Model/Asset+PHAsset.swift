@@ -10,49 +10,13 @@ import Photos
 
 extension Asset where Resource == PHAsset {
     
-    init(phAsset: PHAsset, selectOption: MediaSelectOption, stater: AnyImageStater<PHAsset>, loader: AnyImageLoader, cacher: AnyImageCacher) {
+    init(phAsset: PHAsset, selectOption: MediaSelectOption, stater: AnyImageStater<PHAsset>, fetcher: AnyImageFetcher<PHAsset>, cacher: AnyImageCacher) {
         let mediaType = MediaType(phAsset: phAsset, selectOption: selectOption)
-        self.init(resource: phAsset, mediaType: mediaType, stater: stater, loader: loader, cacher: cacher)
+        self.init(resource: phAsset, mediaType: mediaType, stater: stater, fetcher: fetcher, cacher: cacher)
     }
     
     public var phAsset: PHAsset {
         return resource
-    }
-}
-
-extension Asset: LoadableResource where Resource == PHAsset {
-    
-    func loadImage(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
-        if isCached(type: type) {
-            loadCache(type: type, completion: completion)
-        } else {
-            let loadOptions: PhotoLoadOptions = .init()
-            loader.loadPhoto(asset: resource, loadOptions: loadOptions) { result in
-                switch result {
-                case .success(let response):
-                    self.writeCache(storage: .init(type: type, image: response.image, data: nil), completion: { _ in })
-                    completion(.success(.init(type: type, image: response.image, data: nil)))
-                case .failure(let error):
-                    switch error {
-                    case AnyImageError.resourceIsInCloud:
-                        self.loadImageData(type: type, completion: completion)
-                    default:
-                        completion(.failure(error))
-                    }
-                }
-            }
-        }
-    }
-    
-    func loadImageData(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
-        if isCached(type: type) {
-            loadCache(type: type, completion: completion)
-        } else {
-            let loadOptions: PhotoLoadOptions = .init()
-            loader.loadPhotoData(asset: resource, loadOptions: loadOptions) { result in
-                
-            }
-        }
     }
 }
 

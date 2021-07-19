@@ -47,7 +47,7 @@ extension PickerManager {
                                                   selectOption: options.selectOptions,
                                                   additions: additions,
                                                   stater: imageStater,
-                                                  loader: imageLoader,
+                                                  fetcher: imageFetcher,
                                                   cacher: imageCacher)
                 completion(result)
                 return
@@ -79,7 +79,7 @@ extension PickerManager {
                                                       selectOption: self.options.selectOptions,
                                                       additions: additions,
                                                       stater: self.imageStater,
-                                                      loader: self.imageLoader,
+                                                      fetcher: self.imageFetcher,
                                                       cacher: self.imageCacher)
                     DispatchQueue.main.async {
                         completion(result)
@@ -123,7 +123,7 @@ extension PickerManager {
                                                       selectOption: self.options.selectOptions,
                                                       additions: additions,
                                                       stater: self.imageStater,
-                                                      loader: self.imageLoader,
+                                                      fetcher: self.imageFetcher,
                                                       cacher: self.imageCacher)
                     results.insert(result, at: 0)
                 } else {
@@ -135,7 +135,7 @@ extension PickerManager {
                                                       selectOption: self.options.selectOptions,
                                                       additions: [],
                                                       stater: self.imageStater,
-                                                      loader: self.imageLoader,
+                                                      fetcher: self.imageFetcher,
                                                       cacher: self.imageCacher)
                     results.append(result)
                 }

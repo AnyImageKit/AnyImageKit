@@ -13,6 +13,6 @@ protocol AnyImageCacher {
     func isCached(key: String, type: ImageResourceStorageType) -> Bool
     func remove(key: String, type: ImageResourceStorageType)
     func write(key: String, storage: ImageResourceStorage, completion: @escaping ImageResourceLoadCompletion)
-    func load(key: String, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion)
-    func loadURL(key: String, type: ImageResourceStorageType) -> URL
+    func read(key: String, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion)
+    func readURL(key: String, type: ImageResourceStorageType) -> URL
 }

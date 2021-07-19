@@ -14,14 +14,14 @@ public struct Asset<Resource: IdentifiableResource>: IdentifiableResource, Cacha
     public let mediaType: MediaType
     
     let stater: AnyImageStater<Resource>
-    let loader: AnyImageLoader
+    let fetcher: AnyImageFetcher<Resource>
     let cacher: AnyImageCacher
     
-    init(resource: Resource, mediaType: MediaType, stater: AnyImageStater<Resource>, loader: AnyImageLoader, cacher: AnyImageCacher) {
+    init(resource: Resource, mediaType: MediaType, stater: AnyImageStater<Resource>, fetcher: AnyImageFetcher<Resource>, cacher: AnyImageCacher) {
         self.resource = resource
         self.mediaType = mediaType
         self.stater = stater
-        self.loader = loader
+        self.fetcher = fetcher
         self.cacher = cacher
     }
     
