@@ -8,7 +8,9 @@
 
 import Photos
 
-public struct Asset<Resource: IdentifiableResource>: IdentifiableResource, CachableResource {
+protocol ResourceCoodinator: ResourceStateCoodinator, ResourceFetchCoodinator, ResourceCacheCoodinator { }
+
+public struct Asset<Resource: LoadableResource>: IdentifiableResource, ResourceCoodinator {
     
     public let resource: Resource
     public let mediaType: MediaType

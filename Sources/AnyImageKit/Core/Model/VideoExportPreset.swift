@@ -10,6 +10,8 @@ import AVFoundation
 import VideoToolbox
 
 public enum VideoExportPreset: RawRepresentable, Equatable {
+    
+    case passthrough
     /// H.264/AVC 640x480
     case h264_640x480
     /// H.264/AVC 960x540
@@ -30,6 +32,8 @@ public enum VideoExportPreset: RawRepresentable, Equatable {
     
     public var rawValue: String {
         switch self {
+        case .passthrough:
+            return AVAssetExportPresetPassthrough
         case .h264_640x480:
             return AVAssetExportPreset640x480
         case .h264_960x540:
@@ -58,6 +62,8 @@ public enum VideoExportPreset: RawRepresentable, Equatable {
     public init?(rawValue: String) {
         if #available(iOS 11.0, *) {
             switch rawValue {
+            case AVAssetExportPresetPassthrough:
+                self = .passthrough
             case AVAssetExportPreset640x480:
                 self = .h264_640x480
             case AVAssetExportPreset960x540:
