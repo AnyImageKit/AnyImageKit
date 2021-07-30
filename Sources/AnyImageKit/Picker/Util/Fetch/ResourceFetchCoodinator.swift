@@ -13,5 +13,6 @@ protocol ResourceFetchCoodinator: IdentifiableResource {
     associatedtype Resource: IdentifiableResource
     
     var resource: Resource { get }
-    func fetchResource(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion)
+    var mediaType: MediaType { get }
+    func fetchResource(completion: @escaping ImageResourceLoadCompletion)
 }

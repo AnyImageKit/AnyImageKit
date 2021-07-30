@@ -10,7 +10,7 @@ import Foundation
 
 extension Asset: ResourceFetchCoodinator {
     
-    func fetchResource(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
+    func fetchResource(completion: @escaping ImageResourceLoadCompletion) {
         
     }
 }

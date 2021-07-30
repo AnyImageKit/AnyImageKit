@@ -8,20 +8,20 @@
 
 import UIKit
 
-final class AnyImageFetcher<Resource: IdentifiableResource> {
+final class AnyImageFetcher<Resource: LoadableResource> {
     
     func startRequest(id: Int, identifier: String) {
         _print("🕛 Start Request [\(identifier)]<\(id)>")
     }
     
     func endRequest(id: Int, identifier: String) {
-        _print("✅ Start Request [\(identifier)]<\(id)>")
+        _print("✅ End Request [\(identifier)]<\(id)>")
     }
 }
 
 extension AnyImageFetcher {
     
-    func fetch(resource: Resource, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
+    func fetch(resource: Resource, type: MediaType, completion: @escaping ImageResourceLoadCompletion) {
         
     }
 }
