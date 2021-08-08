@@ -10,7 +10,7 @@ import Foundation
 
 protocol ResourceStateCoodinator: IdentifiableResource {
     
-    associatedtype Resource: IdentifiableResource
+    associatedtype Resource: FetchableResource
     
     var resource: Resource { get }
     var state: ResourceState<Resource> { get nonmutating set }

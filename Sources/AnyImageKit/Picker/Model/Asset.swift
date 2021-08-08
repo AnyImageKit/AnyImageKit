@@ -10,7 +10,7 @@ import Photos
 
 protocol ResourceCoodinator: ResourceStateCoodinator, ResourceFetchCoodinator, ResourceCacheCoodinator { }
 
-public struct Asset<Resource: IdentifiableResource>: IdentifiableResource, ResourceCoodinator {
+public struct Asset<Resource: FetchableResource>: IdentifiableResource, ResourceCoodinator {
     
     public let resource: Resource
     public let mediaType: MediaType

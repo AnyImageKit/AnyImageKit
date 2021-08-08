@@ -54,9 +54,10 @@
 		71D9FFB125AD37C000825B3C /* CropData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D9FFAF25AD37C000825B3C /* CropData.swift */; };
 		A005C309253D306C0021E323 /* AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005C308253D306C0021E323 /* AnyImagePage.swift */; };
 		A005C30D253D33180021E323 /* AnyImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005C30C253D33180021E323 /* AnyImageEvent.swift */; };
-		A008C9AD26BF794C005C9824 /* AnyImageFetcher+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008C9AC26BF794C005C9824 /* AnyImageFetcher+PHAsset.swift */; };
 		A008C9AF26BF8174005C9824 /* VideoResourceStroage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008C9AE26BF8174005C9824 /* VideoResourceStroage.swift */; };
 		A008C9B126BF8CF9005C9824 /* ResourceFetchCoodinator+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008C9B026BF8CF9005C9824 /* ResourceFetchCoodinator+PHAsset.swift */; };
+		A008C9B326BFDDE2005C9824 /* FetchableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008C9B226BFDDE2005C9824 /* FetchableResource.swift */; };
+		A008C9B526BFDE60005C9824 /* FetchableResource+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008C9B426BFDE60005C9824 /* FetchableResource+PHAsset.swift */; };
 		A012D2D226203B2D006B5261 /* IdentifiableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012D2D126203B2D006B5261 /* IdentifiableResource.swift */; };
 		A0147E0223C458BF0071E9D5 /* Core+Thread.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0123C458BF0071E9D5 /* Core+Thread.swift */; };
 		A0147E0423C45A200071E9D5 /* Permission+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0147E0323C45A200071E9D5 /* Permission+Camera.swift */; };
@@ -351,9 +352,10 @@
 		A005C308253D306C0021E323 /* AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImagePage.swift; sourceTree = "<group>"; };
 		A005C30C253D33180021E323 /* AnyImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageEvent.swift; sourceTree = "<group>"; };
 		A005F8E823973FC8006BE028 /* CaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
-		A008C9AC26BF794C005C9824 /* AnyImageFetcher+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyImageFetcher+PHAsset.swift"; sourceTree = "<group>"; };
 		A008C9AE26BF8174005C9824 /* VideoResourceStroage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoResourceStroage.swift; sourceTree = "<group>"; };
 		A008C9B026BF8CF9005C9824 /* ResourceFetchCoodinator+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResourceFetchCoodinator+PHAsset.swift"; sourceTree = "<group>"; };
+		A008C9B226BFDDE2005C9824 /* FetchableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchableResource.swift; sourceTree = "<group>"; };
+		A008C9B426BFDE60005C9824 /* FetchableResource+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FetchableResource+PHAsset.swift"; sourceTree = "<group>"; };
 		A012D2D126203B2D006B5261 /* IdentifiableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableResource.swift; sourceTree = "<group>"; };
 		A0147E0123C458BF0071E9D5 /* Core+Thread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+Thread.swift"; sourceTree = "<group>"; };
 		A0147E0323C45A200071E9D5 /* Permission+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permission+Camera.swift"; sourceTree = "<group>"; };
@@ -1201,7 +1203,8 @@
 				A0F6539A269963D500013573 /* ResourceFetchCoodinator.swift */,
 				A008C9B026BF8CF9005C9824 /* ResourceFetchCoodinator+PHAsset.swift */,
 				A0F6539C26996A1A00013573 /* AnyImageFetcher.swift */,
-				A008C9AC26BF794C005C9824 /* AnyImageFetcher+PHAsset.swift */,
+				A008C9B226BFDDE2005C9824 /* FetchableResource.swift */,
+				A008C9B426BFDE60005C9824 /* FetchableResource+PHAsset.swift */,
 			);
 			path = Fetch;
 			sourceTree = "<group>";
@@ -1591,7 +1594,6 @@
 				A50B2117237AA24300A894A9 /* PhotoEditorContentView.swift in Sources */,
 				713C206925AD32D800BB0F66 /* BrushData.swift in Sources */,
 				71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */,
-				A008C9AD26BF794C005C9824 /* AnyImageFetcher+PHAsset.swift in Sources */,
 				A519FA3223AB11ED0028CCC8 /* MediaType.swift in Sources */,
 				A561239723B5E7B90071C3E8 /* PickerOptionsInfo.swift in Sources */,
 				717DCADA256CEEC700568A6C /* Canvas.swift in Sources */,
@@ -1642,6 +1644,7 @@
 				713C207325AD32D800BB0F66 /* PhotoEditorCropContext.swift in Sources */,
 				A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */,
 				A029D04F2330856C00BC6720 /* PhotoAssetCollection.swift in Sources */,
+				A008C9B326BFDDE2005C9824 /* FetchableResource.swift in Sources */,
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
 				A0622600268CB62D00A9ACC9 /* IdentifiableResource+PHAsset.swift in Sources */,
 				A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */,
@@ -1712,6 +1715,7 @@
 				A0F6539B269963D500013573 /* ResourceFetchCoodinator.swift in Sources */,
 				A561239923B5E8550071C3E8 /* Sort.swift in Sources */,
 				A05982FB269C91F40041CAD5 /* AnyImageStater.swift in Sources */,
+				A008C9B526BFDE60005C9824 /* FetchableResource+PHAsset.swift in Sources */,
 				A56A3C8123307F7D00EBFC48 /* PhotoPreviewCell.swift in Sources */,
 				A0F6539D26996A1A00013573 /* AnyImageFetcher.swift in Sources */,
 				A0839B7623C44C5A00FF8FDE /* Permission+Photos.swift in Sources */,

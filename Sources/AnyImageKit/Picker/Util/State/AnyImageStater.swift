@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class AnyImageStater<Resource: IdentifiableResource> {
+final class AnyImageStater<Resource: FetchableResource> {
     
     private var stateStroage: [String: ResourceState<Resource>] = [:]
     private var selectedStroage: [String] = []
