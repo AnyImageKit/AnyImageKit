@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ResourceState<Resource: LoadableResource>: Equatable {
+enum ResourceState<Resource: IdentifiableResource>: Equatable {
     
     case initialize
     case normal

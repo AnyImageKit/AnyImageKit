@@ -49,3 +49,21 @@ public enum ImageResourceStorage {
         }
     }
 }
+
+public enum ImageResourceStorageType: IdentifiableResource {
+    
+    case thumbnail
+    case preview
+    case original
+    
+    public var identifier: String {
+        switch self {
+        case .thumbnail:
+            return "THUMBNAIL"
+        case .preview:
+            return "PREVIEW"
+        case .original:
+            return "ORIGINAL"
+        }
+    }
+}

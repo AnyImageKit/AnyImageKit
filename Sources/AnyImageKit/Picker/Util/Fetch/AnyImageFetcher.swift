@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class AnyImageFetcher<Resource: LoadableResource> {
+final class AnyImageFetcher<Resource: IdentifiableResource> {
     
     func startRequest(id: Int, identifier: String) {
         _print("🕛 Start Request [\(identifier)]<\(id)>")
@@ -16,12 +16,5 @@ final class AnyImageFetcher<Resource: LoadableResource> {
     
     func endRequest(id: Int, identifier: String) {
         _print("✅ End Request [\(identifier)]<\(id)>")
-    }
-}
-
-extension AnyImageFetcher {
-    
-    func fetch(resource: Resource, type: MediaType, completion: @escaping ImageResourceLoadCompletion) {
-        
     }
 }

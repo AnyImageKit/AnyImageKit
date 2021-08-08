@@ -10,14 +10,14 @@ import Foundation
 
 public protocol ResourceDisableCheckRule: IdentifiableResource {
     
-    associatedtype Resource: LoadableResource
+    associatedtype Resource: IdentifiableResource
     
     func isDisabled(for asset: Asset<Resource>) -> Bool
     func disabledMessage(for asset: Asset<Resource>) -> String
 }
 
 
-public struct AnyResourceDisableCheckRule<Resource: LoadableResource>: IdentifiableResource, ResourceDisableCheckRule {
+public struct AnyResourceDisableCheckRule<Resource: IdentifiableResource>: IdentifiableResource, ResourceDisableCheckRule {
     
     public typealias CheckResultCompletion = (Asset<Resource>) -> Bool
     public typealias DisabledMessageCompletion = (Asset<Resource>) -> String
