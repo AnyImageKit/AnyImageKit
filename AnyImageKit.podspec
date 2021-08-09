@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImageKit'
-    s.version = '0.13.2'
+    s.version = '0.13.3'
     s.license = 'MIT'
     s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
     s.homepage = 'https://github.com/AnyImageProject/AnyImageKit'
