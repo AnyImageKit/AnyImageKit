@@ -8,7 +8,7 @@
 
 import UIKit
 
-final public class AnyImageFetcher<Resource: FetchableResource> {
+final public class AnyImageFetcher<Resource: IdentifiableResource> {
     
     func startRequest(id: Int, identifier: String) {
         _print("🕛 Start Request [\(identifier)]<\(id)>")

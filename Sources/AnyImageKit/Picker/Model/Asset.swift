@@ -6,11 +6,9 @@
 //  Copyright © 2021 AnyImageProject.org. All rights reserved.
 //
 
-import Photos
+import Foundation
 
-protocol ResourceCoodinator: ResourceStateCoodinator, ResourceFetchCoodinator, ResourceCacheCoodinator { }
-
-public struct Asset<Resource: FetchableResource>: IdentifiableResource, ResourceCoodinator {
+public struct Asset<Resource: IdentifiableResource>: IdentifiableResource {
     
     public let resource: Resource
     public let mediaType: MediaType

@@ -1,38 +1,25 @@
 //
-//  FetchableResource+PHAsset.swift
-//  AnyImageKit
+//  AnyImageFetcher+PHAsset.swift
+//  AnyImageFetcher+PHAsset
 //
-//  Created by 刘栋 on 2021/8/8.
+//  Created by 刘栋 on 2021/8/23.
 //  Copyright © 2021 AnyImageProject.org. All rights reserved.
 //
 
 import Photos
 import UIKit
 
-extension PHAsset: FetchableResource {
+extension AnyImageFetcher where Resource == PHAsset {
     
-    public typealias Resource = PHAsset
-    
-    public func fetchPhoto(fetcher: AnyImageFetcher<Resource>, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
-        
-    }
-    
-    public func fetchVideo(fetcher: AnyImageFetcher<Resource>, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
-        
-    }
-}
-
-extension PHAsset {
-    
-    private func loadLibraryPhoto(options: LibraryPhotoLoadOptions, completion: @escaping LibraryPhotoLoadCompletion) -> Int {
+    func loadLibraryPhoto(resource: Resource, options: LibraryPhotoLoadOptions, completion: @escaping LibraryPhotoLoadCompletion) -> Int {
         let phRequestOptions = PHImageRequestOptions()
         phRequestOptions.version = options.version
         phRequestOptions.resizeMode = options.resizeMode
         phRequestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         phRequestOptions.isSynchronous = false
         
-        let identifier = self.identifier
-        let requestID = PHImageManager.default().requestImage(for: self, targetSize: options.size, contentMode: .aspectFill, options: phRequestOptions) { (image, info) in
+        let identifier = resource.identifier
+        let requestID = PHImageManager.default().requestImage(for: resource, targetSize: options.size, contentMode: .aspectFill, options: phRequestOptions) { (image, info) in
             guard let info = info, let requestID = info[PHImageResultRequestIDKey] as? PHImageRequestID else {
                 completion(.failure(.invalidInfo))
                 return
@@ -55,14 +42,14 @@ extension PHAsset {
         return Int(requestID)
     }
     
-    private func loadLibraryPhotoData(options: PhotoDataLoadOptions, completion: @escaping LibraryPhotoDataLoadCompletion) -> Int {
+    func loadLibraryPhotoData(resource: Resource, options: PhotoDataLoadOptions, completion: @escaping LibraryPhotoDataLoadCompletion) -> Int {
         let phRequestOptions = PHImageRequestOptions()
         phRequestOptions.version = options.version
         phRequestOptions.progressHandler = options.progressHandler
         phRequestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         phRequestOptions.isSynchronous = false
         
-        let identifier = self.identifier
+        let identifier = resource.identifier
         func response(data: Data?, dataUTI: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable: Any]?, completion: @escaping LibraryPhotoDataLoadCompletion) {
             guard let data = data, let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) else {
                 completion(.failure(.invalidData))
@@ -77,26 +64,26 @@ extension PHAsset {
         
         let requestID: PHImageRequestID
         if #available(iOS 13.0, *) {
-            requestID = PHImageManager.default().requestImageDataAndOrientation(for: self, options: phRequestOptions) { (data, dataUTI, orientation, info) in
+            requestID = PHImageManager.default().requestImageDataAndOrientation(for: resource, options: phRequestOptions) { (data, dataUTI, orientation, info) in
                 response(data: data, dataUTI: dataUTI, orientation: orientation, info: info, completion: completion)
             }
         } else {
-            requestID = PHImageManager.default().requestImageData(for: self, options: phRequestOptions) { (data, dataUTI, uiOrientation, info) in
+            requestID = PHImageManager.default().requestImageData(for: resource, options: phRequestOptions) { (data, dataUTI, uiOrientation, info) in
                 response(data: data, dataUTI: dataUTI, orientation: .init(uiOrientation), info: info, completion: completion)
             }
         }
         return Int(requestID)
     }
     
-    private func loadLibraryLivePhoto(options: LivePhotoLoadOptions, completion: @escaping LibraryLivePhotoLoadCompletion) -> Int {
+    func loadLibraryLivePhoto(resource: Resource, options: LivePhotoLoadOptions, completion: @escaping LibraryLivePhotoLoadCompletion) -> Int {
         let phRequestOptions = PHLivePhotoRequestOptions()
         phRequestOptions.version = options.version
         phRequestOptions.deliveryMode = options.deliveryMode
         phRequestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         phRequestOptions.progressHandler = options.progressHandler
         
-        let identifier = self.identifier
-        let requestID = PHImageManager.default().requestLivePhoto(for: self, targetSize: options.targetSize, contentMode: .aspectFill, options: phRequestOptions) { (livePhoto, info) in
+        let identifier = resource.identifier
+        let requestID = PHImageManager.default().requestLivePhoto(for: resource, targetSize: options.targetSize, contentMode: .aspectFill, options: phRequestOptions) { (livePhoto, info) in
             if let livePhoto = livePhoto, let requestID = info?[PHImageResultRequestIDKey] as? PHImageRequestID {
                 completion(.success(.init(identifier: identifier, requestID: Int(requestID), livePhoto: livePhoto)))
             } else {
@@ -106,15 +93,15 @@ extension PHAsset {
         return Int(requestID)
     }
     
-    private func loadLibraryVideo(options: LibraryVideoLoadOptions, completion: @escaping LibraryVideoLoadComletion) -> Int {
+    func loadLibraryVideo(resource: Resource, options: LibraryVideoLoadOptions, completion: @escaping LibraryVideoLoadComletion) -> Int {
         let phRequestOptions = PHVideoRequestOptions()
         phRequestOptions.version = options.version
         phRequestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         phRequestOptions.deliveryMode = options.deliveryMode
         phRequestOptions.progressHandler = options.progressHandler
         
-        let identifier = self.identifier
-        let requestID = PHImageManager.default().requestAVAsset(forVideo: self, options: phRequestOptions) { (avAsset, avAudioMix, info) in
+        let identifier = resource.identifier
+        let requestID = PHImageManager.default().requestAVAsset(forVideo: resource, options: phRequestOptions) { (avAsset, avAudioMix, info) in
             if let avAsset = avAsset, let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) {
                 completion(.success(.init(identifier: identifier, requestID: Int(requestID), avAsset: avAsset)))
             } else {
@@ -124,15 +111,15 @@ extension PHAsset {
         return Int(requestID)
     }
     
-    private func loadLibraryVideoData(options: LibraryVideoDataLoadOptions, completion: @escaping LibraryVideoDataLoadCompletion) -> Int {
+    func loadLibraryVideoData(resource: Resource, options: LibraryVideoDataLoadOptions, completion: @escaping LibraryVideoDataLoadCompletion) -> Int {
         let requestOptions = PHVideoRequestOptions()
         requestOptions.isNetworkAccessAllowed = options.isNetworkAccessAllowed
         requestOptions.version = options.version
         requestOptions.deliveryMode = options.deliveryMode
         requestOptions.progressHandler = options.progressHandler
         
-        let identifier = self.identifier
-        let requestID = PHImageManager.default().requestExportSession(forVideo: self, options: requestOptions, exportPreset: options.exportPreset.rawValue) { (exportSession, info) in
+        let identifier = resource.identifier
+        let requestID = PHImageManager.default().requestExportSession(forVideo: resource, options: requestOptions, exportPreset: options.exportPreset.rawValue) { (exportSession, info) in
             if let exportSession = exportSession, let requestID = (info?[PHImageResultRequestIDKey] as? PHImageRequestID) {
                 completion(.success(.init(identifier: identifier, requestID: Int(requestID), avAssetExportSession: exportSession)))
             } else {
@@ -279,3 +266,4 @@ struct LibraryVideoDataLoadResponse: IdentifiableResource {
     let requestID: Int
     let avAssetExportSession: AVAssetExportSession
 }
+
