@@ -63,7 +63,7 @@ final class AudioIOComponent: DeviceIOComponent {
 extension AudioIOComponent {
     
     var recommendedWriterSettings: [String: Any]? {
-        return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4) as? [String : Any]
+        return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
     }
 }
 
