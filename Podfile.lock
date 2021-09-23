@@ -13,12 +13,12 @@ PODS:
     - AnyImageKit/Core
   - AnyImageKit/Picker (0.13.3):
     - AnyImageKit/Core
-  - Kingfisher (6.3.1)
+  - Kingfisher (7.0.0)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
   - AnyImageKit (from `./`)
-  - Kingfisher (~> 6.0)
+  - Kingfisher (~> 7.0)
   - SnapKit (~> 5.0)
 
 SPEC REPOS:
@@ -31,10 +31,10 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  AnyImageKit: 5b6723d75e43fd93b0ffb17903dc0e5c78f3f637
-  Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
+  AnyImageKit: 288a0f90b88a556b0bf8f9c72a8a1baaa7a2b9f0
+  Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: f797279c867b19084ff61df3f6a2c99391049a80
+PODFILE CHECKSUM: bd8c710fcec2946ffd55b64c35e95c31ccd27b1d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

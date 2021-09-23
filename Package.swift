@@ -6,13 +6,13 @@ import PackageDescription
 let package = Package(
     name: "AnyImageKit",
     defaultLocalization: "en",
-    platforms: [.iOS(.v10)],
+    platforms: [.iOS(.v12)],
     products: [
         .library(name: "AnyImageKit", targets: ["AnyImageKit"]),
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit", from: "5.0.0"),
-        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "6.0.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
     ],
     targets: [
         .target(name: "AnyImageKit",

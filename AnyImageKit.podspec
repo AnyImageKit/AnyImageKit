@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
         'RayJiang16' => '1184731421@qq.com',
     }
     s.source = { :git => 'https://github.com/AnyImageProject/AnyImageKit.git', :tag => s.version }
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '12.0'
     s.swift_versions = ['5.3']
     s.frameworks = 'Foundation'
     

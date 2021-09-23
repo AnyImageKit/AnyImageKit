@@ -1,10 +1,10 @@
-platform :ios, '10.0'
+platform :ios, '12.0'
 
 target 'AnyImageKit' do
   use_frameworks!
 
   pod 'SnapKit', '~> 5.0'
-  pod 'Kingfisher', '~> 6.0'
+  pod 'Kingfisher', '~> 7.0'
   
 end
 
