@@ -1,0 +1,17 @@
+/*
+  Editor.strings
+  AnyImageKit
+
+  Created by Henrique Gouveia on 2021/8/8
+  Copyright © 2021 AnyImageProject.org. All rights reserved.
+*/
+
+"PEN" = "Caneta";
+"CROP" = "Cortar";
+"MOSAIC" = "Mosaico";
+"INPUT_TEXT" = "Inserir texto";
+
+"FREE" = "Livre";
+
+"DRAG_HERE_TO_REMOVE" = "Arraste aqui para remover";
+"RELEASE_TO_REMOVE" = "Solte para remover";

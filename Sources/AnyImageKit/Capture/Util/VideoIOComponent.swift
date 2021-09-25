@@ -390,21 +390,10 @@ extension VideoIOComponent: AVCapturePhotoCaptureDelegate {
         delegate?.videoIODidCapturePhoto(self)
     }
     
-    // for iOS 11+
-    @available(iOS 11.0, *)
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let photoData = photo.fileDataRepresentation() else { return }
         export(photoData: photoData)
     }
-    
-    #if !targetEnvironment(macCatalyst)
-    // for iOS 10
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        guard let photoSampleBuffer: CMSampleBuffer = photoSampleBuffer else { return }
-        guard let photoData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) else { return }
-        export(photoData: photoData)
-    }
-    #endif
     
     private func export(photoData: Data) {
         guard let source = CGImageSourceCreateWithData(photoData as CFData, nil) else { return }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImageKit'
-    s.version = '0.13.2'
+    s.version = '0.13.4'
     s.license = 'MIT'
     s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
     s.homepage = 'https://github.com/AnyImageProject/AnyImageKit'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
         'RayJiang16' => '1184731421@qq.com',
     }
     s.source = { :git => 'https://github.com/AnyImageProject/AnyImageKit.git', :tag => s.version }
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '12.0'
     s.swift_versions = ['5.3']
     s.frameworks = 'Foundation'
     
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
             'AnyImageKit_Core' => ['Sources/AnyImageKit/Resources/Core/**/*']
         }
         core.dependency 'SnapKit'
-        core.dependency 'Kingfisher', '~> 6.0'
+        core.dependency 'Kingfisher'
     end
     
     s.subspec 'Picker' do |picker|
