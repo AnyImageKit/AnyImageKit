@@ -92,6 +92,7 @@
 		A04F40F82539A94B00EF9EC6 /* ImageKitDataTrackDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04F40F72539A94B00EF9EC6 /* ImageKitDataTrackDelegate.swift */; };
 		A04F4146261C114A003D968E /* PickerOptionsConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04F4145261C114A003D968E /* PickerOptionsConfigurable.swift */; };
 		A04F6D4026D3E9070003CF24 /* AnyImageFetcher+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04F6D3F26D3E9070003CF24 /* AnyImageFetcher+PHAsset.swift */; };
+		A04F6D4226DB34FB0003CF24 /* LivePhotoResourceStroage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04F6D4126DB34FB0003CF24 /* LivePhotoResourceStroage.swift */; };
 		A0513A152521A0030069C5CB /* CaptureResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0513A142521A0030069C5CB /* CaptureResult.swift */; };
 		A058846826358DB30095D424 /* Asset+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058846726358DB30095D424 /* Asset+PHAsset.swift */; };
 		A05982F9269C90620041CAD5 /* ResourceStateCoodinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05982F8269C90620041CAD5 /* ResourceStateCoodinator.swift */; };
@@ -403,6 +404,7 @@
 		A04F40F72539A94B00EF9EC6 /* ImageKitDataTrackDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageKitDataTrackDelegate.swift; sourceTree = "<group>"; };
 		A04F4145261C114A003D968E /* PickerOptionsConfigurable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerOptionsConfigurable.swift; sourceTree = "<group>"; };
 		A04F6D3F26D3E9070003CF24 /* AnyImageFetcher+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyImageFetcher+PHAsset.swift"; sourceTree = "<group>"; };
+		A04F6D4126DB34FB0003CF24 /* LivePhotoResourceStroage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhotoResourceStroage.swift; sourceTree = "<group>"; };
 		A0513A142521A0030069C5CB /* CaptureResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureResult.swift; sourceTree = "<group>"; };
 		A0514F02235D455600D4AA0F /* AnyImageKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = AnyImageKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A058846726358DB30095D424 /* Asset+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+PHAsset.swift"; sourceTree = "<group>"; };
@@ -1179,6 +1181,7 @@
 				A058846726358DB30095D424 /* Asset+PHAsset.swift */,
 				A0FE36BF269C49B2007A3799 /* ImageResourceStorage.swift */,
 				A008C9AE26BF8174005C9824 /* VideoResourceStroage.swift */,
+				A04F6D4126DB34FB0003CF24 /* LivePhotoResourceStroage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1732,6 +1735,7 @@
 				A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */,
 				A5347D2823A9FF2900C93874 /* ExportTool+PhotoData.swift in Sources */,
 				713C206C25AD32D800BB0F66 /* MosaicData.swift in Sources */,
+				A04F6D4226DB34FB0003CF24 /* LivePhotoResourceStroage.swift in Sources */,
 				A50B2103237AA24200A894A9 /* PhotoEditorController.swift in Sources */,
 				A5ABEF2A239F76EC00B50543 /* TextImageView.swift in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,

@@ -18,10 +18,3 @@ final public class AnyImageFetcher<Resource: IdentifiableResource> {
         _print("✅ End Request [\(identifier)]<\(id)>")
     }
 }
-
-extension AnyImageFetcher {
-    
-    func fetchImage(resource: Resource, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
-        
-    }
-}

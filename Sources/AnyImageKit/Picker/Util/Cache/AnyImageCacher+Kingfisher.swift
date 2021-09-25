@@ -34,9 +34,9 @@ struct KFMixedCacher: AnyImageCacher {
         cacheSerializer.preferCacheOriginalData = true
         let options = KingfisherParsedOptionsInfo([.processor(processor),
                                                    .cacheSerializer(cacheSerializer)])
-        switch storage {
-        case .thumbnail(let image), .preview(let image):
-            imageCache.store(image, forKey: key, options: options, toDisk: true) { result in
+        switch storage.type {
+        case .thumbnail, .preview:
+            imageCache.store(storage.image, forKey: key, options: options, toDisk: true) { result in
                 switch result.diskCacheResult {
                 case .success:
                     _print("✅ Cahce Write [\(storage.type.identifier)]<\(key)>")
@@ -46,10 +46,10 @@ struct KFMixedCacher: AnyImageCacher {
                     completion(.failure(error))
                 }
             }
-        case .original(let image, let data):
+        case .original:
             var cacheSerializer = DefaultCacheSerializer()
             cacheSerializer.preferCacheOriginalData = true
-            imageCache.store(image, original: data, forKey: key, options: options, toDisk: true) { result in
+            imageCache.store(storage.image, original: storage.data, forKey: key, options: options, toDisk: true) { result in
                 switch result.diskCacheResult {
                 case .success:
                     _print("✅ Cahce Write [\(storage.type.identifier)]<\(key)>")
@@ -70,10 +70,10 @@ struct KFMixedCacher: AnyImageCacher {
                 switch imageResult {
                 case .memory(let image):
                     _print("✅ Cahce Load [MEMORY] [\(type.identifier)]<\(key)>")
-                    completion(.success(.init(type: type, image: image, data: nil)))
+                    completion(.success(.init(identifier: key, type: type, image: image, data: nil)))
                 case .disk(let image):
                     _print("✅ Cahce Load [DISK] [\(type.identifier)]<\(key)>")
-                    completion(.success(.init(type: type, image: image, data: nil)))
+                    completion(.success(.init(identifier: key, type: type, image: image, data: nil)))
                 case .none:
                     _print("⚠️ Cahce Load [\(type.identifier)]<\(key)>, Cahce not exist")
                     completion(.failure(AnyImageError.cacheNotExist))

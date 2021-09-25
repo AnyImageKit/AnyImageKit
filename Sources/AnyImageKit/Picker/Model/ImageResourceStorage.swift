@@ -10,43 +10,18 @@ import UIKit
 
 public typealias ImageResourceLoadCompletion = (Result<ImageResourceStorage, Error>) -> Void
 
-public enum ImageResourceStorage {
+public struct ImageResourceStorage: IdentifiableResource {
     
-    case thumbnail(UIImage)
-    case preview(UIImage)
-    case original(UIImage, Data?)
+    public let identifier: String
+    public let type: ImageResourceStorageType
+    public let image: UIImage
+    public let data: Data?
     
-    init(type: ImageResourceStorageType, image: UIImage, data: Data?) {
-        switch type {
-        case .thumbnail:
-            self = .thumbnail(image)
-        case .preview:
-            self = .preview(image)
-        case .original:
-            self = .original(image, data)
-        }
-    }
-    
-    public var type: ImageResourceStorageType {
-        switch self {
-        case .thumbnail:
-            return .thumbnail
-        case .preview:
-            return .preview
-        case .original:
-            return .original
-        }
-    }
-    
-    public var image: UIImage {
-        switch self {
-        case .thumbnail(let image):
-            return image
-        case .preview(let image):
-            return image
-        case .original(let image, _):
-            return image
-        }
+    init(identifier: String, type: ImageResourceStorageType, image: UIImage, data: Data? = nil) {
+        self.identifier = identifier
+        self.type = type
+        self.image = image
+        self.data = data
     }
 }
 

@@ -11,8 +11,24 @@ import AVKit
 
 public typealias VideoResourceLoadCompletion = (Result<VideoResourceStorage, Error>) -> Void
 
-public enum VideoResourceStorage {
+public struct VideoResourceStorage: IdentifiableResource {
     
-    case playback(AVAsset)
+    public let identifier: String
+    public let type: VideoResourceStorageType
+    public let avAsset: AVAsset
+}
+
+public enum VideoResourceStorageType: IdentifiableResource {
+    
+    case playback
     case export
+    
+    public var identifier: String {
+        switch self {
+        case .playback:
+            return "PLAYBACK"
+        case .export:
+            return "EXPORT"
+        }
+    }
 }

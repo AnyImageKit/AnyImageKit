@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ResourceFetchCoodinator: IdentifiableResource {
+protocol ResourceFetchCoodinator {
     
     associatedtype Resource: IdentifiableResource
     
