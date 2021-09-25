@@ -1,5 +1,24 @@
 # Release Notes
 
+## 0.13.4
+
+### New Features
+
+- Use Xcode 13.0 and Kingfisher 7.0.0 
+- Set framework minimum deployment target to 12.0 
+
+## 0.13.3
+
+### New Features
+
+- Added `Portuguese(Brazil) (pt-BR)` internationalization support.([#106](https://github.com/AnyImageProject/AnyImageKit/pull/106))
+
+## 0.13.2
+
+### Resolved
+
+- Fix Xcode 13 beta can not build bug.
+
 ## 0.13.0
 
 ### General

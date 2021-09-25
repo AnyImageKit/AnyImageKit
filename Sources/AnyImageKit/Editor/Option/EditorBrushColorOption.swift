@@ -15,7 +15,6 @@ public enum EditorBrushColorOption: Equatable {
     case custom(color: UIColor)
     
     /// Dynamic color (UIColorWell).
-    @available(iOS 14.0, *)
     case colorWell(color: UIColor)
 }
 

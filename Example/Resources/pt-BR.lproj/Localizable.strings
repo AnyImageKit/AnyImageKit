@@ -1,0 +1,43 @@
+/*
+  Localizable.strings
+  Example
+
+  Created by Henrique Gouveia on 2021/8/8
+  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
+*/
+
+// Picker
+"OpenPicker" = "Abrir Seletor";
+"Theme" = "Tema";
+"SelectLimit" = "Selecione Limite";
+"ColumnNumber" = "Número da Coluna";
+"UseOriginalImage" = "Usar Imagem Original";
+"SelectionTapAction" = "Seleção de Ação do Toque";
+"SelectOptions" = "Opções de Selecionar";
+"AlbumOptions" = "Opções de Álbum";
+"OrderByDate" = "Ordenar por Data";
+"SaveEditedAsset" = "Salvar Item Editado";
+"EditorOptions" = "Opções do Editor";
+"CaptureOptions" = "Opções de Captura";
+"FullScreen" = "Tela Cheia";
+
+// Editor
+"OpenEditor" = "Abrir Editor";
+"EditOptions" = "Opções de Editor";
+"PenWidth" = "Largura da Caneta";
+"MosaicOptions" = "Opções do Mosaico";
+"MosaicWidth" = "Largura do Mosaico";
+"MosaicLevel" = "Nível do Mosaico";
+"CropOptions" = "Opções de Corte";
+
+// Capture
+"OpenCamera" = "Abrir Câmera";
+"MediaOptions" = "Opções de Mídia";
+"PreferredPresets" = "Predefinições Preferidas";
+"PhotoAspectRatio" = "Proporção da Foto";
+"PreferredPositions" = "Posições Preferidas";
+"FlashMode" = "Modo do Flash";
+"VideoMaximumDuration" = "Duração Máxima do Vídeo";
+
+// Other
+"Preselect Assets Tips" = "Se você quiser pré-selecionar itens quando o seletor for apresentado, você deve passar o identificador dos itens selecionados para o selecionador antes de apresentá-lo.";

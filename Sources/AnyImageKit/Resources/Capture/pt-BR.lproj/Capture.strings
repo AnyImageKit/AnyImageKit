@@ -1,0 +1,13 @@
+/*
+  Capture.strings
+  AnyImageKit
+
+  Created by Henrique Gouveia on 2021/8/8
+  Copyright © 2021 AnyImageProject.org. All rights reserved.
+*/
+
+"SWITCH_TO_FRONT_CAMERA" = "Trocar para a câmera frontal";
+"SWITCH_TO_BACK_CAMERA" = "Trocar para a câmera traseira";
+"TAP_FOR_PHOTO" = "Toque para foto";
+"HOLD_FOR_VIDEO" = "Segure para vídeo";
+"HOLD_FOR_VIDEO_TAP_FOR_PHOTO" = "Segure para vídeo, toque para foto";

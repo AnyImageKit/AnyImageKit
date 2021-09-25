@@ -1,0 +1,36 @@
+/*
+  Localizable.strings
+  AnyImageKit
+
+  Created by Henrique Gouveia on 2021/8/8
+  Copyright © 2021 AnyImageProject.org. All rights reserved.
+*/
+
+"OK" = "OK";
+"BACK" = "Voltar";
+"DONE" = "Pronto";
+"EDIT" = "Editar";
+"ALERT" = "Alerta";
+"CANCEL" = "Cancelar";
+"PREVIEW" = "Pré-visualiar";
+"PHOTOS" = "Fotos";
+"CAMERA" = "Câmera";
+"MICROPHONE" = "Microfone";
+"SETTINGS" = "Configurações";
+
+"PHOTO" = "Foto";
+"VIDEO" = "Vídeo";
+"LIVE_PHOTO" = "LIVE";
+"LOADING" = "Carregando";
+
+"UNDO" = "Desfazer";
+"PLAY" = "Reproduzir";
+"PAUSE" = "Pausar";
+"RESET" = "Reiniciar";
+"DOWNLOADING" = "Baixando";
+
+"GO_TO_SETTINGS" = "Vá em Configurações";
+"PERMISSION_IS_DISABLED" = "%@ está desabilitado";
+"NO_PHOTOS_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso ao seu álbum vá em \"Configurações > Privacidade > Fotos\"";
+"NO_CAMERA_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso à sua câmera vá em \"Configurações > Privacidade > Câmera\"";
+"NO_MICROPHONE_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso ao seu microfone vá em \"Configurações > Privacidade > Microfone\"";

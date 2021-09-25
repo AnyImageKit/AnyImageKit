@@ -1,11 +1,30 @@
 # 更新日志
 
+## 0.13.4
+
+### 新增
+
+- 使用 Xcode 13.0 和 Kingfisher 7.0.0
+- 调整最低部署版本为 iOS 12.0+ 以解决 Xcode 编译异常的问题
+
+## 0.13.3
+
+### 新增
+
+- 新增葡萄牙语-巴西 `Portuguese(Brazil) (pt-BR)` 国际化支持。([#106](https://github.com/AnyImageProject/AnyImageKit/pull/106))
+
+## 0.13.2
+
+### 修复
+
+Xcode 13 beta 无法编译错误。([#95](https://github.com/AnyImageProject/AnyImageKit/issues/95))
+
 ## 0.13.0
 
 ### 通用
 
 - 支持 CocoaPods `resource_bundles` 特性。([#79](https://github.com/AnyImageProject/AnyImageKit/pull/79))
-- 新增 `Turkish (tr)` 国际化支持。([#70](https://github.com/AnyImageProject/AnyImageKit/pull/70))
+- 新增土耳其语 `Turkish (tr)` 国际化支持。([#70](https://github.com/AnyImageProject/AnyImageKit/pull/70))
 
 ### 新增
 
