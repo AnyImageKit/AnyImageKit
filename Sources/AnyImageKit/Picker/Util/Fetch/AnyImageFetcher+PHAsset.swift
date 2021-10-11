@@ -1,6 +1,6 @@
 //
 //  AnyImageFetcher+PHAsset.swift
-//  AnyImageFetcher+PHAsset
+//  AnyImageKit
 //
 //  Created by 刘栋 on 2021/8/23.
 //  Copyright © 2021 AnyImageProject.org. All rights reserved.
@@ -11,8 +11,53 @@ import UIKit
 
 extension AnyImageFetcher where Resource == PHAsset {
     
-    func fetchPhoto(resource: Resource, type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
-        
+    func fetchPhoto(resource: Resource, type: ImageResourceStorageType, progressHandler: ResourceLoadProgressHandler? = nil, completion: @escaping ImageResourceLoadCompletion) {
+        switch type {
+        case .thumbnail:
+            let options = LibraryPhotoLoadOptions(targetSize: thumbnailSize)
+            let requestID = loadLibraryPhoto(resource: resource, options: options) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    completion(.success(.init(identifier: response.identifier, type: .thumbnail, image: response.image, data: nil)))
+                    self.endRequest(id: response.requestID, identifier: response.identifier)
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            startRequest(id: requestID, identifier: resource.identifier)
+        case .preview:
+            let options = LibraryPhotoLoadOptions(targetSize: previewSize)
+            let requestID = loadLibraryPhoto(resource: resource, options: options) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    completion(.success(.init(identifier: response.identifier, type: .preview, image: response.image, data: nil)))
+                    self.endRequest(id: response.requestID, identifier: response.identifier)
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            startRequest(id: requestID, identifier: resource.identifier)
+        case .original:
+            let options = LibraryPhotoDataLoadOptions { percent, _, _, _ in
+                progressHandler?(percent)
+            }
+            let requestID = loadLibraryPhotoData(resource: resource, options: options) { result in
+                switch result {
+                case .success(let response):
+                    if let image = UIImage(data: response.data) {
+                        completion(.success(.init(identifier: response.identifier, type: .original, image: image, data: response.data)))
+                    } else {
+                        completion(.failure(AnyImageError.invalidImage))
+                    }
+                    self.endRequest(id: response.requestID, identifier: response.identifier)
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+            startRequest(id: requestID, identifier: resource.identifier)
+        }
     }
     
     func fetchLivePhoto(resource: Resource, type: LivePhotoResourceStorageType, completion: @escaping LivePhotoResourceLoadCompletion) {

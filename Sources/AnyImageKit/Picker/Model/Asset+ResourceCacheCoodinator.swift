@@ -18,11 +18,11 @@ extension Asset: ResourceCacheCoodinator {
         cacher.remove(key: identifier, type: type)
     }
     
-    func cacheWrite(storage: ImageResourceStorage, completion: @escaping (Result<ImageResourceStorage, Error>) -> Void) {
+    func cacheWrite(storage: ImageResourceStorage, completion: @escaping ImageResourceLoadCompletion) {
         cacher.write(key: identifier, storage: storage, completion: completion)
     }
     
-    func cacheRead(type: ImageResourceStorageType, completion: @escaping (Result<ImageResourceStorage, Error>) -> Void) {
+    func cacheRead(type: ImageResourceStorageType, completion: @escaping ImageResourceLoadCompletion) {
         cacher.read(key: identifier, type: type, completion: completion)
     }
     

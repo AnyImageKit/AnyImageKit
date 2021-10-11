@@ -10,6 +10,9 @@ import UIKit
 
 final public class AnyImageFetcher<Resource: IdentifiableResource> {
     
+    var thumbnailSize: CGSize = .init(width: 200, height: 200)
+    var previewSize: CGSize = .init(width: 1200, height: 1200)
+    
     func startRequest(id: Int, identifier: String) {
         _print("🕛 Start Request [\(identifier)]<\(id)>")
     }

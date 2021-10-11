@@ -8,6 +8,7 @@
 
 import UIKit
 
+public typealias ResourceLoadProgressHandler = (Double) -> Void
 public typealias ImageResourceLoadCompletion = (Result<ImageResourceStorage, Error>) -> Void
 
 public struct ImageResourceStorage: IdentifiableResource {
