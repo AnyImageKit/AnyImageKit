@@ -6,6 +6,7 @@
 //  Copyright © 2021 AnyImageProject.org. All rights reserved.
 //
 
+import Foundation
 import Kingfisher
 
 struct KFMixedCacher: AnyImageCacher {
