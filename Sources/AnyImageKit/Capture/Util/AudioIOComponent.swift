@@ -63,7 +63,11 @@ final class AudioIOComponent: DeviceIOComponent {
 extension AudioIOComponent {
     
     var recommendedWriterSettings: [String: Any]? {
+        #if swift(>=5.5)
         return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
+        #else
+        return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4) as? [String: Any]
+        #endif
     }
 }
 

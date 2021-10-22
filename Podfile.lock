@@ -1,17 +1,17 @@
 PODS:
-  - AnyImageKit (0.13.4):
-    - AnyImageKit/Capture (= 0.13.4)
-    - AnyImageKit/Core (= 0.13.4)
-    - AnyImageKit/Editor (= 0.13.4)
-    - AnyImageKit/Picker (= 0.13.4)
-  - AnyImageKit/Capture (0.13.4):
+  - AnyImageKit (0.13.5):
+    - AnyImageKit/Capture (= 0.13.5)
+    - AnyImageKit/Core (= 0.13.5)
+    - AnyImageKit/Editor (= 0.13.5)
+    - AnyImageKit/Picker (= 0.13.5)
+  - AnyImageKit/Capture (0.13.5):
     - AnyImageKit/Core
-  - AnyImageKit/Core (0.13.4):
+  - AnyImageKit/Core (0.13.5):
     - Kingfisher
     - SnapKit
-  - AnyImageKit/Editor (0.13.4):
+  - AnyImageKit/Editor (0.13.5):
     - AnyImageKit/Core
-  - AnyImageKit/Picker (0.13.4):
+  - AnyImageKit/Picker (0.13.5):
     - AnyImageKit/Core
   - Kingfisher (7.0.0)
   - SnapKit (5.0.1)
@@ -31,10 +31,10 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  AnyImageKit: 1038c279094f003e8fb9eb6f2e51e16e026ea23c
+  AnyImageKit: a38b9467a23d2b3e0cc35768e093fafe81a8fe59
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 5495c92a992122439787cd0b8cc6ae947bcd2b46
+PODFILE CHECKSUM: bd8c710fcec2946ffd55b64c35e95c31ccd27b1d
 
 COCOAPODS: 1.11.2
