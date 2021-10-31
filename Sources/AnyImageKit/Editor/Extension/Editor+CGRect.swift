@@ -18,4 +18,8 @@ extension CGRect {
         guard amount != 1.0 else { return self }
         return CGRect(origin: origin.multipliedBy(amount), size: size.multipliedBy(amount))
     }
+    
+    var center: CGPoint {
+        return CGPoint(x: midX, y: midY)
+    }
 }

@@ -23,4 +23,8 @@ extension CGPoint {
         guard amount != 1.0 else { return self }
         return CGPoint(x: x * amount, y: y * amount)
     }
+    
+    func reversed() -> CGPoint {
+        return CGPoint(x: y, y: x)
+    }
 }
