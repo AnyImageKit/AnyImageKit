@@ -86,6 +86,10 @@ extension PhotoEditorContentView {
             self.updateSubviewFrame()
         })
     }
+    
+    /// 向左旋转
+    func rotateToLeft() {
+    }
 }
 
 // MARK: - Target

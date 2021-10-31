@@ -113,9 +113,9 @@ final class EditorToolView: UIView {
         bottomCoverView.snp.makeConstraints { maker in
             maker.bottom.left.right.equalToSuperview()
             if #available(iOS 11.0, *) {
-                maker.top.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-100)
+                maker.top.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-110)
             } else {
-                maker.height.equalTo(100)
+                maker.height.equalTo(110)
             }
         }
         editOptionsView.snp.makeConstraints { maker in
@@ -138,7 +138,7 @@ final class EditorToolView: UIView {
         cropToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(editOptionsView).offset(15)
-            maker.height.equalTo(40+60)
+            maker.height.equalTo(40+10+60)
         }
         doneButton.snp.makeConstraints { maker in
             maker.centerY.equalTo(editOptionsView)
@@ -245,6 +245,10 @@ extension EditorToolView: EditorCropToolViewDelegate {
     
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView) {
         context.action(.cropReset)
+    }
+    
+    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) {
+        context.action(.cropRotateToLeft)
     }
 }
 
