@@ -280,7 +280,16 @@ extension PhotoEditorContentView {
         let scale = scrollView.zoomScale
         let point = textView.data.point
         let newPoint = pan.translation(in: self)
-        textView.data.point = CGPoint(x: point.x + newPoint.x / scale, y: point.y + newPoint.y / scale)
+        switch cropContext.rotateState {
+        case .portrait:
+            textView.data.point = CGPoint(x: point.x + newPoint.x / scale, y: point.y + newPoint.y / scale)
+        case .upsideDown:
+            textView.data.point = CGPoint(x: point.x - newPoint.x / scale, y: point.y - newPoint.y / scale)
+        case .landscapeLeft:
+            textView.data.point = CGPoint(x: point.x - newPoint.y / scale, y: point.y + newPoint.x / scale)
+        case .landscapeRight:
+            textView.data.point = CGPoint(x: point.x + newPoint.y / scale, y: point.y - newPoint.x / scale)
+        }
         textView.transform = textView.calculateTransform()
         pan.setTranslation(.zero, in: self)
         
