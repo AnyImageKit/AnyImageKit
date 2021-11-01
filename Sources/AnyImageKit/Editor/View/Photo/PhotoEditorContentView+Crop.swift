@@ -277,10 +277,11 @@ extension PhotoEditorContentView {
         imageView.addSubview(cropLayerEnter)
         cropLayerLeave.removeFromSuperview()
         
+        let lastCropSize = lastCropData.rect.size.reversed(!rotateState.isPortrait)
         let newRectPathRect = CGRect(origin: CGPoint(x: lastCropData.contentOffset.x / scale + cropOffsetX,
                                                      y: lastCropData.contentOffset.y / scale + cropOffsetY),
-                                     size: CGSize(width: lastCropData.rect.width / scale,
-                                                  height: lastCropData.rect.height / scale))
+                                     size: CGSize(width: lastCropSize.width / scale,
+                                                  height: lastCropSize.height / scale))
         let newCropPath = UIBezierPath(rect: cropLayerEnter.frame)
         let newRectPath = UIBezierPath(rect: newRectPathRect)
         newCropPath.append(newRectPath)
