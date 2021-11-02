@@ -99,8 +99,10 @@ extension PhotoEditorContentView {
     /// 向左旋转
     func rotateToLeft() {
         // TODO: Add turn right
+        setMirrorCropRect(cropRect)
         rotateState = RotateState.nextState(of: rotateState, direction: .left)
-        setCropHidden(true, animated: false)
+        setCropHidden(true, animated: false, inRotation: true)
+        mirrorCropView.isHidden = false
 
         let scrollViewCenter = self.scrollView.center
         let contentOffset = self.scrollView.contentOffset
@@ -156,10 +158,11 @@ extension PhotoEditorContentView {
             self.scrollView.contentSize = newImageFrame.size
             self.scrollView.contentOffset = newContentOffset
             self.scrollView.minimumZoomScale = self.getMinimumZoomScale(with: newCropRect.size, imageSize: newImageFrame.size)
-            
+            self.setMirrorCropRect(newCropRect, animated: true)
         } completion: { _ in
             self.setCropRect(newCropRect, animated: false)
-            self.setCropHidden(false, animated: true)
+            self.setCropHidden(false, animated: true, inRotation: true)
+            self.mirrorCropView.isHidden = true
             self.setupContentInset()
         }
     }
@@ -412,9 +415,23 @@ extension PhotoEditorContentView {
         gridView.setRect(rect, animated: animated)
     }
     
+    /// 设置 imageView 中的蒙版，用于旋转时保持周围有黑色蒙层
+    private func setMirrorCropRect(_ rect: CGRect, animated: Bool = false) {
+        let rectSize = rect.size.reversed(!rotateState.isPortrait)
+        let rectPathRect = CGRect(origin: scrollView.contentOffset.multipliedBy(1/scrollView.zoomScale),
+                                  size: CGSize(width: rectSize.width / imageView.frame.width * imageView.bounds.width,
+                                               height: rectSize.height / imageView.frame.height * imageView.bounds.height))
+        mirrorCropView.setRect(rectPathRect)
+        layoutIfNeeded()
+    }
+    
     /// 显示/隐藏白色裁剪框
-    private func setCropHidden(_ hidden: Bool, animated: Bool) {
-        gridView.setHidden(hidden, animated: animated)
+    private func setCropHidden(_ hidden: Bool, animated: Bool, inRotation: Bool = false) {
+        if inRotation {
+            gridView.alpha = hidden ? 0 : 1
+        } else {
+            gridView.setHidden(hidden, animated: animated)
+        }
         UIView.animate(withDuration: animated ? 0.25 : 0) {
             self.topLeftCorner.alpha = hidden ? 0 : 1
             self.topRightCorner.alpha = hidden ? 0 : 1

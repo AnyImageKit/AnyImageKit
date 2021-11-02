@@ -41,6 +41,7 @@
 		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
 		718DE32725996E36005C3159 /* CropLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32625996E36005C3159 /* CropLayerView.swift */; };
 		718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32A2599AD82005C3159 /* TextTrashView.swift */; };
+		71A2F3BF2730E53100D4997B /* MirrorCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A2F3BE2730E53100D4997B /* MirrorCropView.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9112629784400710A7F /* CaptureMediaOption.swift */; };
 		71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */; };
@@ -290,6 +291,7 @@
 		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		718DE32625996E36005C3159 /* CropLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropLayerView.swift; sourceTree = "<group>"; };
 		718DE32A2599AD82005C3159 /* TextTrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTrashView.swift; sourceTree = "<group>"; };
+		71A2F3BE2730E53100D4997B /* MirrorCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MirrorCropView.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		71B3E9112629784400710A7F /* CaptureMediaOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureMediaOption.swift; sourceTree = "<group>"; };
 		71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAspectRatio.swift; sourceTree = "<group>"; };
@@ -1179,6 +1181,7 @@
 				A0FFB23F25407E86000A7A45 /* GradientView.swift */,
 				718DE32625996E36005C3159 /* CropLayerView.swift */,
 				718DE32A2599AD82005C3159 /* TextTrashView.swift */,
+				71A2F3BE2730E53100D4997B /* MirrorCropView.swift */,
 			);
 			path = Kit;
 			sourceTree = "<group>";
@@ -1584,6 +1587,7 @@
 				716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */,
 				A0AF771F23A7762300A3DD9F /* CaptureRecordView.swift in Sources */,
 				713C207125AD32D800BB0F66 /* DrawnPath.swift in Sources */,
+				71A2F3BF2730E53100D4997B /* MirrorCropView.swift in Sources */,
 				A08DF7C223B2F5E6002B92EE /* DeviceOrientationUtil.swift in Sources */,
 				A557BF9B235D5B820029CCDB /* CameraCell.swift in Sources */,
 				A5347D3223AA210A00C93874 /* ExportTool+VideoURL.swift in Sources */,
