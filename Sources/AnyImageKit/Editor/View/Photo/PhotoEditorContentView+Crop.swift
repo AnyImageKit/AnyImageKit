@@ -490,17 +490,14 @@ extension PhotoEditorContentView {
             isYUp = rect.size.height - point.y > limit && rect.origin.y + point.y > imageView.frame.origin.y + scrollView.frame.origin.y - scrollView.contentOffset.y
             isYDown = rect.size.height + point.y > limit && rect.size.height + point.y < imageView.frame.size.height - scrollView.contentOffset.y
         } else {
-//            isXUp = rect.size.width - point.x > limit && rect.origin.x + point.x > imageView.frame.minY + scrollView.frame.origin.x - scrollView.contentOffset.y
-//            isXDown = rect.size.width + point.x > limit && rect.size.width + point.x < imageView.frame.size.height - scrollView.contentOffset.y
-//            isYUp = rect.size.height - point.y > limit && rect.minY + point.y > imageView.frame.minX + scrollView.frame.origin.y - scrollView.contentOffset.x
-//            isYDown = rect.size.height + point.y > limit && rect.size.height + point.y < imageView.frame.size.width - scrollView.contentOffset.x
-            
-            isXUp = rect.size.width - point.x > limit && rect.origin.x + point.x > imageView.frame.minY + scrollView.frame.origin.x - scrollView.contentOffset.y
-            isXDown = rect.size.width + point.x > limit && rect.size.width + point.x < imageView.frame.size.height - scrollView.contentOffset.y
-            // YUp 有问题
-            isYUp = rect.size.height - point.y > limit && rect.height - point.y < imageView.frame.width - scrollView.contentOffset.x
-            // YDown 有问题
-            isYDown = rect.size.height + point.y > limit && rect.size.height + point.y < imageView.frame.size.width - scrollView.contentOffset.x
+            let offsetX = rotateState == .landscapeLeft ? scrollView.contentOffset.y : imageView.frame.height - cropStartPanRect.width - scrollView.contentOffset.y
+            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageView.frame.minY + scrollView.frame.minX - offsetX
+            isXDown = rect.width + point.x > limit && rect.width + point.x < imageView.frame.height - offsetX
+
+            let yUpOffsetY = rotateState == .landscapeLeft ? scrollView.contentOffset.x : imageView.frame.width - cropStartPanRect.height - scrollView.contentOffset.x
+            isYUp = rect.height - point.y > limit && rect.height - point.y < imageView.frame.width - yUpOffsetY
+            let yDownOffsetY = rotateState == .landscapeLeft ? imageView.frame.width - cropStartPanRect.height - scrollView.contentOffset.x : scrollView.contentOffset.x
+            isYDown = rect.height + point.y > limit && rect.height + point.y < imageView.frame.width - yDownOffsetY
         }
         
         switch position {
