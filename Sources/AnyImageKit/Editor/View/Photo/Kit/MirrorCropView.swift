@@ -62,16 +62,16 @@ final class MirrorCropView: UIView {
             make.height.equalTo(rect.minY)
         }
         leftView.snp.remakeConstraints { make in
-            make.top.equalTo(topView.snp.bottom)
-            make.bottom.equalTo(bottomView.snp.top)
+            make.top.equalTo(rect.minY)
+            make.bottom.equalTo(rect.maxY)
             make.left.equalToSuperview()
             make.width.equalTo(rect.minX)
         }
         rightView.snp.remakeConstraints { make in
-            make.top.equalTo(topView.snp.bottom)
-            make.bottom.equalTo(bottomView.snp.top)
-            make.right.equalToSuperview()
+            make.top.equalTo(rect.minY)
+            make.bottom.equalTo(rect.maxY)
             make.left.equalToSuperview().offset(rect.maxX)
+            make.right.equalToSuperview()
         }
         bottomView.snp.remakeConstraints { make in
             make.left.right.bottom.equalToSuperview()
