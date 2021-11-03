@@ -43,7 +43,7 @@ final class EditorCropToolView: UIView {
     
     private(set) lazy var rotateButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setImage(BundleHelper.image(named: "PhotoToolCropTrunLeft", module: .editor), for: .normal)
+        view.setImage(BundleHelper.image(named: options.rotationDirection.imageName, module: .editor), for: .normal)
         view.addTarget(self, action: #selector(rotateButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -56,7 +56,7 @@ final class EditorCropToolView: UIView {
         view.backgroundColor = .clear
         view.showsHorizontalScrollIndicator = false
         view.registerCell(EditorCropOptionCell.self)
-        view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+        view.contentInset = UIEdgeInsets(top: 0, left: options.rotationDirection == .none ? 20 : 0, bottom: 0, right: 20)
         view.dataSource = self
         view.delegate = self
         return view
@@ -111,6 +111,8 @@ final class EditorCropToolView: UIView {
         addSubview(cancelButton)
         addSubview(doneButton)
         addSubview(resetbutton)
+        
+        rotateButton.isHidden = options.rotationDirection == .none
         collectionView.isHidden = options.cropOptions.count <= 1
         
         rotateButton.snp.makeConstraints { maker in
@@ -120,7 +122,11 @@ final class EditorCropToolView: UIView {
         }
         collectionView.snp.makeConstraints { maker in
             maker.top.bottom.equalTo(rotateButton)
-            maker.left.equalTo(rotateButton.snp.right).offset(10)
+            if options.rotationDirection == .none {
+                maker.left.equalToSuperview()
+            } else {
+                maker.left.equalTo(rotateButton.snp.right).offset(10)
+            }
             maker.right.equalToSuperview()
             maker.height.equalTo(40)
         }

@@ -248,7 +248,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
     }
     
     func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) {
-        context.action(.cropRotateToLeft)
+        context.action(.cropRotate)
     }
 }
 

@@ -95,7 +95,7 @@ extension ImageEditorController {
     }
 }
 
-// MARK: - Private function
+// MARK: - Check
 extension ImageEditorController {
     
     private func check(resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) -> EditorPhotoOptionsInfo {
@@ -106,8 +106,17 @@ extension ImageEditorController {
         default:
             break
         }
+
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
         assert(options.mosaicOptions.count <= 5, "Mosaic count can't more then 5")
+
+        if options.rotationDirection != .none {
+            for cropOption in options.cropOptions {
+                if case let .custom(w, h) = cropOption, !options.cropOptions.contains(.custom(w: h, h: w)) {
+                    fatalError("Custom crop option must appear in pairs if you turn on the rotation feature. Please add .custom(\(h), \(w)) to cropOptions")
+                }
+            }
+        }
         #else
         var options = options
         if options.cacheIdentifier.firstIndex(of: "/") != nil {
@@ -118,6 +127,20 @@ extension ImageEditorController {
         }
         if options.mosaicOptions.count > 5 {
             options.mosaicOptions = Array(options.mosaicOptions.prefix(upTo: 5))
+        }
+        if options.cropOptions.count == 1 {
+            if case let .custom(w, h) = options.cropOptions.first, w != h {
+                options.rotationDirection = .none
+            }
+        }
+        if options.rotationDirection != .none {
+            var addCount = 0
+            for (idx, cropOption) in options.cropOptions.enumerated() {
+                if case let .custom(w, h) = cropOption, !options.cropOptions.contains(.custom(w: h, h: w)) {
+                    options.cropOptions.insert(.custom(w: h, h: w), at: idx + 1 + addCount)
+                    addCount += 1
+                }
+            }
         }
         #endif
         return options
@@ -132,6 +155,10 @@ extension ImageEditorController {
         }
         return options
     }
+}
+
+// MARK: - Private function
+extension ImageEditorController {
     
     private func output(photo: UIImage, fileType: FileType) -> Result<URL, AnyImageError> {
         guard let data = photo.jpegData(compressionQuality: 1.0) else {

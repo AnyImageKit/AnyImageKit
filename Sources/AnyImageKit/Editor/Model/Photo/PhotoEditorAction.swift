@@ -25,7 +25,7 @@ enum PhotoEditorAction {
     case mosaicFinishDraw([MosaicData])
     
     case cropUpdateOption(EditorCropOption)
-    case cropRotateToLeft
+    case cropRotate
     case cropReset
     case cropCancel
     case cropDone

@@ -343,8 +343,8 @@ extension PhotoEditorController {
             stack.setMosaicData(dataList)
         case .cropUpdateOption(let option):
             contentView.setCrop(option)
-        case .cropRotateToLeft:
-            contentView.rotateToLeft()
+        case .cropRotate:
+            contentView.rotate()
         case .cropReset:
             contentView.cropReset()
         case .cropCancel:
