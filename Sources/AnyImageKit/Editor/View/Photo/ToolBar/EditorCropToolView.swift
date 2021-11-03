@@ -171,6 +171,13 @@ extension EditorCropToolView {
     
     @objc private func rotateButtonTapped(_ sender: UIButton) {
         delegate?.cropToolViewRotateButtonTapped(self)
+        
+        guard let cropOption = currentOption else { return }
+        if case let .custom(w, h) = cropOption {
+            if let idx = options.cropOptions.firstIndex(of: .custom(w: h, h: w)) {
+                currentOptionIdx = idx
+            }
+        }
     }
 }
 

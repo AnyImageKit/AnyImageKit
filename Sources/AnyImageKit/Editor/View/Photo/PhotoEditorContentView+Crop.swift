@@ -164,6 +164,10 @@ extension PhotoEditorContentView {
             self.setCropHidden(false, animated: true, inRotation: true)
             self.mirrorCropView.isHidden = true
             self.setupContentInset()
+            
+            if case let .custom(w, h) = self.cropOption {
+                self.cropOption = .custom(w: h, h: w)
+            }
         }
     }
 }
