@@ -55,7 +55,7 @@ extension PhotoEditorAction {
         case .cropDone, .cropCancel:
             return 0.25
         default:
-            return 0.1
+            return 0.0
         }
     }
 }
