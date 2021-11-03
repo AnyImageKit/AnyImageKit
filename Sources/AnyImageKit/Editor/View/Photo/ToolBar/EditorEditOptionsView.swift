@@ -10,7 +10,8 @@ import UIKit
 
 protocol EditorEditOptionsViewDelegate: AnyObject {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: EditorPhotoToolOption?)
+    @discardableResult
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionWillChange option: EditorPhotoToolOption?) -> Bool
 }
 
 final class EditorEditOptionsView: UIView {
@@ -82,12 +83,20 @@ final class EditorEditOptionsView: UIView {
 extension EditorEditOptionsView {
     
     @objc private func buttonTapped(_ sender: UIButton) {
+        let nextOption: EditorPhotoToolOption?
         if let current = currentOption, options.toolOptions[sender.tag] == current {
+            nextOption = nil
+        } else {
+            nextOption = options.toolOptions[sender.tag]
+        }
+
+        let result = delegate?.editOptionsView(self, optionWillChange: nextOption) ?? false
+        guard result else { return }
+        if nextOption == nil {
             unselectButtons()
         } else {
             selectButton(sender)
         }
-        delegate?.editOptionsView(self, optionDidChange: currentOption)
     }
 }
 

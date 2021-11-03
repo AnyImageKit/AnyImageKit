@@ -10,11 +10,13 @@ import UIKit
 
 protocol EditorCropToolViewDelegate: AnyObject {
     
-    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption)
+    @discardableResult
+    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) -> Bool
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView)
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView)
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView)
-    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView)
+    @discardableResult
+    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) -> Bool
 }
 
 final class EditorCropToolView: UIView {
@@ -176,9 +178,8 @@ extension EditorCropToolView {
     }
     
     @objc private func rotateButtonTapped(_ sender: UIButton) {
-        delegate?.cropToolViewRotateButtonTapped(self)
-        
-        guard let cropOption = currentOption else { return }
+        let result = delegate?.cropToolViewRotateButtonTapped(self) ?? false
+        guard result, let cropOption = currentOption else { return }
         if case let .custom(w, h) = cropOption {
             if let idx = options.cropOptions.firstIndex(of: .custom(w: h, h: w)) {
                 currentOptionIdx = idx
@@ -205,9 +206,13 @@ extension EditorCropToolView: UICollectionViewDataSource {
 extension EditorCropToolView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if currentOption != options.cropOptions[indexPath.row] {
-            currentOption = options.cropOptions[indexPath.row]
-            delegate?.cropToolView(self, didClickCropOption: currentOption ?? .free)
+        guard currentOption != options.cropOptions[indexPath.row] else { return }
+        let nextOption = options.cropOptions[indexPath.row]
+        let result = delegate?.cropToolView(self, didClickCropOption: nextOption) ?? false
+        if result {
+            currentOption = nextOption
+        } else {
+            collectionView.selectItem(at: IndexPath(row: currentOptionIdx, section: 0), animated: true, scrollPosition: .left)
         }
     }
 }

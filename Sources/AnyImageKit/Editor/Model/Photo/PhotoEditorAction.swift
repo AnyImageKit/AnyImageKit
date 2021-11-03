@@ -38,3 +38,24 @@ enum PhotoEditorAction {
     case textCancel
     case textDone(TextData)
 }
+
+extension PhotoEditorAction {
+    
+    var duration: TimeInterval {
+        switch self {
+        case .toolOptionChanged(let option):
+            if let option = option, option == .crop {
+                return 0.5
+            }
+            return 0.1
+        case .cropUpdateOption, .cropReset:
+            return 0.55
+        case .cropRotate:
+            return 0.3
+        case .cropDone, .cropCancel:
+            return 0.25
+        default:
+            return 0.1
+        }
+    }
+}

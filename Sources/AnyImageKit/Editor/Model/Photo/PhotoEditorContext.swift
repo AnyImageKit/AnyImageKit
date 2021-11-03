@@ -14,7 +14,7 @@ final class PhotoEditorContext {
     
     let options: EditorPhotoOptionsInfo
     
-    private var didReceiveAction: ((PhotoEditorAction) -> Void)?
+    private var didReceiveAction: ((PhotoEditorAction) -> Bool)?
     
     init(options: EditorPhotoOptionsInfo) {
         self.options = options
@@ -23,13 +23,14 @@ final class PhotoEditorContext {
 
 extension PhotoEditorContext {
     
-    func didReceiveAction(_ callback: @escaping ((PhotoEditorAction) -> Void)) {
+    func didReceiveAction(_ callback: @escaping ((PhotoEditorAction) -> Bool)) {
         if didReceiveAction == nil {
             didReceiveAction = callback
         }
     }
     
-    func action(_ action: PhotoEditorAction) {
-        didReceiveAction?(action)
+    @discardableResult
+    func action(_ action: PhotoEditorAction) -> Bool {
+        return didReceiveAction?(action) ?? false
     }
 }

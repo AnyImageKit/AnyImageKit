@@ -166,14 +166,15 @@ extension EditorToolView {
 // MARK: - EditorEditOptionsViewDelegate
 extension EditorToolView: EditorEditOptionsViewDelegate {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: EditorPhotoToolOption?) {
-        context.action(.toolOptionChanged(option))
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionWillChange option: EditorPhotoToolOption?) -> Bool {
+        let result = context.action(.toolOptionChanged(option))
+        guard result else { return false }
         
         guard let option = option else {
             brushToolView.isHidden = true
             cropToolView.isHidden = true
             mosaicToolView.isHidden = true
-            return
+            return true
         }
         
         brushToolView.isHidden = option != .brush
@@ -191,6 +192,7 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         default:
             break
         }
+        return true
     }
 }
 
@@ -221,12 +223,13 @@ extension EditorToolView: EditorMosaicToolViewDelegate {
 // MARK: - EditorCropToolViewDelegate
 extension EditorToolView: EditorCropToolViewDelegate {
     
-    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) {
-        context.action(.cropUpdateOption(option))
+    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) -> Bool {
+        return context.action(.cropUpdateOption(option))
     }
     
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView) {
-        context.action(.cropCancel)
+        let result = context.action(.cropCancel)
+        guard result else { return }
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
@@ -235,7 +238,8 @@ extension EditorToolView: EditorCropToolViewDelegate {
     }
     
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView) {
-        context.action(.cropDone)
+        let result = context.action(.cropDone)
+        guard result else { return }
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
@@ -247,8 +251,8 @@ extension EditorToolView: EditorCropToolViewDelegate {
         context.action(.cropReset)
     }
     
-    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) {
-        context.action(.cropRotate)
+    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) -> Bool {
+        return context.action(.cropRotate)
     }
 }
 

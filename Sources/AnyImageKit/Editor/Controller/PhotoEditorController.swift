@@ -49,6 +49,7 @@ final class PhotoEditorController: AnyImageViewController {
     private let context: PhotoEditorContext
     private let blurContext = CIContext()
     private weak var delegate: PhotoEditorControllerDelegate?
+    private var lastOperationTime: TimeInterval = 0
     
     private lazy var stack: PhotoEditingStack = {
         let stack = PhotoEditingStack(identifier: options.cacheIdentifier)
@@ -282,7 +283,6 @@ extension PhotoEditorController {
         toolView.bottomCoverView.isHidden = true
         toolView.doneButton.isHidden = true
         toolView.editOptionsView.isHidden = true
-        toolView.editOptionsView.unselectButtons()
         contentView.deactivateAllTextView()
     }
     
@@ -294,6 +294,7 @@ extension PhotoEditorController {
         toolView.doneButton.isHidden = false
         toolView.editOptionsView.isHidden = false
         contentView.scrollView.isScrollEnabled = true
+        toolView.editOptionsView.unselectButtons()
     }
 }
 
@@ -303,11 +304,17 @@ extension PhotoEditorController {
     
     private func bindAction() {
         context.didReceiveAction { [weak self] (action) in
-            self?.didReceive(action: action)
+            return self?.didReceive(action: action) ?? false
         }
     }
     
-    private func didReceive(action: PhotoEditorAction) {
+    private func didReceive(action: PhotoEditorAction) -> Bool {
+        let currentTime = Date().timeIntervalSince1970
+        if lastOperationTime > currentTime {
+            return false
+        }
+        lastOperationTime = currentTime + action.duration
+        
         switch action {
         case .empty:
             if toolView.currentOption != .crop {
@@ -317,7 +324,7 @@ extension PhotoEditorController {
             delegate?.photoEditorDidCancel(self)
         case .done:
             contentView.deactivateAllTextView()
-            guard let image = getResultImage() else { return }
+            guard let image = getResultImage() else { return false }
             setPlaceholdImage(image)
             stack.setOutputImage(image)
             saveEditPath()
@@ -350,7 +357,7 @@ extension PhotoEditorController {
         case .cropCancel:
             if options.toolOptions.count == 1 {
                 context.action(.back)
-                return
+                return true
             }
             backButton.isHidden = false
             contentView.cropCancel { [weak self] (_) in
@@ -388,6 +395,7 @@ extension PhotoEditorController {
                 stack.addTextData(data)
             }
         }
+        return true
     }
     
     private func toolOptionsDidChanged(option: EditorPhotoToolOption?) {
