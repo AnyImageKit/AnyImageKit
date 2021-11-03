@@ -24,7 +24,7 @@ extension CGPoint {
         return CGPoint(x: x * amount, y: y * amount)
     }
     
-    func reversed() -> CGPoint {
-        return CGPoint(x: y, y: x)
+    func reversed(_ flag: Bool = true) -> CGPoint {
+        return flag ? CGPoint(x: y, y: x) : self
     }
 }

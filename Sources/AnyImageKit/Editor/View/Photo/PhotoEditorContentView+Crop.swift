@@ -539,7 +539,6 @@ extension PhotoEditorContentView {
     
     /// pan手势移动中，计算新的裁剪框的位置，用设置了裁剪比例的情况下
     private func updateCropRectWithCropOption(_ point: CGPoint, _ posision: CropCornerPosition) {
-        // TODO: Rotation
         let limit: CGFloat = 55
         var rect = cropRect
         let ratio: CGPoint
@@ -592,11 +591,14 @@ extension PhotoEditorContentView {
                 rect.size.height += point.y
             }
         }
+        
+        let imageFrame = imageView.frame.reversed(!rotateState.isPortrait)
+        let contentOffset = scrollView.contentOffset.reversed(!rotateState.isPortrait)
         if rect.width < limit || rect.height < limit
-            || rect.origin.x < imageView.frame.origin.x + scrollView.frame.origin.x - scrollView.contentOffset.x
-            || rect.origin.y < imageView.frame.origin.y + scrollView.frame.origin.y - scrollView.contentOffset.y
-            || rect.width > imageView.frame.width - scrollView.contentOffset.x
-            || rect.height > imageView.frame.height - scrollView.contentOffset.y {
+            || rect.origin.x < imageFrame.minX + scrollView.frame.minX - contentOffset.x
+            || rect.origin.y < imageFrame.minY + scrollView.frame.minY - contentOffset.y
+            || rect.width > imageFrame.width - contentOffset.x
+            || rect.height > imageFrame.height - contentOffset.y {
             return
         }
         setCropRect(rect)
@@ -645,8 +647,9 @@ extension PhotoEditorContentView {
                 offset = CGPoint(x: contentOffset.x * zoomScale, y: contentOffset.y * zoomScale)
             }
         } else { // 设置指定裁剪尺寸分支
-            let offsetX = (scrollView.contentSize.width - cropRect.width) / 2 * zoomScale
-            let offsetY = (scrollView.contentSize.height - cropRect.height) / 2 * zoomScale
+            let cropSize = cropRect.size.reversed(!rotateState.isPortrait)
+            let offsetX = (scrollView.contentSize.width - cropSize.width) / 2 * zoomScale
+            let offsetY = (scrollView.contentSize.height - cropSize.height) / 2 * zoomScale
             offset = CGPoint(x: offsetX, y: offsetY)
         }
         

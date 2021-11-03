@@ -19,6 +19,10 @@ extension CGRect {
         return CGRect(origin: origin.multipliedBy(amount), size: size.multipliedBy(amount))
     }
     
+    func reversed(_ flag: Bool = true) -> CGRect {
+        return flag ? CGRect(origin: origin.reversed(), size: size.reversed()) : self
+    }
+    
     var center: CGPoint {
         return CGPoint(x: midX, y: midY)
     }
