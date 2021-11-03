@@ -99,16 +99,8 @@ extension PhotoEditorContentView {
     /// 旋转
     func rotate() {
         setMirrorCropRect(cropRect)
-        switch options.rotationDirection {
-        case .turnLeft:
-            rotateState = RotateState.nextState(of: rotateState, direction: .left)
-            layoutRotation()
-        case .turnRight:
-            rotateState = RotateState.nextState(of: rotateState, direction: .right)
-            layoutRotation()
-        default:
-            break
-        }
+        rotateState = RotateState.nextState(of: rotateState, direction: options.rotationDirection)
+        layoutRotation()
     }
 }
 

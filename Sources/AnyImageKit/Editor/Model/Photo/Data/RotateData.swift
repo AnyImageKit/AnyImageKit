@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum RotateDirection: Int, Codable, Equatable {
-    
-    case left = 0
-    case right
-}
-
 enum RotateState: Int, Codable, Equatable {
     
     case portrait = 0
@@ -44,16 +38,19 @@ enum RotateState: Int, Codable, Equatable {
         }
     }
     
-    static func getList(by direction: RotateDirection) -> [RotateState] {
+    static func getList(by direction: EditorRotationDirection) -> [RotateState] {
         switch direction {
-        case .left:
+        case .turnLeft:
             return [.portrait, .landscapeLeft, .upsideDown, .landscapeRight]
-        case .right:
+        case .turnRight:
             return [.portrait, .landscapeRight, .upsideDown, .landscapeLeft]
+        case .none:
+            return []
         }
     }
     
-    static func nextState(of current: RotateState, direction: RotateDirection) -> RotateState {
+    static func nextState(of current: RotateState, direction: EditorRotationDirection) -> RotateState {
+        guard direction != .none else { return current }
         let list = getList(by: direction)
         if let idx = list.firstIndex(of: current) {
             let next = (idx < list.count - 1) ? idx + 1 : 0
