@@ -8,10 +8,10 @@
 
 import Foundation
 
-public enum EditorRotationDirection {
+public enum EditorRotationDirection: Equatable {
     
     /// Turn off rotation feature
-    case none
+    case turnOff
     
     /// Turn left
     case turnLeft
@@ -24,7 +24,7 @@ extension EditorRotationDirection {
     
     var imageName: String {
         switch self {
-        case .none:
+        case .turnOff:
             return ""
         case .turnLeft:
             return "PhotoToolCropTrunLeft"

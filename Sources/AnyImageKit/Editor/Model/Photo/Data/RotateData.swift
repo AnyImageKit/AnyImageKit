@@ -44,13 +44,13 @@ enum RotateState: Int, Codable, Equatable {
             return [.portrait, .landscapeLeft, .upsideDown, .landscapeRight]
         case .turnRight:
             return [.portrait, .landscapeRight, .upsideDown, .landscapeLeft]
-        case .none:
+        case .turnOff:
             return []
         }
     }
     
     static func nextState(of current: RotateState, direction: EditorRotationDirection) -> RotateState {
-        guard direction != .none else { return current }
+        guard direction != .turnOff else { return current }
         let list = getList(by: direction)
         if let idx = list.firstIndex(of: current) {
             let next = (idx < list.count - 1) ? idx + 1 : 0

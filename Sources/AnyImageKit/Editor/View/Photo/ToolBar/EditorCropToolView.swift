@@ -58,7 +58,7 @@ final class EditorCropToolView: UIView {
         view.backgroundColor = .clear
         view.showsHorizontalScrollIndicator = false
         view.registerCell(EditorCropOptionCell.self)
-        view.contentInset = UIEdgeInsets(top: 0, left: options.rotationDirection == .none ? 20 : 0, bottom: 0, right: 20)
+        view.contentInset = UIEdgeInsets(top: 0, left: options.rotationDirection == .turnOff ? 20 : 0, bottom: 0, right: 20)
         view.dataSource = self
         view.delegate = self
         return view
@@ -114,7 +114,7 @@ final class EditorCropToolView: UIView {
         addSubview(doneButton)
         addSubview(resetbutton)
         
-        rotateButton.isHidden = options.rotationDirection == .none
+        rotateButton.isHidden = options.rotationDirection == .turnOff
         collectionView.isHidden = options.cropOptions.count <= 1
         
         rotateButton.snp.makeConstraints { maker in
@@ -124,7 +124,7 @@ final class EditorCropToolView: UIView {
         }
         collectionView.snp.makeConstraints { maker in
             maker.top.bottom.equalTo(rotateButton)
-            if options.rotationDirection == .none {
+            if options.rotationDirection == .turnOff {
                 maker.left.equalToSuperview()
             } else {
                 maker.left.equalTo(rotateButton.snp.right).offset(10)
