@@ -52,7 +52,7 @@ final class EditorBrushToolView: UIView {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             if let button = colorView as? ColorButton {
                 button.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
-                button.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
+                button.isSelected = idx == currentIdx
             }
             if #available(iOS 14.0, *) {
                 if let colorWell = colorView as? ColorWell {
