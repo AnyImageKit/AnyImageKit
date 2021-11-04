@@ -27,7 +27,8 @@ final class TextImageView: UIView {
     private lazy var rectView: UIView = {
         let view = UIView(frame: .zero)
         view.isHidden = true
-        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 1
+        view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor.white.cgColor
         return view
     }()
@@ -57,7 +58,7 @@ final class TextImageView: UIView {
     
     private func setupView() {
         addSubview(rectView)
-        addSubview(deleteButton)
+//        addSubview(deleteButton)
         addSubview(imageView)
     }
     
@@ -71,12 +72,12 @@ final class TextImageView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         rectView.snp.remakeConstraints { maker in
-            maker.edges.equalToSuperview().inset(data.inset*0.6)
+            maker.edges.equalToSuperview().inset(-10)
         }
-        deleteButton.snp.remakeConstraints { maker in
-            maker.top.right.equalToSuperview()
-            maker.width.height.equalTo(data.inset*1.25)
-        }
+//        deleteButton.snp.remakeConstraints { maker in
+//            maker.top.right.equalToSuperview()
+//            maker.width.height.equalTo(data.inset*1.25)
+//        }
         imageView.snp.makeConstraints { maker in
 //            maker.edges.equalToSuperview().inset(data.inset)
             maker.edges.equalToSuperview()
@@ -88,12 +89,12 @@ extension TextImageView {
     
     public func setActive(_ isActive: Bool) {
         self.isActive = isActive
-//        rectView.isHidden = !isActive
+        rectView.isHidden = !isActive
 //        deleteButton.isHidden = !isActive
-//        if isActive && timer == nil {
-//            checkCount = 0
-//            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkActive(_:)), userInfo: nil, repeats: true)
-//        }
+        if isActive && timer == nil {
+            checkCount = 0
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkActive(_:)), userInfo: nil, repeats: true)
+        }
     }
 }
  
