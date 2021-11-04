@@ -13,9 +13,9 @@ import UIKit
 extension AssetPickerViewController {
     
     func canOpenEditor(with asset: Asset) -> Bool {
-        asset.check(disable: manager.options.disableRules)
+        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
         if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset)
+            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
             showAlert(message: message)
             return false
         }

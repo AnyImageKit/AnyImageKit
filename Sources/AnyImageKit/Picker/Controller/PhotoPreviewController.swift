@@ -330,7 +330,7 @@ extension PhotoPreviewController {
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
-            let message = rule.alertMessage(for: data.asset)
+            let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
             showAlert(message: message)
             return
         }
@@ -379,7 +379,7 @@ extension PhotoPreviewController {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
-            let message = rule.alertMessage(for: data.asset)
+            let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
             showAlert(message: message)
             return
         }
@@ -401,7 +401,7 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
         let cell: PreviewCell
-        data.asset.check(disable: manager.options.disableRules)
+        data.asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
         switch data.asset.mediaType {
         case .photo:
             let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
