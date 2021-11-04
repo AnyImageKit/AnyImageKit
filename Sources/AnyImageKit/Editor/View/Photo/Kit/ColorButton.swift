@@ -15,9 +15,6 @@ final class ColorButton: UIButton {
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         view.backgroundColor = color
-        view.layer.borderWidth = borderWidth
-        view.layer.borderColor = borderColor.cgColor
-        view.layer.cornerRadius = size/2
         return view
     }()
     
@@ -34,6 +31,13 @@ final class ColorButton: UIButton {
         super.init(frame: .zero)
         self.tag = tag
         setupView()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        colorView.layer.borderWidth = isSelected ? borderWidth * 1.5 : borderWidth
+        colorView.layer.borderColor = borderColor.cgColor
+        colorView.layer.cornerRadius = size/2
     }
     
     required init?(coder aDecoder: NSCoder) {

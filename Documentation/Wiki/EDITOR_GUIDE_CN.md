@@ -228,6 +228,29 @@ enum EditorCropOption: Equatable {
 
 
 
+### RotationDirection (EditorRotationDirection)
+
+`rotationDirection` 是旋转功能的旋转方向，默认为 `.turnLeft`
+
+```swift
+enum EditorRotationDirection: Equatable {
+    /// 关闭旋转
+    case turnOff
+    /// 向左旋转
+    case turnLeft
+    /// 向右旋转
+    case turnRight
+}
+```
+
+当打开旋转功能时，`cropOptions` 自定义的裁剪尺寸要求成对出现。
+
+比如之前设置 `cropOptions = [3:4, 9:16]`，之后需要增加 4:3, 16:9 这两种情况。
+
+因为当用户指定裁剪比例为 3:4 时，旋转之后比例会变成 4:3，所以要求自定义的裁剪尺寸要成对出现。
+
+
+
 ### CacheIdentifier (String)
 
 `cacheIdentifier` 是缓存标识符，默认为 `""`，即默认不缓存。

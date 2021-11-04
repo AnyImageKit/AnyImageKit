@@ -169,8 +169,8 @@ extension PhotoEditingStack {
         }
     }
     
-    private func cropImage(_ image: UIImage) -> UIImage? {
-        guard let source = image.cgImage else { return nil }
+    private func cropImage(_ image: UIImage) -> UIImage {
+        guard let source = image.cgImage else { return image }
         let size = image.size
         let imageFrame = cropImageViewFrame
         
@@ -180,16 +180,55 @@ extension PhotoEditingStack {
         rect.size.width = size.width * cropRect.width / imageFrame.width
         rect.size.height = size.height * cropRect.height / imageFrame.height
         
-        guard let resultImage = source.cropping(to: rect) else { return nil }
+        guard let resultImage = source.cropping(to: rect) else { return image }
         return UIImage(cgImage: resultImage)
+    }
+    
+    private func rotateImage(_ image: UIImage) -> UIImage {
+        guard edit.cropData.rotateState != .portrait, let cgImage = getCGImage(image) else { return image }
+        let radians = edit.cropData.rotateState.angle
+        var newSize = CGRect(origin: .zero, size: image.size).applying(CGAffineTransform(rotationAngle: radians)).size
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        
+        return UIGraphicsImageRenderer.init(size: newSize, format: getImageRendererFormat()).image { rendererContext in
+            let context = rendererContext.cgContext
+            context.translateBy(x: newSize.width/2, y: newSize.height/2)
+            context.scaleBy(x: -1, y: 1)
+            context.rotate(by: CGFloat(radians))
+            context.draw(cgImage, in: CGRect(x: -image.size.width/2, y: -image.size.height/2, width: image.size.width, height: image.size.height))
+        }
     }
     
     func output() -> UIImage? {
         prepareOutout()
-        guard let sourceImage = CIImage(image: originImage) else { return nil }
-        let ciContext = CIContext(options: [.useSoftwareRenderer : false, .highQualityDownsample : true])
-        let canvasSize = sourceImage.extent.size
+        guard let cgImage = getCGImage(originImage), let ciImage = CIImage(image: originImage) else { return nil }
+        let canvasSize = ciImage.extent.size
         
+        let image = UIGraphicsImageRenderer.init(size: canvasSize, format: getImageRendererFormat()).image { rendererContext in
+            let context = rendererContext.cgContext
+            
+            // 绘制原图
+            context.saveGState()
+            context.translateBy(x: 0, y: canvasSize.height)
+            context.scaleBy(x: 1, y: -1)
+            context.draw(cgImage, in: CGRect(origin: .zero, size: canvasSize))
+            context.restoreGState()
+            
+            // 绘制马赛克 & 画笔 & 文本
+            self.drawer.forEach {
+                $0.draw(in: context, size: canvasSize)
+            }
+        }
+        
+        return rotateImage(cropImage(image))
+    }
+}
+
+// MARK: - Helper
+extension PhotoEditingStack {
+    
+    private func getImageRendererFormat() -> UIGraphicsImageRendererFormat {
         let format: UIGraphicsImageRendererFormat
         if #available(iOS 11.0, *) {
             format = UIGraphicsImageRendererFormat.preferred()
@@ -203,25 +242,12 @@ extension PhotoEditingStack {
         } else {
             format.prefersExtendedRange = false
         }
-        
-        let image = autoreleasepool { () -> UIImage in
-            UIGraphicsImageRenderer.init(size: canvasSize, format: format).image { c in
-                let cgContext = UIGraphicsGetCurrentContext()!
-                
-                // 绘制原图
-                let cgImage = ciContext.createCGImage(sourceImage, from: sourceImage.extent, format: .RGBA8, colorSpace: sourceImage.colorSpace ?? CGColorSpaceCreateDeviceRGB())!
-                cgContext.saveGState()
-                cgContext.translateBy(x: 0, y: canvasSize.height)
-                cgContext.scaleBy(x: 1, y: -1)
-                cgContext.draw(cgImage, in: CGRect(origin: .zero, size: canvasSize))
-                cgContext.restoreGState()
-                
-                // 绘制马赛克 & 画笔 & 文本
-                self.drawer.forEach {
-                    $0.draw(in: cgContext, size: canvasSize)
-                }
-            }
-        }
-        return cropImage(image)
+        return format
+    }
+    
+    private func getCGImage(_ image: UIImage) -> CGImage? {
+        guard let ciImage = CIImage(image: image) else { return nil }
+        let ciContext = CIContext(options: [.useSoftwareRenderer : false, .highQualityDownsample : true])
+        return ciContext.createCGImage(ciImage, from: ciImage.extent, format: .RGBA8, colorSpace: ciImage.colorSpace ?? CGColorSpaceCreateDeviceRGB())
     }
 }

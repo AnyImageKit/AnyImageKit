@@ -10,7 +10,6 @@ import UIKit
 
 final class TextData: Codable {
     
-    var inset: CGFloat = 0
     var frame: CGRect = .zero
     var finalFrame: CGRect = .zero
     

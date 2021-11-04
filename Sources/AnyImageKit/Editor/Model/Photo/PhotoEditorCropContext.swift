@@ -22,6 +22,8 @@ final class PhotoEditorCropContext {
     var cropRealRect: CGRect = .zero
     /// 裁剪尺寸
     var cropOption: EditorCropOption = .free
+    /// 上次裁剪开始时ScrollView的Bounds
+    var lastScrollViewBounds: CGRect = .zero
     /// 上次裁剪开始时图片的Bounds
     var lastImageViewBounds: CGRect = .zero
     /// 裁剪后的contentSize
@@ -32,4 +34,6 @@ final class PhotoEditorCropContext {
     var croppedHeight: CGFloat = 0
     /// 上次裁剪的数据，用于再次进入裁剪
     var lastCropData: CropData = CropData()
+    /// 旋转方向
+    var rotateState: RotateState = .portrait
 }

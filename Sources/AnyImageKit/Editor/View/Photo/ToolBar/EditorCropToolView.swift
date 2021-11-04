@@ -10,10 +10,13 @@ import UIKit
 
 protocol EditorCropToolViewDelegate: AnyObject {
     
-    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption)
+    @discardableResult
+    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) -> Bool
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView)
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView)
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView)
+    @discardableResult
+    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) -> Bool
 }
 
 final class EditorCropToolView: UIView {
@@ -40,6 +43,12 @@ final class EditorCropToolView: UIView {
         }
     }
     
+    private(set) lazy var rotateButton: UIButton = {
+        let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+        view.setImage(BundleHelper.image(named: options.rotationDirection.imageName, module: .editor), for: .normal)
+        view.addTarget(self, action: #selector(rotateButtonTapped(_:)), for: .touchUpInside)
+        return view
+    }()
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 15
@@ -49,7 +58,7 @@ final class EditorCropToolView: UIView {
         view.backgroundColor = .clear
         view.showsHorizontalScrollIndicator = false
         view.registerCell(EditorCropOptionCell.self)
-        view.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        view.contentInset = UIEdgeInsets(top: 0, left: options.rotationDirection == .turnOff ? 20 : 0, bottom: 0, right: 20)
         view.dataSource = self
         view.delegate = self
         return view
@@ -77,6 +86,7 @@ final class EditorCropToolView: UIView {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setTitle(BundleHelper.localizedString(key: "RESET", module: .core), for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
+        view.setTitleColor(UIColor.lightGray, for: .highlighted)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         view.addTarget(self, action: #selector(resetButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -97,16 +107,29 @@ final class EditorCropToolView: UIView {
     private func setupView() {
         let content = UILayoutGuide()
         addLayoutGuide(content)
+        addSubview(rotateButton)
         addSubview(collectionView)
         addSubview(line)
         addSubview(cancelButton)
         addSubview(doneButton)
         addSubview(resetbutton)
+        
+        rotateButton.isHidden = options.rotationDirection == .turnOff
         collectionView.isHidden = options.cropOptions.count <= 1
         
-        collectionView.snp.makeConstraints { maker in
+        rotateButton.snp.makeConstraints { maker in
+            maker.left.equalToSuperview().offset(20)
             maker.bottom.equalTo(line.snp.top).offset(-10)
-            maker.left.right.equalToSuperview()
+            maker.width.height.equalTo(40)
+        }
+        collectionView.snp.makeConstraints { maker in
+            maker.top.bottom.equalTo(rotateButton)
+            if options.rotationDirection == .turnOff {
+                maker.left.equalToSuperview()
+            } else {
+                maker.left.equalTo(rotateButton.snp.right).offset(10)
+            }
+            maker.right.equalToSuperview()
             maker.height.equalTo(40)
         }
         content.snp.makeConstraints { maker in
@@ -153,6 +176,16 @@ extension EditorCropToolView {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         delegate?.cropToolViewDoneButtonTapped(self)
     }
+    
+    @objc private func rotateButtonTapped(_ sender: UIButton) {
+        let result = delegate?.cropToolViewRotateButtonTapped(self) ?? false
+        guard result, let cropOption = currentOption else { return }
+        if case let .custom(w, h) = cropOption {
+            if let idx = options.cropOptions.firstIndex(of: .custom(w: h, h: w)) {
+                currentOptionIdx = idx
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -173,9 +206,13 @@ extension EditorCropToolView: UICollectionViewDataSource {
 extension EditorCropToolView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if currentOption != options.cropOptions[indexPath.row] {
-            currentOption = options.cropOptions[indexPath.row]
-            delegate?.cropToolView(self, didClickCropOption: currentOption ?? .free)
+        guard currentOption != options.cropOptions[indexPath.row] else { return }
+        let nextOption = options.cropOptions[indexPath.row]
+        let result = delegate?.cropToolView(self, didClickCropOption: nextOption) ?? false
+        if result {
+            currentOption = nextOption
+        } else {
+            collectionView.selectItem(at: IndexPath(row: currentOptionIdx, section: 0), animated: true, scrollPosition: .left)
         }
     }
 }
@@ -187,7 +224,7 @@ extension EditorCropToolView {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
             return nil
         }
-        for subView in [cancelButton, doneButton, resetbutton, collectionView] {
+        for subView in [cancelButton, doneButton, resetbutton, collectionView, rotateButton] {
             if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
                 return hitView
             }

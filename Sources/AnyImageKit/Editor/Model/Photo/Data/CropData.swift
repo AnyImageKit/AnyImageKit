@@ -17,4 +17,5 @@ struct CropData: Codable, Equatable {
     var contentSize: CGSize = .zero
     var contentOffset: CGPoint = .zero
     var imageViewFrame: CGRect = .zero
+    var rotateState: RotateState = .portrait
 }

@@ -113,9 +113,9 @@ final class EditorToolView: UIView {
         bottomCoverView.snp.makeConstraints { maker in
             maker.bottom.left.right.equalToSuperview()
             if #available(iOS 11.0, *) {
-                maker.top.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-100)
+                maker.top.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-110)
             } else {
-                maker.height.equalTo(100)
+                maker.height.equalTo(110)
             }
         }
         editOptionsView.snp.makeConstraints { maker in
@@ -138,7 +138,7 @@ final class EditorToolView: UIView {
         cropToolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(editOptionsView).offset(15)
-            maker.height.equalTo(40+60)
+            maker.height.equalTo(40+10+60)
         }
         doneButton.snp.makeConstraints { maker in
             maker.centerY.equalTo(editOptionsView)
@@ -166,14 +166,15 @@ extension EditorToolView {
 // MARK: - EditorEditOptionsViewDelegate
 extension EditorToolView: EditorEditOptionsViewDelegate {
     
-    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionDidChange option: EditorPhotoToolOption?) {
-        context.action(.toolOptionChanged(option))
+    func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionWillChange option: EditorPhotoToolOption?) -> Bool {
+        let result = context.action(.toolOptionChanged(option))
+        guard result else { return false }
         
         guard let option = option else {
             brushToolView.isHidden = true
             cropToolView.isHidden = true
             mosaicToolView.isHidden = true
-            return
+            return true
         }
         
         brushToolView.isHidden = option != .brush
@@ -191,6 +192,7 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         default:
             break
         }
+        return true
     }
 }
 
@@ -221,12 +223,13 @@ extension EditorToolView: EditorMosaicToolViewDelegate {
 // MARK: - EditorCropToolViewDelegate
 extension EditorToolView: EditorCropToolViewDelegate {
     
-    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) {
-        context.action(.cropUpdateOption(option))
+    func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) -> Bool {
+        return context.action(.cropUpdateOption(option))
     }
     
     func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView) {
-        context.action(.cropCancel)
+        let result = context.action(.cropCancel)
+        guard result else { return }
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
@@ -235,7 +238,8 @@ extension EditorToolView: EditorCropToolViewDelegate {
     }
     
     func cropToolViewDoneButtonTapped(_ cropToolView: EditorCropToolView) {
-        context.action(.cropDone)
+        let result = context.action(.cropDone)
+        guard result else { return }
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
@@ -245,6 +249,10 @@ extension EditorToolView: EditorCropToolViewDelegate {
     
     func cropToolViewResetButtonTapped(_ cropToolView: EditorCropToolView) {
         context.action(.cropReset)
+    }
+    
+    func cropToolViewRotateButtonTapped(_ cropToolView: EditorCropToolView) -> Bool {
+        return context.action(.cropRotate)
     }
 }
 

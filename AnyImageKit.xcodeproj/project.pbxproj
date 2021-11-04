@@ -36,11 +36,13 @@
 		715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */; };
 		716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */; };
 		71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71723646249C4CD5003D23DB /* PadCaptureViewController.swift */; };
+		71735B9E27325F9300BE44AA /* EditorRotationDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */; };
 		7174392B2588879C000F83AE /* Editor+CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7174392A2588879C000F83AE /* Editor+CGSize.swift */; };
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
 		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
 		718DE32725996E36005C3159 /* CropLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32625996E36005C3159 /* CropLayerView.swift */; };
 		718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718DE32A2599AD82005C3159 /* TextTrashView.swift */; };
+		71A2F3BF2730E53100D4997B /* MirrorCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A2F3BE2730E53100D4997B /* MirrorCropView.swift */; };
 		71A3D0AB247B9626000A1B24 /* BigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3D0AA247B9626000A1B24 /* BigButton.swift */; };
 		71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9112629784400710A7F /* CaptureMediaOption.swift */; };
 		71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */; };
@@ -53,6 +55,7 @@
 		71BAF335257619A3007AE60F /* CacheModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF334257619A3007AE60F /* CacheModule.swift */; };
 		71BAF33925761A35007AE60F /* ImageCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33825761A35007AE60F /* ImageCacheTool.swift */; };
 		71BAF33D25761C48007AE60F /* CodableCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33C25761C48007AE60F /* CodableCacheTool.swift */; };
+		71C6B6132603428D00A345C7 /* RotateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C6B6122603428D00A345C7 /* RotateData.swift */; };
 		71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF13425199C0D00F79D19 /* ColorWell.swift */; };
 		71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1422519CC4B00F79D19 /* Core+UIView.swift */; };
 		71CBF1592519E5BF00F79D19 /* PermissionLimitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */; };
@@ -284,11 +287,13 @@
 		715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreselectAssetViewController.swift; sourceTree = "<group>"; };
 		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
 		71723646249C4CD5003D23DB /* PadCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadCaptureViewController.swift; sourceTree = "<group>"; };
+		71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRotationDirection.swift; sourceTree = "<group>"; };
 		7174392A2588879C000F83AE /* Editor+CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Editor+CGSize.swift"; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
 		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		718DE32625996E36005C3159 /* CropLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropLayerView.swift; sourceTree = "<group>"; };
 		718DE32A2599AD82005C3159 /* TextTrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTrashView.swift; sourceTree = "<group>"; };
+		71A2F3BE2730E53100D4997B /* MirrorCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MirrorCropView.swift; sourceTree = "<group>"; };
 		71A3D0AA247B9626000A1B24 /* BigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigButton.swift; sourceTree = "<group>"; };
 		71B3E9112629784400710A7F /* CaptureMediaOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureMediaOption.swift; sourceTree = "<group>"; };
 		71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAspectRatio.swift; sourceTree = "<group>"; };
@@ -301,6 +306,7 @@
 		71BAF334257619A3007AE60F /* CacheModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheModule.swift; sourceTree = "<group>"; };
 		71BAF33825761A35007AE60F /* ImageCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheTool.swift; sourceTree = "<group>"; };
 		71BAF33C25761C48007AE60F /* CodableCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableCacheTool.swift; sourceTree = "<group>"; };
+		71C6B6122603428D00A345C7 /* RotateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateData.swift; sourceTree = "<group>"; };
 		71CBF13425199C0D00F79D19 /* ColorWell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWell.swift; sourceTree = "<group>"; };
 		71CBF1422519CC4B00F79D19 /* Core+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+UIView.swift"; sourceTree = "<group>"; };
 		71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLimitedView.swift; sourceTree = "<group>"; };
@@ -585,6 +591,7 @@
 				713C205E25AD32D800BB0F66 /* MosaicData.swift */,
 				71D9FFAF25AD37C000825B3C /* CropData.swift */,
 				71D9FFAE25AD37C000825B3C /* TextData.swift */,
+				71C6B6122603428D00A345C7 /* RotateData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -695,6 +702,7 @@
 				71B3E9422629895300710A7F /* EditorMosaicOption.swift */,
 				71B3E9472629897B00710A7F /* EditorTextColor.swift */,
 				71B3E94C2629898D00710A7F /* EditorCropOption.swift */,
+				71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */,
 				71B3E951262989A600710A7F /* EditorPhotoToolOption.swift */,
 				71B3E956262989BE00710A7F /* EditorVideoToolOption.swift */,
 			);
@@ -1176,6 +1184,7 @@
 				A0FFB23F25407E86000A7A45 /* GradientView.swift */,
 				718DE32625996E36005C3159 /* CropLayerView.swift */,
 				718DE32A2599AD82005C3159 /* TextTrashView.swift */,
+				71A2F3BE2730E53100D4997B /* MirrorCropView.swift */,
 			);
 			path = Kit;
 			sourceTree = "<group>";
@@ -1581,6 +1590,7 @@
 				716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */,
 				A0AF771F23A7762300A3DD9F /* CaptureRecordView.swift in Sources */,
 				713C207125AD32D800BB0F66 /* DrawnPath.swift in Sources */,
+				71A2F3BF2730E53100D4997B /* MirrorCropView.swift in Sources */,
 				A08DF7C223B2F5E6002B92EE /* DeviceOrientationUtil.swift in Sources */,
 				A557BF9B235D5B820029CCDB /* CameraCell.swift in Sources */,
 				A5347D3223AA210A00C93874 /* ExportTool+VideoURL.swift in Sources */,
@@ -1674,6 +1684,7 @@
 				A50B2112237AA24300A894A9 /* CropCornerView.swift in Sources */,
 				A04F40F82539A94B00EF9EC6 /* ImageKitDataTrackDelegate.swift in Sources */,
 				A07D8796233DA2B8000108C7 /* Picker+PHAsset.swift in Sources */,
+				71735B9E27325F9300BE44AA /* EditorRotationDirection.swift in Sources */,
 				A56A3C882330A44B00EBFC48 /* ScaleAnimator.swift in Sources */,
 				71D9FFB025AD37C000825B3C /* TextData.swift in Sources */,
 				A5FA4AF5239F32220007C99B /* ColorButton.swift in Sources */,
@@ -1711,6 +1722,7 @@
 				A082D24623C2D57B001F3D51 /* Picker+MediaType.swift in Sources */,
 				A09FFE6123404923000DEF87 /* PickerManager+Video.swift in Sources */,
 				A5347D2A23AA1B9A00C93874 /* ExportTool+PhotoURL.swift in Sources */,
+				71C6B6132603428D00A345C7 /* RotateData.swift in Sources */,
 				A073C77D239E3BF60078DD4E /* CaptureProgressView.swift in Sources */,
 				A50B2113237AA24300A894A9 /* CropGridView.swift in Sources */,
 				7117A25025A59753000D493F /* (null) in Sources */,

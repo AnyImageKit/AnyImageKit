@@ -23,8 +23,13 @@ extension PhotoEditorContentView {
     var fitSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
         let width = scrollView.bounds.width
-        let scale = image.size.height / image.size.width
-        return CGSize(width: width, height: scale * width)
+        if cropContext.rotateState.isPortrait {
+            let scale = image.size.height / image.size.width
+            return CGSize(width: width, height: scale * width)
+        } else {
+            let scale = image.size.width / image.size.height
+            return CGSize(width: width, height: scale * width)
+        }
     }
     /// 取图片适屏frame
     var fitFrame: CGRect {
@@ -86,7 +91,12 @@ extension PhotoEditorContentView {
     var cropSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
         let maxSize = cropMaxSize
-        let scale = image.size.height / image.size.width
+        let scale: CGFloat
+        if cropContext.rotateState.isPortrait {
+            scale = image.size.height / image.size.width
+        } else {
+            scale = image.size.width / image.size.height
+        }
         let size = CGSize(width: maxSize.width, height: scale * maxSize.width)
         if size.height > maxSize.height {
             let scale2 = maxSize.height / size.height

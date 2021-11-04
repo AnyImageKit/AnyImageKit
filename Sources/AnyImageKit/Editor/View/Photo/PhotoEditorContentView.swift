@@ -26,6 +26,13 @@ final class PhotoEditorContentView: UIView {
         view.isUserInteractionEnabled = true
         return view
     }()
+    private(set) lazy var mirrorCropView: MirrorCropView = {
+        let view = MirrorCropView(frame: .zero)
+        view.isHidden = true
+        view.alpha = 0.8
+        view.color = .black
+        return view
+    }()
     /// 画板 - Brush
     private(set) lazy var canvas: Canvas = {
         let view = Canvas(frame: .zero)
@@ -129,6 +136,7 @@ final class PhotoEditorContentView: UIView {
         addSubview(scrollView)
         addSubview(textTrashView)
         scrollView.addSubview(imageView)
+        imageView.addSubview(mirrorCropView)
         imageView.addSubview(canvas)
         setupCropView()
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
@@ -145,6 +153,9 @@ final class PhotoEditorContentView: UIView {
     }
     
     internal func updateSubviewFrame() {
+        mirrorCropView.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         canvas.frame = CGRect(origin: .zero, size: imageView.bounds.size)
         mosaic?.frame = CGRect(origin: .zero, size: imageView.bounds.size)
         mosaic?.layoutSubviews()
