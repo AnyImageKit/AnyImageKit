@@ -310,7 +310,7 @@ extension PhotoEditorController {
     
     private func didReceive(action: PhotoEditorAction) -> Bool {
         let currentTime = Date().timeIntervalSince1970
-        if lastOperationTime > currentTime {
+        if lastOperationTime > currentTime && action.duration > 0 {
             return false
         }
         lastOperationTime = currentTime + action.duration
