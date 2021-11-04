@@ -151,7 +151,7 @@ extension PhotoEditorContentView {
         scrollView.maximumZoomScale = maximumZoomScale
         scrollView.zoomScale = 1.0
         
-        let cropFrame = cropFrame
+        let cropFrame = self.cropFrame
         
         var imageFrame = CGRect(origin: .zero, size: cropSize.reversed(!rotateState.isPortrait))
         if self.rotateState.isPortrait {
