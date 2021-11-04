@@ -17,7 +17,6 @@ extension PhotoEditorContentView {
             calculateTextFrame(data: data)
         }
         let textView = TextImageView(data: data)
-        textView.deleteButton.addTarget(self, action: #selector(textDeletebuttonTapped(_:)), for: .touchUpInside)
         textView.transform = textView.calculateTransform()
         if add {
             imageView.insertSubview(textView, belowSubview: cropLayerLeave)
@@ -51,7 +50,6 @@ extension PhotoEditorContentView {
             frame.size.width *= scale
             frame.size.height *= scale
             textView.data.frame = frame
-            textView.data.inset *= scale
             
             let newTextView = addText(data: textView.data, add: false)
             newTextView.data.point = CGPoint(x: originPoint.x * scale, y: originPoint.y * scale)
@@ -87,7 +85,6 @@ extension PhotoEditorContentView {
             frame.size.width *= scale
             frame.size.height *= scale
             data.frame = frame
-            data.inset *= scale
             
             let newTextView = TextImageView(data: data)
             data.point = originPoint.multipliedBy(scale)
@@ -197,7 +194,6 @@ extension PhotoEditorContentView {
             y = y + (height - size.height) / 2
         }
         data.frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
-        data.inset = inset / scale
     }
     
     /// 添加手势
@@ -340,13 +336,6 @@ extension PhotoEditorContentView {
         textView.data.rotation += rotation.rotation
         textView.transform = textView.calculateTransform()
         rotation.rotation = 0.0
-    }
-    
-    /// 删除文本
-    @objc private func textDeletebuttonTapped(_ sender: UIButton) {
-        guard let idx = textImageViews.firstIndex(where: { $0.deleteButton == sender }) else { return }
-        textImageViews[idx].removeFromSuperview()
-        textImageViews.remove(at: idx)
     }
 }
 
