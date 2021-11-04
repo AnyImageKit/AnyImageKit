@@ -346,7 +346,7 @@ extension AssetPickerViewController {
         let asset = album.assets[idx]
         
         if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset)
+            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
             showAlert(message: message)
             return
         }
@@ -559,7 +559,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
                 doneButtonTapped(toolBar.doneButton)
             }
         } else if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset)
+            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
             showAlert(message: message)
             return
         } else if !asset.isSelected && manager.isUpToLimit {

@@ -17,4 +17,7 @@
 "FETCH_FAILED_PLEASE_RETRY" = "İndirme başarısız, tekrar deneyin";
 "A11Y_SWITCH_ALBUM_TIPS" = "Albümü değiştir. Mevcut albüm %@";
 "LIMITED_PHOTOS_PERMISSION_TIPS" = "Tüm fotoğraflar getirilemiyor\nDaha fazla fotoğraf seçmek için tıklayın";
+
+// Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "Seçilen videonun süresi %d-%d saniye arasında olmalıdır.";
+"CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME" = "Cannot select photos and videos at the same time.";

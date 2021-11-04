@@ -105,7 +105,7 @@ extension Asset {
     }
     
     var isUnchecked: Bool {
-        return state == .unchecked
+        return state == .unchecked || state == .normal
     }
     
     var isSelected: Bool {
@@ -130,15 +130,16 @@ extension Asset {
 // MARK: - Disable Check
 extension Asset {
 
-    func check(disable rules: [AssetDisableCheckRule]) {
-        guard isUnchecked else { return }
+    func check(disable rules: [AssetDisableCheckRule], assetList: [Asset]) {
         for rule in rules {
-            if rule.isDisable(for: self) {
+            if rule.isDisable(for: self, assetList: assetList) {
                 state = .disable(rule)
                 return
             }
         }
-        state = .normal
+        if state != .selected {
+            state = .normal
+        }
     }
 }
 
