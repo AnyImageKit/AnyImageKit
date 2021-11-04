@@ -15,8 +15,8 @@ jobs:
       
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 12']
-        swift-version: [5.3]
+        destination: ['iOS Simulator,name=iPhone 13']
+        swift-version: [5.5]
 
     steps:
     - uses: actions/checkout@v2
@@ -31,8 +31,8 @@ jobs:
 
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 12']
-        swift-version: [5.3]
+        destination: ['iOS Simulator,name=iPhone 13']
+        swift-version: [5.5]
 
     steps:
     - uses: actions/checkout@v2
@@ -47,8 +47,8 @@ jobs:
 
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 12']
-        swift-version: [5.3]
+        destination: ['iOS Simulator,name=iPhone 13']
+        swift-version: [5.5]
 
     steps:
     - uses: actions/checkout@v2
