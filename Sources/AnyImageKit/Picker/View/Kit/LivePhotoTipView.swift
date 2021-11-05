@@ -17,7 +17,6 @@ final class LivePhotoTipView: UIView {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.localizedString(key: "LIVE_PHOTO", module: .core)
         view.font = UIFont.systemFont(ofSize: 13)
         return view
     }()
@@ -57,6 +56,7 @@ extension LivePhotoTipView: PickerOptionsConfigurable {
                                    light: UIColor.color(hex: 0x666666),
                                    dark: UIColor.color(hex: 0x999999))
         label.textColor = color
+        label.text = options.theme[string: .livePhoto]
         backgroundColor = options.theme[color: .background].withAlphaComponent(0.7)
         updateChildrenConfigurable(options: options)
     }

@@ -27,7 +27,6 @@ final class LoadingiCloudView: UIView {
     
     private lazy var tipLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker)
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 11)
         return view
@@ -80,6 +79,7 @@ final class LoadingiCloudView: UIView {
 extension LoadingiCloudView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
+        tipLabel.text = options.theme[string: .pickerDownloadingFromiCloud]
         imageView.image = options.theme[icon: .iCloud]
         updateChildrenConfigurable(options: options)
     }

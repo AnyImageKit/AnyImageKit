@@ -59,6 +59,7 @@
 		71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF13425199C0D00F79D19 /* ColorWell.swift */; };
 		71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1422519CC4B00F79D19 /* Core+UIView.swift */; };
 		71CBF1592519E5BF00F79D19 /* PermissionLimitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */; };
+		71D552BD2734C98F0059345B /* StringConfigKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D552BC2734C98F0059345B /* StringConfigKey.swift */; };
 		71D9FFB025AD37C000825B3C /* TextData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D9FFAE25AD37C000825B3C /* TextData.swift */; };
 		71D9FFB125AD37C000825B3C /* CropData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D9FFAF25AD37C000825B3C /* CropData.swift */; };
 		9C4A015EF226D73F0F2E2749 /* Pods_AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC7B151F7AF152BFF11B5EF /* Pods_AnyImageKit.framework */; };
@@ -310,6 +311,7 @@
 		71CBF13425199C0D00F79D19 /* ColorWell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWell.swift; sourceTree = "<group>"; };
 		71CBF1422519CC4B00F79D19 /* Core+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+UIView.swift"; sourceTree = "<group>"; };
 		71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLimitedView.swift; sourceTree = "<group>"; };
+		71D552BC2734C98F0059345B /* StringConfigKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConfigKey.swift; sourceTree = "<group>"; };
 		71D9FFAE25AD37C000825B3C /* TextData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextData.swift; sourceTree = "<group>"; };
 		71D9FFAF25AD37C000825B3C /* CropData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropData.swift; sourceTree = "<group>"; };
 		77DACD9D0A1A54677E6BD6E4 /* Pods-AnyImageKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnyImageKit.debug.xcconfig"; path = "Target Support Files/Pods-AnyImageKit/Pods-AnyImageKit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -720,6 +722,14 @@
 			path = Cache;
 			sourceTree = "<group>";
 		};
+		71D552BB2734C98F0059345B /* Option */ = {
+			isa = PBXGroup;
+			children = (
+				71D552BC2734C98F0059345B /* StringConfigKey.swift */,
+			);
+			path = Option;
+			sourceTree = "<group>";
+		};
 		A016917F237A828500B8857B /* Picker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1020,6 +1030,7 @@
 			children = (
 				A0B22EA1237AA1B3001F6066 /* Controller */,
 				A0B22EA3237AA1B3001F6066 /* Model */,
+				71D552BB2734C98F0059345B /* Option */,
 				A0B22E9A237AA1B3001F6066 /* Util */,
 				A0B22E95237AA1B3001F6066 /* Extension */,
 			);
@@ -1662,6 +1673,7 @@
 				A07AC74A23B5EE0C002CB5AF /* Capture+CMSampleBuffer.swift in Sources */,
 				A0F475422330736200BB117B /* Picker+PHAssetCollection.swift in Sources */,
 				A50B211A237AA24300A894A9 /* EditorToolView.swift in Sources */,
+				71D552BD2734C98F0059345B /* StringConfigKey.swift in Sources */,
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				713C206E25AD32D800BB0F66 /* TextMask.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */,

@@ -32,11 +32,12 @@ extension AssetPickerViewController {
             if let image = asset._images[.initial] {
                 showEditor(image, identifier: asset.identifier, tag: indexPath.item)
             } else {
-                showWaitHUD(BundleHelper.localizedString(key: "LOADING", module: .core))
+                showWaitHUD(manager.options.theme[string: .loading])
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
                     DispatchQueue.main.async { [weak self] in
                         _print("Downloading photo from iCloud: \(progress)")
-                        self?.showWaitHUD(BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker) + "\(Int(progress * 100))%")
+                        guard let self = self else { return }
+                        self.showWaitHUD(self.manager.options.theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
                     }
                 }
                 manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in

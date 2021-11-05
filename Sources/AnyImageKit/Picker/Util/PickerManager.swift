@@ -156,7 +156,7 @@ extension PickerManager {
                             self.failedAssets.append(asset)
                             self.lock.unlock()
                             _print(error)
-                            let message = BundleHelper.localizedString(key: "FETCH_FAILED_PLEASE_RETRY", module: .picker)
+                            let message = self.options.theme[string: .pickerFetchFailedPleaseRetry]
                             NotificationCenter.default.post(name: .didSyncAsset, object: message)
                         }
                     }
@@ -186,7 +186,7 @@ extension PickerManager {
                         self.failedAssets.append(asset)
                         self.lock.unlock()
                         _print(error)
-                        let message = BundleHelper.localizedString(key: "FETCH_FAILED_PLEASE_RETRY", module: .picker)
+                        let message = self.options.theme[string: .pickerFetchFailedPleaseRetry]
                         NotificationCenter.default.post(name: .didSyncAsset, object: message)
                     }
                 }

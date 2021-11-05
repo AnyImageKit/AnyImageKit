@@ -338,11 +338,11 @@ extension PhotoPreviewController {
         if !data.asset.isSelected && manager.isUpToLimit {
             let message: String
             if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], manager.options.selectLimit)
             } else if manager.options.selectOptions.isPhoto {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotos], manager.options.selectLimit)
             } else {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
             }
             showAlert(message: message)
             return
