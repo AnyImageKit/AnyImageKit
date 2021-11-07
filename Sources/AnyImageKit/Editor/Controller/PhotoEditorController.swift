@@ -39,7 +39,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         view.setImage(BundleHelper.image(named: "ReturnBackButton", module: .editor), for: .normal)
         view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "BACK", module: .core)
+        view.accessibilityLabel = options.theme[string: .back]
         return view
     }()
     

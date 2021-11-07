@@ -26,7 +26,7 @@ final class EditorBrushToolView: UIView {
         view.isEnabled = false
         view.setImage(BundleHelper.image(named: "PhotoToolUndo", module: .editor), for: .normal)
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "UNDO", module: .core)
+        view.accessibilityLabel = options.theme[string: .undo]
         return view
     }()
     
@@ -34,10 +34,12 @@ final class EditorBrushToolView: UIView {
     private var colorButtons: [UIControl] = []
     private let spacing: CGFloat = 20
     private let itemWidth: CGFloat = 24
+    private let options: EditorPhotoOptionsInfo
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.colorOptions = options.brushColors
         self.currentIdx = options.defaultBrushIndex
+        self.options = options
         super.init(frame: frame)
         setupView()
     }

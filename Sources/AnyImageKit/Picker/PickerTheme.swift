@@ -192,7 +192,7 @@ extension PickerTheme {
 }
 
 extension StringConfigKey {
-
+    
     public static let pickerOriginalImage = StringConfigKey(rawValue: "ORIGINAL_IMAGE")
     public static let pickerSelectPhoto = StringConfigKey(rawValue: "SELECT_PHOTO")
     public static let pickerUnselectPhoto = StringConfigKey(rawValue: "UNSELECT_PHOTO")
@@ -204,20 +204,6 @@ extension StringConfigKey {
     public static let pickerFetchFailedPleaseRetry = StringConfigKey(rawValue: "FETCH_FAILED_PLEASE_RETRY")
     public static let pickerA11ySwitchAlbumTips = StringConfigKey(rawValue: "A11Y_SWITCH_ALBUM_TIPS")
     public static let pickerLimitedPhotosPermissionTips = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_TIPS")
-}
-
-
-// MARK: - Editor
-extension StringConfigKey {
-    
-    public static let editorBrush = StringConfigKey(rawValue: "BRUSH")
-    public static let editorCrop = StringConfigKey(rawValue: "CROP")
-    public static let editorMosaic = StringConfigKey(rawValue: "MOSAIC")
-    public static let editorInputText = StringConfigKey(rawValue: "INPUT_TEXT")
-    public static let editorFree = StringConfigKey(rawValue: "FREE")
-    
-    public static let editorDragHereToRemove = StringConfigKey(rawValue: "DRAG_HERE_TO_REMOVE")
-    public static let editorReleaseToRemove = StringConfigKey(rawValue: "RELEASE_TO_REMOVE")
 }
 
 // MARK: - Capture

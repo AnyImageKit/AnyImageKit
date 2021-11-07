@@ -14,6 +14,9 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: Green
     public var tintColor: UIColor = Palette.main
     
+    /// Theme
+    public var theme: EditorTheme = .init()
+    
     /// Tool options for the Photo Editor, displayed at the bottom of the editor.
     /// Option sorting is arranged in a given array.
     ///

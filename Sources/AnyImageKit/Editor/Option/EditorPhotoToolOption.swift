@@ -54,6 +54,19 @@ extension EditorPhotoToolOption: CustomStringConvertible {
             return "MOSAIC"
         }
     }
+    
+    var stringKey: StringConfigKey {
+        switch self {
+        case .brush:
+            return .editorBrush
+        case .text:
+            return .editorInputText
+        case .crop:
+            return .editorCrop
+        case .mosaic:
+            return .editorMosaic
+        }
+    }
 }
 
 // MARK: - Deprecated

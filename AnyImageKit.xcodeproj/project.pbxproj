@@ -15,6 +15,7 @@
 		71208EB2256F876F002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		71208EBA256F8D88002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		71208EC0256F8D93002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		713585F627379CD400A70B9E /* EditorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713585F527379CD400A70B9E /* EditorTheme.swift */; };
 		713C204E25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */; };
 		713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204F25AD32AA00BB0F66 /* Cacheable.swift */; };
 		713C206725AD32D800BB0F66 /* PhotoEditorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */; };
@@ -267,6 +268,7 @@
 		67A8466525AE30A70066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Capture.strings; sourceTree = "<group>"; };
 		7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIBlurEffect.swift"; sourceTree = "<group>"; };
 		7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushColorOption.swift; sourceTree = "<group>"; };
+		713585F527379CD400A70B9E /* EditorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTheme.swift; sourceTree = "<group>"; };
 		713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetPickerViewController+Editor.swift"; sourceTree = "<group>"; };
 		713C204F25AD32AA00BB0F66 /* Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
 		713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorContext.swift; sourceTree = "<group>"; };
@@ -1132,6 +1134,7 @@
 			children = (
 				A561239C23B5EE400071C3E8 /* EditorPhotoOptionsInfo.swift */,
 				A561239E23B5EE4F0071C3E8 /* EditorVideoOptionsInfo.swift */,
+				713585F527379CD400A70B9E /* EditorTheme.swift */,
 				A01A59362522206A00FABD22 /* EditorResult.swift */,
 				71B3E93C2629892800710A7F /* Option */,
 				A50B20D4237AA24200A894A9 /* Controller */,
@@ -1723,6 +1726,7 @@
 				71CBF1592519E5BF00F79D19 /* PermissionLimitedView.swift in Sources */,
 				A5347D2623A9FD2700C93874 /* ExportTool+Photo.swift in Sources */,
 				71BAF335257619A3007AE60F /* CacheModule.swift in Sources */,
+				713585F627379CD400A70B9E /* EditorTheme.swift in Sources */,
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
 				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
 				A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */,

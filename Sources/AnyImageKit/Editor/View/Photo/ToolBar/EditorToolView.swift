@@ -68,7 +68,7 @@ final class EditorToolView: UIView {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 10, left: 20, bottom: 20, right: 20))
         view.layer.cornerRadius = 2
         view.backgroundColor = options.tintColor
-        view.setTitle(BundleHelper.localizedString(key: "DONE", module: .core), for: .normal)
+        view.setTitle(options.theme[string: .done], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)

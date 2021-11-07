@@ -28,14 +28,17 @@ final class TextTrashView: UIView {
     }()
     private(set) lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.localizedString(key: "DRAG_HERE_TO_REMOVE", module: .editor)
+        view.text = options.theme[string: .editorDragHereToRemove]
         view.textColor = UIColor.white
         view.textAlignment = .center
         view.font = UIFont.systemFont(ofSize: 12)
         return view
     }()
     
-    override init(frame: CGRect) {
+    private let options: EditorPhotoOptionsInfo
+    
+    init(options: EditorPhotoOptionsInfo, frame: CGRect) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -64,10 +67,10 @@ final class TextTrashView: UIView {
         switch state {
         case .idle:
             backgroundColor = Palette.black.withAlphaComponent(0.9)
-            label.text = BundleHelper.localizedString(key: "DRAG_HERE_TO_REMOVE", module: .editor)
+            label.text = options.theme[string: .editorDragHereToRemove]
         case .remove:
             backgroundColor = Palette.red.withAlphaComponent(0.9)
-            label.text = BundleHelper.localizedString(key: "RELEASE_TO_REMOVE", module: .editor)
+            label.text = options.theme[string: .editorReleaseToRemove]
         }
     }
 }

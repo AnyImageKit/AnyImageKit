@@ -32,4 +32,11 @@ extension EditorVideoToolOption: CustomStringConvertible {
             return "CROP"
         }
     }
+    
+    var stringKey: StringConfigKey {
+        switch self {
+        case .clip:
+            return .editorCrop
+        }
+    }
 }

@@ -71,20 +71,20 @@ final class EditorCropToolView: UIView {
     private(set) lazy var cancelButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.image(named: "XMark", module: .editor), for: .normal)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "CANCEL", module: .core)
+        view.accessibilityLabel = options.theme[string: .cancel]
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         view.setImage(BundleHelper.image(named: "CheckMark", module: .editor), for: .normal)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "DONE", module: .core)
+        view.accessibilityLabel = options.theme[string: .done]
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var resetbutton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setTitle(BundleHelper.localizedString(key: "RESET", module: .core), for: .normal)
+        view.setTitle(options.theme[string: .reset], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.setTitleColor(UIColor.lightGray, for: .highlighted)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 14)
@@ -197,7 +197,7 @@ extension EditorCropToolView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(EditorCropOptionCell.self, for: indexPath)
-        cell.set(option: options.cropOptions[indexPath.row], selectColor: options.tintColor)
+        cell.set(options, option: options.cropOptions[indexPath.row], selectColor: options.tintColor)
         return cell
     }
 }
