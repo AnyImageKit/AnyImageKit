@@ -15,6 +15,9 @@ public struct CaptureOptionsInfo {
     /// - Default: Green
     public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
     
+    /// Theme
+    public var theme: CaptureTheme = .init()
+    
     /// Media options for capture.
     ///
     /// You can tap to take photo and hold to take video.

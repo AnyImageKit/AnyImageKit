@@ -30,7 +30,9 @@ final class CaptureViewController: AnyImageViewController {
         view.cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         view.switchButton.addTarget(self, action: #selector(switchButtonTapped(_:)), for: .touchUpInside)
         view.switchButton.isHidden = options.preferredPositions.count <= 1
-        view.switchButton.accessibilityLabel = options.preferredPositions.first?.localizedTips
+        if let stringKey = options.preferredPositions.first?.localizedTipsKey {
+            view.switchButton.accessibilityLabel = options.theme[string: stringKey]
+        }
         view.captureButton.delegate = self
         return view
     }()
@@ -164,7 +166,7 @@ extension CaptureViewController {
         }, startPreview: { [weak self] in
             guard let self = self else { return }
             let newPosition = self.capture.stopSwitchCamera()
-            sender.accessibilityLabel = newPosition.localizedTips
+            sender.accessibilityLabel = self.options.theme[string: newPosition.localizedTipsKey]
         }) { [weak self] in
             guard let self = self else { return }
             self.toolView.showButtons(animated: true)

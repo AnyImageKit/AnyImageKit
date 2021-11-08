@@ -15,7 +15,7 @@ final class CaptureTipsView: UIView {
         view.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         view.textColor = UIColor.white
         view.textAlignment = .center
-        view.text = options.mediaOptions.localizedTips
+        view.text = options.theme[string: options.mediaOptions.localizedTipsKey]
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = .zero
         view.layer.shadowOpacity = 1

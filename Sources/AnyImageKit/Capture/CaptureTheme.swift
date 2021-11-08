@@ -77,7 +77,7 @@ extension CaptureTheme {
 extension CaptureTheme {
     
     private func defaultStringValue(for key: StringConfigKey) -> String {
-        return BundleHelper.localizedString(key: key.rawValue, module: .editor)
+        return BundleHelper.localizedString(key: key.rawValue, module: .capture)
     }
 }
 

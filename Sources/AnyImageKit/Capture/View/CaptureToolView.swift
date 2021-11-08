@@ -15,13 +15,13 @@ final class CaptureToolView: UIView {
         view.limitInterval = options.videoMaximumDuration
         view.isAccessibilityElement = true
         view.accessibilityTraits = .button
-        view.accessibilityLabel = options.mediaOptions.localizedTips
+        view.accessibilityLabel = options.theme[string: options.mediaOptions.localizedTipsKey]
         return view
     }()
     
     private(set) lazy var cancelButton: UIButton = {
         let view = UIButton(frame: .zero)
-        let title = BundleHelper.localizedString(key: "CANCEL", module: .core)
+        let title = options.theme[string: .cancel]
         view.setTitle(title, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         view.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
