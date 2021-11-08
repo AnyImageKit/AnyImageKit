@@ -155,6 +155,8 @@ final class VideoEditorCropProgressView: UIView {
             maker.bottom.equalTo(timeline.snp.top).offset(-8)
             maker.centerX.equalTo(timeline)
         }
+        
+        options.theme.labelConfiguration[.videoTimeline]?.configurable(timelineLabel)
     }
     
     private func layout(updateProgress: Bool) {

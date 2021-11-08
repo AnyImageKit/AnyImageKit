@@ -20,6 +20,9 @@ public struct EditorTheme: Equatable, StringConfigProtocol {
     /// Custom string storage
     private var strings: [StringConfigKey: String] = [:]
     
+    /// Config label
+    internal var labelConfiguration: [LabelConfigKey: LabelConfigObject] = [:]
+    
     public init() {
         
     }
@@ -37,6 +40,10 @@ public struct EditorTheme: Equatable, StringConfigProtocol {
     public subscript(string key: StringConfigKey) -> String {
         get { strings[key] ?? defaultStringValue(for: key) }
         set { strings[key] = newValue }
+    }
+    
+    public mutating func configLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
+        labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
     }
 }
 
@@ -127,4 +134,24 @@ extension StringConfigKey {
     
     public static let editorDragHereToRemove = StringConfigKey(rawValue: "DRAG_HERE_TO_REMOVE")
     public static let editorReleaseToRemove = StringConfigKey(rawValue: "RELEASE_TO_REMOVE")
+}
+
+// MARK: - Label
+extension EditorTheme {
+    
+    struct LabelConfigObject: Equatable {
+        let key: LabelConfigKey
+        let configurable: ((UILabel) -> Void)
+        
+        static func == (lhs: EditorTheme.LabelConfigObject, rhs: EditorTheme.LabelConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum LabelConfigKey: Hashable {
+        
+        case cropOption
+        case trash
+        case videoTimeline
+    }
 }

@@ -72,5 +72,7 @@ final class TextTrashView: UIView {
             backgroundColor = Palette.red.withAlphaComponent(0.9)
             label.text = options.theme[string: .editorReleaseToRemove]
         }
+        
+        options.theme.labelConfiguration[.trash]?.configurable(label)
     }
 }

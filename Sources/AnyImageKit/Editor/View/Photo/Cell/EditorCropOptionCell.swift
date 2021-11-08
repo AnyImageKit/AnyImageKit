@@ -62,6 +62,8 @@ extension EditorCropOptionCell {
         case .custom(let w, let h):
             label.text = "\(w):\(h)"
         }
+        
+        options.theme.labelConfiguration[.cropOption]?.configurable(label)
     }
 }
 
