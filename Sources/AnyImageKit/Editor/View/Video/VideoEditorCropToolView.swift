@@ -67,6 +67,8 @@ final class VideoEditorCropToolView: UIView {
             maker.top.right.bottom.equalToSuperview()
             maker.left.equalTo(splitLine.snp.right)
         }
+        
+        options.theme.buttonConfiguration[.videoPlayPluse]?.configurable(playButton)
     }
 }
 

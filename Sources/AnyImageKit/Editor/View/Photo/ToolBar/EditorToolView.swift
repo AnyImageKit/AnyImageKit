@@ -144,6 +144,8 @@ final class EditorToolView: UIView {
             maker.centerY.equalTo(editOptionsView)
             maker.right.equalToSuperview().offset(-20)
         }
+        
+        options.theme.buttonConfiguration[.done]?.configurable(doneButton)
     }
 }
 

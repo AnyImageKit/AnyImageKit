@@ -69,6 +69,8 @@ final class EditorTextToolView: UIView {
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(25)
         }
+        
+        options.theme.buttonConfiguration[.textSwitch]?.configurable(textButton)
     }
     
     private func setupColorView() {

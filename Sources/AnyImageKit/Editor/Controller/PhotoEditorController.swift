@@ -131,6 +131,8 @@ final class PhotoEditorController: AnyImageViewController {
         if let data = stack.edit.outputImageData, let image = UIImage(data: data) {
             setPlaceholdImage(image)
         }
+        
+        options.theme.buttonConfiguration[.back]?.configurable(backButton)
     }
     
     private func setupMosaicView() {

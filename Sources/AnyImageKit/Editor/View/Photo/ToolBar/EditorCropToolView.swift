@@ -155,6 +155,11 @@ final class EditorCropToolView: UIView {
             maker.centerX.equalTo(content)
             maker.width.equalTo(60)
         }
+        
+        options.theme.buttonConfiguration[.cropRotation]?.configurable(rotateButton)
+        options.theme.buttonConfiguration[.cropCancel]?.configurable(cancelButton)
+        options.theme.buttonConfiguration[.cropReset]?.configurable(resetbutton)
+        options.theme.buttonConfiguration[.cropDone]?.configurable(doneButton)
     }
 }
 

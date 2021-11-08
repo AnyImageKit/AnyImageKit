@@ -23,6 +23,9 @@ public struct EditorTheme: Equatable, StringConfigProtocol {
     /// Config label
     internal var labelConfiguration: [LabelConfigKey: LabelConfigObject] = [:]
     
+    /// Config button
+    internal var buttonConfiguration: [ButtonConfigKey: ButtonConfigObject] = [:]
+    
     public init() {
         
     }
@@ -44,6 +47,10 @@ public struct EditorTheme: Equatable, StringConfigProtocol {
     
     public mutating func configLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
         labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
+    }
+    
+    public mutating func configButton(for key: ButtonConfigKey, configurable: @escaping ((UIButton) -> Void)) {
+        buttonConfiguration[key] = ButtonConfigObject(key: key, configurable: configurable)
     }
 }
 
@@ -84,7 +91,7 @@ extension EditorTheme {
         case photoToolCrop = "PhotoToolCrop"
         /// 25*25
         case photoToolMosaic = "PhotoToolMosaic"
-         
+        
         /// 25*25
         case photoToolUndo = "PhotoToolUndo"
         /// 25*25
@@ -93,12 +100,12 @@ extension EditorTheme {
         case photoToolCropTrunRight = "PhotoToolCropTrunRight"
         /// 25*25
         case photoToolMosaicDefault = "PhotoToolMosaicDefault"
-         
+        
         /// 25*25
         case textNormalIcon = "TextNormalIcon"
         /// 25*25
         case trash = "Trash"
-         
+        
         /// 20*50
         case videoCropLeft = "VideoCropLeft"
         /// 20*50
@@ -153,5 +160,40 @@ extension EditorTheme {
         case cropOption
         case trash
         case videoTimeline
+    }
+}
+
+// MARK: - Button
+extension EditorTheme {
+    
+    struct ButtonConfigObject: Equatable {
+        let key: ButtonConfigKey
+        let configurable: ((UIButton) -> Void)
+        
+        static func == (lhs: EditorTheme.ButtonConfigObject, rhs: EditorTheme.ButtonConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum ButtonConfigKey: Hashable {
+        
+        case back
+        case cancel
+        case done
+        
+        case photoOptions(EditorPhotoToolOption)
+        case videoOptions(EditorVideoToolOption)
+        
+        case undo
+        case textSwitch
+        
+        case cropRotation
+        case cropCancel
+        case cropReset
+        case cropDone
+        
+        case videoPlayPluse
+        case videoCropLeft
+        case videoCropRight
     }
 }

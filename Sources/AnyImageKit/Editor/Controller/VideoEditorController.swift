@@ -117,6 +117,8 @@ final class VideoEditorController: AnyImageViewController {
             maker.bottom.equalTo(toolView.snp.top).offset(-30)
             maker.height.equalTo(50)
         }
+        
+        options.theme.buttonConfiguration[.back]?.configurable(backButton)
     }
     
     private func loadData() {

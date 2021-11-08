@@ -69,7 +69,10 @@ final class VideoEditorToolView: UIView {
             $0.snp.makeConstraints { maker in
                 maker.width.height.equalTo(stackView.snp.height)
             }
+            options.theme.buttonConfiguration[.videoOptions(options.toolOptions[$0.tag])]?.configurable($0)
         }
+        
+        options.theme.buttonConfiguration[.done]?.configurable(doneButton)
     }
     
     private func createButton(tag: Int, option: EditorVideoToolOption) -> UIButton {

@@ -55,6 +55,7 @@ final class EditorEditOptionsView: UIView {
                 maker.width.equalTo(25)
                 maker.height.equalTo(stackView.snp.height)
             }
+            options.theme.buttonConfiguration[.photoOptions(options.toolOptions[$0.tag])]?.configurable($0)
         }
     }
     
