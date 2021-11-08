@@ -63,7 +63,7 @@ extension EditorCropOptionCell {
             label.text = "\(w):\(h)"
         }
         
-        options.theme.labelConfiguration[.cropOption]?.configurable(label)
+        options.theme.labelConfiguration[.cropOption]?.configuration(label)
     }
 }
 

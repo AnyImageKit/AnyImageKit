@@ -77,7 +77,7 @@ final class EditorBrushToolView: UIView {
             maker.width.height.equalTo(itemWidth)
         }
         
-        options.theme.buttonConfiguration[.undo]?.configurable(undoButton)
+        options.theme.buttonConfiguration[.undo]?.configuration(undoButton)
     }
     
     private func setupColorView() {

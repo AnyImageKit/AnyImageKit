@@ -80,8 +80,8 @@ extension AlbumCell {
         subTitleLabel.textColor = theme[color: .subText]
         separatorLine.backgroundColor = theme[color: .separatorLine]
         
-        theme.labelConfiguration[.albumCellTitle]?.configurable(titleLabel)
-        theme.labelConfiguration[.albumCellSubTitle]?.configurable(subTitleLabel)
+        theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
+        theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)
     }
 }
 

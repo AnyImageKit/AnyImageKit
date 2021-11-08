@@ -56,7 +56,7 @@ final class EditorMosaicToolView: UIView {
         setupMosaicView()
         updateState()
         
-        options.theme.buttonConfiguration[.undo]?.configurable(undoButton)
+        options.theme.buttonConfiguration[.undo]?.configuration(undoButton)
     }
     
     private func setupMosaicView() {

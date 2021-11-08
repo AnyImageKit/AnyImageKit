@@ -132,7 +132,7 @@ final class PhotoEditorController: AnyImageViewController {
             setPlaceholdImage(image)
         }
         
-        options.theme.buttonConfiguration[.back]?.configurable(backButton)
+        options.theme.buttonConfiguration[.back]?.configuration(backButton)
     }
     
     private func setupMosaicView() {

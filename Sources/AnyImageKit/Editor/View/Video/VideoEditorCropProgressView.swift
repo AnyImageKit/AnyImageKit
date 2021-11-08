@@ -156,9 +156,9 @@ final class VideoEditorCropProgressView: UIView {
             maker.centerX.equalTo(timeline)
         }
         
-        options.theme.labelConfiguration[.videoTimeline]?.configurable(timelineLabel)
-        options.theme.buttonConfiguration[.videoCropLeft]?.configurable(leftButton)
-        options.theme.buttonConfiguration[.videoCropRight]?.configurable(rightButton)
+        options.theme.labelConfiguration[.videoTimeline]?.configuration(timelineLabel)
+        options.theme.buttonConfiguration[.videoCropLeft]?.configuration(leftButton)
+        options.theme.buttonConfiguration[.videoCropRight]?.configuration(rightButton)
     }
     
     private func layout(updateProgress: Bool) {

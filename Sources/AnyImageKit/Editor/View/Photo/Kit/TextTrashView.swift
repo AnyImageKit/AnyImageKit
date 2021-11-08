@@ -73,6 +73,6 @@ final class TextTrashView: UIView {
             label.text = options.theme[string: .editorReleaseToRemove]
         }
         
-        options.theme.labelConfiguration[.trash]?.configurable(label)
+        options.theme.labelConfiguration[.trash]?.configuration(label)
     }
 }

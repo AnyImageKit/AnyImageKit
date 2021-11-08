@@ -60,6 +60,6 @@ extension LivePhotoTipView: PickerOptionsConfigurable {
         backgroundColor = options.theme[color: .background].withAlphaComponent(0.7)
         updateChildrenConfigurable(options: options)
         
-        options.theme.labelConfiguration[.livePhotoMark]?.configurable(label)
+        options.theme.labelConfiguration[.livePhotoMark]?.configuration(label)
     }
 }

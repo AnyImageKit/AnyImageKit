@@ -267,7 +267,7 @@ extension VideoView: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         videoImageView.image = options.theme[icon: .video]
         updateChildrenConfigurable(options: options)
-        options.theme.labelConfiguration[.assetCellVideoDuration]?.configurable(videoLabel)
+        options.theme.labelConfiguration[.assetCellVideoDuration]?.configuration(videoLabel)
     }
 }
 
@@ -323,7 +323,7 @@ private class GIFView: UIView {
 extension GIFView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
-        options.theme.labelConfiguration[.assetCellGIFMark]?.configurable(gifLabel)
+        options.theme.labelConfiguration[.assetCellGIFMark]?.configuration(gifLabel)
     }
 }
 

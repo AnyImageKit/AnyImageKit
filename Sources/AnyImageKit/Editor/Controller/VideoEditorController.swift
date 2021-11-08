@@ -118,7 +118,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.height.equalTo(50)
         }
         
-        options.theme.buttonConfiguration[.back]?.configurable(backButton)
+        options.theme.buttonConfiguration[.back]?.configuration(backButton)
     }
     
     private func loadData() {

@@ -51,14 +51,14 @@ public class CaptureTheme: StringConfigProtocol {
     
     /// Configuration Label if you needed
     /// - Note: DONOT set hidden/enable properties
-    public func configurationLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
-        labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
+    public func configurationLabel(for key: LabelConfigKey, configuration: @escaping ((UILabel) -> Void)) {
+        labelConfiguration[key] = LabelConfigObject(key: key, configuration: configuration)
     }
     
     /// Configuration Button if you needed
     /// - Note: DONOT set hidden/enable properties
-    public func configurationButton(for key: ButtonConfigKey, configurable: @escaping ((UIButton) -> Void)) {
-        buttonConfiguration[key] = ButtonConfigObject(key: key, configurable: configurable)
+    public func configurationButton(for key: ButtonConfigKey, configuration: @escaping ((UIButton) -> Void)) {
+        buttonConfiguration[key] = ButtonConfigObject(key: key, configuration: configuration)
     }
 }
 
@@ -122,7 +122,7 @@ extension CaptureTheme {
     
     struct LabelConfigObject: Equatable {
         let key: LabelConfigKey
-        let configurable: ((UILabel) -> Void)
+        let configuration: ((UILabel) -> Void)
         
         static func == (lhs: CaptureTheme.LabelConfigObject, rhs: CaptureTheme.LabelConfigObject) -> Bool {
             return lhs.key == rhs.key
@@ -140,7 +140,7 @@ extension CaptureTheme {
     
     struct ButtonConfigObject: Equatable {
         let key: ButtonConfigKey
-        let configurable: ((UIButton) -> Void)
+        let configuration: ((UIButton) -> Void)
         
         static func == (lhs: CaptureTheme.ButtonConfigObject, rhs: CaptureTheme.ButtonConfigObject) -> Bool {
             return lhs.key == rhs.key

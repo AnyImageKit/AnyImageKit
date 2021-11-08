@@ -144,13 +144,13 @@ extension PickerToolBar: PickerOptionsConfigurable {
         
         switch style {
         case .picker:
-            options.theme.buttonConfiguration[.preview]?.configurable(leftButton)
-            options.theme.buttonConfiguration[.originalImage]?.configurable(originalButton)
-            options.theme.buttonConfiguration[.done]?.configurable(doneButton)
+            options.theme.buttonConfiguration[.preview]?.configuration(leftButton)
+            options.theme.buttonConfiguration[.originalImage]?.configuration(originalButton)
+            options.theme.buttonConfiguration[.done]?.configuration(doneButton)
         case .preview:
-            options.theme.buttonConfiguration[.edit]?.configurable(leftButton)
-            options.theme.buttonConfiguration[.originalImage]?.configurable(originalButton)
-            options.theme.buttonConfiguration[.done]?.configurable(doneButton)
+            options.theme.buttonConfiguration[.edit]?.configuration(leftButton)
+            options.theme.buttonConfiguration[.originalImage]?.configuration(originalButton)
+            options.theme.buttonConfiguration[.done]?.configuration(doneButton)
         }
     }
 }

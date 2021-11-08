@@ -186,8 +186,8 @@ final class InputTextViewController: AnyImageViewController {
             maker.height.greaterThanOrEqualTo(55)
         }
         
-        options.theme.buttonConfiguration[.cancel]?.configurable(cancelButton)
-        options.theme.buttonConfiguration[.done]?.configurable(doneButton)
+        options.theme.buttonConfiguration[.cancel]?.configuration(cancelButton)
+        options.theme.buttonConfiguration[.done]?.configuration(doneButton)
     }
     
     override var prefersStatusBarHidden: Bool {

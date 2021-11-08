@@ -65,7 +65,7 @@ extension PermissionDeniedView: PickerOptionsConfigurable {
         button.setTitle(options.theme[string: .goToSettings], for: .normal)
         backgroundColor = options.theme[color: .background]
         
-        options.theme.labelConfiguration[.permissionDeniedTips]?.configurable(label)
-        options.theme.buttonConfiguration[.goSetting]?.configurable(button)
+        options.theme.labelConfiguration[.permissionDeniedTips]?.configuration(label)
+        options.theme.buttonConfiguration[.goSetting]?.configuration(button)
     }
 }

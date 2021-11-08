@@ -60,6 +60,6 @@ extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
         backButton.accessibilityLabel = options.theme[string: .back]
         updateChildrenConfigurable(options: options)
         
-        options.theme.buttonConfiguration[.backInPreview]?.configurable(backButton)
+        options.theme.buttonConfiguration[.backInPreview]?.configuration(backButton)
     }
 }

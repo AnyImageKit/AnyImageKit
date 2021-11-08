@@ -70,7 +70,7 @@ final class EditorTextToolView: UIView {
             maker.width.height.equalTo(25)
         }
         
-        options.theme.buttonConfiguration[.textSwitch]?.configurable(textButton)
+        options.theme.buttonConfiguration[.textSwitch]?.configuration(textButton)
     }
     
     private func setupColorView() {

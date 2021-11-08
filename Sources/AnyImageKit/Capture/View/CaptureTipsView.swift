@@ -40,7 +40,7 @@ final class CaptureTipsView: UIView {
             maker.edges.equalToSuperview()
         }
         
-        options.theme.labelConfiguration[.tips]?.configurable(tipsLabel)
+        options.theme.labelConfiguration[.tips]?.configuration(tipsLabel)
     }
 }
 

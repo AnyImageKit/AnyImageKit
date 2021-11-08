@@ -133,6 +133,6 @@ extension PickerArrowButton: PickerOptionsConfigurable {
         effectView.backgroundColor = effectViewColor
         a11ySwitchAlbumTips = options.theme[string: .pickerA11ySwitchAlbumTips]
         
-        options.theme.labelConfiguration[.albumTitle]?.configurable(label)
+        options.theme.labelConfiguration[.albumTitle]?.configuration(label)
     }
 }

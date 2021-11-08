@@ -97,9 +97,9 @@ extension NumberCircleButton: PickerOptionsConfigurable {
         
         switch style {
         case .default:
-            options.theme.labelConfiguration[.selectedNumber]?.configurable(numLabel)
+            options.theme.labelConfiguration[.selectedNumber]?.configuration(numLabel)
         case .large:
-            options.theme.labelConfiguration[.selectedNumberInPreview]?.configurable(numLabel)
+            options.theme.labelConfiguration[.selectedNumberInPreview]?.configuration(numLabel)
         }
     }
 }

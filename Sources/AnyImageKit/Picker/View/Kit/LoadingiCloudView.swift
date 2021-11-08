@@ -83,8 +83,8 @@ extension LoadingiCloudView: PickerOptionsConfigurable {
         imageView.image = options.theme[icon: .iCloud]
         updateChildrenConfigurable(options: options)
         
-        options.theme.labelConfiguration[.loadingFromiCloudTips]?.configurable(tipsLabel)
-        options.theme.labelConfiguration[.loadingFromiCloudProgress]?.configurable(progressLabel)
+        options.theme.labelConfiguration[.loadingFromiCloudTips]?.configuration(tipsLabel)
+        options.theme.labelConfiguration[.loadingFromiCloudProgress]?.configuration(progressLabel)
     }
 }
 
