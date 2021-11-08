@@ -141,6 +141,17 @@ extension PickerToolBar: PickerOptionsConfigurable {
         
         originalButton.setTitle(options.theme[string: .pickerOriginalImage], for: .normal)
         doneButton.setTitle(options.theme[string: .done], for: .normal)
+        
+        switch style {
+        case .picker:
+            options.theme.buttonConfiguration[.preview]?.configurable(leftButton)
+            options.theme.buttonConfiguration[.originalImage]?.configurable(originalButton)
+            options.theme.buttonConfiguration[.done]?.configurable(doneButton)
+        case .preview:
+            options.theme.buttonConfiguration[.edit]?.configurable(leftButton)
+            options.theme.buttonConfiguration[.originalImage]?.configurable(originalButton)
+            options.theme.buttonConfiguration[.done]?.configurable(doneButton)
+        }
     }
 }
 

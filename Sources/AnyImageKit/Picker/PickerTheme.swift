@@ -25,6 +25,10 @@ public struct PickerTheme: Equatable, StringConfigProtocol {
     
     /// Config label
     internal var labelConfiguration: [LabelConfigKey: LabelConfigObject] = [:]
+    
+    /// Config button
+    internal var buttonConfiguration: [ButtonConfigKey: ButtonConfigObject] = [:]
+    
     public init(style: UserInterfaceStyle) {
         self.style = style
     }
@@ -48,6 +52,9 @@ public struct PickerTheme: Equatable, StringConfigProtocol {
         labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
     }
     
+    public mutating func configButton(for key: ButtonConfigKey, configurable: @escaping ((UIButton) -> Void)) {
+        buttonConfiguration[key] = ButtonConfigObject(key: key, configurable: configurable)
+    }
 }
 
 // MARK: - Colors
@@ -246,3 +253,25 @@ extension PickerTheme {
     }
 }
 
+// MARK: - Button
+extension PickerTheme {
+    
+    struct ButtonConfigObject: Equatable {
+        let key: ButtonConfigKey
+        let configurable: ((UIButton) -> Void)
+        
+        static func == (lhs: PickerTheme.ButtonConfigObject, rhs: PickerTheme.ButtonConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum ButtonConfigKey: Hashable {
+        
+        case preview
+        case edit
+        case originalImage
+        case done
+        case backInPreview
+        case goSetting
+    }
+}

@@ -59,5 +59,7 @@ extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
         backButton.setImage(options.theme[icon: .returnButton], for: .normal)
         backButton.accessibilityLabel = options.theme[string: .back]
         updateChildrenConfigurable(options: options)
+        
+        options.theme.buttonConfiguration[.backInPreview]?.configurable(backButton)
     }
 }
