@@ -87,9 +87,10 @@ extension VideoPreview {
     
     public func setProgress(_ progress: CGFloat) {
         if player == nil { return }
-        guard let duration = player?.currentItem?.duration else { return }
+        guard let duration = player?.currentItem?.duration, duration.isValid else { return }
         imageView.isHidden = true
         let time = CMTime(seconds: duration.seconds * Double(progress), preferredTimescale: duration.timescale)
+        guard time.isValid else { return }
         player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
     }
 }
