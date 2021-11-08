@@ -75,5 +75,7 @@ extension PermissionLimitedView: PickerOptionsConfigurable {
         tipsLabel.text = options.theme[string: .pickerLimitedPhotosPermissionTips]
         arrowImageView.image = options.theme[icon: .arrowRight]
         updateChildrenConfigurable(options: options)
+        
+        options.theme.labelConfiguration[.permissionLimitedTips]?.configurable(tipsLabel)
     }
 }

@@ -94,6 +94,13 @@ extension NumberCircleButton: PickerOptionsConfigurable {
         a11ySelectPhoto = options.theme[string: .pickerSelectPhoto]
         a11yUnselectPhoto = options.theme[string: .pickerUnselectPhoto]
         accessibilityLabel = isSelected ? a11ySelectPhoto : a11yUnselectPhoto
+        
+        switch style {
+        case .default:
+            options.theme.labelConfiguration[.selectedNumber]?.configurable(numLabel)
+        case .large:
+            options.theme.labelConfiguration[.selectedNumberInPreview]?.configurable(numLabel)
+        }
     }
 }
 

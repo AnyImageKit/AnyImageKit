@@ -132,5 +132,7 @@ extension PickerArrowButton: PickerOptionsConfigurable {
                                    dark: UIColor.white.withAlphaComponent(0.9))
         effectView.backgroundColor = effectViewColor
         a11ySwitchAlbumTips = options.theme[string: .pickerA11ySwitchAlbumTips]
+        
+        options.theme.labelConfiguration[.albumTitle]?.configurable(label)
     }
 }

@@ -23,6 +23,8 @@ public struct PickerTheme: Equatable, StringConfigProtocol {
     /// Custom string storage
     private var strings: [StringConfigKey: String] = [:]
     
+    /// Config label
+    internal var labelConfiguration: [LabelConfigKey: LabelConfigObject] = [:]
     public init(style: UserInterfaceStyle) {
         self.style = style
     }
@@ -41,6 +43,11 @@ public struct PickerTheme: Equatable, StringConfigProtocol {
         get { strings[key] ?? defaultStringValue(for: key) }
         set { strings[key] = newValue }
     }
+    
+    public mutating func configLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
+        labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
+    }
+    
 }
 
 // MARK: - Colors
@@ -205,3 +212,37 @@ extension StringConfigKey {
     public static let pickerA11ySwitchAlbumTips = StringConfigKey(rawValue: "A11Y_SWITCH_ALBUM_TIPS")
     public static let pickerLimitedPhotosPermissionTips = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_TIPS")
 }
+
+// MARK: - Label
+extension PickerTheme {
+    
+    struct LabelConfigObject: Equatable {
+        let key: LabelConfigKey
+        let configurable: ((UILabel) -> Void)
+        
+        static func == (lhs: PickerTheme.LabelConfigObject, rhs: PickerTheme.LabelConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum LabelConfigKey: Hashable {
+        
+        case permissionLimitedTips
+        case permissionDeniedTips
+        
+        case albumTitle
+        case albumCellTitle
+        case albumCellSubTitle
+        
+        case assetCellVideoDuration
+        case assetCellGIFMark
+        
+        case selectedNumber
+        case selectedNumberInPreview
+        
+        case livePhotoMark
+        case loadingFromiCloudTips
+        case loadingFromiCloudProgress
+    }
+}
+
