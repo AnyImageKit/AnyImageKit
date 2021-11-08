@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Editor
-public struct CaptureTheme: Equatable {
+public struct CaptureTheme: Equatable, StringConfigProtocol {
     
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]

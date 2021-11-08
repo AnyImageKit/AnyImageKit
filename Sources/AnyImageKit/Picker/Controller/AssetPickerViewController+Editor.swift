@@ -16,7 +16,7 @@ extension AssetPickerViewController {
         asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
         if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return false
         }
         if asset.phAsset.mediaType == .image && manager.options.editorOptions.contains(.photo) {

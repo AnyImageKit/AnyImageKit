@@ -82,7 +82,7 @@ final class CaptureViewController: AnyImageViewController {
         if options.mediaOptions.contains(.video) {
             permissions.append(.microphone)
         }
-        check(permissions: permissions, authorized: { [weak self] in
+        check(permissions: permissions, stringConfig: options.theme, authorized: { [weak self] in
             guard let self = self else { return }
             self.permissionsChecked = true
             self.capture.startRunning()

@@ -331,7 +331,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
             let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
@@ -344,7 +344,7 @@ extension PhotoPreviewController {
             } else {
                 message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
             }
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
@@ -380,7 +380,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
             let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         if manager.selectedAssets.isEmpty {

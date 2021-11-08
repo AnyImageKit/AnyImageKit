@@ -347,7 +347,7 @@ extension AssetPickerViewController {
         
         if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
@@ -360,7 +360,7 @@ extension AssetPickerViewController {
             } else {
                 message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
             }
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
@@ -560,7 +560,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             }
         } else if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         } else if !asset.isSelected && manager.isUpToLimit {
             return

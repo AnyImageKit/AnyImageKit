@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Picker
-public struct PickerTheme: Equatable {
+public struct PickerTheme: Equatable, StringConfigProtocol {
     
     /// User Interface Style
     public let style: UserInterfaceStyle
