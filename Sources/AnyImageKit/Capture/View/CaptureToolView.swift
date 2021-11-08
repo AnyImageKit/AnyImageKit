@@ -84,6 +84,9 @@ final class CaptureToolView: UIView {
             maker.right.equalTo(layoutGuide2.snp.right).offset(-16)
             maker.size.equalTo(CGSize(width: 48, height: 48))
         }
+        
+        options.theme.buttonConfiguration[.cancel]?.configurable(cancelButton)
+        options.theme.buttonConfiguration[.switchCamera]?.configurable(switchButton)
     }
 }
 

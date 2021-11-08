@@ -20,6 +20,12 @@ public struct CaptureTheme: Equatable, StringConfigProtocol {
     /// Custom string storage
     private var strings: [StringConfigKey: String] = [:]
     
+    /// Config label
+    internal var labelConfiguration: [LabelConfigKey: LabelConfigObject] = [:]
+    
+    /// Config button
+    internal var buttonConfiguration: [ButtonConfigKey: ButtonConfigObject] = [:]
+    
     public init() {
         
     }
@@ -37,6 +43,14 @@ public struct CaptureTheme: Equatable, StringConfigProtocol {
     public subscript(string key: StringConfigKey) -> String {
         get { strings[key] ?? defaultStringValue(for: key) }
         set { strings[key] = newValue }
+    }
+    
+    public mutating func configLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
+        labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
+    }
+    
+    public mutating func configButton(for key: ButtonConfigKey, configurable: @escaping ((UIButton) -> Void)) {
+        buttonConfiguration[key] = ButtonConfigObject(key: key, configurable: configurable)
     }
 }
 
@@ -93,4 +107,41 @@ extension StringConfigKey {
     public static let captureTapForPhoto = StringConfigKey(rawValue: "TAP_FOR_PHOTO")
     public static let captureHoldForVideo = StringConfigKey(rawValue: "HOLD_FOR_VIDEO")
     public static let captureHoldForVideoTapForPhoto = StringConfigKey(rawValue: "HOLD_FOR_VIDEO_TAP_FOR_PHOTO")
+}
+
+// MARK: - Label
+extension CaptureTheme {
+    
+    struct LabelConfigObject: Equatable {
+        let key: LabelConfigKey
+        let configurable: ((UILabel) -> Void)
+        
+        static func == (lhs: CaptureTheme.LabelConfigObject, rhs: CaptureTheme.LabelConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum LabelConfigKey: Hashable {
+        
+        case tips
+    }
+}
+
+// MARK: - Button
+extension CaptureTheme {
+    
+    struct ButtonConfigObject: Equatable {
+        let key: ButtonConfigKey
+        let configurable: ((UIButton) -> Void)
+        
+        static func == (lhs: CaptureTheme.ButtonConfigObject, rhs: CaptureTheme.ButtonConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum ButtonConfigKey: Hashable {
+        
+        case cancel
+        case switchCamera
+    }
 }

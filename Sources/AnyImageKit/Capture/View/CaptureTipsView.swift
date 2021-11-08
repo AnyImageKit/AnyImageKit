@@ -39,6 +39,8 @@ final class CaptureTipsView: UIView {
         tipsLabel.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
+        
+        options.theme.labelConfiguration[.tips]?.configurable(tipsLabel)
     }
 }
 
