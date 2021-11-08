@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Editor
-public struct EditorTheme: Equatable, StringConfigProtocol {
+public class EditorTheme: StringConfigProtocol {
     
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]
@@ -30,26 +30,34 @@ public struct EditorTheme: Equatable, StringConfigProtocol {
         
     }
     
+    /// Set custom color
     public subscript(color key: ColorConfigKey) -> UIColor {
         get { colors[key] ?? key.defaultValue() }
         set { colors[key] = newValue }
     }
     
+    /// Set custom icon
     public subscript(icon key: IconConfigKey) -> UIImage? {
         get { icons[key] ?? key.defaultValue() }
         set { icons[key] = newValue }
     }
     
+    /// Set custom string
+    /// - Note: Please set localized text if your app support multiple languages
     public subscript(string key: StringConfigKey) -> String {
         get { strings[key] ?? defaultStringValue(for: key) }
         set { strings[key] = newValue }
     }
     
-    public mutating func configLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
+    /// Configuration Label if you needed
+    /// - Note: DONOT set hidden/enable properties
+    public func configurationLabel(for key: LabelConfigKey, configurable: @escaping ((UILabel) -> Void)) {
         labelConfiguration[key] = LabelConfigObject(key: key, configurable: configurable)
     }
     
-    public mutating func configButton(for key: ButtonConfigKey, configurable: @escaping ((UIButton) -> Void)) {
+    /// Configuration Button if you needed
+    /// - Note: DONOT set hidden/enable properties
+    public func configurationButton(for key: ButtonConfigKey, configurable: @escaping ((UIButton) -> Void)) {
         buttonConfiguration[key] = ButtonConfigObject(key: key, configurable: configurable)
     }
 }
