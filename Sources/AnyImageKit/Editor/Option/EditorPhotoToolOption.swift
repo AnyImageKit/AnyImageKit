@@ -26,16 +26,16 @@ extension EditorPhotoToolOption: CaseIterable {
 
 extension EditorPhotoToolOption {
     
-    var imageName: String {
+    var iconKey: EditorTheme.IconConfigKey {
         switch self {
         case .brush:
-            return "PhotoToolBrush"
+            return .photoToolBrush
         case .text:
-            return "PhotoToolText"
+            return .photoToolText
         case .crop:
-            return "PhotoToolCrop"
+            return .photoToolCrop
         case .mosaic:
-            return "PhotoToolMosaic"
+            return .photoToolMosaic
         }
     }
 }

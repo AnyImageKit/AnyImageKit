@@ -60,13 +60,51 @@ extension EditorTheme {
 // MARK: - Icon
 extension EditorTheme {
     
-    public enum IconConfigKey: Hashable {
+    public enum IconConfigKey: String, Hashable {
         
-        /// 20*20, Light/Dark
-        case albumArrow
+        /// 25*25
+        case checkMark = "CheckMark"
+        /// 25*25
+        case xMark = "XMark"
+        /// 30*30
+        case returnBackButton = "ReturnBackButton"
+        
+        /// 25*25
+        case photoToolBrush = "PhotoToolBrush"
+        /// 25*25
+        case photoToolText = "PhotoToolText"
+        /// 25*25
+        case photoToolCrop = "PhotoToolCrop"
+        /// 25*25
+        case photoToolMosaic = "PhotoToolMosaic"
+         
+        /// 25*25
+        case photoToolUndo = "PhotoToolUndo"
+        /// 25*25
+        case photoToolCropTrunLeft = "PhotoToolCropTrunLeft"
+        /// 25*25
+        case photoToolCropTrunRight = "PhotoToolCropTrunRight"
+        /// 25*25
+        case photoToolMosaicDefault = "PhotoToolMosaicDefault"
+         
+        /// 25*25
+        case textNormalIcon = "TextNormalIcon"
+        /// 25*25
+        case trash = "Trash"
+         
+        /// 20*50
+        case videoCropLeft = "VideoCropLeft"
+        /// 20*50
+        case videoCropRight = "VideoCropRight"
+        /// 30*30
+        case videoPauseFill = "VideoPauseFill"
+        /// 30*30
+        case videoPlayFill = "VideoPlayFill"
+        /// 30*30
+        case videoToolVideo = "VideoToolVideo"
         
         func defaultValue() -> UIImage? {
-            return nil
+            return BundleHelper.image(named: rawValue, module: .editor)
         }
     }
 }

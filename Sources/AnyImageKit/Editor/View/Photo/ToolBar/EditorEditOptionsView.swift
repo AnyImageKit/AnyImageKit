@@ -60,7 +60,7 @@ final class EditorEditOptionsView: UIView {
     
     private func createButton(tag: Int, option: EditorPhotoToolOption) -> UIButton {
         let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
-        let image = BundleHelper.image(named: option.imageName, module: .editor)?.withRenderingMode(.alwaysTemplate)
+        let image = options.theme[icon: option.iconKey]?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white

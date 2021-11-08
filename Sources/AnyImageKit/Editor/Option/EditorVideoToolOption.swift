@@ -16,10 +16,10 @@ public enum EditorVideoToolOption: Equatable, CaseIterable {
 
 extension EditorVideoToolOption {
     
-    var imageName: String {
+    var iconKey: EditorTheme.IconConfigKey {
         switch self {
         case .clip:
-            return "VideoToolVideo"
+            return .videoToolVideo
         }
     }
 }

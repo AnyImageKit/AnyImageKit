@@ -24,7 +24,7 @@ final class EditorMosaicToolView: UIView {
     private(set) lazy var undoButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
         view.isEnabled = false
-        view.setImage(BundleHelper.image(named: "PhotoToolUndo", module: .editor), for: .normal)
+        view.setImage(options.theme[icon: .photoToolUndo], for: .normal)
         view.accessibilityLabel = options.theme[string: .undo]
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -86,7 +86,7 @@ final class EditorMosaicToolView: UIView {
         let image: UIImage?
         switch option {
         case .default:
-            image = BundleHelper.image(named: "PhotoToolMosaicDefault", module: .editor)?.withRenderingMode(.alwaysTemplate)
+            image = options.theme[icon: .photoToolMosaicDefault]?.withRenderingMode(.alwaysTemplate)
         case .custom(let customMosaicIcon, let customMosaic):
             image = customMosaicIcon ?? customMosaic
         }

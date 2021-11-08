@@ -45,7 +45,7 @@ final class EditorCropToolView: UIView {
     
     private(set) lazy var rotateButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setImage(BundleHelper.image(named: options.rotationDirection.imageName, module: .editor), for: .normal)
+        view.setImage(options.theme[icon: options.rotationDirection.iconKey], for: .normal)
         view.addTarget(self, action: #selector(rotateButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -70,14 +70,14 @@ final class EditorCropToolView: UIView {
     }()
     private(set) lazy var cancelButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setImage(BundleHelper.image(named: "XMark", module: .editor), for: .normal)
+        view.setImage(options.theme[icon: .xMark], for: .normal)
         view.accessibilityLabel = options.theme[string: .cancel]
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
         let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-        view.setImage(BundleHelper.image(named: "CheckMark", module: .editor), for: .normal)
+        view.setImage(options.theme[icon: .checkMark], for: .normal)
         view.accessibilityLabel = options.theme[string: .done]
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view

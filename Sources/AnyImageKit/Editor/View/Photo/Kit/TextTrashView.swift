@@ -23,7 +23,7 @@ final class TextTrashView: UIView {
     
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.image = BundleHelper.image(named: "Trash", module: .editor)
+        view.image = options.theme[icon: .trash]
         return view
     }()
     private(set) lazy var label: UILabel = {
