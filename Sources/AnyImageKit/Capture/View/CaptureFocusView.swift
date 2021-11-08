@@ -261,7 +261,7 @@ private final class CaptureFocusRectView: UIView {
 private final class CaptureExposureView: UIView {
     
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "CaptureSunlight", module: .capture)?.withRenderingMode(.alwaysTemplate)
+        let image = options.theme[icon: .captureSunlight]?.withRenderingMode(.alwaysTemplate)
         let view = UIImageView(image: image)
         view.tintColor = options.theme[color: .focus]
         return view
