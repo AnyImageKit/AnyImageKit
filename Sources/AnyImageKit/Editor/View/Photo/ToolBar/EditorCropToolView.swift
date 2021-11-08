@@ -197,7 +197,7 @@ extension EditorCropToolView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(EditorCropOptionCell.self, for: indexPath)
-        cell.set(options, option: options.cropOptions[indexPath.row], selectColor: options.tintColor)
+        cell.set(options, option: options.cropOptions[indexPath.row], selectColor: options.theme[color: .main])
         return cell
     }
 }

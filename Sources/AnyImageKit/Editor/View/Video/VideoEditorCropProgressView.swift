@@ -65,7 +65,7 @@ final class VideoEditorCropProgressView: UIView {
         layer.isHidden = true
         layer.frame = bounds
         layer.fillRule = .evenOdd
-        layer.fillColor = options.tintColor.cgColor
+        layer.fillColor = options.theme[color: .main].cgColor
         return layer
     }()
     private lazy var darkLayer: CAShapeLayer = {

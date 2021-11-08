@@ -31,7 +31,7 @@ final class InputTextViewController: AnyImageViewController {
     private lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 4
-        view.backgroundColor = options.tintColor
+        view.backgroundColor = options.theme[color: .main]
         view.setTitle(options.theme[string: .done], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -58,7 +58,7 @@ final class InputTextViewController: AnyImageViewController {
         view.enablesReturnKeyAutomatically = true
         view.showsVerticalScrollIndicator = false
         view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        view.tintColor = options.tintColor
+        view.tintColor = options.theme[color: .main]
         let color = options.textColors[data.colorIdx]
         view.textColor = data.isTextSelected ? color.subColor : color.color
         view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设

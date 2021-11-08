@@ -74,7 +74,7 @@ final class EditorEditOptionsView: UIView {
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
-            btn.imageView?.tintColor = isSelected ? options.tintColor : .white
+            btn.imageView?.tintColor = isSelected ? options.theme[color: .main] : .white
         }
     }
 }

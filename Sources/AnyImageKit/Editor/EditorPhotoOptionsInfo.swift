@@ -10,10 +10,6 @@ import UIKit
 
 public struct EditorPhotoOptionsInfo {
     
-    /// Tint color.
-    /// - Default: Green
-    public var tintColor: UIColor = Palette.main
-    
     /// Theme
     public var theme: EditorTheme = .init()
     
@@ -115,6 +111,12 @@ public struct EditorPhotoOptionsInfo {
 
 // MARK: - Deprecated
 extension EditorPhotoOptionsInfo {
+    
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please set `theme[color: .main]` instead.")
+    public var tintColor: UIColor {
+        get { theme[color: .main] }
+        set { theme[color: .main] = newValue }
+    }
     
     @available(*, deprecated, renamed: "brushColors", message: "Will be removed in version 1.0, Please use `brushColors` instead.")
     public var penColors: [EditorPenColorOption] {
