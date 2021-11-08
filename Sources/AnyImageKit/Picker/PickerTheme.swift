@@ -205,13 +205,3 @@ extension StringConfigKey {
     public static let pickerA11ySwitchAlbumTips = StringConfigKey(rawValue: "A11Y_SWITCH_ALBUM_TIPS")
     public static let pickerLimitedPhotosPermissionTips = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_TIPS")
 }
-
-// MARK: - Capture
-extension StringConfigKey {
-    
-    public static let captureSwitchToFrontCamera = StringConfigKey(rawValue: "SWITCH_TO_FRONT_CAMERA")
-    public static let captureSwitchToBackCamera = StringConfigKey(rawValue: "SWITCH_TO_BACK_CAMERA")
-    public static let captureTapForPhoto = StringConfigKey(rawValue: "TAP_FOR_PHOTO")
-    public static let captureHoldForVideo = StringConfigKey(rawValue: "HOLD_FOR_VIDEO")
-    public static let captureHoldForVideoTapForPhoto = StringConfigKey(rawValue: "HOLD_FOR_VIDEO_TAP_FOR_PHOTO")
-}

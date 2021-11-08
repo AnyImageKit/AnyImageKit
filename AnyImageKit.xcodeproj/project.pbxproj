@@ -16,6 +16,7 @@
 		71208EBA256F8D88002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		71208EC0256F8D93002C023A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		713585F627379CD400A70B9E /* EditorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713585F527379CD400A70B9E /* EditorTheme.swift */; };
+		713585F82738C42B00A70B9E /* CaptureTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713585F72738C42B00A70B9E /* CaptureTheme.swift */; };
 		713C204E25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */; };
 		713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C204F25AD32AA00BB0F66 /* Cacheable.swift */; };
 		713C206725AD32D800BB0F66 /* PhotoEditorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */; };
@@ -269,6 +270,7 @@
 		7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIBlurEffect.swift"; sourceTree = "<group>"; };
 		7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushColorOption.swift; sourceTree = "<group>"; };
 		713585F527379CD400A70B9E /* EditorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTheme.swift; sourceTree = "<group>"; };
+		713585F72738C42B00A70B9E /* CaptureTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTheme.swift; sourceTree = "<group>"; };
 		713C204D25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AssetPickerViewController+Editor.swift"; sourceTree = "<group>"; };
 		713C204F25AD32AA00BB0F66 /* Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
 		713C205825AD32D800BB0F66 /* PhotoEditorContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoEditorContext.swift; sourceTree = "<group>"; };
@@ -845,6 +847,7 @@
 			isa = PBXGroup;
 			children = (
 				A56123A223B5F43B0071C3E8 /* CaptureOptionsInfo.swift */,
+				713585F72738C42B00A70B9E /* CaptureTheme.swift */,
 				A0513A142521A0030069C5CB /* CaptureResult.swift */,
 				71B3E9102629780200710A7F /* Option */,
 				A076999823963D3B0006AC9B /* Controller */,
@@ -1749,6 +1752,7 @@
 				A0B50C3623A9EDDC002C9799 /* Capture+CGImage.swift in Sources */,
 				A0513A152521A0030069C5CB /* CaptureResult.swift in Sources */,
 				71B3E94D2629898D00710A7F /* EditorCropOption.swift in Sources */,
+				713585F82738C42B00A70B9E /* CaptureTheme.swift in Sources */,
 				A50B211B237AA24300A894A9 /* EditorEditOptionsView.swift in Sources */,
 				A09D15A3239E0FEF00F3FE77 /* CaptureButton.swift in Sources */,
 				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
