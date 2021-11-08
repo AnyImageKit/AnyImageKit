@@ -31,6 +31,6 @@
 
 "GO_TO_SETTINGS" = "前往设置";
 "PERMISSION_IS_DISABLED" = "%@被禁用";
-"NO_PHOTOS_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-照片\"选项中，\n允许%@访问手机相册。";
+"NO_PHOTOS_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-照片\"选项中，\n允许%@访问相册。";
 "NO_CAMERA_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-相机\"选项中，\n允许%@访问相机。";
 "NO_MICROPHONE_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-麦克风\"选项中，\n允许%@访问麦克风。";
