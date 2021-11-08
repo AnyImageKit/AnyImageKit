@@ -48,10 +48,15 @@ extension CaptureTheme {
         /// Main Color
         case main
         
+        /// Focus view
+        case focus
+        
         func defaultValue() -> UIColor {
             switch self {
             case .main:
                 return UIColor.color(hex: 0x57BE6A)
+            case .focus:
+                return UIColor.color(hex: 0xFFD60A)
             }
         }
     }

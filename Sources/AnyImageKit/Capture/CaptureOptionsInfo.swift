@@ -11,10 +11,6 @@ import AVFoundation
 
 public struct CaptureOptionsInfo {
     
-    /// Tint color.
-    /// - Default: Green
-    public var tintColor: UIColor = UIColor.color(hex: 0x57BE6A)
-    
     /// Theme
     public var theme: CaptureTheme = .init()
     
@@ -74,4 +70,14 @@ public struct CaptureOptionsInfo {
     #endif
     
     public init() { }
+}
+
+// MARK: - Deprecated
+extension CaptureOptionsInfo {
+    
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please set `theme[color: .main]` instead.")
+    public var tintColor: UIColor {
+        get { theme[color: .main] }
+        set { theme[color: .main] = newValue }
+    }
 }
