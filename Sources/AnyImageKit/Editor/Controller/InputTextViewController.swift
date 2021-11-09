@@ -161,15 +161,7 @@ final class InputTextViewController: AnyImageViewController {
             maker.centerY.equalTo(cancelButton)
             maker.right.equalToSuperview().offset(-15)
         }
-        toolView.snp.makeConstraints { maker in
-            maker.left.right.equalToSuperview().inset(20)
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-            } else {
-                maker.bottom.equalToSuperview().offset(-40)
-            }
-            maker.height.equalTo(30)
-        }
+        layoutToolView()
         textCoverView.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(50)
             maker.left.equalToSuperview().offset(10)
@@ -188,6 +180,22 @@ final class InputTextViewController: AnyImageViewController {
         
         options.theme.buttonConfiguration[.cancel]?.configuration(cancelButton)
         options.theme.buttonConfiguration[.done]?.configuration(doneButton)
+    }
+    
+    private func layoutToolView(bottonOffset: CGFloat = 0) {
+        toolView.snp.remakeConstraints { maker in
+            maker.left.right.equalToSuperview()
+            if bottonOffset == 0 {
+                if #available(iOS 11.0, *) {
+                    maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+                } else {
+                    maker.bottom.equalToSuperview().offset(-40)
+                }
+            } else {
+                maker.bottom.equalToSuperview().offset(-bottonOffset-20)
+            }
+            maker.height.equalTo(40)
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -348,19 +356,7 @@ extension InputTextViewController {
     @objc private func keyboardFrameChanged(_ notification: Notification) {
         guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let offset = UIScreen.main.bounds.height - frame.origin.y
-        toolView.snp.remakeConstraints { maker in
-            maker.left.right.equalToSuperview().inset(20)
-            if offset == 0 {
-                if #available(iOS 11.0, *) {
-                    maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-                } else {
-                    maker.bottom.equalToSuperview().offset(-40)
-                }
-            } else {
-                maker.bottom.equalToSuperview().offset(-offset-20)
-            }
-            maker.height.equalTo(30)
-        }
+        layoutToolView(bottonOffset: offset)
         view.layoutIfNeeded()
     }
 }

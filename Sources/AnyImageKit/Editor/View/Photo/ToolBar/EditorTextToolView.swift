@@ -32,8 +32,9 @@ final class EditorTextToolView: UIView {
     private let options: EditorPhotoOptionsInfo
     private let colors: [EditorTextColor]
     private var colorButtons: [ColorButton] = []
-    private let spacing: CGFloat = 20
+    private let spacing: CGFloat = 10
     private let itemWidth: CGFloat = 24
+    private let buttonWidth: CGFloat = 34
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
         self.options = options
@@ -53,10 +54,9 @@ final class EditorTextToolView: UIView {
         for (idx, colorButton) in colorButtons.enumerated() {
             let scale: CGFloat = idx == currentIdx ? 1.25 : 1.0
             colorButton.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
-            colorButton.colorView.layer.borderWidth = idx == currentIdx ? 3 : 2
             
-            let colorButtonRight = 25 + 20 + CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
-            colorButton.isHidden = colorButtonRight > bounds.width
+            let colorButtonRight = 56 + CGFloat(idx) * spacing + CGFloat(idx + 1) * itemWidth
+            colorButton.isHidden = colorButtonRight > (bounds.width - 20)
         }
     }
     
@@ -65,9 +65,9 @@ final class EditorTextToolView: UIView {
         setupColorView()
         
         textButton.snp.makeConstraints { maker in
-            maker.left.equalToSuperview()
+            maker.left.equalToSuperview().offset(12)
             maker.centerY.equalToSuperview()
-            maker.width.height.equalTo(25)
+            maker.width.height.equalTo(buttonWidth)
         }
         
         options.theme.buttonConfiguration[.textSwitch]?.configuration(textButton)
@@ -75,7 +75,7 @@ final class EditorTextToolView: UIView {
     
     private func setupColorView() {
         for (idx, color) in colors.enumerated() {
-            colorButtons.append(createColorView(color.color, idx: idx))
+            colorButtons.append(createColorView(color, idx: idx))
         }
         let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
@@ -83,22 +83,23 @@ final class EditorTextToolView: UIView {
         stackView.distribution = .equalSpacing
         addSubview(stackView)
         stackView.snp.makeConstraints { maker in
-            maker.left.equalTo(textButton.snp.right).offset(20)
+            maker.left.equalTo(textButton.snp.right).offset(10)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(itemWidth)
+            maker.height.equalTo(buttonWidth)
         }
         
-        for colorView in colorButtons {
-            colorView.snp.makeConstraints { maker in
-                maker.width.height.equalTo(itemWidth)
+        for button in colorButtons {
+            button.snp.makeConstraints { maker in
+                maker.width.height.equalTo(buttonWidth)
             }
         }
     }
     
-    private func createColorView(_ color: UIColor, idx: Int) -> ColorButton {
-        let view = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
+    private func createColorView(_ color: EditorTextColor, idx: Int) -> ColorButton {
+        let view = ColorButton(tag: idx, size: itemWidth, color: color.color, borderWidth: 2, borderColor: UIColor.white)
         view.isHidden = true
         view.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+        options.theme.buttonConfiguration[.textColor(color)]?.configuration(view.colorView)
         return view
     }
 }

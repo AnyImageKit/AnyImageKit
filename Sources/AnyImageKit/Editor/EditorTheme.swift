@@ -191,6 +191,8 @@ extension EditorTheme {
         case videoOptions(EditorVideoToolOption)
         
         case brush(EditorBrushColorOption)
+        case textColor(EditorTextColor)
+        
         case undo
         case textSwitch
         
