@@ -72,8 +72,8 @@ extension PickerTheme {
     
     public enum ColorConfigKey: Hashable {
         
-        /// Main Color
-        case main
+        /// Primary Color
+        case primary
         
         /// Text Color
         case text
@@ -97,8 +97,8 @@ extension PickerTheme {
             switch style {
             case .auto:
                 switch self {
-                case .main: return UIColor.mainColor
-                case .text: return UIColor.mainText
+                case .primary: return UIColor.primaryColor
+                case .text: return UIColor.primaryText
                 case .subText: return UIColor.subText
                 case .toolBar: return UIColor.toolBar
                 case .background: return UIColor.background
@@ -107,8 +107,8 @@ extension PickerTheme {
                 }
             case .light:
                 switch self {
-                case .main: return UIColor.mainColor
-                case .text: return UIColor.mainTextLight
+                case .primary: return UIColor.primaryColor
+                case .text: return UIColor.primaryTextLight
                 case .subText: return UIColor.subTextLight
                 case .toolBar: return UIColor.toolBarLight
                 case .background: return UIColor.backgroundLight
@@ -117,8 +117,8 @@ extension PickerTheme {
                 }
             case .dark:
                 switch self {
-                case .main: return UIColor.mainColor
-                case .text: return UIColor.mainTextDark
+                case .primary: return UIColor.primaryColor
+                case .text: return UIColor.primaryTextDark
                 case .subText: return UIColor.subTextDark
                 case .toolBar: return UIColor.toolBarDark
                 case .background: return UIColor.backgroundDark

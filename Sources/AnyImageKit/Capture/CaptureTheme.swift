@@ -66,14 +66,14 @@ extension CaptureTheme {
     public enum ColorConfigKey: Hashable {
         
         /// Main Color
-        case main
+        case primary
         
         /// Focus view
         case focus
         
         func defaultValue() -> UIColor {
             switch self {
-            case .main:
+            case .primary:
                 return UIColor.color(hex: 0x57BE6A)
             case .focus:
                 return UIColor.color(hex: 0xFFD60A)

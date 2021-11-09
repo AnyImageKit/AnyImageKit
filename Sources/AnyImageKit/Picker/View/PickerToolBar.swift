@@ -122,7 +122,7 @@ extension PickerToolBar: PickerOptionsConfigurable {
         }
         leftButton.setTitleColor(options.theme[color: .text], for: .normal)
         leftButton.setTitleColor(options.theme[color: .text].withAlphaComponent(0.3), for: .disabled)
-        doneButton.backgroundColor = options.theme[color: .main]
+        doneButton.backgroundColor = options.theme[color: .primary]
         let normal = UIColor.create(style: options.theme.style,
                                     light: .white,
                                     dark: options.theme[color: .text])
@@ -135,7 +135,7 @@ extension PickerToolBar: PickerOptionsConfigurable {
         originalButton.setImage(options.theme[icon: .checkOff], for: .normal)
         originalButton.setTitleColor(options.theme[color: .text], for: .selected)
         originalButton.setTitleColor(options.theme[color: .text], for: .normal)
-        originalButton.tintColor = options.theme[color: .main]
+        originalButton.tintColor = options.theme[color: .primary]
         originalButton.isHidden = !options.allowUseOriginalImage
         updateChildrenConfigurable(options: options)
         

@@ -122,7 +122,7 @@ final class AssetCell: UICollectionViewCell {
 extension AssetCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
-        boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
+        boxCoverView.layer.borderColor = options.theme[color: .primary].cgColor
         selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
         updateChildrenConfigurable(options: options)
     }

@@ -122,7 +122,7 @@ extension EditorMosaicToolView {
         switch option {
         case .default:
             for button in mosaicButtons {
-                button.tintColor = options.theme[color: .main]
+                button.tintColor = options.theme[color: .primary]
                 button.imageView?.layer.borderWidth = 0
             }
         default:

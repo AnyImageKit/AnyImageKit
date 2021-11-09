@@ -88,7 +88,7 @@ final class NumberCircleButton: UIControl {
 extension NumberCircleButton: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
-        numLabel.backgroundColor = options.theme[color: .main]
+        numLabel.backgroundColor = options.theme[color: .primary]
         updateChildrenConfigurable(options: options)
         
         a11ySelectPhoto = options.theme[string: .pickerSelectPhoto]

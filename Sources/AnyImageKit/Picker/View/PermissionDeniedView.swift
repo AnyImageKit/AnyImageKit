@@ -61,7 +61,7 @@ extension PermissionDeniedView: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         label.textColor = options.theme[color: .text]
         label.text = String(format: options.theme[string: Permission.photos.localizedAlertMessageKey], BundleHelper.appName)
-        button.setTitleColor(options.theme[color: .main], for: .normal)
+        button.setTitleColor(options.theme[color: .primary], for: .normal)
         button.setTitle(options.theme[string: .goToSettings], for: .normal)
         backgroundColor = options.theme[color: .background]
         

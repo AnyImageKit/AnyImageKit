@@ -66,12 +66,12 @@ extension EditorTheme {
     public enum ColorConfigKey: Hashable {
         
         /// Main Color
-        case main
+        case primary
         
         func defaultValue() -> UIColor {
             switch self {
-            case .main:
-                return Palette.main
+            case .primary:
+                return Palette.primary
             }
         }
     }

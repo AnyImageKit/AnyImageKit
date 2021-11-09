@@ -75,9 +75,9 @@ public struct CaptureOptionsInfo {
 // MARK: - Deprecated
 extension CaptureOptionsInfo {
     
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please set `theme[color: .main]` instead.")
+    @available(*, deprecated, message: "Will be removed in version 1.0, Please set `theme[color: .primary]` instead.")
     public var tintColor: UIColor {
-        get { theme[color: .main] }
-        set { theme[color: .main] = newValue }
+        get { theme[color: .primary] }
+        set { theme[color: .primary] = newValue }
     }
 }

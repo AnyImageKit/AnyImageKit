@@ -71,7 +71,7 @@ final class AlbumCell: UITableViewCell {
 extension AlbumCell {
     
     private func updateTheme(_ theme: PickerTheme) {
-        tintColor = theme[color: .main]
+        tintColor = theme[color: .primary]
         backgroundColor = theme[color: .background]
         let view = UIView(frame: .zero)
         view.backgroundColor = theme[color: .selectedCell]

@@ -21,7 +21,7 @@ final class VideoEditorToolView: UIView {
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
-        view.backgroundColor = options.theme[color: .main]
+        view.backgroundColor = options.theme[color: .primary]
         view.setTitle(options.theme[string: .done], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -91,7 +91,7 @@ final class VideoEditorToolView: UIView {
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
-            btn.imageView?.tintColor = isSelected ? options.theme[color: .main] : .white
+            btn.imageView?.tintColor = isSelected ? options.theme[color: .primary] : .white
         }
     }
 }
