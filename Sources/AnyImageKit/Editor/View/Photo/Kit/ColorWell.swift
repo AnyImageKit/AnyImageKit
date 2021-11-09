@@ -41,15 +41,19 @@ final class ColorWell: UIControl {
     
     private lazy var colorView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 10
-        view.layer.borderWidth = 1.5
+        view.layer.borderWidth = borderWidth
         view.layer.borderColor = UIColor.white.cgColor
         view.isUserInteractionEnabled = false
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private let itemSize: CGFloat
+    private let borderWidth: CGFloat
+    
+    init(itemSize: CGFloat, borderWidth: CGFloat) {
+        self.itemSize = itemSize
+        self.borderWidth = borderWidth
+        super.init(frame: .zero)
         self.isUserInteractionEnabled = true
         setupView()
     }
@@ -65,12 +69,13 @@ final class ColorWell: UIControl {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let imageSize = bounds.width
-        let colorSize = 20 / 24 * imageSize
+        let imageSize = itemSize
+        let colorSize = itemSize - borderWidth * 2
         imageView.frame = CGRect(x: 0, y: 0, width: imageSize, height: imageSize)
         colorView.frame = CGRect(x: 0, y: 0, width: colorSize, height: colorSize)
         imageView.center = convert(center, from: superview)
         colorView.center = convert(center, from: superview)
+        colorView.layer.cornerRadius = colorSize / 2
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

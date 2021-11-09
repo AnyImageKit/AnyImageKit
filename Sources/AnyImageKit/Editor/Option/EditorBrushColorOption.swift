@@ -9,7 +9,7 @@
 import UIKit
 
 /// Brush color option
-public enum EditorBrushColorOption: Equatable {
+public enum EditorBrushColorOption: Equatable, Hashable {
     
     /// Static color.
     case custom(color: UIColor)

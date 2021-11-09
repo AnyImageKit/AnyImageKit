@@ -30,12 +30,11 @@ final class EditorToolView: UIView {
     private(set) lazy var bottomCoverView: GradientView = {
         let view = GradientView(frame: .zero)
         view.layer.colors = [
+            UIColor.black.withAlphaComponent(0.15).cgColor,
             UIColor.black.withAlphaComponent(0.12).cgColor,
-            UIColor.black.withAlphaComponent(0.12).cgColor,
-            UIColor.black.withAlphaComponent(0.06).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor,
         ]
-        view.layer.locations = [0, 0.7, 0.85, 1]
+        view.layer.locations = [0, 0.6, 1]
         view.layer.startPoint = CGPoint(x: 0.5, y: 1)
         view.layer.endPoint = CGPoint(x: 0.5, y: 0)
         return view
@@ -65,13 +64,13 @@ final class EditorToolView: UIView {
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: 10, left: 20, bottom: 20, right: 20))
+        let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
         view.backgroundColor = options.theme[color: .primary]
         view.setTitle(options.theme[string: .done], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
+        view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 12)
         view.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         return view
     }()
@@ -111,15 +110,12 @@ final class EditorToolView: UIView {
             }
         }
         bottomCoverView.snp.makeConstraints { maker in
+            maker.top.equalTo(brushToolView).offset(-20)
             maker.bottom.left.right.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-110)
-            } else {
-                maker.height.equalTo(110)
-            }
         }
         editOptionsView.snp.makeConstraints { maker in
-            maker.left.equalToSuperview().offset(20)
+            maker.left.equalToSuperview()
+            maker.right.equalTo(doneButton.snp.left).offset(-20).priority(.low)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(safeAreaLayoutGuide).offset(-14)
             } else {
@@ -128,9 +124,9 @@ final class EditorToolView: UIView {
             maker.height.equalTo(50)
         }
         brushToolView.snp.makeConstraints { maker in
-            maker.left.right.equalToSuperview().inset(20)
+            maker.left.right.equalToSuperview()
             maker.bottom.equalTo(editOptionsView.snp.top).offset(-10)
-            maker.height.equalTo(30)
+            maker.height.equalTo(40)
         }
         mosaicToolView.snp.makeConstraints { maker in
             maker.edges.equalTo(brushToolView)

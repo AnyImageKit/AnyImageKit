@@ -22,7 +22,6 @@ final class EditorEditOptionsView: UIView {
     
     private let options: EditorPhotoOptionsInfo
     private var buttons: [UIButton] = []
-    private let spacing: CGFloat = 25
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.options = options
@@ -41,26 +40,23 @@ final class EditorEditOptionsView: UIView {
         }
         
         let stackView = UIStackView(arrangedSubviews: buttons)
-        stackView.spacing = spacing
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         addSubview(stackView)
         stackView.snp.makeConstraints { maker in
-            maker.left.right.equalToSuperview()
-            maker.centerY.equalToSuperview()
-            maker.height.equalTo(35)
+            maker.top.bottom.equalToSuperview()
+            maker.left.equalToSuperview().inset(12)
         }
         buttons.forEach {
             $0.snp.makeConstraints { maker in
-                maker.width.equalTo(25)
-                maker.height.equalTo(stackView.snp.height)
+                maker.width.height.equalTo(stackView.snp.height)
             }
             options.theme.buttonConfiguration[.photoOptions(options.toolOptions[$0.tag])]?.configuration($0)
         }
     }
     
     private func createButton(tag: Int, option: EditorPhotoToolOption) -> UIButton {
-        let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
+        let button = UIButton(type: .custom)
         let image = options.theme[icon: option.iconKey]?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
         button.setImage(image, for: .normal)
@@ -116,21 +112,5 @@ extension EditorEditOptionsView {
             button.isSelected = false
             button.imageView?.tintColor = .white
         }
-    }
-}
-
-// MARK: - Event
-extension EditorEditOptionsView {
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
-            return nil
-        }
-        for subView in buttons {
-            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
-                return hitView
-            }
-        }
-        return nil
     }
 }

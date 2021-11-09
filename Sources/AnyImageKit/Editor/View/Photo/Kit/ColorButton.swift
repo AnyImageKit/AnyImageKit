@@ -10,8 +10,8 @@ import UIKit
 
 final class ColorButton: UIButton {
     
-    private(set) lazy var colorView: UIView = {
-        let view = UIView(frame: .zero)
+    private(set) lazy var colorView: UIButton = {
+        let view = UIButton(type: .custom)
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         view.backgroundColor = color
@@ -37,7 +37,7 @@ final class ColorButton: UIButton {
         super.layoutSubviews()
         colorView.layer.borderWidth = isSelected ? borderWidth * 1.5 : borderWidth
         colorView.layer.borderColor = borderColor.cgColor
-        colorView.layer.cornerRadius = size/2
+        colorView.layer.cornerRadius = colorView.bounds.width / 2
     }
     
     required init?(coder aDecoder: NSCoder) {

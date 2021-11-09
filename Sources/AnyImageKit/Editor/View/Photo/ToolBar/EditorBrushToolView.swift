@@ -22,7 +22,7 @@ final class EditorBrushToolView: UIView {
     private(set) var currentIdx: Int
     
     private(set) lazy var undoButton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
+        let view = UIButton(type: .custom)
         view.isEnabled = false
         view.setImage(options.theme[icon: .photoToolUndo], for: .normal)
         view.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
@@ -30,11 +30,12 @@ final class EditorBrushToolView: UIView {
         return view
     }()
     
+    private let options: EditorPhotoOptionsInfo
     private let colorOptions: [EditorBrushColorOption]
     private var colorButtons: [UIControl] = []
-    private let spacing: CGFloat = 20
+    private let spacing: CGFloat = 10
     private let itemWidth: CGFloat = 24
-    private let options: EditorPhotoOptionsInfo
+    private let buttonWidth: CGFloat = 34
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.colorOptions = options.brushColors
@@ -68,13 +69,13 @@ final class EditorBrushToolView: UIView {
     }
     
     private func setupView() {
-        setupColorView()
         addSubview(undoButton)
+        setupColorView()
         
         undoButton.snp.makeConstraints { maker in
-            maker.right.equalToSuperview()
+            maker.right.equalToSuperview().offset(-8)
             maker.centerY.equalToSuperview()
-            maker.width.height.equalTo(itemWidth)
+            maker.width.height.equalTo(buttonWidth)
         }
         
         options.theme.buttonConfiguration[.undo]?.configuration(undoButton)
@@ -90,14 +91,14 @@ final class EditorBrushToolView: UIView {
         stackView.distribution = .equalSpacing
         addSubview(stackView)
         stackView.snp.makeConstraints { maker in
-            maker.left.equalToSuperview()
+            maker.left.equalToSuperview().offset(12)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(itemWidth)
+            maker.height.equalTo(buttonWidth)
         }
         
-        for colorView in colorButtons {
-            colorView.snp.makeConstraints { maker in
-                maker.width.height.equalTo(itemWidth)
+        for button in colorButtons {
+            button.snp.makeConstraints { maker in
+                maker.width.height.equalTo(buttonWidth)
             }
         }
     }
@@ -108,10 +109,11 @@ final class EditorBrushToolView: UIView {
             let button = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
             button.isHidden = true
             button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+            options.theme.buttonConfiguration[.brush(option)]?.configuration(button.colorView)
             return button
         case .colorWell(let color):
             if #available(iOS 14.0, *) {
-                let colorWell = ColorWell(frame: CGRect(x: 0, y: 0, width: itemWidth, height: itemWidth))
+                let colorWell = ColorWell(itemSize: itemWidth, borderWidth: 2)
                 colorWell.backgroundColor = .clear
                 colorWell.tag = idx
                 colorWell.selectedColor = color
@@ -120,7 +122,10 @@ final class EditorBrushToolView: UIView {
                 colorWell.addTarget(self, action: #selector(colorWellValueChanged(_:)), for: .valueChanged)
                 return colorWell
             } else {
-                fatalError()
+                let button = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
+                button.isHidden = true
+                button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+                return button
             }
         }
     }
@@ -153,23 +158,5 @@ extension EditorBrushToolView {
     @available(iOS 14, *)
     @objc private func colorWellValueChanged(_ sender: ColorWell) {
         delegate?.brushToolView(self, colorDidChange: sender.selectedColor ?? .white)
-    }
-}
-
-// MARK: - Event
-extension EditorBrushToolView {
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
-            return nil
-        }
-        var subViews: [UIView] = colorButtons
-        subViews.append(undoButton)
-        for subView in subViews {
-            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
-                return hitView
-            }
-        }
-        return nil
     }
 }

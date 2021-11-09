@@ -190,6 +190,7 @@ extension EditorTheme {
         case photoOptions(EditorPhotoToolOption)
         case videoOptions(EditorVideoToolOption)
         
+        case brush(EditorBrushColorOption)
         case undo
         case textSwitch
         
