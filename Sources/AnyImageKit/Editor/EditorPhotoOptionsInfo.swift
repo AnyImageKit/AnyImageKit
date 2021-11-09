@@ -73,6 +73,15 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: [white, black, red, yellow, green, blue, purple]
     public var textColors: [EditorTextColor] = Palette.textColors
     
+    /// Style of input text at the first time.
+    ///
+    /// false: No background color, and the text color is main color.
+    ///
+    /// true: The background color is main color, and the text color is sub color.
+    ///
+    /// - Default: true
+    public var isTextSelected: Bool = true
+    
     /// Crop size of crop tool options.
     /// Option sorting is arranged in a given array.
     ///

@@ -266,6 +266,7 @@ extension PhotoEditorController {
     
     /// 打开文本编辑器
     private func openInputController(_ data: TextData = TextData()) {
+        data.isTextSelected = options.isTextSelected
         willBeginInput()
         let coverImage = getInputCoverImage()
         let controller = InputTextViewController(context: context, data: data, coverImage: coverImage)
