@@ -48,13 +48,13 @@ public final class EditorTheme: ThemeConfigurable {
     }
     
     /// Configuration Label if you needed
-    /// - Note: ⚠️ DONOT set hidden/enable properties
+    /// - Note: ⚠️ DO NOT set hidden/enable properties
     public func configurationLabel(for key: LabelConfigKey, configuration: @escaping ((UILabel) -> Void)) {
         labelConfiguration[key] = LabelConfigObject(key: key, configuration: configuration)
     }
     
     /// Configuration Button if you needed
-    /// - Note: ⚠️ DONOT set hidden/enable properties
+    /// - Note: ⚠️ DO NOT set hidden/enable properties
     public func configurationButton(for key: ButtonConfigKey, configuration: @escaping ((UIButton) -> Void)) {
         buttonConfiguration[key] = ButtonConfigObject(key: key, configuration: configuration)
     }
