@@ -20,4 +20,13 @@ public struct EditorTextColor: Equatable, Hashable {
     
     /// Sub color
     public let subColor: UIColor
+    
+    /// Shadow of first style
+    public let shadow: Shadow?
+    
+    public init(color: UIColor, subColor: UIColor, shadow: Shadow? = nil) {
+        self.color = color
+        self.subColor = subColor
+        self.shadow = shadow
+    }
 }

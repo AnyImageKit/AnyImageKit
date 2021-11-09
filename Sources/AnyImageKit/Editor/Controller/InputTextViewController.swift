@@ -120,6 +120,7 @@ final class InputTextViewController: AnyImageViewController {
             if !data.text.isEmpty {
                 textView.text = data.text
                 textViewDidChange(textView)
+                updateShadow()
             }
             textView.becomeFirstResponder()
         }
@@ -297,6 +298,19 @@ extension InputTextViewController {
         attr = attr.attributedSubstring(from: (attr.string as NSString).range(of: string))
         calculateLabel.attributedText = attr
     }
+    
+    /// 设置文本阴影
+    private func updateShadow() {
+        if data.isTextSelected {
+            textView.layer.removeSketchShadow()
+        } else {
+            if let shadow = options.textColors[data.colorIdx].shadow {
+                textView.layer.applySketchShadow(with: shadow)
+            } else {
+                textView.layer.removeSketchShadow()
+            }
+        }
+    }
 }
 
 // MARK: - UITextViewDelegate
@@ -329,6 +343,7 @@ extension InputTextViewController: EditorTextToolViewDelegate {
         let color = options.textColors[data.colorIdx]
         textView.textColor = data.isTextSelected ? color.subColor : color.color
         setupMaskLayer()
+        updateShadow()
     }
     
     func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
@@ -338,6 +353,7 @@ extension InputTextViewController: EditorTextToolViewDelegate {
         if data.isTextSelected {
             setupMaskLayer()
         }
+        updateShadow()
     }
 }
 
