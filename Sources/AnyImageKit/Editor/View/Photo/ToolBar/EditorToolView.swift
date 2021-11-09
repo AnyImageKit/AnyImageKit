@@ -19,10 +19,9 @@ final class EditorToolView: UIView {
         view.layer.colors = [
             UIColor.black.withAlphaComponent(0.12).cgColor,
             UIColor.black.withAlphaComponent(0.12).cgColor,
-            UIColor.black.withAlphaComponent(0.06).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor,
         ]
-        view.layer.locations = [0, 0.7, 0.85, 1]
+        view.layer.locations = [0, 0.5, 1]
         view.layer.startPoint = CGPoint(x: 0.5, y: 0)
         view.layer.endPoint = CGPoint(x: 0.5, y: 1)
         return view
@@ -104,9 +103,9 @@ final class EditorToolView: UIView {
         topCoverView.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview()
             if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(safeAreaLayoutGuide.snp.top).offset(120)
+                maker.bottom.equalTo(safeAreaLayoutGuide.snp.top).offset(140)
             } else {
-                maker.height.equalTo(120)
+                maker.height.equalTo(140)
             }
         }
         bottomCoverView.snp.makeConstraints { maker in
