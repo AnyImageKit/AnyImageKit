@@ -46,12 +46,12 @@ public enum CapturePosition: RawRepresentable, Equatable {
 
 extension CapturePosition {
     
-    var localizedTips: String {
+    var localizedTipsKey: StringConfigKey {
         switch self {
         case .back:
-            return BundleHelper.localizedString(key: "SWITCH_TO_FRONT_CAMERA", module: .capture)
+            return .captureSwitchToFrontCamera
         case .front:
-            return BundleHelper.localizedString(key: "SWITCH_TO_BACK_CAMERA", module: .capture)
+            return .captureSwitchToBackCamera
         }
     }
 }

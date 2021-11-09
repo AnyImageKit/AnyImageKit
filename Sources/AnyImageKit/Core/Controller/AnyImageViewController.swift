@@ -63,9 +63,9 @@ class AnyImageViewController: UIViewController {
 // MARK: - Function
 extension AnyImageViewController {
     
-    func showAlert(message: String) {
-        let alert = UIAlertController(title: BundleHelper.localizedString(key: "ALERT", module: .core), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: BundleHelper.localizedString(key: "OK", module: .core), style: .default, handler: nil))
+    func showAlert(message: String, stringConfig: ThemeStringConfigurable) {
+        let alert = UIAlertController(title: stringConfig[string: .alert], message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: stringConfig[string: .ok], style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 }
@@ -165,20 +165,20 @@ extension AnyImageViewController {
 // MARK: - Permission UI
 extension AnyImageViewController {
     
-    func check(permission: Permission, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
+    func check(permission: Permission, stringConfig: ThemeStringConfigurable, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
         check(permission: permission, authorized: authorized, limited: authorized, denied: { [weak self] _ in
             guard let self = self else { return }
-            let title = permission.localizedAlertTitle
-            let message = String(format: permission.localizedAlertMessage, BundleHelper.appName)
+            let title = String(format: stringConfig[string: .permissionIsDisabled], stringConfig[string: permission.localizedTitleKey])
+            let message = String(format: stringConfig[string: permission.localizedAlertMessageKey], BundleHelper.appName)
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let settings = BundleHelper.localizedString(key: "SETTINGS", module: .core)
+            let settings = stringConfig[string: .settings]
             alert.addAction(UIAlertAction(title: settings, style: .default, handler: { _ in
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 UIApplication.shared.open(url, options: [:]) { _ in
                     canceled(permission)
                 }
             }))
-            let cancel = BundleHelper.localizedString(key: "CANCEL", module: .core)
+            let cancel = stringConfig[string: .cancel]
             alert.addAction(UIAlertAction(title: cancel, style: .cancel, handler: { _ in
                 canceled(permission)
             }))
@@ -186,13 +186,13 @@ extension AnyImageViewController {
         })
     }
     
-    func check(permissions: [Permission], authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
+    func check(permissions: [Permission], stringConfig: ThemeStringConfigurable, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
         if !permissions.isEmpty {
             var _permissions = permissions
             let permission = _permissions.removeFirst()
-            check(permission: permission, authorized: { [weak self] in
+            check(permission: permission, stringConfig: stringConfig, authorized: { [weak self] in
                 guard let self = self else { return }
-                self.check(permissions: _permissions, authorized: authorized, canceled: canceled)
+                self.check(permissions: _permissions, stringConfig: stringConfig, authorized: authorized, canceled: canceled)
             }, canceled: canceled)
         } else {
             authorized()

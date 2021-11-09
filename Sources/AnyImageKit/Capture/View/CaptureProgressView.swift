@@ -23,7 +23,7 @@ final class CaptureProgressView: UIView {
                     endAngle: .pi + .pi / 2,
                     clockwise: true)
         layer.fillColor = nil
-        layer.strokeColor = options.tintColor.cgColor
+        layer.strokeColor = options.theme[color: .primary].cgColor
         layer.lineWidth = lineWidth
         layer.backgroundColor = nil
         layer.path = path.cgPath
@@ -62,7 +62,7 @@ final class CaptureProgressView: UIView {
                 let end: CGFloat = start + .pi * 2.0 * progress
                 let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: start, endAngle: end, clockwise: true)
                 context.setLineWidth(lineWidth)
-                options.tintColor.setStroke()
+                options.theme[color: .primary].setStroke()
                 context.addPath(path.cgPath)
                 context.strokePath()
             }

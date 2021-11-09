@@ -142,7 +142,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: BundleHelper.localizedString(key: "CANCEL", module: .core), style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: manager.options.theme[string: .cancel], style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
@@ -347,20 +347,20 @@ extension AssetPickerViewController {
         
         if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
         if !asset.isSelected && manager.isUpToLimit {
             let message: String
             if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], manager.options.selectLimit)
             } else if manager.options.selectOptions.isPhoto {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotos], manager.options.selectLimit)
             } else {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
             }
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
@@ -506,7 +506,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
             cell.update(options: manager.options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
+            cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
             return cell
         }
         #endif
@@ -520,7 +520,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.white
         cell.isAccessibilityElement = true
         cell.accessibilityTraits = .button
-        let accessibilityLabel = BundleHelper.localizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO", module: .core)
+        let accessibilityLabel = manager.options.theme[string: asset.mediaType == .video ? .video : .photo]
         cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         return cell
     }
@@ -560,7 +560,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             }
         } else if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         } else if !asset.isSelected && manager.isUpToLimit {
             return
@@ -699,10 +699,10 @@ extension AssetPickerViewController {
     
     @available(iOS 14.0, *)
     private func setupDataSource() {
-        let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { cell, indexPath, asset in
+        let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { [weak self] cell, indexPath, asset in
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = BundleHelper.localizedString(key: "TAKE_PHOTO", module: .picker)
+            cell.accessibilityLabel = self?.manager.options.theme[string: .pickerTakePhoto] ?? ""
         }
         
         let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
@@ -715,7 +715,7 @@ extension AssetPickerViewController {
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            let accessibilityLabel = BundleHelper.localizedString(key: asset.mediaType == .video ? "VIDEO" : "PHOTO", module: .core)
+            let accessibilityLabel = self.manager.options.theme[string: asset.mediaType == .video ? .video : .photo]
             cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
         }
         

@@ -48,14 +48,14 @@ final class VideoEditorCropProgressView: UIView {
     }()
     private lazy var leftButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.image(named: "VideoCropLeft", module: .editor), for: .normal)
+        view.setImage(options.theme[icon: .videoCropLeft], for: .normal)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(leftButtonPan(_:)))
         view.addGestureRecognizer(pan)
         return view
     }()
     private lazy var rightButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.image(named: "VideoCropRight", module: .editor), for: .normal)
+        view.setImage(options.theme[icon: .videoCropRight], for: .normal)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(rightButtonPan(_:)))
         view.addGestureRecognizer(pan)
         return view
@@ -65,7 +65,7 @@ final class VideoEditorCropProgressView: UIView {
         layer.isHidden = true
         layer.frame = bounds
         layer.fillRule = .evenOdd
-        layer.fillColor = options.tintColor.cgColor
+        layer.fillColor = options.theme[color: .primary].cgColor
         return layer
     }()
     private lazy var darkLayer: CAShapeLayer = {
@@ -155,6 +155,10 @@ final class VideoEditorCropProgressView: UIView {
             maker.bottom.equalTo(timeline.snp.top).offset(-8)
             maker.centerX.equalTo(timeline)
         }
+        
+        options.theme.labelConfiguration[.videoTimeline]?.configuration(timelineLabel)
+        options.theme.buttonConfiguration[.videoCropLeft]?.configuration(leftButton)
+        options.theme.buttonConfiguration[.videoCropRight]?.configuration(rightButton)
     }
     
     private func layout(updateProgress: Bool) {

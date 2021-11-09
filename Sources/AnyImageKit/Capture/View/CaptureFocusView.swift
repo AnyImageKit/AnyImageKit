@@ -23,22 +23,22 @@ final class CaptureFocusView: UIView {
     }
     
     private lazy var rectView: CaptureFocusRectView = {
-        let view = CaptureFocusRectView(frame: .zero, color: color)
+        let view = CaptureFocusRectView(frame: .zero, options: options)
         view.isHidden = true
         return view
     }()
     
     private lazy var exposureView: CaptureExposureView = {
-        let view = CaptureExposureView(frame: .zero, color: color)
+        let view = CaptureExposureView(frame: .zero, options: options)
         view.isHidden = true
         return view
     }()
     
-    private let color: UIColor
+    private let options: CaptureOptionsInfo
     private var timer: Timer?
     
-    init(frame: CGRect, color: UIColor) {
-        self.color = color
+    init(frame: CGRect, options: CaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
         isUserInteractionEnabled = false
@@ -220,15 +220,15 @@ private final class CaptureFocusRectView: UIView {
     private lazy var rectLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.lineWidth = 1
-        layer.strokeColor = color.cgColor
+        layer.strokeColor = options.theme[color: .focus].cgColor
         layer.fillColor = UIColor.clear.cgColor
         return layer
     }()
     
-    private let color: UIColor
+    private let options: CaptureOptionsInfo
     
-    init(frame: CGRect, color: UIColor) {
-        self.color = color
+    init(frame: CGRect, options: CaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         setupView()
     }
@@ -261,33 +261,34 @@ private final class CaptureFocusRectView: UIView {
 private final class CaptureExposureView: UIView {
     
     private lazy var imageView: UIImageView = {
-        let image = BundleHelper.image(named: "CaptureSunlight", module: .capture)?.withRenderingMode(.alwaysTemplate)
+        let image = options.theme[icon: .captureSunlight]?.withRenderingMode(.alwaysTemplate)
         let view = UIImageView(image: image)
-        view.tintColor = color
+        view.tintColor = options.theme[color: .focus]
         return view
     }()
     
     private lazy var topLine: UIView = {
         let view = UIView(frame: .zero)
         view.isHidden = true
-        view.backgroundColor = color
+        view.backgroundColor = options.theme[color: .focus]
         return view
     }()
     
     private lazy var bottomLine: UIView = {
         let view = UIView(frame: .zero)
         view.isHidden = true
-        view.backgroundColor = color
+        view.backgroundColor = options.theme[color: .focus]
         return view
     }()
     
     var point: CGPoint = .zero
     var orientation: DeviceOrientation = .portrait
-    private let color: UIColor
+    
+    private let options: CaptureOptionsInfo
     private(set) var value: CGFloat = 0.5
     
-    init(frame: CGRect, color: UIColor) {
-        self.color = color
+    init(frame: CGRect, options: CaptureOptionsInfo) {
+        self.options = options
         super.init(frame: frame)
         clipsToBounds = true
         setupView()

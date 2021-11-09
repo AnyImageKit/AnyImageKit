@@ -13,7 +13,6 @@ final class PickerPreviewNavigationBar: UIView {
     private(set) lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
         view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "BACK", module: .core)
         return view
     }()
     private(set) lazy var selectButton: NumberCircleButton = {
@@ -58,6 +57,9 @@ extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
         backButton.setImage(options.theme[icon: .returnButton], for: .normal)
+        backButton.accessibilityLabel = options.theme[string: .back]
         updateChildrenConfigurable(options: options)
+        
+        options.theme.buttonConfiguration[.backInPreview]?.configuration(backButton)
     }
 }

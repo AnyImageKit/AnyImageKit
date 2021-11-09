@@ -71,7 +71,7 @@ final class AlbumCell: UITableViewCell {
 extension AlbumCell {
     
     private func updateTheme(_ theme: PickerTheme) {
-        tintColor = theme[color: .main]
+        tintColor = theme[color: .primary]
         backgroundColor = theme[color: .background]
         let view = UIView(frame: .zero)
         view.backgroundColor = theme[color: .selectedCell]
@@ -79,6 +79,9 @@ extension AlbumCell {
         titleLabel.textColor = theme[color: .text]
         subTitleLabel.textColor = theme[color: .subText]
         separatorLine.backgroundColor = theme[color: .separatorLine]
+        
+        theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
+        theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)
     }
 }
 

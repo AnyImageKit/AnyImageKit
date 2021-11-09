@@ -11,20 +11,20 @@ import UIKit
 extension UIColor {
     
     // MARK: - main color
-    static var mainColor: UIColor {
+    static var primaryColor: UIColor {
         return UIColor.color(hex: 0x57BE6A)
     }
 
     // MARK: - main text
-    static var mainText: UIColor {
-        return UIColor.create(light: mainTextLight, dark: mainTextDark)
+    static var primaryText: UIColor {
+        return UIColor.create(light: primaryTextLight, dark: primaryTextDark)
     }
     
-    static var mainTextLight: UIColor {
+    static var primaryTextLight: UIColor {
         return UIColor.color(hex: 0x333333)
     }
     
-    static var mainTextDark: UIColor {
+    static var primaryTextDark: UIColor {
         return UIColor.color(hex: 0xEAEAEA)
     }
     

@@ -91,7 +91,7 @@ final class PhotoEditorContentView: UIView {
     internal var textImageViews: [TextImageView] = []
     /// 文本删除视图
     private(set) lazy var textTrashView: TextTrashView = {
-        let view = TextTrashView(frame: CGRect(x: (bounds.width - 160) / 2, y: bounds.height, width: 160, height: 80))
+        let view = TextTrashView(options: options, frame: CGRect(x: (bounds.width - 160) / 2, y: bounds.height, width: 160, height: 80))
         view.alpha = 0
         view.clipsToBounds = true
         view.layer.cornerRadius = 16

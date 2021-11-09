@@ -22,10 +22,10 @@ final class VideoEditorCropToolView: UIView {
     
     private(set) lazy var playButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(BundleHelper.image(named: "VideoPlayFill", module: .editor), for: .normal)
-        view.setImage(BundleHelper.image(named: "VideoPauseFill", module: .editor), for: .selected)
+        view.setImage(options.theme[icon: .videoPlayFill], for: .normal)
+        view.setImage(options.theme[icon: .videoPauseFill], for: .selected)
         view.addTarget(self, action: #selector(playButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "PLAY", module: .core) + BundleHelper.localizedString(key: "PAUSE", module: .core)
+        view.accessibilityLabel = options.theme[string: .play] + options.theme[string: .pause]
         return view
     }()
     private lazy var splitLine: UIView = {
@@ -67,6 +67,8 @@ final class VideoEditorCropToolView: UIView {
             maker.top.right.bottom.equalToSuperview()
             maker.left.equalTo(splitLine.snp.right)
         }
+        
+        options.theme.buttonConfiguration[.videoPlayPluse]?.configuration(playButton)
     }
 }
 

@@ -23,7 +23,10 @@ final class NumberCircleButton: UIControl {
         view.textAlignment = .center
         return view
     }()
+    
     private let style: Style
+    private var a11ySelectPhoto: String = BundleHelper.localizedString(key: "UNSELECT_PHOTO", module: .picker)
+    private var a11yUnselectPhoto: String = BundleHelper.localizedString(key: "UNSELECT_PHOTO", module: .picker)
     
     init(frame: CGRect, style: Style) {
         self.style = style
@@ -31,7 +34,6 @@ final class NumberCircleButton: UIControl {
         setupView()
         isAccessibilityElement = true
         accessibilityTraits = .button
-        accessibilityLabel = BundleHelper.localizedString(key: "UNSELECT_PHOTO", module: .picker)
     }
     
     required init?(coder: NSCoder) {
@@ -86,8 +88,19 @@ final class NumberCircleButton: UIControl {
 extension NumberCircleButton: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
-        numLabel.backgroundColor = options.theme[color: .main]
+        numLabel.backgroundColor = options.theme[color: .primary]
         updateChildrenConfigurable(options: options)
+        
+        a11ySelectPhoto = options.theme[string: .pickerSelectPhoto]
+        a11yUnselectPhoto = options.theme[string: .pickerUnselectPhoto]
+        accessibilityLabel = isSelected ? a11ySelectPhoto : a11yUnselectPhoto
+        
+        switch style {
+        case .default:
+            options.theme.labelConfiguration[.selectedNumber]?.configuration(numLabel)
+        case .large:
+            options.theme.labelConfiguration[.selectedNumberInPreview]?.configuration(numLabel)
+        }
     }
 }
 
@@ -97,7 +110,7 @@ extension NumberCircleButton {
         self.isSelected = isSelected
         numLabel.text = num.description
         showNumber(animated)
-        accessibilityLabel = BundleHelper.localizedString(key: isSelected ? "SELECT_PHOTO" : "UNSELECT_PHOTO", module: .picker)
+        accessibilityLabel = isSelected ? a11ySelectPhoto : a11yUnselectPhoto
     }
 }
 

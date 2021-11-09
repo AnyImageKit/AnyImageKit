@@ -46,6 +46,10 @@ final class PhotoGIFPreviewCell: PreviewCell {
         imageView.contentMode = .scaleToFill
         scrollView.addSubview(imageView)
     }
+    
+    override func optionsDidUpdate(options: PickerOptionsInfo) {
+        accessibilityLabel = options.theme[string: .photo]
+    }
 }
 
 // MARK: - Function

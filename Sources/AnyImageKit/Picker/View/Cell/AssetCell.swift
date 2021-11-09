@@ -122,7 +122,7 @@ final class AssetCell: UICollectionViewCell {
 extension AssetCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
-        boxCoverView.layer.borderColor = options.theme[color: .main].cgColor
+        boxCoverView.layer.borderColor = options.theme[color: .primary].cgColor
         selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
         updateChildrenConfigurable(options: options)
     }
@@ -267,6 +267,7 @@ extension VideoView: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         videoImageView.image = options.theme[icon: .video]
         updateChildrenConfigurable(options: options)
+        options.theme.labelConfiguration[.assetCellVideoDuration]?.configuration(videoLabel)
     }
 }
 
@@ -315,6 +316,14 @@ private class GIFView: UIView {
             maker.left.bottom.equalToSuperview().inset(8)
             maker.height.equalTo(15)
         }
+    }
+}
+
+// MARK: - PickerOptionsConfigurable
+extension GIFView: PickerOptionsConfigurable {
+    
+    func update(options: PickerOptionsInfo) {
+        options.theme.labelConfiguration[.assetCellGIFMark]?.configuration(gifLabel)
     }
 }
 

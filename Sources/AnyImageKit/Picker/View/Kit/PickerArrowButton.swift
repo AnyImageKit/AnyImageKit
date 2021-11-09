@@ -12,7 +12,6 @@ final class PickerArrowButton: UIControl {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.localizedString(key: "PHOTO", module: .core)
         view.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return view
     }()
@@ -31,6 +30,7 @@ final class PickerArrowButton: UIControl {
     }()
     
     private var preferredStyle: UserInterfaceStyle?
+    private var a11ySwitchAlbumTips = BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker)
     
     override var isSelected: Bool {
         didSet {
@@ -106,7 +106,7 @@ extension PickerArrowButton {
             self.label.text = title
             self.layoutIfNeeded()
         }
-        accessibilityLabel = String(format: BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker), title)
+        accessibilityLabel = String(format: a11ySwitchAlbumTips, title)
     }
 }
 
@@ -124,11 +124,15 @@ extension PickerArrowButton: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         preferredStyle = options.theme.style
         label.textColor = options.theme[color: .text]
+        label.text = options.theme[string: .photo]
         imageView.image = options.theme[icon: .albumArrow]
         effectView.effect = UIBlurEffect(style: .init(uiStyle: preferredStyle!, traitCollection: traitCollection))
         let effectViewColor = UIColor.create(style: preferredStyle!,
                                    light: UIColor.black.withAlphaComponent(0.1),
                                    dark: UIColor.white.withAlphaComponent(0.9))
         effectView.backgroundColor = effectViewColor
+        a11ySwitchAlbumTips = options.theme[string: .pickerA11ySwitchAlbumTips]
+        
+        options.theme.labelConfiguration[.albumTitle]?.configuration(label)
     }
 }

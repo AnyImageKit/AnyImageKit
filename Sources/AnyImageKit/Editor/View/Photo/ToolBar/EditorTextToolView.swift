@@ -23,18 +23,20 @@ final class EditorTextToolView: UIView {
     private lazy var textButton: UIButton = {
         let view = UIButton(type: .custom)
         view.isSelected = true
-        view.setImage(BundleHelper.image(named: "TextNormalIcon", module: .editor), for: .normal)
-        view.setImage(BundleHelper.image(named: "PhotoToolText", module: .editor), for: .selected)
+        view.setImage(options.theme[icon: .textNormalIcon], for: .normal)
+        view.setImage(options.theme[icon: .photoToolText], for: .selected)
         view.addTarget(self, action: #selector(textButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
+    private let options: EditorPhotoOptionsInfo
     private let colors: [EditorTextColor]
     private var colorButtons: [ColorButton] = []
     private let spacing: CGFloat = 20
     private let itemWidth: CGFloat = 24
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
+        self.options = options
         self.colors = options.textColors
         self.currentIdx = idx
         super.init(frame: frame)
@@ -67,6 +69,8 @@ final class EditorTextToolView: UIView {
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(25)
         }
+        
+        options.theme.buttonConfiguration[.textSwitch]?.configuration(textButton)
     }
     
     private func setupColorView() {

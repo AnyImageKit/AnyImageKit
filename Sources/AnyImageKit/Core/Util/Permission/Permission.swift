@@ -41,29 +41,25 @@ enum Permission: Equatable {
 
 extension Permission {
     
-    var localizedTitle: String {
+    var localizedTitleKey: StringConfigKey {
         switch self {
         case .photos:
-            return BundleHelper.localizedString(key: "PHOTOS", module: .core)
+            return .photos
         case .camera:
-            return BundleHelper.localizedString(key: "CAMERA", module: .core)
+            return .camera
         case .microphone:
-            return BundleHelper.localizedString(key: "MICROPHONE", module: .core)
+            return .microphone
         }
     }
     
-    var localizedAlertTitle: String {
-        return String(format: BundleHelper.localizedString(key: "PERMISSION_IS_DISABLED", module: .core), localizedTitle)
-    }
-    
-    var localizedAlertMessage: String {
+    var localizedAlertMessageKey: StringConfigKey {
         switch self {
         case .photos:
-            return BundleHelper.localizedString(key: "NO_PHOTOS_PERMISSION_TIPS", module: .core)
+            return .noPhotosPermissionTips
         case .camera:
-            return BundleHelper.localizedString(key: "NO_CAMERA_PERMISSION_TIPS", module: .core)
+            return .noCameraPermissionTips
         case .microphone:
-            return BundleHelper.localizedString(key: "NO_MICROPHONE_PERMISSION_TIPS", module: .core)
+            return .noMicrophonePermissionTips
         }
     }
 }

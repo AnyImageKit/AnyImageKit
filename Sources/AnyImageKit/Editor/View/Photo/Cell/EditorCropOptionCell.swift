@@ -51,17 +51,19 @@ final class EditorCropOptionCell: UICollectionViewCell {
 // MARK: - Public
 extension EditorCropOptionCell {
     
-    func set(option: EditorCropOption, selectColor: UIColor) {
+    func set(_ options: EditorPhotoOptionsInfo, option: EditorCropOption, selectColor: UIColor) {
         self.option = option
         self.selectColor = selectColor
         
         setupLayer()
         switch option {
         case .free:
-            label.text = BundleHelper.localizedString(key: "FREE", module: .editor)
+            label.text = options.theme[string: .editorFree]
         case .custom(let w, let h):
             label.text = "\(w):\(h)"
         }
+        
+        options.theme.labelConfiguration[.cropOption]?.configuration(label)
     }
 }
 

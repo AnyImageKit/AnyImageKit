@@ -25,9 +25,8 @@ final class LoadingiCloudView: UIView {
         return view
     }()
     
-    private lazy var tipLabel: UILabel = {
+    private lazy var tipsLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.text = BundleHelper.localizedString(key: "DOWNLOADING_FROM_ICLOUD", module: .picker)
         view.textColor = UIColor.white
         view.font = UIFont.systemFont(ofSize: 11)
         return view
@@ -53,7 +52,7 @@ final class LoadingiCloudView: UIView {
     private func setupView() {
         addSubview(effectView)
         addSubview(imageView)
-        addSubview(tipLabel)
+        addSubview(tipsLabel)
         addSubview(progressLabel)
         
         effectView.snp.makeConstraints { maker in
@@ -64,12 +63,12 @@ final class LoadingiCloudView: UIView {
             maker.centerY.equalToSuperview()
             maker.width.height.equalTo(20)
         }
-        tipLabel.snp.makeConstraints { maker in
+        tipsLabel.snp.makeConstraints { maker in
             maker.left.equalTo(imageView.snp.right).offset(5)
             maker.centerY.equalToSuperview()
         }
         progressLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(tipLabel.snp.right).offset(3)
+            maker.left.equalTo(tipsLabel.snp.right).offset(3)
             maker.right.equalToSuperview().offset(-5)
             maker.centerY.equalToSuperview()
         }
@@ -80,8 +79,12 @@ final class LoadingiCloudView: UIView {
 extension LoadingiCloudView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
+        tipsLabel.text = options.theme[string: .pickerDownloadingFromiCloud]
         imageView.image = options.theme[icon: .iCloud]
         updateChildrenConfigurable(options: options)
+        
+        options.theme.labelConfiguration[.loadingFromiCloudTips]?.configuration(tipsLabel)
+        options.theme.labelConfiguration[.loadingFromiCloudProgress]?.configuration(progressLabel)
     }
 }
 

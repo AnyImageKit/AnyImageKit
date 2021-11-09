@@ -37,9 +37,9 @@ final class PhotoEditorController: AnyImageViewController {
     private lazy var backButton: UIButton = {
         let view = UIButton(type: .custom)
         view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-        view.setImage(BundleHelper.image(named: "ReturnBackButton", module: .editor), for: .normal)
+        view.setImage(options.theme[icon: .returnBackButton], for: .normal)
         view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = BundleHelper.localizedString(key: "BACK", module: .core)
+        view.accessibilityLabel = options.theme[string: .back]
         return view
     }()
     
@@ -131,6 +131,8 @@ final class PhotoEditorController: AnyImageViewController {
         if let data = stack.edit.outputImageData, let image = UIImage(data: data) {
             setPlaceholdImage(image)
         }
+        
+        options.theme.buttonConfiguration[.back]?.configuration(backButton)
     }
     
     private func setupMosaicView() {

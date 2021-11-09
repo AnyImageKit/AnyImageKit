@@ -25,16 +25,16 @@ public struct CaptureMediaOption: OptionSet {
 
 extension CaptureMediaOption {
     
-    var localizedTips: String {
+    var localizedTipsKey: StringConfigKey {
         if contains(.photo) && contains(.video) {
-            return BundleHelper.localizedString(key: "HOLD_FOR_VIDEO_TAP_FOR_PHOTO", module: .capture)
+            return .captureHoldForVideoTapForPhoto
         }
         if contains(.photo) {
-            return BundleHelper.localizedString(key: "TAP_FOR_PHOTO", module: .capture)
+            return .captureTapForPhoto
         }
         if contains(.video) {
-            return BundleHelper.localizedString(key: "HOLD_FOR_VIDEO", module: .capture)
+            return .captureHoldForVideo
         }
-        return ""
+        return StringConfigKey(rawValue: "")
     }
 }

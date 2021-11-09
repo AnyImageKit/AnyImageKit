@@ -12,8 +12,6 @@ final class PermissionDeniedView: UIView {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
-        let text = String(format: Permission.camera.localizedAlertMessage, BundleHelper.appName)
-        view.text = text
         view.textAlignment = .center
         view.numberOfLines = 0
         return view
@@ -21,7 +19,6 @@ final class PermissionDeniedView: UIView {
     
     private lazy var button: UIButton = {
         let view = UIButton(type: .custom)
-        view.setTitle(BundleHelper.localizedString(key: "GO_TO_SETTINGS", module: .core), for: .normal)
         view.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
@@ -63,7 +60,12 @@ extension PermissionDeniedView: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         label.textColor = options.theme[color: .text]
-        button.setTitleColor(options.theme[color: .main], for: .normal)
+        label.text = String(format: options.theme[string: Permission.photos.localizedAlertMessageKey], BundleHelper.appName)
+        button.setTitleColor(options.theme[color: .primary], for: .normal)
+        button.setTitle(options.theme[string: .goToSettings], for: .normal)
         backgroundColor = options.theme[color: .background]
+        
+        options.theme.labelConfiguration[.permissionDeniedTips]?.configuration(label)
+        options.theme.buttonConfiguration[.goSetting]?.configuration(button)
     }
 }

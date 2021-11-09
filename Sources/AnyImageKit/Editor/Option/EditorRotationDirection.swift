@@ -22,14 +22,14 @@ public enum EditorRotationDirection: Equatable {
 
 extension EditorRotationDirection {
     
-    var imageName: String {
+    var iconKey: EditorTheme.IconConfigKey {
         switch self {
         case .turnOff:
-            return ""
+            return .photoToolCropTrunLeft
         case .turnLeft:
-            return "PhotoToolCropTrunLeft"
+            return .photoToolCropTrunLeft
         case .turnRight:
-            return "PhotoToolCropTrunRight"
+            return .photoToolCropTrunRight
         }
     }
 }

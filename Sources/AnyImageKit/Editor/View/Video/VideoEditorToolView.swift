@@ -21,8 +21,8 @@ final class VideoEditorToolView: UIView {
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
-        view.backgroundColor = options.tintColor
-        view.setTitle(BundleHelper.localizedString(key: "DONE", module: .core), for: .normal)
+        view.backgroundColor = options.theme[color: .primary]
+        view.setTitle(options.theme[string: .done], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
@@ -69,17 +69,20 @@ final class VideoEditorToolView: UIView {
             $0.snp.makeConstraints { maker in
                 maker.width.height.equalTo(stackView.snp.height)
             }
+            options.theme.buttonConfiguration[.videoOptions(options.toolOptions[$0.tag])]?.configuration($0)
         }
+        
+        options.theme.buttonConfiguration[.done]?.configuration(doneButton)
     }
     
     private func createButton(tag: Int, option: EditorVideoToolOption) -> UIButton {
         let button = UIButton(type: .custom)
-        let image = BundleHelper.image(named: option.imageName, module: .editor)?.withRenderingMode(.alwaysTemplate)
+        let image = options.theme[icon: option.iconKey]?.withRenderingMode(.alwaysTemplate)
         button.tag = tag
         button.setImage(image, for: .normal)
         button.imageView?.tintColor = .white
         button.addTarget(self, action: #selector(optionButtonTapped(_:)), for: .touchUpInside)
-        button.accessibilityLabel = BundleHelper.localizedString(key: option.description, module: .editor)
+        button.accessibilityLabel = options.theme[string: option.stringKey]
         return button
     }
     
@@ -88,7 +91,7 @@ final class VideoEditorToolView: UIView {
         for btn in buttons {
             let isSelected = btn == button
             btn.isSelected = isSelected
-            btn.imageView?.tintColor = isSelected ? options.tintColor : .white
+            btn.imageView?.tintColor = isSelected ? options.theme[color: .primary] : .white
         }
     }
 }

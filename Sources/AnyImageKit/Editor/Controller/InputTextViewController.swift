@@ -22,7 +22,7 @@ final class InputTextViewController: AnyImageViewController {
     }()
     private lazy var cancelButton: UIButton = {
         let view = UIButton(type: .custom)
-        view.setTitle(BundleHelper.localizedString(key: "CANCEL", module: .core), for: .normal)
+        view.setTitle(options.theme[string: .cancel], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
@@ -31,8 +31,8 @@ final class InputTextViewController: AnyImageViewController {
     private lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 4
-        view.backgroundColor = options.tintColor
-        view.setTitle(BundleHelper.localizedString(key: "DONE", module: .core), for: .normal)
+        view.backgroundColor = options.theme[color: .primary]
+        view.setTitle(options.theme[string: .done], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 5, right: 10)
@@ -58,7 +58,7 @@ final class InputTextViewController: AnyImageViewController {
         view.enablesReturnKeyAutomatically = true
         view.showsVerticalScrollIndicator = false
         view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        view.tintColor = options.tintColor
+        view.tintColor = options.theme[color: .primary]
         let color = options.textColors[data.colorIdx]
         view.textColor = data.isTextSelected ? color.subColor : color.color
         view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
@@ -185,6 +185,9 @@ final class InputTextViewController: AnyImageViewController {
             maker.left.right.equalToSuperview().inset(25)
             maker.height.greaterThanOrEqualTo(55)
         }
+        
+        options.theme.buttonConfiguration[.cancel]?.configuration(cancelButton)
+        options.theme.buttonConfiguration[.done]?.configuration(doneButton)
     }
     
     override var prefersStatusBarHidden: Bool {

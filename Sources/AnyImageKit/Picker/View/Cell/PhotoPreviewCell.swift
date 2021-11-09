@@ -40,6 +40,10 @@ final class PhotoPreviewCell: PreviewCell {
     override func reset() {
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
+    
+    override func optionsDidUpdate(options: PickerOptionsInfo) {
+        accessibilityLabel = options.theme[string: .photo]
+    }
 }
 
 // MARK: - Function

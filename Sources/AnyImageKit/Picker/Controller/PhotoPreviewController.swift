@@ -331,20 +331,20 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
             let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
         if !data.asset.isSelected && manager.isUpToLimit {
             let message: String
             if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS_OR_VIDEOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], manager.options.selectLimit)
             } else if manager.options.selectOptions.isPhoto {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_PHOTOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotos], manager.options.selectLimit)
             } else {
-                message = String(format: BundleHelper.localizedString(key: "SELECT_A_MAXIMUM_OF_VIDEOS", module: .picker), manager.options.selectLimit)
+                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
             }
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         
@@ -380,7 +380,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         if case .disable(let rule) = data.asset.state {
             let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
-            showAlert(message: message)
+            showAlert(message: message, stringConfig: manager.options.theme)
             return
         }
         if manager.selectedAssets.isEmpty {

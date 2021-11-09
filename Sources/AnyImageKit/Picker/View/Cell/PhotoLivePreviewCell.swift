@@ -94,6 +94,10 @@ final class PhotoLivePreviewCell: PreviewCell {
         super.setDownloadingProgress(progress)
         livePhotoTipView.isHidden = progress != 1
     }
+    
+    override func optionsDidUpdate(options: PickerOptionsInfo) {
+        accessibilityLabel = options.theme[string: .livePhoto]
+    }
 }
 
 extension PhotoLivePreviewCell {

@@ -19,7 +19,6 @@ final class PermissionLimitedView: UIView {
         let view = UILabel(frame: .zero)
         view.numberOfLines = 2
         view.font = UIFont.systemFont(ofSize: 14)
-        view.text = BundleHelper.localizedString(key: "LIMITED_PHOTOS_PERMISSION_TIPS", module: .picker)
         return view
     }()
     
@@ -73,7 +72,10 @@ extension PermissionLimitedView: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         warningImageView.image = options.theme[icon: .warning]
         tipsLabel.textColor = options.theme[color: .text]
+        tipsLabel.text = options.theme[string: .pickerLimitedPhotosPermissionTips]
         arrowImageView.image = options.theme[icon: .arrowRight]
         updateChildrenConfigurable(options: options)
+        
+        options.theme.labelConfiguration[.permissionLimitedTips]?.configuration(tipsLabel)
     }
 }

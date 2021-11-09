@@ -49,7 +49,6 @@ final class VideoPreviewCell: PreviewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        accessibilityLabel = BundleHelper.localizedString(key: "VIDEO", module: .core)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -121,6 +120,7 @@ final class VideoPreviewCell: PreviewCell {
     
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         playImageView.image = options.theme[icon: .videoPlay]
+        accessibilityLabel = options.theme[string: .video]
     }
 }
 
