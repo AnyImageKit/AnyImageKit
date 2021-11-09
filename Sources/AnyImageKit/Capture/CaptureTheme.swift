@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Capture
-public class CaptureTheme: StringConfigProtocol {
+public final class CaptureTheme: ThemeConfigable {
     
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]
@@ -26,9 +26,7 @@ public class CaptureTheme: StringConfigProtocol {
     /// Config button
     internal var buttonConfiguration: [ButtonConfigKey: ButtonConfigObject] = [:]
     
-    public init() {
-        
-    }
+    public init() { }
     
     /// Set custom color
     public subscript(color key: ColorConfigKey) -> UIColor {
@@ -50,13 +48,13 @@ public class CaptureTheme: StringConfigProtocol {
     }
     
     /// Configuration Label if you needed
-    /// - Note: DONOT set hidden/enable properties
+    /// - Note: ⚠️ DONOT set hidden/enable properties
     public func configurationLabel(for key: LabelConfigKey, configuration: @escaping ((UILabel) -> Void)) {
         labelConfiguration[key] = LabelConfigObject(key: key, configuration: configuration)
     }
     
     /// Configuration Button if you needed
-    /// - Note: DONOT set hidden/enable properties
+    /// - Note: ⚠️ DONOT set hidden/enable properties
     public func configurationButton(for key: ButtonConfigKey, configuration: @escaping ((UIButton) -> Void)) {
         buttonConfiguration[key] = ButtonConfigObject(key: key, configuration: configuration)
     }

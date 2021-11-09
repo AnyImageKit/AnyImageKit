@@ -8,11 +8,6 @@
 
 import Foundation
 
-public protocol StringConfigProtocol {
-    
-    subscript(string key: StringConfigKey) -> String { get set }
-}
-
 public struct StringConfigKey: Hashable {
 
     public let rawValue: String
