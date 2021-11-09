@@ -1,5 +1,11 @@
 # Release Notes
 
+## 0.13.5
+
+### Resolved
+
+- Fix Xcode 12 can not build.
+
 ## 0.13.4
 
 ### New Features
