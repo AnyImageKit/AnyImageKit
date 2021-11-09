@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Picker
-public final class PickerTheme: ThemeConfigable {
+public final class PickerTheme: ThemeConfigurable {
 
     /// User Interface Style
     public let style: UserInterfaceStyle

@@ -63,7 +63,7 @@ class AnyImageViewController: UIViewController {
 // MARK: - Function
 extension AnyImageViewController {
     
-    func showAlert(message: String, stringConfig: ThemeStringConfigable) {
+    func showAlert(message: String, stringConfig: ThemeStringConfigurable) {
         let alert = UIAlertController(title: stringConfig[string: .alert], message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: stringConfig[string: .ok], style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -165,7 +165,7 @@ extension AnyImageViewController {
 // MARK: - Permission UI
 extension AnyImageViewController {
     
-    func check(permission: Permission, stringConfig: ThemeStringConfigable, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
+    func check(permission: Permission, stringConfig: ThemeStringConfigurable, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
         check(permission: permission, authorized: authorized, limited: authorized, denied: { [weak self] _ in
             guard let self = self else { return }
             let title = String(format: stringConfig[string: .permissionIsDisabled], stringConfig[string: permission.localizedTitleKey])
@@ -186,7 +186,7 @@ extension AnyImageViewController {
         })
     }
     
-    func check(permissions: [Permission], stringConfig: ThemeStringConfigable, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
+    func check(permissions: [Permission], stringConfig: ThemeStringConfigurable, authorized: @escaping () -> Void, canceled: @escaping (Permission) -> Void) {
         if !permissions.isEmpty {
             var _permissions = permissions
             let permission = _permissions.removeFirst()

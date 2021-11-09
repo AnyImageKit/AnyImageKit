@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Editor
-public final class EditorTheme: ThemeConfigable {
+public final class EditorTheme: ThemeConfigurable {
     
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]

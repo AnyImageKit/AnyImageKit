@@ -1,5 +1,5 @@
 //
-//  ThemeConfigable.swift
+//  ThemeConfigurable.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2021/11/9.
@@ -8,35 +8,35 @@
 
 import UIKit
 
-public typealias ThemeConfigable = ThemeColorConfigable & ThemeIconConfigable & ThemeStringConfigable & ThemeLabelConfigable & ThemeButtonConfigable
+public typealias ThemeConfigurable = ThemeColorConfigurable & ThemeIconConfigurable & ThemeStringConfigurable & ThemeLabelConfigurable & ThemeButtonConfigurable
 
-public protocol ThemeColorConfigable {
+public protocol ThemeColorConfigurable {
     
     associatedtype ColorKey: Hashable
     
     subscript(color key: ColorKey) -> UIColor { get set }
 }
 
-public protocol ThemeIconConfigable {
+public protocol ThemeIconConfigurable {
     
     associatedtype IconKey: Hashable
     
     subscript(icon key: IconKey) -> UIImage? { get set }
 }
 
-public protocol ThemeStringConfigable {
+public protocol ThemeStringConfigurable {
     
     subscript(string key: StringConfigKey) -> String { get set }
 }
 
-public protocol ThemeLabelConfigable {
+public protocol ThemeLabelConfigurable {
     
     associatedtype LabelKey: Hashable
     
     func configurationLabel(for key: LabelKey, configuration: @escaping ((UILabel) -> Void))
 }
 
-public protocol ThemeButtonConfigable {
+public protocol ThemeButtonConfigurable {
     
     associatedtype ButtonKey: Hashable
     

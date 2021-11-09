@@ -9,7 +9,7 @@
 import UIKit
 
 /// UI Theme for Capture
-public final class CaptureTheme: ThemeConfigable {
+public final class CaptureTheme: ThemeConfigurable {
     
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]
