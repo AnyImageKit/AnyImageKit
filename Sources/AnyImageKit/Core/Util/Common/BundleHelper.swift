@@ -107,12 +107,16 @@ extension BundleHelper {
         if result != key {
             return result
         } else { // Just in case
-            let coreBundle = bundle(for: .core)
-            if current != coreBundle {
-                let coreResult = coreBundle.localizedString(forKey: key, value: value, table: Module.core.rawValue)
-                if coreResult != key {
-                    return coreResult
-                }
+            let coreBundle: Bundle
+            if current != bundle(for: .core) {
+                coreBundle = bundle(for: .core)
+            } else {
+                coreBundle = current
+            }
+            
+            let coreResult = coreBundle.localizedString(forKey: key, value: value, table: Module.core.rawValue)
+            if coreResult != key {
+                return coreResult
             }
             return Bundle.main.localizedString(forKey: key, value: value, table: nil)
         }
