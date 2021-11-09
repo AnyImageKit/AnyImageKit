@@ -30,7 +30,7 @@ final class EditorTextToolView: UIView {
     }()
     
     private let options: EditorPhotoOptionsInfo
-    private let colors: [EditorTextColor]
+    private let colorOptions: [EditorTextColor]
     private var colorButtons: [ColorButton] = []
     private let spacing: CGFloat = 10
     private let itemWidth: CGFloat = 24
@@ -38,7 +38,7 @@ final class EditorTextToolView: UIView {
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo, idx: Int, isTextSelected: Bool) {
         self.options = options
-        self.colors = options.textColors
+        self.colorOptions = options.textColors
         self.currentIdx = idx
         super.init(frame: frame)
         setupView()
@@ -74,23 +74,28 @@ final class EditorTextToolView: UIView {
     }
     
     private func setupColorView() {
-        for (idx, color) in colors.enumerated() {
+        for (idx, color) in colorOptions.enumerated() {
             colorButtons.append(createColorView(color, idx: idx))
         }
         let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         addSubview(stackView)
         stackView.snp.makeConstraints { maker in
-            maker.left.equalTo(textButton.snp.right).offset(10)
+            maker.left.equalTo(textButton.snp.right).offset(12)
             maker.centerY.equalToSuperview()
             maker.height.equalTo(buttonWidth)
+            if UIDevice.current.userInterfaceIdiom == .phone && colorOptions.count >= 5 {
+                maker.right.equalToSuperview().offset(-20)
+            }
         }
         
-        for button in colorButtons {
-            button.snp.makeConstraints { maker in
-                maker.width.height.equalTo(buttonWidth)
+        if !(UIDevice.current.userInterfaceIdiom == .phone && colorOptions.count >= 5) {
+            for button in colorButtons {
+                button.snp.makeConstraints { maker in
+                    maker.width.height.equalTo(buttonWidth)
+                }
             }
         }
     }

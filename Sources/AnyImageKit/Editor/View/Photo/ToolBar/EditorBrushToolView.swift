@@ -88,17 +88,22 @@ final class EditorBrushToolView: UIView {
         let stackView = UIStackView(arrangedSubviews: colorButtons)
         stackView.spacing = spacing
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         addSubview(stackView)
         stackView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(12)
             maker.centerY.equalToSuperview()
             maker.height.equalTo(buttonWidth)
+            if UIDevice.current.userInterfaceIdiom == .phone && colorOptions.count >= 5 {
+                maker.right.equalTo(undoButton.snp.left).offset(-20)
+            }
         }
         
-        for button in colorButtons {
-            button.snp.makeConstraints { maker in
-                maker.width.height.equalTo(buttonWidth)
+        if !(UIDevice.current.userInterfaceIdiom == .phone && colorOptions.count >= 5) {
+            for button in colorButtons {
+                button.snp.makeConstraints { maker in
+                    maker.width.height.equalTo(buttonWidth)
+                }
             }
         }
     }
@@ -125,6 +130,7 @@ final class EditorBrushToolView: UIView {
                 let button = ColorButton(tag: idx, size: itemWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
                 button.isHidden = true
                 button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+                options.theme.buttonConfiguration[.brush(option)]?.configuration(button.colorView)
                 return button
             }
         }
