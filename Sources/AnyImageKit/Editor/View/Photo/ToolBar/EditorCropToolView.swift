@@ -44,7 +44,7 @@ final class EditorCropToolView: UIView {
     }
     
     private(set) lazy var rotateButton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+        let view = UIButton(type: .custom)
         view.setImage(options.theme[icon: options.rotationDirection.iconKey], for: .normal)
         view.addTarget(self, action: #selector(rotateButtonTapped(_:)), for: .touchUpInside)
         return view
@@ -69,21 +69,21 @@ final class EditorCropToolView: UIView {
         return view
     }()
     private(set) lazy var cancelButton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+        let view = UIButton(type: .custom)
         view.setImage(options.theme[icon: .xMark], for: .normal)
         view.accessibilityLabel = options.theme[string: .cancel]
         view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var doneButton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+        let view = UIButton(type: .custom)
         view.setImage(options.theme[icon: .checkMark], for: .normal)
         view.accessibilityLabel = options.theme[string: .done]
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private(set) lazy var resetbutton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+        let view = UIButton(type: .custom)
         view.setTitle(options.theme[string: .reset], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.setTitleColor(UIColor.lightGray, for: .highlighted)
@@ -219,21 +219,5 @@ extension EditorCropToolView: UICollectionViewDelegate {
         } else {
             collectionView.selectItem(at: IndexPath(row: currentOptionIdx, section: 0), animated: true, scrollPosition: .left)
         }
-    }
-}
-
-// MARK: - Event
-extension EditorCropToolView {
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
-            return nil
-        }
-        for subView in [cancelButton, doneButton, resetbutton, collectionView, rotateButton] {
-            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
-                return hitView
-            }
-        }
-        return nil
     }
 }
