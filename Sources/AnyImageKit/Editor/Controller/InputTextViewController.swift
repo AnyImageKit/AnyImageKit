@@ -57,11 +57,13 @@ final class InputTextViewController: AnyImageViewController {
         view.returnKeyType = .done
         view.enablesReturnKeyAutomatically = true
         view.showsVerticalScrollIndicator = false
-        view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        view.font = options.textFont
         view.tintColor = options.theme[color: .primary]
         let color = options.textColors[data.colorIdx]
         view.textColor = data.isTextSelected ? color.subColor : color.color
-        view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
+        view.frame = CGRect(x: hInset, y: 0, width: UIScreen.main.bounds.width-hInset*4, height: lineHeight+vInset*2) // 预设
+        view.textContainerInset = UIEdgeInsets.zero
+        view.textContainer.lineFragmentPadding = 0
         return view
     }()
     /// 仅用于计算TextView最后一行的文本
@@ -77,8 +79,9 @@ final class InputTextViewController: AnyImageViewController {
     }
     private let coverImage: UIImage?
     private let data: TextData
-    
-    private let lineHeight: CGFloat = 36
+    private let lineHeight: CGFloat
+    private let vInset: CGFloat = 8
+    private let hInset: CGFloat = 12
     private var isBegin: Bool = true
     private var containerSize: CGSize = .zero
     
@@ -86,6 +89,7 @@ final class InputTextViewController: AnyImageViewController {
         self.context = context
         self.coverImage = coverImage
         self.data = data
+        self.lineHeight = context.options.textFont.lineHeight
         super.init(nibName: nil, bundle: nil)
         self.modalPresentationStyle = .fullScreen
     }
@@ -165,17 +169,17 @@ final class InputTextViewController: AnyImageViewController {
         layoutToolView()
         textCoverView.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(50)
-            maker.left.equalToSuperview().offset(10)
-            maker.right.equalToSuperview().offset(-10)
-            maker.height.equalTo(lineHeight+10*2)
+            maker.left.right.equalToSuperview().inset(hInset)
+            maker.height.equalTo(lineHeight + vInset * 2)
         }
         textView.snp.makeConstraints { maker in
-            maker.top.bottom.equalToSuperview()
-            maker.left.right.equalToSuperview().inset(10)
+            maker.top.equalToSuperview().offset(vInset)
+            maker.bottom.equalToSuperview()
+            maker.left.right.equalToSuperview().inset(hInset)
         }
         calculateLabel.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(250)
-            maker.left.right.equalToSuperview().inset(25)
+            maker.left.right.equalTo(textView)
             maker.height.greaterThanOrEqualTo(55)
         }
         
@@ -234,7 +238,7 @@ extension InputTextViewController {
         if array.isEmpty { return }
         
         updateCalculateLabel(string: array.last!)
-        let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
+        let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2.5)
         textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
         textCoverView.layer.insertSublayer(textLayer!, at: 0)
     }
@@ -248,7 +252,7 @@ extension InputTextViewController {
         let lastLineHeight: CGFloat = lineHeight + 2
         
         let bezier: UIBezierPath
-        if hasMultiLine && width - lastLineWidth > 20 { // 一半的情况
+        if hasMultiLine && width - lastLineWidth > (hInset * 2) { // 一半的情况
             bezier = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: width, height: height), byRoundingCorners: [.topLeft, .topRight, .bottomLeft], cornerRadii: CGSize(width: radius, height: radius))
             let cropBezier1 = UIBezierPath(roundedRect: CGRect(x: lastLineWidth, y: height-lastLineHeight, width: width-lastLineWidth, height: lastLineHeight), byRoundingCorners: .topLeft, cornerRadii: CGSize(width: radius, height: radius))
             bezier.append(cropBezier1)
@@ -284,8 +288,8 @@ extension InputTextViewController {
         let array = textView.getSeparatedLines()
         if array.count == 1 {
             updateCalculateLabel(string: array.last!)
-            let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
-            let offset = textCoverView.bounds.width - lastLineWidth + 10
+            let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2.5)
+            let offset = textCoverView.bounds.width - lastLineWidth + hInset
             textCoverView.snp.updateConstraints { maker in
                 maker.right.equalToSuperview().offset(-offset)
             }
@@ -318,7 +322,7 @@ extension InputTextViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         let line = CGFloat(textView.getSeparatedLines().count)
-        let height: CGFloat = max(lineHeight * line + 10 * 2, textView.contentSize.height)
+        let height: CGFloat = max(lineHeight * line, textView.contentSize.height) + vInset * 2
         textCoverView.snp.updateConstraints { maker in
             maker.height.equalTo(height)
         }
@@ -387,7 +391,7 @@ extension UITextView {
         
         // size needs to be adjusted, because frame might change because of intelligent word wrapping of iOS
         let size = sizeThatFits(CGSize(width: self.frame.width, height: .greatestFiniteMagnitude))
-        path.addRect(CGRect(x: 0, y: 0, width: size.width, height: size.height), transform: .identity)
+        path.addRect(CGRect(x: 0, y: 0, width: size.width, height: size.height + 50), transform: .identity)
         
         let frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attributedText.length), path, nil)
         guard let lines = CTFrameGetLines(frame) as? [Any] else { return linesArray }

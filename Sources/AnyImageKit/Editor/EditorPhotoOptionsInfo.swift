@@ -73,6 +73,11 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: [white, black, red, yellow, green, blue, purple]
     public var textColors: [EditorTextColor] = Palette.textColors
     
+    /// Font of intput text.
+    ///
+    /// - Default: .systemFont(ofSize: 32, weight: .bold)
+    public var textFont: UIFont = .systemFont(ofSize: 32, weight: .bold)
+    
     /// Style of input text at the first time.
     ///
     /// false: No background color, and the text color is main color.
