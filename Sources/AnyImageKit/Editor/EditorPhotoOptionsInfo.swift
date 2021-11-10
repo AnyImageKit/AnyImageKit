@@ -87,6 +87,15 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: true
     public var isTextSelected: Bool = true
     
+    /// Calculate text last line mask width when input text.
+    ///
+    /// false: The last line mask width equal to text view width.
+    ///
+    /// true: The last line mask width equal to text length.
+    ///
+    /// - Default: true
+    public var calculateTextLastLineMask: Bool = true
+    
     /// Crop size of crop tool options.
     /// Option sorting is arranged in a given array.
     ///

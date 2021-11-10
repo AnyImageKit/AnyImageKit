@@ -238,7 +238,12 @@ extension InputTextViewController {
         if array.isEmpty { return }
         
         updateCalculateLabel(string: array.last!)
-        let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2.5)
+        let lastLineWidth: CGFloat
+        if options.calculateTextLastLineMask {
+            lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2)
+        } else {
+            lastLineWidth = array.count == 1 ? calculateLabel.intrinsicContentSize.width + (hInset * 2) : textCoverView.bounds.width
+        }
         textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
         textCoverView.layer.insertSublayer(textLayer!, at: 0)
     }
@@ -288,7 +293,7 @@ extension InputTextViewController {
         let array = textView.getSeparatedLines()
         if array.count == 1 {
             updateCalculateLabel(string: array.last!)
-            let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2.5)
+            let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2)
             let offset = textCoverView.bounds.width - lastLineWidth + hInset
             textCoverView.snp.updateConstraints { maker in
                 maker.right.equalToSuperview().offset(-offset)
