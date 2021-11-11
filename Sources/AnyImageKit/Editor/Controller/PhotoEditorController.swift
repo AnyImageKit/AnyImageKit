@@ -197,7 +197,7 @@ extension PhotoEditorController {
         let tmpScale = contentView.scrollView.zoomScale
         let tmpOffset = contentView.scrollView.contentOffset
         let tmpContentSize = contentView.scrollView.contentSize
-        contentView.scrollView.zoomScale = 1.0
+        contentView.scrollView.zoomScale = contentView.scrollView.minimumZoomScale
         stack.cropImageViewFrame = contentView.imageView.frame
         contentView.scrollView.zoomScale = tmpScale
         contentView.scrollView.contentOffset = tmpOffset
@@ -384,6 +384,7 @@ extension PhotoEditorController {
         case .textWillBeginMove(_):
             setTool(hidden: true)
         case .textDidFinishMove(let data, let delete):
+            stack.updateTextData(data)
             setTool(hidden: false)
             if delete {
                 stack.removeTextData(data)

@@ -15,7 +15,11 @@ extension PhotoEditorContentView {
     func addText(data: TextData, add: Bool = true) -> TextImageView {
         if data.frame.isEmpty {
             calculateTextFrame(data: data)
+            if cropContext.rotateState != .portrait {
+                data.rotation = cropContext.rotateState.toPortraitAngle
+            }
         }
+        
         let textView = TextImageView(data: data)
         textView.transform = textView.calculateTransform()
         if add {
@@ -167,9 +171,9 @@ extension PhotoEditorContentView {
         var x: CGFloat
         var y: CGFloat
         if !cropContext.didCrop {
-            if scale == 1.0 {
-                x = (imageView.frame.width - size.width) / 2
-                y = (imageView.frame.height - size.height) / 2
+            if scrollView.zoomScale == scrollView.minimumZoomScale {
+                x = (imageView.bounds.width - size.width) / 2
+                y = (imageView.bounds.height - size.height) / 2
             } else {
                 let width = UIScreen.main.bounds.width * imageView.bounds.width / imageView.frame.width
                 x = abs(scrollView.contentOffset.x) / scale
@@ -182,15 +186,24 @@ extension PhotoEditorContentView {
                 y = y + (height - size.height) / 2
             }
         } else {
+            let reversedCropRect = cropContext.cropRect.size.reversed(!cropContext.rotateState.isPortrait)
+            let imageFrameSize = imageView.frame.size
+            let contentSize = scrollView.contentSize
+            let imageSize = CGSize(width: contentSize.width * imageFrameSize.width / reversedCropRect.width,
+                                   height: contentSize.height * imageFrameSize.height / reversedCropRect.height)
+
+            let contentOffset = cropContext.lastCropData.contentOffset
+            let offsetX = contentOffset.x * imageSize.width / imageFrameSize.width
+            let offsetY = contentOffset.y * imageSize.height / imageFrameSize.height
+            
             let width = cropContext.cropRealRect.width * imageView.bounds.width / imageView.frame.width
-            x = abs(imageView.frame.origin.x) / scale
+            x = offsetX / scale
             x = x + (width - size.width) / 2
             
-            var height = cropContext.cropRealRect.height * imageView.bounds.height / imageView.frame.height
-            let screenHeight = UIScreen.main.bounds.height / scale
-            height = height > screenHeight ? screenHeight : height
-            y = cropContext.lastCropData.contentOffset.y / scale
-            y = y + scrollView.contentOffset.y / scale
+            let height = cropContext.cropRealRect.height * imageView.bounds.height / imageView.frame.height
+//            let screenHeight = UIScreen.main.bounds.height / scale
+//            height = height > screenHeight ? screenHeight : height
+            y = offsetY / scale
             y = y + (height - size.height) / 2
         }
         data.frame = CGRect(origin: CGPoint(x: x, y: y), size: size)

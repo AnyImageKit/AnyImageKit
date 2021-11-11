@@ -20,4 +20,8 @@ extension CGSize {
     func reversed(_ flag: Bool = true) -> CGSize {
         return flag ? CGSize(width: height, height: width) : self
     }
+    
+    func roundTo(places: Int) -> CGSize {
+        return CGSize(width: width.roundTo(places: 1), height: height.roundTo(places: 1))
+    }
 }

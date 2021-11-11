@@ -56,7 +56,11 @@ extension PhotoEditorContentView {
     }
     /// 最大缩放比例
     var maximumZoomScale: CGFloat {
-        return (image.size.width / scrollView.bounds.width) * 4
+        if cropContext.rotateState.isPortrait {
+            return (image.size.width / scrollView.bounds.width) * 4
+        } else {
+            return (image.size.height / scrollView.bounds.width) * 4
+        }
     }
 }
 
