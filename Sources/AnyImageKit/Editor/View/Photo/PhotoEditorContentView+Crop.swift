@@ -492,10 +492,13 @@ extension PhotoEditorContentView {
         
         // 第一个条件控制最小边界；第二个条件控制最大边界
         if rotateState.isPortrait {
-            isXUp = rect.size.width - point.x > limit && rect.origin.x + point.x > imageView.frame.origin.x + scrollView.frame.origin.x - scrollView.contentOffset.x
-            isXDown = rect.size.width + point.x > limit && rect.size.width + point.x < imageView.frame.size.width - scrollView.contentOffset.x
-            isYUp = rect.size.height - point.y > limit && rect.origin.y + point.y > imageView.frame.origin.y + scrollView.frame.origin.y - scrollView.contentOffset.y
-            isYDown = rect.size.height + point.y > limit && rect.size.height + point.y < imageView.frame.size.height - scrollView.contentOffset.y
+            let offsetX = rotateState == .portrait ? scrollView.contentOffset.x : imageView.frame.width - cropStartPanRect.width - scrollView.contentOffset.x
+            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageView.frame.minX + scrollView.frame.minX - offsetX
+            isXDown = rect.width + point.x > limit && rect.width + point.x < imageView.frame.width - offsetX
+            
+            let offsetY = rotateState == .portrait ? scrollView.contentOffset.y : imageView.frame.height - cropStartPanRect.height - scrollView.contentOffset.y
+            isYUp = rect.height - point.y > limit && rect.minY + point.y > imageView.frame.minY + scrollView.frame.minY - offsetY
+            isYDown = rect.height + point.y > limit && rect.height + point.y < imageView.frame.height - offsetY
         } else {
             let offsetX = rotateState == .landscapeLeft ? scrollView.contentOffset.y : imageView.frame.height - cropStartPanRect.width - scrollView.contentOffset.y
             isXUp = rect.width - point.x > limit && rect.minX + point.x > imageView.frame.minY + scrollView.frame.minX - offsetX
