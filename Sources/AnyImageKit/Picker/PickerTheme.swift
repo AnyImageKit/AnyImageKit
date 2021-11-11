@@ -156,7 +156,7 @@ extension PickerTheme {
         /// 20*20, Light/Dark
         case livePhoto
         
-        /// 24*24
+        /// 20*20
         case photoEdited
         
         /// 24*24, Light/Dark
