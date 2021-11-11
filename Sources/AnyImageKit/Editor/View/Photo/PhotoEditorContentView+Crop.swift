@@ -232,6 +232,10 @@ extension PhotoEditorContentView {
     /// 布局裁剪结束
     func layoutEndCrop(_ fromCache: Bool = false) {
         if fromCache {
+            rotateState = lastCropData.rotateState
+            scrollView.transform = CGAffineTransform(rotationAngle: rotateState.angle)
+            scrollView.bounds = CGRect(origin: .zero, size: scrollView.bounds.size.reversed(!rotateState.isPortrait))
+            
             let top = cropY
             let bottom = cropBottomOffset
             scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
@@ -241,6 +245,9 @@ extension PhotoEditorContentView {
             scrollView.contentOffset = lastCropData.contentOffset
             setCropRect(lastCropData.rect)
             didCrop = cropRect.size != scrollView.contentSize
+            
+            scrollView.maximumZoomScale = maximumZoomScale
+            scrollView.minimumZoomScale = getMinimumZoomScale(with: lastCropData.rect.size, imageSize: lastCropData.imageViewFrame.size)
         } else {
             lastCropData.didCrop = didCrop
             lastCropData.rect = cropRect
