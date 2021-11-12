@@ -41,7 +41,7 @@ final class EditorEditOptionsView: UIView {
         
         let stackView = UIStackView(arrangedSubviews: buttons)
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         addSubview(stackView)
         stackView.snp.makeConstraints { maker in
             maker.top.bottom.equalToSuperview()
