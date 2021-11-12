@@ -10,7 +10,7 @@ import Foundation
 
 extension AnyImagePage {
     
-    public static let photoEditor: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_PHOTO"
-    public static let videoEditor: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_VIDEO"
-    public static let textInput: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_TEXTINPUT"
+    public static let editorPhoto: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_PHOTO"
+    public static let editorVideo: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_VIDEO"
+    public static let editorInputText: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_TEXTINPUT"
 }

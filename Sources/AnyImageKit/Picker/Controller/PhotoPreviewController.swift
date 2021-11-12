@@ -391,7 +391,7 @@ extension PhotoPreviewController {
         }
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
-        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.photoPreview])
+        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerPreview])
     }
 }
 

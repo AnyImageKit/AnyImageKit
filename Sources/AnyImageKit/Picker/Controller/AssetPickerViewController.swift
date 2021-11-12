@@ -448,7 +448,7 @@ extension AssetPickerViewController {
     @objc func doneButtonTapped(_ sender: UIButton) {
         stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
-        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.assetPicker])
+        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
     }
     
     @objc private func limitedButtonTapped(_ sender: UIButton) {

@@ -10,7 +10,7 @@ import Foundation
 
 extension AnyImagePage {
     
-    public static let albumPicker: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_ALBUM"
-    public static let assetPicker: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_ASSET"
-    public static let photoPreview: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_PREVIEW"
+    public static let pickerAlbum: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_ALBUM"
+    public static let pickerAsset: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_ASSET"
+    public static let pickerPreview: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_PREVIEW"
 }
