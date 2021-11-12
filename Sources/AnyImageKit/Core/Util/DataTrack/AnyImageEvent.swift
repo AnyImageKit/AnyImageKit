@@ -39,3 +39,12 @@ extension AnyImageEventUserInfoKey: ExpressibleByStringLiteral {
         self.rawValue = value
     }
 }
+
+extension AnyImageEventUserInfoKey {
+    
+    /// Value: Bool
+    public static let isOn: AnyImageEventUserInfoKey = "ANYIMAGEKIT_USERINFO_IS_ON"
+    
+    /// Value: AnyImagePage
+    public static let page: AnyImageEventUserInfoKey = "ANYIMAGEKIT_USERINFO_PAGE"
+}

@@ -324,6 +324,7 @@ extension PhotoPreviewController {
         delegate?.previewControllerWillDisappear(self)
         dismiss(animated: true, completion: nil)
         setStatusBar(hidden: false)
+        trackObserver?.track(event: .pickerBackInPreview, userInfo: [:])
     }
     
     /// NavigationBar - Select
@@ -358,6 +359,7 @@ extension PhotoPreviewController {
         }
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
+        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected])
     }
     
     /// ToolBar - Original
@@ -373,6 +375,7 @@ extension PhotoPreviewController {
                 selectButtonTapped(navigationBar.selectButton)
             }
         }
+        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected])
     }
     
     /// ToolBar - Done
@@ -388,6 +391,7 @@ extension PhotoPreviewController {
         }
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
+        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.photoPreview])
     }
 }
 
