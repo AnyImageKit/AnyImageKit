@@ -23,6 +23,7 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 AnyImageKit.framework.zip
+.DS_Store
 
 ## Obj-C/Swift specific
 *.hmap
