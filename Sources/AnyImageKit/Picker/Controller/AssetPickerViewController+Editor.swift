@@ -19,7 +19,7 @@ extension AssetPickerViewController {
             showAlert(message: message, stringConfig: manager.options.theme)
             return false
         }
-        if asset.phAsset.mediaType == .image && manager.options.editorOptions.contains(.photo) {
+        if asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
             return true
         } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
             return true
@@ -28,7 +28,7 @@ extension AssetPickerViewController {
     }
     
     func openEditor(with asset: Asset, indexPath: IndexPath) {
-        if asset.phAsset.mediaType == .image {
+        if asset.mediaType == .photo {
             if let image = asset._images[.initial] {
                 showEditor(image, identifier: asset.identifier, tag: indexPath.item)
             } else {
