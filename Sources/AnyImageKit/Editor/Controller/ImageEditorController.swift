@@ -128,6 +128,9 @@ extension ImageEditorController {
         if options.mosaicOptions.count > 5 {
             options.mosaicOptions = Array(options.mosaicOptions.prefix(upTo: 5))
         }
+        if options.cropOptions.isEmpty {
+            options.cropOptions = [.free]
+        }
         if options.cropOptions.count == 1 {
             if case let .custom(w, h) = options.cropOptions.first, w != h {
                 options.rotationDirection = .turnOff
