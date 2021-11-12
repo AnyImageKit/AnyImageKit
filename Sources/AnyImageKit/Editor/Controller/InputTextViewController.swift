@@ -57,11 +57,13 @@ final class InputTextViewController: AnyImageViewController {
         view.returnKeyType = .done
         view.enablesReturnKeyAutomatically = true
         view.showsVerticalScrollIndicator = false
-        view.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        view.font = options.textFont
         view.tintColor = options.theme[color: .primary]
         let color = options.textColors[data.colorIdx]
         view.textColor = data.isTextSelected ? color.subColor : color.color
-        view.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width-40, height: 55) // 预设
+        view.frame = CGRect(x: hInset, y: 0, width: UIScreen.main.bounds.width-hInset*4, height: lineHeight+vInset*2) // 预设
+        view.textContainerInset = UIEdgeInsets.zero
+        view.textContainer.lineFragmentPadding = 0
         return view
     }()
     /// 仅用于计算TextView最后一行的文本
@@ -77,8 +79,9 @@ final class InputTextViewController: AnyImageViewController {
     }
     private let coverImage: UIImage?
     private let data: TextData
-    
-    private let lineHeight: CGFloat = 36
+    private let lineHeight: CGFloat
+    private let vInset: CGFloat = 8
+    private let hInset: CGFloat = 12
     private var isBegin: Bool = true
     private var containerSize: CGSize = .zero
     
@@ -86,6 +89,7 @@ final class InputTextViewController: AnyImageViewController {
         self.context = context
         self.coverImage = coverImage
         self.data = data
+        self.lineHeight = context.options.textFont.lineHeight
         super.init(nibName: nil, bundle: nil)
         self.modalPresentationStyle = .fullScreen
     }
@@ -120,6 +124,7 @@ final class InputTextViewController: AnyImageViewController {
             if !data.text.isEmpty {
                 textView.text = data.text
                 textViewDidChange(textView)
+                updateShadow()
             }
             textView.becomeFirstResponder()
         }
@@ -161,33 +166,41 @@ final class InputTextViewController: AnyImageViewController {
             maker.centerY.equalTo(cancelButton)
             maker.right.equalToSuperview().offset(-15)
         }
-        toolView.snp.makeConstraints { maker in
-            maker.left.right.equalToSuperview().inset(20)
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-            } else {
-                maker.bottom.equalToSuperview().offset(-40)
-            }
-            maker.height.equalTo(30)
-        }
+        layoutToolView()
         textCoverView.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(50)
-            maker.left.equalToSuperview().offset(10)
-            maker.right.equalToSuperview().offset(-10)
-            maker.height.equalTo(lineHeight+10*2)
+            maker.left.right.equalToSuperview().inset(hInset)
+            maker.height.equalTo(lineHeight + vInset * 2)
         }
         textView.snp.makeConstraints { maker in
-            maker.top.bottom.equalToSuperview()
-            maker.left.right.equalToSuperview().inset(10)
+            maker.top.equalToSuperview().offset(vInset)
+            maker.bottom.equalToSuperview()
+            maker.left.right.equalToSuperview().inset(hInset)
         }
         calculateLabel.snp.makeConstraints { maker in
             maker.top.equalTo(cancelButton.snp.bottom).offset(250)
-            maker.left.right.equalToSuperview().inset(25)
+            maker.left.right.equalTo(textView)
             maker.height.greaterThanOrEqualTo(55)
         }
         
         options.theme.buttonConfiguration[.cancel]?.configuration(cancelButton)
         options.theme.buttonConfiguration[.done]?.configuration(doneButton)
+    }
+    
+    private func layoutToolView(bottonOffset: CGFloat = 0) {
+        toolView.snp.remakeConstraints { maker in
+            maker.left.right.equalToSuperview()
+            if bottonOffset == 0 {
+                if #available(iOS 11.0, *) {
+                    maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+                } else {
+                    maker.bottom.equalToSuperview().offset(-40)
+                }
+            } else {
+                maker.bottom.equalToSuperview().offset(-bottonOffset-20)
+            }
+            maker.height.equalTo(40)
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -225,7 +238,12 @@ extension InputTextViewController {
         if array.isEmpty { return }
         
         updateCalculateLabel(string: array.last!)
-        let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
+        let lastLineWidth: CGFloat
+        if options.calculateTextLastLineMask {
+            lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2)
+        } else {
+            lastLineWidth = array.count == 1 ? calculateLabel.intrinsicContentSize.width + (hInset * 2) : textCoverView.bounds.width
+        }
         textLayer = createMaskLayer(CGSize(width: textCoverView.bounds.width, height: height), lastLineWidth: lastLineWidth, hasMultiLine: array.count > 1)
         textCoverView.layer.insertSublayer(textLayer!, at: 0)
     }
@@ -239,7 +257,7 @@ extension InputTextViewController {
         let lastLineHeight: CGFloat = lineHeight + 2
         
         let bezier: UIBezierPath
-        if hasMultiLine && width - lastLineWidth > 20 { // 一半的情况
+        if hasMultiLine && width - lastLineWidth > (hInset * 2) { // 一半的情况
             bezier = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: width, height: height), byRoundingCorners: [.topLeft, .topRight, .bottomLeft], cornerRadii: CGSize(width: radius, height: radius))
             let cropBezier1 = UIBezierPath(roundedRect: CGRect(x: lastLineWidth, y: height-lastLineHeight, width: width-lastLineWidth, height: lastLineHeight), byRoundingCorners: .topLeft, cornerRadii: CGSize(width: radius, height: radius))
             bezier.append(cropBezier1)
@@ -275,8 +293,8 @@ extension InputTextViewController {
         let array = textView.getSeparatedLines()
         if array.count == 1 {
             updateCalculateLabel(string: array.last!)
-            let lastLineWidth = calculateLabel.intrinsicContentSize.width + 30
-            let offset = textCoverView.bounds.width - lastLineWidth + 10
+            let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2)
+            let offset = textCoverView.bounds.width - lastLineWidth + hInset
             textCoverView.snp.updateConstraints { maker in
                 maker.right.equalToSuperview().offset(-offset)
             }
@@ -289,6 +307,19 @@ extension InputTextViewController {
         attr = attr.attributedSubstring(from: (attr.string as NSString).range(of: string))
         calculateLabel.attributedText = attr
     }
+    
+    /// 设置文本阴影
+    private func updateShadow() {
+        if data.isTextSelected {
+            textView.layer.removeSketchShadow()
+        } else {
+            if let shadow = options.textColors[data.colorIdx].shadow {
+                textView.layer.applySketchShadow(with: shadow)
+            } else {
+                textView.layer.removeSketchShadow()
+            }
+        }
+    }
 }
 
 // MARK: - UITextViewDelegate
@@ -296,7 +327,7 @@ extension InputTextViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         let line = CGFloat(textView.getSeparatedLines().count)
-        let height: CGFloat = max(lineHeight * line + 10 * 2, textView.contentSize.height)
+        let height: CGFloat = max(lineHeight * line, textView.contentSize.height) + vInset * 2
         textCoverView.snp.updateConstraints { maker in
             maker.height.equalTo(height)
         }
@@ -321,6 +352,7 @@ extension InputTextViewController: EditorTextToolViewDelegate {
         let color = options.textColors[data.colorIdx]
         textView.textColor = data.isTextSelected ? color.subColor : color.color
         setupMaskLayer()
+        updateShadow()
     }
     
     func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
@@ -330,6 +362,7 @@ extension InputTextViewController: EditorTextToolViewDelegate {
         if data.isTextSelected {
             setupMaskLayer()
         }
+        updateShadow()
     }
 }
 
@@ -348,19 +381,7 @@ extension InputTextViewController {
     @objc private func keyboardFrameChanged(_ notification: Notification) {
         guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let offset = UIScreen.main.bounds.height - frame.origin.y
-        toolView.snp.remakeConstraints { maker in
-            maker.left.right.equalToSuperview().inset(20)
-            if offset == 0 {
-                if #available(iOS 11.0, *) {
-                    maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-                } else {
-                    maker.bottom.equalToSuperview().offset(-40)
-                }
-            } else {
-                maker.bottom.equalToSuperview().offset(-offset-20)
-            }
-            maker.height.equalTo(30)
-        }
+        layoutToolView(bottonOffset: offset)
         view.layoutIfNeeded()
     }
 }
@@ -375,7 +396,7 @@ extension UITextView {
         
         // size needs to be adjusted, because frame might change because of intelligent word wrapping of iOS
         let size = sizeThatFits(CGSize(width: self.frame.width, height: .greatestFiniteMagnitude))
-        path.addRect(CGRect(x: 0, y: 0, width: size.width, height: size.height), transform: .identity)
+        path.addRect(CGRect(x: 0, y: 0, width: size.width, height: size.height + 50), transform: .identity)
         
         let frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attributedText.length), path, nil)
         guard let lines = CTFrameGetLines(frame) as? [Any] else { return linesArray }

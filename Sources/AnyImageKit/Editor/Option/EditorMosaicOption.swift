@@ -9,7 +9,7 @@
 import UIKit
 
 /// Mosaic option
-public enum EditorMosaicOption: Equatable {
+public enum EditorMosaicOption: Equatable, Hashable {
     
     /// Default mosaic.
     /// Blurring the original image.

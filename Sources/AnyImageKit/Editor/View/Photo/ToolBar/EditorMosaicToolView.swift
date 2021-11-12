@@ -22,7 +22,7 @@ final class EditorMosaicToolView: UIView {
     private(set) var currentIdx: Int = 0
     
     private(set) lazy var undoButton: UIButton = {
-        let view = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
+        let view = UIButton(type: .custom)
         view.isEnabled = false
         view.setImage(options.theme[icon: .photoToolUndo], for: .normal)
         view.accessibilityLabel = options.theme[string: .undo]
@@ -33,7 +33,8 @@ final class EditorMosaicToolView: UIView {
     private let options: EditorPhotoOptionsInfo
     private var mosaicButtons: [UIButton] = []
     private let spacing: CGFloat = 40
-    private let itemWidth: CGFloat = 24
+    private let itemWidth: CGFloat = 22
+    private let buttonWidth: CGFloat = 34
     
     init(frame: CGRect, options: EditorPhotoOptionsInfo) {
         self.options = options
@@ -49,10 +50,11 @@ final class EditorMosaicToolView: UIView {
     private func setupView() {
         addSubview(undoButton)
         undoButton.snp.makeConstraints { maker in
-            maker.right.equalToSuperview()
+            maker.right.equalToSuperview().offset(-8)
             maker.centerY.equalToSuperview()
-            maker.width.height.equalTo(itemWidth)
+            maker.width.height.equalTo(buttonWidth)
         }
+        
         setupMosaicView()
         updateState()
         
@@ -65,6 +67,7 @@ final class EditorMosaicToolView: UIView {
         }
         
         let stackView = UIStackView(arrangedSubviews: mosaicButtons)
+        stackView.isHidden = options.mosaicOptions.count <= 1
         stackView.spacing = spacing
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
@@ -74,12 +77,12 @@ final class EditorMosaicToolView: UIView {
         stackView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(offset)
             maker.centerY.equalToSuperview()
-            maker.height.equalTo(itemWidth)
+            maker.height.equalTo(buttonWidth)
         }
         
-        for icon in mosaicButtons {
-            icon.snp.makeConstraints { maker in
-                maker.width.height.equalTo(itemWidth)
+        for button in mosaicButtons {
+            button.snp.makeConstraints { maker in
+                maker.width.height.equalTo(buttonWidth)
             }
         }
     }
@@ -92,15 +95,17 @@ final class EditorMosaicToolView: UIView {
         case .custom(let customMosaicIcon, let customMosaic):
             image = customMosaicIcon ?? customMosaic
         }
-        let button = BigButton(moreInsets: UIEdgeInsets(top: spacing/4, left: spacing/2, bottom: spacing*0.8, right: spacing/2))
+        let inset = (buttonWidth - itemWidth) / 2
+        let button = UIButton(type: .custom)
         button.tag = idx
         button.tintColor = .white
         button.clipsToBounds = true
         button.setImage(image, for: .normal)
-        button.imageEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+        button.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         button.imageView?.layer.cornerRadius = option == .default ? 0 : 2
         button.imageView?.layer.borderColor = UIColor.white.cgColor
         button.addTarget(self, action: #selector(mosaicButtonTapped(_:)), for: .touchUpInside)
+        options.theme.buttonConfiguration[.mosaic(option)]?.configuration(button)
         return button
     }
 }
@@ -148,23 +153,5 @@ extension EditorMosaicToolView {
     
     @objc private func undoButtonTapped(_ sender: UIButton) {
         delegate?.mosaicToolViewUndoButtonTapped(self)
-    }
-}
-
-// MARK: - Event
-extension EditorMosaicToolView {
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
-            return nil
-        }
-        var subViews: [UIView] = mosaicButtons
-        subViews.append(undoButton)
-        for subView in subViews {
-            if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
-                return hitView
-            }
-        }
-        return nil
     }
 }

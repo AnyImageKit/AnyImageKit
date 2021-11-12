@@ -73,6 +73,29 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: [white, black, red, yellow, green, blue, purple]
     public var textColors: [EditorTextColor] = Palette.textColors
     
+    /// Font of intput text.
+    ///
+    /// - Default: .systemFont(ofSize: 32, weight: .bold)
+    public var textFont: UIFont = .systemFont(ofSize: 32, weight: .bold)
+    
+    /// Style of input text at the first time.
+    ///
+    /// false: No background color, and the text color is main color.
+    ///
+    /// true: The background color is main color, and the text color is sub color.
+    ///
+    /// - Default: true
+    public var isTextSelected: Bool = true
+    
+    /// Calculate text last line mask width when input text.
+    ///
+    /// false: The last line mask width equal to text view width.
+    ///
+    /// true: The last line mask width equal to text length.
+    ///
+    /// - Default: true
+    public var calculateTextLastLineMask: Bool = true
+    
     /// Crop size of crop tool options.
     /// Option sorting is arranged in a given array.
     ///

@@ -208,11 +208,11 @@ private class VideoView: UIView {
         view.font = UIFont.systemFont(ofSize: 12)
         return view
     }()
-    private lazy var videoCoverLayer: CAGradientLayer = {
+    private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
         layer.colors = [
-            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor]
         layer.locations = [0, 1]
         layer.startPoint = CGPoint(x: 0.5, y: 1)
@@ -222,7 +222,7 @@ private class VideoView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        videoCoverLayer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
     }
     
     override init(frame: CGRect) {
@@ -235,7 +235,7 @@ private class VideoView: UIView {
     }
     
     private func setupView() {
-        layer.addSublayer(videoCoverLayer)
+        layer.addSublayer(coverLayer)
         addSubview(videoImageView)
         addSubview(videoLabel)
         
@@ -282,11 +282,11 @@ private class GIFView: UIView {
         view.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         return view
     }()
-    private lazy var gifCoverLayer: CAGradientLayer = {
+    private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
         layer.colors = [
-            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor]
         layer.locations = [0, 1]
         layer.startPoint = CGPoint(x: 0.5, y: 1)
@@ -296,7 +296,7 @@ private class GIFView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        gifCoverLayer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
     }
     
     override init(frame: CGRect) {
@@ -309,7 +309,7 @@ private class GIFView: UIView {
     }
     
     private func setupView() {
-        layer.addSublayer(gifCoverLayer)
+        layer.addSublayer(coverLayer)
         addSubview(gifLabel)
         
         gifLabel.snp.makeConstraints { maker in
@@ -337,9 +337,9 @@ private class EditedView: UIView {
     
     private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
         layer.colors = [
-            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor]
         layer.locations = [0, 1]
         layer.startPoint = CGPoint(x: 0.5, y: 1)
@@ -349,7 +349,7 @@ private class EditedView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20)
+        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
     }
     
     override init(frame: CGRect) {
@@ -367,7 +367,6 @@ private class EditedView: UIView {
         
         imageView.snp.makeConstraints { maker in
             maker.left.bottom.equalToSuperview().inset(6)
-            maker.width.height.equalTo(15)
         }
     }
 }
@@ -380,4 +379,3 @@ extension EditedView: PickerOptionsConfigurable {
         updateChildrenConfigurable(options: options)
     }
 }
-
