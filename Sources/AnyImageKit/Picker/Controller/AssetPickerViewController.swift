@@ -700,9 +700,11 @@ extension AssetPickerViewController {
     @available(iOS 14.0, *)
     private func setupDataSource() {
         let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { [weak self] cell, indexPath, asset in
+            guard let self = self else { return }
+            cell.update(options: self.manager.options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = self?.manager.options.theme[string: .pickerTakePhoto] ?? ""
+            cell.accessibilityLabel = self.manager.options.theme[string: .pickerTakePhoto]
         }
         
         let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
