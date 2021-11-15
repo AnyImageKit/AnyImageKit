@@ -15,7 +15,7 @@ extension PhotoPreviewController {
     /// ToolBar - Edit
     @objc func editButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if data.asset.phAsset.mediaType == .image {
+        if data.asset.mediaType == .photo {
             if let image = data.asset._images[.initial] {
                 showEditor(image, identifier: data.asset.identifier)
             } else {
@@ -62,7 +62,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
         
-        if data.asset.phAsset.mediaType == .image && manager.options.editorOptions.contains(.photo) {
+        if data.asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
             toolBar.leftButton.isHidden = false
         } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
             toolBar.leftButton.isHidden = false

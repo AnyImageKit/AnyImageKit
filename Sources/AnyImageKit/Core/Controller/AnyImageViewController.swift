@@ -77,20 +77,20 @@ extension AnyImageViewController {
         switch self {
         #if ANYIMAGEKIT_ENABLE_PICKER
         case _ as AlbumPickerViewController:
-            page = .albumPicker
+            page = .pickerAlbum
         case _ as AssetPickerViewController:
-            page = .assetPicker
+            page = .pickerAsset
         case _ as PhotoPreviewController:
-            page = .photoPreview
+            page = .pickerPreview
         #endif
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         case _ as PhotoEditorController:
-            page = .photoEditor
+            page = .editorPhoto
         case _ as VideoEditorController:
-            page = .videoEditor
+            page = .editorVideo
         case _ as InputTextViewController:
-            page = .textInput
+            page = .editorInputText
         #endif
             
         #if ANYIMAGEKIT_ENABLE_CAPTURE

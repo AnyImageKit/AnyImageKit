@@ -373,6 +373,7 @@ extension AssetPickerViewController {
             updateVisibleCellState(idx)
         }
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected])
     }
 }
 
@@ -420,10 +421,12 @@ extension AssetPickerViewController {
         controller.transitioningDelegate = presentationController
         self.albumsPicker = controller
         present(controller, animated: true, completion: nil)
+        trackObserver?.track(event: .pickerSwitchAlbum, userInfo: [:])
     }
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         delegate?.assetPickerDidCancel(self)
+        trackObserver?.track(event: .pickerCancel, userInfo: [:])
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
@@ -433,21 +436,25 @@ extension AssetPickerViewController {
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
+        trackObserver?.track(event: .pickerPreview, userInfo: [:])
     }
     
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
         manager.useOriginalImage = sender.isSelected
+        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn:sender.isSelected])
     }
     
     @objc func doneButtonTapped(_ sender: UIButton) {
         stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
+        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
     }
     
     @objc private func limitedButtonTapped(_ sender: UIButton) {
         if #available(iOS 14.0, *) {
             PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+            trackObserver?.track(event: .pickerLimitedLibrary, userInfo: [:])
         }
     }
 }
@@ -700,9 +707,11 @@ extension AssetPickerViewController {
     @available(iOS 14.0, *)
     private func setupDataSource() {
         let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { [weak self] cell, indexPath, asset in
+            guard let self = self else { return }
+            cell.update(options: self.manager.options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = self?.manager.options.theme[string: .pickerTakePhoto] ?? ""
+            cell.accessibilityLabel = self.manager.options.theme[string: .pickerTakePhoto]
         }
         
         let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
