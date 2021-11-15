@@ -325,6 +325,7 @@ extension PhotoEditorController {
             }
         case .back:
             delegate?.photoEditorDidCancel(self)
+            trackObserver?.track(event: .editorBack, userInfo: [:])
         case .done:
             contentView.deactivateAllTextView()
             guard let image = getResultImage() else { return false }
@@ -332,6 +333,7 @@ extension PhotoEditorController {
             stack.setOutputImage(image)
             saveEditPath()
             delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
+            trackObserver?.track(event: .editorDone, userInfo: [:])
         case .toolOptionChanged(let option):
             context.toolOption = option
             toolOptionsDidChanged(option: option)
@@ -339,6 +341,7 @@ extension PhotoEditorController {
             setTool(hidden: true)
         case .brushUndo:
             stack.canvasUndo()
+            trackObserver?.track(event: .editorPhotoBrushUndo, userInfo: [:])
         case .brushChangeColor(let color):
             contentView.canvas.setBrush(color: color)
         case .brushFinishDraw(let dataList):
@@ -346,6 +349,7 @@ extension PhotoEditorController {
             stack.setBrushData(dataList)
         case .mosaicUndo:
             stack.mosaicUndo()
+            trackObserver?.track(event: .editorPhotoMosaicUndo, userInfo: [:])
         case .mosaicChangeImage(let idx):
             contentView.mosaic?.setMosaicCoverImage(idx)
         case .mosaicFinishDraw(let dataList):
@@ -355,9 +359,12 @@ extension PhotoEditorController {
             contentView.setCrop(option)
         case .cropRotate:
             contentView.rotate()
+            trackObserver?.track(event: .editorPhotoCropRotation, userInfo: [:])
         case .cropReset:
             contentView.cropReset()
+            trackObserver?.track(event: .editorPhotoCropReset, userInfo: [:])
         case .cropCancel:
+            trackObserver?.track(event: .editorPhotoCropCancel, userInfo: [:])
             if options.toolOptions.count == 1 {
                 context.action(.back)
                 return true
@@ -367,6 +374,7 @@ extension PhotoEditorController {
                 self?.didEndCroping()
             }
         case .cropDone:
+            trackObserver?.track(event: .editorPhotoCropDone, userInfo: [:])
             backButton.isHidden = false
             contentView.cropDone { [weak self] (_) in
                 guard let self = self else { return }
@@ -409,10 +417,10 @@ extension PhotoEditorController {
         switch option {
         case .brush:
             contentView.canvas.isUserInteractionEnabled = true
-            trackObserver?.track(event: .photoPen, userInfo: [:])
+            trackObserver?.track(event: .editorPhotoBrush, userInfo: [:])
         case .text:
             openInputController()
-            trackObserver?.track(event: .photoText, userInfo: [:])
+            trackObserver?.track(event: .editorPhotoText, userInfo: [:])
         case .crop:
             willBeginCrop()
             if let option = options.cropOptions.first, !contentView.cropContext.didCrop {
@@ -421,13 +429,13 @@ extension PhotoEditorController {
             } else {
                 contentView.cropStart()
             }
-            trackObserver?.track(event: .photoCrop, userInfo: [:])
+            trackObserver?.track(event: .editorPhotoCrop, userInfo: [:])
         case .mosaic:
             if contentView.mosaic == nil {
                 showWaitHUD()
             }
             contentView.mosaic?.isUserInteractionEnabled = true
-            trackObserver?.track(event: .photoMosaic, userInfo: [:])
+            trackObserver?.track(event: .editorPhotoMosaic, userInfo: [:])
         }
     }
 }
