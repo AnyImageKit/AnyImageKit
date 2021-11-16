@@ -69,8 +69,11 @@ extension AssetPickerViewController {
                 collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
             }
         }
-        updateVisibleCellState()
+        
+        let indexPaths = collectionView.visibleCells.compactMap { collectionView.indexPath(for: $0) }
+        collectionView.reloadItems(at: indexPaths)
         toolBar.setEnable(true)
+        
         if addSuccess {
             /// 拍照结束后，如果 limit=1 直接返回
             if manager.options.selectLimit == 1 {
