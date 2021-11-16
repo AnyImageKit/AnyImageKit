@@ -373,7 +373,7 @@ extension AssetPickerViewController {
             updateVisibleCellState(idx)
         }
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
-        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected])
+        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerAsset])
     }
 }
 
@@ -442,7 +442,7 @@ extension AssetPickerViewController {
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
         manager.useOriginalImage = sender.isSelected
-        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn:sender.isSelected])
+        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
     }
     
     @objc func doneButtonTapped(_ sender: UIButton) {

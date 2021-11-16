@@ -359,7 +359,7 @@ extension PhotoPreviewController {
         }
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
-        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected])
+        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
     }
     
     /// ToolBar - Original
@@ -375,7 +375,7 @@ extension PhotoPreviewController {
                 selectButtonTapped(navigationBar.selectButton)
             }
         }
-        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected])
+        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerPreview])
     }
     
     /// ToolBar - Done
