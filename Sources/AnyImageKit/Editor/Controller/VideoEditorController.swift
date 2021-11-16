@@ -161,7 +161,7 @@ extension VideoEditorController {
     
     @objc private func backButtonTapped(_ sender: UIButton) {
         delegate?.videoEditorDidCancel(self)
-        trackObserver?.track(event: .editorBack, userInfo: [:])
+        trackObserver?.track(event: .editorBack, userInfo: [.page: AnyImagePage.editorVideo])
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
@@ -172,7 +172,7 @@ extension VideoEditorController {
         if let url = resource as? URL, !isEdited {
             _print("Export video at \(url)")
             delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
-            trackObserver?.track(event: .editorDone, userInfo: [:])
+            trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             return
         }
         clipVideo(url: url, start: start, end: end) { [weak self] (result) in
@@ -181,7 +181,7 @@ extension VideoEditorController {
             case .success(let url):
                 _print("Export video at \(url)")
                 self.delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
-                self.trackObserver?.track(event: .editorDone, userInfo: [:])
+                self.trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             case .failure(let error):
                 _print(error.localizedDescription)
             }
@@ -217,7 +217,7 @@ extension VideoEditorController: VideoEditorCropToolViewDelegate {
         videoPreview.playOrPause()
         button.isSelected = videoPreview.isPlaying
         addPlayerObserver()
-        trackObserver?.track(event: .editorVideoPlayPluse, userInfo: [:])
+        trackObserver?.track(event: .editorVideoPlayPause, userInfo: [.isOn: videoPreview.isPlaying])
     }
     
     func cropTool(_ view: VideoEditorCropToolView, didUpdate progress: CGFloat) {

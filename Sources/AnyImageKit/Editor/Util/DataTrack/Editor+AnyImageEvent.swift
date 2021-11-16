@@ -11,29 +11,44 @@ import Foundation
 extension AnyImageEvent {
     
     // MARK: - Common
+    /// UserInfo: [page: (editorPhoto|editorVideo)]
     public static let editorBack: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_BACK"
-    public static let editorCancel: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_CANCEL"
+    
+    /// UserInfo: [page: (editorPhoto|editorVideo)]
     public static let editorDone: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_DONE"
     
+    /// UserInfo: [page: (editorPhoto|editorVideo)]
+    public static let editorCancel: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_CANCEL"
+    
     // MARK: - Photo
+    
     public static let editorPhotoBrushUndo: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_BRUSH_UNDO"
+    
     public static let editorPhotoMosaicUndo: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_MOSAIC_UNDO"
+    
+    /// UserInfo: [isOn: (true|false)]
     public static let editorPhotoTextSwitch: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_TEXT_SWITCH"
     
     public static let editorPhotoCropRotation: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_CROP_ROTATION"
+    
     public static let editorPhotoCropCancel: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_CROP_CANCEL"
+    
     public static let editorPhotoCropReset: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_CROP_RESET"
+    
     public static let editorPhotoCropDone: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_CROP_DONE"
     
     public static let editorPhotoBrush: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_BRUSH"
+    
     public static let editorPhotoMosaic: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_MOSAIC"
+    
     public static let editorPhotoText: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_TEXT"
+    
     public static let editorPhotoCrop: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_PHOTO_CROP"
     
     // MARK: - Video
-    public static let editorVideoPlayPluse: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_VIDEO_PLAY_PLUSE"
-//    public static let editorVideoCropLeft: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_VIDEO_CROP_LEFT"
-//    public static let editorVideoCropRight: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_VIDEO_CROP_RIGHT"
+    
+    /// UserInfo: [isOn: (true|false)] true=play, false=pause
+    public static let editorVideoPlayPause: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_VIDEO_PLAY_PAUSE"
 }
 
 extension AnyImageEvent {

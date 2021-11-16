@@ -325,7 +325,7 @@ extension PhotoEditorController {
             }
         case .back:
             delegate?.photoEditorDidCancel(self)
-            trackObserver?.track(event: .editorBack, userInfo: [:])
+            trackObserver?.track(event: .editorBack, userInfo: [.page: AnyImagePage.editorPhoto])
         case .done:
             contentView.deactivateAllTextView()
             guard let image = getResultImage() else { return false }
@@ -333,7 +333,7 @@ extension PhotoEditorController {
             stack.setOutputImage(image)
             saveEditPath()
             delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
-            trackObserver?.track(event: .editorDone, userInfo: [:])
+            trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorPhoto])
         case .toolOptionChanged(let option):
             context.toolOption = option
             toolOptionsDidChanged(option: option)
