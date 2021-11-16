@@ -155,6 +155,7 @@ extension CaptureViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIButton) {
         delegate?.captureDidCancel(self)
+        trackObserver?.track(event: .captureCancel, userInfo: [:])
     }
     
     @objc private func switchButtonTapped(_ sender: UIButton) {
@@ -172,6 +173,7 @@ extension CaptureViewController {
             self.toolView.showButtons(animated: true)
         }
         sender.isSelected.toggle()
+        trackObserver?.track(event: .captureSwitchCamera, userInfo: [:])
     }
 }
 

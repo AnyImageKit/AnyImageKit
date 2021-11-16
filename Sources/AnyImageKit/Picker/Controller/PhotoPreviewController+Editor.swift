@@ -12,9 +12,11 @@ import UIKit
 
 // MARK: - Target
 extension PhotoPreviewController {
+    
     /// ToolBar - Edit
     @objc func editButtonTapped(_ sender: UIButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        trackObserver?.track(event: .pickerEdit, userInfo: [:])
         if data.asset.mediaType == .photo {
             if let image = data.asset._images[.initial] {
                 showEditor(image, identifier: data.asset.identifier)

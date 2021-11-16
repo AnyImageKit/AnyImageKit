@@ -282,6 +282,6 @@ extension PickerTheme {
         case originalImage
         case done
         case backInPreview
-        case goSetting
+        case goSettings
     }
 }

@@ -202,7 +202,7 @@ extension EditorTheme {
         case cropReset
         case cropDone
         
-        case videoPlayPluse
+        case videoPlayPause
         case videoCropLeft
         case videoCropRight
     }

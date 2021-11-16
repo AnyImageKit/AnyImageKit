@@ -353,6 +353,7 @@ extension InputTextViewController: EditorTextToolViewDelegate {
         textView.textColor = data.isTextSelected ? color.subColor : color.color
         setupMaskLayer()
         updateShadow()
+        trackObserver?.track(event: .editorPhotoTextSwitch, userInfo: [.isOn: isSelected])
     }
     
     func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {

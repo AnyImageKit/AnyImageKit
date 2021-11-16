@@ -373,6 +373,7 @@ extension AssetPickerViewController {
             updateVisibleCellState(idx)
         }
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerAsset])
     }
 }
 
@@ -420,10 +421,12 @@ extension AssetPickerViewController {
         controller.transitioningDelegate = presentationController
         self.albumsPicker = controller
         present(controller, animated: true, completion: nil)
+        trackObserver?.track(event: .pickerSwitchAlbum, userInfo: [:])
     }
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         delegate?.assetPickerDidCancel(self)
+        trackObserver?.track(event: .pickerCancel, userInfo: [:])
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
@@ -433,21 +436,25 @@ extension AssetPickerViewController {
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
+        trackObserver?.track(event: .pickerPreview, userInfo: [:])
     }
     
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
         manager.useOriginalImage = sender.isSelected
+        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
     }
     
     @objc func doneButtonTapped(_ sender: UIButton) {
         stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
+        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
     }
     
     @objc private func limitedButtonTapped(_ sender: UIButton) {
         if #available(iOS 14.0, *) {
             PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+            trackObserver?.track(event: .pickerLimitedLibrary, userInfo: [:])
         }
     }
 }
