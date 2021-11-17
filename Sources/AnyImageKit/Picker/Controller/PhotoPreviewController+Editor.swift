@@ -111,6 +111,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
                 selectButtonTapped(navigationBar.selectButton)
             }
         }
+        delegate?.previewController(self, didSelected: currentIndex)
     }
 }
 
