@@ -489,25 +489,27 @@ extension PhotoEditorContentView {
         let isXDown: Bool
         let isYUp: Bool
         let isYDown: Bool
+        let imageFrame = imageView.frame
+        let contentOffset = scrollView.contentOffset
         
         // 第一个条件控制最小边界；第二个条件控制最大边界
         if rotateState.isPortrait {
-            let offsetX = rotateState == .portrait ? scrollView.contentOffset.x : imageView.frame.width - cropStartPanRect.width - scrollView.contentOffset.x
-            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageView.frame.minX + scrollView.frame.minX - offsetX
-            isXDown = rect.width + point.x > limit && rect.width + point.x < imageView.frame.width - offsetX
+            let offsetX = rotateState == .portrait ? contentOffset.x : imageFrame.width - cropStartPanRect.width - contentOffset.x
+            let offsetY = rotateState == .portrait ? contentOffset.y : imageFrame.height - cropStartPanRect.height - contentOffset.y
             
-            let offsetY = rotateState == .portrait ? scrollView.contentOffset.y : imageView.frame.height - cropStartPanRect.height - scrollView.contentOffset.y
-            isYUp = rect.height - point.y > limit && rect.minY + point.y > imageView.frame.minY + scrollView.frame.minY - offsetY
-            isYDown = rect.height + point.y > limit && rect.height + point.y < imageView.frame.height - offsetY
+            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageFrame.minX + scrollView.frame.minX - offsetX
+            isYUp = rect.height - point.y > limit && rect.minY + point.y > imageFrame.minY + scrollView.frame.minY - offsetY
+            isXDown = rect.width + point.x > limit && rect.width + point.x < imageFrame.width - offsetX
+            isYDown = rect.height + point.y > limit && rect.height + point.y < imageFrame.height - offsetY
         } else {
-            let offsetX = rotateState == .landscapeLeft ? scrollView.contentOffset.y : imageView.frame.height - cropStartPanRect.width - scrollView.contentOffset.y
-            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageView.frame.minY + scrollView.frame.minX - offsetX
-            isXDown = rect.width + point.x > limit && rect.width + point.x < imageView.frame.height - offsetX
-
-            let yUpOffsetY = rotateState == .landscapeLeft ? scrollView.contentOffset.x : imageView.frame.width - cropStartPanRect.height - scrollView.contentOffset.x
-            isYUp = rect.height - point.y > limit && rect.height - point.y < imageView.frame.width - yUpOffsetY
-            let yDownOffsetY = rotateState == .landscapeLeft ? imageView.frame.width - cropStartPanRect.height - scrollView.contentOffset.x : scrollView.contentOffset.x
-            isYDown = rect.height + point.y > limit && rect.height + point.y < imageView.frame.width - yDownOffsetY
+            let offsetX = rotateState == .landscapeLeft ? contentOffset.y : imageFrame.height - cropStartPanRect.width - contentOffset.y
+            let offsetYUp = rotateState == .landscapeLeft ? contentOffset.x : imageFrame.width - cropStartPanRect.height - contentOffset.x
+            let offsetYDown = rotateState == .landscapeLeft ? imageFrame.width - cropStartPanRect.height - contentOffset.x : contentOffset.x
+            
+            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageFrame.minY + scrollView.frame.minX - offsetX
+            isYUp = rect.height - point.y > limit && rect.height - point.y < imageFrame.width - offsetYUp
+            isXDown = rect.width + point.x > limit && rect.width + point.x < imageFrame.height - offsetX
+            isYDown = rect.height + point.y > limit && rect.height + point.y < imageFrame.width - offsetYDown
         }
         
         switch position {
