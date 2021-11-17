@@ -37,6 +37,7 @@
 		7142FF7625591DB0003FF44D /* DryDrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7142FF7525591DB0003FF44D /* DryDrawingView.swift */; };
 		714869182744D88E003D4605 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
 		7148691F2744E366003D4605 /* PickerAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148691E2744E366003D4605 /* PickerAPITests.swift */; };
+		714869252744E8F8003D4605 /* EditorAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714869242744E8F8003D4605 /* EditorAPITests.swift */; };
 		715D6B37256E449B004D9BF1 /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D6B36256E449B004D9BF1 /* Mosaic.swift */; };
 		715D6B3D256E4690004D9BF1 /* MosaicContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */; };
 		715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */; };
@@ -310,6 +311,7 @@
 		714869132744D88E003D4605 /* APITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		714869172744D88E003D4605 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7148691E2744E366003D4605 /* PickerAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerAPITests.swift; sourceTree = "<group>"; };
+		714869242744E8F8003D4605 /* EditorAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorAPITests.swift; sourceTree = "<group>"; };
 		715D6B36256E449B004D9BF1 /* Mosaic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
 		715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MosaicContentView.swift; sourceTree = "<group>"; };
 		715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreselectAssetViewController.swift; sourceTree = "<group>"; };
@@ -664,6 +666,7 @@
 			isa = PBXGroup;
 			children = (
 				7148691E2744E366003D4605 /* PickerAPITests.swift */,
+				714869242744E8F8003D4605 /* EditorAPITests.swift */,
 				714869172744D88E003D4605 /* Info.plist */,
 			);
 			path = APITests;
@@ -1698,6 +1701,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				714869252744E8F8003D4605 /* EditorAPITests.swift in Sources */,
 				7148691F2744E366003D4605 /* PickerAPITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
