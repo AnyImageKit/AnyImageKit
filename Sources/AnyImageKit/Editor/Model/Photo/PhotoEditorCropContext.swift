@@ -30,10 +30,15 @@ final class PhotoEditorCropContext {
     var contentSize: CGSize = .zero
     /// 裁剪后的imageViewFrame
     var imageViewFrame: CGRect = .zero
-    /// 裁剪掉的高度
-    var croppedHeight: CGFloat = 0
+    /// 裁剪掉的宽高
+    var croppedSize: CGSize = .zero
     /// 上次裁剪的数据，用于再次进入裁剪
     var lastCropData: CropData = CropData()
     /// 旋转方向
     var rotateState: RotateState = .portrait
+    
+    /// 图片已经裁剪或者旋转
+    var didCropOrRotate: Bool {
+        return didCrop || rotateState != .portrait
+    }
 }
