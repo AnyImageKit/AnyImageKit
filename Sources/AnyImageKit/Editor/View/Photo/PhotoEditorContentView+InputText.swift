@@ -201,8 +201,6 @@ extension PhotoEditorContentView {
             x = x + (width - size.width) / 2
             
             let height = cropContext.cropRealRect.height * imageView.bounds.height / imageView.frame.height
-//            let screenHeight = UIScreen.main.bounds.height / scale
-//            height = height > screenHeight ? screenHeight : height
             y = offsetY / scale
             y = y + (height - size.height) / 2
         }
