@@ -604,14 +604,50 @@ extension PhotoEditorContentView {
             }
         }
         
-        let imageFrame = imageView.frame.reversed(!rotateState.isPortrait)
-        let contentOffset = scrollView.contentOffset.reversed(!rotateState.isPortrait)
-        if rect.width < limit || rect.height < limit
-            || rect.origin.x < imageFrame.minX + scrollView.frame.minX - contentOffset.x
-            || rect.origin.y < imageFrame.minY + scrollView.frame.minY - contentOffset.y
-            || rect.width > imageFrame.width - contentOffset.x
-            || rect.height > imageFrame.height - contentOffset.y {
-            return
+        let isXUp: Bool
+        let isXDown: Bool
+        let isYUp: Bool
+        let isYDown: Bool
+        let imageFrame = imageView.frame
+        let contentOffset = scrollView.contentOffset
+        
+        // 第一个条件控制最小边界；第二个条件控制最大边界
+        if rotateState.isPortrait {
+            let offsetX = rotateState != .upsideDown ? contentOffset.x : imageFrame.width - cropStartPanRect.width - contentOffset.x
+            let offsetY = rotateState != .upsideDown ? contentOffset.y : imageFrame.height - cropStartPanRect.height - contentOffset.y
+            
+            isXUp = rect.width < limit || rect.minX < imageFrame.minX + scrollView.frame.minX - offsetX
+            isYUp = rect.height < limit || rect.minY < imageFrame.minY + scrollView.frame.minY - offsetY
+            isXDown = rect.width < limit || rect.width > imageFrame.width - offsetX
+            isYDown = rect.height < limit || rect.height > imageFrame.height - offsetY
+        } else {
+            let offsetX = rotateState == .landscapeLeft ? contentOffset.y : imageFrame.height - cropStartPanRect.width - contentOffset.y
+            let offsetYUp = rotateState == .landscapeLeft ? contentOffset.x : imageFrame.width - cropStartPanRect.height - contentOffset.x
+            let offsetYDown = rotateState == .landscapeLeft ? imageFrame.width - cropStartPanRect.height - contentOffset.x : contentOffset.x
+            
+            isXUp = rect.width < limit || rect.minX < imageFrame.minY + scrollView.frame.minX - offsetX
+            isYUp = rect.height < limit || rect.height > imageFrame.width - offsetYUp
+            isXDown = rect.width < limit || rect.width > imageFrame.height - offsetX
+            isYDown = rect.height < limit || rect.height > imageFrame.width - offsetYDown
+        }
+        
+        switch posision {
+        case .topLeft: // x+ y+
+            if isXUp || isYUp {
+                return
+            }
+        case .topRight: // x- y+
+            if isXDown || isYUp {
+                return
+            }
+        case .bottomLeft: // x+ y-
+            if isXUp || isYDown {
+                return
+            }
+        case .bottomRight: // x- y-
+            if isXDown || isYDown {
+                return
+            }
         }
         setCropRect(rect)
     }
