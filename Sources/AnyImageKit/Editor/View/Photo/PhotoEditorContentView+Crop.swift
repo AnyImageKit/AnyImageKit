@@ -31,7 +31,7 @@ extension PhotoEditorContentView {
         lastImageViewBounds = imageView.bounds
         cropLayerEnter.frame = cropLayerLeave.frame
         UIView.animate(withDuration: 0.25, animations: {
-            if !self.didCrop {
+            if !self.cropOrRotate {
                 self.layoutStartCrop()
             } else {
                 self.layoutStartCroped()
@@ -53,7 +53,7 @@ extension PhotoEditorContentView {
         isCrop = false
         setCropHidden(true, animated: false)
         // 基础设置
-        if didCrop {
+        if cropOrRotate {
             scrollView.zoomScale = lastCropData.zoomScale
             scrollView.contentSize = lastCropData.contentSize
             imageView.frame = lastCropData.imageViewFrame
@@ -68,7 +68,7 @@ extension PhotoEditorContentView {
                 self.scrollView.bounds = self.lastScrollViewBounds
             }
             
-            if self.didCrop {
+            if self.cropOrRotate {
                 self.layoutEndCrop()
             } else {
                 self.layout()
@@ -80,7 +80,7 @@ extension PhotoEditorContentView {
     /// 裁剪完成
     func cropDone(completion: ((Bool) -> Void)? = nil) {
         isCrop = false
-        didCrop = cropRect.size != scrollView.contentSize || rotateState != .portrait
+        didCrop = cropRect.size.roundTo(places: 1) != (scrollView.contentSize.reversed(!rotateState.isPortrait).roundTo(places: 1))
         setCropHidden(true, animated: false)
         layoutEndCrop()
         UIView.animate(withDuration: 0.25, animations: {
@@ -178,7 +178,6 @@ extension PhotoEditorContentView {
         let top = cropY
         let bottom = cropBottomOffset
         scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
-        scrollView.maximumZoomScale = maximumZoomScale
   
         // 加载上次裁剪数据
         scrollView.zoomScale = lastCropData.zoomScale
@@ -188,16 +187,8 @@ extension PhotoEditorContentView {
         setCropRect(lastCropData.rect, animated: true)
         
         // minimumZoomScale
-        let isVertical = cropRect.height * (scrollView.bounds.width / cropRect.width) > scrollView.bounds.height
-        let mZoom1 = scrollView.bounds.width / imageView.bounds.width
-        let mZoom2 = scrollView.bounds.height / imageView.bounds.height
-        let mZoom: CGFloat
-        if !isVertical {
-            mZoom = (imageView.bounds.height < cropRect.height) ? (cropRect.height / imageView.bounds.height) : mZoom1
-        } else {
-            mZoom = (imageView.bounds.width < cropRect.width) ? (cropRect.width / imageView.bounds.width) : mZoom2
-        }
-        scrollView.minimumZoomScale = mZoom
+        scrollView.maximumZoomScale = maximumZoomScale
+        scrollView.minimumZoomScale = getMinimumZoomScale(with: lastCropData.rect.size, imageSize: lastCropData.imageViewFrame.size)
         
         setupContentInset()
         
@@ -232,6 +223,10 @@ extension PhotoEditorContentView {
     /// 布局裁剪结束
     func layoutEndCrop(_ fromCache: Bool = false) {
         if fromCache {
+            rotateState = lastCropData.rotateState
+            scrollView.transform = CGAffineTransform(rotationAngle: rotateState.angle)
+            scrollView.bounds = CGRect(origin: .zero, size: scrollView.bounds.size.reversed(!rotateState.isPortrait))
+            
             let top = cropY
             let bottom = cropBottomOffset
             scrollView.frame = CGRect(x: cropX, y: top, width: bounds.width-cropX*2, height: bounds.height-top-bottom)
@@ -240,7 +235,10 @@ extension PhotoEditorContentView {
             imageView.frame = lastCropData.imageViewFrame
             scrollView.contentOffset = lastCropData.contentOffset
             setCropRect(lastCropData.rect)
-            didCrop = cropRect.size != scrollView.contentSize
+            didCrop = cropRect.size.roundTo(places: 1) != (scrollView.contentSize.reversed(!rotateState.isPortrait).roundTo(places: 1))
+            
+            scrollView.maximumZoomScale = maximumZoomScale
+            scrollView.minimumZoomScale = getMinimumZoomScale(with: lastCropData.rect.size, imageSize: lastCropData.imageViewFrame.size)
         } else {
             lastCropData.didCrop = didCrop
             lastCropData.rect = cropRect
@@ -268,7 +266,7 @@ extension PhotoEditorContentView {
         let y = (boundsSize.height - contentSize.height) > 0 ? (boundsSize.height - contentSize.height) * 0.5 : 0
         
         // Set
-        scrollView.minimumZoomScale = didCrop ? scale : 1.0
+        scrollView.minimumZoomScale = cropOrRotate ? scale : 1.0
         cropRealRect = CGRect(origin: CGPoint(x: x, y: y), size: contentSize)
         cropContext.contentSize = contentSize
         UIView.animate(withDuration: fromCache ? 0 : 0.25) {
@@ -279,11 +277,12 @@ extension PhotoEditorContentView {
             self.imageView.frame.size = imageSize
             self.scrollView.contentSize = contentSize
             self.cropContext.imageViewFrame = self.imageView.frame
-            self.cropContext.croppedHeight = self.cropRealRect.minY - self.imageView.frame.minY
+            self.cropContext.croppedSize = CGSize(width: self.cropRealRect.minX - self.imageView.frame.minX,
+                                                  height: self.cropRealRect.minY - self.imageView.frame.minY)
         }
         
         // CropLayer
-        guard didCrop else { return }
+        guard cropOrRotate else { return }
         cropLayerLeave.frame = imageView.bounds
         let cropOffsetX = UIScreen.main.bounds.width
         let cropOffsetY = UIScreen.main.bounds.height
@@ -377,6 +376,7 @@ extension PhotoEditorContentView {
             self.scrollView.contentSize = newImageFrame.size
             self.scrollView.contentOffset = newContentOffset
             self.scrollView.minimumZoomScale = self.getMinimumZoomScale(with: newCropRect.size, imageSize: newImageFrame.size)
+            self.scrollView.maximumZoomScale = self.maximumZoomScale
             self.setMirrorCropRect(newCropRect, animated: true)
         } completion: { _ in
             self.setCropRect(newCropRect, animated: false)
@@ -392,7 +392,7 @@ extension PhotoEditorContentView {
     
     /// 设置无裁剪状态时的遮罩
     internal func setupCropLayer() {
-        guard !didCrop && !cropContext.isCrop && cropLayerLeave.superview == nil else { return }
+        guard !cropOrRotate && !cropContext.isCrop && cropLayerLeave.superview == nil else { return }
         cropLayerLeave.frame = imageView.bounds
         let cropOffsetX = UIScreen.main.bounds.width
         let cropOffsetY = UIScreen.main.bounds.height
@@ -490,22 +490,27 @@ extension PhotoEditorContentView {
         let isXDown: Bool
         let isYUp: Bool
         let isYDown: Bool
+        let imageFrame = imageView.frame
+        let contentOffset = scrollView.contentOffset
         
         // 第一个条件控制最小边界；第二个条件控制最大边界
         if rotateState.isPortrait {
-            isXUp = rect.size.width - point.x > limit && rect.origin.x + point.x > imageView.frame.origin.x + scrollView.frame.origin.x - scrollView.contentOffset.x
-            isXDown = rect.size.width + point.x > limit && rect.size.width + point.x < imageView.frame.size.width - scrollView.contentOffset.x
-            isYUp = rect.size.height - point.y > limit && rect.origin.y + point.y > imageView.frame.origin.y + scrollView.frame.origin.y - scrollView.contentOffset.y
-            isYDown = rect.size.height + point.y > limit && rect.size.height + point.y < imageView.frame.size.height - scrollView.contentOffset.y
+            let offsetX = rotateState == .portrait ? contentOffset.x : imageFrame.width - cropStartPanRect.width - contentOffset.x
+            let offsetY = rotateState == .portrait ? contentOffset.y : imageFrame.height - cropStartPanRect.height - contentOffset.y
+            
+            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageFrame.minX + scrollView.frame.minX - offsetX
+            isYUp = rect.height - point.y > limit && rect.minY + point.y > imageFrame.minY + scrollView.frame.minY - offsetY
+            isXDown = rect.width + point.x > limit && rect.width + point.x < imageFrame.width - offsetX
+            isYDown = rect.height + point.y > limit && rect.height + point.y < imageFrame.height - offsetY
         } else {
-            let offsetX = rotateState == .landscapeLeft ? scrollView.contentOffset.y : imageView.frame.height - cropStartPanRect.width - scrollView.contentOffset.y
-            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageView.frame.minY + scrollView.frame.minX - offsetX
-            isXDown = rect.width + point.x > limit && rect.width + point.x < imageView.frame.height - offsetX
-
-            let yUpOffsetY = rotateState == .landscapeLeft ? scrollView.contentOffset.x : imageView.frame.width - cropStartPanRect.height - scrollView.contentOffset.x
-            isYUp = rect.height - point.y > limit && rect.height - point.y < imageView.frame.width - yUpOffsetY
-            let yDownOffsetY = rotateState == .landscapeLeft ? imageView.frame.width - cropStartPanRect.height - scrollView.contentOffset.x : scrollView.contentOffset.x
-            isYDown = rect.height + point.y > limit && rect.height + point.y < imageView.frame.width - yDownOffsetY
+            let offsetX = rotateState == .landscapeLeft ? contentOffset.y : imageFrame.height - cropStartPanRect.width - contentOffset.y
+            let offsetYUp = rotateState == .landscapeLeft ? contentOffset.x : imageFrame.width - cropStartPanRect.height - contentOffset.x
+            let offsetYDown = rotateState == .landscapeLeft ? imageFrame.width - cropStartPanRect.height - contentOffset.x : contentOffset.x
+            
+            isXUp = rect.width - point.x > limit && rect.minX + point.x > imageFrame.minY + scrollView.frame.minX - offsetX
+            isYUp = rect.height - point.y > limit && rect.height - point.y < imageFrame.width - offsetYUp
+            isXDown = rect.width + point.x > limit && rect.width + point.x < imageFrame.height - offsetX
+            isYDown = rect.height + point.y > limit && rect.height + point.y < imageFrame.width - offsetYDown
         }
         
         switch position {
@@ -546,7 +551,7 @@ extension PhotoEditorContentView {
     }
     
     /// pan手势移动中，计算新的裁剪框的位置，用设置了裁剪比例的情况下
-    private func updateCropRectWithCropOption(_ point: CGPoint, _ posision: CropCornerPosition) {
+    private func updateCropRectWithCropOption(_ point: CGPoint, _ position: CropCornerPosition) {
         let limit: CGFloat = 55
         var rect = cropRect
         let ratio: CGPoint
@@ -557,7 +562,7 @@ extension PhotoEditorContentView {
         } else {
             ratio = point
         }
-        switch posision {
+        switch position {
         case .topLeft: // x+ y+
             if point.x != 0 {
                 rect.origin.x += point.x
@@ -600,14 +605,50 @@ extension PhotoEditorContentView {
             }
         }
         
-        let imageFrame = imageView.frame.reversed(!rotateState.isPortrait)
-        let contentOffset = scrollView.contentOffset.reversed(!rotateState.isPortrait)
-        if rect.width < limit || rect.height < limit
-            || rect.origin.x < imageFrame.minX + scrollView.frame.minX - contentOffset.x
-            || rect.origin.y < imageFrame.minY + scrollView.frame.minY - contentOffset.y
-            || rect.width > imageFrame.width - contentOffset.x
-            || rect.height > imageFrame.height - contentOffset.y {
-            return
+        let isXUp: Bool
+        let isXDown: Bool
+        let isYUp: Bool
+        let isYDown: Bool
+        let imageFrame = imageView.frame
+        let contentOffset = scrollView.contentOffset
+        
+        // 第一个条件控制最小边界；第二个条件控制最大边界
+        if rotateState.isPortrait {
+            let offsetX = rotateState != .upsideDown ? contentOffset.x : imageFrame.width - cropStartPanRect.width - contentOffset.x
+            let offsetY = rotateState != .upsideDown ? contentOffset.y : imageFrame.height - cropStartPanRect.height - contentOffset.y
+            
+            isXUp = rect.width < limit || rect.minX < imageFrame.minX + scrollView.frame.minX - offsetX
+            isYUp = rect.height < limit || rect.minY < imageFrame.minY + scrollView.frame.minY - offsetY
+            isXDown = rect.width < limit || rect.width > imageFrame.width - offsetX
+            isYDown = rect.height < limit || rect.height > imageFrame.height - offsetY
+        } else {
+            let offsetX = rotateState == .landscapeLeft ? contentOffset.y : imageFrame.height - cropStartPanRect.width - contentOffset.y
+            let offsetYUp = rotateState == .landscapeLeft ? contentOffset.x : imageFrame.width - cropStartPanRect.height - contentOffset.x
+            let offsetYDown = rotateState == .landscapeLeft ? imageFrame.width - cropStartPanRect.height - contentOffset.x : contentOffset.x
+            
+            isXUp = rect.width < limit || rect.minX < imageFrame.minY + scrollView.frame.minX - offsetX
+            isYUp = rect.height < limit || rect.height > imageFrame.width - offsetYUp
+            isXDown = rect.width < limit || rect.width > imageFrame.height - offsetX
+            isYDown = rect.height < limit || rect.height > imageFrame.width - offsetYDown
+        }
+        
+        switch position {
+        case .topLeft: // x+ y+
+            if isXUp || isYUp {
+                return
+            }
+        case .topRight: // x- y+
+            if isXDown || isYUp {
+                return
+            }
+        case .bottomLeft: // x+ y-
+            if isXUp || isYDown {
+                return
+            }
+        case .bottomRight: // x- y-
+            if isXDown || isYDown {
+                return
+            }
         }
         setCropRect(rect)
     }
@@ -678,20 +719,25 @@ extension PhotoEditorContentView {
         // set
         UIView.animate(withDuration: 0.5, animations: {
             self.setCropRect(newCropRect, animated: true)
+            
+            var newImageFrame = self.imageView.frame
             if self.rotateState.isPortrait {
-                self.imageView.frame.origin.x = newCropRect.origin.x - self.scrollView.frame.origin.x
-                self.imageView.frame.origin.y = newCropRect.origin.y - self.scrollView.frame.origin.y
+                newImageFrame.origin.x = newCropRect.origin.x - self.scrollView.frame.origin.x
+                newImageFrame.origin.y = newCropRect.origin.y - self.scrollView.frame.origin.y
             } else {
-                self.imageView.frame.origin.y = newCropRect.origin.x - self.scrollView.frame.origin.x
-                self.imageView.frame.origin.x = newCropRect.origin.y - self.scrollView.frame.origin.y
+                newImageFrame.origin.y = newCropRect.origin.x - self.scrollView.frame.origin.x
+                newImageFrame.origin.x = newCropRect.origin.y - self.scrollView.frame.origin.y
             }
+            newImageFrame.size = newImageFrame.size.multipliedBy(zoomScale)
             
             self.scrollView.zoomScale = zoom
             self.scrollView.contentOffset = offset
-        })
-        
-        setupContentInset()
-        scrollView.minimumZoomScale = getMinimumZoomScale(with: newCropRect.size, imageSize: imageView.frame.size)
+            self.imageView.frame = newImageFrame
+        }) { _ in
+            self.setupContentInset()
+            self.scrollView.contentSize = self.imageView.frame.size
+            self.scrollView.minimumZoomScale = self.getMinimumZoomScale(with: newCropRect.size, imageSize: self.imageView.frame.size)
+        }
     }
     
     // 根据裁剪比例计算实际裁剪大小
@@ -729,6 +775,10 @@ extension PhotoEditorContentView {
     fileprivate var didCrop: Bool {
         get { return cropContext.didCrop }
         set { cropContext.didCrop = newValue }
+    }
+    /// 图片已经裁剪或者旋转
+    fileprivate var cropOrRotate: Bool {
+        return didCrop || rotateState != .portrait
     }
     /// 裁剪框的位置
     fileprivate var cropRect: CGRect {

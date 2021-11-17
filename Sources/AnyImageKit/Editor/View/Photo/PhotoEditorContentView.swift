@@ -184,7 +184,7 @@ final class PhotoEditorContentView: UIView {
         }
         group.notify(queue: .main) { [weak self] in
             guard let self = self else { completion?(); return }
-            if edit.cropData.didCrop && self.cropContext.lastCropData != edit.cropData {
+            if edit.cropData.didCropOrRotate && self.cropContext.lastCropData != edit.cropData {
                 self.cropContext.lastCropData = edit.cropData
                 self.layoutEndCrop(edit.isEdited)
                 self.updateSubviewFrame()
@@ -210,19 +210,25 @@ extension PhotoEditorContentView: UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        if !cropContext.isCrop && !cropContext.didCrop {
+        guard !cropContext.isCrop else { return }
+        if !cropContext.didCrop {
             imageView.center = centerOfContentSize
-        } else if !cropContext.isCrop  && cropContext.didCrop {
+        } else {
             let scale = scrollView.zoomScale / cropContext.lastCropData.zoomScale
             let contentSize = cropContext.contentSize.multipliedBy(scale)
             let imageFrame = cropContext.imageViewFrame.multipliedBy(scale)
             
-            let topOffset = cropContext.croppedHeight * scale
+            let leftOffset = cropContext.croppedSize.width * scale
+            let deltaWidth = scrollView.bounds.width - contentSize.width
+            let offsetX = (deltaWidth > 0 ? deltaWidth / 2 : 0) - leftOffset
+            let centerX = imageFrame.width / 2 + offsetX
+            
+            let topOffset = cropContext.croppedSize.height * scale
             let deltaHeight = scrollView.bounds.height - contentSize.height
             let offsetY = (deltaHeight > 0 ? deltaHeight / 2 : 0) - topOffset
             let centerY = imageFrame.height / 2 + offsetY
             
-            imageView.center = CGPoint(x: imageFrame.midX, y: centerY)
+            imageView.center = CGPoint(x: centerX, y: centerY)
             scrollView.contentSize = contentSize
         }
     }

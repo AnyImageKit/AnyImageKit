@@ -18,4 +18,9 @@ struct CropData: Codable, Equatable {
     var contentOffset: CGPoint = .zero
     var imageViewFrame: CGRect = .zero
     var rotateState: RotateState = .portrait
+    
+    /// 图片已经裁剪或者旋转
+    var didCropOrRotate: Bool {
+        return didCrop || rotateState != .portrait
+    }
 }

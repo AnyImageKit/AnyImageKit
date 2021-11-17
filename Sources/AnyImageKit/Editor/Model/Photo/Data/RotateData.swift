@@ -25,7 +25,7 @@ enum RotateState: Int, Codable, Equatable {
         case .landscapeLeft:
             return -(pi / 2.0)
         case .landscapeRight:
-            return pi / 2.0
+            return (pi / 2.0)
         }
     }
     
@@ -35,6 +35,20 @@ enum RotateState: Int, Codable, Equatable {
             return true
         case .landscapeLeft, .landscapeRight:
             return false
+        }
+    }
+    
+    var toPortraitAngle: CGFloat {
+        let pi = CGFloat.pi
+        switch self {
+        case .portrait:
+            return 0.0
+        case .upsideDown:
+            return -pi
+        case .landscapeLeft:
+            return (pi / 2.0)
+        case .landscapeRight:
+            return -(pi / 2.0)
         }
     }
     

@@ -77,6 +77,7 @@ extension PhotoEditingStack {
     
     func setCropData(_ data: CropData) {
         edit.cropData = data
+        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
     func addTextData(_ data: TextData) {
@@ -88,6 +89,13 @@ extension PhotoEditingStack {
         if let idx = edit.textData.firstIndex(of: data) {
             edit.textData.remove(at: idx)
             delegate?.editingStack(self, needUpdatePreview: edit)
+        }
+    }
+    
+    func updateTextData(_ data: TextData) {
+        if let idx = edit.textData.firstIndex(of: data) {
+            edit.textData.remove(at: idx)
+            edit.textData.append(data)
         }
     }
     
@@ -125,7 +133,7 @@ extension PhotoEditingStack {
 extension PhotoEditingStack.Edit {
     
     var isEdited: Bool {
-        return cropData.didCrop || !brushData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
+        return cropData.didCrop || cropData.rotateState != .portrait || !brushData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
     }
     
     var canvasCanUndo: Bool {
@@ -220,7 +228,6 @@ extension PhotoEditingStack {
                 $0.draw(in: context, size: canvasSize)
             }
         }
-        
         return rotateImage(cropImage(image))
     }
 }
