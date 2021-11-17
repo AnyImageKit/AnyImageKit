@@ -2,7 +2,7 @@
 //  EditorAPITests.swift
 //  APITests
 //
-//  Created by Ray Jiang on 2021/11/17.
+//  Created by 蒋惠 on 2021/11/17.
 //  Copyright © 2021 AnyImageProject.org. All rights reserved.
 //
 
@@ -31,7 +31,19 @@ class EditorAPITests: XCTestCase {
         }
         
         func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
+            let _ = result.isEdited
+            let _ = result.mediaURL
             
+            switch result.type {
+            case .photo:
+                break
+            case .video:
+                break
+            case .photoGIF:
+                break
+            case .photoLive:
+                break
+            }
         }
     }
     
