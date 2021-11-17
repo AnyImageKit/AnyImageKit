@@ -551,7 +551,7 @@ extension PhotoEditorContentView {
     }
     
     /// pan手势移动中，计算新的裁剪框的位置，用设置了裁剪比例的情况下
-    private func updateCropRectWithCropOption(_ point: CGPoint, _ posision: CropCornerPosition) {
+    private func updateCropRectWithCropOption(_ point: CGPoint, _ position: CropCornerPosition) {
         let limit: CGFloat = 55
         var rect = cropRect
         let ratio: CGPoint
@@ -562,7 +562,7 @@ extension PhotoEditorContentView {
         } else {
             ratio = point
         }
-        switch posision {
+        switch position {
         case .topLeft: // x+ y+
             if point.x != 0 {
                 rect.origin.x += point.x
@@ -632,7 +632,7 @@ extension PhotoEditorContentView {
             isYDown = rect.height < limit || rect.height > imageFrame.width - offsetYDown
         }
         
-        switch posision {
+        switch position {
         case .topLeft: // x+ y+
             if isXUp || isYUp {
                 return
