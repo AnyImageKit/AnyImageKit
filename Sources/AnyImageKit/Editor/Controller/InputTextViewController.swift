@@ -50,7 +50,7 @@ final class InputTextViewController: AnyImageViewController {
         return view
     }()
     private lazy var textView: UITextView = {
-        let view = UITextView()
+        let view = MyUITextView()
         view.delegate = self
         view.backgroundColor = .clear
         view.keyboardAppearance = .dark
@@ -254,7 +254,7 @@ extension InputTextViewController {
         let lastLineWidth = lastLineWidth < size.width ? lastLineWidth : size.width
         let width: CGFloat = !hasMultiLine ? lastLineWidth : size.width
         let height: CGFloat = size.height
-        let lastLineHeight: CGFloat = lineHeight + 2
+        let lastLineHeight: CGFloat = lineHeight
         
         let bezier: UIBezierPath
         if hasMultiLine && width - lastLineWidth > (hInset * 2) { // 一半的情况
@@ -409,5 +409,12 @@ extension UITextView {
             linesArray.append(lineString)
         }
         return linesArray
+    }
+}
+
+private final class MyUITextView: UITextView {
+    
+    override func scrollRectToVisible(_ rect: CGRect, animated: Bool) {
+        return
     }
 }
