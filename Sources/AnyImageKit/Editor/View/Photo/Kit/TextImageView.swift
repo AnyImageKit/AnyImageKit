@@ -71,6 +71,19 @@ final class TextImageView: UIView {
             maker.edges.equalToSuperview()
         }
     }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let inset: CGFloat = 50
+        let directionList = Direction.allCases
+        for direction in directionList {
+            let newPoint = direction.newPoint(with: point, offset: inset)
+            let convertedPoint = imageView.convert(newPoint, from: self)
+            if imageView.point(inside: convertedPoint, with: event) {
+                return self
+            }
+        }
+        return super.hitTest(point, with: event)
+    }
 }
 
 extension TextImageView {
@@ -99,6 +112,44 @@ extension TextImageView {
             setActive(false)
             timer.invalidate()
             self.timer = nil
+        }
+    }
+}
+
+extension TextImageView {
+    
+    private enum Direction: CaseIterable {
+        case origin
+        case top
+        case left
+        case right
+        case bottom
+        case topLeft
+        case topRight
+        case bottomLeft
+        case bottomRight
+        
+        func newPoint(with point: CGPoint, offset: CGFloat) -> CGPoint {
+            switch self {
+            case .origin:
+                return point
+            case .top:
+                return CGPoint(x: point.x, y: point.y - offset)
+            case .left:
+                return CGPoint(x: point.x - offset, y: point.y)
+            case .right:
+                return CGPoint(x: point.x + offset, y: point.y)
+            case .bottom:
+                return CGPoint(x: point.x, y: point.y + offset)
+            case .topLeft:
+                return CGPoint(x: point.x - offset, y: point.y - offset)
+            case .topRight:
+                return CGPoint(x: point.x + offset, y: point.y - offset)
+            case .bottomLeft:
+                return CGPoint(x: point.x - offset, y: point.y + offset)
+            case .bottomRight:
+                return CGPoint(x: point.x + offset, y: point.y + offset)
+            }
         }
     }
 }
