@@ -265,11 +265,18 @@ extension PhotoEditorController {
 extension PhotoEditorController {
     
     /// 打开文本编辑器
-    private func openInputController(_ data: TextData = TextData()) {
-        data.isTextSelected = options.isTextSelected
+    private func openInputController(_ data: TextData? = nil) {
+        let textData: TextData
+        if let obj = data {
+            textData = obj
+        } else {
+            textData = TextData()
+            textData.isTextSelected = options.isTextSelected
+        }
+        
         willBeginInput()
         let coverImage = getInputCoverImage()
-        let controller = InputTextViewController(context: context, data: data, coverImage: coverImage)
+        let controller = InputTextViewController(context: context, data: textData, coverImage: coverImage)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }

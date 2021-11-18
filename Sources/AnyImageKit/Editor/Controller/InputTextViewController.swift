@@ -135,10 +135,10 @@ final class InputTextViewController: AnyImageViewController {
         view.addSubview(coverView)
         view.addSubview(cancelButton)
         view.addSubview(doneButton)
-        view.addSubview(toolView)
         view.addSubview(textCoverView)
         textCoverView.addSubview(textView)
         view.addSubview(calculateLabel)
+        view.addSubview(toolView)
         
         coverImageView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
