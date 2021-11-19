@@ -29,7 +29,7 @@
     - [x] 文字
     - [x] 裁剪
     - [x] 马赛克
-    - [ ] 旋转
+    - [x] 旋转
     - [ ] 滤镜支持
 - [x] 多平台支持
     - [x] iOS
@@ -58,7 +58,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.13.0"))
+    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.14.0"))
 ]
 ```
 
@@ -136,7 +136,7 @@ extension ViewController: ImagePickerControllerDelegate {
 
 | 版本 | 发布时间 | Xcode | Swift | iOS |
 | ---- | ----  | ---- | ---- | ---- |
-| [v0.14.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0135) | 开发中 | 13.1 | 5.5 | 12.0+ |
+| [v0.14.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0140) | 2021-11-19 | 13.1 | 5.5 | 12.0+ |
 | [v0.13.5](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0135) | 2021-10-15 | 13.0 | 5.5 | 12.0+ |
 | [v0.13.4](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0134) | 2021-09-23 | 13.0 | 5.5 | 12.0+ |
 | [v0.13.3](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0133) | 2021-08-09 | 12.5 | 5.4 | 10.0+ |

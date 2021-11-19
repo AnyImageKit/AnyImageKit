@@ -14,12 +14,15 @@ open weak var trackDelegate: ImageKitDataTrackDelegate?
 
 | Module | Controller | AnyImagePage |
 | - | - | - |
-| Picker | AlbumPickerViewController | .albumPicker |
-| Picker | AssetPickerViewController | .assetPicker |
-| Picker | PhotoPreviewController | .photoPreview |
-| Editor | PhotoEditorController | .photoEditor |
-| Editor | VideoEditorController | .videoEditor |
-| Editor | InputTextViewController | .textInput |
+| Picker |  |  |
+| Picker | AlbumPickerViewController | .pickerAlbum |
+| Picker | AssetPickerViewController | .pickerAsset |
+| Picker | PhotoPreviewController | .pickerPreview |
+| Editor |  |  |
+| Editor | PhotoEditorController | .editorPhoto |
+| Editor | VideoEditorController | .editorVideo |
+| Editor | InputTextViewController | .editorInputText |
+| Capture |  |  |
 | Capture | CaptureViewController | .capture |
 | Capture | PadCaptureViewController | .capture |
 
@@ -27,11 +30,36 @@ open weak var trackDelegate: ImageKitDataTrackDelegate?
 
 | Module | AnyImageEvent | userInfo |
 | - | - | - |
-| Picker | .takePhoto |  |
-| Picker | .takeVideo |  |
-| Editor | .photoPen |  |
-| Editor | .photoMosaic |  |
-| Editor | .photoText |  |
-| Editor | .photoCrop |  |
+| Picker |  |  |
+| Picker | .pickerCancel |  |
+| Picker | .pickerDone | [page: (pickerAsset, pickerPreview)] |
+| Picker | .pickerSelect | [isOn: (true, false), page: (pickerAsset, pickerPreview)] |
+| Picker | .pickerSwitchAlbum |  |
+| Picker | .pickerPreview |  |
+| Picker | .pickerEdit |  |
+| Picker | .pickerOriginalImage | [isOn: (true, false), page: (pickerAsset, pickerPreview)] |
+| Picker | .pickerBackInPreview |  |
+| Picker | .pickerLimitedLibrary |  |
+| Picker | .pickerTakePhoto |  |
+| Picker | .pickerTakeVideo |  |
+| Editor |  |  |
+| Editor | .editorBack | [page: (editorPhoto, editorVideo)] |
+| Editor | .editorDone | [page: (editorPhoto, editorVideo)] |
+| Editor | .editorCancel | [page: (editorPhoto, editorVideo)] |
+| Editor | .editorPhotoBrushUndo |  |
+| Editor | .editorPhotoMosaicUndo |  |
+| Editor | .editorPhotoTextSwitch | [isOn: (true, false)] |
+| Editor | .editorPhotoCropRotation |  |
+| Editor | .editorPhotoCropCancel |  |
+| Editor | .editorPhotoCropReset |  |
+| Editor | .editorPhotoCropDone |  |
+| Editor | .editorPhotoBrush |  |
+| Editor | .editorPhotoMosaic |  |
+| Editor | .editorPhotoText |  |
+| Editor | .editorPhotoCrop |  |
+| Editor | .editorVideoPlayPause | [isOn: (true, false)] true=play, false=pause |
+| Capture |  |  |
 | Capture | .capturePhoto |  |
 | Capture | .captureVideo |  |
+| Capture | .captureCancel |  |
+| Capture | .captureSwitchCamera |  |
