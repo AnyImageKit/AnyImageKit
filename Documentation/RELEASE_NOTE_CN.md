@@ -1,17 +1,54 @@
 # 更新日志
 
+## 0.14.0
+
+### 新增
+
+- Editor
+  - 新增 `rotationDirection` 枚举字段，支持在裁剪时进行旋转。([#100](https://github.com/AnyImageProject/AnyImageKit/pull/100))
+  - 新增 `textFont` 字段，用于设置输入文本时的字体。
+  - 新增 `isTextSelected` 布尔字段，用于设置默认字体样式。
+  - 新增 `calculateTextLastLineMask` 布尔字段，用于输入文本时是否计算最后一行宽度。
+  - 文本边框回归。
+  - 文本在纯色样式下增加阴影配置。
+
+### 优化
+
+- 所有模块
+  - `Theme` 可以自定义颜色/图标/文本，可以对`Label/Button` 进行定制。 ([#104](https://github.com/AnyImageProject/AnyImageKit/pull/104))
+  - `Data track` 支持更多事件，已支持的页面和事件可以在 [这里](./DATA_TRACK.md) 找到。
+- Picker
+  - `AssetDisableCheckRule` 支持更复杂的业务场景。 ([#96](https://github.com/AnyImageProject/AnyImageKit/pull/96))
+- Editor
+  - 扩大文本响应区域。
+
+### 修复
+
+- Picker
+  - 尝试修复快速点击完成按钮会多次触发回调。 ([#110](https://github.com/AnyImageProject/AnyImageKit/pull/110))
+  - `GIF/Live Photo` 会展示编辑按钮。
+  - iOS 14 之前版本，在倒序排序模式下，拍照后会导致资源下标错乱。
+- Editor
+  - 编辑视频时闪退。 ([#111](https://github.com/AnyImageProject/AnyImageKit/pull/111))
+  - 在指定裁剪比例模式下，裁剪框可能会无法移动。
+  - 输入文本时，文本框可能会滚动。
+
+### 其他
+
+- 增加 `API Tests`，用于比较不同版本间 API 的差异。
+
 ## 0.13.5
 
 ### 修复
 
-- 修复无法在 Xcode 12 编译的问题
+- 修复无法在 Xcode 12 编译的问题。
 
 ## 0.13.4
 
 ### 新增
 
-- 使用 Xcode 13.0 和 Kingfisher 7.0.0
-- 调整最低部署版本为 iOS 12.0+ 以解决 Xcode 编译异常的问题
+- 使用 Xcode 13.0 和 Kingfisher 7.0.0。
+- 调整最低部署版本为 iOS 12.0+ 以解决 Xcode 编译异常的问题。
 
 ## 0.13.3
 

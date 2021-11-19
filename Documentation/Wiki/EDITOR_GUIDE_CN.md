@@ -203,6 +203,8 @@ struct EditorTextColor: Equatable {
     let color: UIColor
     /// 辅色
     let subColor: UIColor
+    /// 在非高亮的样式下，阴影的样式
+    let shadow: Shadow?
 }
 ```
 
@@ -210,6 +212,24 @@ struct EditorTextColor: Equatable {
 
 - 非高亮：无背景色，文本颜色使用 `color`。
 - 高亮：背景色使用 `color`，文本颜色使用 `subColor`。
+
+
+
+### TextFont (UIFont)
+
+设置输入文本时的字体，默认为 `.systemFont(ofSize: 32, weight: .bold)`。
+
+
+
+### IsTextSelected (Bool)
+
+设置输入文本时默认的样式，默认为 `true`。
+
+
+
+### CalculateTextLastLineMask (Bool)
+
+计算输入文本时最后一行的宽度，用于是否展示遮罩，默认为 `true`。
 
 
 

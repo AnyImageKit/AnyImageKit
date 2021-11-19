@@ -1,5 +1,42 @@
 # Release Notes
 
+## 0.14.0
+
+### New Features
+
+- Editor
+  - Added `rotationDirection` enumeration. Can rotate the image when cropping. ([#100](https://github.com/AnyImageProject/AnyImageKit/pull/100))
+  - Added `textFont` UIFont value. Can customize font of input text.
+  - Added `isTextSelected` boolean value. Set default style of input text.
+  - Added `calculateTextLastLineMask` boolean value. Calculate the width of the last line of the input text to show mask layer.
+  - Added input text border.
+  - Added the shadow of input text.
+
+### Improved
+
+- All modules
+  - `Theme` can customize color, icon, text, label and button. ([#104](https://github.com/AnyImageProject/AnyImageKit/pull/104))
+  - `Data track` added more events, supported page and events can be find [HERE](./DATA_TRACK.md).
+- Picker
+  - `AssetDisableCheckRule` support more complex scene. ([#96](https://github.com/AnyImageProject/AnyImageKit/pull/96))
+- Editor
+  - Improved the response area of input text.
+
+### Resolved
+
+- Picker
+  - Try to fix that quick click on done button will trigger the delegate several times. ([#110](https://github.com/AnyImageProject/AnyImageKit/pull/110))
+  - Fixed `GIF/Live Photo` will show edit button.
+  - Before iOS 14, Picker used the wrong index when selecting asset after take photos in desc sort mode.
+- Editor
+  - Crush when cropping video. ([#111](https://github.com/AnyImageProject/AnyImageKit/pull/111))
+  - In the specified crop option, the crop rect may not move.
+  - The UITextView may scroll when enter input text.
+
+### Other
+
+- Added `API Tests` to compare API between different versions.
+
 ## 0.13.5
 
 ### Resolved
