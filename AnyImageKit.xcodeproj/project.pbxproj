@@ -372,7 +372,6 @@
 		A0226A3F23AB69F1000AFC87 /* Capture+AVCaptureDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AVCaptureDevice.swift"; sourceTree = "<group>"; };
 		A026C99E23978DF400931028 /* CaptureConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureConfigViewController.swift; sourceTree = "<group>"; };
 		A02846B324E2E5A5001F1AB1 /* PassThrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PassThrough.metal; sourceTree = "<group>"; };
-		A029D04E233084B600BC6720 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		A032AEC4255588AF00776FCF /* RELEASE_NOTE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_NOTE.md; sourceTree = "<group>"; };
 		A032AEC6255588AF00776FCF /* GITHUB_SLIDEBAR_CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = GITHUB_SLIDEBAR_CN.md; sourceTree = "<group>"; };
 		A032AEC7255588AF00776FCF /* EDITOR_GUIDE_CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EDITOR_GUIDE_CN.md; sourceTree = "<group>"; };
@@ -1066,7 +1065,6 @@
 			children = (
 				A080040F232F4EC8006B4711 /* LICENSE */,
 				A080040E232F4EC8006B4711 /* README.md */,
-				A029D04E233084B600BC6720 /* Cartfile */,
 				A0514F02235D455600D4AA0F /* AnyImageKit.podspec */,
 				A032AEC3255588AF00776FCF /* Documentation */,
 				A099CC62232F3BF70023CC3D /* Sources */,
