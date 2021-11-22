@@ -70,16 +70,6 @@ dependencies: [
 pod 'AnyImageKit'
 ```
 
-### ~~[Carthage](https://github.com/Carthage/Carthage)~~
-
-~~将下面内容添加到 `Cartfile`，并执行依赖更新。~~
-
-```ogdl
-github "AnyImageProject/AnyImageKit"
-```
-
-⚠️ 由于 Carthage 自身的问题，目前无法在 Xcode 12 中使用，[查看详情](https://github.com/Carthage/Carthage/issues/3019)
-
 ## 使用方法
 
 > 我们在 [Wiki](https://github.com/AnyImageProject/AnyImageKit/wiki) 中提供了更详细的使用说明。

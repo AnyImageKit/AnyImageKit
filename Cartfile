@@ -1,8 +1,0 @@
-github "SnapKit/SnapKit" ~> 5.0
-github "onevcat/Kingfisher" ~> 6.0
-
-# How to update
-# carthage update --platform iOS --no-use-binaries --new-resolver --cache-builds
-
-# How to install Carthage
-# brew install carthage

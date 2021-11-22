@@ -78,16 +78,6 @@ Add this to `Podfile`, and then update dependency:
 pod 'AnyImageKit'
 ```
 
-### ~~[Carthage](https://github.com/Carthage/Carthage)~~
-
-~~Add this to `Cartfile`, and then update dependency:~~
-
-```ogdl
-github "AnyImageProject/AnyImageKit"
-```
-
-⚠️ Unsupport in Xcode 12.0, [more details](https://github.com/Carthage/Carthage/issues/3019)
-
 ## Usage
 
 ### Prepare
