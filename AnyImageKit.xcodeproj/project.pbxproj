@@ -1070,7 +1070,6 @@
 				A099CC62232F3BF70023CC3D /* Sources */,
 				A5A27BA7232F82AE00D966B8 /* Example */,
 				A5B835B323BED26D00D10F85 /* Tests */,
-				714869142744D88E003D4605 /* APITests */,
 				A099CC61232F3BF70023CC3D /* Products */,
 				A5A27B9D232F81CF00D966B8 /* Frameworks */,
 				0CBA07A71D1667CD90C2A897 /* Pods */,
@@ -1450,6 +1449,7 @@
 		A5B835B323BED26D00D10F85 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				714869142744D88E003D4605 /* APITests */,
 				A0A161F7251AF2B600569969 /* UITests */,
 			);
 			path = Tests;
@@ -2051,7 +2051,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = APITests/Info.plist;
+				INFOPLIST_FILE = Tests/APITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2069,7 +2069,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = APITests/Info.plist;
+				INFOPLIST_FILE = Tests/APITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
