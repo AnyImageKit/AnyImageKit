@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.14.1
+
+### Resolved
+
+- Picker
+  - Crash after take photo in iOS 14 or later.
+
 ## 0.14.0
 
 ### New Features
