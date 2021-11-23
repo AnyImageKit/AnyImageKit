@@ -57,7 +57,11 @@ extension AssetPickerViewController {
             if #available(iOS 14.0, *) {
                 // iOS 14 将会监听相册，自动刷新
             } else {
-                collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+                collectionView.performBatchUpdates { [weak self] in
+                    self?.collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+                } completion: { [weak self] _ in
+                    self?.collectionView.reloadData()
+                }
             }
         case .desc:
             let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
@@ -66,12 +70,15 @@ extension AssetPickerViewController {
             if #available(iOS 14.0, *) {
                 // iOS 14 将会监听相册，自动刷新
             } else {
-                collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
+                collectionView.performBatchUpdates { [weak self] in
+                    self?.collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
+                } completion: { [weak self] _ in
+                    self?.collectionView.reloadData()
+                }
             }
         }
         
-        let indexPaths = collectionView.visibleCells.compactMap { collectionView.indexPath(for: $0) }
-        collectionView.reloadItems(at: indexPaths)
+        updateVisibleCellState()
         toolBar.setEnable(true)
         
         if addSuccess {
