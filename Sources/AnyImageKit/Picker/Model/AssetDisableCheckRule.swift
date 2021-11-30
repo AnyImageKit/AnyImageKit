@@ -10,7 +10,16 @@ import Foundation
 
 public protocol AssetDisableCheckRule {
     
+    /// Disable current asset
+    /// - Parameters:
+    ///   - asset: Current asset
+    ///   - assetList: Selected assets
     func isDisable(for asset: Asset, assetList: [Asset]) -> Bool
+    
+    /// Alert message when select disabled asset
+    /// - Parameters:
+    ///   - asset: Current asset
+    ///   - assetList: Selected assets
     func alertMessage(for asset: Asset, assetList: [Asset]) -> String
 }
 
@@ -34,7 +43,6 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
         return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }
 }
-
 
 public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRule {
     
