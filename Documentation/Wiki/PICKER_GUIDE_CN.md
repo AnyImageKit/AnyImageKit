@@ -21,6 +21,7 @@
   - [SelectionTapAction](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectiontapaction-pickerselectiontapaction)
   - [OrderByDate](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#orderbydate-sort)
   - [PreselectAssets](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#preselectassets-string)
+  - [DisableRules](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#disablerules-assetdisablecheckrule)
   - [SaveEditedAsset](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#saveeditedasset-bool)
   - [EditorOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editoroptions-pickereditoroption)
   - [EditorPhotoOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editorphotooptions-editorphotooptionsinfo)
@@ -252,6 +253,58 @@ enum Sort: Equatable {
 接收 `Asset.identifier` 字符串，设置之后打开 `Picker` 会选中该资源。
 
 具体使用方式可以在 `Example - PreselectAsset` 控制器中查看。
+
+
+
+### DisableRules ([AssetDisableCheckRule])
+
+`disableRules` 可以让你在选择资源时禁用不想要的的资源。
+
+`AssetDisableCheckRule` 是一个协议，声明如下：
+
+```swift
+protocol AssetDisableCheckRule {
+    /// 是否禁用该资源，true=禁用 false=不禁用
+    /// - Parameters:
+    ///   - asset: 当前资源
+    ///   - assetList: 已选择的资源
+    func isDisable(for asset: Asset, assetList: [Asset]) -> Bool
+  
+    /// 禁用该资源的理由/提示
+    /// - Parameters:
+    ///   - asset: 当前资源
+    ///   - assetList: 已选择的资源
+    func alertMessage(for asset: Asset, assetList: [Asset]) -> String
+}
+```
+
+`disableRules` 是一个数组，可以传入多条规则，对资源进行限制。
+
+你可以根据协议自定义自己的规则，同时我们默认提供了两个 `AssetDisableCheckRule` 的实现：
+
+#### VideoDurationDisableCheckRule
+
+```swift
+public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
+    ...
+    public init(min: TimeInterval, max: TimeInterval) { ... }
+    ...
+}
+```
+
+当我们选择视频时，如果需要控制视频的时长在一定范围之内，比如要求视频时长为5-60秒，就可以使用该协议。不符合规则的视频资源将被禁用，无法被选中。
+
+#### PhotoOrVideoDisableCheckRule
+
+```swift
+public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRule {
+		...
+    public init(photoCount: Int, videoCount: Int) { ... }
+    ...
+}  
+```
+
+当我们可以同时选择图片和视频时，如果需要用户只能选择图片或者只能选择视频，就可以使用该协议。当用户选择图片后，视频资源将被禁用，反之亦然。
 
 
 
