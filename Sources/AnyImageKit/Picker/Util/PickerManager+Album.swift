@@ -111,8 +111,9 @@ extension PickerManager {
                                                                     .albumRegular,
                                                                     .albumSyncedAlbum,
                                                                     .albumCloudShared]
-                let assetCollectionsfetchResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
-                for assetCollectionsFetchResult in assetCollectionsfetchResults {
+                let smartAlbumResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
+                let normalAlbumResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .album, subtype: $0, options: nil) }
+                for assetCollectionsFetchResult in smartAlbumResults + normalAlbumResults {
                     let smartCollections = assetCollectionsFetchResult.objects()
                     load(assetCollections: smartCollections)
                 }
