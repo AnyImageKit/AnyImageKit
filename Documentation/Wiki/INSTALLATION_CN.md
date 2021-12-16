@@ -54,33 +54,6 @@ pod 'AnyImageKit', :subspecs => ['Picker', 'Editor'] # 引入图片选择器和�
 
 
 
-## ~~Carthage~~
-
-⚠️ 由于 Carthage 自身的问题，目前无法在 Xcode 12 中使用，[查看详情](https://github.com/Carthage/Carthage/issues/3019)
-
-[Carthage](https://github.com/Carthage/Carthage) 是项目依赖管理器，你可以用以下命令安装：
-
-```ruby
-$ brew update
-$ brew install carthage
-```
-
-将下面内容添加到 `Cartfile`
-
-```ruby
-github "AnyImageProject/AnyImageKit"
-```
-
-接下来执行安装命令：
-
-```ruby
-$ carthage update AnyImageKit --platform iOS
-```
-
-> 由于 Carthage 的依赖问题，不支持 `--no-use-binaries`，请直接使用我们的二进制文件。
-
-
-
 ## 下一步
 
 - [Picker使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
