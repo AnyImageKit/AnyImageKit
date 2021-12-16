@@ -189,8 +189,16 @@ extension PickerConfigViewController {
             self?.options.albumOptions = [.userCreated]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
+        alert.addAction(UIAlertAction(title: "Shared", style: .default, handler: { [weak self] (action) in
+            self?.options.albumOptions = [.shared]
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
         alert.addAction(UIAlertAction(title: "Smart+User Created", style: .default, handler: { [weak self] (action) in
             self?.options.albumOptions = [.smart, .userCreated]
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Smart+User Created+Shared", style: .default, handler: { [weak self] (action) in
+            self?.options.albumOptions = [.smart, .userCreated, .shared]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

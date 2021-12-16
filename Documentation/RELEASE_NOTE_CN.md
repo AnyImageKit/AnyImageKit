@@ -5,7 +5,8 @@
 ### 修复
 
 - Picker
-  - 修复使用 Xcode 13.2+ 时，未授权时请求注册相册观察者会卡住主线程 15 秒的问题 
+  - 修复使用 Xcode 13.2+ 时，未授权时请求注册相册观察者会卡住主线程 15 秒的问题。([#130](https://github.com/AnyImageProject/AnyImageKit/pull/130))
+  - 修复无法选择共享相册的问题，`PickerAlbumOption` 添加了一个 `.shared` 的选项。([#129](https://github.com/AnyImageProject/AnyImageKit/pull/129)) ([#131](https://github.com/AnyImageProject/AnyImageKit/pull/131))
 
 ## 0.14.1
 

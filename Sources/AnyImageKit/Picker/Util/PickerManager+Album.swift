@@ -107,13 +107,12 @@ extension PickerManager {
             
             // Load Smart Albums
             if self.options.albumOptions.contains(.smart) {
-                let allAlbumSubTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream,
-                                                                    .albumRegular,
-                                                                    .albumSyncedAlbum,
-                                                                    .albumCloudShared]
-                let smartAlbumResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil) }
-                let normalAlbumResults = allAlbumSubTypes.map { PHAssetCollection.fetchAssetCollections(with: .album, subtype: $0, options: nil) }
-                for assetCollectionsFetchResult in smartAlbumResults + normalAlbumResults {
+                let subTypes: [PHAssetCollectionSubtype] = [.albumRegular,
+                                                            .albumSyncedAlbum]
+                let assetCollectionsfetchResults = subTypes.map {
+                    PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil)
+                }
+                for assetCollectionsFetchResult in assetCollectionsfetchResults {
                     let smartCollections = assetCollectionsFetchResult.objects()
                     load(assetCollections: smartCollections)
                 }
@@ -124,6 +123,19 @@ extension PickerManager {
                 let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
                 let userCollections = topLevelUserCollections.objects().compactMap { $0 as? PHAssetCollection }
                 load(assetCollections: userCollections)
+            }
+            
+            // Load Shared Albums
+            if self.options.albumOptions.contains(.shared) {
+                let subTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream,
+                                                            .albumCloudShared]
+                let assetCollectionsfetchResults = subTypes.map {
+                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: $0, options: nil)
+                }
+                for assetCollectionsFetchResult in assetCollectionsfetchResults {
+                    let smartCollections = assetCollectionsFetchResult.objects()
+                    load(assetCollections: smartCollections)
+                }
             }
             
             // Export results

@@ -5,7 +5,8 @@
 ### Resolved
 
 - Picker
-  - Fix when using Xcode 13.2+, main thread will be stuck for 15 seconds when requesting to register photo library observer before authorization
+  - Fix when using Xcode 13.2+, main thread will be stuck for 15 seconds when requesting to register photo library observer before authorization.([#130](https://github.com/AnyImageProject/AnyImageKit/pull/130))
+  - Fix shared albums cannot be select in picker, add a new option `.shared` for `PickerAlbumOption`.([#129](https://github.com/AnyImageProject/AnyImageKit/pull/129)) ([#131](https://github.com/AnyImageProject/AnyImageKit/pull/131))
 
 ## 0.14.1
 

@@ -151,6 +151,8 @@ public struct PickerAlbumOption: OptionSet {
     public static let smart = PickerAlbumOption(rawValue: 1 << 0)
     /// User Created Album
     public static let userCreated = PickerAlbumOption(rawValue: 1 << 1)
+    /// Shared Album
+    public static let shared = PickerAlbumOption(rawValue: 1 << 2)
     
     public let rawValue: Int
     
