@@ -28,6 +28,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
+    private var didRegisterPhotoLibraryChangeObserver: Bool = false
     
     #if swift(>=5.5)
     /// Fix Xcode 13 beta bug.
@@ -109,11 +110,10 @@ final class AssetPickerViewController: AnyImageViewController {
     init(manager: PickerManager) {
         self.manager = manager
         super.init(nibName: nil, bundle: nil)
-        PHPhotoLibrary.shared().register(self)
     }
     
     deinit {
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        unregisterPhotoLibraryChangeObserver()
     }
     
     required init?(coder: NSCoder) {
@@ -187,12 +187,27 @@ extension AssetPickerViewController: PickerOptionsConfigurable {
 // MARK: - Private function
 extension AssetPickerViewController {
     
+    /// After iOS 15.2/Xcode 13.2, you must register PhotoLibraryChangeObserver after authorized Photo permission
+    private func registerPhotoLibraryChangeObserver() {
+        guard !didRegisterPhotoLibraryChangeObserver else { return }
+        PHPhotoLibrary.shared().register(self)
+        didRegisterPhotoLibraryChangeObserver = true
+    }
+    
+    private func unregisterPhotoLibraryChangeObserver() {
+        guard didRegisterPhotoLibraryChangeObserver else { return }
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        didRegisterPhotoLibraryChangeObserver = false
+    }
+    
     private func checkPermission() {
         check(permission: .photos, authorized: { [weak self] in
             guard let self = self else { return }
+            self.registerPhotoLibraryChangeObserver()
             self.loadDefaultAlbumIfNeeded()
         }, limited: { [weak self] in
             guard let self = self else { return }
+            self.registerPhotoLibraryChangeObserver()
             self.loadDefaultAlbumIfNeeded()
             self.showLimitedView()
         }, denied: { [weak self] _ in
