@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.14.2
+
+### Resolved
+
+- Picker
+  - Fix when using Xcode 13.2+, main thread will be stuck for 15 seconds when requesting to register photo library observer before authorization
+
 ## 0.14.1
 
 ### Resolved
