@@ -29,12 +29,12 @@ public struct PickerOptionsInfo {
     /// - Default: true
     public var autoCalculateColumnNumber: Bool = true
     
-    /// - Default: 800
-    public var photoMaxWidth: CGFloat = 800
+    /// - Default: 1200
+    public var photoMaxWidth: CGFloat = 1200
     
     /// Max Width for export Large Photo(When User pick original image)
-    /// - Default: 1200
-    public var largePhotoMaxWidth: CGFloat = 1200
+    /// - Default: 1800
+    public var largePhotoMaxWidth: CGFloat = 1800
     
     /// Allow Use Original Image
     /// - Default: false
