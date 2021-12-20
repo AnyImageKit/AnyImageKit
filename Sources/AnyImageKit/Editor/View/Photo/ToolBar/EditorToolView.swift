@@ -29,11 +29,10 @@ final class EditorToolView: UIView {
     private(set) lazy var bottomCoverView: GradientView = {
         let view = GradientView(frame: .zero)
         view.layer.colors = [
-            UIColor.black.withAlphaComponent(0.15).cgColor,
-            UIColor.black.withAlphaComponent(0.12).cgColor,
+            UIColor.black.withAlphaComponent(0.25).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor,
         ]
-        view.layer.locations = [0, 0.6, 1]
+        view.layer.locations = [0, 1]
         view.layer.startPoint = CGPoint(x: 0.5, y: 1)
         view.layer.endPoint = CGPoint(x: 0.5, y: 0)
         return view
