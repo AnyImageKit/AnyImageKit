@@ -150,6 +150,13 @@ extension EditorToolView {
     public func selectFirstItemIfNeeded() {
         editOptionsView.selectFirstItemIfNeeded()
     }
+    
+    public func hiddenToolBarIfNeeded() {
+        if currentOption == nil && options.toolOptions.count == 1 && options.toolOptions.first! == .crop {
+            doneButton.isHidden = true
+            editOptionsView.isHidden = true
+        }
+    }
 }
 
 // MARK: - Target
