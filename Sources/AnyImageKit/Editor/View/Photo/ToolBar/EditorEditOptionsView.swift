@@ -101,7 +101,7 @@ extension EditorEditOptionsView {
 extension EditorEditOptionsView {
     
     public func selectFirstItemIfNeeded() {
-        if self.currentOption == nil && self.options.toolOptions.count == 1 && self.options.toolOptions.first! != .text {
+        if currentOption == nil && options.toolOptions.count == 1 && options.toolOptions.first! != .text {
             buttonTapped(buttons.first!)
         }
     }

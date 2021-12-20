@@ -79,7 +79,7 @@ final class PhotoEditorController: AnyImageViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         showHUDIfNeeded()
-        toolView.selectFirstItemIfNeeded()
+        toolView.hiddenToolBarIfNeeded()
     }
     
     private func loadData() {
@@ -158,6 +158,7 @@ final class PhotoEditorController: AnyImageViewController {
         stack.originImage = image
         stack.mosaicImages = contentView.mosaic?.mosaicImage ?? []
         stack.originImageViewBounds = contentView.imageView.bounds
+        toolView.selectFirstItemIfNeeded()
     }
     
     private func setPlaceholdImage(_ image: UIImage) {
