@@ -105,14 +105,34 @@ extension PickerManager {
 extension PickerManager {
     
     @discardableResult
-    func addSelectedAsset(_ asset: Asset) -> Bool {
-        if selectedAssets.contains(asset) { return false }
-        if selectedAssets.count == options.selectLimit { return false }
+    func addSelectedAsset(_ asset: Asset) -> (success: Bool, message: String) {
+        if selectedAssets.contains(asset) { return (false, "") }
+        
+        if asset.state == .unchecked {
+            asset.check(disable: options.disableRules, assetList: selectedAssets)
+        }
+        if case .disable(let rule) = asset.state {
+            let message = rule.alertMessage(for: asset, assetList: selectedAssets)
+            return (false, message)
+        }
+        
+        if !asset.isSelected && isUpToLimit {
+            let message: String
+            if options.selectOptions.isPhoto && options.selectOptions.isVideo {
+                message = String(format: options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], options.selectLimit)
+            } else if options.selectOptions.isPhoto {
+                message = String(format: options.theme[string: .pickerSelectMaximumOfPhotos], options.selectLimit)
+            } else {
+                message = String(format: options.theme[string: .pickerSelectMaximumOfVideos], options.selectLimit)
+            }
+            return (false, message)
+        }
+        
         selectedAssets.append(asset)
-        asset.isSelected = true
+        asset.state = .selected
         asset.selectedNum = selectedAssets.count
         syncAsset(asset)
-        return true
+        return (true, "")
     }
     
     @discardableResult
@@ -124,7 +144,7 @@ extension PickerManager {
             }
         }
         selectedAssets.remove(at: idx)
-        asset.isSelected = false
+        asset.state = .normal
         asset._images[.initial] = nil
         return true
     }

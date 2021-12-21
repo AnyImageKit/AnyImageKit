@@ -48,12 +48,11 @@ extension AssetPickerViewController {
     func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
         let sortType = manager.options.orderByDate
-        let addSuccess: Bool
+        let asset: Asset
         switch sortType {
         case .asc:
-            let asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.addAsset(asset, atLast: false)
-            addSuccess = manager.addSelectedAsset(asset)
             if #available(iOS 14.0, *) {
                 // iOS 14 将会监听相册，自动刷新
             } else {
@@ -64,9 +63,8 @@ extension AssetPickerViewController {
                 }
             }
         case .desc:
-            let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.insertAsset(asset, at: 1, sort: manager.options.orderByDate)
-            addSuccess = manager.addSelectedAsset(asset)
             if #available(iOS 14.0, *) {
                 // iOS 14 将会监听相册，自动刷新
             } else {
@@ -81,7 +79,8 @@ extension AssetPickerViewController {
         updateVisibleCellState()
         toolBar.setEnable(true)
         
-        if addSuccess {
+        let result = manager.addSelectedAsset(asset)
+        if result.success {
             /// 拍照结束后，如果 limit=1 直接返回
             if manager.options.selectLimit == 1 {
                 stopReloadAlbum = true
