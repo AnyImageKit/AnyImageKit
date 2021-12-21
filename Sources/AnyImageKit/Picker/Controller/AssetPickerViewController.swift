@@ -279,7 +279,7 @@ extension AssetPickerViewController {
     }
     
     private func updateAlbum(_ album: Album) {
-        // Update selected assets
+        // Update selected assets when album assets changed
         for asset in manager.selectedAssets.reversed() {
             if !(album.assets.contains { $0 == asset }) {
                 manager.removeSelectedAsset(asset)
@@ -360,33 +360,16 @@ extension AssetPickerViewController {
         guard let album = album else { return }
         let asset = album.assets[idx]
         
-        if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return
-        }
-        
-        if !asset.isSelected && manager.isUpToLimit {
-            let message: String
-            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], manager.options.selectLimit)
-            } else if manager.options.selectOptions.isPhoto {
-                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotos], manager.options.selectLimit)
-            } else {
-                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
+        if !asset.isSelected {
+            let result = manager.addSelectedAsset(asset)
+            if !result.success && !result.message.isEmpty {
+                showAlert(message: result.message, stringConfig: manager.options.theme)
             }
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return
-        }
-        
-        asset.isSelected.toggle()
-        if asset.isSelected {
-            manager.addSelectedAsset(asset)
-            updateVisibleCellState(idx)
         } else {
             manager.removeSelectedAsset(asset)
-            updateVisibleCellState(idx)
         }
+        updateVisibleCellState(idx)
+        
         toolBar.setEnable(!manager.selectedAssets.isEmpty)
         trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerAsset])
     }

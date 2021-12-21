@@ -112,9 +112,6 @@ extension Asset {
         get {
             return state == .selected
         }
-        set {
-            state = newValue ? .selected : .normal
-        }
     }
     
     var isDisable: Bool {

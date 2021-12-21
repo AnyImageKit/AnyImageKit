@@ -330,33 +330,20 @@ extension PhotoPreviewController {
     /// NavigationBar - Select
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if case .disable(let rule) = data.asset.state {
-            let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return
-        }
+        let asset = data.asset
         
-        if !data.asset.isSelected && manager.isUpToLimit {
-            let message: String
-            if manager.options.selectOptions.isPhoto && manager.options.selectOptions.isVideo {
-                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], manager.options.selectLimit)
-            } else if manager.options.selectOptions.isPhoto {
-                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfPhotos], manager.options.selectLimit)
-            } else {
-                message = String(format: manager.options.theme[string: .pickerSelectMaximumOfVideos], manager.options.selectLimit)
+        if !asset.isSelected {
+            let result = manager.addSelectedAsset(asset)
+            if result.success {
+                delegate?.previewController(self, didSelected: currentIndex)
+            } else if !result.message.isEmpty {
+                showAlert(message: result.message, stringConfig: manager.options.theme)
             }
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return
-        }
-        
-        data.asset.isSelected = !sender.isSelected
-        if data.asset.isSelected {
-            manager.addSelectedAsset(data.asset)
-            delegate?.previewController(self, didSelected: currentIndex)
         } else {
-            manager.removeSelectedAsset(data.asset)
+            manager.removeSelectedAsset(asset)
             delegate?.previewController(self, didDeselected: currentIndex)
         }
+        
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
         trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
