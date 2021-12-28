@@ -10,12 +10,14 @@ import UIKit
 
 final class HomeViewController: UITableViewController {
     
-    private var versionLabel: UILabel = {
-        let view = UILabel(frame: .zero)
+    private var versionButton: UIButton = {
+        let view = UIButton(frame: .zero)
         if let info = Bundle.main.infoDictionary, let version = info["CFBundleShortVersionString"] as? String {
-            view.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-            view.text = "v"+version
+            view.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            view.setTitle("v\(version)", for: .normal)
+            view.setTitleColor(.black, for: .normal)
         }
+        view.addTarget(self, action: #selector(versionButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
 
@@ -34,11 +36,15 @@ final class HomeViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
         
-        view.addSubview(versionLabel)
-        versionLabel.snp.makeConstraints { maker in
+        view.addSubview(versionButton)
+        versionButton.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-8)
         }
+    }
+    
+    @objc private func versionButtonTapped(_ sender: UIButton) {
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
     }
 
     // MARK: - Table view data source
