@@ -6,7 +6,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
+    .package(url: "https://github.com/AnyImageKit/AnyImageKit.git", .upToNextMajor(from: "0.9.0"))
 ]
 ```
 
@@ -56,8 +56,8 @@ pod 'AnyImageKit', :subspecs => ['Picker', 'Editor'] # 引入图片选择器和�
 
 ## 下一步
 
-- [Picker使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
+- [Picker使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
 
-- [Editor使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
+- [Editor使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
 
-- [Capture使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Capture%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
+- [Capture使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Capture%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)

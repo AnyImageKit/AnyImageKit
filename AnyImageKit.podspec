@@ -3,12 +3,12 @@ Pod::Spec.new do |s|
     s.version = '0.14.3'
     s.license = 'MIT'
     s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
-    s.homepage = 'https://github.com/AnyImageProject/AnyImageKit'
+    s.homepage = 'https://github.com/AnyImageKit/AnyImageKit'
     s.authors = {
         'anotheren' => 'liudong.edward@gmail.com',
         'RayJiang16' => '1184731421@qq.com',
     }
-    s.source = { :git => 'https://github.com/AnyImageProject/AnyImageKit.git', :tag => s.version }
+    s.source = { :git => 'https://github.com/AnyImageKit/AnyImageKit.git', :tag => s.version }
     s.ios.deployment_target = '12.0'
     s.swift_versions = ['5.3']
     s.frameworks = 'Foundation'

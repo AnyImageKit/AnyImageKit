@@ -6,30 +6,30 @@
 
 ## 目录
 
-- [调用/回调说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%B0%83%E7%94%A8%E5%9B%9E%E8%B0%83%E8%AF%B4%E6%98%8E)
-- [配置项说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E9%85%8D%E7%BD%AE%E9%A1%B9%E8%AF%B4%E6%98%8E)
-  - [Theme](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#theme-pickertheme)
-  - [SelectLimit](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectlimit-int)
-  - [ColumnNumber](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#columnnumber-int)
-  - [AutoCalculateColumnNumber](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#autocalculatecolumnnumber-bool)
-  - [AllowUseOriginalImage](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#allowuseoriginalimage-bool)
-  - [PhotoMaxWidth](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#photomaxwidth-cgfloat)
-  - [LargePhotoMaxWidth](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#largephotomaxwidth-cgfloat)
-  - ~~[QuickPick](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#quickpick-bool)~~
-  - [AlbumOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#albumoptions-pickeralbumoption)
-  - [SelectOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectoptions-pickerselectoption)
-  - [SelectionTapAction](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectiontapaction-pickerselectiontapaction)
-  - [OrderByDate](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#orderbydate-sort)
-  - [PreselectAssets](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#preselectassets-string)
-  - [DisableRules](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#disablerules-assetdisablecheckrule)
-  - [SaveEditedAsset](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#saveeditedasset-bool)
-  - [EditorOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editoroptions-pickereditoroption)
-  - [EditorPhotoOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editorphotooptions-editorphotooptionsinfo)
-  - [CaptureOptions](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#captureoptions-captureoptionsinfo)
-  - [UseSameEditorOptionsInCapture](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#usesameeditoroptionsincapture-bool)
-- [公开方法](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E5%85%AC%E5%BC%80%E6%96%B9%E6%B3%95)
-  - [获取原始图片](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%8E%B7%E5%8F%96%E5%8E%9F%E5%A7%8B%E5%9B%BE%E7%89%87)
-  - [获取视频](https://github.com/AnyImageProject/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91)
+- [调用/回调说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%B0%83%E7%94%A8%E5%9B%9E%E8%B0%83%E8%AF%B4%E6%98%8E)
+- [配置项说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E9%85%8D%E7%BD%AE%E9%A1%B9%E8%AF%B4%E6%98%8E)
+  - [Theme](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#theme-pickertheme)
+  - [SelectLimit](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectlimit-int)
+  - [ColumnNumber](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#columnnumber-int)
+  - [AutoCalculateColumnNumber](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#autocalculatecolumnnumber-bool)
+  - [AllowUseOriginalImage](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#allowuseoriginalimage-bool)
+  - [PhotoMaxWidth](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#photomaxwidth-cgfloat)
+  - [LargePhotoMaxWidth](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#largephotomaxwidth-cgfloat)
+  - ~~[QuickPick](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#quickpick-bool)~~
+  - [AlbumOptions](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#albumoptions-pickeralbumoption)
+  - [SelectOptions](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectoptions-pickerselectoption)
+  - [SelectionTapAction](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#selectiontapaction-pickerselectiontapaction)
+  - [OrderByDate](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#orderbydate-sort)
+  - [PreselectAssets](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#preselectassets-string)
+  - [DisableRules](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#disablerules-assetdisablecheckrule)
+  - [SaveEditedAsset](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#saveeditedasset-bool)
+  - [EditorOptions](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editoroptions-pickereditoroption)
+  - [EditorPhotoOptions](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#editorphotooptions-editorphotooptionsinfo)
+  - [CaptureOptions](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#captureoptions-captureoptionsinfo)
+  - [UseSameEditorOptionsInCapture](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#usesameeditoroptionsincapture-bool)
+- [公开方法](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E5%85%AC%E5%BC%80%E6%96%B9%E6%B3%95)
+  - [获取原始图片](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%8E%B7%E5%8F%96%E5%8E%9F%E5%A7%8B%E5%9B%BE%E7%89%87)
+  - [获取视频](https://github.com/AnyImageKit/AnyImageKit/wiki/Picker%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E#%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91)
 
 
 
@@ -335,13 +335,13 @@ public struct PickerEditorOption: OptionSet {
 
 ### EditorPhotoOptions (EditorPhotoOptionsInfo)
 
-`editorPhotoOptions` 是 `Editor` 模块的配置项，你可以在[Editor使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
+`editorPhotoOptions` 是 `Editor` 模块的配置项，你可以在[Editor使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
 
 
 
 ### CaptureOptions (CaptureOptionsInfo)
 
-`captureOptions` 是 `Capture` 模块的配置项，你可以在[Capture使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Capture%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
+`captureOptions` 是 `Capture` 模块的配置项，你可以在[Capture使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Capture%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
 
 
 
