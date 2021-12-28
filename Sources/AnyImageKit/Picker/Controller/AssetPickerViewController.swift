@@ -202,19 +202,20 @@ extension AssetPickerViewController {
     }
     
     private func checkPermission() {
-        check(permission: .photos, authorized: { [weak self] in
-            guard let self = self else { return }
-            self.registerPhotoLibraryChangeObserver()
-            self.loadDefaultAlbumIfNeeded()
-        }, limited: { [weak self] in
-            guard let self = self else { return }
-            self.registerPhotoLibraryChangeObserver()
-            self.loadDefaultAlbumIfNeeded()
-            self.showLimitedView()
-        }, denied: { [weak self] _ in
-            guard let self = self else { return }
-            self.permissionView.isHidden = false
-        })
+        Task {
+            let checkedStatus = await check(permission: .photos)
+            switch checkedStatus {
+            case .authorized:
+                self.registerPhotoLibraryChangeObserver()
+                self.loadDefaultAlbumIfNeeded()
+            case .limited:
+                self.registerPhotoLibraryChangeObserver()
+                self.loadDefaultAlbumIfNeeded()
+                self.showLimitedView()
+            case .denied:
+                self.permissionView.isHidden = false
+            }
+        }
     }
     
     private func loadDefaultAlbumIfNeeded() {

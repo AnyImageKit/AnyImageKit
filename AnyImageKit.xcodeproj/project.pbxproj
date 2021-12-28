@@ -154,6 +154,7 @@
 		A09FFE6123404923000DEF87 /* PickerManager+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09FFE6023404923000DEF87 /* PickerManager+Video.swift */; };
 		A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A9825323A729BA00537F9D /* CaptureCircleView.swift */; };
 		A0AF771F23A7762300A3DD9F /* CaptureRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF771E23A7762300A3DD9F /* CaptureRecordView.swift */; };
+		A0B215E8276F67D000C4FE9A /* AnyImageViewController+Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B215E7276F67D000C4FE9A /* AnyImageViewController+Permission.swift */; };
 		A0B22EA5237AA1B3001F6066 /* Core+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E96237AA1B3001F6066 /* Core+UICollectionView.swift */; };
 		A0B22EA7237AA1B3001F6066 /* Core+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E98237AA1B3001F6066 /* Core+UIColor.swift */; };
 		A0B22EA8237AA1B3001F6066 /* Core+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E99237AA1B3001F6066 /* Core+UITableView.swift */; };
@@ -466,6 +467,7 @@
 		A09FFE6023404923000DEF87 /* PickerManager+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerManager+Video.swift"; sourceTree = "<group>"; };
 		A0A9825323A729BA00537F9D /* CaptureCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCircleView.swift; sourceTree = "<group>"; };
 		A0AF771E23A7762300A3DD9F /* CaptureRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureRecordView.swift; sourceTree = "<group>"; };
+		A0B215E7276F67D000C4FE9A /* AnyImageViewController+Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyImageViewController+Permission.swift"; sourceTree = "<group>"; };
 		A0B22E96237AA1B3001F6066 /* Core+UICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UICollectionView.swift"; sourceTree = "<group>"; };
 		A0B22E98237AA1B3001F6066 /* Core+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UIColor.swift"; sourceTree = "<group>"; };
 		A0B22E99237AA1B3001F6066 /* Core+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UITableView.swift"; sourceTree = "<group>"; };
@@ -1183,6 +1185,7 @@
 			children = (
 				A076999623963A360006AC9B /* AnyImageNavigationController.swift */,
 				A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */,
+				A0B215E7276F67D000C4FE9A /* AnyImageViewController+Permission.swift */,
 				A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */,
 			);
 			path = Controller;
@@ -1677,6 +1680,7 @@
 				71B3E9482629897B00710A7F /* EditorTextColor.swift in Sources */,
 				71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */,
 				A5347D1823A9D11F00C93874 /* EditorVideoResource.swift in Sources */,
+				A0B215E8276F67D000C4FE9A /* AnyImageViewController+Permission.swift in Sources */,
 				A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */,
 				A0FFB24025407E86000A7A45 /* GradientView.swift in Sources */,
 				A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */,

@@ -8,8 +8,6 @@
 
 import Foundation
 
-typealias PermissionCompletion = (Permission.Status) -> Void
-
 enum Permission: Equatable {
     
     case photos
@@ -27,14 +25,15 @@ enum Permission: Equatable {
         }
     }
     
-    func request(completion: @escaping PermissionCompletion) {
+    @MainActor
+    func request() async -> Permission.Status {
         switch self {
         case .photos:
-            _requestPhotos(completion: completion)
+            return await _requestPhotos()
         case .camera:
-            _requestCamera(completion: completion)
+            return await _requestCamera()
         case .microphone:
-            _requestMicrophone(completion: completion)
+            return await _requestMicrophone()
         }
     }
 }
@@ -69,6 +68,24 @@ extension Permission {
     enum Status: Equatable {
         
         case notDetermined
+        case denied
+        case authorized
+        case limited // Photos only
+        
+        var checkedStatus: Permission.CheckedStatus {
+            switch self {
+            case .authorized:
+                return .authorized
+            case .denied:
+                return .denied
+            default:
+                return .limited
+            }
+        }
+    }
+    
+    enum CheckedStatus: Equatable {
+        
         case denied
         case authorized
         case limited // Photos only
