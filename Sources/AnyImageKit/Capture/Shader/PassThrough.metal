@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2020/8/11.
-//  Copyright © 2020-2021 AnyImageProject.org. All rights reserved.
+//  Copyright © 2020-2021 AnyImageKit.org. All rights reserved.
 //
 
 #include <metal_stdlib>

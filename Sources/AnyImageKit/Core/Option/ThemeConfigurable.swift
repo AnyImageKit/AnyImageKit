@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2021/11/9.
-//  Copyright © 2021 AnyImageProject.org. All rights reserved.
+//  Copyright © 2021 AnyImageKit.org. All rights reserved.
 //
 
 import UIKit
