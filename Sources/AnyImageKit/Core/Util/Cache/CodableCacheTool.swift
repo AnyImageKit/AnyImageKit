@@ -17,7 +17,7 @@ struct CodableCacheTool: Cacheable {
     init(module: CacheModule, path: String = "") {
         self.module = module
         self.path = path.isEmpty ? module.path : path
-        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
+        self.workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
         FileHelper.createDirectory(at: self.path)
     }
 }

@@ -28,7 +28,7 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private var containerSize: CGSize = .zero
     private var didFinishSelect: Bool = false
-    private let workQueue = DispatchQueue.init(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.ImagePickerController")
+    private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
     private let manager: PickerManager = .init()
     

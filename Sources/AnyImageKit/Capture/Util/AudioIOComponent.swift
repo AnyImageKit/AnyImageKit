@@ -19,7 +19,7 @@ final class AudioIOComponent: DeviceIOComponent {
     weak var delegate: AudioIOComponentDelegate?
     
     private let audioOutput = AVCaptureAudioDataOutput()
-    private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.AudioCapture")
+    private let workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.AudioCapture")
     
     private let options: CaptureOptionsInfo
     

@@ -40,7 +40,7 @@ final class PickerManager {
     
     init() { }
     
-    let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.PickerManager")
+    let workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.PickerManager")
     let resizeSemaphore = DispatchSemaphore(value: 3)
 }
 

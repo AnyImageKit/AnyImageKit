@@ -25,7 +25,7 @@ final class Recorder {
     
     private(set) var isRunning: Bool = false
     
-    private let workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.Recorder")
+    private let workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.Recorder")
     
     private var writer: AVAssetWriter?
     private var writerInputs: [AVMediaType: AVAssetWriterInput] = [:]

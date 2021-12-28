@@ -3,7 +3,7 @@
 [![GitHub Actions](https://github.com/AnyImageKit/AnyImageKit/workflows/build/badge.svg?branch=master)](https://github.com/AnyImageKit/AnyImageKit/actions?query=workflow%3Abuild)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImageKit.svg)](https://cocoapods.org/pods/AnyImageKit)
 [![Platform](https://img.shields.io/cocoapods/p/AnyImageKit.svg?style=flat)](./)
-[![License](https://img.shields.io/cocoapods/l/AnyImageKit.svg?style=flat)](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/LICENSE)
+[![License](https://img.shields.io/cocoapods/l/AnyImageKit.svg?style=flat)](https://raw.githubusercontent.com/AnyImageKit/AnyImageKit/master/LICENSE)
 
 `AnyImageKit` is a toolbox for picking, editing or capturing photos/videos, written in Swift. 
 
