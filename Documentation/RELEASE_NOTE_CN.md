@@ -9,7 +9,7 @@
   - 修复 `contentInsetAdjustmentBehavior` 被业务方全局替换后，视图出现偏移的问题。
 
 - Editor
-  - 修复当编辑选项仅裁剪时，输出了错误的图片。
+  - 修复当编辑选项仅裁剪时，输出了错误的图片。([#133](https://github.com/AnyImageProject/AnyImageKit/pull/133))
 
 ## 0.14.2
 

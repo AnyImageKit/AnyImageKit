@@ -2,14 +2,14 @@
 
 ## 0.14.3
 
-### 修复
+### Resolved
 
 - Picker
   - Fix the issue that disable rule is not checked when selecting photos after taking photos.
   - Fix asset collection view will be offset when `contentInsetAdjustmentBehavior` is modified globally.
 
 - Editor
-  - Fix the issue that image will be wrong after crop when tool option only has crop option.
+  - Fix the issue that image will be wrong after crop when tool option only has crop option.([#133](https://github.com/AnyImageProject/AnyImageKit/pull/133))
 
 ## 0.14.2
 
