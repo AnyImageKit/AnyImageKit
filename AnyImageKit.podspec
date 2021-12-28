@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
         'RayJiang16' => '1184731421@qq.com',
     }
     s.source = { :git => 'https://github.com/AnyImageProject/AnyImageKit.git', :tag => s.version }
-    s.ios.deployment_target = '12.0'
-    s.swift_versions = ['5.3']
+    s.ios.deployment_target = '13.0'
+    s.swift_versions = ['5.5']
     s.frameworks = 'Foundation'
     
     s.default_subspecs = 'Core', 'Picker', 'Editor', 'Capture'

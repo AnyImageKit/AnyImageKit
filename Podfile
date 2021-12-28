@@ -1,4 +1,4 @@
-platform :ios, '12.0'
+platform :ios, '13.0'
 
 install! 'cocoapods', disable_input_output_paths: true
 
