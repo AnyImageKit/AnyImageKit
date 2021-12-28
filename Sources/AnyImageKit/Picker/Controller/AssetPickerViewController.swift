@@ -57,6 +57,7 @@ final class AssetPickerViewController: AnyImageViewController {
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.alwaysBounceVertical = true
+        view.contentInsetAdjustmentBehavior = .automatic
         let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
                                          left: defaultAssetSpacing,
