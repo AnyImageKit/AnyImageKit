@@ -3,7 +3,7 @@
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/21.
-//  Copyright © 2019-2021 AnyImageProject.org. All rights reserved.
+//  Copyright © 2019-2021 AnyImageKit.org. All rights reserved.
 //
 
 import Foundation
