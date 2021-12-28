@@ -1,6 +1,6 @@
 ![AnyImageKit](https://github.com/AnyImageProject/AnyImageProject.github.io/raw/master/Resources/TitleMap@2x.png)
 
-[![GitHub Actions](https://github.com/AnyImageProject/AnyImageKit/workflows/build/badge.svg?branch=master)](https://github.com/AnyImageProject/AnyImageKit/actions?query=workflow%3Abuild)
+[![GitHub Actions](https://github.com/AnyImageKit/AnyImageKit/workflows/build/badge.svg?branch=master)](https://github.com/AnyImageKit/AnyImageKit/actions?query=workflow%3Abuild)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AnyImageKit.svg)](https://cocoapods.org/pods/AnyImageKit)
 [![Platform](https://img.shields.io/cocoapods/p/AnyImageKit.svg?style=flat)](./)
 [![License](https://img.shields.io/cocoapods/l/AnyImageKit.svg?style=flat)](https://raw.githubusercontent.com/AnyImageProject/AnyImageKit/master/LICENSE)
@@ -65,7 +65,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/AnyImageProject/AnyImageKit.git", .upToNextMajor(from: "0.14.0"))
+    .package(url: "https://github.com/AnyImageKit/AnyImageKit.git", .upToNextMajor(from: "0.14.0"))
 ]
 ```
 
@@ -131,20 +131,20 @@ extension ViewController: ImagePickerControllerDelegate {
 
 | Version | Release Date | Xcode | Swift | iOS |
 | ---- | ----  | ---- | ---- | ---- |
-| [v0.14.3](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0143) | 2021-12-28 | 13.2 | 5.5 | 12.0+ |
-| [v0.14.2](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0142) | 2021-12-16 | 13.2 | 5.5 | 12.0+ |
-| [v0.14.1](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0141) | 2021-11-23 | 13.1 | 5.5 | 12.0+ |
-| [v0.14.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0140) | 2021-11-22 | 13.1 | 5.5 | 12.0+ |
-| [v0.13.5](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0135) | 2021-10-15 | 13.0 | 5.5 | 12.0+ |
-| [v0.13.4](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0134) | 2021-09-23 | 13.0 | 5.5 | 12.0+ |
-| [v0.13.3](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0133) | 2021-08-09 | 12.5 | 5.4 | 10.0+ |
-| [v0.13.2](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0132) | 2021-06-30 | 12.5 | 5.4 | 10.0+ |
-| [v0.13.1](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0131) | 2021-06-01 | 12.5 | 5.4 | 10.0+ |
-| [v0.13.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0130) | 2021-02-08 | 12.4 | 5.3 | 10.0+ |
-| [v0.12.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0120) | 2020-12-30 | 12.2 | 5.3 | 10.0+ |
-| [v0.11.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0110) | 2020-12-18 | 12.2 | 5.3 | 10.0+ |
-| [v0.10.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0100) | 2020-11-03 | 12.1 | 5.3 | 10.0+ |
-| [v0.9.0](https://github.com/AnyImageProject/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#090) | 2020-10-09 | 12.0 | 5.3 | 10.0+ |
+| [v0.14.3](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0143) | 2021-12-28 | 13.2 | 5.5 | 12.0+ |
+| [v0.14.2](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0142) | 2021-12-16 | 13.2 | 5.5 | 12.0+ |
+| [v0.14.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0141) | 2021-11-23 | 13.1 | 5.5 | 12.0+ |
+| [v0.14.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0140) | 2021-11-22 | 13.1 | 5.5 | 12.0+ |
+| [v0.13.5](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0135) | 2021-10-15 | 13.0 | 5.5 | 12.0+ |
+| [v0.13.4](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0134) | 2021-09-23 | 13.0 | 5.5 | 12.0+ |
+| [v0.13.3](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0133) | 2021-08-09 | 12.5 | 5.4 | 10.0+ |
+| [v0.13.2](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0132) | 2021-06-30 | 12.5 | 5.4 | 10.0+ |
+| [v0.13.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0131) | 2021-06-01 | 12.5 | 5.4 | 10.0+ |
+| [v0.13.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0130) | 2021-02-08 | 12.4 | 5.3 | 10.0+ |
+| [v0.12.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0120) | 2020-12-30 | 12.2 | 5.3 | 10.0+ |
+| [v0.11.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0110) | 2020-12-18 | 12.2 | 5.3 | 10.0+ |
+| [v0.10.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0100) | 2020-11-03 | 12.1 | 5.3 | 10.0+ |
+| [v0.9.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#090) | 2020-10-09 | 12.0 | 5.3 | 10.0+ |
 
 ## License
 

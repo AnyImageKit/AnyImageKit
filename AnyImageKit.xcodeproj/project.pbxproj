@@ -1558,7 +1558,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1200;
-				ORGANIZATIONNAME = AnyImageProject.org;
+				ORGANIZATIONNAME = AnyImageKit.org;
 				TargetAttributes = {
 					714869122744D88E003D4605 = {
 						CreatedOnToolsVersion = 12.5;

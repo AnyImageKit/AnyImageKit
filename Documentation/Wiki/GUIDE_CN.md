@@ -180,4 +180,4 @@ func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: 
 
 ## 下一步
 
-[安装说明](https://github.com/AnyImageProject/AnyImageKit/wiki/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E)
+[安装说明](https://github.com/AnyImageKit/AnyImageKit/wiki/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E)

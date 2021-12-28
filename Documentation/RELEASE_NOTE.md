@@ -9,15 +9,15 @@
   - Fix asset collection view will be offset when `contentInsetAdjustmentBehavior` is modified globally.
 
 - Editor
-  - Fix the issue that image will be wrong after crop when tool option only has crop option.([#133](https://github.com/AnyImageProject/AnyImageKit/pull/133))
+  - Fix the issue that image will be wrong after crop when tool option only has crop option.([#133](https://github.com/AnyImageKit/AnyImageKit/pull/133))
 
 ## 0.14.2
 
 ### Resolved
 
 - Picker
-  - Fix when using Xcode 13.2+, main thread will be stuck for 15 seconds when requesting to register photo library observer before authorization.([#130](https://github.com/AnyImageProject/AnyImageKit/pull/130))
-  - Fix shared albums cannot be select in picker, add a new option `.shared` for `PickerAlbumOption`.([#129](https://github.com/AnyImageProject/AnyImageKit/pull/129)) ([#131](https://github.com/AnyImageProject/AnyImageKit/pull/131))
+  - Fix when using Xcode 13.2+, main thread will be stuck for 15 seconds when requesting to register photo library observer before authorization.([#130](https://github.com/AnyImageKit/AnyImageKit/pull/130))
+  - Fix shared albums cannot be select in picker, add a new option `.shared` for `PickerAlbumOption`.([#129](https://github.com/AnyImageKit/AnyImageKit/pull/129)) ([#131](https://github.com/AnyImageKit/AnyImageKit/pull/131))
 
 ## 0.14.1
 
@@ -31,7 +31,7 @@
 ### New Features
 
 - Editor
-  - Added `rotationDirection` enumeration. Can rotate the image when cropping. ([#100](https://github.com/AnyImageProject/AnyImageKit/pull/100))
+  - Added `rotationDirection` enumeration. Can rotate the image when cropping. ([#100](https://github.com/AnyImageKit/AnyImageKit/pull/100))
   - Added `textFont` UIFont value. Can customize font of input text.
   - Added `isTextSelected` boolean value. Set default style of input text.
   - Added `calculateTextLastLineMask` boolean value. Calculate the width of the last line of the input text to show mask layer.
@@ -41,21 +41,21 @@
 ### Improved
 
 - All modules
-  - `Theme` can customize color, icon, text, label and button. ([#104](https://github.com/AnyImageProject/AnyImageKit/pull/104))
+  - `Theme` can customize color, icon, text, label and button. ([#104](https://github.com/AnyImageKit/AnyImageKit/pull/104))
   - `Data track` added more events, supported page and events can be find [HERE](./DATA_TRACK.md).
 - Picker
-  - `AssetDisableCheckRule` support more complex scene. ([#96](https://github.com/AnyImageProject/AnyImageKit/pull/96))
+  - `AssetDisableCheckRule` support more complex scene. ([#96](https://github.com/AnyImageKit/AnyImageKit/pull/96))
 - Editor
   - Improved the response area of input text.
 
 ### Resolved
 
 - Picker
-  - Try to fix that quick click on done button will trigger the delegate several times. ([#110](https://github.com/AnyImageProject/AnyImageKit/pull/110))
+  - Try to fix that quick click on done button will trigger the delegate several times. ([#110](https://github.com/AnyImageKit/AnyImageKit/pull/110))
   - Fixed `GIF/Live Photo` will show edit button.
   - Before iOS 14, Picker used the wrong index when selecting asset after take photos in desc sort mode.
 - Editor
-  - Crush when cropping video. ([#111](https://github.com/AnyImageProject/AnyImageKit/pull/111))
+  - Crush when cropping video. ([#111](https://github.com/AnyImageKit/AnyImageKit/pull/111))
   - In the specified crop option, the crop rect may not move.
   - The UITextView may scroll when enter input text.
 
@@ -80,7 +80,7 @@
 
 ### New Features
 
-- Added `Portuguese(Brazil) (pt-BR)` internationalization support.([#106](https://github.com/AnyImageProject/AnyImageKit/pull/106))
+- Added `Portuguese(Brazil) (pt-BR)` internationalization support.([#106](https://github.com/AnyImageKit/AnyImageKit/pull/106))
 
 ## 0.13.2
 
@@ -92,34 +92,34 @@
 
 ### General
 
-- AnyImageKit now support `resource_bundles` for CocoaPods.([#79](https://github.com/AnyImageProject/AnyImageKit/pull/79))
-- Added `Turkish (tr)` internationalization support.([#70](https://github.com/AnyImageProject/AnyImageKit/pull/70))
+- AnyImageKit now support `resource_bundles` for CocoaPods.([#79](https://github.com/AnyImageKit/AnyImageKit/pull/79))
+- Added `Turkish (tr)` internationalization support.([#70](https://github.com/AnyImageKit/AnyImageKit/pull/70))
 
 ### New Features
 
 - Editor
-  - The output workflow has been refactored so that editing now does not reduce the resolution of the original image.([#67](https://github.com/AnyImageProject/AnyImageKit/pull/67))
+  - The output workflow has been refactored so that editing now does not reduce the resolution of the original image.([#67](https://github.com/AnyImageKit/AnyImageKit/pull/67))
 
 ### Resolved
 
 - Core
-  - Fixed the issue that `AnyImageError.invalidExportPreset` is thrown when setting HEVC/H.265 output with devices below A10 chip, and the unsupported devices will be downgraded to AVC/H.264 solution automatically.([#75](https://github.com/AnyImageProject/AnyImageKit/pull/75))
-  - Fixed the issue that the status bar is not hidden correctly on iPhone8/8 Plus and older device.([#78](https://github.com/AnyImageProject/AnyImageKit/pull/78))
+  - Fixed the issue that `AnyImageError.invalidExportPreset` is thrown when setting HEVC/H.265 output with devices below A10 chip, and the unsupported devices will be downgraded to AVC/H.264 solution automatically.([#75](https://github.com/AnyImageKit/AnyImageKit/pull/75))
+  - Fixed the issue that the status bar is not hidden correctly on iPhone8/8 Plus and older device.([#78](https://github.com/AnyImageKit/AnyImageKit/pull/78))
 - Capture
-  - Fixed the issue that Metal resource files were not copied when using CocoaPods as a static library dependency.([#81](https://github.com/AnyImageProject/AnyImageKit/pull/81))
+  - Fixed the issue that Metal resource files were not copied when using CocoaPods as a static library dependency.([#81](https://github.com/AnyImageKit/AnyImageKit/pull/81))
 
 ## 0.12.0
 
 ### New Features
 
 - Picker
-  - Added the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. ([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
+  - Added the `selectionTapAction` enumeration. The action after tapping the asset on selection view depends on this enumeration. ([#59](https://github.com/AnyImageKit/AnyImageKit/issues/59))
   - Added the `saveEditedAsset` boolean value. Determines whether the Picker save edited assets.
 
 ### Resolved
 
 - Picker
-  - Fixed the issue that Picker would crash by array index out of range when `orderByDate = DESC`. ([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
+  - Fixed the issue that Picker would crash by array index out of range when `orderByDate = DESC`. ([#65](https://github.com/AnyImageKit/AnyImageKit/issues/65))
   - Fixed the issue that the `Preview` button cannot be used sometimes.
 
 ### BREAKING CHANGE

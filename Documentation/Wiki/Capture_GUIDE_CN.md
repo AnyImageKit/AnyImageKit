@@ -125,13 +125,13 @@ struct CapturePreset: Equatable {
 
 ### EditorPhotoOptions (EditorPhotoOptionsInfo)
 
-`editorPhotoOptions` 是 `Editor` 模块图片编辑的配置项，你可以在[Editor使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
+`editorPhotoOptions` 是 `Editor` 模块图片编辑的配置项，你可以在[Editor使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
 
 
 
 ### EditorVideoOptions (EditorVideoOptionsInfo)
 
-`editorVideoOptions` 是 `Editor` 模块视频编辑的配置项，你可以在[Editor使用说明](https://github.com/AnyImageProject/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
+`editorVideoOptions` 是 `Editor` 模块视频编辑的配置项，你可以在[Editor使用说明](https://github.com/AnyImageKit/AnyImageKit/wiki/Editor%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)中查看详细的介绍。
 
 
 

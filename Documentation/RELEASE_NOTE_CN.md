@@ -9,15 +9,15 @@
   - 修复 `contentInsetAdjustmentBehavior` 被业务方全局替换后，视图出现偏移的问题。
 
 - Editor
-  - 修复当编辑选项仅裁剪时，输出了错误的图片。([#133](https://github.com/AnyImageProject/AnyImageKit/pull/133))
+  - 修复当编辑选项仅裁剪时，输出了错误的图片。([#133](https://github.com/AnyImageKit/AnyImageKit/pull/133))
 
 ## 0.14.2
 
 ### 修复
 
 - Picker
-  - 修复使用 Xcode 13.2+ 时，未授权时请求注册相册观察者会卡住主线程 15 秒的问题。([#130](https://github.com/AnyImageProject/AnyImageKit/pull/130))
-  - 修复无法选择共享相册的问题，`PickerAlbumOption` 添加了一个 `.shared` 的选项。([#129](https://github.com/AnyImageProject/AnyImageKit/pull/129)) ([#131](https://github.com/AnyImageProject/AnyImageKit/pull/131))
+  - 修复使用 Xcode 13.2+ 时，未授权时请求注册相册观察者会卡住主线程 15 秒的问题。([#130](https://github.com/AnyImageKit/AnyImageKit/pull/130))
+  - 修复无法选择共享相册的问题，`PickerAlbumOption` 添加了一个 `.shared` 的选项。([#129](https://github.com/AnyImageKit/AnyImageKit/pull/129)) ([#131](https://github.com/AnyImageKit/AnyImageKit/pull/131))
 
 ## 0.14.1
 
@@ -31,7 +31,7 @@
 ### 新增
 
 - Editor
-  - 新增 `rotationDirection` 枚举字段，支持在裁剪时进行旋转。([#100](https://github.com/AnyImageProject/AnyImageKit/pull/100))
+  - 新增 `rotationDirection` 枚举字段，支持在裁剪时进行旋转。([#100](https://github.com/AnyImageKit/AnyImageKit/pull/100))
   - 新增 `textFont` 字段，用于设置输入文本时的字体。
   - 新增 `isTextSelected` 布尔字段，用于设置默认字体样式。
   - 新增 `calculateTextLastLineMask` 布尔字段，用于输入文本时是否计算最后一行宽度。
@@ -41,21 +41,21 @@
 ### 优化
 
 - 所有模块
-  - `Theme` 可以自定义颜色/图标/文本，可以对`Label/Button` 进行定制。 ([#104](https://github.com/AnyImageProject/AnyImageKit/pull/104))
+  - `Theme` 可以自定义颜色/图标/文本，可以对`Label/Button` 进行定制。 ([#104](https://github.com/AnyImageKit/AnyImageKit/pull/104))
   - `Data track` 支持更多事件，已支持的页面和事件可以在 [这里](./DATA_TRACK.md) 找到。
 - Picker
-  - `AssetDisableCheckRule` 支持更复杂的业务场景。 ([#96](https://github.com/AnyImageProject/AnyImageKit/pull/96))
+  - `AssetDisableCheckRule` 支持更复杂的业务场景。 ([#96](https://github.com/AnyImageKit/AnyImageKit/pull/96))
 - Editor
   - 扩大文本响应区域。
 
 ### 修复
 
 - Picker
-  - 尝试修复快速点击完成按钮会多次触发回调。 ([#110](https://github.com/AnyImageProject/AnyImageKit/pull/110))
+  - 尝试修复快速点击完成按钮会多次触发回调。 ([#110](https://github.com/AnyImageKit/AnyImageKit/pull/110))
   - `GIF/Live Photo` 会展示编辑按钮。
   - iOS 14 之前版本，在倒序排序模式下，拍照后会导致资源下标错乱。
 - Editor
-  - 编辑视频时闪退。 ([#111](https://github.com/AnyImageProject/AnyImageKit/pull/111))
+  - 编辑视频时闪退。 ([#111](https://github.com/AnyImageKit/AnyImageKit/pull/111))
   - 在指定裁剪比例模式下，裁剪框可能会无法移动。
   - 输入文本时，文本框可能会滚动。
 
@@ -80,46 +80,46 @@
 
 ### 新增
 
-- 新增葡萄牙语-巴西 `Portuguese(Brazil) (pt-BR)` 国际化支持。([#106](https://github.com/AnyImageProject/AnyImageKit/pull/106))
+- 新增葡萄牙语-巴西 `Portuguese(Brazil) (pt-BR)` 国际化支持。([#106](https://github.com/AnyImageKit/AnyImageKit/pull/106))
 
 ## 0.13.2
 
 ### 修复
 
-Xcode 13 beta 无法编译错误。([#95](https://github.com/AnyImageProject/AnyImageKit/issues/95))
+Xcode 13 beta 无法编译错误。([#95](https://github.com/AnyImageKit/AnyImageKit/issues/95))
 
 ## 0.13.0
 
 ### 通用
 
-- 支持 CocoaPods `resource_bundles` 特性。([#79](https://github.com/AnyImageProject/AnyImageKit/pull/79))
-- 新增土耳其语 `Turkish (tr)` 国际化支持。([#70](https://github.com/AnyImageProject/AnyImageKit/pull/70))
+- 支持 CocoaPods `resource_bundles` 特性。([#79](https://github.com/AnyImageKit/AnyImageKit/pull/79))
+- 新增土耳其语 `Turkish (tr)` 国际化支持。([#70](https://github.com/AnyImageKit/AnyImageKit/pull/70))
 
 ### 新增
 
 - Editor
-  - 重构了输出模块，现在编辑后不会降低原图的分辨率。([#67](https://github.com/AnyImageProject/AnyImageKit/pull/67))
+  - 重构了输出模块，现在编辑后不会降低原图的分辨率。([#67](https://github.com/AnyImageKit/AnyImageKit/pull/67))
 
 ### 修复
 
 - Core
-  - 修复使用 A10 以下设备设置 HEVC/H.265 输出时抛出 AnyImageError.invalidExportPreset 的问题，不支持的设备会自动降级到 AVC/H.264 方案。([#75](https://github.com/AnyImageProject/AnyImageKit/pull/75))
-  - 修复状态栏在非全面屏上隐藏不正确的问题。([#78](https://github.com/AnyImageProject/AnyImageKit/pull/78))
+  - 修复使用 A10 以下设备设置 HEVC/H.265 输出时抛出 AnyImageError.invalidExportPreset 的问题，不支持的设备会自动降级到 AVC/H.264 方案。([#75](https://github.com/AnyImageKit/AnyImageKit/pull/75))
+  - 修复状态栏在非全面屏上隐藏不正确的问题。([#78](https://github.com/AnyImageKit/AnyImageKit/pull/78))
 - Capture
-  - 修复使用 CocoaPods 作为静态库依赖时不会拷贝 Metal 资源文件的问题。([#81](https://github.com/AnyImageProject/AnyImageKit/pull/81))
+  - 修复使用 CocoaPods 作为静态库依赖时不会拷贝 Metal 资源文件的问题。([#81](https://github.com/AnyImageKit/AnyImageKit/pull/81))
 
 ## 0.12.0
 
 ### 新增
 
 - Picker
-  - 新增 `selectionTapAction` 枚举字段，用于在资源列表页面点击资源后的动作。([#59](https://github.com/AnyImageProject/AnyImageKit/issues/59))
+  - 新增 `selectionTapAction` 枚举字段，用于在资源列表页面点击资源后的动作。([#59](https://github.com/AnyImageKit/AnyImageKit/issues/59))
   - 新增 `saveEditedAsset` 布尔字段，用于完成选择后是否保存编辑过的资源。
 
 ### 修复
 
 - Picker
-  - 修复 `DESC` 排序时，获取数据错误和数组越界问题。([#65](https://github.com/AnyImageProject/AnyImageKit/issues/65))
+  - 修复 `DESC` 排序时，获取数据错误和数组越界问题。([#65](https://github.com/AnyImageKit/AnyImageKit/issues/65))
   - 修复 `预览` 按钮有时无法使用的问题。
 
 ### 不兼容变更
