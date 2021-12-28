@@ -20,7 +20,7 @@ struct ImageCacheTool: Cacheable {
     init(module: CacheModule, path: String = "", memoryCountLimit: Int = 5, useDiskCache: Bool = false) {
         self.module = module
         self.path = path.isEmpty ? module.path : path
-        self.workQueue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
+        self.workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
         self.useDiskCache = useDiskCache
         do {
             self.cache = try ImageCache(name: "AnyImageKitImageCache", cacheDirectoryURL: URL(fileURLWithPath: self.path))

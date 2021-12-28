@@ -358,5 +358,5 @@ extension PreviewCell: UIGestureRecognizerDelegate {
 
 extension Notification.Name {
     
-    static let previewCellDidDownloadResource = Notification.Name("org.AnyImageProject.AnyImageKit.Notification.Name.Picker.PreviewCellDidDownloadResource")
+    static let previewCellDidDownloadResource = Notification.Name("org.AnyImageKit.Notification.Name.Picker.PreviewCellDidDownloadResource")
 }

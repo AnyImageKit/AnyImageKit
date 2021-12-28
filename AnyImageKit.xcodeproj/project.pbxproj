@@ -2183,7 +2183,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.14.3;
-				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageKit.AnyImageKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
@@ -2216,7 +2216,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.14.3;
-				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageKit.AnyImageKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
@@ -2241,7 +2241,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.14.3;
-				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageKit.Example;
 				PRODUCT_NAME = Example;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
@@ -2264,7 +2264,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.14.3;
-				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageProject.AnyImageKit.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageKit.Example;
 				PRODUCT_NAME = Example;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";

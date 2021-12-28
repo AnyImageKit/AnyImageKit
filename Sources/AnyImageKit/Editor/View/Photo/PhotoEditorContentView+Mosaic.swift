@@ -38,7 +38,7 @@ extension PhotoEditorContentView {
             !options.cacheIdentifier.isEmpty,
             let data = image.jpegData(compressionQuality: 1.0) else { return }
         let filename = options.cacheIdentifier
-        let queue = DispatchQueue(label: "org.AnyImageProject.AnyImageKit.DispatchQueue.CacheMosaicImage")
+        let queue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.CacheMosaicImage")
         queue.async {
             FileHelper.write(photoData: data, fileType: .jpeg, filename: filename)
         }
