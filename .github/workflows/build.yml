@@ -11,15 +11,17 @@ on:
 jobs:
   iOS:
     name: Test iOS
-    runs-on: macOS-latest
+    runs-on: macos-11
       
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 13']
+        destination: ["OS=15.2,name=iPhone 13 Pro"]
         swift-version: [5.5]
 
     steps:
     - uses: actions/checkout@v2
+    - name: Xcode
+      run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
     - name: Pod Install
       run: pod install
     - name: Archive for iOS Device slice
@@ -27,15 +29,17 @@ jobs:
     
   iOS_Simulator:
     name: Test iOS Simulator
-    runs-on: macOS-latest
+    runs-on: macOS-11
 
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 13']
+        destination: ["OS=15.2,name=iPhone 13 Pro"]
         swift-version: [5.5]
 
     steps:
     - uses: actions/checkout@v2
+    - name: Xcode
+      run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
     - name: Pod Install
       run: pod install
     - name: Archive for iOS Simulator slice
@@ -43,14 +47,16 @@ jobs:
     
   CocoaPods:
     name: CocoaPods Library Lint
-    runs-on: macOS-latest
+    runs-on: macOS-11
 
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 13']
+        destination: ["OS=15.2,name=iPhone 13 Pro"]
         swift-version: [5.5]
 
     steps:
     - uses: actions/checkout@v2
+    - name: Xcode
+      run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
     - name: Library Lint Check
       run: pod lib lint
