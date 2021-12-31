@@ -14,25 +14,19 @@ extension Permission {
         return AVCaptureDevice.authorizationStatus(for: .video)._status
     }
     
-    func _requestCamera(completion: @escaping PermissionCompletion) {
+    @MainActor
+    func _requestCamera() async -> Permission.Status {
         guard Bundle.main.object(forInfoDictionaryKey: ._cameraUsageDescription) != nil else {
             _print("WARNING: \(String._cameraUsageDescription) not found in Info.plist")
-            return
+            return .denied
         }
         
-        AVCaptureDevice.requestAccess(for: .video) { result in
-            Thread.runOnMain {
-                if result {
-                    completion(.authorized)
-                } else {
-                    completion(.denied)
-                }
-            }
-        }
+        let result = await AVCaptureDevice.requestAccess(for: .video)
+        return result ? .authorized : .denied
     }
 }
 
-fileprivate extension AVAuthorizationStatus {
+extension AVAuthorizationStatus {
     
     var _status: Permission.Status {
         switch self {

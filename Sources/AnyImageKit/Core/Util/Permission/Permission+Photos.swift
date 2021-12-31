@@ -18,22 +18,19 @@ extension Permission {
         }
     }
     
-    func _requestPhotos(completion: @escaping PermissionCompletion) {
+    @MainActor
+    func _requestPhotos() async -> Permission.Status {
         guard Bundle.main.object(forInfoDictionaryKey: ._photoLibraryUsageDescription) != nil else {
             _print("WARNING: \(String._photoLibraryUsageDescription) not found in Info.plist")
-            return
+            return .denied
         }
         
         if #available(iOS 14.0, *) {
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
-                Thread.runOnMain {
-                    completion(status._status)
-                }
-            }
+            return await PHPhotoLibrary.requestAuthorization(for: .readWrite)._status
         } else {
-            PHPhotoLibrary.requestAuthorization { status in
-                Thread.runOnMain {
-                    completion(status._status)
+            return await withCheckedContinuation { continuation in
+                PHPhotoLibrary.requestAuthorization { status in
+                    continuation.resume(returning: status._status)
                 }
             }
         }

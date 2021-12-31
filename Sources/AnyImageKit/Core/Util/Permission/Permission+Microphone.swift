@@ -11,38 +11,18 @@ import AVFoundation
 extension Permission {
     
     func _checkMicrophone() -> Status {
-        return AVAudioSession.sharedInstance().recordPermission._status
+        return AVCaptureDevice.authorizationStatus(for: .audio)._status
     }
     
-    func _requestMicrophone(completion: @escaping PermissionCompletion) {
+    @MainActor
+    func _requestMicrophone() async -> Permission.Status {
         guard Bundle.main.object(forInfoDictionaryKey: ._microphoneUsageDescription) != nil else {
             _print("WARNING: \(String._microphoneUsageDescription) not found in Info.plist")
-            return
+            return .denied
         }
         
-        AVAudioSession.sharedInstance().requestRecordPermission { result in
-            Thread.runOnMain {
-                if result {
-                    completion(.authorized)
-                } else {
-                    completion(.denied)
-                }
-            }
-        }
-    }
-}
-
-fileprivate extension AVAudioSession.RecordPermission {
-    
-    var _status: Permission.Status {
-        switch self {
-        case .denied:
-            return .denied
-        case .granted:
-            return .authorized
-        default:
-            return .notDetermined
-        }
+        let result = await AVCaptureDevice.requestAccess(for: .audio)
+        return result ? .authorized : .denied
     }
 }
 
