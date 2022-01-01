@@ -91,9 +91,14 @@ final class VideoIOComponent: DeviceIOComponent {
                 delegate?.videoIO(self, didUpdate: .isAdjustingExposure(value))
             }
         case #keyPath(AVCaptureDevice.deviceWhiteBalanceGains):
-            if let value = change?[.newKey] as? NSValue {
+            if let value = change?[.newKey] as? NSValue, let maxWhiteBalanceGain = device?.maxWhiteBalanceGain {
                 var whiteBalanceGains: AVCaptureDevice.WhiteBalanceGains = .init()
                 value.getValue(&whiteBalanceGains)
+                // For each channel in the whiteBalanceGains struct, only values between 1.0 and -maxWhiteBalanceGain are supported.
+                let minWhiteBalanceGain: Float = 1.0
+                whiteBalanceGains.redGain = max(min(whiteBalanceGains.redGain, maxWhiteBalanceGain), minWhiteBalanceGain)
+                whiteBalanceGains.greenGain = max(min(whiteBalanceGains.greenGain, maxWhiteBalanceGain), minWhiteBalanceGain)
+                whiteBalanceGains.blueGain = max(min(whiteBalanceGains.blueGain, maxWhiteBalanceGain), minWhiteBalanceGain)
                 if let temperatureAndTintValues = device?.temperatureAndTintValues(for: whiteBalanceGains) {
                     let whiteBalance = CaptureWhiteBalance(temperatureAndTintValues)
                     delegate?.videoIO(self, didUpdate: .whiteBalance(whiteBalance))
