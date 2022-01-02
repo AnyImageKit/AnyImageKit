@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 蒋惠 on 2020/10/20.
-//  Copyright © 2020-2021 AnyImageKit.org. All rights reserved.
+//  Copyright © 2020-2022 AnyImageKit.org. All rights reserved.
 //
 
 import UIKit
