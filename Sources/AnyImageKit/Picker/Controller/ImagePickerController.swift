@@ -81,6 +81,18 @@ open class ImagePickerController: AnyImageNavigationController {
             super.dismiss(animated: flag, completion: completion)
         }
     }
+    
+    open override var shouldAutorotate: Bool {
+        return true
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .all
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIApplication.shared.statusBarOrientation
+    }
 }
 
 extension ImagePickerController {

@@ -174,17 +174,16 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
         updateLayout()
     }
     
-    @available(iOS 11.0, *)
-    override var prefersHomeIndicatorAutoHidden: Bool {
+    override var shouldAutorotate: Bool {
         return true
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
+        return .all
     }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
+        return UIApplication.shared.statusBarOrientation
     }
     
     override func setStatusBar(hidden: Bool) {
