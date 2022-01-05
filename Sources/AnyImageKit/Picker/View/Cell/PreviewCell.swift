@@ -117,11 +117,17 @@ class PreviewCell: UICollectionViewCell {
     /// 记录pan手势开始时，手势位置
     private var beganTouch = CGPoint.zero
     
+    private var needLayout: Bool = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
         setupView()
         isAccessibilityElement = true
+        
+        NotificationCenter.default.addObserver(forName: .containerSizeDidChange, object: nil, queue: .main) { noti in
+            self.layout()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -140,12 +146,14 @@ class PreviewCell: UICollectionViewCell {
         imageView.image = image
         if image != nil {
             layout()
+            needLayout = true
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if UIDevice.current.userInterfaceIdiom == .pad { // Optimize performance, fit size classes
+        if needLayout {
+            needLayout = false
             layout()
         }
     }
