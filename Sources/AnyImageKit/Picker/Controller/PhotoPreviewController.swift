@@ -314,9 +314,13 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     @objc private func containerSizeDidChange(_ sender: Notification) {
-        collectionView.reloadData()
-        let indexPath = IndexPath(item: currentIndex, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        collectionView.performBatchUpdates { [weak self] in
+            self?.collectionView.reloadData()
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            let indexPath = IndexPath(item: self.currentIndex, section: 0)
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        }
     }
     
     /// NavigationBar - Back
