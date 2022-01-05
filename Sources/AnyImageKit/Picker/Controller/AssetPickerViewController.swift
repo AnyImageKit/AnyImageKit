@@ -598,7 +598,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
         if UIDevice.current.userInterfaceIdiom == .phone || !manager.options.autoCalculateColumnNumber {
             columnNumber = CGFloat(manager.options.columnNumber)
         } else {
-            let minWidth: CGFloat = 140
+            let minWidth: CGFloat = 135
             columnNumber = max(CGFloat(Int(contentSize.width / minWidth)), 3)
         }
         let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
