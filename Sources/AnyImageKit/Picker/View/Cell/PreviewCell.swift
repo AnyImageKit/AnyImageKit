@@ -106,8 +106,9 @@ class PreviewCell: UICollectionViewCell {
     /// 取图片适屏frame
     var fitFrame: CGRect {
         let size = fitSize
+        let x = (scrollView.bounds.width - size.width) > 0 ? (scrollView.bounds.width - size.width) * 0.5 : 0
         let y = (scrollView.bounds.height - size.height) > 0 ? (scrollView.bounds.height - size.height) * 0.5 : 0
-        return CGRect(x: 0, y: y, width: size.width, height: size.height)
+        return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
     
     /// 记录pan手势开始时imageView的位置
