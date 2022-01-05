@@ -29,6 +29,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private var preferredCollectionWidth: CGFloat = .zero
     private var autoScrollToLatest: Bool = false
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
+    private var containerSize: CGSize = ScreenHelper.mainBounds.size
     
     #if swift(>=5.5)
     /// Fix Xcode 13 beta bug.
@@ -385,6 +386,7 @@ extension AssetPickerViewController {
     }
     
     @objc private func containerSizeDidChange(_ sender: Notification) {
+        containerSize = (sender.userInfo?[containerSizeKey] as? CGSize) ?? ScreenHelper.mainBounds.size
         guard collectionView.visibleCells.count > 0 else { return }
         let visibleCellRows = collectionView.visibleCells.map{ $0.tag }.sorted()
         let row = visibleCellRows[visibleCellRows.count / 2]
@@ -593,15 +595,15 @@ extension AssetPickerViewController: UICollectionViewDelegate {
 extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
+        let maxSize = CGRect(origin: .zero, size: containerSize).inset(by: collectionView.contentInset).size
         let columnNumber: CGFloat
         if UIDevice.current.userInterfaceIdiom == .phone || !manager.options.autoCalculateColumnNumber {
             columnNumber = CGFloat(manager.options.columnNumber)
         } else {
             let minWidth: CGFloat = 135
-            columnNumber = max(CGFloat(Int(contentSize.width / minWidth)), 3)
+            columnNumber = max(CGFloat(Int(maxSize.width / minWidth)), 3)
         }
-        let width = floor((contentSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
+        let width = floor((maxSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
             
     }
