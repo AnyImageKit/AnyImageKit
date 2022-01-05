@@ -75,7 +75,8 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
-        if let _ = presentedViewController as? PhotoPreviewController {
+        if let previewController = presentedViewController as? PhotoPreviewController {
+            previewController.transitioningDelegate = nil
             presentingViewController?.dismiss(animated: flag, completion: completion)
         } else {
             super.dismiss(animated: flag, completion: completion)

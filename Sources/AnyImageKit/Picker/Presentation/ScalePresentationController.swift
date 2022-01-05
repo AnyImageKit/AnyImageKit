@@ -18,6 +18,8 @@ final class ScalePresentationController: UIPresentationController {
         }
     }
     
+    var updateMask: Bool = true
+    
     /// 蒙板
     private(set) var maskView: UIView = {
         let view = UIView(frame: .zero)
@@ -32,14 +34,18 @@ final class ScalePresentationController: UIPresentationController {
         maskView.frame = containerView.bounds
         maskView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         maskView.alpha = 0
-        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
-            self.maskView.alpha = 1
+        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] _ in
+            if self?.updateMask ?? false {
+                self?.maskView.alpha = 1
+            }
         }, completion: nil)
     }
     
     override func dismissalTransitionWillBegin() {
-        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
-            self.maskView.alpha = 0
+        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] _ in
+            if self?.updateMask ?? false {
+                self?.maskView.alpha = 0
+            }
         })
     }
 }
