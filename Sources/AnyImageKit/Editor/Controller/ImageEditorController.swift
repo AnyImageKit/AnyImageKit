@@ -66,7 +66,7 @@ open class ImageEditorController: AnyImageNavigationController {
         let newSize = view.frame.size
         if containerSize != .zero, containerSize != newSize {
             view.endEditing(true)
-            presentingViewController?.dismiss(animated: false, completion: nil)
+            dismiss(animated: false, completion: nil)
             editorDelegate?.imageEditorDidCancel(self)
         }
         containerSize = newSize
