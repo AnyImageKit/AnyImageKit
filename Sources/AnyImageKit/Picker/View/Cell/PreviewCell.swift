@@ -317,15 +317,8 @@ extension PreviewCell {
     private func endPan() {
         panScale(1.0)
         panEnded(false)
-        // 如果图片当前显示的size小于原size，则重置为原size
-        let size = fitSize
-        let needResetSize = imageView.bounds.size.width < size.width
-            || imageView.bounds.size.height < size.height
         UIView.animate(withDuration: 0.25) {
-            self.imageView.center = self.centerOfContentSize
-            if needResetSize {
-                self.imageView.bounds.size = size
-            }
+            self.imageView.frame = self.beganFrame
         }
     }
 }
