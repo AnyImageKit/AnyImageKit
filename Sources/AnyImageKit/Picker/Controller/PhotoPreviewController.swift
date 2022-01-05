@@ -559,7 +559,8 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     
     /// 提供退场动画
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return makeDismissedAnimator()
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        return makeDismissedAnimator(indexPath: indexPath)
     }
     
     /// 提供转场协调器
@@ -584,8 +585,8 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     }
     
     /// 创建缩放型退场动画
-    private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
-        guard let cell = collectionView.visibleCells.first as? PreviewCell else {
+    private func makeDismissedAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning? {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else {
             return nil
         }
         let imageView = UIImageView(image: cell.imageView.image)
