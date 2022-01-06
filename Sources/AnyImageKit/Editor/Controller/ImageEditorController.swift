@@ -179,19 +179,10 @@ extension ImageEditorController {
     
     private func addNotification() {
         beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     private func removeNotifications() {
         endGeneratingDeviceOrientationNotifications()
-    }
-    
-    @objc private func orientationDidChangeNotification(_ sender: Notification) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            view.endEditing(true)
-            presentingViewController?.dismiss(animated: false, completion: nil)
-            editorDelegate?.imageEditorDidCancel(self)
-        }
     }
 }
 
