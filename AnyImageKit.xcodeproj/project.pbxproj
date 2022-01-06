@@ -39,6 +39,9 @@
 		7148691F2744E366003D4605 /* PickerAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148691E2744E366003D4605 /* PickerAPITests.swift */; };
 		714869252744E8F8003D4605 /* EditorAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714869242744E8F8003D4605 /* EditorAPITests.swift */; };
 		714869272744EC86003D4605 /* CaptureAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714869262744EC86003D4605 /* CaptureAPITests.swift */; };
+		71522F982786F60800020AC6 /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71522F952786F60800020AC6 /* Injected.swift */; };
+		71522F992786F60800020AC6 /* InjectedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71522F962786F60800020AC6 /* InjectedValues.swift */; };
+		71522F9A2786F60800020AC6 /* InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71522F972786F60800020AC6 /* InjectionKey.swift */; };
 		715D6B37256E449B004D9BF1 /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D6B36256E449B004D9BF1 /* Mosaic.swift */; };
 		715D6B3D256E4690004D9BF1 /* MosaicContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */; };
 		715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */; };
@@ -337,6 +340,9 @@
 		7148691E2744E366003D4605 /* PickerAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerAPITests.swift; sourceTree = "<group>"; };
 		714869242744E8F8003D4605 /* EditorAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorAPITests.swift; sourceTree = "<group>"; };
 		714869262744EC86003D4605 /* CaptureAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAPITests.swift; sourceTree = "<group>"; };
+		71522F952786F60800020AC6 /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
+		71522F962786F60800020AC6 /* InjectedValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InjectedValues.swift; sourceTree = "<group>"; };
+		71522F972786F60800020AC6 /* InjectionKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InjectionKey.swift; sourceTree = "<group>"; };
 		715D6B36256E449B004D9BF1 /* Mosaic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
 		715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MosaicContentView.swift; sourceTree = "<group>"; };
 		715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreselectAssetViewController.swift; sourceTree = "<group>"; };
@@ -681,6 +687,16 @@
 				714869172744D88E003D4605 /* Info.plist */,
 			);
 			path = APITests;
+			sourceTree = "<group>";
+		};
+		71522F942786F60800020AC6 /* Inject */ = {
+			isa = PBXGroup;
+			children = (
+				71522F952786F60800020AC6 /* Injected.swift */,
+				71522F962786F60800020AC6 /* InjectedValues.swift */,
+				71522F972786F60800020AC6 /* InjectionKey.swift */,
+			);
+			path = Inject;
 			sourceTree = "<group>";
 		};
 		7176B7DF248DD7FE00B607BD /* Controller */ = {
@@ -1171,6 +1187,7 @@
 		A0B22E9A237AA1B3001F6066 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				71522F942786F60800020AC6 /* Inject */,
 				71BAF32B2576197C007AE60F /* Cache */,
 				A04F40F62539A8EF00EF9EC6 /* DataTrack */,
 				A0839B7223C44B0800FF8FDE /* Permission */,
@@ -1689,6 +1706,7 @@
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
+				71522F9A2786F60800020AC6 /* InjectionKey.swift in Sources */,
 				7117A24825A595A8000D493F /* (null) in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
@@ -1799,6 +1817,7 @@
 				A5FA4AF5239F32220007C99B /* ColorButton.swift in Sources */,
 				A54436F923AB193F003C65F9 /* VideoPreview.swift in Sources */,
 				A5347D2E23AA1EC000C93874 /* ExportTool+PhotoLive.swift in Sources */,
+				71522F982786F60800020AC6 /* Injected.swift in Sources */,
 				7195A84F273E5C8100C3D5D5 /* Capture+AnyImagePage.swift in Sources */,
 				A0226A4023AB69F1000AFC87 /* Capture+AVCaptureDevice.swift in Sources */,
 				71D9FFB125AD37C000825B3C /* CropData.swift in Sources */,
@@ -1821,6 +1840,7 @@
 				71CBF1592519E5BF00F79D19 /* PermissionLimitedView.swift in Sources */,
 				A5347D2623A9FD2700C93874 /* ExportTool+Photo.swift in Sources */,
 				71BAF335257619A3007AE60F /* CacheModule.swift in Sources */,
+				71522F992786F60800020AC6 /* InjectedValues.swift in Sources */,
 				713585F627379CD400A70B9E /* EditorTheme.swift in Sources */,
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
 				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
