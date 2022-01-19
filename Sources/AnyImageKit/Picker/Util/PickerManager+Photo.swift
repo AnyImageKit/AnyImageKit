@@ -65,7 +65,7 @@ extension PickerManager {
     func requestPhoto(for album: Album, completion: @escaping _PhotoFetchCompletion) {
         if let asset = options.orderByDate == .asc ? album.assets.last : album.assets.first {
             let phAsset: PHAsset
-            if asset.isCamera, let secondAsset = options.orderByDate == .asc ? album.assets.dropLast().last : album.assets.dropFirst().first {
+            if /*asset.isCamera, */let secondAsset = options.orderByDate == .asc ? album.assets.dropLast().last : album.assets.dropFirst().first {
                 phAsset = secondAsset.phAsset
             } else {
                 phAsset = asset.phAsset

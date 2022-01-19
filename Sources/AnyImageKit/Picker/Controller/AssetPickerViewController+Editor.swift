@@ -12,7 +12,7 @@ import UIKit
 
 extension AssetPickerViewController {
     
-    func canOpenEditor(with asset: Asset) -> Bool {
+    func canOpenEditor(with asset: AssetOld) -> Bool {
         asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
         if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
@@ -27,7 +27,7 @@ extension AssetPickerViewController {
         return false
     }
     
-    func openEditor(with asset: Asset, indexPath: IndexPath) {
+    func openEditor(with asset: AssetOld, indexPath: IndexPath) {
         if asset.mediaType == .photo {
             if let image = asset._images[.initial] {
                 showEditor(image, identifier: asset.identifier, tag: indexPath.item)
@@ -40,9 +40,9 @@ extension AssetPickerViewController {
                         self.showWaitHUD(self.manager.options.theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
                     }
                 }
-                manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
+                manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] success in
                     guard let self = self else { return }
-                    switch result {
+                    switch success {
                     case .success(let response):
                         if !response.isDegraded {
                             self.hideHUD()
@@ -81,16 +81,16 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
         editor.dismiss(animated: true, completion: nil)
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing success: EditorResult) {
         editor.dismiss(animated: true, completion: nil)
-        guard result.type == .photo else { return }
-        guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
+        guard success.type == .photo else { return }
+        guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
         guard let album = album else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? AssetCell else { return }
         
         let asset = album.assets[editor.tag]
-        asset._images[.edited] = result.isEdited ? photo : nil
+        asset._images[.edited] = success.isEdited ? photo : nil
         cell.setContent(asset, manager: manager)
         if !asset.isSelected { // Select
             selectItem(editor.tag)

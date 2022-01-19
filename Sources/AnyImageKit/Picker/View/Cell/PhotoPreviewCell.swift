@@ -20,6 +20,8 @@ final class PhotoPreviewCell: PreviewCell {
     /// 双击放大图片时的目标比例
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
+    private var task: Task<Void, Error>?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -44,6 +46,12 @@ final class PhotoPreviewCell: PreviewCell {
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         accessibilityLabel = options.theme[string: .photo]
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        task?.cancel()
+        task = nil
+    }
 }
 
 // MARK: - Function
@@ -51,36 +59,27 @@ extension PhotoPreviewCell {
     
     /// 加载图片
     func requestPhoto() {
-        let id = asset.identifier
-        if imageView.image == nil { // thumbnail
-            let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-            manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let response):
-                    guard self.imageView.image == nil && self.asset.identifier == id else { return }
-                    self.setImage(response.image)
-                case .failure(let error):
-                    _print(error)
+        task?.cancel()
+        task = Task {
+            do {
+                for try await result in asset.phAsset.loadPhotoLibraryImage(options: .library()) {
+                    guard !Task.isCancelled else { return }
+                    switch result {
+                    case .progress(let progress):
+                        self.setDownloadingProgress(progress)
+                    case .success(let loadResult):
+                        switch loadResult {
+                        case .thumbnail(let image):
+                            self.setImage(image)
+                        case .preview(let image):
+                            self.setDownloadingProgress(1.0)
+                            self.setImage(image)
+                        default:
+                            break
+                        }
+                    }
                 }
-            })
-        }
-        
-        let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self, self.asset.identifier == id else { return }
-                _print("Download photo from iCloud: \(progress)")
-                self.setDownloadingProgress(progress)
-            }
-        }
-        manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let response):
-                guard !response.isDegraded && self.asset.identifier == id else { return }
-                self.setImage(response.image)
-                self.setDownloadingProgress(1.0)
-            case .failure(let error):
+            } catch {
                 _print(error)
             }
         }

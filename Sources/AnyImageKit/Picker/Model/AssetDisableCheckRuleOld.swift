@@ -1,5 +1,5 @@
 //
-//  AssetDisableCheckRule.swift
+//  AssetDisableCheckRuleOld.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2020/11/17.
@@ -8,22 +8,22 @@
 
 import Foundation
 
-public protocol AssetDisableCheckRule {
+public protocol AssetDisableCheckRuleOld {
     
     /// Disable current asset
     /// - Parameters:
     ///   - asset: Current asset
     ///   - assetList: Selected assets
-    func isDisable(for asset: Asset, assetList: [Asset]) -> Bool
+    func isDisable(for asset: AssetOld, assetList: [AssetOld]) -> Bool
     
     /// Alert message when select disabled asset
     /// - Parameters:
     ///   - asset: Current asset
     ///   - assetList: Selected assets
-    func alertMessage(for asset: Asset, assetList: [Asset]) -> String
+    func alertMessage(for asset: AssetOld, assetList: [AssetOld]) -> String
 }
 
-public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
+public struct VideoDurationDisableCheckRule: AssetDisableCheckRuleOld {
     
     public let minDuration: TimeInterval
     public let maxDuration: TimeInterval
@@ -33,18 +33,18 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
         self.maxDuration = max
     }
     
-    public func isDisable(for asset: Asset, assetList: [Asset]) -> Bool {
+    public func isDisable(for asset: AssetOld, assetList: [AssetOld]) -> Bool {
         guard asset.mediaType.isVideo else { return false }
         return asset.duration < minDuration || asset.duration > maxDuration
     }
     
-    public func alertMessage(for asset: Asset, assetList: [Asset]) -> String {
+    public func alertMessage(for asset: AssetOld, assetList: [AssetOld]) -> String {
         let message = BundleHelper.localizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE", module: .picker)
         return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }
 }
 
-public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRule {
+public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRuleOld {
     
     public let photoCount: Int
     public let videoCount: Int
@@ -54,7 +54,7 @@ public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRule {
         self.videoCount = videoCount
     }
     
-    public func isDisable(for asset: Asset, assetList: [Asset]) -> Bool {
+    public func isDisable(for asset: AssetOld, assetList: [AssetOld]) -> Bool {
         guard let firstAsset = assetList.first else { return false }
         if assetList.contains(asset) { return false }
         if (asset.mediaType.isVideo && firstAsset.mediaType.isImage)
@@ -69,7 +69,7 @@ public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRule {
         }
     }
     
-    public func alertMessage(for asset: Asset, assetList: [Asset]) -> String {
+    public func alertMessage(for asset: AssetOld, assetList: [AssetOld]) -> String {
         guard let firstAsset = assetList.first else { return "" }
         if (asset.mediaType.isVideo && firstAsset.mediaType.isImage)
             || (asset.mediaType.isImage && firstAsset.mediaType.isVideo) {

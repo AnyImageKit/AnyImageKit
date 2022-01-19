@@ -30,28 +30,28 @@ extension AssetPickerViewController {
     
     /// 添加拍照 Item
     func addCameraAssetIfNeeded() {
-        guard let album = album, album.isCameraRoll else { return }
-        if album.hasCamera { return }
-        let options = manager.options
-        let sortType = options.orderByDate
-        if !options.captureOptions.mediaOptions.isEmpty {
-            switch sortType {
-            case .asc:
-                album.addAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), atLast: true)
-            case .desc:
-                album.insertAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
-            }
-        }
+//        guard let album = album, album.isUserLibrary else { return }
+//        if album.hasCamera { return }
+//        let options = manager.options
+//        let sortType = options.orderByDate
+//        if !options.captureOptions.mediaOptions.isEmpty {
+//            switch sortType {
+//            case .asc:
+//                album.addAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), atLast: true)
+//            case .desc:
+//                album.insertAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
+//            }
+//        }
     }
     
     /// 拍照结束后，插入 PHAsset
     func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
         let sortType = manager.options.orderByDate
-        let asset: Asset
+        let asset: AssetOld
         switch sortType {
         case .asc:
-            asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = AssetOld(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.addAsset(asset, atLast: false)
             if #available(iOS 14.0, *) {
                 // iOS 14 将会监听相册，自动刷新
@@ -63,7 +63,7 @@ extension AssetPickerViewController {
                 }
             }
         case .desc:
-            asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
+            asset = AssetOld(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
             album.insertAsset(asset, at: 1, sort: manager.options.orderByDate)
             if #available(iOS 14.0, *) {
                 // iOS 14 将会监听相册，自动刷新
@@ -79,8 +79,8 @@ extension AssetPickerViewController {
         updateVisibleCellState()
         toolBar.setEnable(true)
         
-        let result = manager.addSelectedAsset(asset)
-        if result.success {
+        let success = manager.addSelectedAsset(asset)
+        if success.success {
             /// 拍照结束后，如果 limit=1 直接返回
             if manager.options.selectLimit == 1 {
                 stopReloadAlbum = true
@@ -93,14 +93,14 @@ extension AssetPickerViewController {
 // MARK: - ImageCaptureControllerDelegate
 extension AssetPickerViewController: ImageCaptureControllerDelegate {
     
-    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: CaptureResult) {
+    func imageCapture(_ capture: ImageCaptureController, didFinishCapturing success: CaptureResult) {
         capture.dismiss(animated: true, completion: nil)
         showWaitHUD()
-        switch result.type {
+        switch success.type {
         case .photo:
             trackObserver?.track(event: .pickerTakePhoto, userInfo: [:])
-            manager.savePhoto(url: result.mediaURL) { [weak self] (result) in
-                switch result {
+            manager.savePhoto(url: success.mediaURL) { [weak self] (success) in
+                switch success {
                 case .success(let asset):
                     self?.addPHAsset(asset)
                 case .failure(let error):
@@ -110,8 +110,8 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
             }
         case .video:
             trackObserver?.track(event: .pickerTakeVideo, userInfo: [:])
-            manager.saveVideo(url: result.mediaURL) { [weak self] (result) in
-                switch result {
+            manager.saveVideo(url: success.mediaURL) { [weak self] (success) in
+                switch success {
                 case .success(let asset):
                     self?.addPHAsset(asset)
                 case .failure(let error):

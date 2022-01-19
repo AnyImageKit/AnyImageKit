@@ -10,7 +10,7 @@ import Photos
 
 extension PHAssetCollection {
     
-    var isCameraRoll: Bool {
+    var isUserLibrary: Bool {
         return assetCollectionSubtype == .smartAlbumUserLibrary
     }
     

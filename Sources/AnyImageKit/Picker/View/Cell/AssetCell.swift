@@ -58,11 +58,12 @@ final class AssetCell: UICollectionViewCell {
         return view
     }()
     
-    private var identifier: String = ""
+    private var task: Task<Void, Error>?
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        identifier = ""
+        task?.cancel()
+        task = nil
         selectdCoverView.isHidden = true
         gifView.isHidden = true
         videoView.isHidden = true
@@ -145,27 +146,41 @@ extension AssetCell {
 
 extension AssetCell {
     
-    func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
-        let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-        identifier = asset.identifier
-        manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let response):
-                guard self.identifier == asset.identifier else { return }
-                self.imageView.image = asset._image ?? response.image
-                if asset.mediaType == .video && !isPreview {
-                    self.videoView.setVideoTime(asset.durationDescription)
+    func setContent(_ asset: AssetOld, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+        task?.cancel()
+        task = Task {
+            do {
+                let scale = CGAffineTransform(scaleX: UIScreen.main.nativeScale, y: UIScreen.main.nativeScale)
+                let size = frame.size.applying(scale)
+                let options = ResourceLoadOptions.library(targetSize: size)
+                for try await result in asset.phAsset.loadPhotoLibraryImage(options: options) {
+                    guard !Task.isCancelled else {
+                        print("\(String(describing: task)) isCancelled")
+                        return
+                    }
+                    switch result {
+                    case .progress(let progress):
+                        print("progress=\(progress)")
+                    case .success(let loadResult):
+//                        print(loadResult)
+                        switch loadResult {
+                        case .thumbnail(let image):
+                            self.imageView.image = image
+                        case .preview(let image):
+                            self.imageView.image = image
+                        default:
+                            break
+                        }
+                    }
                 }
-            case .failure(let error):
+            } catch {
                 _print(error)
             }
-        })
-        
+        }
         updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+    func updateState(_ asset: AssetOld, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
         update(options: manager.options)
         if asset._images[.edited] != nil {

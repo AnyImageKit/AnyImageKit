@@ -63,7 +63,7 @@ public struct PickerOptionsInfo {
     
     /// Disable Rules
     /// - Default: []
-    public var disableRules: [AssetDisableCheckRule] = []
+    public var disableRules: [AssetDisableCheckRuleOld] = []
     
     /// Enable Debug Log
     /// - Default: false

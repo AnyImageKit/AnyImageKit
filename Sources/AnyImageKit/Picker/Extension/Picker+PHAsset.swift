@@ -7,6 +7,7 @@
 //
 
 import Photos
+import MobileCoreServices
 
 extension PHAsset {
     
@@ -15,10 +16,9 @@ extension PHAsset {
     }
     
     var isGIF: Bool {
-        if let fileName = value(forKey: "filename") as? String {
-            return fileName.uppercased().hasSuffix("GIF")
-        } else {
-            return false
+        if let dataUTI = value(forKey: "uniformTypeIdentifier") as? String {
+            return UTTypeConformsTo(dataUTI as CFString, kUTTypeGIF)
         }
+        return false
     }
 }

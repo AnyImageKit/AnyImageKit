@@ -31,7 +31,7 @@ extension PickerManager {
         let assetCollections = assetCollectionsFetchResult.objects()
         for assetCollection in assetCollections {
             if assetCollection.estimatedAssetCount <= 0 { continue }
-            if assetCollection.isCameraRoll {
+            if assetCollection.isUserLibrary {
                 let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
                 let result = Album(fetchResult: assetsfetchResult,
                                    identifier: assetCollection.localIdentifier,
@@ -57,7 +57,7 @@ extension PickerManager {
                     let result = Album(fetchResult: assetsfetchResult,
                                        identifier: assetCollection.localIdentifier,
                                        title: assetCollection.localizedTitle,
-                                       isCameraRoll: assetCollection.isCameraRoll,
+                                       isCameraRoll: assetCollection.isUserLibrary,
                                        selectOptions: self.options.selectOptions)
                     DispatchQueue.main.async {
                         completion(result)
@@ -76,7 +76,7 @@ extension PickerManager {
             
             func load(assetCollections: [PHAssetCollection]) {
                 for assetCollection in assetCollections {
-                    let isCameraRoll = assetCollection.isCameraRoll
+                    let isCameraRoll = assetCollection.isUserLibrary
                     
                     if assetCollection.estimatedAssetCount <= 0 && !isCameraRoll { continue }
                     

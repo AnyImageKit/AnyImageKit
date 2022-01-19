@@ -345,8 +345,8 @@ extension CaptureViewController: ImageEditorControllerDelegate {
         editor.dismiss(animated: false, completion: nil)
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
-        delegate?.capture(self, didOutput: result.mediaURL, type: result.type)
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing success: EditorResult) {
+        delegate?.capture(self, didOutput: success.mediaURL, type: success.type)
     }
 }
 

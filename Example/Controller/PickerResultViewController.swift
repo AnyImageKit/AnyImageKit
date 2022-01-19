@@ -12,7 +12,7 @@ import AnyImageKit
 
 final class PickerResultViewController: UIViewController {
     
-    var assets: [Asset] = []
+    var assets: [AssetOld] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

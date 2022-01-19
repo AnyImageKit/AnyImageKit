@@ -166,7 +166,7 @@ extension ImagePickerController {
         }
     }
     
-    private func saveEditPhotos(_ assets: [Asset], completion: @escaping (([Asset]) -> Void)) {
+    private func saveEditPhotos(_ assets: [AssetOld], completion: @escaping (([AssetOld]) -> Void)) {
         #if ANYIMAGEKIT_ENABLE_EDITOR
         guard manager.options.saveEditedAsset else {
             completion(assets)
@@ -178,10 +178,10 @@ extension ImagePickerController {
         for (idx, asset) in assets.enumerated() {
             guard let editedImage = asset._images[.edited] else { continue }
             group.enter()
-            manager.savePhoto(image: editedImage) { result in
-                switch result {
+            manager.savePhoto(image: editedImage) { success in
+                switch success {
                 case .success(let newAsset):
-                    assets[idx] = Asset(idx: asset.idx, asset: newAsset, selectOptions: selectOptions)
+                    assets[idx] = AssetOld(idx: asset.idx, asset: newAsset, selectOptions: selectOptions)
                     assets[idx]._images[.initial] = editedImage
                 case .failure(let error):
                     _print(error)
@@ -197,7 +197,7 @@ extension ImagePickerController {
         #endif
     }
     
-    private func resizeImagesIfNeeded(_ assets: [Asset]) {
+    private func resizeImagesIfNeeded(_ assets: [AssetOld]) {
         if !manager.useOriginalImage {
             let limitSize = CGSize(width: manager.options.photoMaxWidth,
                                    height: manager.options.photoMaxWidth)

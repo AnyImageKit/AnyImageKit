@@ -15,14 +15,14 @@ class Album: IdentifiableResource {
     
     let identifier: String
     let title: String
-    let isCameraRoll: Bool
-    private(set) var assets: [Asset] = []
+    let isUserLibrary: Bool
+    private(set) var assets: [AssetOld] = []
     
     init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
         self.fetchResult = fetchResult
         self.identifier = identifier
         self.title = title ?? ""
-        self.isCameraRoll = isCameraRoll
+        self.isUserLibrary = isCameraRoll
         fetchAssets(result: fetchResult, selectOptions: selectOptions)
     }
 }
@@ -30,14 +30,14 @@ class Album: IdentifiableResource {
 extension Album {
     
     private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: PickerSelectOption) {
-        var array: [Asset] = []
+        var array: [AssetOld] = []
         let selectPhoto = selectOptions.contains(.photo)
         let selectVideo = selectOptions.contains(.video)
         let selectPhotoGIF = selectOptions.contains(.photoGIF)
         let selectPhotoLive = selectOptions.contains(.photoLive)
         
         for phAsset in result.objects() {
-            let asset = Asset(idx: array.count, asset: phAsset, selectOptions: selectOptions)
+            let asset = AssetOld(idx: array.count, asset: phAsset, selectOptions: selectOptions)
             switch asset.mediaType {
             case .photo:
                 if selectPhoto {
@@ -64,12 +64,12 @@ extension Album {
 // MARK: - Capture
 extension Album {
     
-    func insertAsset(_ asset: Asset, at: Int, sort: Sort) {
+    func insertAsset(_ asset: AssetOld, at: Int, sort: Sort) {
         assets.insert(asset, at: at)
         reloadIndex(sort: sort)
     }
     
-    func addAsset(_ asset: Asset, atLast: Bool) {
+    func addAsset(_ asset: AssetOld, atLast: Bool) {
         if atLast {
             assets.append(asset)
         } else {
@@ -79,7 +79,7 @@ extension Album {
     
     private func reloadIndex(sort: Sort) {
         var idx = 0
-        let array: [Asset]
+        let array: [AssetOld]
         switch sort {
         case .asc:
             array = Array(assets[0..<assets.count-1])
@@ -104,7 +104,8 @@ extension Album {
     }
     
     var hasCamera: Bool {
-        return (assets.first?.isCamera ?? false) || (assets.last?.isCamera ?? false)
+        return false
+//        return (assets.first?.isCamera ?? false) || (assets.last?.isCamera ?? false)
     }
 }
 

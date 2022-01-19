@@ -1,5 +1,5 @@
 //
-//  Asset.swift
+//  AssetOld.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public class Asset: IdentifiableResource {
+public class AssetOld: IdentifiableResource {
     /// 对应的 PHAsset
     public let phAsset: PHAsset
     /// 媒体类型
@@ -33,7 +33,7 @@ public class Asset: IdentifiableResource {
     }
 }
 
-extension Asset {
+extension AssetOld {
     
     /// 输出图像
     public var image: UIImage {
@@ -63,15 +63,9 @@ extension Asset {
             return videoDidDownload
         }
     }
-    
-    var isCamera: Bool {
-        return idx == Asset.cameraItemIdx
-    }
-    
-    static let cameraItemIdx: Int = -1
 }
 
-extension Asset: CustomStringConvertible {
+extension AssetOld: CustomStringConvertible {
     
     public var description: String {
         return "<Asset> \(identifier) mediaType=\(mediaType) image=\(image)"
@@ -79,14 +73,14 @@ extension Asset: CustomStringConvertible {
 }
 
 // MARK: - State
-extension Asset {
+extension AssetOld {
     
     enum State: Equatable {
         
         case unchecked
         case normal
         case selected
-        case disable(AssetDisableCheckRule)
+        case disable(AssetDisableCheckRuleOld)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
@@ -125,9 +119,9 @@ extension Asset {
 }
 
 // MARK: - Disable Check
-extension Asset {
+extension AssetOld {
 
-    func check(disable rules: [AssetDisableCheckRule], assetList: [Asset]) {
+    func check(disable rules: [AssetDisableCheckRuleOld], assetList: [AssetOld]) {
         for rule in rules {
             if rule.isDisable(for: self, assetList: assetList) {
                 state = .disable(rule)
@@ -141,7 +135,7 @@ extension Asset {
 }
 
 // MARK: - Original Photo
-extension Asset {
+extension AssetOld {
     
     /// Fetch Photo Data 获取原图数据
     /// - Note: Only for `MediaType` Photo, GIF, LivePhoto 仅用于媒体类型为照片、GIF、实况
@@ -171,7 +165,7 @@ extension Asset {
 }
 
 // MARK: - Video
-extension Asset {
+extension AssetOld {
     
     /// Fetch Video 获取视频，用于播放
     /// - Note: Only for `MediaType` Video 仅用于媒体类型为视频
@@ -200,7 +194,7 @@ extension Asset {
     }
 }
 
-extension Asset {
+extension AssetOld {
     
     enum ImageKey: String, Hashable {
         

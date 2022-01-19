@@ -11,7 +11,7 @@ import AnyImageKit
 
 final class PreselectAssetViewController: UIViewController {
 
-    private var assets: [Asset] = []
+    private var assets: [AssetOld] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
