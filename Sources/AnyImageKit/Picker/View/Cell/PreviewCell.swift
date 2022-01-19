@@ -118,6 +118,8 @@ class PreviewCell: UICollectionViewCell {
     private var beganTouch = CGPoint.zero
     
     private var needLayout: Bool = false
+
+    private var containerSize: CGSize = .zero
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -152,10 +154,12 @@ class PreviewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if needLayout {
+        let newContainerSize = contentView.bounds.size
+        if needLayout || containerSize != newContainerSize {
             needLayout = false
             layout()
         }
+        containerSize = newContainerSize
     }
     
     /// 重新布局
