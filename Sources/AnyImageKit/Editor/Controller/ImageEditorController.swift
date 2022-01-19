@@ -71,6 +71,29 @@ open class ImageEditorController: AnyImageNavigationController {
         }
         containerSize = newSize
     }
+    
+    open override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        switch UIApplication.shared.statusBarOrientation {
+        case .unknown:
+            return .portrait
+        case .portrait:
+            return .portrait
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        }
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIApplication.shared.statusBarOrientation
+    }
 }
 
 extension ImageEditorController {
