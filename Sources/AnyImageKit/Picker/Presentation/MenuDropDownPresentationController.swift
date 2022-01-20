@@ -14,7 +14,6 @@ final class MenuDropDownPresentationController: UIPresentationController {
     private var presentationWrappingView: UIView?
     private var opaqueView: UIView?
     
-    
     var isFullScreen = true
     var extraTopMenuHeight: CGFloat = 0
     var cornerRadius: CGFloat = 0

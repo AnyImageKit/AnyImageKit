@@ -1,5 +1,5 @@
 //
-//  AlbumPickerViewController.swift
+//  PhotoLibraryListViewController.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/16.
@@ -10,26 +10,14 @@ import UIKit
 
 private let rowHeight: CGFloat = 55
 
-protocol AlbumPickerViewControllerDelegate: AnyObject {
+final class PhotoLibraryListViewController: AnyImageViewController {
     
-    func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album)
-    func albumPickerWillDisappear(_ picker: AlbumPickerViewController)
-}
-
-final class AlbumPickerViewController: AnyImageViewController {
+    private lazy var tableView: UITableView = makeTableView()
     
-    weak var delegate: AlbumPickerViewControllerDelegate?
-    var album: Album?
-    var albums = [Album]()
+    private var photoLibrary: PhotoLibraryAssetCollection?
+    private var photoLibraryList: [PhotoLibraryAssetCollection] = []
     
-    private lazy var tableView: UITableView = {
-        let view = UITableView(frame: .zero, style: .plain)
-        view.registerCell(AlbumCell.self)
-        view.separatorStyle = .none
-        view.dataSource = self
-        view.delegate = self
-        return view
-    }()
+    private var continuation: CheckedContinuation<UserInteractionResult<PhotoLibraryAssetCollection>, Never>?
     
     let manager: PickerManager
     
@@ -56,21 +44,17 @@ final class AlbumPickerViewController: AnyImageViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        delegate?.albumPickerWillDisappear(self)
+        resume(result: .cancel)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        scrollToCurrentAlbum()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        scrollToCurrentPhotoLibrary()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         updatePreferredContentSize(with: newCollection)
-    }
-    
-    func reloadData() {
-        tableView.reloadData()
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -82,8 +66,32 @@ final class AlbumPickerViewController: AnyImageViewController {
     }
 }
 
+extension PhotoLibraryListViewController {
+    
+    func config(library: PhotoLibraryAssetCollection?, libraryList: [PhotoLibraryAssetCollection]) {
+        photoLibrary = library
+        photoLibraryList = libraryList
+        if isViewLoaded {
+            tableView.reloadData()
+        }
+    }
+    
+    func pick() async -> UserInteractionResult<PhotoLibraryAssetCollection> {
+        return await withCheckedContinuation { continuation in
+            self.continuation = continuation
+        }
+    }
+    
+    private func resume(result: UserInteractionResult<PhotoLibraryAssetCollection>) {
+        if let continuation = continuation {
+            continuation.resume(returning: result)
+            self.continuation = nil
+        }
+    }
+}
+
 // MARK: - Target
-extension AlbumPickerViewController {
+extension PhotoLibraryListViewController {
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
@@ -98,7 +106,7 @@ extension AlbumPickerViewController {
 }
 
 // MARK: - Private
-extension AlbumPickerViewController {
+extension PhotoLibraryListViewController {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -108,17 +116,10 @@ extension AlbumPickerViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    private func setupView() {
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { maker in
-            maker.edges.equalTo(view.snp.edges)
-        }
-    }
-    
-    private func scrollToCurrentAlbum() {
-        if let album = album, let index = albums.firstIndex(of: album) {
+    private func scrollToCurrentPhotoLibrary() {
+        if let photoLibrary = photoLibrary, let index = photoLibraryList.firstIndex(of: photoLibrary) {
             let indexPath = IndexPath(row: index, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         }
     }
     
@@ -128,10 +129,10 @@ extension AlbumPickerViewController {
         let preferredMaxHeight = floor(screenSize.height*(2.0/3.0))
         let presentingViewController = (self.presentingViewController as? ImagePickerController)?.topViewController
         let preferredWidth = presentingViewController?.view.bounds.size.width ?? screenSize.width
-        if albums.isEmpty {
+        if photoLibraryList.isEmpty {
             preferredContentSize = CGSize(width: preferredWidth, height: preferredMaxHeight)
         } else {
-            let height = CGFloat(albums.count) * rowHeight
+            let height = CGFloat(photoLibraryList.count) * rowHeight
             let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
             preferredContentSize = CGSize(width: preferredWidth, height: preferredHeight)
         }
@@ -139,7 +140,7 @@ extension AlbumPickerViewController {
 }
 
 // MARK: - PickerOptionsConfigurable
-extension AlbumPickerViewController: PickerOptionsConfigurable {
+extension PhotoLibraryListViewController: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         tableView.backgroundColor = options.theme[color: .background]
@@ -147,34 +148,54 @@ extension AlbumPickerViewController: PickerOptionsConfigurable {
     }
 }
 
+// MARK: - UI
+extension PhotoLibraryListViewController {
+    
+    private func setupView() {
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { maker in
+            maker.edges.equalTo(view.snp.edges)
+        }
+    }
+    
+    private func makeTableView() -> UITableView {
+        let view = UITableView(frame: .zero, style: .plain)
+        view.registerCell(PhotoLibraryCell.self)
+        view.separatorStyle = .none
+        view.dataSource = self
+        view.delegate = self
+        return view
+    }
+}
+
 // MARK: - UITableViewDataSource
-extension AlbumPickerViewController: UITableViewDataSource {
+extension PhotoLibraryListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return albums.count
+        return photoLibraryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
-        let album = albums[indexPath.row]
-        cell.setContent(album, manager: manager)
-        cell.accessoryType = self.album == album ? .checkmark : .none
+        let cell = tableView.dequeueReusableCell(PhotoLibraryCell.self, for: indexPath)
+        let photoLibrary = photoLibraryList[indexPath.row]
+        cell.setContent(photoLibrary, manager: manager)
+        cell.accessoryType = self.photoLibrary == photoLibrary ? .checkmark : .none
         return cell
     }
 }
 
 // MARK: - UITableViewDelegate
-extension AlbumPickerViewController: UITableViewDelegate {
+extension PhotoLibraryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let album = albums[indexPath.row]
-        delegate?.albumPicker(self, didSelected: album)
-        dismiss(animated: true, completion: nil)
         tableView.deselectRow(at: indexPath, animated: true)
+        let photoLibrary = photoLibraryList[indexPath.row]
+        resume(result: .interaction(photoLibrary))
+        dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

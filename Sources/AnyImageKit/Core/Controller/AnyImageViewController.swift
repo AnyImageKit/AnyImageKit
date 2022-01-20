@@ -76,7 +76,7 @@ extension AnyImageViewController {
     private func setTrackPage() {
         switch self {
         #if ANYIMAGEKIT_ENABLE_PICKER
-        case _ as AlbumPickerViewController:
+        case _ as PhotoLibraryListViewController:
             page = .pickerAlbum
         case _ as AssetPickerViewController:
             page = .pickerAsset

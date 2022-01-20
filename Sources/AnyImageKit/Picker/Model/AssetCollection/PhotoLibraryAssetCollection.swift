@@ -44,8 +44,7 @@ struct PhotoLibraryAssetCollection: AssetCollection, IdentifiableResource {
          fetchOrder: Sort,
          isUserLibrary: Bool,
          selectOption: PickerSelectOption,
-         additions: [AssetCollectionAddition],
-         checker: AssetChecker<PHAsset>) {
+         additions: [AssetCollectionAddition]) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
@@ -60,7 +59,7 @@ struct PhotoLibraryAssetCollection: AssetCollection, IdentifiableResource {
             self.prefixAdditions = additions
             self.suffixAdditions = []
         }
-        self.checker = checker
+        self.checker = .init()
     }
 }
 

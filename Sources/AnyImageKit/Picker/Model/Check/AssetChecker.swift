@@ -10,11 +10,9 @@ import Foundation
 
 struct AssetChecker<Resource: IdentifiableResource> {
     
-    private let storage: Storage<Resource>
+    private let storage: Storage<Resource> = .init()
     
-    init(preselected identifiers: [String], disableCheckRules: [AssetDisableCheckRule<Resource>]) {
-        self.storage = Storage(preselected: identifiers, disableCheckRules: disableCheckRules)
-    }
+    init() { }
 }
 
 extension AssetChecker {
@@ -58,6 +56,18 @@ extension AssetChecker {
 
 extension AssetChecker {
     
+    func reset(preselected identifiers: [String], disableCheckRules: [AssetDisableCheckRule<Resource>]) {
+        storage.selectedItems.removeAll()
+        storage.disableCheckRules = disableCheckRules
+        storage.states.removeAll()
+        for identifier in identifiers {
+            storage.states[identifier] = .preselected
+        }
+    }
+}
+
+extension AssetChecker {
+    
     func selectedNumber(asset: Asset<Resource>) -> Int? {
         if let index = storage.selectedItems.firstIndex(of: asset.identifier) {
             return index + 1
@@ -89,6 +99,7 @@ extension AssetChecker {
     @discardableResult
     private func updateStorage(state: AssetState<Resource>, asset: Asset<Resource>) -> AssetState<Resource> {
         storage.states[asset.identifier] = state
+        // update selectedItems
         if state.isSelected, !storage.selectedItems.contains(asset.identifier) {
             storage.selectedItems.append(asset.identifier)
         } else if !state.isSelected, let index = storage.selectedItems.firstIndex(of: asset.identifier) {
@@ -102,15 +113,10 @@ extension AssetChecker {
     
     private class Storage<Resource: IdentifiableResource> {
         
-        var disableCheckRules: [AssetDisableCheckRule<Resource>]
+        var disableCheckRules: [AssetDisableCheckRule<Resource>] = []
         var states: [String: AssetState<Resource>] = [:]
         var selectedItems: [String] = []
         
-        init(preselected identifiers: [String], disableCheckRules: [AssetDisableCheckRule<Resource>]) {
-            self.disableCheckRules = disableCheckRules
-            for identifier in identifiers {
-                states[identifier] = .preselected
-            }
-        }
+        init() { }
     }
 }

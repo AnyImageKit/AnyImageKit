@@ -7,6 +7,7 @@
 //
 
 import CoreGraphics
+import UIKit
 
 extension CGSize {
     
@@ -18,5 +19,14 @@ extension CGSize {
     func resizeTo(height: CGFloat) -> CGSize {
         let width = self.width*height/self.height
         return CGSize(width: width, height: height)
+    }
+}
+
+extension CGSize {
+    
+    var displaySize: CGSize {
+        let scale = UIScreen.main.scale
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+        return applying(transform)
     }
 }

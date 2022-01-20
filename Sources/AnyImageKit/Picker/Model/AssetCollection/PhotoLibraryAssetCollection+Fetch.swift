@@ -22,16 +22,13 @@ extension PhotoLibraryAssetCollection {
                 if assetCollection.isUserLibrary {
                     let assetfetchResult = FetchResult(PHAsset.fetchAssets(in: assetCollection, options: fetchOptions))
                     let additions = createCollectionAdditions(with: options, isUserLibrary: true)
-                    let checker = AssetChecker<PHAsset>(preselected: options.preselectAssets,
-                                                        disableCheckRules: [])
                     let result = PhotoLibraryAssetCollection(identifier: assetCollection.localIdentifier,
                                                              localizedTitle: assetCollection.localizedTitle,
                                                              fetchResult: assetfetchResult,
                                                              fetchOrder: options.orderByDate,
                                                              isUserLibrary: true,
                                                              selectOption: options.selectOptions,
-                                                             additions: additions,
-                                                             checker: checker)
+                                                             additions: additions)
                     continuation.resume(returning: result)
                     return
                 }
@@ -101,16 +98,13 @@ extension PhotoLibraryAssetCollection {
                 if fetchResult.isEmpty && !isUserLibrary { continue }
                 
                 let additions = createCollectionAdditions(with: options, isUserLibrary: isUserLibrary)
-                let checker = AssetChecker<PHAsset>(preselected: options.preselectAssets,
-                                                    disableCheckRules: [])
                 let assetCollection = PhotoLibraryAssetCollection(identifier: phCollection.localIdentifier,
                                                                   localizedTitle: phCollection.localizedTitle,
                                                                   fetchResult: fetchResult,
                                                                   fetchOrder: options.orderByDate,
                                                                   isUserLibrary: isUserLibrary,
                                                                   selectOption: options.selectOptions,
-                                                                  additions: additions,
-                                                                  checker: checker)
+                                                                  additions: additions)
                 if isUserLibrary {
                     assetCollections.insert(assetCollection, at: 0)
                 } else {
