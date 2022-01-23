@@ -19,7 +19,7 @@ struct PhotoLibraryAssetCollection: AssetCollection, IdentifiableResource {
     let localizedTitle: String
     
     /// Fetch result from system photo library object PHAssetCollection
-    let fetchResult: FetchResult<PHAsset>
+    private(set) var fetchResult: FetchResult<PHAsset>
     
     /// Fetch result order
     let fetchOrder: Sort
@@ -44,7 +44,8 @@ struct PhotoLibraryAssetCollection: AssetCollection, IdentifiableResource {
          fetchOrder: Sort,
          isUserLibrary: Bool,
          selectOption: PickerSelectOption,
-         additions: [AssetCollectionAddition]) {
+         additions: [AssetCollectionAddition],
+         checker: AssetChecker<PHAsset> = .init()) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
@@ -59,7 +60,14 @@ struct PhotoLibraryAssetCollection: AssetCollection, IdentifiableResource {
             self.prefixAdditions = additions
             self.suffixAdditions = []
         }
-        self.checker = .init()
+        self.checker = checker
+    }
+}
+
+extension PhotoLibraryAssetCollection {
+    
+    mutating func update(fetchResult: FetchResult<PHAsset>) {
+        self.fetchResult = fetchResult
     }
 }
 

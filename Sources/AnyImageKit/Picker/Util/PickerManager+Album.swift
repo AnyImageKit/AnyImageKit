@@ -51,7 +51,6 @@ extension PickerManager {
             let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
             let assetCollections = assetCollectionsFetchResult.objects()
             for assetCollection in assetCollections {
-                if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
                     let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
                     let result = Album(fetchResult: assetsfetchResult,

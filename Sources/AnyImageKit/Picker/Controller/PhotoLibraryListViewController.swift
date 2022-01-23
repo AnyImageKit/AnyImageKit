@@ -16,7 +16,6 @@ final class PhotoLibraryListViewController: AnyImageViewController {
     
     private var photoLibrary: PhotoLibraryAssetCollection?
     private var photoLibraryList: [PhotoLibraryAssetCollection] = []
-    
     private var continuation: CheckedContinuation<UserInteractionResult<PhotoLibraryAssetCollection>, Never>?
     
     let manager: PickerManager

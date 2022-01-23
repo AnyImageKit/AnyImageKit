@@ -188,7 +188,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     override func setStatusBar(hidden: Bool) {
-        if let controller = (presentingViewController as? AnyImageNavigationController)?.topViewController as? AssetPickerViewController {
+        if let controller = (presentingViewController as? AnyImageNavigationController)?.topViewController as? PhotoAssetCollectionViewController {
             controller.setStatusBar(hidden: hidden)
         }
     }

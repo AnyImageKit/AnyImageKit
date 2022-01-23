@@ -93,7 +93,7 @@ extension ImagePickerController {
         manager.clearAll()
         manager.options = check(options: options)
         
-        let rootViewController = AssetPickerViewController(manager: manager)
+        let rootViewController = PhotoAssetCollectionViewController(manager: manager)
         rootViewController.delegate = self
         rootViewController.trackObserver = self
         viewControllers = [rootViewController]
@@ -222,11 +222,11 @@ extension ImagePickerController {
 // MARK: - AssetPickerViewControllerDelegate
 extension ImagePickerController: AssetPickerViewControllerDelegate {
     
-    func assetPickerDidCancel(_ picker: AssetPickerViewController) {
+    func assetPickerDidCancel(_ picker: PhotoAssetCollectionViewController) {
         pickerDelegate?.imagePickerDidCancel(self)
     }
     
-    func assetPickerDidFinishPicking(_ controller: AssetPickerViewController) {
+    func assetPickerDidFinishPicking(_ controller: PhotoAssetCollectionViewController) {
         didFinishSelect = true
         manager.resynchronizeAsset()
         checkData()

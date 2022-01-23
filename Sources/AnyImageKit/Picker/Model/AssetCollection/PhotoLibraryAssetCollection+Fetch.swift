@@ -39,49 +39,7 @@ extension PhotoLibraryAssetCollection {
     @MainActor
     static func fetchAll(options: PickerOptionsInfo) async -> [PhotoLibraryAssetCollection] {
         return await withCheckedContinuation { continuation in
-            var phCollections: [PHAssetCollection] = []
-            
-            // Load Smart Albums
-            if options.albumOptions.contains(.smart) {
-                let subTypes: [PHAssetCollectionSubtype] = [.albumRegular,
-                                                            .albumSyncedAlbum]
-                let fetchResults = subTypes.map {
-                    FetchResult(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil))
-                }
-                for fetchResult in fetchResults {
-                    for phCollection in fetchResult {
-                        if !phCollections.contains(where: { $0.localIdentifier == phCollection.localIdentifier}) {
-                            phCollections.append(phCollection)
-                        }
-                    }
-                }
-            }
-            
-            // Load User Albums
-            if options.albumOptions.contains(.userCreated) {
-                let fetchResult = FetchResult(PHCollectionList.fetchTopLevelUserCollections(with: nil))
-                for phCollection in fetchResult.compactMap({ $0 as? PHAssetCollection }) {
-                    if !phCollections.contains(where: { $0.localIdentifier == phCollection.localIdentifier}) {
-                        phCollections.append(phCollection)
-                    }
-                }
-            }
-            
-            // Load Shared Albums
-            if options.albumOptions.contains(.shared) {
-                let subTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream,
-                                                            .albumCloudShared]
-                let fetchResults = subTypes.map {
-                    FetchResult(PHAssetCollection.fetchAssetCollections(with: .album, subtype: $0, options: nil))
-                }
-                for fetchResult in fetchResults {
-                    for phCollection in fetchResult {
-                        if !phCollections.contains(where: { $0.localIdentifier == phCollection.localIdentifier}) {
-                            phCollections.append(phCollection)
-                        }
-                    }
-                }
-            }
+            let phCollections = loadPHCollections(with: options)
             
             // Load Asset Collection
             var assetCollections = [PhotoLibraryAssetCollection]()
@@ -135,6 +93,58 @@ extension PhotoLibraryAssetCollection {
     }
     
     private static func createCollectionAdditions(with options: PickerOptionsInfo, isUserLibrary: Bool) -> [AssetCollectionAddition] {
-        return []
+        if !options.captureOptions.mediaOptions.isEmpty {
+            return [.camera]
+        } else {
+            return []
+        }
+    }
+    
+    private static func loadPHCollections(with options: PickerOptionsInfo) -> [PHAssetCollection] {
+        var phCollections: [PHAssetCollection] = []
+        
+        // Load Smart Albums
+        if options.albumOptions.contains(.smart) {
+            let subTypes: [PHAssetCollectionSubtype] = [.albumRegular,
+                                                        .albumSyncedAlbum]
+            let fetchResults = subTypes.map {
+                FetchResult(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil))
+            }
+            for fetchResult in fetchResults {
+                for phCollection in fetchResult {
+                    if !phCollections.contains(where: { $0.localIdentifier == phCollection.localIdentifier}) {
+                        phCollections.append(phCollection)
+                    }
+                }
+            }
+        }
+        
+        // Load User Albums
+        if options.albumOptions.contains(.userCreated) {
+            let fetchResult = FetchResult(PHCollectionList.fetchTopLevelUserCollections(with: nil))
+            for phCollection in fetchResult.compactMap({ $0 as? PHAssetCollection }) {
+                if !phCollections.contains(where: { $0.localIdentifier == phCollection.localIdentifier}) {
+                    phCollections.append(phCollection)
+                }
+            }
+        }
+        
+        // Load Shared Albums
+        if options.albumOptions.contains(.shared) {
+            let subTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream,
+                                                        .albumCloudShared]
+            let fetchResults = subTypes.map {
+                FetchResult(PHAssetCollection.fetchAssetCollections(with: .album, subtype: $0, options: nil))
+            }
+            for fetchResult in fetchResults {
+                for phCollection in fetchResult {
+                    if !phCollections.contains(where: { $0.localIdentifier == phCollection.localIdentifier}) {
+                        phCollections.append(phCollection)
+                    }
+                }
+            }
+        }
+        
+        return phCollections
     }
 }

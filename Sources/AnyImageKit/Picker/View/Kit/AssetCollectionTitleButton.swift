@@ -1,5 +1,5 @@
 //
-//  PickerArrowButton.swift
+//  AssetCollectionTitleButton.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PickerArrowButton: UIControl {
+final class AssetCollectionTitleButton: UIControl {
     
     private lazy var label: UILabel = {
         let view = UILabel(frame: .zero)
@@ -97,7 +97,7 @@ final class PickerArrowButton: UIControl {
 }
 
 // MARK: - Function
-extension PickerArrowButton {
+extension AssetCollectionTitleButton {
     
     func setTitle(_ title: String) {
         if isSelected {
@@ -112,7 +112,7 @@ extension PickerArrowButton {
 }
 
 // MARK: - Target
-extension PickerArrowButton {
+extension AssetCollectionTitleButton {
     
     @objc private func buttonTapped(_ sender: UIButton) {
         isSelected.toggle()
@@ -120,7 +120,7 @@ extension PickerArrowButton {
 }
 
 // MARK: - PickerOptionsConfigurable
-extension PickerArrowButton: PickerOptionsConfigurable {
+extension AssetCollectionTitleButton: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         preferredStyle = options.theme.style

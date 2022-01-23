@@ -68,8 +68,12 @@ extension AssetChecker {
 
 extension AssetChecker {
     
+    var selectedItems: [Asset<Resource>] {
+        storage.selectedItems
+    }
+    
     func selectedNumber(asset: Asset<Resource>) -> Int? {
-        if let index = storage.selectedItems.firstIndex(of: asset.identifier) {
+        if let index = storage.selectedItems.firstIndex(of: asset) {
             return index + 1
         }
         return nil
@@ -100,9 +104,9 @@ extension AssetChecker {
     private func updateStorage(state: AssetState<Resource>, asset: Asset<Resource>) -> AssetState<Resource> {
         storage.states[asset.identifier] = state
         // update selectedItems
-        if state.isSelected, !storage.selectedItems.contains(asset.identifier) {
-            storage.selectedItems.append(asset.identifier)
-        } else if !state.isSelected, let index = storage.selectedItems.firstIndex(of: asset.identifier) {
+        if state.isSelected, !storage.selectedItems.contains(asset) {
+            storage.selectedItems.append(asset)
+        } else if !state.isSelected, let index = storage.selectedItems.firstIndex(of: asset) {
             storage.selectedItems.remove(at: index)
         }
         return state
@@ -115,7 +119,7 @@ extension AssetChecker {
         
         var disableCheckRules: [AssetDisableCheckRule<Resource>] = []
         var states: [String: AssetState<Resource>] = [:]
-        var selectedItems: [String] = []
+        var selectedItems: [Asset<Resource>] = []
         
         init() { }
     }

@@ -37,7 +37,7 @@ final class PickerPreviewIndexView: UIView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         view.showsHorizontalScrollIndicator = false
-        view.registerCell(AssetCell.self)
+        view.registerCell(PhotoAssetCell.self)
         view.dataSource = self
         view.delegate = self
         return view
@@ -131,9 +131,9 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(PhotoAssetCell.self, for: indexPath)
         let asset = manager.selectedAssets[indexPath.item]
-        cell.setContent(asset, manager: manager, animated: false, isPreview: true)
+//        cell.setContent(asset, manager: manager, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
         cell.boxCoverView.isHidden = asset.idx != currentIndex
         return cell

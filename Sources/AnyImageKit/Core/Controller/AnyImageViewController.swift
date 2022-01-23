@@ -78,7 +78,7 @@ extension AnyImageViewController {
         #if ANYIMAGEKIT_ENABLE_PICKER
         case _ as PhotoLibraryListViewController:
             page = .pickerAlbum
-        case _ as AssetPickerViewController:
+        case _ as PhotoAssetCollectionViewController:
             page = .pickerAsset
         case _ as PhotoPreviewController:
             page = .pickerPreview

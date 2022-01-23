@@ -10,7 +10,9 @@ import Foundation
 import Photos
 import UIKit
 
-extension Asset where Resource == PHAsset {
+typealias PhotoAsset = Asset<PHAsset>
+
+extension PhotoAsset {
     
     init(phAsset: PHAsset, selectOption: PickerSelectOption, checker: AssetChecker<PHAsset>) {
         self.init(resource: phAsset,
@@ -23,7 +25,7 @@ extension Asset where Resource == PHAsset {
     }
 }
 
-extension Asset where Resource == PHAsset {
+extension PhotoAsset {
     
     var duration: TimeInterval {
         return phAsset.duration
@@ -45,7 +47,7 @@ extension Asset where Resource == PHAsset {
     }
 }
 
-extension Asset: LoadableResource where Resource == PHAsset {
+extension PhotoAsset: LoadableResource {
 
     public func loadImage(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         resource.loadPhotoLibraryImage(options: options)

@@ -1,5 +1,5 @@
 //
-//  AssetCell.swift
+//  PhotoAssetCell.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2019/9/17.
@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-final class AssetCell: UICollectionViewCell {
+final class PhotoAssetCell: UICollectionViewCell {
     
     let selectEvent: Delegate<Void, Void> = .init()
     
@@ -120,7 +120,7 @@ final class AssetCell: UICollectionViewCell {
 }
 
 // MARK: - PickerOptionsConfigurable
-extension AssetCell: PickerOptionsConfigurable {
+extension PhotoAssetCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         boxCoverView.layer.borderColor = options.theme[color: .primary].cgColor
@@ -129,7 +129,7 @@ extension AssetCell: PickerOptionsConfigurable {
     }
 }
 
-extension AssetCell {
+extension PhotoAssetCell {
     
     var image: UIImage? {
         return imageView.image
@@ -137,32 +137,30 @@ extension AssetCell {
 }
 
 // MARK: - Action
-extension AssetCell {
+extension PhotoAssetCell {
     
     @objc private func selectButtonTapped(_ sender: NumberCircleButton) {
         selectEvent.call()
     }
 }
 
-extension AssetCell {
+extension PhotoAssetCell {
     
-    func setContent(_ asset: AssetOld, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+    func setContent(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
         task?.cancel()
         task = Task {
             do {
-                let scale = CGAffineTransform(scaleX: UIScreen.main.nativeScale, y: UIScreen.main.nativeScale)
-                let size = frame.size.applying(scale)
-                let options = ResourceLoadOptions.library(targetSize: size)
+                let targetSize = frame.size.displaySize
+                let options = ResourceLoadOptions.library(targetSize: targetSize)
                 for try await result in asset.phAsset.loadPhotoLibraryImage(options: options) {
                     guard !Task.isCancelled else {
                         print("\(String(describing: task)) isCancelled")
                         return
                     }
                     switch result {
-                    case .progress(let progress):
-                        print("progress=\(progress)")
+                    case .progress:
+                        break
                     case .success(let loadResult):
-//                        print(loadResult)
                         switch loadResult {
                         case .thumbnail(let image):
                             self.imageView.image = image
@@ -180,31 +178,31 @@ extension AssetCell {
         updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: AssetOld, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
-        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
-        update(options: manager.options)
-        if asset._images[.edited] != nil {
-            editedView.isHidden = false
-        } else {
-            switch asset.mediaType {
-            case .photoGIF:
-                gifView.isHidden = false
-            case .video:
-                videoView.isHidden = false
-            default:
-                break
-            }
-        }
-        
-        if !isPreview {
-            selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
-            selectdCoverView.isHidden = !asset.isSelected
-            if asset.isDisable {
-                disableCoverView.isHidden = false
-            } else {
-                disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
-            }
-        }
+    func updateState(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+//        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
+//        update(options: manager.options)
+//        if asset._images[.edited] != nil {
+//            editedView.isHidden = false
+//        } else {
+//            switch asset.mediaType {
+//            case .photoGIF:
+//                gifView.isHidden = false
+//            case .video:
+//                videoView.isHidden = false
+//            default:
+//                break
+//            }
+//        }
+//
+//        if !isPreview {
+//            selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
+//            selectdCoverView.isHidden = !asset.isSelected
+//            if asset.isDisable {
+//                disableCoverView.isHidden = false
+//            } else {
+//                disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
+//            }
+//        }
     }
 }
 

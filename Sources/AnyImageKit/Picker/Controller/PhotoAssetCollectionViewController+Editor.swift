@@ -10,7 +10,7 @@ import UIKit
 
 #if ANYIMAGEKIT_ENABLE_EDITOR
 
-extension AssetPickerViewController {
+extension PhotoAssetCollectionViewController {
     
     func canOpenEditor(with asset: AssetOld) -> Bool {
         asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
@@ -75,29 +75,29 @@ extension AssetPickerViewController {
 }
 
 // MARK: - ImageEditorControllerDelegate
-extension AssetPickerViewController: ImageEditorControllerDelegate {
+extension PhotoAssetCollectionViewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: true, completion: nil)
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing success: EditorResult) {
-        editor.dismiss(animated: true, completion: nil)
-        guard success.type == .photo else { return }
-        guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
-        guard let photo = UIImage(data: photoData) else { return }
-        guard let album = album else { return }
-        guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? AssetCell else { return }
-        
-        let asset = album.assets[editor.tag]
-        asset._images[.edited] = success.isEdited ? photo : nil
-        cell.setContent(asset, manager: manager)
-        if !asset.isSelected { // Select
-            selectItem(editor.tag)
-            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
-                doneButtonTapped(toolBar.doneButton)
-            }
-        }
+//        editor.dismiss(animated: true, completion: nil)
+//        guard success.type == .photo else { return }
+//        guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
+//        guard let photo = UIImage(data: photoData) else { return }
+//        guard let album = album else { return }
+//        guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? PhotoAssetCell else { return }
+//        
+//        let asset = album.assets[editor.tag]
+//        asset._images[.edited] = success.isEdited ? photo : nil
+////        cell.setContent(asset, manager: manager)
+//        if !asset.isSelected { // Select
+//            selectItem(editor.tag)
+//            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
+//                doneButtonTapped(toolBar.doneButton)
+//            }
+//        }
     }
 }
 
