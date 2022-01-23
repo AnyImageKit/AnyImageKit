@@ -45,7 +45,7 @@ struct PhotoLibraryAssetCollection: AssetCollection, IdentifiableResource {
          isUserLibrary: Bool,
          selectOption: PickerSelectOption,
          additions: [AssetCollectionAddition],
-         checker: AssetChecker<PHAsset> = .init()) {
+         checker: AssetChecker<PHAsset>) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle ?? String(identifier.prefix(8))
         self.fetchResult = fetchResult
@@ -80,27 +80,33 @@ extension PhotoLibraryAssetCollection {
     }
     
     subscript(asset index: Int) -> AssetElement {
-        return Asset(phAsset: fetchResult[index],
-                     selectOption: selectOption,
-                     checker: checker)
+        let asset = Asset(phAsset: fetchResult[index],
+                          selectOption: selectOption,
+                          checker: checker)
+        checkState(asset: asset)
+        return asset
     }
     
     var firstAsset: AssetElement? {
         guard let first = fetchResult.first else {
             return nil
         }
-        return Asset(phAsset: first,
-                     selectOption: selectOption,
-                     checker: checker)
+        let asset = Asset(phAsset: first,
+                          selectOption: selectOption,
+                          checker: checker)
+        checkState(asset: asset)
+        return asset
     }
     
     var lastAsset: AssetElement? {
         guard let last = fetchResult.last else {
             return nil
         }
-        return Asset(phAsset: last,
-                     selectOption: selectOption,
-                     checker: checker)
+        let asset = Asset(phAsset: last,
+                          selectOption: selectOption,
+                          checker: checker)
+        checkState(asset: asset)
+        return asset
     }
 }
 
@@ -117,9 +123,11 @@ extension PhotoLibraryAssetCollection: Sequence {
             case 0 ..< prefixCount:
                 return .prefix(prefixAdditions[count])
             case prefixCount ..< (assetCount + prefixCount):
-                return .asset(Asset(phAsset: fetchResult[count - prefixCount],
-                                    selectOption: selectOption,
-                                    checker: checker))
+                let asset = Asset(phAsset: fetchResult[count - prefixCount],
+                                  selectOption: selectOption,
+                                  checker: checker)
+                checkState(asset: asset)
+                return .asset(asset)
             case (assetCount + prefixCount) ..< (prefixCount + assetCount + suffixCount):
                 return .suffix(suffixAdditions[count - prefixCount - assetCount])
             default:
@@ -137,9 +145,11 @@ extension PhotoLibraryAssetCollection: BidirectionalCollection {
         case 0 ..< prefixCount:
             return .prefix(prefixAdditions[position])
         case prefixCount ..< (assetCount + prefixCount):
-            return .asset(Asset(phAsset: fetchResult[position - prefixCount],
-                                selectOption: selectOption,
-                                checker: checker))
+            let asset = Asset(phAsset: fetchResult[position - prefixCount],
+                              selectOption: selectOption,
+                              checker: checker)
+            checkState(asset: asset)
+            return .asset(asset)
         default:
             return .suffix(suffixAdditions[position - prefixCount - assetCount])
         }

@@ -22,13 +22,17 @@ extension PhotoLibraryAssetCollection {
                 if assetCollection.isUserLibrary {
                     let assetfetchResult = FetchResult(PHAsset.fetchAssets(in: assetCollection, options: fetchOptions))
                     let additions = createCollectionAdditions(with: options, isUserLibrary: true)
+                    let checker = AssetChecker<PHAsset>(limitCount: options.selectLimit,
+                                                        preselectedIdentifiers: options.preselectAssets,
+                                                        disableCheckRules: [])
                     let result = PhotoLibraryAssetCollection(identifier: assetCollection.localIdentifier,
                                                              localizedTitle: assetCollection.localizedTitle,
                                                              fetchResult: assetfetchResult,
                                                              fetchOrder: options.orderByDate,
                                                              isUserLibrary: true,
                                                              selectOption: options.selectOptions,
-                                                             additions: additions)
+                                                             additions: additions,
+                                                             checker: checker)
                     continuation.resume(returning: result)
                     return
                 }
@@ -56,13 +60,17 @@ extension PhotoLibraryAssetCollection {
                 if fetchResult.isEmpty && !isUserLibrary { continue }
                 
                 let additions = createCollectionAdditions(with: options, isUserLibrary: isUserLibrary)
+                let checker = AssetChecker<PHAsset>(limitCount: options.selectLimit,
+                                                    preselectedIdentifiers: options.preselectAssets,
+                                                    disableCheckRules: [])
                 let assetCollection = PhotoLibraryAssetCollection(identifier: phCollection.localIdentifier,
                                                                   localizedTitle: phCollection.localizedTitle,
                                                                   fetchResult: fetchResult,
                                                                   fetchOrder: options.orderByDate,
                                                                   isUserLibrary: isUserLibrary,
                                                                   selectOption: options.selectOptions,
-                                                                  additions: additions)
+                                                                  additions: additions,
+                                                                  checker: checker)
                 if isUserLibrary {
                     assetCollections.insert(assetCollection, at: 0)
                 } else {

@@ -146,13 +146,13 @@ extension PhotoAssetCell {
 
 extension PhotoAssetCell {
     
-    func setContent(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+    func setContent(_ asset: PhotoAsset, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
         task?.cancel()
         task = Task {
             do {
                 let targetSize = frame.size.displaySize
                 let options = ResourceLoadOptions.library(targetSize: targetSize)
-                for try await result in asset.phAsset.loadPhotoLibraryImage(options: options) {
+                for try await result in asset.loadImage(options: options) {
                     guard !Task.isCancelled else {
                         print("\(String(describing: task)) isCancelled")
                         return
@@ -175,34 +175,30 @@ extension PhotoAssetCell {
                 _print(error)
             }
         }
-        updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
+        
+        updateState(asset, options: options, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: PhotoAsset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
-//        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
-//        update(options: manager.options)
-//        if asset._images[.edited] != nil {
-//            editedView.isHidden = false
-//        } else {
-//            switch asset.mediaType {
-//            case .photoGIF:
-//                gifView.isHidden = false
-//            case .video:
-//                videoView.isHidden = false
-//            default:
-//                break
-//            }
-//        }
-//
-//        if !isPreview {
-//            selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
-//            selectdCoverView.isHidden = !asset.isSelected
-//            if asset.isDisable {
-//                disableCoverView.isHidden = false
-//            } else {
-//                disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
-//            }
-//        }
+    func updateState(_ asset: PhotoAsset, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
+        update(options: options)
+        switch asset.mediaType {
+        case .photoGIF:
+            gifView.isHidden = false
+        case .video:
+            videoView.isHidden = false
+        default:
+            break
+        }
+        
+        if !isPreview {
+            selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
+            selectdCoverView.isHidden = !asset.isSelected
+            if asset.isDisabled {
+                disableCoverView.isHidden = false
+            } else {
+                disableCoverView.isHidden = !(asset.checker.isUpToLimit && !asset.isSelected)
+            }
+        }
     }
 }
 

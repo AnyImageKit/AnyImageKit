@@ -193,7 +193,11 @@ extension PhotoLibraryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let photoLibrary = photoLibraryList[indexPath.row]
-        resume(result: .interaction(photoLibrary))
+        if photoLibrary != self.photoLibrary {
+            resume(result: .interaction(photoLibrary))
+        } else {
+            resume(result: .cancel)
+        }
         dismiss(animated: true, completion: nil)
     }
     

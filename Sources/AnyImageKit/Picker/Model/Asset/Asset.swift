@@ -9,15 +9,15 @@
 import Foundation
 
 /// A wapper for manage Real Resource
-public struct Asset<Resource: IdentifiableResource> {
+public struct Asset<Resource: IdentifiableResource>: CheckableResource {
     
     public let resource: Resource
     public let mediaType: MediaType
     
     /// Manage/Store states
     ///
-    /// Checker is create/shared by AssetCollection
-    let checker: AssetChecker<Resource>
+    /// Checker is create/shared by AssetCollection, for asset, it's read only
+    unowned let checker: AssetChecker<Resource>
     
     init(resource: Resource, mediaType: MediaType, checker: AssetChecker<Resource>) {
         self.resource = resource
@@ -34,23 +34,27 @@ extension Asset: IdentifiableResource {
     }
 }
 
-// MARK: CheckableResource
-extension Asset: CheckableResource {
+// MARK: State
+extension Asset {
     
     var selectedNum: Int {
         checker.selectedNumber(asset: self) ?? 1
     }
     
     var state: AssetState<Resource> {
-        checker.state(asset: self)
+        checker.loadState(asset: self)
     }
     
-    func checkState(context: AssetCheckContext<Resource>) -> AssetState<Resource> {
-        checker.check(asset: self, context: context)
+    var isNormal: Bool {
+        state.isNormal
     }
     
-    func setSelected(_ isSelected: Bool) {
-        checker.setSelected(asset: self, isSelected: isSelected)
+    var isSelected: Bool {
+        state.isSelected
+    }
+    
+    var isDisabled: Bool {
+        state.isDisabled
     }
 }
 

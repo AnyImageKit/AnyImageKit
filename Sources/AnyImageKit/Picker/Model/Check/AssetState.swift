@@ -8,21 +8,14 @@
 
 import Foundation
 
-public enum AssetState<Resource: IdentifiableResource>: Equatable {
-    // unchecked state
-    case initialization
-    case preselected
-    // checked state
+enum AssetState<Resource: IdentifiableResource>: Equatable {
+    
     case normal
     case selected
     case disabled(AssetDisableCheckRule<Resource>)
     
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
-        case (.initialization, initialization):
-            return true
-        case (.preselected, .preselected):
-            return true
         case (.normal, normal):
             return true
         case (.selected, selected):
@@ -37,19 +30,7 @@ public enum AssetState<Resource: IdentifiableResource>: Equatable {
 
 extension AssetState {
     
-    var isChecked: Bool {
-        switch self {
-        case .initialization, .preselected:
-            return false
-        case .normal, .selected, .disabled:
-            return true
-        }
-    }
-}
-
-extension AssetState {
-    
-    public var isNormal: Bool {
+    var isNormal: Bool {
         switch self {
         case .normal:
             return true
@@ -61,7 +42,7 @@ extension AssetState {
 
 extension AssetState {
     
-    public var isSelected: Bool {
+    var isSelected: Bool {
         switch self {
         case .selected:
             return true
@@ -73,7 +54,7 @@ extension AssetState {
 
 extension AssetState {
     
-    public var isDisabled: Bool {
+    var isDisabled: Bool {
         switch self {
         case .disabled:
             return true
@@ -82,7 +63,7 @@ extension AssetState {
         }
     }
     
-    public var disableCheckRule: AssetDisableCheckRule<Resource>? {
+    var disableCheckRule: AssetDisableCheckRule<Resource>? {
         switch self {
         case .disabled(let rule):
             return rule

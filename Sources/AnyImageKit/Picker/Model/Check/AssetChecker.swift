@@ -8,65 +8,75 @@
 
 import Foundation
 
-struct AssetChecker<Resource: IdentifiableResource> {
+final class AssetChecker<Resource: IdentifiableResource> {
+    
+    private let limitCount: Int
+    private let preselectedIdentifiers: [String]
+    private let disableCheckRules: [AssetDisableCheckRule<Resource>]
     
     private let storage: Storage<Resource> = .init()
     
-    init() { }
+    init(limitCount: Int, preselectedIdentifiers: [String], disableCheckRules: [AssetDisableCheckRule<Resource>]) {
+        self.limitCount = limitCount
+        self.preselectedIdentifiers = preselectedIdentifiers
+        self.disableCheckRules = disableCheckRules
+    }
 }
 
 extension AssetChecker {
     
-    func state(asset: Asset<Resource>) -> AssetState<Resource> {
-        if let state = storage.states[asset.identifier] {
-            return state
-        } else {
-            return .initialization
-        }
+    var context: AssetCheckContext<Resource> {
+        return .init(selectedAssets: storage.selectedItems)
     }
     
-    func check(asset: Asset<Resource>, context: AssetCheckContext<Resource>) -> AssetState<Resource> {
+    func check(asset: Asset<Resource>) {
         if let state = storage.states[asset.identifier] {
             switch state {
-            case .initialization:
-                assertionFailure("Should Never Happened Here!")
-                return updateStorage(state: .normal, asset: asset)
-            case .preselected:
+            case .normal:
                 if let rule = checkDisabled(asset: asset, context: context) {
-                    return updateStorage(state: .disabled(rule), asset: asset)
-                } else {
-                    return updateStorage(state: .selected, asset: asset)
-                }
-            case .normal, .disabled:
-                if let rule = checkDisabled(asset: asset, context: context) {
-                    return updateStorage(state: .disabled(rule), asset: asset)
-                }else {
-                    return updateStorage(state: .normal, asset: asset)
+                    updateStorage(state: .disabled(rule), asset: asset)
                 }
             case .selected:
-                return state
+                break
+            case .disabled:
+                if let rule = checkDisabled(asset: asset, context: context) {
+                    updateStorage(state: .disabled(rule), asset: asset)
+                } else {
+                    updateStorage(state: .normal, asset: asset)
+                }
             }
         } else if let rule = checkDisabled(asset: asset, context: context) {
-            return updateStorage(state: .disabled(rule), asset: asset)
+            updateStorage(state: .disabled(rule), asset: asset)
+        } else if preselectedIdentifiers.contains(asset.identifier) {
+            updateStorage(state: .selected, asset: asset)
         } else {
-            return updateStorage(state: .normal, asset: asset)
+            updateStorage(state: .normal, asset: asset)
         }
+    }
+    
+    private func checkDisabled(asset: Asset<Resource>, context: AssetCheckContext<Resource>) -> AssetDisableCheckRule<Resource>? {
+        for rule in disableCheckRules where rule.isDisable(for: asset, context: context) {
+            return rule
+        }
+        return nil
     }
 }
 
 extension AssetChecker {
     
-    func reset(preselected identifiers: [String], disableCheckRules: [AssetDisableCheckRule<Resource>]) {
-        storage.selectedItems.removeAll()
-        storage.disableCheckRules = disableCheckRules
-        storage.states.removeAll()
-        for identifier in identifiers {
-            storage.states[identifier] = .preselected
+    func loadState(asset: Asset<Resource>) -> AssetState<Resource> {
+        guard let state = storage.states[asset.identifier] else {
+            fatalError("Asset Collection must check asset before return!")
         }
+        return state
     }
 }
 
 extension AssetChecker {
+    
+    var isUpToLimit: Bool {
+        selectedItems.count == limitCount
+    }
     
     var selectedItems: [Asset<Resource>] {
         storage.selectedItems
@@ -80,7 +90,7 @@ extension AssetChecker {
     }
     
     func setSelected(asset: Asset<Resource>, isSelected: Bool) {
-        guard let state = storage.states[asset.identifier], state.isChecked, !state.isDisabled else {
+        guard let state = storage.states[asset.identifier], !state.isDisabled else {
             return
         }
         if isSelected {
@@ -93,15 +103,12 @@ extension AssetChecker {
 
 extension AssetChecker {
     
-    private func checkDisabled(asset: Asset<Resource>, context: AssetCheckContext<Resource>) -> AssetDisableCheckRule<Resource>? {
-        for rule in storage.disableCheckRules where rule.isDisable(for: asset, context: context) {
-            return rule
-        }
-        return nil
+    func reset() {
+        storage.selectedItems.removeAll()
+        storage.states.removeAll()
     }
     
-    @discardableResult
-    private func updateStorage(state: AssetState<Resource>, asset: Asset<Resource>) -> AssetState<Resource> {
+    private func updateStorage(state: AssetState<Resource>, asset: Asset<Resource>){
         storage.states[asset.identifier] = state
         // update selectedItems
         if state.isSelected, !storage.selectedItems.contains(asset) {
@@ -109,7 +116,6 @@ extension AssetChecker {
         } else if !state.isSelected, let index = storage.selectedItems.firstIndex(of: asset) {
             storage.selectedItems.remove(at: index)
         }
-        return state
     }
 }
 
@@ -117,7 +123,6 @@ extension AssetChecker {
     
     private class Storage<Resource: IdentifiableResource> {
         
-        var disableCheckRules: [AssetDisableCheckRule<Resource>] = []
         var states: [String: AssetState<Resource>] = [:]
         var selectedItems: [Asset<Resource>] = []
         

@@ -106,7 +106,7 @@ extension PhotoAssetCollectionViewController {
     
     private func setPhotoLibrary(_ library: PhotoLibraryAssetCollection, reset: Bool) {
         if reset {
-            library.reset(preselected: manager.options.preselectAssets, disableCheckRules: [])
+            library.reset()
         }
         photoLibrary = library
         titleView.setTitle(library.localizedTitle)
@@ -126,13 +126,40 @@ extension PhotoAssetCollectionViewController {
 // MARK: - Private function
 extension PhotoAssetCollectionViewController {
     
-    func updateVisibleCellState(_ animatedItem: Int = -1) {
-//        guard let album = album else { return }
-//        for cell in collectionView.visibleCells {
-//            if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? PhotoAssetCell {
-////                cell.updateState(album.assets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
-//            }
-//        }
+    private func setSelected(_ index: Int) {
+        guard let photoLibrary = photoLibrary, let asset = photoLibrary[index].asset else { return }
+        
+        do {
+            try photoLibrary.setSelected(asset: asset)
+            updateVisibleCellState(current: index)
+            toolBar.setEnable(!photoLibrary.selectItems.isEmpty)
+            trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.state.isSelected, .page: AnyImagePage.pickerAsset])
+        } catch {
+            if let error = error as? AssetSelectedError<PHAsset> {
+                let options = manager.options
+                let message: String
+                switch error {
+                case .maximumOfPhotosOrVideos:
+                    message = String(format: options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], options.selectLimit)
+                case .maximumOfPhotos:
+                    message = String(format: options.theme[string: .pickerSelectMaximumOfPhotos], options.selectLimit)
+                case .maximumOfVideos:
+                    message = String(format: options.theme[string: .pickerSelectMaximumOfVideos], options.selectLimit)
+                case .disabled(let rule):
+                    message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                }
+                self.showAlert(message: message, stringConfig: options.theme)
+            }
+        }
+    }
+    
+    private func updateVisibleCellState(current index: Int? = nil) {
+        guard let photoLibrary = photoLibrary else { return }
+        for cell in collectionView.visibleCells {
+            if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? PhotoAssetCell, let asset = photoLibrary[indexPath.item].asset {
+                cell.updateState(asset, options: manager.options, animated: index == indexPath.item)
+            }
+        }
     }
     
     private func scrollToEnd(animated: Bool = false) {
@@ -141,24 +168,6 @@ extension PhotoAssetCollectionViewController {
         } else {
             collectionView.scrollToFirst(at: .top, animated: animated)
         }
-    }
-    
-    func selectItem(_ idx: Int) {
-//        guard let album = album else { return }
-//        let asset = album.assets[idx]
-//
-//        if !asset.isSelected {
-//            let result = manager.addSelectedAsset(asset)
-//            if !result.success && !result.message.isEmpty {
-//                showAlert(message: result.message, stringConfig: manager.options.theme)
-//            }
-//        } else {
-//            manager.removeSelectedAsset(asset)
-//        }
-//        updateVisibleCellState(idx)
-//
-//        toolBar.setEnable(!manager.selectedAssets.isEmpty)
-//        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerAsset])
     }
 }
 
@@ -181,7 +190,7 @@ extension PhotoAssetCollectionViewController {
     }
 }
 
-// MARK: - Target
+// MARK: - Action
 extension PhotoAssetCollectionViewController {
     
     @objc private func titleViewTapped(_ sender: AssetCollectionTitleButton) {
@@ -375,7 +384,8 @@ extension PhotoAssetCollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let element = photoLibrary?[indexPath.item] else { return UICollectionViewCell() }
+        guard let photoLibrary = photoLibrary else { return UICollectionViewCell() }
+        let element = photoLibrary[indexPath.item]
         switch element {
         case .prefix(let addition), .suffix(let addition):
             print(addition)
@@ -387,10 +397,10 @@ extension PhotoAssetCollectionViewController: UICollectionViewDataSource {
             return cell
         case .asset(let asset):
             let cell = collectionView.dequeueReusableCell(PhotoAssetCell.self, for: indexPath)
-            cell.tag = indexPath.row
-//            cell.setContent(asset, manager: manager)
+            cell.tag = indexPath.item
+            cell.setContent(asset, options: manager.options)
             cell.selectEvent.delegate(on: self) { (self, _) in
-                self.selectItem(indexPath.row)
+                self.setSelected(indexPath.item)
             }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
