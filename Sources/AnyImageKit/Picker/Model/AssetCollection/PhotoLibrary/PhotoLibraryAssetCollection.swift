@@ -79,14 +79,6 @@ extension PhotoLibraryAssetCollection {
         return fetchResult.count
     }
     
-    subscript(asset index: Int) -> Asset<Resource> {
-        let asset = Asset(phAsset: fetchResult[index],
-                          selectOption: selectOption,
-                          checker: checker)
-        checkState(asset: asset)
-        return asset
-    }
-    
     var firstAsset: Asset<Resource>? {
         guard let first = fetchResult.first else {
             return nil
@@ -103,6 +95,29 @@ extension PhotoLibraryAssetCollection {
             return nil
         }
         let asset = Asset(phAsset: last,
+                          selectOption: selectOption,
+                          checker: checker)
+        checkState(asset: asset)
+        return asset
+    }
+    
+    func loadAssetIndex(for asset: Asset<Resource>) -> Int? {
+        switch fetchOrder {
+        case .asc:
+            if let lastIndex = fetchResult.lastIndex(of: asset.resource) {
+                return lastIndex
+            }
+        case .desc:
+            if let firstIndex = fetchResult.firstIndex(of: asset.resource) {
+                return firstIndex
+            }
+        }
+        return nil
+    }
+    
+    func loadAsset(for assetIndex: Int) -> Asset<Resource>? {
+        guard assetIndex < fetchResult.count else { return nil }
+        let asset = Asset(phAsset: fetchResult[assetIndex],
                           selectOption: selectOption,
                           checker: checker)
         checkState(asset: asset)

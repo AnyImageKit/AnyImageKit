@@ -226,9 +226,9 @@ extension PhotoAssetCollectionViewController {
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
-        guard let asset = manager.selectedAssets.first else { return }
-        let controller = PhotoPreviewController(manager: manager)
-        controller.currentIndex = asset.idx
+        guard let photoLibrary = photoLibrary, let asset = photoLibrary.selectedItems.first, let index = photoLibrary.loadAssetIndex(for: asset) else { return }
+        let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
+        controller.currentIndex = index
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
@@ -416,48 +416,43 @@ extension PhotoAssetCollectionViewController: UICollectionViewDataSource {
 extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        guard let album = album else { return }
-//        let asset = album.assets[indexPath.item]
-//
-//        #if ANYIMAGEKIT_ENABLE_CAPTURE
-//        if asset.isCamera { // 点击拍照 Item
-//            showCapture()
-//            return
-//        }
-//        #endif
-//        #if ANYIMAGEKIT_ENABLE_EDITOR
-//        if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
-//            openEditor(with: asset, indexPath: indexPath)
-//            return
-//        }
-//        #endif
-//
-//        if manager.options.selectionTapAction == .quickPick {
-//            guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-//            cell.selectEvent.call()
-//            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
-//                doneButtonTapped(toolBar.doneButton)
+        guard let photoLibrary = photoLibrary else { return }
+        let element = photoLibrary[indexPath.item]
+        switch element {
+        case .prefix(let plugin), .suffix(let plugin):
+            print(plugin)
+            #if ANYIMAGEKIT_ENABLE_CAPTURE
+            showCapture()
+            #endif
+        case .asset(let asset):
+            let options = manager.options
+            
+//            #if ANYIMAGEKIT_ENABLE_EDITOR
+//            if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
+//                openEditor(with: asset, indexPath: indexPath)
+//                return
 //            }
-//        } else if case .disable(let rule) = asset.state {
-//            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-//            showAlert(message: message, stringConfig: manager.options.theme)
-//            return
-//        } else if !asset.isSelected && manager.isUpToLimit {
-//            return
-//        } else {
-//            let controller = PhotoPreviewController(manager: manager)
-//            controller.currentIndex = indexPath.item - itemOffset
-//            controller.dataSource = self
-//            controller.delegate = self
-//            present(controller, animated: true, completion: nil)
-//        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        guard let asset = album?.assets[indexPath.item] else { return }
-//        if let cell = cell as? AssetCell {
-//            cell.updateState(asset, manager: manager, animated: false)
-//        }
+//            #endif
+            
+            if options.selectionTapAction == .quickPick {
+                setSelected(indexPath.item)
+                if options.selectLimit == 1 && photoLibrary.selectedItems.count == 1 {
+                    doneButtonTapped(toolBar.doneButton)
+                }
+            } else if let rule = asset.state.disableCheckRule {
+                let message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                showAlert(message: message, stringConfig: options.theme)
+                return
+            } else if !asset.isSelected && photoLibrary.checker.isUpToLimit {
+                return
+            } else {
+                let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
+                controller.currentIndex = 0
+                controller.dataSource = self
+                controller.delegate = self
+                present(controller, animated: true, completion: nil)
+            }
+        }
     }
 }
 
@@ -524,10 +519,11 @@ extension PhotoAssetCollectionViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
-        let idx = controller.currentIndex //+ itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
-        collectionView.reloadData()
-        if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
+        guard let photoLibrary = photoLibrary else { return }
+        let assetIndex = controller.currentIndex
+        let index = photoLibrary.convertAssetIndexToIndex(assetIndex)
+        let indexPath = IndexPath(item: index, section: 0)
+        if !(collectionView.visibleCells.map{ $0.tag }).contains(index) {
             collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
         }
     }

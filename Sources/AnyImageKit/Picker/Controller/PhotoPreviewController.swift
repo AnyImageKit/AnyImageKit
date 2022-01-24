@@ -81,57 +81,18 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     /// ToolBar 缩放动画前的状态
     private var toolBarHiddenStateBeforePan = false
     
-    private lazy var flowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        return layout
-    }()
-    private(set) lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = UIColor.clear
-        view.decelerationRate = UIScrollView.DecelerationRate.fast
-        view.showsVerticalScrollIndicator = false
-        view.showsHorizontalScrollIndicator = false
-        view.delegate = self
-        view.dataSource = self
-        view.registerCell(PhotoPreviewCell.self)
-        view.registerCell(PhotoGIFPreviewCell.self)
-        view.registerCell(VideoPreviewCell.self)
-        view.registerCell(PhotoLivePreviewCell.self)
-        view.isPagingEnabled = true
-        view.alwaysBounceHorizontal = false
-        view.isPrefetchingEnabled = false
-        return view
-    }()
-    private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
-        let view = PickerPreviewNavigationBar(frame: .zero)
-        view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
-        return view
-    }()
-    private(set) lazy var toolBar: PickerToolBar = {
-        let view = PickerToolBar(style: .preview)
-        view.originalButton.isSelected = manager.useOriginalImage
-        view.leftButton.isHidden = true
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
-        #endif
-        view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
-        view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
-        return view
-    }()
-    private lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView(frame: .zero)
-        view.setManager(manager)
-        view.isHidden = true
-        view.delegate = self
-        return view
-    }()
+    private lazy var flowLayout: UICollectionViewFlowLayout = makeFlowLayout()
+    private(set) lazy var collectionView: UICollectionView = makeCollectionView()
+    private(set) lazy var navigationBar: PickerPreviewNavigationBar = makeNavigationBar()
+    private(set) lazy var toolBar: PickerToolBar = makeToolBar()
+    private lazy var indexView: PickerPreviewIndexView = makeIndexView()
     
     let manager: PickerManager
+    let photoLibrary: PhotoLibraryAssetCollection
     
-    init(manager: PickerManager) {
+    init(manager: PickerManager, photoLibrary: PhotoLibraryAssetCollection) {
         self.manager = manager
+        self.photoLibrary = photoLibrary
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
@@ -139,14 +100,6 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.identifier)
-            }
-        }
     }
     
     // MARK: - Life Cycle
@@ -174,7 +127,6 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
         updateLayout()
     }
     
-    @available(iOS 11.0, *)
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
@@ -203,46 +155,89 @@ extension PhotoPreviewController {
         NotificationCenter.default.addObserver(self, selector: #selector(previewCellDidDownloadResource(_:)), name: .previewCellDidDownloadResource, object: nil)
         #endif
     }
+}
+
+// MARK: - UI Setup
+extension PhotoPreviewController {
     
-    /// 添加视图
     private func setupViews() {
         view.backgroundColor = UIColor.clear
-        if #available(iOS 11.0, *) {
-            collectionView.contentInsetAdjustmentBehavior = .never
-        }
+        collectionView.contentInsetAdjustmentBehavior = .never
         view.addSubview(collectionView)
         view.addSubview(navigationBar)
         view.addSubview(toolBar)
         view.addSubview(indexView)
-        setupLayout()
-        setBar(hidden: true, animated: false, isNormal: false)
-    }
-    
-    /// 设置视图布局
-    private func setupLayout() {
         navigationBar.snp.makeConstraints { maker in
             maker.top.equalToSuperview()
             maker.left.right.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
-            } else {
-                maker.bottom.equalTo(topLayoutGuide.snp.bottom).offset(44)
-            }
+            maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
         }
         toolBar.snp.makeConstraints { maker in
             maker.left.right.bottom.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
-            } else {
-                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
-            }
+            maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
         }
         indexView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(toolBar.snp.top)
             maker.height.equalTo(96)
         }
+        setBar(hidden: true, animated: false, isNormal: false)
     }
+    
+    private func makeFlowLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        return layout
+    }
+    
+    private func makeCollectionView() -> UICollectionView {
+        let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = UIColor.clear
+        view.decelerationRate = UIScrollView.DecelerationRate.fast
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        view.delegate = self
+        view.dataSource = self
+        view.registerCell(PhotoPreviewCell.self)
+        view.registerCell(PhotoGIFPreviewCell.self)
+        view.registerCell(VideoPreviewCell.self)
+        view.registerCell(PhotoLivePreviewCell.self)
+        view.isPagingEnabled = true
+        view.alwaysBounceHorizontal = false
+        view.isPrefetchingEnabled = false
+        return view
+    }
+    
+    private func makeNavigationBar() -> PickerPreviewNavigationBar {
+        let view = PickerPreviewNavigationBar(frame: .zero)
+        view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
+        return view
+    }
+    
+    private func makeToolBar() -> PickerToolBar {
+        let view = PickerToolBar(style: .preview)
+        view.originalButton.isSelected = manager.useOriginalImage
+        view.leftButton.isHidden = true
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
+        #endif
+        view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
+        view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
+        return view
+    }
+    
+    private func makeIndexView() -> PickerPreviewIndexView {
+        let view = PickerPreviewIndexView(frame: .zero)
+        view.setManager(manager)
+        view.isHidden = true
+        view.delegate = self
+        return view
+    }
+}
+
+// MARK: - UI Update
+extension PhotoPreviewController {
     
     /// 更新视图布局
     private func updateLayout() {
@@ -310,7 +305,7 @@ extension PhotoPreviewController {
     }
 }
 
-// MARK: - Target
+// MARK: - Action
 extension PhotoPreviewController {
     
     @objc private func containerSizeDidChange(_ sender: Notification) {

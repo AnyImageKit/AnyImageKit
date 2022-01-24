@@ -28,22 +28,6 @@ extension PhotoAssetCollectionViewController {
         #endif
     }
     
-    /// 添加拍照 Item
-    func addCameraAssetIfNeeded() {
-//        guard let album = album, album.isUserLibrary else { return }
-//        if album.hasCamera { return }
-//        let options = manager.options
-//        let sortType = options.orderByDate
-//        if !options.captureOptions.mediaOptions.isEmpty {
-//            switch sortType {
-//            case .asc:
-//                album.addAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), atLast: true)
-//            case .desc:
-//                album.insertAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
-//            }
-//        }
-    }
-    
     /// 拍照结束后，插入 PHAsset
     func addPHAsset(_ phAsset: PHAsset) {
 //        guard let album = album else { return }
