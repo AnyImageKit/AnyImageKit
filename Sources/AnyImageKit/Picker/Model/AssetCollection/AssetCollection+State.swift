@@ -1,5 +1,5 @@
 //
-//  PhotoLibraryAssetCollection+State.swift
+//  AssetCollection+State.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2022/1/21.
@@ -9,35 +9,34 @@
 import Foundation
 import Photos
 
-extension PhotoLibraryAssetCollection {
+extension AssetCollection {
     
-    func checkState(asset: Asset<PHAsset>) {
+    public func checkState(asset: Asset<Resource>) {
         checker.check(asset: asset)
     }
     
-    func reset() {
+    public func reset() {
         checker.reset()
     }
 }
 
-extension PhotoLibraryAssetCollection {
+extension AssetCollection {
     
-    
-    var selectItems: [Asset<PHAsset>] {
+    public var selectedItems: [Asset<Resource>] {
         checker.selectedItems
     }
     
-    func setSelected(asset: Asset<PHAsset>) throws {
+    public func setSelected(asset: Asset<Resource>) throws {
         let state = asset.state
         switch state {
         case .normal:
             if checker.isUpToLimit {
                 if selectOption.isPhoto && selectOption.isVideo {
-                    throw AssetSelectedError<PHAsset>.maximumOfPhotosOrVideos
+                    throw AssetSelectedError<Resource>.maximumOfPhotosOrVideos
                 } else if selectOption.isPhoto {
-                    throw AssetSelectedError<PHAsset>.maximumOfPhotos
+                    throw AssetSelectedError<Resource>.maximumOfPhotos
                 } else {
-                    throw AssetSelectedError<PHAsset>.maximumOfVideos
+                    throw AssetSelectedError<Resource>.maximumOfVideos
                 }
             } else {
                 checker.setSelected(asset: asset, isSelected: true)
@@ -45,7 +44,7 @@ extension PhotoLibraryAssetCollection {
         case .selected:
             checker.setSelected(asset: asset, isSelected: false)
         case .disabled(let rule):
-            throw AssetSelectedError<PHAsset>.disabled(rule)
+            throw AssetSelectedError<Resource>.disabled(rule)
         }
     }
 }

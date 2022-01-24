@@ -21,17 +21,17 @@ extension PhotoLibraryAssetCollection {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.isUserLibrary {
                     let assetfetchResult = FetchResult(PHAsset.fetchAssets(in: assetCollection, options: fetchOptions))
-                    let additions = createCollectionAdditions(with: options, isUserLibrary: true)
-                    let checker = AssetChecker<PHAsset>(limitCount: options.selectLimit,
-                                                        preselectedIdentifiers: options.preselectAssets,
-                                                        disableCheckRules: [])
+                    let plugins = createCollectionPlugins(with: options, isUserLibrary: true)
+                    let checker = AssetChecker<Resource>(limitCount: options.selectLimit,
+                                                         preselectedIdentifiers: options.preselectAssets,
+                                                         disableCheckRules: [])
                     let result = PhotoLibraryAssetCollection(identifier: assetCollection.localIdentifier,
                                                              localizedTitle: assetCollection.localizedTitle,
                                                              fetchResult: assetfetchResult,
                                                              fetchOrder: options.orderByDate,
                                                              isUserLibrary: true,
                                                              selectOption: options.selectOptions,
-                                                             additions: additions,
+                                                             plugins: plugins,
                                                              checker: checker)
                     continuation.resume(returning: result)
                     return
@@ -59,17 +59,17 @@ extension PhotoLibraryAssetCollection {
                 let fetchResult = FetchResult(PHAsset.fetchAssets(in: phCollection, options: fetchOptions))
                 if fetchResult.isEmpty && !isUserLibrary { continue }
                 
-                let additions = createCollectionAdditions(with: options, isUserLibrary: isUserLibrary)
-                let checker = AssetChecker<PHAsset>(limitCount: options.selectLimit,
-                                                    preselectedIdentifiers: options.preselectAssets,
-                                                    disableCheckRules: [])
+                let plugins = createCollectionPlugins(with: options, isUserLibrary: isUserLibrary)
+                let checker = AssetChecker<Resource>(limitCount: options.selectLimit,
+                                                     preselectedIdentifiers: options.preselectAssets,
+                                                     disableCheckRules: [])
                 let assetCollection = PhotoLibraryAssetCollection(identifier: phCollection.localIdentifier,
                                                                   localizedTitle: phCollection.localizedTitle,
                                                                   fetchResult: fetchResult,
                                                                   fetchOrder: options.orderByDate,
                                                                   isUserLibrary: isUserLibrary,
                                                                   selectOption: options.selectOptions,
-                                                                  additions: additions,
+                                                                  plugins: plugins,
                                                                   checker: checker)
                 if isUserLibrary {
                     assetCollections.insert(assetCollection, at: 0)
@@ -100,7 +100,7 @@ extension PhotoLibraryAssetCollection {
         return fetchOptions
     }
     
-    private static func createCollectionAdditions(with options: PickerOptionsInfo, isUserLibrary: Bool) -> [AssetCollectionAddition] {
+    private static func createCollectionPlugins(with options: PickerOptionsInfo, isUserLibrary: Bool) -> [AssetPlugin] {
         if !options.captureOptions.mediaOptions.isEmpty {
             return [.camera]
         } else {

@@ -8,16 +8,18 @@
 
 import Foundation
 
-public protocol AssetCollection: BidirectionalCollection {
+public protocol AssetCollection: BidirectionalCollection, IdentifiableResource where Element == AssetCollectionElement<Asset<Resource>> {
     
-    associatedtype AssetElement
+    associatedtype Resource: IdentifiableResource
     
     /// Localized title
     var localizedTitle: String { get }
+    
     /// Addition elements before asset collection
-    var prefixAdditions: [AssetCollectionAddition] { get }
+    var prefixPlugins: [AssetPlugin] { get }
     /// Addition elements after asset collection
-    var suffixAdditions: [AssetCollectionAddition] { get }
+    var suffixPlugins: [AssetPlugin] { get }
+    
     /// Prefix elements count
     var prefixCount: Int { get }
     /// Asset elements count
@@ -25,21 +27,25 @@ public protocol AssetCollection: BidirectionalCollection {
     /// Suffix elements count
     var suffixCount: Int { get }
     
-    subscript(asset index: Int) -> AssetElement { get }
+    var selectOption: PickerSelectOption { get }
     
-    var firstAsset: AssetElement? { get }
+    var checker: AssetChecker<Resource> { get }
     
-    var lastAsset: AssetElement? { get }
+    subscript(asset index: Int) -> Asset<Resource> { get }
+    
+    var firstAsset: Asset<Resource>? { get }
+    
+    var lastAsset: Asset<Resource>? { get }
 }
 
 extension AssetCollection {
     
     public var prefixCount: Int {
-        return prefixAdditions.count
+        return prefixPlugins.count
     }
     
     public var suffixCount: Int {
-        return suffixAdditions.count
+        return suffixPlugins.count
     }
 }
 

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 import Kingfisher
 
 final class PhotoAssetCell: UICollectionViewCell {
@@ -146,7 +147,7 @@ extension PhotoAssetCell {
 
 extension PhotoAssetCell {
     
-    func setContent(_ asset: PhotoAsset, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
+    func setContent(_ asset: Asset<PHAsset>, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
         task?.cancel()
         task = Task {
             do {
@@ -179,7 +180,7 @@ extension PhotoAssetCell {
         updateState(asset, options: options, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: PhotoAsset, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
+    func updateState(_ asset: Asset<PHAsset>, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
         update(options: options)
         switch asset.mediaType {
         case .photoGIF:

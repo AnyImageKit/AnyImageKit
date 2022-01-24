@@ -110,7 +110,7 @@ extension PhotoAssetCollectionViewController {
         }
         photoLibrary = library
         titleView.setTitle(library.localizedTitle)
-        toolBar.setEnable(!library.selectItems.isEmpty)
+        toolBar.setEnable(!library.selectedItems.isEmpty)
         collectionView.reloadData()
         scrollToEnd()
     }
@@ -132,7 +132,7 @@ extension PhotoAssetCollectionViewController {
         do {
             try photoLibrary.setSelected(asset: asset)
             updateVisibleCellState(current: index)
-            toolBar.setEnable(!photoLibrary.selectItems.isEmpty)
+            toolBar.setEnable(!photoLibrary.selectedItems.isEmpty)
             trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.state.isSelected, .page: AnyImagePage.pickerAsset])
         } catch {
             if let error = error as? AssetSelectedError<PHAsset> {

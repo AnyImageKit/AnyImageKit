@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class AssetChecker<Resource: IdentifiableResource> {
+final public class AssetChecker<Resource: IdentifiableResource> {
     
     private let limitCount: Int
     private let preselectedIdentifiers: [String]
