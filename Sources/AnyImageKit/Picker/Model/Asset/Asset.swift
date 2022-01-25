@@ -34,6 +34,30 @@ extension Asset: IdentifiableResource {
     }
 }
 
+// MARK: LoadableResource
+extension Asset: LoadableResource where Resource: LoadableResource {
+    
+    func loadImage(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+        resource.loadImage(options: options)
+    }
+    
+    func loadImageData(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+        resource.loadImageData(options: options)
+    }
+    
+    func loadLivePhoto(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+        resource.loadLivePhoto(options: options)
+    }
+    
+    func loadGIF(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+        resource.loadGIF(options: options)
+    }
+    
+    func loadVideo(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+        resource.loadVideo(options: options)
+    }
+}
+
 // MARK: State
 extension Asset {
     

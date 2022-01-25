@@ -1,5 +1,5 @@
 //
-//  PhotoPreviewCell.swift
+//  PreviewAssetPhotoCell.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/17.
@@ -8,17 +8,13 @@
 
 import UIKit
 
-final class PhotoPreviewCell: PreviewCell {
-    
-    /// 双击手势
-    private lazy var doubleTap: UITapGestureRecognizer = {
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(onDoubleTap(_:)))
-        doubleTap.numberOfTapsRequired = 2
-        return doubleTap
-    }()
+final class PreviewAssetPhotoCell: PreviewAssetCell {
     
     /// 双击放大图片时的目标比例
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
+    
+    /// 双击手势
+    private lazy var doubleTap: UITapGestureRecognizer = makeDoubleTap()
     
     private var task: Task<Void, Error>?
     
@@ -28,14 +24,14 @@ final class PhotoPreviewCell: PreviewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setupView()
     }
     
-    private func setupView() {
-        scrollView.delegate = self
-        // 双击手势
-        contentView.addGestureRecognizer(doubleTap)
-        singleTap.require(toFail: doubleTap)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        task?.cancel()
+        task = nil
     }
     
     /// 重置图片缩放比例
@@ -46,16 +42,26 @@ final class PhotoPreviewCell: PreviewCell {
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         accessibilityLabel = options.theme[string: .photo]
     }
+}
+
+// MARK: UI Setup
+extension PreviewAssetPhotoCell {
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        task?.cancel()
-        task = nil
+    private func setupView() {
+        scrollView.delegate = self
+        contentView.addGestureRecognizer(doubleTap)
+        singleTap.require(toFail: doubleTap)
+    }
+    
+    private func makeDoubleTap() -> UITapGestureRecognizer {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onDoubleTap(_:)))
+        gesture.numberOfTapsRequired = 2
+        return gesture
     }
 }
 
 // MARK: - Function
-extension PhotoPreviewCell {
+extension PreviewAssetPhotoCell {
     
     /// 加载图片
     func requestPhoto() {
@@ -87,7 +93,7 @@ extension PhotoPreviewCell {
 }
 
 // MARK: - Target
-extension PhotoPreviewCell {
+extension PreviewAssetPhotoCell {
     
     /// 响应双击
     @objc private func onDoubleTap(_ dbTap: UITapGestureRecognizer) {
@@ -114,7 +120,7 @@ extension PhotoPreviewCell {
 }
 
 // MARK: - UIScrollViewDelegate
-extension PhotoPreviewCell: UIScrollViewDelegate {
+extension PreviewAssetPhotoCell: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView

@@ -44,26 +44,3 @@ extension Asset where Resource == PHAsset {
         return true
     }
 }
-
-extension Asset: LoadableResource where Resource == PHAsset {
-
-    public func loadImage(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
-        resource.loadPhotoLibraryImage(options: options)
-    }
-
-    public func loadImageData(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
-        resource.loadPhotoLibraryImageData(options: options)
-    }
-
-    public func loadLivePhoto(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
-        resource.loadPhotoLibraryLivePhoto(options: options)
-    }
-
-    public func loadGIF(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
-        resource.loadPhotoLibraryGIF(options: options)
-    }
-
-    public func loadVideo(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
-        resource.loadPhotoLibraryVideo(options: options)
-    }
-}

@@ -1,5 +1,5 @@
 //
-//  PreviewCell.swift
+//  PreviewAssetCell.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/27.
@@ -7,28 +7,29 @@
 //
 
 import UIKit
+import Photos
 
-protocol PreviewCellDelegate: AnyObject {
+protocol PreviewAssetCellDelegate: AnyObject {
     
     /// 开始拖动
-    func previewCellDidBeginPan(_ cell: PreviewCell)
+    func previewCellDidBeginPan(_ cell: PreviewAssetCell)
     
     /// 拖动时回调。scale:缩放比率
-    func previewCell(_ cell: PreviewCell, didPanScale scale: CGFloat)
+    func previewCell(_ cell: PreviewAssetCell, didPanScale scale: CGFloat)
     
     /// 结束拖动
-    func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool)
+    func previewCell(_ cell: PreviewAssetCell, didEndPanWithExit isExit: Bool)
     
     /// 单击时回调
-    func previewCellDidSingleTap(_ cell: PreviewCell)
+    func previewCellDidSingleTap(_ cell: PreviewAssetCell)
     
     /// 获取工具栏的显示状态
     func previewCellGetToolBarHiddenState() -> Bool
 }
 
-class PreviewCell: UICollectionViewCell {
+class PreviewAssetCell: UICollectionViewCell {
     
-    weak var delegate: PreviewCellDelegate?
+    weak var delegate: PreviewAssetCellDelegate?
     
     var asset: AssetOld!
     var manager: PickerManager! {
@@ -48,9 +49,7 @@ class PreviewCell: UICollectionViewCell {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
-        if #available(iOS 11.0, *) {
-            view.contentInsetAdjustmentBehavior = .never
-        }
+        view.contentInsetAdjustmentBehavior = .never
         return view
     }()
     
@@ -194,10 +193,12 @@ class PreviewCell: UICollectionViewCell {
     /// 通知子类更新配置
     /// 由于 update options 方法来自协议，无法在子类重载，所以需要这个方法通知子类
     func optionsDidUpdate(options: PickerOptionsInfo) { }
+    
+    func setContent(asset: Asset<PHAsset>) { }
 }
 
 // MARK: - PickerOptionsConfigurable
-extension PreviewCell: PickerOptionsConfigurable {
+extension PreviewAssetCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         optionsDidUpdate(options: options)
@@ -206,7 +207,7 @@ extension PreviewCell: PickerOptionsConfigurable {
 }
 
 // MARK: - Private function
-extension PreviewCell {
+extension PreviewAssetCell {
     
     private func setupView() {
         contentView.addSubview(scrollView)
@@ -255,7 +256,7 @@ extension PreviewCell {
 }
 
 // MARK: - Target
-extension PreviewCell {
+extension PreviewAssetCell {
     /// 响应单击
     @objc private func onSingleTap() {
         singleTapped()
@@ -331,7 +332,7 @@ extension PreviewCell {
 }
 
 // MARK: - UIGestureRecognizerDelegate
-extension PreviewCell: UIGestureRecognizerDelegate {
+extension PreviewAssetCell: UIGestureRecognizerDelegate {
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         // 只响应pan手势

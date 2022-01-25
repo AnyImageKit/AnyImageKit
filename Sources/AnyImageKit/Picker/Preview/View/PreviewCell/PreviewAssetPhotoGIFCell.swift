@@ -1,5 +1,5 @@
 //
-//  PhotoGIFPreviewCell.swift
+//  PreviewAssetPhotoGIFCell.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/27.
@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-final class PhotoGIFPreviewCell: PreviewCell {
+final class PreviewAssetPhotoGIFCell: PreviewAssetCell {
     
     /// 取图片适屏size
     override var fitSize: CGSize {
@@ -53,7 +53,7 @@ final class PhotoGIFPreviewCell: PreviewCell {
 }
 
 // MARK: - Function
-extension PhotoGIFPreviewCell {
+extension PreviewAssetPhotoGIFCell {
     
     /// 加载 GIF
     func requestGIF() {

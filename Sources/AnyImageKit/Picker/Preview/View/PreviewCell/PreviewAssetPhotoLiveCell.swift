@@ -1,5 +1,5 @@
 //
-//  PhotoLivePreviewCell.swift
+//  PreviewAssetPhotoLiveCell.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/10/22.
@@ -9,7 +9,7 @@
 import UIKit
 import PhotosUI
 
-final class PhotoLivePreviewCell: PreviewCell {
+final class PreviewAssetPhotoLiveCell: PreviewAssetCell {
     
     private lazy var livePhotoView: PHLivePhotoView = {
         let view = PHLivePhotoView()
@@ -100,7 +100,7 @@ final class PhotoLivePreviewCell: PreviewCell {
     }
 }
 
-extension PhotoLivePreviewCell {
+extension PreviewAssetPhotoLiveCell {
     
     func requestLivePhoto() {
         let id = asset.identifier
@@ -130,7 +130,7 @@ extension PhotoLivePreviewCell {
 }
 
 // MARK: - Target
-extension PhotoLivePreviewCell {
+extension PreviewAssetPhotoLiveCell {
     
     /// 长按播放 live photo
     @objc private func onLongPress(_ gr: UILongPressGestureRecognizer) {
@@ -147,7 +147,7 @@ extension PhotoLivePreviewCell {
 }
 
 // MARK: - UIScrollViewDelegate
-extension PhotoLivePreviewCell: UIScrollViewDelegate {
+extension PreviewAssetPhotoLiveCell: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView

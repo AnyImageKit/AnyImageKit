@@ -62,7 +62,7 @@ extension PhotoPreviewController {
         guard !collectionView.visibleCells.isEmpty else { return }
         toolBar.leftButton.isHidden = true
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
+        guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewAssetCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
         
         if data.asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
             toolBar.leftButton.isHidden = false
@@ -101,7 +101,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PhotoPreviewCell else { return }
+        guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PreviewAssetPhotoCell else { return }
         data.asset._images[.edited] = success.isEdited ? photo : nil
         cell.setImage(photo)
         

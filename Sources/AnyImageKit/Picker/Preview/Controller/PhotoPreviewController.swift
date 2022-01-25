@@ -191,20 +191,20 @@ extension PhotoPreviewController {
     }
     
     private func makeCollectionView() -> UICollectionView {
-        let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = UIColor.clear
-        view.decelerationRate = UIScrollView.DecelerationRate.fast
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.backgroundColor = .clear
+        view.decelerationRate = .fast
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
-        view.delegate = self
-        view.dataSource = self
-        view.registerCell(PhotoPreviewCell.self)
-        view.registerCell(PhotoGIFPreviewCell.self)
-        view.registerCell(VideoPreviewCell.self)
-        view.registerCell(PhotoLivePreviewCell.self)
         view.isPagingEnabled = true
         view.alwaysBounceHorizontal = false
         view.isPrefetchingEnabled = false
+        view.delegate = self
+        view.dataSource = self
+        view.registerCell(PreviewAssetPhotoCell.self)
+        view.registerCell(PreviewAssetPhotoGIFCell.self)
+        view.registerCell(PreviewAssetPhotoLiveCell.self)
+        view.registerCell(PreviewAssetVideoCell.self)
         return view
     }
     
@@ -271,7 +271,7 @@ extension PhotoPreviewController {
     /// - Parameter animated: true-播放；false-暂停
     private func setGIF(animated: Bool) {
         for cell in collectionView.visibleCells {
-            if let cell = cell as? PhotoGIFPreviewCell {
+            if let cell = cell as? PreviewAssetPhotoGIFCell {
                 if animated {
                     cell.imageView.startAnimating()
                 } else {
@@ -284,7 +284,7 @@ extension PhotoPreviewController {
     /// 暂停视频
     private func stopVideo() {
         for cell in collectionView.visibleCells {
-            if let cell = cell as? VideoPreviewCell {
+            if let cell = cell as? PreviewAssetVideoCell {
                 cell.pause()
             }
         }
@@ -382,33 +382,45 @@ extension PhotoPreviewController {
 // MARK: - UICollectionViewDataSource
 extension PhotoPreviewController: UICollectionViewDataSource {
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfPhotos(in: self) ?? 0
+        return photoLibrary.assetCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
-        let cell: PreviewCell
-        data.asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
-        switch data.asset.mediaType {
+        guard let asset = photoLibrary.loadAsset(for: indexPath.item) else { return UICollectionViewCell() }
+        switch asset.mediaType {
         case .photo:
-            let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
-            photoCell.imageView.contentMode = imageScaleMode
-            photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-            cell = photoCell
-        case .video:
-            cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
+            cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
+            cell.delegate = self
+            cell.tag = indexPath.item
+            cell.manager = manager
+            return cell
         case .photoGIF:
-            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoGIFCell.self, for: indexPath)
+            cell.delegate = self
+            cell.tag = indexPath.item
+            cell.manager = manager
+            return cell
         case .photoLive:
-            cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoLiveCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
+            cell.delegate = self
+            cell.tag = indexPath.item
+            cell.manager = manager
+            return cell
+        case .video:
+            let cell = collectionView.dequeueReusableCell(PreviewAssetVideoCell.self, for: indexPath)
+            cell.imageView.contentMode = imageScaleMode
+            cell.delegate = self
+            cell.tag = indexPath.item
+            return cell
         }
-        cell.delegate = self
-        cell.asset = data.asset
-        cell.manager = manager
-        return cell
     }
 }
 
@@ -417,50 +429,16 @@ extension PhotoPreviewController: UICollectionViewDelegate {
     
     /// Cell 进入屏幕 - 请求数据
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
-        switch cell {
-        case let cell as PhotoPreviewCell:
-            if data.asset._image != nil {
-                cell.setImage(data.asset._image)
-                cell.setDownloadingProgress(1.0)
-            } else {
-                if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
-                    cell.setImage(originalImage)
-                    cell.setDownloadingProgress(1.0)
-                } else {
-                    cell.setImage(data.thumbnail)
-                    cell.requestPhoto()
-                }
-            }
-        case let cell as VideoPreviewCell:
-            if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
-                cell.setImage(originalImage)
-            } else {
-                cell.setImage(data.thumbnail)
-                cell.requestPhoto()
-            }
-            cell.requestVideo()
-        case let cell as PhotoGIFPreviewCell:
-            cell.setImage(data.thumbnail)
-            cell.requestGIF()
-        case let cell as PhotoLivePreviewCell:
-            cell.setImage(data.thumbnail)
-            cell.requestLivePhoto()
-        default:
-            break
+        guard let asset = photoLibrary.loadAsset(for: indexPath.item) else { return }
+        if let cell = cell as? PreviewAssetCell {
+            cell.setContent(asset: asset)
         }
     }
     
     /// Cell 离开屏幕 - 重设状态
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        switch cell {
-        case let cell as PreviewCell:
+        if let cell = cell as? PreviewAssetCell {
             cell.reset()
-            if !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.identifier)
-            }
-        default:
-            break
         }
     }
 }
@@ -492,22 +470,22 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     }
 }
 
-// MARK: - PreviewCellDelegate
-extension PhotoPreviewController: PreviewCellDelegate {
+// MARK: - PreviewAssetCellDelegate
+extension PhotoPreviewController: PreviewAssetCellDelegate {
     
-    func previewCellDidBeginPan(_ cell: PreviewCell) {
+    func previewCellDidBeginPan(_ cell: PreviewAssetCell) {
         delegate?.previewControllerWillDisappear(self)
         toolBarHiddenStateBeforePan = navigationBar.alpha == 0
     }
     
-    func previewCell(_ cell: PreviewCell, didPanScale scale: CGFloat) {
+    func previewCell(_ cell: PreviewAssetCell, didPanScale scale: CGFloat) {
         // 实测用 scale 的平方，效果比线性好些
         let alpha = scale * scale
         scalePresentationController?.maskAlpha = alpha
         setBar(hidden: true, isNormal: false)
     }
     
-    func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool) {
+    func previewCell(_ cell: PreviewAssetCell, didEndPanWithExit isExit: Bool) {
         if isExit {
             dismiss(animated: true, completion: nil)
             setStatusBar(hidden: false)
@@ -516,7 +494,7 @@ extension PhotoPreviewController: PreviewCellDelegate {
         }
     }
     
-    func previewCellDidSingleTap(_ cell: PreviewCell) {
+    func previewCellDidSingleTap(_ cell: PreviewAssetCell) {
         setBar(hidden: navigationBar.alpha == 1, animated: false)
     }
     
@@ -570,7 +548,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     
     /// 创建缩放型进场动画
     private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
-        let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell
+        let cell = collectionView.cellForItem(at: indexPath) as? PreviewAssetCell
         let imageView = UIImageView(image: cell?.imageView.image)
         imageView.contentMode = imageScaleMode
         imageView.clipsToBounds = true
@@ -580,7 +558,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     
     /// 创建缩放型退场动画
     private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
-        guard let cell = collectionView.visibleCells.first as? PreviewCell else {
+        guard let cell = collectionView.visibleCells.first as? PreviewAssetCell else {
             return nil
         }
         let imageView = UIImageView(image: cell.imageView.image)
