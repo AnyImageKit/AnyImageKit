@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import Photos
 
 final class PreviewAssetVideoCell: PreviewAssetContentCell {
     
@@ -16,6 +15,7 @@ final class PreviewAssetVideoCell: PreviewAssetContentCell {
     
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
+    
     private var task: Task<Void, Error>?
     
     override init(frame: CGRect) {
@@ -37,20 +37,6 @@ final class PreviewAssetVideoCell: PreviewAssetContentCell {
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         iconView.image = options.theme[icon: .videoPlay]
         accessibilityLabel = options.theme[string: .video]
-    }
-    
-    func setContent(asset: Asset<PHAsset>) {
-        task?.cancel()
-        task = Task {
-            await withThrowingTaskGroup(of: Void.self) { group in
-                group.addTask {
-                    try await self.loadImage(asset: asset)
-                }
-                group.addTask {
-                    try await self.loadVideo(asset: asset)
-                }
-            }
-        }
     }
 }
 
@@ -74,14 +60,6 @@ extension PreviewAssetVideoCell {
             size = CGSize(width: width, height: width * scale)
         }
         return size
-    }
-    
-    func reset() {
-        setPlayButton(hidden: false)
-        imageView.image = nil
-        player = nil
-        playerLayer?.removeFromSuperlayer()
-        playerLayer = nil
     }
     
     func layoutDidUpdate() {
@@ -112,9 +90,7 @@ extension PreviewAssetVideoCell {
     
     func panScale(_ scale: CGFloat) {
         sendPanEvent(state: .scale(scale))
-        UIView.animate(withDuration: 0.25) {
-            self.setPlayButton(hidden: true, animated: true)
-        }
+        setPlayButton(hidden: true, animated: true)
     }
     
     func panEnded(_ exit: Bool) {
@@ -123,29 +99,30 @@ extension PreviewAssetVideoCell {
             setPlayButton(hidden: false, animated: true)
         }
     }
-}
-
-// MARK: UI Setup
-extension PreviewAssetVideoCell {
     
-    private func setupView() {
-        addSubview(iconView)
-        iconView.snp.makeConstraints { maker in
-            maker.width.height.equalTo(80)
-            maker.center.equalToSuperview()
+    func resetContent() {
+        setPlayButton(hidden: false)
+        imageView.image = nil
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        player = nil
+    }
+    
+    func setContent<Resource>(asset: Asset<Resource>) where Resource: IdentifiableResource, Resource: LoadableResource {
+        task?.cancel()
+        task = Task {
+            await withThrowingTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    try await self.loadCover(asset: asset)
+                }
+                group.addTask {
+                    try await self.loadVideo(asset: asset)
+                }
+            }
         }
     }
     
-    private func makeIconView() -> UIImageView {
-        let view = UIImageView(frame: .zero)
-        return view
-    }
-}
-
-// MARK: - Content Setup
-extension PreviewAssetVideoCell {
-    
-    private func loadImage(asset: Asset<PHAsset>) async throws {
+    private func loadCover<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
         let targetSize = frame.size.displaySize
         for try await result in asset.loadImage(options: .init(targetSize: targetSize)) {
             switch result {
@@ -164,11 +141,11 @@ extension PreviewAssetVideoCell {
         }
     }
     
-    private func loadVideo(asset: Asset<PHAsset>) async throws {
+    private func loadVideo<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
         for try await result in asset.loadVideo() {
             switch result {
             case .progress(let progress):
-                _print("Download video from iCloud: \(progress)")
+                _print("Loading video: \(progress)")
                 updateLoadingProgress(progress)
             case .success(let loadResult):
                 switch loadResult {
@@ -181,6 +158,23 @@ extension PreviewAssetVideoCell {
                 }
             }
         }
+    }
+}
+
+// MARK: UI Setup
+extension PreviewAssetVideoCell {
+    
+    private func setupView() {
+        addSubview(iconView)
+        iconView.snp.makeConstraints { maker in
+            maker.width.height.equalTo(80)
+            maker.center.equalToSuperview()
+        }
+    }
+    
+    private func makeIconView() -> UIImageView {
+        let view = UIImageView(frame: .zero)
+        return view
     }
 }
 

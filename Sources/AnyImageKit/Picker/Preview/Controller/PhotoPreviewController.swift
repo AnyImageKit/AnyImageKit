@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import Combine
 
 protocol PhotoPreviewControllerDataSource: AnyObject {
     
@@ -86,6 +87,12 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = makeNavigationBar()
     private(set) lazy var toolBar: PickerToolBar = makeToolBar()
     private lazy var indexView: PickerPreviewIndexView = makeIndexView()
+    
+    private var disposeBag: Set<AnyCancellable> = .init() {
+        didSet {
+            print(disposeBag)
+        }
+    }
     
     let manager: PickerManager
     let photoLibrary: PhotoLibraryAssetCollection
@@ -419,16 +426,38 @@ extension PhotoPreviewController: UICollectionViewDelegate {
     
     /// Cell 进入屏幕 - 请求数据
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let asset = photoLibrary.loadAsset(for: indexPath.item) else { return }
-        if let cell = cell as? PreviewAssetContentCell {
-//            cell.setContent(asset: asset)
-        }
+        guard let asset = photoLibrary.loadAsset(for: indexPath.item), let cell = cell as? PreviewAssetContentCell else { return }
+        cell.setContent(asset: asset)
+        cell.singleTapEvent.sink { [weak self] _ in
+            guard let self = self else { return }
+            self.setBar(hidden: self.navigationBar.alpha == 1, animated: false)
+        }.store(in: &disposeBag)
+        cell.panEvent.sink { [weak self] state in
+            guard let self = self else { return }
+            switch state {
+            case .begin:
+                self.delegate?.previewControllerWillDisappear(self)
+                self.toolBarHiddenStateBeforePan = self.navigationBar.alpha == 0
+            case .scale(let scale):
+                // 实测用 scale 的平方，效果比线性好些
+                let alpha = scale * scale
+                self.scalePresentationController?.maskAlpha = alpha
+                self.setBar(hidden: true, isNormal: false)
+            case .end(let isExit):
+                if isExit {
+                    self.dismiss(animated: true, completion: nil)
+                    self.setStatusBar(hidden: false)
+                } else if !self.toolBarHiddenStateBeforePan {
+                    self.setBar(hidden: false, isNormal: false)
+                }
+            }
+        }.store(in: &disposeBag)
     }
     
     /// Cell 离开屏幕 - 重设状态
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? PreviewAssetContentCell {
-            cell.reset()
+            cell.resetContent()
         }
     }
 }
@@ -460,40 +489,6 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     }
 }
 
-/*
-// MARK: - PreviewAssetCellDelegate
-extension PhotoPreviewController: PreviewAssetCellDelegate {
-    
-    func previewCellDidBeginPan(_ cell: PreviewAssetCell) {
-        delegate?.previewControllerWillDisappear(self)
-        toolBarHiddenStateBeforePan = navigationBar.alpha == 0
-    }
-    
-    func previewCell(_ cell: PreviewAssetCell, didPanScale scale: CGFloat) {
-        // 实测用 scale 的平方，效果比线性好些
-        let alpha = scale * scale
-        scalePresentationController?.maskAlpha = alpha
-        setBar(hidden: true, isNormal: false)
-    }
-    
-    func previewCell(_ cell: PreviewAssetCell, didEndPanWithExit isExit: Bool) {
-        if isExit {
-            dismiss(animated: true, completion: nil)
-            setStatusBar(hidden: false)
-        } else if !toolBarHiddenStateBeforePan {
-            setBar(hidden: false, isNormal: false)
-        }
-    }
-    
-    func previewCellDidSingleTap(_ cell: PreviewAssetCell) {
-        setBar(hidden: navigationBar.alpha == 1, animated: false)
-    }
-    
-    func previewCellGetToolBarHiddenState() -> Bool {
-        return navigationBar.alpha == 0
-    }
-}
-*/
 // MARK: - PickerPreviewIndexViewDelegate
 extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     

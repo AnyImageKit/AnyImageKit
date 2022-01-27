@@ -15,6 +15,7 @@ class PreviewAssetContentCell: UICollectionViewCell, PreviewAssetContent {
     private let panSubject: PassthroughSubject<PreviewAssetContentPanState, Never> = .init()
     
     /// 内嵌容器
+    ///
     /// 本类不能继承 UIScrollView，因为实测 UIScrollView 遵循了 UIGestureRecognizerDelegate 协议，而本类也需要遵循此协议
     /// 若继承 UIScrollView 则会覆盖 UIScrollView 的协议实现，故只内嵌而不继承
     private(set) lazy var scrollView: UIScrollView = makeScrollView()

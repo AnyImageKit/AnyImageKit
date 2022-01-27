@@ -15,6 +15,7 @@ final class PreviewAssetPhotoCell: PreviewAssetContentCell {
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
     private lazy var doubleTap: UITapGestureRecognizer = makeDoubleTap()
+    
     private var task: Task<Void, Error>?
     
     override init(frame: CGRect) {
@@ -36,8 +37,16 @@ final class PreviewAssetPhotoCell: PreviewAssetContentCell {
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         accessibilityLabel = options.theme[string: .photo]
     }
+}
+
+// MARK: - PreviewAssetContent
+extension PreviewAssetPhotoCell {
     
-    func setContent(asset: Asset<PHAsset>) {
+    func resetContent() {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    }
+    
+    func setContent<Resource>(asset: Asset<Resource>) where Resource: IdentifiableResource, Resource: LoadableResource {
         task?.cancel()
         task = Task {
             do {
@@ -47,13 +56,25 @@ final class PreviewAssetPhotoCell: PreviewAssetContentCell {
             }
         }
     }
-}
-
-// MARK: - PreviewAssetContent
-extension PreviewAssetPhotoCell {
     
-    func reset() {
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    private func loadImage<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
+        for try await result in asset.loadImage() {
+            switch result {
+            case .progress(let progress):
+                _print("Loading Image: \(progress)")
+                updateLoadingProgress(progress)
+            case .success(let loadResult):
+                switch loadResult {
+                case .thumbnail(let image):
+                    setImage(image)
+                case .preview(let image):
+                    updateLoadingProgress(1.0)
+                    setImage(image)
+                default:
+                    break
+                }
+            }
+        }
     }
 }
 
@@ -70,29 +91,6 @@ extension PreviewAssetPhotoCell {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onDoubleTap(_:)))
         gesture.numberOfTapsRequired = 2
         return gesture
-    }
-}
-
-// MARK: - Content Setup
-extension PreviewAssetPhotoCell {
-    
-    private func loadImage(asset: Asset<PHAsset>) async throws {
-        for try await result in asset.loadImage() {
-            switch result {
-            case .progress(let progress):
-                updateLoadingProgress(progress)
-            case .success(let loadResult):
-                switch loadResult {
-                case .thumbnail(let image):
-                    setImage(image)
-                case .preview(let image):
-                    updateLoadingProgress(1.0)
-                    setImage(image)
-                default:
-                    break
-                }
-            }
-        }
     }
 }
 

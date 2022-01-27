@@ -23,7 +23,6 @@ protocol PreviewAssetContent {
     var fitSize: CGSize { get }
     var fitFrame: CGRect { get }
     
-    func reset()
     func layout()
     func layoutDidUpdate()
     
@@ -42,6 +41,9 @@ protocol PreviewAssetContent {
     
     func sendSingleTappedEvent()
     func sendPanEvent(state: PreviewAssetContentPanState)
+    
+    func resetContent()
+    func setContent<Resource>(asset: Asset<Resource>) where Resource: IdentifiableResource, Resource: LoadableResource
 }
 
 extension PreviewAssetContent where Self: UICollectionViewCell {
@@ -76,10 +78,6 @@ extension PreviewAssetContent where Self: UICollectionViewCell {
         return CGRect(x: 0, y: y, width: size.width, height: size.height)
     }
     
-    func reset() {
-        
-    }
-    
     func layout() {
         scrollView.frame = contentView.bounds
         scrollView.setZoomScale(1.0, animated: false)
@@ -108,7 +106,7 @@ extension PreviewAssetContent where Self: UICollectionViewCell {
     }
     
     func updateLoadingProgress(_ progress: Double) {
-        loadingView.isHidden = progress == 1
+        loadingView.isHidden = progress == 1.0
         loadingView.setProgress(progress)
         loadingProgressDidUpdate(progress)
     }
@@ -131,6 +129,14 @@ extension PreviewAssetContent where Self: UICollectionViewCell {
     
     func panEnded(_ exit: Bool) {
         sendPanEvent(state: .end(exit))
+    }
+    
+    func resetContent() {
+        
+    }
+    
+    func setContent<Resource>(asset: Asset<Resource>) where Resource: IdentifiableResource, Resource: LoadableResource {
+        
     }
 }
 

@@ -15,6 +15,8 @@ final class PreviewAssetPhotoLiveCell: PreviewAssetContentCell {
     private lazy var livePhotoTipView: LivePhotoTipView = makeLivePhotoTipView()
     private lazy var longPress: UILongPressGestureRecognizer = makeLongPressGesture()
     
+    private var task: Task<Void, Error>?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -71,6 +73,37 @@ extension PreviewAssetPhotoLiveCell {
             }
         }
     }
+    
+    func setContent<Resource>(asset: Asset<Resource>) where Resource: IdentifiableResource, Resource: LoadableResource {
+        task?.cancel()
+        task = Task {
+            do {
+                try await loadLivePhoto(asset: asset)
+            } catch {
+                _print(error)
+            }
+        }
+    }
+    
+    private func loadLivePhoto<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
+        for try await result in asset.loadLivePhoto() {
+            switch result {
+            case .progress(let progress):
+                _print("Loading Live Photo: \(progress)")
+                updateLoadingProgress(progress)
+            case .success(let loadResult):
+                switch loadResult {
+                case .thumbnail(let image):
+                    setImage(image)
+                case .preview(let image):
+                    updateLoadingProgress(1.0)
+                    setImage(image)
+                default:
+                    break
+                }
+            }
+        }
+    }
 }
 
 // MARK: UI Setup
@@ -108,35 +141,6 @@ extension PreviewAssetPhotoLiveCell {
         gesture.minimumPressDuration = 0.3
         return gesture
     }
-}
-
-extension PreviewAssetPhotoLiveCell {
-    
-//    func requestLivePhoto() {
-//        let id = asset.identifier
-//        DispatchQueue.global().async { [weak self] in
-//            guard let self = self else { return }
-//            let options = PhotoLiveFetchOptions(targetSize: PHImageManagerMaximumSize)  { (progress, error, isAtEnd, info) in
-//                DispatchQueue.main.async { [weak self] in
-//                    guard let self = self, self.asset.identifier == id else { return }
-//                    _print("Download live photo from iCloud: \(progress)")
-//                    self.setDownloadingProgress(progress)
-//                }
-//            }
-//            self.manager.requestPhotoLive(for: self.asset.phAsset, options: options) { result in
-//                switch result {
-//                case .success(let response):
-//                    DispatchQueue.main.async { [weak self] in
-//                        guard let self = self, self.asset.identifier == id else { return }
-//                        self.livePhotoView.livePhoto = response.livePhoto
-//                        self.setDownloadingProgress(1.0)
-//                    }
-//                case .failure(let error):
-//                    _print(error.localizedDescription)
-//                }
-//            }
-//        }
-//    }
 }
 
 // MARK: - Action
