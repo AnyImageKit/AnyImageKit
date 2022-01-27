@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Combine
+import Photos
 
 enum PreviewAssetContentPanState {
     
@@ -34,6 +34,14 @@ protocol PreviewAssetContent {
     var loadingView: LoadingiCloudView { get }
     func updateLoadingProgress(_ progress: Double)
     func loadingProgressDidUpdate(_ progress: Double)
+    
+    func singleTapped()
+    func panBegin()
+    func panScale(_ scale: CGFloat)
+    func panEnded(_ exit: Bool)
+    
+    func sendSingleTappedEvent()
+    func sendPanEvent(state: PreviewAssetContentPanState)
 }
 
 extension PreviewAssetContent where Self: UICollectionViewCell {
@@ -107,6 +115,22 @@ extension PreviewAssetContent where Self: UICollectionViewCell {
     
     func loadingProgressDidUpdate(_ progress: Double) {
         
+    }
+    
+    func singleTapped() {
+        sendSingleTappedEvent()
+    }
+    
+    func panBegin() {
+        sendPanEvent(state: .begin)
+    }
+    
+    func panScale(_ scale: CGFloat) {
+        sendPanEvent(state: .scale(scale))
+    }
+    
+    func panEnded(_ exit: Bool) {
+        sendPanEvent(state: .end(exit))
     }
 }
 

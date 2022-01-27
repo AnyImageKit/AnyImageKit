@@ -395,18 +395,15 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             cell.imageView.contentMode = imageScaleMode
             cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
             cell.tag = indexPath.item
-            cell.manager = manager
             return cell
         case .photoGIF:
             let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoGIFCell.self, for: indexPath)
             cell.tag = indexPath.item
-            cell.manager = manager
             return cell
         case .photoLive:
             let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoLiveCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
             cell.tag = indexPath.item
-            cell.manager = manager
             return cell
         case .video:
             let cell = collectionView.dequeueReusableCell(PreviewAssetVideoCell.self, for: indexPath)
@@ -423,14 +420,14 @@ extension PhotoPreviewController: UICollectionViewDelegate {
     /// Cell 进入屏幕 - 请求数据
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let asset = photoLibrary.loadAsset(for: indexPath.item) else { return }
-        if let cell = cell as? PreviewAssetCell {
-            cell.setContent(asset: asset)
+        if let cell = cell as? PreviewAssetContentCell {
+//            cell.setContent(asset: asset)
         }
     }
     
     /// Cell 离开屏幕 - 重设状态
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? PreviewAssetCell {
+        if let cell = cell as? PreviewAssetContentCell {
             cell.reset()
         }
     }
@@ -542,7 +539,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     
     /// 创建缩放型进场动画
     private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
-        let cell = collectionView.cellForItem(at: indexPath) as? PreviewAssetCell
+        let cell = collectionView.cellForItem(at: indexPath) as? PreviewAssetContentCell
         let imageView = UIImageView(image: cell?.imageView.image)
         imageView.contentMode = imageScaleMode
         imageView.clipsToBounds = true
@@ -552,7 +549,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     
     /// 创建缩放型退场动画
     private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
-        guard let cell = collectionView.visibleCells.first as? PreviewAssetCell else {
+        guard let cell = collectionView.visibleCells.first as? PreviewAssetContentCell else {
             return nil
         }
         let imageView = UIImageView(image: cell.imageView.image)

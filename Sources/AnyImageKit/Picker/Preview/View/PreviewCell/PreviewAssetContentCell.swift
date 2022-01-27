@@ -1,5 +1,5 @@
 //
-//  PreviewAssetCell.swift
+//  PreviewAssetContentCell.swift
 //  AnyImageKit
 //
 //  Created by 蒋惠 on 2019/9/27.
@@ -7,19 +7,9 @@
 //
 
 import UIKit
-import Photos
 import Combine
 
-class PreviewAssetCell: UICollectionViewCell, PreviewAssetContent {
-    
-    var asset: AssetOld!
-    var manager: PickerManager! {
-        didSet {
-            if oldValue == nil {
-                update(options: manager.options)
-            }
-        }
-    }
+class PreviewAssetContentCell: UICollectionViewCell, PreviewAssetContent {
     
     private let sinageTapSubject: PassthroughSubject<Void, Never> = .init()
     private let panSubject: PassthroughSubject<PreviewAssetContentPanState, Never> = .init()
@@ -63,32 +53,25 @@ class PreviewAssetCell: UICollectionViewCell, PreviewAssetContent {
         }
     }
     
-    // MARK: - Override
-    
-    func singleTapped() {
-        sinageTapSubject.send()
-    }
-    
-    func panBegin() {
-        panSubject.send(.begin)
-    }
-    
-    func panScale(_ scale: CGFloat) {
-        panSubject.send(.scale(scale))
-    }
-    
-    func panEnded(_ exit: Bool) {
-        panSubject.send(.end(exit))
-    }
-    
     /// 通知子类更新配置
     /// 由于 update options 方法来自协议，无法在子类重载，所以需要这个方法通知子类
     func optionsDidUpdate(options: PickerOptionsInfo) { }
-    
-    func setContent(asset: Asset<PHAsset>) { }
 }
 
-extension PreviewAssetCell {
+// MARK: - PreviewAssetContent
+extension PreviewAssetContentCell {
+    
+    func sendSingleTappedEvent() {
+        sinageTapSubject.send()
+    }
+    
+    func sendPanEvent(state: PreviewAssetContentPanState) {
+        panSubject.send(state)
+    }
+}
+
+// MARK: - Publisher
+extension PreviewAssetContentCell {
     
     var singleTapEvent: AnyPublisher<Void, Never> {
         sinageTapSubject.eraseToAnyPublisher()
@@ -100,7 +83,7 @@ extension PreviewAssetCell {
 }
 
 // MARK: - PickerOptionsConfigurable
-extension PreviewAssetCell: PickerOptionsConfigurable {
+extension PreviewAssetContentCell: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
         optionsDidUpdate(options: options)
@@ -108,8 +91,8 @@ extension PreviewAssetCell: PickerOptionsConfigurable {
     }
 }
 
-// MARK: - View Setup
-extension PreviewAssetCell {
+// MARK: - UI Setup
+extension PreviewAssetContentCell {
     
     private func setupView() {
         isAccessibilityElement = true
@@ -158,13 +141,12 @@ extension PreviewAssetCell {
 }
 
 // MARK: - Action
-extension PreviewAssetCell {
-    /// 响应单击
+extension PreviewAssetContentCell {
+    
     @objc private func onSingleTap(_ tap: UITapGestureRecognizer) {
         singleTapped()
     }
     
-    /// 响应拖动
     @objc private func onPan(_ pan: UIPanGestureRecognizer) {
         guard imageView.image != nil else {
             return
@@ -175,12 +157,12 @@ extension PreviewAssetCell {
             beganTouch = pan.location(in: scrollView)
             panBegin()
         case .changed:
-            let (frame, scale) = panResult(pan)
+            let (frame, scale) = calculatePanResult(pan)
             imageView.frame = frame
             // 通知代理，发生了缩放。代理可依scale值改变背景蒙板alpha值
             panScale(scale)
         case .ended, .cancelled:
-            let (frame, _) = panResult(pan)
+            let (frame, _) = calculatePanResult(pan)
             imageView.frame = frame
             if pan.velocity(in: self).y > 0 {
                 // dismiss
@@ -194,7 +176,7 @@ extension PreviewAssetCell {
         }
     }
     
-    private func panResult(_ pan: UIPanGestureRecognizer) -> (CGRect, CGFloat) {
+    private func calculatePanResult(_ pan: UIPanGestureRecognizer) -> (CGRect, CGFloat) {
         // 拖动偏移量
         let translation = pan.translation(in: scrollView)
         let currentTouch = pan.location(in: scrollView)
@@ -235,7 +217,7 @@ extension PreviewAssetCell {
 }
 
 // MARK: - UIGestureRecognizerDelegate
-extension PreviewAssetCell: UIGestureRecognizerDelegate {
+extension PreviewAssetContentCell: UIGestureRecognizerDelegate {
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         // 只响应pan手势

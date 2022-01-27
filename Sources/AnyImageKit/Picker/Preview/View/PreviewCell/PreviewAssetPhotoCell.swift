@@ -9,14 +9,12 @@
 import UIKit
 import Photos
 
-final class PreviewAssetPhotoCell: PreviewAssetCell {
+final class PreviewAssetPhotoCell: PreviewAssetContentCell {
     
-    /// 双击放大图片时的目标比例
+    /// Scale ratio when Double Tap
     var imageZoomScaleForDoubleTap: CGFloat = 2.0
     
-    /// 双击手势
     private lazy var doubleTap: UITapGestureRecognizer = makeDoubleTap()
-    
     private var task: Task<Void, Error>?
     
     override init(frame: CGRect) {
@@ -35,16 +33,11 @@ final class PreviewAssetPhotoCell: PreviewAssetCell {
         task = nil
     }
     
-    /// 重置图片缩放比例
-    func reset() {
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-    }
-    
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         accessibilityLabel = options.theme[string: .photo]
     }
     
-    override func setContent(asset: Asset<PHAsset>) {
+    func setContent(asset: Asset<PHAsset>) {
         task?.cancel()
         task = Task {
             do {
@@ -53,6 +46,14 @@ final class PreviewAssetPhotoCell: PreviewAssetCell {
                 _print(error)
             }
         }
+    }
+}
+
+// MARK: - PreviewAssetContent
+extension PreviewAssetPhotoCell {
+    
+    func reset() {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
 }
 

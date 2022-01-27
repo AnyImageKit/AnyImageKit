@@ -9,9 +9,16 @@
 import UIKit
 import Kingfisher
 
-final class PreviewAssetPhotoGIFCell: PreviewAssetCell {
+final class PreviewAssetPhotoGIFCell: PreviewAssetContentCell {
     
-    /// 取图片适屏size
+    override func optionsDidUpdate(options: PickerOptionsInfo) {
+        accessibilityLabel = options.theme[string: .photo]
+    }
+}
+
+// MARK: PreviewAssetContent
+extension PreviewAssetPhotoGIFCell {
+    
     var fitSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
         let screenSize = ScreenHelper.mainBounds.size
@@ -23,7 +30,6 @@ final class PreviewAssetPhotoGIFCell: PreviewAssetCell {
         return image.size
     }
     
-    /// 取图片适屏frame
     var fitFrame: CGRect {
         let size = fitSize
         let x = (scrollView.bounds.width - size.width) > 0 ? (scrollView.bounds.width - size.width) * 0.5 : 0
@@ -36,36 +42,32 @@ final class PreviewAssetPhotoGIFCell: PreviewAssetCell {
         view.contentMode = .scaleToFill
         return view
     }
-    
-    override func optionsDidUpdate(options: PickerOptionsInfo) {
-        accessibilityLabel = options.theme[string: .photo]
-    }
 }
 
 // MARK: - Function
 extension PreviewAssetPhotoGIFCell {
     
     /// 加载 GIF
-    func requestGIF() {
-        let id = asset.identifier
-        let options = PhotoGIFFetchOptions() { (progress, error, isAtEnd, info) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self, self.asset.identifier == id else { return }
-                _print("Download GIF from iCloud: \(progress)")
-                self.updateLoadingProgress(progress)
-            }
-        }
-        manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
-            guard let self = self else { return }
-            switch result {
-            case .success(let response):
-                guard self.asset.identifier == id else { return }
-                self.imageView.image = response.image
-                self.imageView.frame = self.fitFrame
-                self.updateLoadingProgress(1.0)
-            case .failure(let error):
-                _print(error)
-            }
-        }
-    }
+//    func requestGIF() {
+//        let id = asset.identifier
+//        let options = PhotoGIFFetchOptions() { (progress, error, isAtEnd, info) in
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self = self, self.asset.identifier == id else { return }
+//                _print("Download GIF from iCloud: \(progress)")
+//                self.updateLoadingProgress(progress)
+//            }
+//        }
+//        manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
+//            guard let self = self else { return }
+//            switch result {
+//            case .success(let response):
+//                guard self.asset.identifier == id else { return }
+//                self.imageView.image = response.image
+//                self.imageView.frame = self.fitFrame
+//                self.updateLoadingProgress(1.0)
+//            case .failure(let error):
+//                _print(error)
+//            }
+//        }
+//    }
 }

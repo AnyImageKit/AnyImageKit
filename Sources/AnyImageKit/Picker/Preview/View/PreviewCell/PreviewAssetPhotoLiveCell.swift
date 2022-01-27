@@ -9,7 +9,7 @@
 import UIKit
 import PhotosUI
 
-final class PreviewAssetPhotoLiveCell: PreviewAssetCell {
+final class PreviewAssetPhotoLiveCell: PreviewAssetContentCell {
     
     private lazy var livePhotoView: PHLivePhotoView = makeLivePhotoView()
     private lazy var livePhotoTipView: LivePhotoTipView = makeLivePhotoTipView()
@@ -30,42 +30,8 @@ final class PreviewAssetPhotoLiveCell: PreviewAssetCell {
         livePhotoView.livePhoto = nil
     }
     
-    
-    
-//    override func singleTapped() {
-//        super.singleTapped()
-//        if let hidden = delegate?.previewCellGetToolBarHiddenState(), loadingView.isHidden {
-//            livePhotoTipView.isHidden = hidden
-//        }
-//    }
-    
-    override func panBegin() {
-        super.panBegin()
-        livePhotoView.isHidden = true
-        livePhotoTipView.isHidden = true
-    }
-    
-    override func panEnded(_ exit: Bool) {
-        super.panEnded(exit)
-        if !exit {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.25) { [weak self] in
-                guard let self = self else { return }
-                self.livePhotoView.isHidden = false
-//                if let hidden = self.delegate?.previewCellGetToolBarHiddenState() {
-//                    self.livePhotoTipView.isHidden = hidden
-//                }
-            }
-        }
-    }
-    
-    
-    
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         accessibilityLabel = options.theme[string: .livePhoto]
-    }
-    
-    override func setContent(asset: Asset<PHAsset>) {
-        
     }
 }
 
@@ -78,6 +44,32 @@ extension PreviewAssetPhotoLiveCell {
     
     func loadingProgressDidUpdate(_ progress: Double) {
         livePhotoTipView.isHidden = progress != 1
+    }
+    
+    func singleTapped() {
+        sendSingleTappedEvent()
+//        if let hidden = delegate?.previewCellGetToolBarHiddenState(), loadingView.isHidden {
+//            livePhotoTipView.isHidden = hidden
+//        }
+    }
+    
+    func panBegin() {
+        sendPanEvent(state: .begin)
+        livePhotoView.isHidden = true
+        livePhotoTipView.isHidden = true
+    }
+    
+    func panEnded(_ exit: Bool) {
+        sendPanEvent(state: .end(exit))
+        if !exit {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.25) { [weak self] in
+                guard let self = self else { return }
+                self.livePhotoView.isHidden = false
+//                if let hidden = self.delegate?.previewCellGetToolBarHiddenState() {
+//                    self.livePhotoTipView.isHidden = hidden
+//                }
+            }
+        }
     }
 }
 

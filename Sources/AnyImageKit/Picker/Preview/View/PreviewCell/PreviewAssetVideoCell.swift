@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import Photos
 
-final class PreviewAssetVideoCell: PreviewAssetCell {
+final class PreviewAssetVideoCell: PreviewAssetContentCell {
     
     private lazy var iconView: UIImageView = makeIconView()
     
@@ -34,49 +34,12 @@ final class PreviewAssetVideoCell: PreviewAssetCell {
         task = nil
     }
     
-    /// 单击事件触发时，处理播放和暂停的逻辑
-    override func singleTapped() {
-        let toolBarIsHidden = /* delegate?.previewCellGetToolBarHiddenState() ??*/ true
-        if player == nil {
-            super.singleTapped()
-        } else {
-            if !toolBarIsHidden && isPlaying { // 工具栏展示 && 在播放视频 -> 暂停视频
-                player?.pause()
-            } else if toolBarIsHidden && !isPlaying { // 工具栏隐藏 && 未播放视频 -> 播放视频
-                player?.play()
-            } else {
-                super.singleTapped()
-                if isPlaying {
-                    player?.pause()
-                } else {
-                    player?.play()
-                }
-            }
-        }
-        
-        self.setPlayButton(hidden: isPlaying)
-    }
-    
-    override func panScale(_ scale: CGFloat) {
-        super.panScale(scale)
-        UIView.animate(withDuration: 0.25) {
-            self.setPlayButton(hidden: true, animated: true)
-        }
-    }
-    
-    override func panEnded(_ exit: Bool) {
-        super.panEnded(exit)
-        if !exit && !isPlaying {
-            self.setPlayButton(hidden: false, animated: true)
-        }
-    }
-    
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         iconView.image = options.theme[icon: .videoPlay]
         accessibilityLabel = options.theme[string: .video]
     }
     
-    override func setContent(asset: Asset<PHAsset>) {
+    func setContent(asset: Asset<PHAsset>) {
         task?.cancel()
         task = Task {
             await withThrowingTaskGroup(of: Void.self) { group in
@@ -123,6 +86,42 @@ extension PreviewAssetVideoCell {
     
     func layoutDidUpdate() {
         playerLayer?.frame = imageView.bounds
+    }
+    
+    func singleTapped() {
+        let toolBarIsHidden = /* delegate?.previewCellGetToolBarHiddenState() ??*/ true
+        if player == nil {
+            sendSingleTappedEvent()
+        } else {
+            if !toolBarIsHidden && isPlaying { // 工具栏展示 && 在播放视频 -> 暂停视频
+                player?.pause()
+            } else if toolBarIsHidden && !isPlaying { // 工具栏隐藏 && 未播放视频 -> 播放视频
+                player?.play()
+            } else {
+                sendSingleTappedEvent()
+                if isPlaying {
+                    player?.pause()
+                } else {
+                    player?.play()
+                }
+            }
+        }
+        
+        self.setPlayButton(hidden: isPlaying)
+    }
+    
+    func panScale(_ scale: CGFloat) {
+        sendPanEvent(state: .scale(scale))
+        UIView.animate(withDuration: 0.25) {
+            self.setPlayButton(hidden: true, animated: true)
+        }
+    }
+    
+    func panEnded(_ exit: Bool) {
+        sendPanEvent(state: .end(exit))
+        if !exit && !isPlaying {
+            setPlayButton(hidden: false, animated: true)
+        }
     }
 }
 
