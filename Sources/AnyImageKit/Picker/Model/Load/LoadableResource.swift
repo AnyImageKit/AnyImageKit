@@ -12,11 +12,20 @@ import Photos
 
 protocol LoadableResource {
     
+    static var preferredMaximumSize: CGSize { get }
+    
     func loadImage(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error>
     func loadImageData(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error>
     func loadLivePhoto(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error>
     func loadGIF(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error>
     func loadVideo(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error>
+}
+
+extension LoadableResource {
+    
+    static var preferredOptions: ResourceLoadOptions {
+        return .init(targetSize: preferredMaximumSize)
+    }
 }
 
 public enum LoadingResult<Success> {
@@ -50,22 +59,11 @@ public struct ResourceLoadOptions {
     public let isNetworkAccessAllowed: Bool
     
     public init(targetSize: CGSize,
-                contentMode: ResourceContentMode,
-                isNetworkAccessAllowed: Bool) {
+                contentMode: ResourceContentMode = .aspectFill,
+                isNetworkAccessAllowed: Bool = true) {
         self.targetSize = targetSize
         self.contentMode = contentMode
         self.isNetworkAccessAllowed = isNetworkAccessAllowed
-    }
-}
-
-extension ResourceLoadOptions {
-    
-    static func library(targetSize: CGSize = PHImageManagerMaximumSize,
-                        contentMode: ResourceContentMode = .aspectFill,
-                        isNetworkAccessAllowed: Bool = true) -> ResourceLoadOptions {
-        return ResourceLoadOptions(targetSize: targetSize,
-                                   contentMode: contentMode,
-                                   isNetworkAccessAllowed: isNetworkAccessAllowed)
     }
 }
 

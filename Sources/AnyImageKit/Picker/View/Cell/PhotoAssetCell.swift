@@ -152,8 +152,7 @@ extension PhotoAssetCell {
         task = Task {
             do {
                 let targetSize = frame.size.displaySize
-                let options = ResourceLoadOptions.library(targetSize: targetSize)
-                for try await result in asset.loadImage(options: options) {
+                for try await result in asset.loadImage(options: .init(targetSize: targetSize)) {
                     guard !Task.isCancelled else {
                         print("\(String(describing: task)) isCancelled")
                         return

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 /// A wapper for manage Real Resource
 public struct Asset<Resource: IdentifiableResource>: CheckableResource {
@@ -37,23 +38,27 @@ extension Asset: IdentifiableResource {
 // MARK: LoadableResource
 extension Asset: LoadableResource where Resource: LoadableResource {
     
-    func loadImage(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+    static var preferredMaximumSize: CGSize {
+        Resource.preferredMaximumSize
+    }
+    
+    func loadImage(options: ResourceLoadOptions = preferredOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         resource.loadImage(options: options)
     }
     
-    func loadImageData(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+    func loadImageData(options: ResourceLoadOptions = preferredOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         resource.loadImageData(options: options)
     }
     
-    func loadLivePhoto(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+    func loadLivePhoto(options: ResourceLoadOptions = preferredOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         resource.loadLivePhoto(options: options)
     }
     
-    func loadGIF(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+    func loadGIF(options: ResourceLoadOptions = preferredOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         resource.loadGIF(options: options)
     }
     
-    func loadVideo(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
+    func loadVideo(options: ResourceLoadOptions = preferredOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         resource.loadVideo(options: options)
     }
 }

@@ -151,9 +151,6 @@ extension PhotoPreviewController {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        NotificationCenter.default.addObserver(self, selector: #selector(previewCellDidDownloadResource(_:)), name: .previewCellDidDownloadResource, object: nil)
-        #endif
     }
 }
 
@@ -397,27 +394,23 @@ extension PhotoPreviewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
             cell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-            cell.delegate = self
             cell.tag = indexPath.item
             cell.manager = manager
             return cell
         case .photoGIF:
             let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoGIFCell.self, for: indexPath)
-            cell.delegate = self
             cell.tag = indexPath.item
             cell.manager = manager
             return cell
         case .photoLive:
             let cell = collectionView.dequeueReusableCell(PreviewAssetPhotoLiveCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
-            cell.delegate = self
             cell.tag = indexPath.item
             cell.manager = manager
             return cell
         case .video:
             let cell = collectionView.dequeueReusableCell(PreviewAssetVideoCell.self, for: indexPath)
             cell.imageView.contentMode = imageScaleMode
-            cell.delegate = self
             cell.tag = indexPath.item
             return cell
         }
@@ -470,6 +463,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     }
 }
 
+/*
 // MARK: - PreviewAssetCellDelegate
 extension PhotoPreviewController: PreviewAssetCellDelegate {
     
@@ -502,7 +496,7 @@ extension PhotoPreviewController: PreviewAssetCellDelegate {
         return navigationBar.alpha == 0
     }
 }
-
+*/
 // MARK: - PickerPreviewIndexViewDelegate
 extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     

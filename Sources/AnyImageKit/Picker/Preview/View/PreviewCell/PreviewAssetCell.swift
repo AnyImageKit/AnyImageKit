@@ -8,28 +8,9 @@
 
 import UIKit
 import Photos
+import Combine
 
-protocol PreviewAssetCellDelegate: AnyObject {
-    
-    /// 开始拖动
-    func previewCellDidBeginPan(_ cell: PreviewAssetCell)
-    
-    /// 拖动时回调。scale:缩放比率
-    func previewCell(_ cell: PreviewAssetCell, didPanScale scale: CGFloat)
-    
-    /// 结束拖动
-    func previewCell(_ cell: PreviewAssetCell, didEndPanWithExit isExit: Bool)
-    
-    /// 单击时回调
-    func previewCellDidSingleTap(_ cell: PreviewAssetCell)
-    
-    /// 获取工具栏的显示状态
-    func previewCellGetToolBarHiddenState() -> Bool
-}
-
-class PreviewAssetCell: UICollectionViewCell {
-    
-    weak var delegate: PreviewAssetCellDelegate?
+class PreviewAssetCell: UICollectionViewCell, PreviewAssetContent {
     
     var asset: AssetOld!
     var manager: PickerManager! {
@@ -40,74 +21,17 @@ class PreviewAssetCell: UICollectionViewCell {
         }
     }
     
-    var isDownloaded: Bool = false
+    private let sinageTapSubject: PassthroughSubject<Void, Never> = .init()
+    private let panSubject: PassthroughSubject<PreviewAssetContentPanState, Never> = .init()
     
     /// 内嵌容器
     /// 本类不能继承 UIScrollView，因为实测 UIScrollView 遵循了 UIGestureRecognizerDelegate 协议，而本类也需要遵循此协议
     /// 若继承 UIScrollView 则会覆盖 UIScrollView 的协议实现，故只内嵌而不继承
-    private(set) lazy var scrollView: UIScrollView = {
-        let view = UIScrollView()
-        view.showsVerticalScrollIndicator = false
-        view.showsHorizontalScrollIndicator = false
-        view.contentInsetAdjustmentBehavior = .never
-        return view
-    }()
-    
-    /// 显示图像
-    lazy var imageView: UIImageView = {
-        let view = UIImageView(frame: .zero)
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    /// 下载进度
-    private(set) lazy var iCloudView: LoadingiCloudView = {
-        let view = LoadingiCloudView(frame: .zero)
-        view.isHidden = true
-        return view
-    }()
-    
-    /// 单击手势
-    private(set) lazy var singleTap: UITapGestureRecognizer = {
-        return UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
-    }()
-    
-    /// 拖动手势
-    private(set) lazy var pan: UIPanGestureRecognizer = {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
-        pan.delegate = self
-        return pan
-    }()
-    
-    /// 计算contentSize应处于的中心位置
-    var centerOfContentSize: CGPoint {
-        let deltaWidth = bounds.width - scrollView.contentSize.width
-        let offsetX = deltaWidth > 0 ? deltaWidth * 0.5 : 0
-        let deltaHeight = bounds.height - scrollView.contentSize.height
-        let offsetY = deltaHeight > 0 ? deltaHeight * 0.5 : 0
-        return CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
-                       y: scrollView.contentSize.height * 0.5 + offsetY)
-    }
-    
-    /// 取图片适屏size
-    var fitSize: CGSize {
-        guard let image = imageView.image else { return CGSize.zero }
-        let screenSize = ScreenHelper.mainBounds.size
-        let scale = image.size.height / image.size.width
-        var size = CGSize(width: screenSize.width, height: scale * screenSize.width)
-        if size.width > size.height {
-            size.width = size.width * screenSize.height / size.height
-            size.height = screenSize.height
-        }
-        return size
-    }
-    
-    /// 取图片适屏frame
-    var fitFrame: CGRect {
-        let size = fitSize
-        let y = (scrollView.bounds.height - size.height) > 0 ? (scrollView.bounds.height - size.height) * 0.5 : 0
-        return CGRect(x: 0, y: y, width: size.width, height: size.height)
-    }
+    private(set) lazy var scrollView: UIScrollView = makeScrollView()
+    private(set) lazy var imageView: UIImageView = makeImageView()
+    private(set) lazy var loadingView: LoadingiCloudView = makeLoadingView()
+    private(set) lazy var singleTap: UITapGestureRecognizer = makeSingleTapGesture()
+    private(set) lazy var pan: UIPanGestureRecognizer = makePanGesture()
     
     /// 记录pan手势开始时imageView的位置
     private var beganFrame = CGRect.zero
@@ -117,29 +41,20 @@ class PreviewAssetCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clear
         setupView()
-        isAccessibilityElement = true
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setupView()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        iCloudView.reset()
+        loadingView.reset()
     }
     
     // MARK: - Function
-    
-    /// 设置图片
-    func setImage(_ image: UIImage?) {
-        imageView.image = image
-        if image != nil {
-            layout()
-        }
-    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -148,46 +63,22 @@ class PreviewAssetCell: UICollectionViewCell {
         }
     }
     
-    /// 重新布局
-    internal func layout() {
-        scrollView.frame = contentView.bounds
-        scrollView.setZoomScale(1.0, animated: false)
-        imageView.frame = fitFrame
-        let minZoomScale = getDefaultScale()
-        let maxZoomScale = getMaxZoomScale(with: minZoomScale)
-        scrollView.minimumZoomScale = minZoomScale
-        scrollView.maximumZoomScale = maxZoomScale
-        scrollView.setZoomScale(minZoomScale, animated: false)
-    }
-    
-    /// 设置 iCloud 下载进度
-    internal func setDownloadingProgress(_ progress: Double) {
-        isDownloaded = progress == 1
-        iCloudView.isHidden = progress == 1
-        iCloudView.setProgress(progress)
-        if progress == 1 {
-            NotificationCenter.default.post(name: .previewCellDidDownloadResource, object: asset)
-        }
-    }
-    
     // MARK: - Override
     
-    func reset() { }
-    
     func singleTapped() {
-        delegate?.previewCellDidSingleTap(self)
+        sinageTapSubject.send()
     }
     
     func panBegin() {
-        delegate?.previewCellDidBeginPan(self)
+        panSubject.send(.begin)
     }
     
     func panScale(_ scale: CGFloat) {
-        delegate?.previewCell(self, didPanScale: scale)
+        panSubject.send(.scale(scale))
     }
     
     func panEnded(_ exit: Bool) {
-        delegate?.previewCell(self, didEndPanWithExit: exit)
+        panSubject.send(.end(exit))
     }
     
     /// 通知子类更新配置
@@ -195,6 +86,17 @@ class PreviewAssetCell: UICollectionViewCell {
     func optionsDidUpdate(options: PickerOptionsInfo) { }
     
     func setContent(asset: Asset<PHAsset>) { }
+}
+
+extension PreviewAssetCell {
+    
+    var singleTapEvent: AnyPublisher<Void, Never> {
+        sinageTapSubject.eraseToAnyPublisher()
+    }
+    
+    var panEvent: AnyPublisher<PreviewAssetContentPanState, Never> {
+        panSubject.eraseToAnyPublisher()
+    }
 }
 
 // MARK: - PickerOptionsConfigurable
@@ -206,15 +108,17 @@ extension PreviewAssetCell: PickerOptionsConfigurable {
     }
 }
 
-// MARK: - Private function
+// MARK: - View Setup
 extension PreviewAssetCell {
     
     private func setupView() {
+        isAccessibilityElement = true
+        backgroundColor = UIColor.clear
         contentView.addSubview(scrollView)
         scrollView.addSubview(imageView)
-        contentView.addSubview(iCloudView)
+        contentView.addSubview(loadingView)
         
-        iCloudView.snp.makeConstraints { maker in
+        loadingView.snp.makeConstraints { maker in
             maker.top.equalToSuperview().offset(100)
             maker.left.equalToSuperview().offset(10)
             maker.height.equalTo(25)
@@ -226,39 +130,37 @@ extension PreviewAssetCell {
         scrollView.addGestureRecognizer(pan)
     }
     
-    /// 获取缩放比例
-    private func getDefaultScale() -> CGFloat {
-        guard let image = imageView.image else { return 1.0 }
-        let width = scrollView.bounds.width
-        let scale = image.size.height / image.size.width
-        let size = CGSize(width: width, height: scale * width)
-        let screenSize = ScreenHelper.mainBounds.size
-        if size.width > size.height {
-            return size.height / screenSize.height
-        }
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            let height = scrollView.bounds.height
-            let scale = image.size.width / image.size.height
-            let size = CGSize(width: height * scale, height: height)
-            if size.height > size.width {
-                return size.width / screenSize.width
-            }
-        }
-        return 1.0
+    private func makeScrollView() -> UIScrollView {
+        let view = UIScrollView()
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        view.contentInsetAdjustmentBehavior = .never
+        return view
     }
     
-    private func getMaxZoomScale(with minZoomScale: CGFloat) -> CGFloat {
-        guard let image = imageView.image else { return 1.0 }
-        var maxZoomScale = (image.size.width / ScreenHelper.mainBounds.width) * 2
-        maxZoomScale = maxZoomScale / (1.0 / minZoomScale)
-        return maxZoomScale < 1.0 ? 1.0 : maxZoomScale
+    private func makeLoadingView() -> LoadingiCloudView {
+        let view = LoadingiCloudView(frame: .zero)
+        view.isHidden = true
+        return view
+    }
+    
+    private func makeSingleTapGesture() -> UITapGestureRecognizer {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onSingleTap(_:)))
+        gesture.numberOfTapsRequired = 1
+        return gesture
+    }
+    
+    private func makePanGesture() -> UIPanGestureRecognizer {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        gesture.delegate = self
+        return gesture
     }
 }
 
-// MARK: - Target
+// MARK: - Action
 extension PreviewAssetCell {
     /// 响应单击
-    @objc private func onSingleTap() {
+    @objc private func onSingleTap(_ tap: UITapGestureRecognizer) {
         singleTapped()
     }
     
@@ -273,12 +175,13 @@ extension PreviewAssetCell {
             beganTouch = pan.location(in: scrollView)
             panBegin()
         case .changed:
-            let result = panResult(pan)
-            imageView.frame = result.0
+            let (frame, scale) = panResult(pan)
+            imageView.frame = frame
             // 通知代理，发生了缩放。代理可依scale值改变背景蒙板alpha值
-            panScale(result.1)
+            panScale(scale)
         case .ended, .cancelled:
-            imageView.frame = panResult(pan).0
+            let (frame, _) = panResult(pan)
+            imageView.frame = frame
             if pan.velocity(in: self).y > 0 {
                 // dismiss
                 panEnded(true)
@@ -355,9 +258,4 @@ extension PreviewAssetCell: UIGestureRecognizerDelegate {
         // 响应允许范围内的下滑手势
         return true
     }
-}
-
-extension Notification.Name {
-    
-    static let previewCellDidDownloadResource = Notification.Name("org.AnyImageKit.Notification.Name.Picker.PreviewCellDidDownloadResource")
 }

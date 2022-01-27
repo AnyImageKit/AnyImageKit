@@ -47,28 +47,28 @@ extension PhotoPreviewController {
         }
     }
     
-    @objc func previewCellDidDownloadResource(_ notification: Notification) {
-        guard let asset = notification.object as? AssetOld else { return }
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        guard asset == data.asset else { return }
-        autoSetEditorButtonHidden()
-    }
+//    @objc func previewCellDidDownloadResource(_ notification: Notification) {
+//        guard let asset = notification.object as? AssetOld else { return }
+//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        guard asset == data.asset else { return }
+//        autoSetEditorButtonHidden()
+//    }
 }
 
 // MARK: - Internal function
 extension PhotoPreviewController {
     
     internal func autoSetEditorButtonHidden() {
-        guard !collectionView.visibleCells.isEmpty else { return }
-        toolBar.leftButton.isHidden = true
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewAssetCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
-        
-        if data.asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
-            toolBar.leftButton.isHidden = false
-        } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
-            toolBar.leftButton.isHidden = false
-        }
+//        guard !collectionView.visibleCells.isEmpty else { return }
+//        toolBar.leftButton.isHidden = true
+//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewAssetCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
+//
+//        if data.asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
+//            toolBar.leftButton.isHidden = false
+//        } else if data.asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
+//            toolBar.leftButton.isHidden = false
+//        }
     }
 }
 

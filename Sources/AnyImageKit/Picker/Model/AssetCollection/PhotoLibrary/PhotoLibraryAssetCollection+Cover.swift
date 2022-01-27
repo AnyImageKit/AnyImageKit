@@ -15,7 +15,7 @@ extension PhotoLibraryAssetCollection {
     func loadCover(targetSize: CGSize) -> AsyncThrowingStream<UIImage, Error> {
         AsyncThrowingStream { continuation in
             if let asset = fetchOrder == .asc ? lastAsset : firstAsset {
-                let options = ResourceLoadOptions.library(targetSize: targetSize)
+                let options = ResourceLoadOptions(targetSize: targetSize)
                 Task {
                     for try await result in asset.loadImage(options: options) {
                         switch result {

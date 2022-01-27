@@ -34,47 +34,9 @@ final class PreviewAssetVideoCell: PreviewAssetCell {
         task = nil
     }
     
-    override var fitSize: CGSize {
-        guard let image = imageView.image else { return CGSize.zero }
-        let width = scrollView.bounds.width
-        var size: CGSize = .zero
-        if image.size.height > image.size.width {
-            let scale = image.size.height / image.size.width
-            size = CGSize(width: width, height: scale * width)
-            let screenSize = ScreenHelper.mainBounds.size
-            if size.width > size.height {
-                size.width = size.width * screenSize.height / size.height
-                size.height = screenSize.height
-            }
-        } else {
-            let scale = image.size.height / image.size.width
-            size = CGSize(width: width, height: width * scale)
-        }
-        return size
-    }
-    
-    override func layout() {
-        super.layout()
-        playerLayer?.frame = imageView.bounds
-    }
-    
-    override func reset() {
-        setPlayButton(hidden: false)
-        
-        imageView.image = nil
-        player = nil
-        playerLayer = nil
-        
-        if let sublayers = imageView.layer.sublayers {
-            for layer in sublayers {
-                layer.removeFromSuperlayer()
-            }
-        }
-    }
-    
     /// 单击事件触发时，处理播放和暂停的逻辑
     override func singleTapped() {
-        let toolBarIsHidden = delegate?.previewCellGetToolBarHiddenState() ?? true
+        let toolBarIsHidden = /* delegate?.previewCellGetToolBarHiddenState() ??*/ true
         if player == nil {
             super.singleTapped()
         } else {
@@ -129,6 +91,41 @@ final class PreviewAssetVideoCell: PreviewAssetCell {
     }
 }
 
+// MARK: PreviewAssetContent
+extension PreviewAssetVideoCell {
+    
+    var fitSize: CGSize {
+        guard let image = imageView.image else { return CGSize.zero }
+        let width = scrollView.bounds.width
+        var size: CGSize = .zero
+        if image.size.height > image.size.width {
+            let scale = image.size.height / image.size.width
+            size = CGSize(width: width, height: scale * width)
+            let screenSize = ScreenHelper.mainBounds.size
+            if size.width > size.height {
+                size.width = size.width * screenSize.height / size.height
+                size.height = screenSize.height
+            }
+        } else {
+            let scale = image.size.height / image.size.width
+            size = CGSize(width: width, height: width * scale)
+        }
+        return size
+    }
+    
+    func reset() {
+        setPlayButton(hidden: false)
+        imageView.image = nil
+        player = nil
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+    }
+    
+    func layoutDidUpdate() {
+        playerLayer?.frame = imageView.bounds
+    }
+}
+
 // MARK: UI Setup
 extension PreviewAssetVideoCell {
     
@@ -146,22 +143,12 @@ extension PreviewAssetVideoCell {
     }
 }
 
-// MARK: - Function
-extension PreviewAssetVideoCell {
-    
-    /// 暂停
-    func pause() {
-        player?.pause()
-        setPlayButton(hidden: false)
-    }
-}
-
-// MARK: - Private function
+// MARK: - Content Setup
 extension PreviewAssetVideoCell {
     
     private func loadImage(asset: Asset<PHAsset>) async throws {
         let targetSize = frame.size.displaySize
-        for try await result in asset.loadImage(options: .library(targetSize: targetSize)) {
+        for try await result in asset.loadImage(options: .init(targetSize: targetSize)) {
             switch result {
             case .progress:
                 break
@@ -179,23 +166,37 @@ extension PreviewAssetVideoCell {
     }
     
     private func loadVideo(asset: Asset<PHAsset>) async throws {
-        for try await result in asset.loadVideo(options: .library()) {
+        for try await result in asset.loadVideo() {
             switch result {
             case .progress(let progress):
                 _print("Download video from iCloud: \(progress)")
-                setDownloadingProgress(progress)
+                updateLoadingProgress(progress)
             case .success(let loadResult):
                 switch loadResult {
                 case .video(let avAsset, _):
                     let playerItem = AVPlayerItem(asset: avAsset)
                     setPlayerItem(playerItem)
-                    setDownloadingProgress(1.0)
+                    updateLoadingProgress(1.0)
                 default:
                     break
                 }
             }
         }
     }
+}
+
+// MARK: - Function
+extension PreviewAssetVideoCell {
+    
+    /// 暂停
+    func pause() {
+        player?.pause()
+        setPlayButton(hidden: false)
+    }
+}
+
+// MARK: - Private function
+extension PreviewAssetVideoCell {
     
     private var isPlaying: Bool {
         if let player = player {
@@ -225,7 +226,7 @@ extension PreviewAssetVideoCell {
     }
 }
 
-// MARK: - Target
+// MARK: - Action
 extension PreviewAssetVideoCell {
     
     @objc private func playerDidPlayToEndTime(_ sender: Notification) {

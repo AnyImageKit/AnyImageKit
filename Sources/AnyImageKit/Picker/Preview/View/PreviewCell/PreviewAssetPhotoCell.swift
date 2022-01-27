@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 final class PreviewAssetPhotoCell: PreviewAssetCell {
     
@@ -35,12 +36,23 @@ final class PreviewAssetPhotoCell: PreviewAssetCell {
     }
     
     /// 重置图片缩放比例
-    override func reset() {
+    func reset() {
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
     
     override func optionsDidUpdate(options: PickerOptionsInfo) {
         accessibilityLabel = options.theme[string: .photo]
+    }
+    
+    override func setContent(asset: Asset<PHAsset>) {
+        task?.cancel()
+        task = Task {
+            do {
+                try await loadImage(asset: asset)
+            } catch {
+                _print(error)
+            }
+        }
     }
 }
 
@@ -60,49 +72,39 @@ extension PreviewAssetPhotoCell {
     }
 }
 
-// MARK: - Function
+// MARK: - Content Setup
 extension PreviewAssetPhotoCell {
     
-    /// 加载图片
-    func requestPhoto() {
-        task?.cancel()
-        task = Task {
-            do {
-                for try await result in asset.phAsset.loadPhotoLibraryImage(options: .library()) {
-                    guard !Task.isCancelled else { return }
-                    switch result {
-                    case .progress(let progress):
-                        self.setDownloadingProgress(progress)
-                    case .success(let loadResult):
-                        switch loadResult {
-                        case .thumbnail(let image):
-                            self.setImage(image)
-                        case .preview(let image):
-                            self.setDownloadingProgress(1.0)
-                            self.setImage(image)
-                        default:
-                            break
-                        }
-                    }
+    private func loadImage(asset: Asset<PHAsset>) async throws {
+        for try await result in asset.loadImage() {
+            switch result {
+            case .progress(let progress):
+                updateLoadingProgress(progress)
+            case .success(let loadResult):
+                switch loadResult {
+                case .thumbnail(let image):
+                    setImage(image)
+                case .preview(let image):
+                    updateLoadingProgress(1.0)
+                    setImage(image)
+                default:
+                    break
                 }
-            } catch {
-                _print(error)
             }
         }
     }
 }
 
-// MARK: - Target
+// MARK: - Action
 extension PreviewAssetPhotoCell {
     
-    /// 响应双击
-    @objc private func onDoubleTap(_ dbTap: UITapGestureRecognizer) {
+    @objc private func onDoubleTap(_ gesture: UITapGestureRecognizer) {
         // 如果当前没有任何缩放，则放大到目标比例
         // 否则重置到原比例
         if scrollView.zoomScale == 1.0 {
             if scrollView.minimumZoomScale == scrollView.zoomScale {
                 // 以点击的位置为中心，放大
-                let pointInView = dbTap.location(in: imageView)
+                let pointInView = gesture.location(in: imageView)
                 let w = scrollView.bounds.size.width / imageZoomScaleForDoubleTap
                 let h = scrollView.bounds.size.height / imageZoomScaleForDoubleTap
                 let x = pointInView.x - (w / 2.0)

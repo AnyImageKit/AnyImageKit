@@ -12,7 +12,7 @@ import Kingfisher
 final class PreviewAssetPhotoGIFCell: PreviewAssetCell {
     
     /// 取图片适屏size
-    override var fitSize: CGSize {
+    var fitSize: CGSize {
         guard let image = imageView.image else { return CGSize.zero }
         let screenSize = ScreenHelper.mainBounds.size
         if image.size.width > screenSize.width {
@@ -24,27 +24,17 @@ final class PreviewAssetPhotoGIFCell: PreviewAssetCell {
     }
     
     /// 取图片适屏frame
-    override var fitFrame: CGRect {
+    var fitFrame: CGRect {
         let size = fitSize
         let x = (scrollView.bounds.width - size.width) > 0 ? (scrollView.bounds.width - size.width) * 0.5 : 0
         let y = (scrollView.bounds.height - size.height) > 0 ? (scrollView.bounds.height - size.height) * 0.5 : 0
         return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupView() {
-        imageView.removeFromSuperview()
-        imageView = AnimatedImageView()
-        imageView.contentMode = .scaleToFill
-        scrollView.addSubview(imageView)
+    func makeImageView() -> UIImageView {
+        let view = AnimatedImageView(frame: .zero)
+        view.contentMode = .scaleToFill
+        return view
     }
     
     override func optionsDidUpdate(options: PickerOptionsInfo) {
@@ -62,7 +52,7 @@ extension PreviewAssetPhotoGIFCell {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self, self.asset.identifier == id else { return }
                 _print("Download GIF from iCloud: \(progress)")
-                self.setDownloadingProgress(progress)
+                self.updateLoadingProgress(progress)
             }
         }
         manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
@@ -72,7 +62,7 @@ extension PreviewAssetPhotoGIFCell {
                 guard self.asset.identifier == id else { return }
                 self.imageView.image = response.image
                 self.imageView.frame = self.fitFrame
-                self.setDownloadingProgress(1.0)
+                self.updateLoadingProgress(1.0)
             case .failure(let error):
                 _print(error)
             }

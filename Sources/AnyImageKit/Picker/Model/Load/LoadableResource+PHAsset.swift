@@ -10,6 +10,10 @@ import Photos
 
 extension PHAsset: LoadableResource {
     
+    static var preferredMaximumSize: CGSize {
+        PHImageManagerMaximumSize
+    }
+    
     func loadImage(options: ResourceLoadOptions) -> AsyncThrowingStream<LoadingResult<ResourceLoadResult>, Error> {
         loadPhotoLibraryImage(options: options)
     }
