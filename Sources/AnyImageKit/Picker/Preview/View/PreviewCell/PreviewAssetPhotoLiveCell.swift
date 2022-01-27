@@ -85,6 +85,7 @@ extension PreviewAssetPhotoLiveCell {
         }
     }
     
+    @MainActor
     private func loadLivePhoto<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
         for try await result in asset.loadLivePhoto() {
             switch result {

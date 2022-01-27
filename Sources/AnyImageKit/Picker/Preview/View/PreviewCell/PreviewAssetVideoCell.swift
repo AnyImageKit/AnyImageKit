@@ -122,6 +122,7 @@ extension PreviewAssetVideoCell {
         }
     }
     
+    @MainActor
     private func loadCover<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
         let targetSize = frame.size.displaySize
         for try await result in asset.loadImage(options: .init(targetSize: targetSize)) {
@@ -141,6 +142,7 @@ extension PreviewAssetVideoCell {
         }
     }
     
+    @MainActor
     private func loadVideo<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
         for try await result in asset.loadVideo() {
             switch result {

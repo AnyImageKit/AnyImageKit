@@ -445,9 +445,11 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
                 return
             } else if !asset.isSelected && photoLibrary.checker.isUpToLimit {
                 return
-            } else {
+            } else if let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell {
                 let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
-                controller.currentIndex = 0
+                let assetIndex = photoLibrary.convertIndexToAssetIndex(indexPath.item)
+                controller.presentationScaleImage = cell.displayImage
+                controller.currentIndex = assetIndex
                 controller.dataSource = self
                 controller.delegate = self
                 present(controller, animated: true, completion: nil)
@@ -475,19 +477,6 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegateFlowLayout
 
 // MARK: - PhotoPreviewControllerDataSource
 extension PhotoAssetCollectionViewController: PhotoPreviewControllerDataSource {
-    
-    func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
-        guard let photoLibrary = photoLibrary else { return 0 }
-        return photoLibrary.assetCount
-    }
-    
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
-        let idx = index //+ itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
-        let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell
-        fatalError()
-//        return (cell?.image, album!.assets[idx])
-    }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
         let idx = index //+ itemOffset

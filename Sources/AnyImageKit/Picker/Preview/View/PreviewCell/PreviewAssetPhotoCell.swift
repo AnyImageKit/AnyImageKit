@@ -56,6 +56,7 @@ extension PreviewAssetPhotoCell {
         }
     }
     
+    @MainActor
     private func loadImage<Resource>(asset: Asset<Resource>) async throws where Resource: IdentifiableResource, Resource: LoadableResource {
         for try await result in asset.loadImage() {
             switch result {

@@ -11,15 +11,6 @@ import Photos
 import Combine
 
 protocol PhotoPreviewControllerDataSource: AnyObject {
-    
-    typealias PreviewData = (thumbnail: UIImage?, asset: AssetOld)
-    
-    /// 获取需要展示图片的数量
-    func numberOfPhotos(in controller: PhotoPreviewController) -> Int
-    
-    /// 获取索引对应的数据模型
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData
-    
     /// 获取转场动画时的缩略图所在的 view
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
 }
@@ -58,6 +49,8 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     weak var delegate: PhotoPreviewControllerDelegate?
     weak var dataSource: PhotoPreviewControllerDataSource?
     
+    var presentationScaleImage: UIImage?
+    
     /// 图片索引
     var currentIndex: Int = 0 {
         didSet {
@@ -88,11 +81,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     private(set) lazy var toolBar: PickerToolBar = makeToolBar()
     private lazy var indexView: PickerPreviewIndexView = makeIndexView()
     
-    private var disposeBag: Set<AnyCancellable> = .init() {
-        didSet {
-            print(disposeBag)
-        }
-    }
+    private var disposeBags: [IndexPath: AnyCancellable] = [:]
     
     let manager: PickerManager
     let photoLibrary: PhotoLibraryAssetCollection
@@ -295,13 +284,13 @@ extension PhotoPreviewController {
     }
     
     private func didSetCurrentIdx() {
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        guard let asset = photoLibrary.loadAsset(for: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
+        navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
         indexView.currentIndex = currentIndex
         
         if manager.options.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
+            toolBar.originalButton.isHidden = asset.mediaType != .photo
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
         autoSetEditorButtonHidden()
@@ -328,24 +317,34 @@ extension PhotoPreviewController {
     
     /// NavigationBar - Select
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        let asset = data.asset
-        
-        if !asset.isSelected {
-            let result = manager.addSelectedAsset(asset)
-            if result.success {
+        guard let asset = photoLibrary.loadAsset(for: currentIndex) else { return }
+        do {
+            try photoLibrary.setSelected(asset: asset)
+            if asset.isSelected {
                 delegate?.previewController(self, didSelected: currentIndex)
-            } else if !result.message.isEmpty {
-                showAlert(message: result.message, stringConfig: manager.options.theme)
+            } else {
+                delegate?.previewController(self, didDeselected: currentIndex)
             }
-        } else {
-            manager.removeSelectedAsset(asset)
-            delegate?.previewController(self, didDeselected: currentIndex)
+            navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: true)
+            indexView.didChangeSelectedAsset()
+            trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerPreview])
+        } catch {
+            if let error = error as? AssetSelectedError<PHAsset> {
+                let options = manager.options
+                let message: String
+                switch error {
+                case .maximumOfPhotosOrVideos:
+                    message = String(format: options.theme[string: .pickerSelectMaximumOfPhotosOrVideos], options.selectLimit)
+                case .maximumOfPhotos:
+                    message = String(format: options.theme[string: .pickerSelectMaximumOfPhotos], options.selectLimit)
+                case .maximumOfVideos:
+                    message = String(format: options.theme[string: .pickerSelectMaximumOfVideos], options.selectLimit)
+                case .disabled(let rule):
+                    message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                }
+                self.showAlert(message: message, stringConfig: options.theme)
+            }
         }
-        
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
-        indexView.didChangeSelectedAsset()
-        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
     }
     
     /// ToolBar - Original
@@ -354,32 +353,32 @@ extension PhotoPreviewController {
         manager.useOriginalImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
-        // 选择当前照片
-        if manager.useOriginalImage && !manager.isUpToLimit {
-            guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-            if !data.asset.isSelected {
-                selectButtonTapped(navigationBar.selectButton)
-            }
-        }
-        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerPreview])
+//        // 选择当前照片
+//        if manager.useOriginalImage && !manager.isUpToLimit {
+//            guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//            if !data.asset.isSelected {
+//                selectButtonTapped(navigationBar.selectButton)
+//            }
+//        }
+//        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerPreview])
     }
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
         defer { sender.isEnabled = true }
         sender.isEnabled = false
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        if manager.selectedAssets.isEmpty {
-            if case .disable(let rule) = data.asset.state {
-                let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
-                showAlert(message: message, stringConfig: manager.options.theme)
-                return
-            }
-            selectButtonTapped(navigationBar.selectButton)
-        }
-        delegate?.previewControllerWillDisappear(self)
-        delegate?.previewControllerDidClickDone(self)
-        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerPreview])
+//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        if manager.selectedAssets.isEmpty {
+//            if case .disable(let rule) = data.asset.state {
+//                let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
+//                showAlert(message: message, stringConfig: manager.options.theme)
+//                return
+//            }
+//            selectButtonTapped(navigationBar.selectButton)
+//        }
+//        delegate?.previewControllerWillDisappear(self)
+//        delegate?.previewControllerDidClickDone(self)
+//        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerPreview])
     }
 }
 
@@ -427,12 +426,23 @@ extension PhotoPreviewController: UICollectionViewDelegate {
     /// Cell 进入屏幕 - 请求数据
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let asset = photoLibrary.loadAsset(for: indexPath.item), let cell = cell as? PreviewAssetContentCell else { return }
-        cell.setContent(asset: asset)
-        cell.singleTapEvent.sink { [weak self] _ in
+        switch cell {
+        case let cell as PreviewAssetPhotoCell:
+            cell.setContent(asset: asset)
+        case let cell as PreviewAssetPhotoGIFCell:
+            cell.setContent(asset: asset)
+        case let cell as PreviewAssetPhotoLiveCell:
+            cell.setContent(asset: asset)
+        case let cell as PreviewAssetVideoCell:
+            cell.setContent(asset: asset)
+        default:
+            cell.setContent(asset: asset)
+        }
+        disposeBags[indexPath] = cell.singleTapEvent.sink { [weak self] _ in
             guard let self = self else { return }
             self.setBar(hidden: self.navigationBar.alpha == 1, animated: false)
-        }.store(in: &disposeBag)
-        cell.panEvent.sink { [weak self] state in
+        }
+        disposeBags[indexPath] = cell.panEvent.sink { [weak self] state in
             guard let self = self else { return }
             switch state {
             case .begin:
@@ -451,7 +461,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
                     self.setBar(hidden: false, isNormal: false)
                 }
             }
-        }.store(in: &disposeBag)
+        }
     }
     
     /// Cell 离开屏幕 - 重设状态
@@ -459,6 +469,7 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         if let cell = cell as? PreviewAssetContentCell {
             cell.resetContent()
         }
+        disposeBags[indexPath] = nil
     }
 }
 
@@ -535,9 +546,10 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     /// 创建缩放型进场动画
     private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
         let cell = collectionView.cellForItem(at: indexPath) as? PreviewAssetContentCell
-        let imageView = UIImageView(image: cell?.imageView.image)
+        let imageView = UIImageView(image: presentationScaleImage)
         imageView.contentMode = imageScaleMode
         imageView.clipsToBounds = true
+        presentationScaleImage = nil
         // 创建animator
         return ScaleAnimator(startView: relatedView, endView: cell?.imageView, scaleView: imageView)
     }

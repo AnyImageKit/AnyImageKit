@@ -132,7 +132,7 @@ extension PhotoAssetCell: PickerOptionsConfigurable {
 
 extension PhotoAssetCell {
     
-    var image: UIImage? {
+    var displayImage: UIImage? {
         return imageView.image
     }
 }
