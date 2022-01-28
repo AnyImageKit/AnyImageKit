@@ -14,7 +14,7 @@ final class PhotoAssetCell: UICollectionViewCell {
     
     let selectEvent: Delegate<Void, Void> = .init()
     
-    private lazy var imageView: UIImageView = {
+    private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         view.contentMode = .scaleAspectFill
         view.layer.masksToBounds = true

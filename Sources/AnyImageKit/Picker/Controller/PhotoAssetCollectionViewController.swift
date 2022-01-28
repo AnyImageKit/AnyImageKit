@@ -228,7 +228,7 @@ extension PhotoAssetCollectionViewController {
     @objc private func previewButtonTapped(_ sender: UIButton) {
         guard let photoLibrary = photoLibrary, let asset = photoLibrary.selectedItems.first, let index = photoLibrary.loadAssetIndex(for: asset) else { return }
         let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
-        controller.currentIndex = index
+        controller.assetIndex = index
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
@@ -449,7 +449,7 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
                 let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
                 let assetIndex = photoLibrary.convertIndexToAssetIndex(indexPath.item)
                 controller.presentationScaleImage = cell.displayImage
-                controller.currentIndex = assetIndex
+                controller.assetIndex = assetIndex
                 controller.dataSource = self
                 controller.delegate = self
                 present(controller, animated: true, completion: nil)
@@ -478,10 +478,12 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegateFlowLayout
 // MARK: - PhotoPreviewControllerDataSource
 extension PhotoAssetCollectionViewController: PhotoPreviewControllerDataSource {
     
-    func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
-        let idx = index //+ itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
-        return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
+    func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex assetIndex: Int) -> UIImageView? {
+        guard let photoLibrary = photoLibrary else { return nil }
+        let index = photoLibrary.convertAssetIndexToIndex(assetIndex)
+        let indexPath = IndexPath(item: index, section: 0)
+        let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell
+        return cell?.imageView
     }
 }
 
@@ -509,7 +511,7 @@ extension PhotoAssetCollectionViewController: PhotoPreviewControllerDelegate {
     
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
         guard let photoLibrary = photoLibrary else { return }
-        let assetIndex = controller.currentIndex
+        let assetIndex = controller.assetIndex
         let index = photoLibrary.convertAssetIndexToIndex(assetIndex)
         let indexPath = IndexPath(item: index, section: 0)
         if !(collectionView.visibleCells.map{ $0.tag }).contains(index) {

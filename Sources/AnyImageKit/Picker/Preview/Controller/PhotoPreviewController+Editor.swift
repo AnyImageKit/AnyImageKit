@@ -15,7 +15,7 @@ extension PhotoPreviewController {
     
     /// ToolBar - Edit
     @objc func editButtonTapped(_ sender: UIButton) {
-//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        guard let data = dataSource?.previewController(self, assetOfIndex: assetIndex) else { return }
 //        trackObserver?.track(event: .pickerEdit, userInfo: [:])
 //        if data.asset.mediaType == .photo {
 //            if let image = data.asset._images[.initial] {
@@ -49,7 +49,7 @@ extension PhotoPreviewController {
     
 //    @objc func previewCellDidDownloadResource(_ notification: Notification) {
 //        guard let asset = notification.object as? AssetOld else { return }
-//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        guard let data = dataSource?.previewController(self, assetOfIndex: assetIndex) else { return }
 //        guard asset == data.asset else { return }
 //        autoSetEditorButtonHidden()
 //    }
@@ -61,7 +61,7 @@ extension PhotoPreviewController {
     internal func autoSetEditorButtonHidden() {
 //        guard !collectionView.visibleCells.isEmpty else { return }
 //        toolBar.leftButton.isHidden = true
-//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        guard let data = dataSource?.previewController(self, assetOfIndex: assetIndex) else { return }
 //        guard let cell = (collectionView.visibleCells.compactMap{ $0 as? PreviewAssetCell }.filter{ $0.asset == data.asset }.first), cell.isDownloaded else { return }
 //
 //        if data.asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
@@ -89,7 +89,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: false, completion: nil)
-        let indexPath = IndexPath(item: currentIndex, section: 0)
+        let indexPath = IndexPath(item: assetIndex, section: 0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
         }
@@ -100,11 +100,11 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
 //        guard success.type == .photo else { return }
 //        guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
 //        guard let photo = UIImage(data: photoData) else { return }
-//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+//        guard let data = dataSource?.previewController(self, assetOfIndex: assetIndex) else { return }
 //        guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PreviewAssetPhotoCell else { return }
 //        data.asset._images[.edited] = success.isEdited ? photo : nil
 //        cell.setImage(photo)
-//        
+//
 //        // 选择当前照片
 //        if !manager.isUpToLimit {
 //            if !data.asset.isSelected {

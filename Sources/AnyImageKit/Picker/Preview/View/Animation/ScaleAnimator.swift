@@ -8,8 +8,7 @@
 
 import UIKit
 
-/// 缩放动画
-class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+final class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     /// 动画开始位置的视图
     var startView: UIView?
@@ -18,18 +17,13 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     var endView: UIView?
     
     /// 用于转场时的缩放视图
-    var scaleView: UIView?
+    var scaleView: UIView
     
     /// 初始化
-    init(startView: UIView?, endView: UIView?, scaleView: UIView?) {
+    init(startView: UIView?, endView: UIView?, scaleView: UIView) {
         self.startView = startView
         self.endView = endView
         self.scaleView = scaleView
-    }
-    
-    /// 初始化，无参
-    override convenience init() {
-        self.init(startView: nil, endView: nil, scaleView: nil)
     }
     
     // MARK: - UIViewControllerAnimatedTransitioning
@@ -52,13 +46,13 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             presentedView.alpha = 0.01
         }
         
-        // 转场容器
         let containerView = transitionContext.containerView
         
-        guard let startView = self.startView, let scaleView = self.scaleView else {
+        guard let startView = self.startView else {
             transitionContext.completeTransition(false)
             return
         }
+        
         let startFrame = startView.convert(startView.bounds, to: containerView)
         var endFrame = startFrame
         var endAlpha: CGFloat = 0.0
@@ -67,8 +61,7 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             // 当前正在显示视图的前一个页面关联视图已经存在，此时分两种情况
             // 视图显示在屏幕内，作scale动画；否则作fade动画
             let relativeFrame = endView.convert(endView.bounds, to: nil)
-            let keyWindowBounds =  ScreenHelper.mainBounds
-            if keyWindowBounds.intersects(relativeFrame) {
+            if toVC.view.frame.intersects(relativeFrame) {
                 // 在屏幕内，求endFrame，让其缩放
                 endAlpha = 1.0
                 endFrame = endView.convert(endView.bounds, to: containerView)
@@ -79,14 +72,14 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         containerView.addSubview(scaleView)
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-            scaleView.alpha = endAlpha
-            scaleView.frame = endFrame
+            self.scaleView.alpha = endAlpha
+            self.scaleView.frame = endFrame
         }) { _ in
             // presentation转场，需要把目标视图添加到视图栈
             if presentation, let presentedView = transitionContext.view(forKey: .to) {
                 containerView.addSubview(presentedView)
             }
-            scaleView.removeFromSuperview()
+            self.scaleView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }

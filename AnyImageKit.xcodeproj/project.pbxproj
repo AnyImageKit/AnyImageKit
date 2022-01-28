@@ -890,7 +890,6 @@
 				A0F4753A232F7DDB00BB117B /* Model */,
 				A0800417232F5F87006B4711 /* Util */,
 				A0800416232F5F7F006B4711 /* Extension */,
-				A56A3C862330A43B00EBFC48 /* Animation */,
 				A56A3C792330746A00EBFC48 /* Presentation */,
 			);
 			path = Picker;
@@ -1025,6 +1024,7 @@
 		A05F792D279FD34C00B4F19F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A56A3C862330A43B00EBFC48 /* Animation */,
 				A05F792E279FD38E00B4F19F /* PreviewCell */,
 			);
 			path = View;
