@@ -30,7 +30,7 @@ struct PhotoLibraryAssetCollection: AssetCollection {
     let isUserLibrary: Bool
     
     /// Select Option
-    let selectOption: PickerSelectOption
+    let selectOption: MediaSelectOption
     
     /// Addition elements before asset collection
     let prefixPlugins: [AssetPlugin]
@@ -45,7 +45,7 @@ struct PhotoLibraryAssetCollection: AssetCollection {
          fetchResult: FetchResult<Resource>,
          fetchOrder: Sort,
          isUserLibrary: Bool,
-         selectOption: PickerSelectOption,
+         selectOption: MediaSelectOption,
          plugins: [AssetPlugin],
          checker: AssetChecker<Resource>) {
         self.identifier = identifier

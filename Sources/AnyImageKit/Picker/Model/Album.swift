@@ -18,7 +18,7 @@ class Album: IdentifiableResource {
     let isUserLibrary: Bool
     private(set) var assets: [AssetOld] = []
     
-    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
+    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: MediaSelectOption) {
         self.fetchResult = fetchResult
         self.identifier = identifier
         self.title = title ?? ""
@@ -29,7 +29,7 @@ class Album: IdentifiableResource {
 
 extension Album {
     
-    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: PickerSelectOption) {
+    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: MediaSelectOption) {
         var array: [AssetOld] = []
         let selectPhoto = selectOptions.contains(.photo)
         let selectVideo = selectOptions.contains(.video)

@@ -157,7 +157,8 @@ extension PhotoAssetCollectionViewController {
         guard let photoLibrary = photoLibrary else { return }
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? PhotoAssetCell, let asset = photoLibrary[indexPath.item].asset {
-                cell.updateState(asset, options: manager.options, animated: index == indexPath.item)
+                cell.updateState(asset, animated: index == indexPath.item)
+                cell.update(options: manager.options)
             }
         }
     }
@@ -398,7 +399,8 @@ extension PhotoAssetCollectionViewController: UICollectionViewDataSource {
         case .asset(let asset):
             let cell = collectionView.dequeueReusableCell(PhotoAssetCell.self, for: indexPath)
             cell.tag = indexPath.item
-            cell.setContent(asset, options: manager.options)
+            cell.setContent(asset)
+            cell.update(options: manager.options)
             cell.selectEvent.delegate(on: self) { (self, _) in
                 self.setSelected(indexPath.item)
             }

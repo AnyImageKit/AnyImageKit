@@ -12,7 +12,7 @@ import UIKit
 
 extension Asset where Resource == PHAsset {
     
-    init(phAsset: PHAsset, selectOption: PickerSelectOption, checker: AssetChecker<PHAsset>) {
+    init(phAsset: PHAsset, selectOption: MediaSelectOption, checker: AssetChecker<PHAsset>) {
         self.init(resource: phAsset,
                   mediaType: .photo,
                   checker: checker)

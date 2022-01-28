@@ -79,7 +79,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     private(set) lazy var collectionView: UICollectionView = makeCollectionView()
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = makeNavigationBar()
     private(set) lazy var toolBar: PickerToolBar = makeToolBar()
-    private lazy var indexView: PickerPreviewIndexView = makeIndexView()
+    private lazy var indexView: PreviewIndexView = makeIndexView()
     
     private var disposeBags: [IndexPath: AnyCancellable] = [:]
     
@@ -220,9 +220,8 @@ extension PhotoPreviewController {
         return view
     }
     
-    private func makeIndexView() -> PickerPreviewIndexView {
-        let view = PickerPreviewIndexView(frame: .zero)
-        view.setManager(manager)
+    private func makeIndexView() -> PreviewIndexView {
+        let view = PreviewIndexView(photoLibrary: photoLibrary)
         view.isHidden = true
         view.delegate = self
         return view
@@ -287,7 +286,7 @@ extension PhotoPreviewController {
         guard let asset = photoLibrary.loadAsset(for: assetIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
-        indexView.currentIndex = assetIndex
+        indexView.assetIndex = assetIndex
         
         if manager.options.allowUseOriginalImage {
             toolBar.originalButton.isHidden = asset.mediaType != .photo
@@ -513,10 +512,10 @@ extension PhotoPreviewController: UIScrollViewDelegate {
     }
 }
 
-// MARK: - PickerPreviewIndexViewDelegate
-extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
+// MARK: - PreviewIndexViewDelegate
+extension PhotoPreviewController: PreviewIndexViewDelegate {
     
-    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int) {
+    func pickerPreviewIndexView(_ view: PreviewIndexView, didSelect idx: Int) {
         assetIndex = idx
         collectionView.scrollToItem(at: IndexPath(item: idx, section: 0), at: .left, animated: false)
         #if ANYIMAGEKIT_ENABLE_EDITOR

@@ -147,7 +147,7 @@ extension PhotoAssetCell {
 
 extension PhotoAssetCell {
     
-    func setContent(_ asset: Asset<PHAsset>, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
+    func setContent(_ asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
         task?.cancel()
         task = Task {
             do {
@@ -176,11 +176,10 @@ extension PhotoAssetCell {
             }
         }
         
-        updateState(asset, options: options, animated: animated, isPreview: isPreview)
+        updateState(asset, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: Asset<PHAsset>, options: PickerOptionsInfo, animated: Bool = false, isPreview: Bool = false) {
-        update(options: options)
+    func updateState(_ asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
         switch asset.mediaType {
         case .photoGIF:
             gifView.isHidden = false

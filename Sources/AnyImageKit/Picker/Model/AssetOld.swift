@@ -26,7 +26,7 @@ public class AssetOld: IdentifiableResource {
         return phAsset.localIdentifier
     }
     
-    init(idx: Int, asset: PHAsset, selectOptions: PickerSelectOption) {
+    init(idx: Int, asset: PHAsset, selectOptions: MediaSelectOption) {
         self.idx = idx
         self.phAsset = asset
         self.mediaType = MediaType(asset: asset, selectOptions: selectOptions)

@@ -101,7 +101,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
 //        guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
 //        guard let photo = UIImage(data: photoData) else { return }
 //        guard let data = dataSource?.previewController(self, assetOfIndex: assetIndex) else { return }
-//        guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PreviewAssetPhotoCell else { return }
+//        guard let cell = collectionView.cellForItem(at: IndexPath(item: assetIndex, section: 0)) as? PreviewAssetPhotoCell else { return }
 //        data.asset._images[.edited] = success.isEdited ? photo : nil
 //        cell.setImage(photo)
 //

@@ -17,7 +17,7 @@ public protocol AssetCollection: BidirectionalCollection, IdentifiableResource w
     var checker: AssetChecker<Resource> { get }
     
     /// Select Option
-    var selectOption: PickerSelectOption { get }
+    var selectOption: MediaSelectOption { get }
     /// Fetch result order
     var fetchOrder: Sort { get }
     

@@ -87,12 +87,7 @@ extension PhotoLibraryAssetCollection {
     
     private static func createFetchOptions(with options: PickerOptionsInfo) -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
-        if !options.selectOptions.mediaTypes.contains(.video) {
-            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
-        }
-        if !options.selectOptions.mediaTypes.contains(.image) {
-            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
-        }
+        fetchOptions.predicate = options.selectOptions.predicate
         if options.orderByDate == .desc {
             let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
             fetchOptions.sortDescriptors = [sortDescriptor]

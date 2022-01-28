@@ -15,7 +15,7 @@ extension PHAsset {
         return mediaSubtypes.contains(.photoLive)
     }
     
-    var isGIF: Bool {
+    @objc var isGIF: Bool {
         if let dataUTI = value(forKey: "uniformTypeIdentifier") as? String {
             return UTTypeConformsTo(dataUTI as CFString, kUTTypeGIF)
         }
