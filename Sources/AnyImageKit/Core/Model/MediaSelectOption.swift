@@ -43,14 +43,27 @@ extension MediaSelectOption {
             return nil
         case [.photo], [.photo, .photoGIF], [.photo, .photoLive], [.photo, .photoGIF, .photoLive]:
             return NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaType), PHAssetMediaType.image.rawValue)
-        case [.video]:
-            return NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaType), PHAssetMediaType.video.rawValue)
         case [.photoGIF]:
             return NSPredicate(format: "%K == %ld", #keyPath(PHAsset.playbackStyle), PHAsset.PlaybackStyle.imageAnimated.rawValue)
         case [.photoLive]:
             return NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaSubtypes), PHAssetMediaSubtype.photoLive.rawValue)
         case [.photoGIF, .photoLive]:
             let predicates = [NSPredicate(format: "%K == %ld", #keyPath(PHAsset.playbackStyle), PHAsset.PlaybackStyle.imageAnimated.rawValue),
+                              NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaSubtypes), PHAssetMediaSubtype.photoLive.rawValue)]
+            return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        case [.video]:
+            return NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaType), PHAssetMediaType.video.rawValue)
+        case [.video, .photoGIF]:
+            let predicates = [NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaType), PHAssetMediaType.video.rawValue),
+                              NSPredicate(format: "%K == %ld", #keyPath(PHAsset.playbackStyle), PHAsset.PlaybackStyle.imageAnimated.rawValue)]
+            return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        case [.video, .photoLive]:
+            let predicates = [NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaType), PHAssetMediaType.video.rawValue),
+                              NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaSubtypes), PHAssetMediaSubtype.photoLive.rawValue)]
+            return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        case [.video, .photoGIF ,.photoLive]:
+            let predicates = [NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaType), PHAssetMediaType.video.rawValue),
+                              NSPredicate(format: "%K == %ld", #keyPath(PHAsset.playbackStyle),  PHAsset.PlaybackStyle.imageAnimated.rawValue),
                               NSPredicate(format: "%K == %ld", #keyPath(PHAsset.mediaSubtypes), PHAssetMediaSubtype.photoLive.rawValue)]
             return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         default:
