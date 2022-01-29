@@ -48,8 +48,6 @@ class PreviewAssetContentCell: UICollectionViewCell, PreviewAssetContent {
     override func prepareForReuse() {
         super.prepareForReuse()
         loadingView.reset()
-        sinageTapSubject.send(completion: .finished)
-        panSubject.send(completion: .finished)
     }
     
     // MARK: - Function

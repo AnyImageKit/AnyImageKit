@@ -11,14 +11,15 @@ import MobileCoreServices
 
 extension PHAsset {
     
-    var isLivePhoto: Bool {
-        return mediaSubtypes.contains(.photoLive)
+    var isVideo: Bool {
+        mediaType == .video
     }
     
-    @objc var isGIF: Bool {
-        if let dataUTI = value(forKey: "uniformTypeIdentifier") as? String {
-            return UTTypeConformsTo(dataUTI as CFString, kUTTypeGIF)
-        }
-        return false
+    var isLivePhoto: Bool {
+        mediaSubtypes.contains(.photoLive)
+    }
+    
+    var isGIF: Bool {
+        playbackStyle == .imageAnimated
     }
 }

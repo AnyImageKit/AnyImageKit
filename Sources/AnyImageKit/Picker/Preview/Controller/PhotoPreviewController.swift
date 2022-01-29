@@ -191,7 +191,6 @@ extension PhotoPreviewController {
         view.showsHorizontalScrollIndicator = false
         view.isPagingEnabled = true
         view.alwaysBounceHorizontal = false
-        view.isPrefetchingEnabled = false
         view.delegate = self
         view.dataSource = self
         view.registerCell(PreviewAssetPhotoCell.self)

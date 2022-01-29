@@ -13,9 +13,15 @@ import UIKit
 extension Asset where Resource == PHAsset {
     
     init(phAsset: PHAsset, selectOption: MediaSelectOption, checker: AssetChecker<PHAsset>) {
-        self.init(resource: phAsset,
-                  mediaType: .photo,
-                  checker: checker)
+        if selectOption.contains(.video), phAsset.isVideo {
+            self.init(resource: phAsset, mediaType: .video, checker: checker)
+        } else if selectOption.contains(.photoLive), phAsset.isLivePhoto {
+            self.init(resource: phAsset, mediaType: .photoLive, checker: checker)
+        } else if selectOption.contains(.photoGIF), phAsset.isGIF {
+            self.init(resource: phAsset, mediaType: .photoGIF, checker: checker)
+        } else {
+            self.init(resource: phAsset, mediaType: .photo, checker: checker)
+        }
     }
     
     var phAsset: PHAsset {
