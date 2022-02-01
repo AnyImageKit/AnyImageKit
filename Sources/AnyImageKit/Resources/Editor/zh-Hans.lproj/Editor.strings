@@ -10,6 +10,8 @@
 "CROP" = "裁剪";
 "MOSAIC" = "马赛克";
 "INPUT_TEXT" = "输入文本";
+"ADJUST" = "Adjust";
+"FILTER" = "Filter";
 
 "FREE" = "自由";
 

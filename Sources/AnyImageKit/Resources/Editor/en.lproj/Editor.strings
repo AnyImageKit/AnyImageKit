@@ -10,6 +10,8 @@
 "CROP" = "Crop";
 "MOSAIC" = "Mosaic";
 "INPUT_TEXT" = "Input text";
+"ADJUST" = "Adjust";
+"FILTER" = "Filter";
 
 "FREE" = "Free";
 
