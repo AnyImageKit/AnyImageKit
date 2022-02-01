@@ -39,11 +39,15 @@ final class InputTextViewController: AnyImageViewController {
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var toolView: EditorTextToolView = {
-        let view = EditorTextToolView(frame: .zero, options: options, idx: data.colorIdx, isTextSelected: data.isTextSelected)
-        view.delegate = self
+    private lazy var toolView: UIView = {
+        let view = UIView()
         return view
     }()
+//    private lazy var toolView: EditorTextToolView = {
+//        let view = EditorTextToolView(frame: .zero, options: options, idx: data.colorIdx, isTextSelected: data.isTextSelected)
+//        view.delegate = self
+//        return view
+//    }()
     private var textLayer: CAShapeLayer?
     private lazy var textCoverView: UIView = {
         let view = UIView(frame: .zero)
@@ -344,28 +348,28 @@ extension InputTextViewController: UITextViewDelegate {
     }
 }
 
-// MARK: - EditorTextToolViewDelegate
-extension InputTextViewController: EditorTextToolViewDelegate {
-    
-    func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool) {
-        data.isTextSelected = isSelected
-        let color = options.textColors[data.colorIdx]
-        textView.textColor = data.isTextSelected ? color.subColor : color.color
-        setupMaskLayer()
-        updateShadow()
-        trackObserver?.track(event: .editorPhotoTextSwitch, userInfo: [.isOn: isSelected])
-    }
-    
-    func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
-        data.colorIdx = idx
-        let color = options.textColors[data.colorIdx]
-        textView.textColor = data.isTextSelected ? color.subColor : color.color
-        if data.isTextSelected {
-            setupMaskLayer()
-        }
-        updateShadow()
-    }
-}
+//// MARK: - EditorTextToolViewDelegate
+//extension InputTextViewController: EditorTextToolViewDelegate {
+//
+//    func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool) {
+//        data.isTextSelected = isSelected
+//        let color = options.textColors[data.colorIdx]
+//        textView.textColor = data.isTextSelected ? color.subColor : color.color
+//        setupMaskLayer()
+//        updateShadow()
+//        trackObserver?.track(event: .editorPhotoTextSwitch, userInfo: [.isOn: isSelected])
+//    }
+//
+//    func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int) {
+//        data.colorIdx = idx
+//        let color = options.textColors[data.colorIdx]
+//        textView.textColor = data.isTextSelected ? color.subColor : color.color
+//        if data.isTextSelected {
+//            setupMaskLayer()
+//        }
+//        updateShadow()
+//    }
+//}
 
 // MARK: - Notification
 extension InputTextViewController {

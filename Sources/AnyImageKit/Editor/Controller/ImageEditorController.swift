@@ -56,13 +56,8 @@ open class ImageEditorController: AnyImageNavigationController {
         self.modalPresentationStyle = .fullScreen
     }
     
-    deinit {
-        removeNotifications()
-    }
-    
     open override func viewDidLoad() {
         super.viewDidLoad()
-        addNotification()
     }
 }
 
