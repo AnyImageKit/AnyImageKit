@@ -10,54 +10,62 @@ import UIKit
 import Photos
 
 public protocol EditorPhotoResource {
-    func loadImage(completion: @escaping (Result<UIImage, AnyImageError>) -> Void)
+    
+    func loadImage() async throws -> UIImage
 }
 
 extension UIImage: EditorPhotoResource {
     
-    public func loadImage(completion: @escaping (Result<UIImage, AnyImageError>) -> Void) {
-        completion(.success(self))
+    public func loadImage() async throws -> UIImage {
+        return self
     }
 }
 
 extension URL: EditorPhotoResource {
     
-    public func loadImage(completion: @escaping (Result<UIImage, AnyImageError>) -> Void) {
+    public func loadImage() async throws -> UIImage {
         if self.isFileURL {
             do {
                 let data = try Data(contentsOf: self)
                 if let image = UIImage(data: data) {
-                    completion(.success(image))
+                    return image
                 } else {
-                    completion(.failure(.invalidImage))
+                    throw AnyImageError.invalidImage
                 }
             } catch {
                 _print(error.localizedDescription)
-                completion(.failure(.invalidData))
+                throw AnyImageError.invalidData
             }
         } else {
-            completion(.failure(.invalidURL))
+            throw AnyImageError.invalidURL
         }
     }
 }
 
 extension PHAsset: EditorPhotoResource {
     
-    public func loadImage(completion: @escaping (Result<UIImage, AnyImageError>) -> Void) {
+    public func loadImage() async throws -> UIImage {
         guard mediaType == .image else {
-            completion(.failure(.invalidMediaType))
-            return
+            throw AnyImageError.invalidMediaType
         }
-        ExportTool.requestPhoto(for: self, options: .init(size: limitSize)) { [weak self] (result, _) in
-            switch result {
-            case .success(let response):
-                if !response.isDegraded {
-                    completion(.success(response.image))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-                if error == .cannotFindInLocal {
-                    self?.loadImageFromNetwork(completion: completion)
+        return try await withCheckedThrowingContinuation { continuation in
+            ExportTool.requestPhoto(for: self, options: .init(size: limitSize)) { [weak self] (result, _) in
+                switch result {
+                case .success(let response):
+                    if !response.isDegraded {
+                        continuation.resume(returning: response.image)
+                    }
+                case .failure(let error):
+                    if error == .cannotFindInLocal {
+                        self?.loadImageFromNetwork(completion: { result in
+                            switch result {
+                            case .success(let image):
+                                continuation.resume(returning: image)
+                            case .failure(let error):
+                                continuation.resume(throwing: error)
+                            }
+                        })
+                    }
                 }
             }
         }

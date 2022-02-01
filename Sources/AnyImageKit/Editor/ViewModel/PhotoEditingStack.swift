@@ -65,41 +65,47 @@ extension PhotoEditingStack {
         var outputImageData: Data?
     }
     
-    func setBrushData(_ dataList: [BrushData]) {
+    func setBrush(_ dataList: [BrushData]) {
         edit.brushData = dataList
-        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
-    func setMosaicData(_ dataList: [MosaicData]) {
+    func addBrush(_ data: BrushData) {
+        edit.brushData.append(data)
+    }
+    
+    func setMosaic(_ dataList: [MosaicData]) {
         edit.mosaicData = dataList.filter { !$0.drawnPaths.isEmpty }
-        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
-    func setCropData(_ data: CropData) {
+    func addMosaic(_ data: MosaicData) {
+        edit.mosaicData.append(data)
+    }
+    
+    func setCrop(_ data: CropData) {
         edit.cropData = data
-        delegate?.editingStack(self, needUpdatePreview: edit)
+//        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
-    func addTextData(_ data: TextData) {
+    func addText(_ data: TextData) {
         edit.textData.append(data)
-        delegate?.editingStack(self, needUpdatePreview: edit)
+//        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
-    func removeTextData(_ data: TextData) {
+    func removeText(_ data: TextData) {
         if let idx = edit.textData.firstIndex(of: data) {
             edit.textData.remove(at: idx)
             delegate?.editingStack(self, needUpdatePreview: edit)
         }
     }
     
-    func updateTextData(_ data: TextData) {
+    func updateText(_ data: TextData) {
         if let idx = edit.textData.firstIndex(of: data) {
             edit.textData.remove(at: idx)
             edit.textData.append(data)
         }
     }
     
-    func moveTextDataToTop(_ data: TextData) {
+    func moveTextToTop(_ data: TextData) {
         if let idx = edit.textData.firstIndex(of: data) {
             edit.textData.remove(at: idx)
             edit.textData.append(data)
@@ -111,10 +117,9 @@ extension PhotoEditingStack {
         edit.outputImageData = data
     }
     
-    func canvasUndo() {
+    func brushUndo() {
         guard !edit.brushData.isEmpty else { return }
         edit.brushData.removeLast()
-        delegate?.editingStack(self, needUpdatePreview: edit)
     }
     
     func mosaicUndo() {
@@ -136,7 +141,7 @@ extension PhotoEditingStack.Edit {
         return cropData.didCrop || cropData.rotateState != .portrait || !brushData.isEmpty || !mosaicData.isEmpty || !textData.isEmpty
     }
     
-    var canvasCanUndo: Bool {
+    var brushCanUndo: Bool {
         return !brushData.isEmpty
     }
     
@@ -163,9 +168,10 @@ extension PhotoEditingStack {
     private func prepareOutout() {
         drawer = []
         guard let sourceImage = CIImage(image: originImage) else { return }
-        let imageSize = sourceImage.extent.size
-        let size = originImageViewBounds.size
-        let scale = imageSize.width / size.width
+//        let imageSize = sourceImage.extent.size
+//        let size = originImageViewBounds.size
+//        let scale = imageSize.width / size.width
+        let scale: CGFloat = 1.0
         
         // 先绘制马赛克，再绘制画笔，最后绘制文本
         edit.mosaicData.forEach { data in

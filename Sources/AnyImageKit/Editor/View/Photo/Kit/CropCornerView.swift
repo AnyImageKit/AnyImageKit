@@ -62,10 +62,3 @@ final class CropCornerView: UIView {
     }
     
 }
-
-enum CropCornerPosition: Int {
-    case topLeft = 1
-    case topRight
-    case bottomLeft
-    case bottomRight
-}

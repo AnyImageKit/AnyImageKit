@@ -2,7 +2,7 @@
 //  InjectionKey.swift
 //  AnyImageKit
 //
-//  Created by Ray Jiang on 2022/1/6.
+//  Created by 蒋惠 on 2022/1/6.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 

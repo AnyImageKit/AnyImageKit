@@ -114,6 +114,12 @@ extension ColorWell: UIColorPickerViewControllerDelegate {
         sendActions(for: .valueChanged)
     }
 
+    @available(iOS 15.0, *)
+    func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
+        selectedColor = color
+        sendActions(for: .valueChanged)
+    }
+    
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         
     }

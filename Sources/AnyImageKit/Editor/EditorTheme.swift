@@ -97,6 +97,10 @@ extension EditorTheme {
         case photoToolCrop = "PhotoToolCrop"
         /// 25*25
         case photoToolMosaic = "PhotoToolMosaic"
+        /// 25*25
+        case photoToolAdjust = "PhotoToolAdjust"
+        /// 25*25
+        case photoToolFilter = "PhotoToolFilter"
         
         /// 25*25
         case photoToolUndo = "PhotoToolUndo"
@@ -143,6 +147,8 @@ extension StringConfigKey {
     public static let editorCrop = StringConfigKey(rawValue: "CROP")
     public static let editorMosaic = StringConfigKey(rawValue: "MOSAIC")
     public static let editorInputText = StringConfigKey(rawValue: "INPUT_TEXT")
+    public static let editorAdjust = StringConfigKey(rawValue: "ADJUST")
+    public static let editorFilter = StringConfigKey(rawValue: "FILTER")
     public static let editorFree = StringConfigKey(rawValue: "FREE")
     
     public static let editorDragHereToRemove = StringConfigKey(rawValue: "DRAG_HERE_TO_REMOVE")

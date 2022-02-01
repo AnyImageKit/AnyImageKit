@@ -15,12 +15,14 @@ public enum EditorPhotoToolOption: Equatable {
     case text
     case crop
     case mosaic
+    case adjust
+    case filter
 }
 
 extension EditorPhotoToolOption: CaseIterable {
     
     public static var allCases: [EditorPhotoToolOption] {
-        return [.brush, .text, .crop, .mosaic]
+        return [.brush, .text, .crop, .mosaic, .adjust, .filter]
     }
 }
 
@@ -36,6 +38,10 @@ extension EditorPhotoToolOption {
             return .photoToolCrop
         case .mosaic:
             return .photoToolMosaic
+        case .adjust:
+            return .photoToolAdjust
+        case .filter:
+            return .photoToolFilter
         }
     }
 }
@@ -52,6 +58,10 @@ extension EditorPhotoToolOption: CustomStringConvertible {
             return "CROP"
         case .mosaic:
             return "MOSAIC"
+        case .adjust:
+            return "ADJUST"
+        case .filter:
+            return "FILTER"
         }
     }
     
@@ -65,6 +75,10 @@ extension EditorPhotoToolOption: CustomStringConvertible {
             return .editorCrop
         case .mosaic:
             return .editorMosaic
+        case .adjust:
+            return .editorAdjust
+        case .filter:
+            return .editorFilter
         }
     }
 }

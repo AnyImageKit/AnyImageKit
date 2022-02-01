@@ -8,11 +8,15 @@
 
 import UIKit
 
+final class DryDrawingBezierPath: UIBezierPath {
+    var points: [CGPoint] = []
+}
+
 class DryDrawingView: UIView {
     
-    private var bezierPath: UIBezierPath = UIBezierPath()
+    private var bezierPath = DryDrawingBezierPath()
     private var step = 0
-    private var points: [CGPoint] = Array(repeating: CGPoint(), count: 3)
+    private var points = Array(repeating: CGPoint(), count: 3)
     private var didCallBegin = false
     
     internal var originBounds: CGRect = .zero
@@ -38,15 +42,15 @@ class DryDrawingView: UIView {
     }
     
     // MARK: - Override
-    func willBeginDraw(path: UIBezierPath) { }
-    func panning(path: UIBezierPath) { }
-    func didFinishDraw(path: UIBezierPath) { }
+    func willBeginDraw(path: DryDrawingBezierPath) { }
+    func panning(path: DryDrawingBezierPath) { }
+    func didFinishDraw(path: DryDrawingBezierPath) { }
     
     // MARK: - Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let touchPoint = touch.preciseLocation(in: self)
-        bezierPath = UIBezierPath()
+        bezierPath = DryDrawingBezierPath()
         step = 0
         didCallBegin = false
         points.removeAll()
@@ -76,7 +80,8 @@ extension DryDrawingView {
     private func draw(_ touches: Set<UITouch>, finish: Bool) {
         defer {
             if finish {
-                if step >= 3 {
+                if step > 3 {
+                    bezierPath.points = points
                     didFinishDraw(path: bezierPath)
                 }
                 step = 0

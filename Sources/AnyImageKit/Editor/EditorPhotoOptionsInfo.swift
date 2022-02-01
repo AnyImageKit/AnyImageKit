@@ -19,26 +19,7 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: [brush, text, crop, mosaic]
     public var toolOptions: [EditorPhotoToolOption] = EditorPhotoToolOption.allCases
     
-    /// Colors of brush tool options, displayed at the top of the toolbar.
-    /// Option sorting is arranged in a given array.
-    ///
-    /// For iOS 14 and later, the last color element will use dynamic color(UIColorWell) instead of static color.
-    ///
-    /// For the 320pt screen, the last color element will be hidden automatically.
-    ///
-    /// - Default: [white, black, red, yellow, green, blue, purple]
-    public var brushColors: [EditorBrushColorOption] = EditorBrushColorOption.allCases
-    
-    /// Preferred color index of brush.
-    ///
-    /// If the given subscript out of the `brushColors` bounds, it will use first color element as preferred color.
-    ///
-    /// - Default: 2
-    public var defaultBrushIndex: Int = 2
-    
-    /// Width of brush.
-    /// - Default: 5.0
-    public var brushWidth: CGFloat = 5.0
+    public var brush: EditorBrushOption = .init()
     
     /// Mosaic style of mosaic tool options, displayed at the top of the toolbar.
     /// Option sorting is arranged in a given array.
@@ -132,30 +113,16 @@ public struct EditorPhotoOptionsInfo {
     public init() { }
 }
 
-// MARK: - Deprecated
-extension EditorPhotoOptionsInfo {
+// MARK: - Private
+struct EditorPhotoOptionsInfoKey: InjectionKey {
     
-    @available(*, deprecated, message: "Will be removed in version 1.0, Please set `theme[color: .primary]` instead.")
-    public var tintColor: UIColor {
-        get { theme[color: .primary] }
-        set { theme[color: .primary] = newValue }
-    }
+    static var currentValue = EditorPhotoOptionsInfo()
+}
+
+extension InjectedValues {
     
-    @available(*, deprecated, renamed: "brushColors", message: "Will be removed in version 1.0, Please use `brushColors` instead.")
-    public var penColors: [EditorPenColorOption] {
-        get { brushColors }
-        set { brushColors = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "defaultBrushIndex", message: "Will be removed in version 1.0, Please use `defaultBrushIndex` instead.")
-    public var defaultPenIndex: Int {
-        get { defaultBrushIndex }
-        set { defaultBrushIndex = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "brushWidth", message: "Will be removed in version 1.0, Please use `brushWidth` instead.")
-    public var penWidth: CGFloat {
-        get { brushWidth }
-        set { brushWidth = newValue }
+    var photoOptions: EditorPhotoOptionsInfo {
+        get { Self[EditorPhotoOptionsInfoKey.self] }
+        set { Self[EditorPhotoOptionsInfoKey.self] = newValue }
     }
 }

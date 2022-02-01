@@ -8,67 +8,38 @@
 
 import UIKit
 
-/// 画笔路径
-/// 由于 UIBezierPath 不能遵守 Codable，所以通过 NSKeyedArchiver 存储。
 struct DrawnPath: Codable {
     
     let brush: Brush
-    let scale: CGFloat
-    let bezierPath: UIBezierPath
+    let points: [CGPoint]
     let uuid: String
     
     enum CodingKeys: String, CodingKey {
         case brush
-        case scale
+        case points
         case uuid
     }
     
-    init(brush: Brush, scale: CGFloat, path: UIBezierPath) {
-        self.brush = brush
-        self.scale = scale
-        self.bezierPath = path
+    init(brush: Brush, scale: CGFloat, points: [CGPoint]) {
         self.uuid = UUID().uuidString
+        self.brush = Brush(color: brush.color, lineWidth: brush.lineWidth * scale)
+        self.points = points.map {
+             CGPoint(x: $0.x * scale, y: $0.y * scale)
+        }
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(brush, forKey: .brush)
-        try container.encode(scale, forKey: .scale)
+        try container.encode(points, forKey: .points)
         try container.encode(uuid, forKey: .uuid)
-        try saveBezierPath()
     }
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         brush = try values.decode(Brush.self, forKey: .brush)
-        scale = try values.decode(CGFloat.self, forKey: .scale)
+        points = try values.decode([CGPoint].self, forKey: .points)
         uuid = try values.decode(String.self, forKey: .uuid)
-        bezierPath = try DrawnPath.loadBezierPath(uuid: uuid)
-    }
-    
-    private func saveBezierPath() throws {
-        let path = CacheModule.editor(.bezierPath).path
-        let file = "\(path)\(uuid)"
-        FileHelper.createDirectory(at: path)
-        if #available(iOS 11.0, macCatalyst 13.0, *) {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: bezierPath, requiringSecureCoding: true)
-            let url = URL(fileURLWithPath: file)
-            try data.write(to: url)
-        } else {
-            NSKeyedArchiver.archiveRootObject(bezierPath, toFile: file)
-        }
-    }
-    
-    static private func loadBezierPath(uuid: String) throws -> UIBezierPath {
-        let path = CacheModule.editor(.bezierPath).path
-        let file = "\(path)\(uuid)"
-        if #available(iOS 11.0, macCatalyst 13.0, *) {
-            let url = URL(fileURLWithPath: file)
-            let data = try Data(contentsOf: url)
-            return try NSKeyedUnarchiver.unarchivedObject(ofClass: UIBezierPath.self, from: data) ?? UIBezierPath()
-        } else {
-            return (NSKeyedUnarchiver.unarchiveObject(withFile: file) as? UIBezierPath) ?? UIBezierPath()
-        }
     }
 }
 
@@ -90,22 +61,31 @@ extension DrawnPath: GraphicsDrawing {
     private func draw(scale: CGFloat) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.saveGState()
-        context.scaleBy(x: self.scale / scale, y: self.scale / scale)
         brush.color.setStroke()
         let bezierPath = brushedPath()
         bezierPath.stroke()
         context.restoreGState()
     }
     
-    private func brushedPath() -> UIBezierPath {
-        let _bezierPath = bezierPath.copy() as! UIBezierPath
-        _bezierPath.lineJoinStyle = .round
-        _bezierPath.lineCapStyle = .round
-        _bezierPath.lineWidth = brush.lineWidth
-        return _bezierPath
+    func brushedPath(scale: CGFloat = 1.0) -> DryDrawingBezierPath {
+        let bezierPath = DryDrawingBezierPath()
+        bezierPath.lineJoinStyle = .round
+        bezierPath.lineCapStyle = .round
+        bezierPath.lineWidth = brush.lineWidth * scale
+        bezierPath.points = points
+        for (index, point) in points.enumerated() {
+            let p = CGPoint(x: point.x * scale, y: point.y * scale)
+            if index == 0 {
+                bezierPath.move(to: p)
+            } else {
+                bezierPath.addLine(to: p)
+            }
+        }
+        return bezierPath
     }
 }
 
+// MARK: - Equatable
 extension DrawnPath: Equatable {
     
     static func == (lhs: DrawnPath, rhs: DrawnPath) -> Bool {

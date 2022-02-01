@@ -137,19 +137,19 @@ extension EditorConfigViewController {
     private func penWidthTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Brush Width", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "2.5", style: .default, handler: { [weak self] (action) in
-            self?.options.brushWidth = 2.5
+            self?.options.brush.lineWidth = .fixed(width: 2.5)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "5.0", style: .default, handler: { [weak self] (action) in
-            self?.options.brushWidth = 5.0
+            self?.options.brush.lineWidth = .fixed(width: 5.0)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "7.5", style: .default, handler: { [weak self] (action) in
-            self?.options.brushWidth = 7.5
+            self?.options.brush.lineWidth = .fixed(width: 7.5)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "10.0", style: .default, handler: { [weak self] (action) in
-            self?.options.brushWidth = 10.0
+            self?.options.brush.lineWidth = .fixed(width: 10.0)
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

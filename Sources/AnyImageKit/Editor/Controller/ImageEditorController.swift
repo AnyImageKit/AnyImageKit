@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 public protocol ImageEditorControllerDelegate: AnyObject {
@@ -25,6 +26,9 @@ extension ImageEditorControllerDelegate {
 open class ImageEditorController: AnyImageNavigationController {
     
     open weak var editorDelegate: ImageEditorControllerDelegate?
+    
+    private var continuation: CheckedContinuation<EditorResult, Error>?
+    private var task: Task<(), Never>?
     
     private var containerSize: CGSize = .zero
     
@@ -60,16 +64,15 @@ open class ImageEditorController: AnyImageNavigationController {
         super.viewDidLoad()
         addNotification()
     }
+}
+
+// MARK: - Concurrency
+extension ImageEditorController {
     
-    open override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let newSize = view.frame.size
-        if containerSize != .zero, containerSize != newSize {
-            view.endEditing(true)
-            presentingViewController?.dismiss(animated: false, completion: nil)
-            editorDelegate?.imageEditorDidCancel(self)
+    public func edit() async throws -> EditorResult {
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            self?.continuation = continuation
         }
-        containerSize = newSize
     }
 }
 
@@ -80,10 +83,27 @@ extension ImageEditorController {
             return
         }
         enableDebugLog = options.enableDebugLog
-        let checkedOptions = check(resource: resource, options: options)
-        let rootViewController = PhotoEditorController(photo: resource, options: checkedOptions, delegate: self)
-        rootViewController.trackObserver = self
-        viewControllers = [rootViewController]
+        
+        task?.cancel()
+        task = Task {
+            let controller = PhotoEditorController(photo: resource, options: options)
+            viewControllers = [controller]
+            
+            do {
+                let result = try await controller.edit()
+                if editorDelegate != nil {
+                    editorDelegate?.imageEditor(self, didFinishEditing: result)
+                } else if let continuation = continuation {
+                    continuation.resume(returning: result)
+                }
+            } catch {
+                if editorDelegate != nil {
+                    editorDelegate?.imageEditorDidCancel(self)
+                } else if let continuation = continuation {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     open func update(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo) {
@@ -171,46 +191,6 @@ extension ImageEditorController {
             return .failure(.fileWriteFailed)
         }
         return .success(url)
-    }
-}
-
-// MARK: - Notification
-extension ImageEditorController {
-    
-    private func addNotification() {
-        beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
-    }
-    
-    private func removeNotifications() {
-        endGeneratingDeviceOrientationNotifications()
-    }
-    
-    @objc private func orientationDidChangeNotification(_ sender: Notification) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            view.endEditing(true)
-            presentingViewController?.dismiss(animated: false, completion: nil)
-            editorDelegate?.imageEditorDidCancel(self)
-        }
-    }
-}
-
-// MARK: - PhotoEditorControllerDelegate
-extension ImageEditorController: PhotoEditorControllerDelegate {
-    
-    func photoEditorDidCancel(_ editor: PhotoEditorController) {
-        editorDelegate?.imageEditorDidCancel(self)
-    }
-    
-    func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool) {
-        let outputResult = output(photo: photo, fileType: .jpeg)
-        switch outputResult {
-        case .success(let url):
-            let result = EditorResult(mediaURL: url, type: .photo, isEdited: isEdited)
-            editorDelegate?.imageEditor(self, didFinishEditing: result)
-        case .failure(let error):
-            _print(error.localizedDescription)
-        }
     }
 }
 

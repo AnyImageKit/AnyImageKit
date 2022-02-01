@@ -16,6 +16,19 @@ struct Brush: Codable {
     private var blue: CGFloat = 0.0
     
     var lineWidth: CGFloat = 5.0
+    
+    init() {
+        
+    }
+    
+    init(color: UIColor, lineWidth: CGFloat) {
+        self.color = color
+        self.lineWidth = lineWidth
+    }
+    
+    func scale(_ scale: CGFloat) -> Brush {
+        return Brush(color: color, lineWidth: lineWidth * scale)
+    }
 }
 
 extension Brush {
