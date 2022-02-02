@@ -138,6 +138,10 @@ extension PhotoEditorViewModel {
             stack.addBrush(data)
         case .brushUndo:
             stack.brushUndo()
+        case .mosaicFinishDraw(let data):
+            stack.addMosaic(data)
+        case .mosaicUndo:
+            stack.mosaicUndo()
         default:
             break
         }

@@ -78,7 +78,11 @@ extension PhotoEditingStack {
     }
     
     func addMosaic(_ data: MosaicData) {
-        edit.mosaicData.append(data)
+        if let index = edit.mosaicData.lastIndex(of: data) { // TODO: Check
+            edit.mosaicData[index] = data
+        } else {
+            edit.mosaicData.append(data)
+        }
     }
     
     func setCrop(_ data: CropData) {
@@ -129,7 +133,7 @@ extension PhotoEditingStack {
         } else {
             var paths = data.drawnPaths
             paths.removeLast()
-            edit.mosaicData[edit.mosaicData.count-1] = MosaicData(idx: data.idx, drawnPaths: paths)
+            edit.mosaicData[edit.mosaicData.count-1] = MosaicData(idx: data.idx, drawnPaths: paths, uuid: data.uuid)
         }
         delegate?.editingStack(self, needUpdatePreview: edit)
     }

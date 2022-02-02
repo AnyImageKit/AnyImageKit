@@ -95,6 +95,8 @@ extension PhotoEditorController {
                 self.continuation?.resume(throwing: AnyImageError.exportCanceled)
             case .done:
                 self.output()
+            case .mosaicDidCreate:
+                self.stack.mosaicImages = self.contentView.mosaic.mosaicImage
             default:
                 break
             }
@@ -166,7 +168,6 @@ extension PhotoEditorController {
     
     private func setupData() {
         stack.originImage = viewModel.image
-//        stack.mosaicImages = contentView.mosaic?.mosaicImage ?? []
         stack.originImageViewBounds = contentView.imageView.bounds
     }
 }

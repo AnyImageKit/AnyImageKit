@@ -20,10 +20,12 @@ enum PhotoEditorAction {
     case brushBeginDraw
     case brushFinishDraw(BrushData)
     
-    case mosaicBeginDraw
-    case mosaicUndo
+    case mosaicDidCreate
     case mosaicChangeImage(Int)
-    case mosaicFinishDraw([MosaicData])
+    case mosaicChangeLineWidth(CGFloat)
+    case mosaicUndo
+    case mosaicBeginDraw
+    case mosaicFinishDraw(MosaicData)
     
     case cropUpdateOption(EditorCropOption)
     case cropRotate

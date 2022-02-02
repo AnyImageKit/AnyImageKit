@@ -72,6 +72,8 @@
 		71780CA027A62EAE00056709 /* EditorBrushOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71780C9F27A62EAE00056709 /* EditorBrushOption.swift */; };
 		71780CA227A630D100056709 /* EditorBrushWidthOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71780CA127A630D100056709 /* EditorBrushWidthOption.swift */; };
 		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
+		7193635627AA220800038CDA /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7193635427AA220800038CDA /* Mosaic.swift */; };
+		7193635727AA220800038CDA /* MosaicContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7193635527AA220800038CDA /* MosaicContentView.swift */; };
 		7195A844273E5BC000C3D5D5 /* Picker+AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A843273E5BC000C3D5D5 /* Picker+AnyImagePage.swift */; };
 		7195A846273E5BE400C3D5D5 /* Picker+AnyImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A845273E5BE400C3D5D5 /* Picker+AnyImageEvent.swift */; };
 		7195A84A273E5C6000C3D5D5 /* Editor+AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A849273E5C6000C3D5D5 /* Editor+AnyImagePage.swift */; };
@@ -79,6 +81,7 @@
 		7195A84F273E5C8100C3D5D5 /* Capture+AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A84E273E5C8100C3D5D5 /* Capture+AnyImagePage.swift */; };
 		7195A851273E5C8A00C3D5D5 /* Capture+AnyImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A850273E5C8A00C3D5D5 /* Capture+AnyImageEvent.swift */; };
 		71A69B0B27A8CD7800EC01FA /* InputTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A69B0A27A8CD7800EC01FA /* InputTextViewController.swift */; };
+		71A69B0D27A8D1F900EC01FA /* EditorMosaicStyleOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A69B0C27A8D1F900EC01FA /* EditorMosaicStyleOption.swift */; };
 		71A8A126279BA254001D83CB /* PhotoEditorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */; };
 		71A8A128279BA710001D83CB /* ToolCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A127279BA710001D83CB /* ToolCollectionView.swift */; };
 		71A8A12A279BA974001D83CB /* ToolCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A129279BA974001D83CB /* ToolCollectionCell.swift */; };
@@ -367,6 +370,8 @@
 		71780C9F27A62EAE00056709 /* EditorBrushOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushOption.swift; sourceTree = "<group>"; };
 		71780CA127A630D100056709 /* EditorBrushWidthOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushWidthOption.swift; sourceTree = "<group>"; };
 		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		7193635427AA220800038CDA /* Mosaic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
+		7193635527AA220800038CDA /* MosaicContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MosaicContentView.swift; sourceTree = "<group>"; };
 		7195A843273E5BC000C3D5D5 /* Picker+AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+AnyImagePage.swift"; sourceTree = "<group>"; };
 		7195A845273E5BE400C3D5D5 /* Picker+AnyImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+AnyImageEvent.swift"; sourceTree = "<group>"; };
 		7195A849273E5C6000C3D5D5 /* Editor+AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Editor+AnyImagePage.swift"; sourceTree = "<group>"; };
@@ -374,6 +379,7 @@
 		7195A84E273E5C8100C3D5D5 /* Capture+AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AnyImagePage.swift"; sourceTree = "<group>"; };
 		7195A850273E5C8A00C3D5D5 /* Capture+AnyImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AnyImageEvent.swift"; sourceTree = "<group>"; };
 		71A69B0A27A8CD7800EC01FA /* InputTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewController.swift; sourceTree = "<group>"; };
+		71A69B0C27A8D1F900EC01FA /* EditorMosaicStyleOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMosaicStyleOption.swift; sourceTree = "<group>"; };
 		71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorOptionsView.swift; sourceTree = "<group>"; };
 		71A8A127279BA710001D83CB /* ToolCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCollectionView.swift; sourceTree = "<group>"; };
 		71A8A129279BA974001D83CB /* ToolCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCollectionCell.swift; sourceTree = "<group>"; };
@@ -745,6 +751,8 @@
 			children = (
 				7142FF7525591DB0003FF44D /* DryDrawingView.swift */,
 				717DCA8B256CD25100568A6C /* Canvas.swift */,
+				7193635427AA220800038CDA /* Mosaic.swift */,
+				7193635527AA220800038CDA /* MosaicContentView.swift */,
 			);
 			path = Draw;
 			sourceTree = "<group>";
@@ -843,9 +851,11 @@
 		71B3E93C2629892800710A7F /* Option */ = {
 			isa = PBXGroup;
 			children = (
+				71780C9F27A62EAE00056709 /* EditorBrushOption.swift */,
 				7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */,
 				71780CA127A630D100056709 /* EditorBrushWidthOption.swift */,
 				71B3E9422629895300710A7F /* EditorMosaicOption.swift */,
+				71A69B0C27A8D1F900EC01FA /* EditorMosaicStyleOption.swift */,
 				71B3E9472629897B00710A7F /* EditorTextColor.swift */,
 				71B3E94C2629898D00710A7F /* EditorCropOption.swift */,
 				71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */,
@@ -1290,7 +1300,6 @@
 			children = (
 				A561239C23B5EE400071C3E8 /* EditorPhotoOptionsInfo.swift */,
 				A561239E23B5EE4F0071C3E8 /* EditorVideoOptionsInfo.swift */,
-				71780C9F27A62EAE00056709 /* EditorBrushOption.swift */,
 				713585F527379CD400A70B9E /* EditorTheme.swift */,
 				A01A59362522206A00FABD22 /* EditorResult.swift */,
 				71B3E93C2629892800710A7F /* Option */,
@@ -1749,6 +1758,7 @@
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
 				71208EC0256F8D93002C023A /* (null) in Sources */,
 				71522FA12786FA0900020AC6 /* PhotoEditorController.swift in Sources */,
+				7193635627AA220800038CDA /* Mosaic.swift in Sources */,
 				A005C30D253D33180021E323 /* AnyImageEvent.swift in Sources */,
 				A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */,
 				A0B22EA5237AA1B3001F6066 /* Core+UICollectionView.swift in Sources */,
@@ -1772,6 +1782,7 @@
 				A07AC74A23B5EE0C002CB5AF /* Capture+CMSampleBuffer.swift in Sources */,
 				A0F475422330736200BB117B /* Picker+PHAssetCollection.swift in Sources */,
 				71D552BD2734C98F0059345B /* StringConfigKey.swift in Sources */,
+				7193635727AA220800038CDA /* MosaicContentView.swift in Sources */,
 				A0F47540232F89C600BB117B /* AlbumPickerViewController.swift in Sources */,
 				713C206E25AD32D800BB0F66 /* TextMask.swift in Sources */,
 				A0604E7123307ABD00D9AA01 /* Picker+PHFetchResult.swift in Sources */,
@@ -1849,6 +1860,7 @@
 				A09D15A3239E0FEF00F3FE77 /* CaptureButton.swift in Sources */,
 				A04EACCB2385250D004A9795 /* Core+Notification.swift in Sources */,
 				7142FF7625591DB0003FF44D /* DryDrawingView.swift in Sources */,
+				71A69B0D27A8D1F900EC01FA /* EditorMosaicStyleOption.swift in Sources */,
 				A076999723963A360006AC9B /* AnyImageNavigationController.swift in Sources */,
 				7195A84A273E5C6000C3D5D5 /* Editor+AnyImagePage.swift in Sources */,
 				A08DF7C723B332E8002B92EE /* Capture+UIImage.swift in Sources */,

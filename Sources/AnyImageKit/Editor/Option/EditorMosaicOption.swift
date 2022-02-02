@@ -8,32 +8,28 @@
 
 import UIKit
 
-/// Mosaic option
-public enum EditorMosaicOption: Equatable, Hashable {
+public struct EditorMosaicOption {
     
-    /// Default mosaic.
-    /// Blurring the original image.
-    case `default`
-    
-    /// Custom mosaic.
+    /// Mosaic style of mosaic tool options, displayed at the top of the toolbar.
+    /// Option sorting is arranged in a given array.
     ///
-    /// The principle of mosaic is to superimpose a transparent mosaic image on the original image.
-    /// After the user gestures slip, the sliding part is displayed.
-    /// Based on that you can customize your own mosaic.
+    /// You can customize your own mosaic style if you want. See `EditorMosaicOption` for more details.
     ///
-    /// icon: Image on mosaic tool bar, it will use mosaic image as icon image if icon image is nil.
+    /// - Default: [default, colorful]
+    public var style: [EditorMosaicStyleOption] = EditorMosaicStyleOption.allCases
+    
+    /// Preferred mosaic style index of mosaic.
     ///
-    /// mosaic: Custom mosaic image.
-    case custom(icon: UIImage?, mosaic: UIImage)
+    /// If the given subscript out of the `mosaicOptions` bounds, it will use first mosaic element as preferred mosaic style.
+    ///
+    /// - Default: 2
+    public var defaultMosaicIndex: Int = 0
     
-    public static var colorful: EditorMosaicOption {
-        return .custom(icon: nil, mosaic: BundleHelper.image(named: "CustomMosaic", module: .editor)!)
-    }
-}
-
-extension EditorMosaicOption: CaseIterable {
+    /// Width of mosaic.
+    /// - Default: 15.0
+    public var lineWidth: EditorBrushWidthOption = .fixed(width: 15.0)
     
-    public static var allCases: [EditorMosaicOption] {
-        return [.default, .colorful]
-    }
+    /// Mosaic blur level, only for default mosaic style.
+    /// - Default: 30
+    public var level: Int = 30
 }

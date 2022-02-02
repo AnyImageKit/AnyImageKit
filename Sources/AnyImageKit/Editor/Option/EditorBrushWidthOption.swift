@@ -2,7 +2,7 @@
 //  EditorBrushWidthOption.swift
 //  AnyImageKit
 //
-//  Created by Ray on 2022/1/30.
+//  Created by 蒋惠 on 2022/1/30.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 

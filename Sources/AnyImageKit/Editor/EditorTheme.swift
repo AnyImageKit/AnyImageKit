@@ -197,7 +197,7 @@ extension EditorTheme {
         case videoOptions(EditorVideoToolOption)
         
         case brush(EditorBrushColorOption)
-        case mosaic(EditorMosaicOption)
+        case mosaic(EditorMosaicStyleOption)
         case textColor(EditorTextColor)
         
         case undo

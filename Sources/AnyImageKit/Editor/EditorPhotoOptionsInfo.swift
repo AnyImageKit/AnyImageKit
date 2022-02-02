@@ -21,28 +21,7 @@ public struct EditorPhotoOptionsInfo {
     
     public var brush: EditorBrushOption = .init()
     
-    /// Mosaic style of mosaic tool options, displayed at the top of the toolbar.
-    /// Option sorting is arranged in a given array.
-    ///
-    /// You can customize your own mosaic style if you want. See `EditorMosaicOption` for more details.
-    ///
-    /// - Default: [default, colorful]
-    public var mosaicOptions: [EditorMosaicOption] = EditorMosaicOption.allCases
-    
-    /// Preferred mosaic style index of mosaic.
-    ///
-    /// If the given subscript out of the `mosaicOptions` bounds, it will use first mosaic element as preferred mosaic style.
-    ///
-    /// - Default: 2
-    public var defaultMosaicIndex: Int = 0
-    
-    /// Width of mosaic.
-    /// - Default: 15.0
-    public var mosaicWidth: CGFloat = 15.0
-    
-    /// Mosaic blur level, only for default mosaic style.
-    /// - Default: 30
-    public var mosaicLevel: Int = 30
+    public var mosaic: EditorMosaicOption = .init()
     
     /// Colors of input text.
     /// Option sorting is arranged in a given array.

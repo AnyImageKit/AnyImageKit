@@ -97,4 +97,12 @@ extension UIImage {
         guard let outputImage = context.createCGImage(result, from: ciImage.extent) else { return nil }
         return UIImage(cgImage: outputImage)
     }
+    
+    func filter(name: String, parameters: [String: Any]) -> UIImage? {
+        guard let cgImage = self.cgImage else { return nil }
+        let ciImage = CIImage(cgImage: cgImage)
+        let output = ciImage.applyingFilter(name, parameters: parameters)
+        guard let cgimage = CIContext(options: nil).createCGImage(output, from: ciImage.extent) else { return nil }
+        return UIImage(cgImage: cgimage)
+    }
 }

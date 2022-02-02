@@ -37,6 +37,10 @@ final class PhotoEditorContentView: UIView {
         let view = Canvas(viewModel: viewModel)
         return view
     }()
+    private(set) lazy var mosaic: Mosaic = {
+        let view = Mosaic(viewModel: viewModel)
+        return view
+    }()
     
     init(viewModel: PhotoEditorViewModel) {
         self.viewModel = viewModel
@@ -62,7 +66,7 @@ extension PhotoEditorContentView {
             guard let self = self else { return }
             switch action {
             case .toolOptionChanged(let option):
-                self.scrollView.isScrollEnabled = option != .brush
+                self.scrollView.isScrollEnabled = !(option == .brush || option == .mosaic)
             default:
                 break
             }
@@ -76,6 +80,7 @@ extension PhotoEditorContentView {
     private func setupView() {
         addSubview(scrollView)
         scrollView.addSubview(imageView)
+        imageView.addSubview(mosaic)
         imageView.addSubview(canvas)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSingleTapped)))
     }
@@ -99,6 +104,9 @@ extension PhotoEditorContentView {
         
         canvas.frame = CGRect(origin: .zero, size: imageSize)
         canvas.updateView(with: viewModel.stack.edit, force: true)
+        
+        mosaic.frame = CGRect(origin: .zero, size: imageSize)
+        mosaic.updateView(with: viewModel.stack.edit)
     }
     
     internal func updateSubviewFrame() {
@@ -107,7 +115,7 @@ extension PhotoEditorContentView {
 //        }
 //        canvas.frame = imageView.frame
         canvas.frame = CGRect(origin: .zero, size: imageView.frame.size)
-//        mosaic?.frame = CGRect(origin: .zero, size: imageView.bounds.size)
+        mosaic.frame = CGRect(origin: .zero, size: imageView.bounds.size)
 //        mosaic?.layoutSubviews()
     }
 }

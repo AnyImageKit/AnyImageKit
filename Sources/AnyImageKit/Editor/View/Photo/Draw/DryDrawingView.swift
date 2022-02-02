@@ -60,6 +60,7 @@ class DryDrawingView: UIView {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if step > 3 && !didCallBegin {
             didCallBegin = true
+            bezierPath.points = points
             willBeginDraw(path: bezierPath)
         }
         draw(touches, finish: false)
@@ -87,7 +88,10 @@ extension DryDrawingView {
                 step = 0
                 points.removeAll()
             } else {
-                panning(path: bezierPath)
+                if didCallBegin {
+                    bezierPath.points = points
+                    panning(path: bezierPath)
+                }
             }
         }
         

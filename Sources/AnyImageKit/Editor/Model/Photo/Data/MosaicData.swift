@@ -8,14 +8,25 @@
 
 import UIKit
 
-struct MosaicData: Codable, Equatable {
+struct MosaicData: Codable {
     
     let idx: Int
+    let uuid: String
     let drawnPaths: [DrawnPath]
     
     init(idx: Int,
-         drawnPaths: [DrawnPath]) {
+         drawnPaths: [DrawnPath],
+         uuid: String) {
         self.idx = idx
         self.drawnPaths = drawnPaths
+        self.uuid = uuid
+    }
+}
+
+// MARK: - Equatable
+extension MosaicData: Equatable {
+    
+    static func == (lhs: MosaicData, rhs: MosaicData) -> Bool {
+        return lhs.uuid == rhs.uuid
     }
 }

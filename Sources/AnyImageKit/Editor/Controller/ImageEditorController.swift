@@ -123,7 +123,7 @@ extension ImageEditorController {
         }
 
         assert(options.cacheIdentifier.firstIndex(of: "/") == nil, "Cache identifier can't contains '/'")
-        assert(options.mosaicOptions.count <= 5, "Mosaic count can't more then 5")
+        assert(options.mosaic.style.count <= 5, "Mosaic count can't more then 5")
 
         if options.rotationDirection != .turnOff {
             for cropOption in options.cropOptions {
