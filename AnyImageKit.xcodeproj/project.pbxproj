@@ -80,6 +80,7 @@
 		7195A84C273E5C6900C3D5D5 /* Editor+AnyImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A84B273E5C6900C3D5D5 /* Editor+AnyImageEvent.swift */; };
 		7195A84F273E5C8100C3D5D5 /* Capture+AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A84E273E5C8100C3D5D5 /* Capture+AnyImagePage.swift */; };
 		7195A851273E5C8A00C3D5D5 /* Capture+AnyImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A850273E5C8A00C3D5D5 /* Capture+AnyImageEvent.swift */; };
+		71A1BFBE27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A1BFBD27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift */; };
 		71A69B0B27A8CD7800EC01FA /* InputTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A69B0A27A8CD7800EC01FA /* InputTextViewController.swift */; };
 		71A69B0D27A8D1F900EC01FA /* EditorMosaicStyleOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A69B0C27A8D1F900EC01FA /* EditorMosaicStyleOption.swift */; };
 		71A8A126279BA254001D83CB /* PhotoEditorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */; };
@@ -378,6 +379,7 @@
 		7195A84B273E5C6900C3D5D5 /* Editor+AnyImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Editor+AnyImageEvent.swift"; sourceTree = "<group>"; };
 		7195A84E273E5C8100C3D5D5 /* Capture+AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AnyImagePage.swift"; sourceTree = "<group>"; };
 		7195A850273E5C8A00C3D5D5 /* Capture+AnyImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+AnyImageEvent.swift"; sourceTree = "<group>"; };
+		71A1BFBD27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorMosaicToolView.swift; sourceTree = "<group>"; };
 		71A69B0A27A8CD7800EC01FA /* InputTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewController.swift; sourceTree = "<group>"; };
 		71A69B0C27A8D1F900EC01FA /* EditorMosaicStyleOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMosaicStyleOption.swift; sourceTree = "<group>"; };
 		71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorOptionsView.swift; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				711A6842279B964600C7ABED /* PhotoEditorToolView.swift */,
 				71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */,
 				71620071279BEB1900FA94E4 /* PhotoEditorBrushToolView.swift */,
+				71A1BFBD27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift */,
 				71A8A127279BA710001D83CB /* ToolCollectionView.swift */,
 				71A8A129279BA974001D83CB /* ToolCollectionCell.swift */,
 			);
@@ -1697,6 +1700,7 @@
 				A0800415232F5F7A006B4711 /* PickerManager.swift in Sources */,
 				71522F9A2786F60800020AC6 /* InjectionKey.swift in Sources */,
 				7117A24825A595A8000D493F /* (null) in Sources */,
+				71A1BFBE27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
 				716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */,

@@ -43,7 +43,12 @@ final class PhotoEditorToolView: UIView {
     }()
     private lazy var brushView: PhotoEditorBrushToolView = {
         let view = PhotoEditorBrushToolView(viewModel: viewModel)
-        view.isHidden = true
+        view.alpha = 0.0
+        return view
+    }()
+    private lazy var mosaicView: PhotoEditorMosaicToolView = {
+        let view = PhotoEditorMosaicToolView(viewModel: viewModel)
+        view.alpha = 0.0
         return view
     }()
     
@@ -84,12 +89,17 @@ extension PhotoEditorToolView {
             guard let self = self else { return }
             switch action {
             case .toolOptionChanged(let option):
-                self.brushView.isHidden = option != .brush
-            case .brushBeginDraw:
+                self.brushView.alpha = 0.0
+                self.mosaicView.alpha = 0.0
+                UIView.animate(withDuration: 0.25) {
+                    self.brushView.alpha = option == .brush ? 1.0 : 0.0
+                    self.mosaicView.alpha = option == .mosaic ? 1.0 : 0.0
+                }
+            case .brushBeginDraw, .mosaicBeginDraw:
                 UIView.animate(withDuration: 0.25) {
                     self.alpha = 0.0
                 }
-            case .brushFinishDraw:
+            case .brushFinishDraw, .mosaicFinishDraw:
                 UIView.animate(withDuration: 0.25) {
                     self.alpha = 1.0
                 }
@@ -122,6 +132,7 @@ extension PhotoEditorToolView {
         addSubview(doneButton)
         addSubview(optionsView)
         addSubview(brushView)
+        addSubview(mosaicView)
         
         layout()
     }
@@ -141,7 +152,7 @@ extension PhotoEditorToolView {
     }
     
     private func layout() {
-        let marginOffset: CGFloat = viewModel.isRegular ? 30 : 20
+        let marginOffset: CGFloat = viewModel.isRegular ? 30 : 15
         subviews.forEach { $0.snp.removeConstraints() }
         layoutGuide()
         
@@ -167,6 +178,9 @@ extension PhotoEditorToolView {
                 make.trailing.equalToSuperview().offset(-30)
                 make.width.equalTo(100)
             }
+            mosaicView.snp.remakeConstraints { make in
+                make.edges.equalTo(brushView)
+            }
         } else { // iPhone
             doneButton.snp.remakeConstraints { make in
                 make.trailing.equalTo(bottomGuide).offset(-marginOffset)
@@ -181,6 +195,9 @@ extension PhotoEditorToolView {
                 make.bottom.equalTo(bottomGuide.snp.top)
                 make.leading.trailing.equalTo(bottomGuide)
                 make.height.equalTo(100)
+            }
+            mosaicView.snp.remakeConstraints { make in
+                make.edges.equalTo(brushView)
             }
         }
     }

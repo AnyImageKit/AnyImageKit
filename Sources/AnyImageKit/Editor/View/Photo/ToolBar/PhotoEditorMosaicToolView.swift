@@ -1,29 +1,30 @@
 //
-//  PhotoEditorBrushToolView.swift
+//  PhotoEditorMosaicToolView.swift
 //  AnyImageKit
 //
-//  Created by 蒋惠 on 2022/1/22.
+//  Created by Ray on 2022/2/3.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-final class PhotoEditorBrushToolView: UIView {
+final class PhotoEditorMosaicToolView: UIView {
     
     private var options: EditorPhotoOptionsInfo { viewModel.options }
     private let viewModel: PhotoEditorViewModel
     private var cancellable = Set<AnyCancellable>()
     
-    private lazy var selectedIndex = options.brush.defaultColorIndex
+    private lazy var selectedIndex = options.mosaic.defaultMosaicIndex
     private var needLayout = false
     private var layoutWithAnimated = false
     
-    private let colorWidth: CGFloat = 24
+    private let iconWidth: CGFloat = 24
     private let itemWidth: CGFloat = 34
-    private let minSpacing: CGFloat = 10
-    private let maxCount: Int = 7
-    private var optionsCount: Int { options.brush.colors.count }
+    private let minSpacing: CGFloat = 50
+    private let maxCountMinSpacing: CGFloat = 20
+    private let maxCount: Int = 4
+    private var optionsCount: Int { options.mosaic.style.count }
     
     private let primaryGuide = UILayoutGuide()
     private let secondaryGuide = UILayoutGuide()
@@ -42,11 +43,11 @@ final class PhotoEditorBrushToolView: UIView {
     }()
     private lazy var slider: UISlider = {
         let view = UISlider(frame: .zero)
-        view.isHidden = !options.brush.lineWidth.isDynamic
+        view.isHidden = !options.mosaic.lineWidth.isDynamic
         view.alpha = 0.4
         view.minimumTrackTintColor = .white
         view.maximumTrackTintColor = .white.withAlphaComponent(0.5)
-        view.value = options.brush.lineWidth.percent(of: options.brush.lineWidth.width)
+        view.value = options.mosaic.lineWidth.percent(of: options.mosaic.lineWidth.width)
         view.layer.applySketchShadow(color: .black.withAlphaComponent(0.4), alpha: 0.5, x: 0, y: 0, blur: 4, spread: 0)
         view.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
         view.addTarget(self, action: #selector(sliderTouchDown(_:)), for: .touchDown)
@@ -91,7 +92,7 @@ final class PhotoEditorBrushToolView: UIView {
 }
 
 // MARK: - Observer
-extension PhotoEditorBrushToolView {
+extension PhotoEditorMosaicToolView {
     
     private func bindViewModel() {
         viewModel.containerSizeSubject.sink { [weak self] _ in
@@ -108,8 +109,8 @@ extension PhotoEditorBrushToolView {
         viewModel.actionSubject.sink { [weak self] action in
             guard let self = self else { return }
             switch action {
-            case .brushFinishDraw:
-                self.undoButton.isEnabled = self.viewModel.stack.edit.brushCanUndo
+            case .mosaicFinishDraw:
+                self.undoButton.isEnabled = self.viewModel.stack.edit.mosaicCanUndo
             default:
                 break
             }
@@ -118,37 +119,23 @@ extension PhotoEditorBrushToolView {
 }
 
 // MARK: - Target
-extension PhotoEditorBrushToolView {
+extension PhotoEditorMosaicToolView {
     
     @objc private func undoButtonTapped(_ sender: UIButton) {
-        viewModel.send(action: .brushUndo)
-        sender.isEnabled = viewModel.stack.edit.brushCanUndo
+        viewModel.send(action: .mosaicUndo)
+        sender.isEnabled = viewModel.stack.edit.mosaicCanUndo
     }
     
-    @objc private func colorButtonTapped(_ sender: UIButton) {
+    @objc private func mosaicButtonTapped(_ sender: UIButton) {
         if selectedIndex != sender.tag {
             selectedIndex = sender.tag
             updateSelectedStyle()
         }
-        viewModel.send(action: .brushChangeColor(options.brush.colors[selectedIndex].color))
-    }
-    
-    @available(iOS 14, *)
-    @objc private func colorWellTapped(_ sender: ColorWell) {
-        if selectedIndex != sender.tag {
-            selectedIndex = sender.tag
-            updateSelectedStyle()
-        }
-        viewModel.send(action: .brushChangeColor(sender.selectedColor ?? .white))
-    }
-    
-    @available(iOS 14, *)
-    @objc private func colorWellValueChanged(_ sender: ColorWell) {
-        viewModel.send(action: .brushChangeColor(sender.selectedColor ?? .white))
+        viewModel.send(action: .mosaicChangeImage(selectedIndex))
     }
     
     @objc private func sliderValueChanged(_ sender: UISlider) {
-        viewModel.send(action: .brushChangeLineWidth(options.brush.lineWidth.width(of: sender.value)))
+        viewModel.send(action: .mosaicChangeLineWidth(options.mosaic.lineWidth.width(of: sender.value)))
     }
     
     @objc private func sliderTouchDown(_ sender: UISlider) {
@@ -165,7 +152,7 @@ extension PhotoEditorBrushToolView {
 }
 
 // MARK: - UI
-extension PhotoEditorBrushToolView {
+extension PhotoEditorMosaicToolView {
     
     private func setupView() {
         addLayoutGuide(primaryGuide)
@@ -186,7 +173,7 @@ extension PhotoEditorBrushToolView {
                 make.trailing.equalToSuperview()
                 make.centerY.equalToSuperview()
                 make.width.equalTo(50)
-                make.height.equalTo(calculateViewLength(count: optionsCount, maxCount: maxCount) + 10 + 44)
+                make.height.equalTo(calculateViewLength(count: maxCount, maxCount: maxCount) + 10 + 44)
             }
             secondaryGuide.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(primaryGuide)
@@ -229,7 +216,7 @@ extension PhotoEditorBrushToolView {
         } else { // iPhone
             collectionView.snp.remakeConstraints { make in
                 make.leading.equalTo(primaryGuide).offset(15)
-                make.trailing.equalTo(undoButton.snp.leading).offset(-15)
+                make.trailing.equalTo(undoButton.snp.leading).offset(-20)
                 make.centerY.equalTo(primaryGuide)
                 make.height.height.equalTo(itemWidth)
             }
@@ -244,53 +231,55 @@ extension PhotoEditorBrushToolView {
                 make.centerY.equalTo(secondaryGuide)
             }
         }
+        
+        let count = options.mosaic.style.count
+        let value = calculateViewLength(count: count, maxCount: maxCount)
+        collectionView.layout(style: count >= maxCount ? .full : .center(value: value, offset: 30), isRegular: viewModel.isRegular)
     }
     
     private func updateSelectedStyle() {
-        for (index, item) in collectionView.items.enumerated() {
-            let scale: CGFloat = index == selectedIndex ? 1.25 : 1.0
-            if let button = item as? ColorButton {
-                button.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
-                button.isSelected = index == selectedIndex
+        let style = options.mosaic.style[selectedIndex]
+        let mosaicButtons = collectionView.items.map { $0 as! UIButton }
+        switch style {
+        case .default:
+            for button in mosaicButtons {
+                button.tintColor = options.theme[color: .primary]
+                button.imageView?.layer.borderWidth = 0
             }
-            if #available(iOS 14.0, *) {
-                if let colorWell = item as? ColorWell {
-                    colorWell.transform = CGAffineTransform(scaleX: scale, y: scale)
-                }
+        default:
+            for (idx, button) in mosaicButtons.enumerated() {
+                button.tintColor = .white
+                button.imageView?.layer.borderWidth = idx == selectedIndex ? 2 : 0
             }
         }
     }
     
     private func createItems() -> [UIView] {
-        return options.brush.colors.enumerated().map { (idx, option) -> UIView in
-            return createColorButton(idx: idx, option: option)
+        return options.mosaic.style.enumerated().map { (idx, style) -> UIView in
+            return createMosaicButton(idx: idx, style: style)
         }
     }
     
-    private func createColorButton(idx: Int, option: EditorBrushColorOption) -> UIView {
-        switch option {
-        case .custom(let color):
-            let button = ColorButton(tag: idx, size: colorWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
-            button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
-            options.theme.buttonConfiguration[.brush(option)]?.configuration(button.colorView)
-            return button
-        case .colorWell(let color):
-            if #available(iOS 14.0, *) {
-                let colorWell = ColorWell(itemSize: colorWidth, borderWidth: 2)
-                colorWell.backgroundColor = .clear
-                colorWell.tag = idx
-                colorWell.selectedColor = color
-                colorWell.supportsAlpha = false
-                colorWell.addTarget(self, action: #selector(colorWellTapped(_:)), for: .touchUpInside)
-                colorWell.addTarget(self, action: #selector(colorWellValueChanged(_:)), for: .valueChanged)
-                return colorWell
-            } else {
-                let button = ColorButton(tag: idx, size: colorWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
-                button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
-                options.theme.buttonConfiguration[.brush(option)]?.configuration(button.colorView)
-                return button
-            }
+    private func createMosaicButton(idx: Int, style: EditorMosaicStyleOption) -> UIButton {
+        let image: UIImage?
+        switch style {
+        case .default:
+            image = options.theme[icon: .photoToolMosaicDefault]?.withRenderingMode(.alwaysTemplate)
+        case .custom(let icon, let mosaic):
+            image = icon ?? mosaic
         }
+        let inset = (itemWidth - iconWidth) / 2
+        let button = UIButton(type: .custom)
+        button.tag = idx
+        button.tintColor = .white
+        button.clipsToBounds = true
+        button.setImage(image, for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        button.imageView?.layer.cornerRadius = style == .default ? 0 : 2
+        button.imageView?.layer.borderColor = UIColor.white.cgColor
+        button.addTarget(self, action: #selector(mosaicButtonTapped(_:)), for: .touchUpInside)
+        options.theme.buttonConfiguration[.mosaic(style)]?.configuration(button)
+        return button
     }
     
     private func calculateViewLength(count: Int, maxCount: Int = 0) -> CGFloat {
@@ -299,18 +288,27 @@ extension PhotoEditorBrushToolView {
         if maxCount > 0 {
             optionsCount = optionsCount > maxCount ? maxCount : optionsCount
         }
-        return itemWidth * optionsCount + (optionsCount - 1) * minSpacing
+        
+        if optionsCount >= maxCount {
+            return itemWidth * optionsCount + (optionsCount - 1) * maxCountMinSpacing
+        } else {
+            return itemWidth * optionsCount + (optionsCount - 1) * minSpacing
+        }
     }
     
     private func calculateSpacing() -> CGFloat {
-        var spacing: CGFloat = minSpacing
+        if optionsCount < maxCount {
+            return minSpacing
+        }
+        
+        var spacing: CGFloat = maxCountMinSpacing
         let count = CGFloat(optionsCount)
         
         let maxSize: CGFloat
         if viewModel.isRegular { // iPad
             maxSize = primaryGuide.layoutFrame.height - 15 - 44
         } else { // iPhone
-            maxSize = primaryGuide.layoutFrame.width - 15 - 15 - 44 - 15
+            maxSize = primaryGuide.layoutFrame.width - 15 - 20 - 44 - 15
         }
         
         if primaryGuide.layoutFrame == .zero {

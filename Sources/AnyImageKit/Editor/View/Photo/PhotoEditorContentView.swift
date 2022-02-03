@@ -107,6 +107,7 @@ extension PhotoEditorContentView {
         
         mosaic.frame = CGRect(origin: .zero, size: imageSize)
         mosaic.updateView(with: viewModel.stack.edit)
+        mosaic.updateFrame()
     }
     
     internal func updateSubviewFrame() {
@@ -115,7 +116,8 @@ extension PhotoEditorContentView {
 //        }
 //        canvas.frame = imageView.frame
         canvas.frame = CGRect(origin: .zero, size: imageView.frame.size)
-        mosaic.frame = CGRect(origin: .zero, size: imageView.bounds.size)
+        mosaic.frame = CGRect(origin: .zero, size: imageView.frame.size)
+        
 //        mosaic?.layoutSubviews()
     }
 }

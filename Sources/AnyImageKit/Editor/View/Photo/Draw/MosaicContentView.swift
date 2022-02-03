@@ -7,23 +7,25 @@
 //
 
 import UIKit
-import Combine
 
 final class MosaicContentView: DryDrawingView {
 
     let idx: Int
     let uuid: String
     let mosaic: UIImage
+    var lineWidth: CGFloat = 5.0
     
     private var options: EditorPhotoOptionsInfo { viewModel.options }
     private let viewModel: PhotoEditorViewModel
-    private var cancellable = Set<AnyCancellable>()
     
     private var brush = Brush()
-    private lazy var lineWidth = options.mosaic.lineWidth.width
     
     /// Used to draw mosaic view
-    private(set) var drawnPaths: [DrawnPath] = []
+    private(set) var drawnPaths: [DrawnPath] = [] {
+        didSet {
+            updateMask()
+        }
+    }
     
     private lazy var contentLayer: CALayer = {
         let contentLayer = CALayer()
@@ -31,25 +33,27 @@ final class MosaicContentView: DryDrawingView {
         return contentLayer
     }()
     
-    private lazy var maskLayer: CAShapeLayer = {
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.lineCap = .round
-        shapeLayer.lineJoin = .round
-        shapeLayer.fillColor = nil
-        shapeLayer.strokeColor = UIColor.white.cgColor
-        return shapeLayer
+    private lazy var maskLayer: MaskLayer = {
+        let layer = MaskLayer()
+        layer.scale = { [weak self] in
+            guard let self = self else { return 1.0 }
+            return self.frame.size.width / self.viewModel.imageSize.width
+        }
+        layer.contentsScale = UIScreen.main.scale
+        layer.drawsAsynchronously = true
+        return layer
     }()
     
     private var pathBeforeBegin = DryDrawingBezierPath()
     
-    init(viewModel: PhotoEditorViewModel, idx: Int, mosaic: UIImage, uuid: String) {
+    init(viewModel: PhotoEditorViewModel, idx: Int, mosaic: UIImage, lineWidth: CGFloat, uuid: String) {
         self.idx = idx
-        self.uuid = uuid
         self.mosaic = mosaic
+        self.lineWidth = lineWidth
+        self.uuid = uuid
         self.viewModel = viewModel
         super.init(frame: .zero)
         setupView()
-        bindViewModel()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -59,58 +63,36 @@ final class MosaicContentView: DryDrawingView {
     override func willBeginDraw(path: DryDrawingBezierPath) {
         viewModel.send(action: .mosaicBeginDraw)
         brush.lineWidth = lineWidth / viewModel.scrollView!.zoomScale
-        maskLayer.lineWidth = brush.lineWidth
-        
-        if let cgPath = maskLayer.path {
-            pathBeforeBegin = DryDrawingBezierPath(cgPath: cgPath)
-            let newPath = DryDrawingBezierPath(cgPath: cgPath)
-            newPath.append(path)
-            maskLayer.path = newPath.cgPath
-        } else {
-            pathBeforeBegin = path
-            maskLayer.path = path.cgPath
-        }
+        let drawnPath = DrawnPath(brush: brush, scale: 1.0, points: path.points)
+        drawnPaths.append(drawnPath)
+        setNeedsDisplay()
     }
     
     override func panning(path: DryDrawingBezierPath) {
-        let newPath = DryDrawingBezierPath(cgPath: pathBeforeBegin.cgPath)
-        newPath.append(path)
-        maskLayer.path = newPath.cgPath
+        guard !drawnPaths.isEmpty else { return }
+        let drawnPath = DrawnPath(brush: brush, scale: 1.0, points: path.points)
+        drawnPaths[drawnPaths.count-1] = drawnPath
+        updateMask()
     }
     
     override func didFinishDraw(path: DryDrawingBezierPath) {
-        let newPath = DryDrawingBezierPath(cgPath: pathBeforeBegin.cgPath)
-        newPath.append(path)
-        maskLayer.path = newPath.cgPath
+        guard !drawnPaths.isEmpty else { return }
+        let drawnPath = DrawnPath(brush: brush, scale: 1.0, points: path.points)
+        drawnPaths[drawnPaths.count-1] = drawnPath
+        updateMask()
         
         let scale = (viewModel.imageSize.width / frame.width) * viewModel.scrollView!.zoomScale
-        drawnPaths.append(DrawnPath(brush: brush, scale: scale, points: path.points))
-        viewModel.send(action: .mosaicFinishDraw(MosaicData(idx: idx, drawnPaths: drawnPaths, uuid: uuid)))
+        let stackDrawnPaths = drawnPaths.map {
+            DrawnPath(brush: $0.brush, scale: scale, points: $0.points)
+        }
+        viewModel.send(action: .mosaicFinishDraw(MosaicData(idx: idx, drawnPaths: stackDrawnPaths, uuid: uuid)))
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        contentLayer.frame = bounds
-        maskLayer.frame = bounds
-        CATransaction.commit()
-    }
-}
-
-// MARK: - Observer
-extension MosaicContentView {
-    
-    private func bindViewModel() {
-        viewModel.actionSubject.sink { [weak self] action in
-            guard let self = self else { return }
-            switch action {
-            case .mosaicChangeLineWidth(let width):
-                self.lineWidth = width
-            default:
-                break
-            }
-        }.store(in: &cancellable)
+        if maskLayer.frame == .zero {
+            updateLayerFrame()
+        }
     }
 }
 
@@ -122,21 +104,21 @@ extension MosaicContentView {
     }
     
     func setDrawn(paths: [DrawnPath], scale: CGFloat) {
-        drawnPaths = paths
-        
-        maskLayer.path = nil
-        for drawnPath in drawnPaths {
-            maskLayer.lineWidth = drawnPath.brush.lineWidth * scale
-            let path = drawnPath.brushedPath(scale: scale)
-            
-            if let cgPath = maskLayer.path {
-                let newPath = DryDrawingBezierPath(cgPath: cgPath)
-                newPath.append(path)
-                maskLayer.path = newPath.cgPath
-            } else {
-                maskLayer.path = path.cgPath
-            }
+        drawnPaths = paths.map {
+            DrawnPath(brush: $0.brush, scale: scale, points: $0.points)
         }
+    }
+    
+    func updateMask() {
+        maskLayer.drawnPaths = drawnPaths
+    }
+    
+    func updateLayerFrame() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        contentLayer.frame = bounds
+        maskLayer.frame = bounds
+        CATransaction.commit()
     }
 }
 
@@ -146,8 +128,22 @@ extension MosaicContentView {
     private func setupView() {
         layer.addSublayer(contentLayer)
         contentLayer.contents = mosaic.cgImage
-        
         brush.lineWidth = lineWidth / viewModel.scrollView!.zoomScale
-        maskLayer.lineWidth = brush.lineWidth
+    }
+}
+
+// MARK: - MaskLayer
+private class MaskLayer: CALayer {
+    
+    var scale: (() -> CGFloat)?
+    
+    var drawnPaths: [DrawnPath] = [] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    override func draw(in ctx: CGContext) {
+        drawnPaths.forEach { $0.draw(in: ctx, size: bounds.size, scale: scale?() ?? 1.0) }
     }
 }

@@ -19,6 +19,7 @@ final class Mosaic: UIView {
     private let queue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.Mosaic")
     private var originalMosaicImage: UIImage? // 原图传统马赛克的图片
     private var originBounds: CGRect = .zero
+    private lazy var lineWidth = options.mosaic.lineWidth.width
     private(set) var mosaicImage: [UIImage] = []
     private(set) var contentViews: [MosaicContentView] = []
     
@@ -41,7 +42,7 @@ final class Mosaic: UIView {
         }
         contentViews.forEach {
             $0.originBounds = originBounds
-//            $0.updateMask()
+            $0.updateMask()
         }
     }
 }
@@ -57,6 +58,9 @@ extension Mosaic {
                 self.isUserInteractionEnabled = option == .mosaic
             case .mosaicChangeImage(let idx):
                 self.setMosaicCoverImage(idx: idx)
+            case .mosaicChangeLineWidth(let width):
+                self.lineWidth = width
+                self.contentViews.forEach { $0.lineWidth = width }
             case .mosaicUndo:
                 self.undo()
             default:
@@ -68,6 +72,15 @@ extension Mosaic {
 
 // MARK: - Public
 extension Mosaic {
+    
+    func updateFrame() {
+        contentViews.forEach {
+            $0.originBounds = originBounds
+            $0.frame = bounds
+            $0.updateLayerFrame()
+            $0.updateMask()
+        }
+    }
     
     func updateView(with edit: PhotoEditingStack.Edit) {
         for (idx, data) in edit.mosaicData.enumerated() {
@@ -99,7 +112,7 @@ extension Mosaic {
     
     @discardableResult
     private func createContentView(idx: Int, uuid: String = UUID().uuidString) -> MosaicContentView {
-        let contentView = MosaicContentView(viewModel: viewModel, idx: idx, mosaic: mosaicImage[idx], uuid: uuid)
+        let contentView = MosaicContentView(viewModel: viewModel, idx: idx, mosaic: mosaicImage[idx], lineWidth: lineWidth, uuid: uuid)
         addSubview(contentView)
         contentViews.append(contentView)
         contentView.snp.makeConstraints { (maker) in

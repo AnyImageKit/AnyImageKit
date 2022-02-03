@@ -10,6 +10,12 @@ import UIKit
 
 final class ToolCollectionView: UIView {
 
+    enum LayoutStyle {
+        case full
+        case center(value: CGFloat, offset: CGFloat)
+        case leading(value: CGFloat, offset: CGFloat)
+    }
+    
     var spacing: CGFloat = 10 {
         didSet {
             flowLayout.minimumLineSpacing = spacing
@@ -89,8 +95,38 @@ extension ToolCollectionView {
     
     private func setupView() {
         addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        layout(style: .full)
+    }
+    
+    func layout(style: LayoutStyle, isRegular: Bool = false) {
+        switch style {
+        case .full:
+            collectionView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        case .center(let value, let offset):
+            collectionView.snp.remakeConstraints { make in
+                if isRegular { // iPad
+                    make.leading.trailing.equalToSuperview()
+                    make.centerY.equalToSuperview()
+                    make.height.equalTo(value)
+                } else { // iPhone
+                    make.top.bottom.equalToSuperview()
+                    make.centerX.equalToSuperview().offset(offset)
+                    make.width.equalTo(value)
+                }
+            }
+        case .leading(let value, let offset):
+            collectionView.snp.remakeConstraints { make in
+                if isRegular { // iPad
+                    make.top.leading.trailing.equalToSuperview()
+                    make.height.equalTo(value)
+                } else { // iPhone
+                    make.leading.equalToSuperview().offset(offset)
+                    make.top.bottom.equalToSuperview()
+                    make.width.equalTo(value)
+                }
+            }
         }
     }
 }
