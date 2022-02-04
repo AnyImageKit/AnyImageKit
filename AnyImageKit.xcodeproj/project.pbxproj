@@ -10,6 +10,8 @@
 		7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */; };
 		71034F1D273A6992007BBF60 /* Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1C273A6992007BBF60 /* Shadow.swift */; };
 		71034F1F273A6AEA007BBF60 /* Core+CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */; };
+		7105BE0D27ACDBF9008624CE /* ArcFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */; };
+		7105BE0F27ACFFAD008624CE /* ArcCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105BE0E27ACFFAD008624CE /* ArcCollectionCell.swift */; };
 		7112B6BF262D283400F36B9A /* EditorBrushColorOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */; };
 		7117A24425A5959C000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7117A24825A595A8000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -86,6 +88,8 @@
 		71A8A126279BA254001D83CB /* PhotoEditorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */; };
 		71A8A128279BA710001D83CB /* ToolCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A127279BA710001D83CB /* ToolCollectionView.swift */; };
 		71A8A12A279BA974001D83CB /* ToolCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A129279BA974001D83CB /* ToolCollectionCell.swift */; };
+		71AF7D1527ACBC2300027B70 /* ArcCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF7D1427ACBC2300027B70 /* ArcCollectionView.swift */; };
+		71AF7D1727ACBD6700027B70 /* PhotoEditorFilterToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */; };
 		71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9112629784400710A7F /* CaptureMediaOption.swift */; };
 		71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */; };
 		71B3E9432629895300710A7F /* EditorMosaicOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9422629895300710A7F /* EditorMosaicOption.swift */; };
@@ -314,6 +318,8 @@
 		7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIBlurEffect.swift"; sourceTree = "<group>"; };
 		71034F1C273A6992007BBF60 /* Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadow.swift; sourceTree = "<group>"; };
 		71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CALayer.swift"; sourceTree = "<group>"; };
+		7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcFlowLayout.swift; sourceTree = "<group>"; };
+		7105BE0E27ACFFAD008624CE /* ArcCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcCollectionCell.swift; sourceTree = "<group>"; };
 		7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushColorOption.swift; sourceTree = "<group>"; };
 		711A6842279B964600C7ABED /* PhotoEditorToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorToolView.swift; sourceTree = "<group>"; };
 		713585F527379CD400A70B9E /* EditorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTheme.swift; sourceTree = "<group>"; };
@@ -385,6 +391,8 @@
 		71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorOptionsView.swift; sourceTree = "<group>"; };
 		71A8A127279BA710001D83CB /* ToolCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCollectionView.swift; sourceTree = "<group>"; };
 		71A8A129279BA974001D83CB /* ToolCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCollectionCell.swift; sourceTree = "<group>"; };
+		71AF7D1427ACBC2300027B70 /* ArcCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcCollectionView.swift; sourceTree = "<group>"; };
+		71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorFilterToolView.swift; sourceTree = "<group>"; };
 		71B3E9112629784400710A7F /* CaptureMediaOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureMediaOption.swift; sourceTree = "<group>"; };
 		71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAspectRatio.swift; sourceTree = "<group>"; };
 		71B3E9422629895300710A7F /* EditorMosaicOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMosaicOption.swift; sourceTree = "<group>"; };
@@ -636,8 +644,12 @@
 				71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */,
 				71620071279BEB1900FA94E4 /* PhotoEditorBrushToolView.swift */,
 				71A1BFBD27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift */,
+				71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */,
 				71A8A127279BA710001D83CB /* ToolCollectionView.swift */,
 				71A8A129279BA974001D83CB /* ToolCollectionCell.swift */,
+				71AF7D1427ACBC2300027B70 /* ArcCollectionView.swift */,
+				7105BE0E27ACFFAD008624CE /* ArcCollectionCell.swift */,
+				7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */,
 			);
 			path = ToolBar;
 			sourceTree = "<group>";
@@ -1713,6 +1725,7 @@
 				7112B6BF262D283400F36B9A /* EditorBrushColorOption.swift in Sources */,
 				A04F4146261C114A003D968E /* PickerOptionsConfigurable.swift in Sources */,
 				71BAF33D25761C48007AE60F /* CodableCacheTool.swift in Sources */,
+				71AF7D1527ACBC2300027B70 /* ArcCollectionView.swift in Sources */,
 				71522FA32786FA1900020AC6 /* PhotoEditorViewModel.swift in Sources */,
 				A0B22EA8237AA1B3001F6066 /* Core+UITableView.swift in Sources */,
 				A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */,
@@ -1823,6 +1836,7 @@
 				A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */,
 				A5347D2823A9FF2900C93874 /* ExportTool+PhotoData.swift in Sources */,
 				713C206C25AD32D800BB0F66 /* MosaicData.swift in Sources */,
+				7105BE0F27ACFFAD008624CE /* ArcCollectionCell.swift in Sources */,
 				71208EBA256F8D88002C023A /* (null) in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,
 				713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */,
@@ -1836,6 +1850,7 @@
 				7148296A27A4DCBF008035E5 /* VideoEditorCropProgressView.swift in Sources */,
 				71522F992786F60800020AC6 /* InjectedValues.swift in Sources */,
 				713585F627379CD400A70B9E /* EditorTheme.swift in Sources */,
+				7105BE0D27ACDBF9008624CE /* ArcFlowLayout.swift in Sources */,
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
 				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
 				71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */,
@@ -1869,6 +1884,7 @@
 				7195A84A273E5C6000C3D5D5 /* Editor+AnyImagePage.swift in Sources */,
 				A08DF7C723B332E8002B92EE /* Capture+UIImage.swift in Sources */,
 				713C206D25AD32D800BB0F66 /* PhotoEditingStack.swift in Sources */,
+				71AF7D1727ACBD6700027B70 /* PhotoEditorFilterToolView.swift in Sources */,
 				7148295C27A4DBDE008035E5 /* TextTrashView.swift in Sources */,
 				A5DF1E88237AA32C00E3A32E /* Editor+UIImage.swift in Sources */,
 				71B3E957262989BE00710A7F /* EditorVideoToolOption.swift in Sources */,
