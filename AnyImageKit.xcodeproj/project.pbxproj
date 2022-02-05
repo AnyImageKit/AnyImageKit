@@ -651,14 +651,6 @@
 				71620071279BEB1900FA94E4 /* PhotoEditorBrushToolView.swift */,
 				71A1BFBD27AB6D2600CE65EF /* PhotoEditorMosaicToolView.swift */,
 				71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */,
-				71A8A127279BA710001D83CB /* ToolCollectionView.swift */,
-				71A8A129279BA974001D83CB /* ToolCollectionCell.swift */,
-				7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */,
-				71CC2AC627AE199A001FC268 /* ArcBaseCollectionView.swift */,
-				71CC2AC827AE1A9D001FC268 /* FilterCollectionView.swift */,
-				71CC2ACA27AE1BBF001FC268 /* FilterCollectionCell.swift */,
-				71CC2ACC27AE2004001FC268 /* SliderCollectionView.swift */,
-				71CC2ACE27AE2050001FC268 /* SliderCollectionCell.swift */,
 			);
 			path = ToolBar;
 			sourceTree = "<group>";
@@ -904,6 +896,14 @@
 		71CC2AD027AE5805001FC268 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
+				71A8A127279BA710001D83CB /* ToolCollectionView.swift */,
+				71A8A129279BA974001D83CB /* ToolCollectionCell.swift */,
+				7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */,
+				71CC2AC627AE199A001FC268 /* ArcBaseCollectionView.swift */,
+				71CC2AC827AE1A9D001FC268 /* FilterCollectionView.swift */,
+				71CC2ACA27AE1BBF001FC268 /* FilterCollectionCell.swift */,
+				71CC2ACC27AE2004001FC268 /* SliderCollectionView.swift */,
+				71CC2ACE27AE2050001FC268 /* SliderCollectionCell.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
