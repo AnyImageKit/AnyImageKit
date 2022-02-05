@@ -11,7 +11,6 @@
 		71034F1D273A6992007BBF60 /* Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1C273A6992007BBF60 /* Shadow.swift */; };
 		71034F1F273A6AEA007BBF60 /* Core+CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */; };
 		7105BE0D27ACDBF9008624CE /* ArcFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */; };
-		7105BE0F27ACFFAD008624CE /* ArcCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105BE0E27ACFFAD008624CE /* ArcCollectionCell.swift */; };
 		7112B6BF262D283400F36B9A /* EditorBrushColorOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */; };
 		7117A24425A5959C000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7117A24825A595A8000D493F /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -88,7 +87,6 @@
 		71A8A126279BA254001D83CB /* PhotoEditorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */; };
 		71A8A128279BA710001D83CB /* ToolCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A127279BA710001D83CB /* ToolCollectionView.swift */; };
 		71A8A12A279BA974001D83CB /* ToolCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A8A129279BA974001D83CB /* ToolCollectionCell.swift */; };
-		71AF7D1527ACBC2300027B70 /* ArcCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF7D1427ACBC2300027B70 /* ArcCollectionView.swift */; };
 		71AF7D1727ACBD6700027B70 /* PhotoEditorFilterToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */; };
 		71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9112629784400710A7F /* CaptureMediaOption.swift */; };
 		71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */; };
@@ -103,6 +101,11 @@
 		71C6B6132603428D00A345C7 /* RotateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C6B6122603428D00A345C7 /* RotateData.swift */; };
 		71CBF1432519CC4B00F79D19 /* Core+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1422519CC4B00F79D19 /* Core+UIView.swift */; };
 		71CBF1592519E5BF00F79D19 /* PermissionLimitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */; };
+		71CC2AC727AE199A001FC268 /* ArcBaseCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CC2AC627AE199A001FC268 /* ArcBaseCollectionView.swift */; };
+		71CC2AC927AE1A9D001FC268 /* FilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CC2AC827AE1A9D001FC268 /* FilterCollectionView.swift */; };
+		71CC2ACB27AE1BBF001FC268 /* FilterCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CC2ACA27AE1BBF001FC268 /* FilterCollectionCell.swift */; };
+		71CC2ACD27AE2004001FC268 /* SliderCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CC2ACC27AE2004001FC268 /* SliderCollectionView.swift */; };
+		71CC2ACF27AE2050001FC268 /* SliderCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CC2ACE27AE2050001FC268 /* SliderCollectionCell.swift */; };
 		71D552BD2734C98F0059345B /* StringConfigKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D552BC2734C98F0059345B /* StringConfigKey.swift */; };
 		71D9FFB025AD37C000825B3C /* TextData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D9FFAE25AD37C000825B3C /* TextData.swift */; };
 		71D9FFB125AD37C000825B3C /* CropData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D9FFAF25AD37C000825B3C /* CropData.swift */; };
@@ -319,7 +322,6 @@
 		71034F1C273A6992007BBF60 /* Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadow.swift; sourceTree = "<group>"; };
 		71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CALayer.swift"; sourceTree = "<group>"; };
 		7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcFlowLayout.swift; sourceTree = "<group>"; };
-		7105BE0E27ACFFAD008624CE /* ArcCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcCollectionCell.swift; sourceTree = "<group>"; };
 		7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushColorOption.swift; sourceTree = "<group>"; };
 		711A6842279B964600C7ABED /* PhotoEditorToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorToolView.swift; sourceTree = "<group>"; };
 		713585F527379CD400A70B9E /* EditorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTheme.swift; sourceTree = "<group>"; };
@@ -391,7 +393,6 @@
 		71A8A125279BA254001D83CB /* PhotoEditorOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorOptionsView.swift; sourceTree = "<group>"; };
 		71A8A127279BA710001D83CB /* ToolCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCollectionView.swift; sourceTree = "<group>"; };
 		71A8A129279BA974001D83CB /* ToolCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCollectionCell.swift; sourceTree = "<group>"; };
-		71AF7D1427ACBC2300027B70 /* ArcCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcCollectionView.swift; sourceTree = "<group>"; };
 		71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorFilterToolView.swift; sourceTree = "<group>"; };
 		71B3E9112629784400710A7F /* CaptureMediaOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureMediaOption.swift; sourceTree = "<group>"; };
 		71B3E9192629785C00710A7F /* CaptureAspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAspectRatio.swift; sourceTree = "<group>"; };
@@ -406,6 +407,11 @@
 		71C6B6122603428D00A345C7 /* RotateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateData.swift; sourceTree = "<group>"; };
 		71CBF1422519CC4B00F79D19 /* Core+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+UIView.swift"; sourceTree = "<group>"; };
 		71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLimitedView.swift; sourceTree = "<group>"; };
+		71CC2AC627AE199A001FC268 /* ArcBaseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcBaseCollectionView.swift; sourceTree = "<group>"; };
+		71CC2AC827AE1A9D001FC268 /* FilterCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionView.swift; sourceTree = "<group>"; };
+		71CC2ACA27AE1BBF001FC268 /* FilterCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionCell.swift; sourceTree = "<group>"; };
+		71CC2ACC27AE2004001FC268 /* SliderCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderCollectionView.swift; sourceTree = "<group>"; };
+		71CC2ACE27AE2050001FC268 /* SliderCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderCollectionCell.swift; sourceTree = "<group>"; };
 		71D552BC2734C98F0059345B /* StringConfigKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConfigKey.swift; sourceTree = "<group>"; };
 		71D9FFAE25AD37C000825B3C /* TextData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextData.swift; sourceTree = "<group>"; };
 		71D9FFAF25AD37C000825B3C /* CropData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropData.swift; sourceTree = "<group>"; };
@@ -647,9 +653,12 @@
 				71AF7D1627ACBD6700027B70 /* PhotoEditorFilterToolView.swift */,
 				71A8A127279BA710001D83CB /* ToolCollectionView.swift */,
 				71A8A129279BA974001D83CB /* ToolCollectionCell.swift */,
-				71AF7D1427ACBC2300027B70 /* ArcCollectionView.swift */,
-				7105BE0E27ACFFAD008624CE /* ArcCollectionCell.swift */,
 				7105BE0C27ACDBF9008624CE /* ArcFlowLayout.swift */,
+				71CC2AC627AE199A001FC268 /* ArcBaseCollectionView.swift */,
+				71CC2AC827AE1A9D001FC268 /* FilterCollectionView.swift */,
+				71CC2ACA27AE1BBF001FC268 /* FilterCollectionCell.swift */,
+				71CC2ACC27AE2004001FC268 /* SliderCollectionView.swift */,
+				71CC2ACE27AE2050001FC268 /* SliderCollectionCell.swift */,
 			);
 			path = ToolBar;
 			sourceTree = "<group>";
@@ -724,6 +733,7 @@
 				711A6844279B969200C7ABED /* ToolBar */,
 				715E94DF279FEF5300E3674F /* Draw */,
 				7148294B27A4DBDE008035E5 /* Kit */,
+				71CC2AD027AE5805001FC268 /* Collection */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
@@ -889,6 +899,13 @@
 				71BAF33C25761C48007AE60F /* CodableCacheTool.swift */,
 			);
 			path = Cache;
+			sourceTree = "<group>";
+		};
+		71CC2AD027AE5805001FC268 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Collection;
 			sourceTree = "<group>";
 		};
 		71D552BB2734C98F0059345B /* Option */ = {
@@ -1703,6 +1720,7 @@
 				71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */,
 				A5347D1823A9D11F00C93874 /* EditorVideoResource.swift in Sources */,
 				7148296827A4DCBF008035E5 /* VideoEditorCropToolView.swift in Sources */,
+				71CC2ACD27AE2004001FC268 /* SliderCollectionView.swift in Sources */,
 				A0B215E8276F67D000C4FE9A /* AnyImageViewController+Permission.swift in Sources */,
 				A036C3942330B5D000D32ED8 /* AssetCell.swift in Sources */,
 				A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */,
@@ -1725,7 +1743,6 @@
 				7112B6BF262D283400F36B9A /* EditorBrushColorOption.swift in Sources */,
 				A04F4146261C114A003D968E /* PickerOptionsConfigurable.swift in Sources */,
 				71BAF33D25761C48007AE60F /* CodableCacheTool.swift in Sources */,
-				71AF7D1527ACBC2300027B70 /* ArcCollectionView.swift in Sources */,
 				71522FA32786FA1900020AC6 /* PhotoEditorViewModel.swift in Sources */,
 				A0B22EA8237AA1B3001F6066 /* Core+UITableView.swift in Sources */,
 				A0C03C1B2331D426005F742C /* Picker+UIColor.swift in Sources */,
@@ -1747,6 +1764,7 @@
 				A56A3C8C2330BCA100EBFC48 /* PickerPreviewNavigationBar.swift in Sources */,
 				713C207325AD32D800BB0F66 /* PhotoEditorCropContext.swift in Sources */,
 				A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */,
+				71CC2AC727AE199A001FC268 /* ArcBaseCollectionView.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
 				A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */,
@@ -1762,6 +1780,7 @@
 				A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */,
 				7148296927A4DCBF008035E5 /* VideoEditorToolView.swift in Sources */,
 				A0B50C3823AA0AD2002C9799 /* CapturePreviewContentView.swift in Sources */,
+				71CC2ACB27AE1BBF001FC268 /* FilterCollectionCell.swift in Sources */,
 				713C206725AD32D800BB0F66 /* PhotoEditorContext.swift in Sources */,
 				A02F18762616BE0A00085EEA /* PickerTheme.swift in Sources */,
 				A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */,
@@ -1811,6 +1830,7 @@
 				713C204E25AD329D00BB0F66 /* AssetPickerViewController+Editor.swift in Sources */,
 				A561239B23B5EDA90071C3E8 /* UserInterfaceStyle.swift in Sources */,
 				A5DF1E86237AA32C00E3A32E /* Editor+CABasicAnimation.swift in Sources */,
+				71CC2ACF27AE2050001FC268 /* SliderCollectionCell.swift in Sources */,
 				71B3E9432629895300710A7F /* EditorMosaicOption.swift in Sources */,
 				A561239923B5E8550071C3E8 /* Sort.swift in Sources */,
 				7117A24425A5959C000D493F /* (null) in Sources */,
@@ -1829,6 +1849,7 @@
 				7195A84F273E5C8100C3D5D5 /* Capture+AnyImagePage.swift in Sources */,
 				A0226A4023AB69F1000AFC87 /* Capture+AVCaptureDevice.swift in Sources */,
 				71D9FFB125AD37C000825B3C /* CropData.swift in Sources */,
+				71CC2AC927AE1A9D001FC268 /* FilterCollectionView.swift in Sources */,
 				A01866F1239F8740002E623D /* CapturePreviewMaskView.swift in Sources */,
 				A08DF7BE23B1F814002B92EE /* DeviceOrientation.swift in Sources */,
 				A036C3932330B5D000D32ED8 /* AlbumCell.swift in Sources */,
@@ -1836,7 +1857,6 @@
 				A067AC1D23C81B8C00FF681B /* CapturePosition.swift in Sources */,
 				A5347D2823A9FF2900C93874 /* ExportTool+PhotoData.swift in Sources */,
 				713C206C25AD32D800BB0F66 /* MosaicData.swift in Sources */,
-				7105BE0F27ACFFAD008624CE /* ArcCollectionCell.swift in Sources */,
 				71208EBA256F8D88002C023A /* (null) in Sources */,
 				A5325EA52331C14F00ADA116 /* PickerArrowButton.swift in Sources */,
 				713C205025AD32AA00BB0F66 /* Cacheable.swift in Sources */,

@@ -2,7 +2,7 @@
 //  PhotoEditorFilterToolView.swift
 //  AnyImageKit
 //
-//  Created by Ray on 2022/2/4.
+//  Created by 蒋惠 on 2022/2/4.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
@@ -19,22 +19,31 @@ final class PhotoEditorFilterToolView: UIView {
     private var needLayout = false
     private var layoutWithAnimated = false
     
-    private let iconWidth: CGFloat = 24
-    private let itemWidth: CGFloat = 50
-    private let minSpacing: CGFloat = 2
-//    private let maxCount: Int = 4
+    private let itemWidth: CGFloat = 55
     private var optionsCount: Int { options.mosaic.style.count }
     
     private let primaryGuide = UILayoutGuide()
     private let secondaryGuide = UILayoutGuide()
     
-    private lazy var collectionView: ArcCollectionView = {
-        let view = ArcCollectionView(items: createItems(), size: .init(width: itemWidth, height: itemWidth), spacing: minSpacing, topMargin: 12, bottomMargin: 3)
+    private lazy var collectionView: FilterCollectionView = {
+        let option = FilterCollectionView.ArcOption(size: .init(width: itemWidth, height: itemWidth),
+                                                    spacing: 2,
+                                                    topMargin: 15,
+                                                    bottomMargin: 5,
+                                                    dotIndex: 0,
+                                                    selectedIndex: .index(0))
+        let view = FilterCollectionView(option: option, images: createItems())
         view.updateLayout(isRegular: viewModel.isRegular)
         return view
     }()
-    private lazy var progressCollectionView: ArcCollectionView = {
-        let view = ArcCollectionView(items: createProgressItems(), size: .init(width: 1, height: 10), spacing: 9, topMargin: 20, bottomMargin: 5)
+    private lazy var progressCollectionView: SliderCollectionView = {
+        let option = SliderCollectionView.ArcOption(size: .init(width: 1, height: 10),
+                                                    spacing: 9,
+                                                    topMargin: 20,
+                                                    bottomMargin: 15,
+                                                    dotIndex: 0,
+                                                    selectedIndex: .present(0))
+        let view = SliderCollectionView(option: option, count: 41)
         view.updateLayout(isRegular: viewModel.isRegular)
         return view
     }()
@@ -122,12 +131,12 @@ extension PhotoEditorFilterToolView {
         primaryCenterView.layer.borderWidth = 2.5
         primaryCenterView.layer.cornerRadius = 6
         primaryCenterView.layer.borderColor = UIColor.white.cgColor
-        collectionView.setCenterView(primaryCenterView, size: CGSize(width: itemWidth+4, height: itemWidth+4))
+        collectionView.setCenterView(primaryCenterView, size: CGSize(width: itemWidth+4, height: itemWidth+4), topMargin: collectionView.topMargin-2.5)
         
-//        let secondaryCenterView = UIView(frame: .zero)
-//        secondaryCenterView.isUserInteractionEnabled = false
-//        secondaryCenterView.backgroundColor = .white
-//        progressCollectionView.setCenterView(secondaryCenterView, size: CGSize(width: 1, height: 30))
+        let secondaryCenterView = UIView(frame: .zero)
+        secondaryCenterView.isUserInteractionEnabled = false
+        secondaryCenterView.backgroundColor = .white
+        progressCollectionView.setCenterView(secondaryCenterView, size: CGSize(width: 1, height: 25), topMargin: 5)
     }
     
     private func layoutGuide() {
@@ -137,22 +146,22 @@ extension PhotoEditorFilterToolView {
             primaryGuide.snp.remakeConstraints { make in
                 make.leading.equalToSuperview()
                 make.centerY.equalToSuperview()
-                make.width.equalTo(65)
+                make.width.equalTo(75)
                 make.height.equalToSuperview()
             }
             secondaryGuide.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(primaryGuide)
                 make.trailing.equalToSuperview()
-                make.width.equalTo(35)
+                make.width.equalTo(45)
             }
         } else { // iPhone
             primaryGuide.snp.remakeConstraints { make in
                 make.top.leading.trailing.equalToSuperview()
-                make.height.equalTo(65)
+                make.height.equalTo(75)
             }
             secondaryGuide.snp.remakeConstraints { make in
                 make.bottom.leading.trailing.equalToSuperview()
-                make.height.equalTo(35)
+                make.height.equalTo(45)
             }
         }
     }
@@ -182,18 +191,19 @@ extension PhotoEditorFilterToolView {
         }
     }
     
-    private func createItems() -> [UIView] {
-        return Array(repeating: 0, count: 30).enumerated().map { (idx, style) -> UIView in
+    private func createItems() -> [UIImage] {
+        return Array(repeating: 0, count: 30).enumerated().map { (idx, style) -> UIImage in
 //            return createMosaicButton(idx: idx, style: style)
-            let view = UIImageView(image: viewModel.image)
-            view.contentMode = .scaleAspectFill
-            view.clipsToBounds = true
-            return view
+//            let view = UIImageView(image: viewModel.image)
+//            view.contentMode = .scaleAspectFill
+//            view.clipsToBounds = true
+//            return view
+            return viewModel.image
         }
     }
     
     private func createProgressItems() -> [UIView] {
-        return Array(repeating: 0, count: 40).enumerated().map { (idx, style) -> UIView in
+        return Array(repeating: 0, count: 41).enumerated().map { (idx, style) -> UIView in
             let highlight = idx % 10 == 0
             let view = UIView(frame: .zero)
             view.backgroundColor = highlight ? .white : .color(hex: 0xB5B5B5)

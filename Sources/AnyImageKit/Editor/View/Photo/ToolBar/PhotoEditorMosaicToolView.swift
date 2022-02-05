@@ -2,7 +2,7 @@
 //  PhotoEditorMosaicToolView.swift
 //  AnyImageKit
 //
-//  Created by Ray on 2022/2/3.
+//  Created by 蒋惠 on 2022/2/3.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 

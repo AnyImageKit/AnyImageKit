@@ -1,14 +1,14 @@
 //
-//  ArcCollectionCell.swift
+//  FilterCollectionCell.swift
 //  AnyImageKit
 //
-//  Created by Ray on 2022/2/4.
+//  Created by 蒋惠 on 2022/2/5.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
 import UIKit
 
-final class ArcCollectionCell: UICollectionViewCell {
+final class FilterCollectionCell: UICollectionViewCell {
     
     private lazy var dotView: UIView = {
         let view = UIView(frame: .zero)
@@ -17,9 +17,13 @@ final class ArcCollectionCell: UICollectionViewCell {
         view.layer.cornerRadius = 2.5
         return view
     }()
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView(frame: .zero)
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        return view
+    }()
     private let guide = UILayoutGuide()
-    
-     var customView: UIView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,24 +36,19 @@ final class ArcCollectionCell: UICollectionViewCell {
     
     private func setupView() {
         contentView.addSubview(dotView)
+        contentView.addSubview(imageView)
         contentView.addLayoutGuide(guide)
     }
     
-    func config(view: UIView, size: CGSize, isRegular: Bool, hiddenDot: Bool) {
+    func config(size: CGSize, image: UIImage, hiddenDot: Bool, isRegular: Bool) {
         dotView.isHidden = hiddenDot
-        if view.superview != nil {
-            view.removeFromSuperview()
-        }
-        if customView?.window == nil {
-            customView?.removeFromSuperview()
-        }
-        contentView.addSubview(view)
-        customView = view
+        imageView.image = image
         
         if isRegular {
             guide.snp.remakeConstraints { make in
                 make.leading.equalToSuperview()
-                make.trailing.equalTo(view.snp.leading)
+                make.trailing.equalTo(imageView.snp.leading)
+                make.centerY.equalToSuperview()
                 make.height.equalTo(10)
             }
             dotView.snp.remakeConstraints { make in
@@ -57,14 +56,16 @@ final class ArcCollectionCell: UICollectionViewCell {
                 make.centerY.equalToSuperview()
                 make.width.height.equalTo(5)
             }
-            view.snp.remakeConstraints { make in
-                make.top.bottom.trailing.equalToSuperview()
+            imageView.snp.remakeConstraints { make in
+                make.trailing.equalToSuperview()
+                make.centerY.equalToSuperview()
                 make.size.equalTo(size)
             }
         } else {
             guide.snp.remakeConstraints { make in
                 make.top.equalToSuperview()
-                make.bottom.equalTo(view.snp.top)
+                make.bottom.equalTo(imageView.snp.top)
+                make.centerX.equalToSuperview()
                 make.width.equalTo(10)
             }
             dotView.snp.remakeConstraints { make in
@@ -72,8 +73,9 @@ final class ArcCollectionCell: UICollectionViewCell {
                 make.centerX.equalToSuperview()
                 make.width.height.equalTo(5)
             }
-            view.snp.remakeConstraints { make in
-                make.leading.trailing.bottom.equalToSuperview()
+            imageView.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.centerX.equalToSuperview()
                 make.size.equalTo(size)
             }
         }

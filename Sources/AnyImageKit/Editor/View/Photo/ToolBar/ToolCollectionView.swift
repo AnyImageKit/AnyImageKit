@@ -68,7 +68,7 @@ final class ToolCollectionView: UIView {
 extension ToolCollectionView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(1)
+        print(2)
     }
 }
 
