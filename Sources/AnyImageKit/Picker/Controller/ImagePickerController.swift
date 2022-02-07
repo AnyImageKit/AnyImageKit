@@ -83,11 +83,22 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override var shouldAutorotate: Bool {
-        return true
+        return false
     }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .all
+        switch UIApplication.shared.statusBarOrientation {
+        case .unknown:
+            return .portrait
+        case .portrait:
+            return .portrait
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        }
     }
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {

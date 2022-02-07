@@ -175,11 +175,22 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     override var shouldAutorotate: Bool {
-        return true
+        return false
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .all
+        switch UIApplication.shared.statusBarOrientation {
+        case .unknown:
+            return .portrait
+        case .portrait:
+            return .portrait
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        }
     }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
