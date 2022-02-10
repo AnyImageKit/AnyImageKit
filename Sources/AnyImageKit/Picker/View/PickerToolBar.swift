@@ -10,6 +10,8 @@ import UIKit
 
 final class PickerToolBar: UIView {
     
+    private var isLimited: Bool = false
+    
     private(set) lazy var contentView = UIView(frame: .zero)
     
     private lazy var backgroundView: UIVisualEffectView = {
@@ -114,7 +116,7 @@ extension PickerToolBar: PickerOptionsConfigurable {
         backgroundView.contentView.backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.7)
         switch style {
         case .picker:
-            isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+            isHidden = isLimited ? false : options.selectionTapAction.hideToolBar && options.selectLimit == 1
             leftButton.setTitle(options.theme[string: .preview], for: .normal)
         case .preview:
             backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
@@ -165,6 +167,7 @@ extension PickerToolBar {
     }
     
     func showLimitedView() {
+        isLimited = true
         permissionLimitedView.isHidden = false
         contentView.snp.updateConstraints { update in
             update.top.equalToSuperview().offset(limitedViewHeight)
