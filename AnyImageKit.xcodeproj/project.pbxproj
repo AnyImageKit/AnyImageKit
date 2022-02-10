@@ -73,6 +73,7 @@
 		71780CA027A62EAE00056709 /* EditorBrushOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71780C9F27A62EAE00056709 /* EditorBrushOption.swift */; };
 		71780CA227A630D100056709 /* EditorBrushWidthOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71780CA127A630D100056709 /* EditorBrushWidthOption.swift */; };
 		717DCADA256CEEC700568A6C /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DCA8B256CD25100568A6C /* Canvas.swift */; };
+		7187DAB927B4B11200E07428 /* EditorAdjustOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7187DAB827B4B11200E07428 /* EditorAdjustOption.swift */; };
 		7193635627AA220800038CDA /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7193635427AA220800038CDA /* Mosaic.swift */; };
 		7193635727AA220800038CDA /* MosaicContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7193635527AA220800038CDA /* MosaicContentView.swift */; };
 		7195A844273E5BC000C3D5D5 /* Picker+AnyImagePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195A843273E5BC000C3D5D5 /* Picker+AnyImagePage.swift */; };
@@ -379,6 +380,7 @@
 		71780C9F27A62EAE00056709 /* EditorBrushOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushOption.swift; sourceTree = "<group>"; };
 		71780CA127A630D100056709 /* EditorBrushWidthOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBrushWidthOption.swift; sourceTree = "<group>"; };
 		717DCA8B256CD25100568A6C /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		7187DAB827B4B11200E07428 /* EditorAdjustOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorAdjustOption.swift; sourceTree = "<group>"; };
 		7193635427AA220800038CDA /* Mosaic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
 		7193635527AA220800038CDA /* MosaicContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MosaicContentView.swift; sourceTree = "<group>"; };
 		7195A843273E5BC000C3D5D5 /* Picker+AnyImagePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+AnyImagePage.swift"; sourceTree = "<group>"; };
@@ -868,6 +870,7 @@
 		71B3E93C2629892800710A7F /* Option */ = {
 			isa = PBXGroup;
 			children = (
+				71B3E951262989A600710A7F /* EditorPhotoToolOption.swift */,
 				71780C9F27A62EAE00056709 /* EditorBrushOption.swift */,
 				7112B6BE262D283400F36B9A /* EditorBrushColorOption.swift */,
 				71780CA127A630D100056709 /* EditorBrushWidthOption.swift */,
@@ -876,7 +879,7 @@
 				71B3E9472629897B00710A7F /* EditorTextColor.swift */,
 				71B3E94C2629898D00710A7F /* EditorCropOption.swift */,
 				71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */,
-				71B3E951262989A600710A7F /* EditorPhotoToolOption.swift */,
+				7187DAB827B4B11200E07428 /* EditorAdjustOption.swift */,
 				71B3E956262989BE00710A7F /* EditorVideoToolOption.swift */,
 			);
 			path = Option;
@@ -1871,6 +1874,7 @@
 				71522F992786F60800020AC6 /* InjectedValues.swift in Sources */,
 				713585F627379CD400A70B9E /* EditorTheme.swift in Sources */,
 				7105BE0D27ACDBF9008624CE /* ArcFlowLayout.swift in Sources */,
+				7187DAB927B4B11200E07428 /* EditorAdjustOption.swift in Sources */,
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
 				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
 				71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */,

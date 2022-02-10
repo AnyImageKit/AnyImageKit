@@ -17,3 +17,20 @@
 
 "DRAG_HERE_TO_REMOVE" = "拖到此处删除";
 "RELEASE_TO_REMOVE" = "松手即可删除";
+
+// Adjust
+"EXPOSURE" = "曝光";
+"BRILLIANCE" = "鲜明度";
+"HIGHLIGHTS" = "高光";
+"SHADOWS" = "阴影";
+"CONTRAST" = "对比度";
+"BRIGHTNESS" = "亮度";
+"BLACK_POINT" = "黑点";
+"SATURATION" = "饱和度";
+"VIBRANCE" = "自然饱和度";
+"WARMTH" = "色温";
+"TINT" = "色调";
+"SHARPNESS" = "锐度";
+"DEFINITION" = "清晰度";
+"NOISE_REDUCTION" = "噪点消除";
+"VIGNETTE" = "晕影";
