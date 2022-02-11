@@ -318,6 +318,12 @@ extension InputTextViewController {
             updateCalculateLabel(string: array.last!)
             let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2)
             let offset = textCoverView.bounds.width - lastLineWidth + hInset
+            
+            // For iPad
+            var frame = textCoverView.frame
+            frame.size.width = lastLineWidth
+            textCoverView.frame = frame
+            
             textCoverView.snp.updateConstraints { maker in
                 maker.right.equalToSuperview().offset(-offset)
             }
