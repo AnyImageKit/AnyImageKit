@@ -22,14 +22,11 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
     
     weak var delegate: AssetPickerViewControllerDelegate?
     
+    private var didRegisterPhotoLibraryChangeObserver: Bool = false
+    
     private(set) var listPicker: PhotoLibraryListViewController?
     private(set) var photoLibrary: PhotoLibraryAssetCollection?
     private(set) var photoLibraryList: [PhotoLibraryAssetCollection] = []
-    
-    private var preferredCollectionWidth: CGFloat = .zero
-    private var didRegisterPhotoLibraryChangeObserver: Bool = false
-    
-    lazy var stopReloadAlbum: Bool = false
     
     private(set) lazy var titleView: AssetCollectionTitleButton = makeTitleView()
     private(set) lazy var collectionView: UICollectionView = makeCollectionView()
@@ -56,7 +53,7 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
         addNotifications()
         setupNavigation()
         setupView()
-        checkPermission()
+        loadData()
         update(options: manager.options)
     }
     
@@ -76,7 +73,7 @@ extension PhotoAssetCollectionViewController: PickerOptionsConfigurable {
 // MARK: - Photo Library
 extension PhotoAssetCollectionViewController {
     
-    private func checkPermission() {
+    private func loadData() {
         Task {
             let status = await check(permission: .photos)
             switch status {
@@ -95,7 +92,7 @@ extension PhotoAssetCollectionViewController {
     
     private func loadPhotoLibrary() async {
         let library = await PhotoLibraryAssetCollection.fetchDefault(options: manager.options)
-        setPhotoLibrary(library, reset: true)
+        setPhotoLibrary(library)
         await loadPhotoLibraryList()
     }
     
@@ -104,10 +101,7 @@ extension PhotoAssetCollectionViewController {
         setPhotoLibraryList(libraryList)
     }
     
-    private func setPhotoLibrary(_ library: PhotoLibraryAssetCollection, reset: Bool) {
-        if reset {
-            library.reset()
-        }
+    private func setPhotoLibrary(_ library: PhotoLibraryAssetCollection) {
         photoLibrary = library
         titleView.setTitle(library.localizedTitle)
         toolBar.setEnable(!library.selectedItems.isEmpty)
@@ -126,7 +120,7 @@ extension PhotoAssetCollectionViewController {
 // MARK: - Private function
 extension PhotoAssetCollectionViewController {
     
-    private func setSelected(_ index: Int) {
+    func setSelected(_ index: Int) {
         guard let photoLibrary = photoLibrary, let asset = photoLibrary[index].asset else { return }
         
         do {
@@ -211,7 +205,7 @@ extension PhotoAssetCollectionViewController {
             let result = await controller.pick()
             switch result {
             case .interaction(let newLibrary):
-                setPhotoLibrary(newLibrary, reset: true)
+                setPhotoLibrary(newLibrary)
             case .cancel:
                 break
             }
@@ -242,10 +236,9 @@ extension PhotoAssetCollectionViewController {
         trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
     }
     
-    @objc func doneButtonTapped(_ sender: UIButton) {
+    @objc private func doneButtonTapped(_ sender: UIButton) {
         defer { sender.isEnabled = true }
         sender.isEnabled = false
-        stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
         trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
     }
@@ -283,7 +276,9 @@ extension PhotoAssetCollectionViewController: PHPhotoLibraryChangeObserver {
         
         let fetchResult = FetchResult(changeDetails.fetchResultAfterChanges)
         self.photoLibrary?.update(fetchResult: fetchResult)
-        self.collectionView.reloadData()
+        Thread.runOnMain {
+            self.collectionView.reloadData()
+        }
     }
 }
 
@@ -427,35 +422,46 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
             showCapture()
             #endif
         case .asset(let asset):
+            #if ANYIMAGEKIT_ENABLE_EDITOR
             let options = manager.options
-            
-//            #if ANYIMAGEKIT_ENABLE_EDITOR
-//            if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
-//                openEditor(with: asset, indexPath: indexPath)
-//                return
-//            }
-//            #endif
-            
-            if options.selectionTapAction == .quickPick {
-                setSelected(indexPath.item)
-                if options.selectLimit == 1 && photoLibrary.selectedItems.count == 1 {
-                    doneButtonTapped(toolBar.doneButton)
+            if options.selectionTapAction == .openEditor {
+                if let rule = asset.state.disableCheckRule {
+                    let message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                    showAlert(message: message, stringConfig: manager.options.theme)
+                } else if asset.mediaType == .photo && options.editorOptions.contains(.photo) {
+                    openEditor(asset: asset, indexPath: indexPath)
+                } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
+                    openEditor(asset: asset, indexPath: indexPath)
                 }
-            } else if let rule = asset.state.disableCheckRule {
-                let message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
-                showAlert(message: message, stringConfig: options.theme)
                 return
-            } else if !asset.isSelected && photoLibrary.checker.isUpToLimit {
-                return
-            } else if let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell {
-                let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
-                let assetIndex = photoLibrary.convertIndexToAssetIndex(indexPath.item)
-                controller.presentationScaleImage = cell.displayImage
-                controller.assetIndex = assetIndex
-                controller.dataSource = self
-                controller.delegate = self
-                present(controller, animated: true, completion: nil)
             }
+            #endif
+            openPreview(asset: asset, indexPath: indexPath)
+        }
+    }
+    
+    private func openPreview(asset: Asset<PHAsset>, indexPath: IndexPath) {
+        guard let photoLibrary = photoLibrary else { return }
+        let options = manager.options
+        if options.selectionTapAction == .quickPick {
+            setSelected(indexPath.item)
+            if options.selectLimit == 1 && photoLibrary.selectedItems.count == 1 {
+                doneButtonTapped(toolBar.doneButton)
+            }
+        } else if let rule = asset.state.disableCheckRule {
+            let message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+            showAlert(message: message, stringConfig: options.theme)
+            return
+        } else if !asset.isSelected && photoLibrary.checker.isUpToLimit {
+            return
+        } else if let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell {
+            let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
+            let assetIndex = photoLibrary.convertIndexToAssetIndex(indexPath.item)
+            controller.presentationScaleImage = cell.displayImage
+            controller.assetIndex = assetIndex
+            controller.dataSource = self
+            controller.delegate = self
+            present(controller, animated: true, completion: nil)
         }
     }
 }
@@ -507,7 +513,6 @@ extension PhotoAssetCollectionViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
-        stopReloadAlbum = true
         delegate?.assetPickerDidFinishPicking(self)
     }
     

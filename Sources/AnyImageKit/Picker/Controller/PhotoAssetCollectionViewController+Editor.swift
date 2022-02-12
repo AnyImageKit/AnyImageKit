@@ -7,97 +7,65 @@
 //
 
 import UIKit
+import Photos
 
 #if ANYIMAGEKIT_ENABLE_EDITOR
 
 extension PhotoAssetCollectionViewController {
     
-    func canOpenEditor(with asset: AssetOld) -> Bool {
-        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
-        if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return false
-        }
-        if asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
-            return true
-        } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
-            return true
-        }
-        return false
-    }
-    
-    func openEditor(with asset: AssetOld, indexPath: IndexPath) {
-        if asset.mediaType == .photo {
-            if let image = asset._images[.initial] {
-                showEditor(image, identifier: asset.identifier, tag: indexPath.item)
-            } else {
-                showWaitHUD(manager.options.theme[string: .loading])
-                let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
-                    DispatchQueue.main.async { [weak self] in
-                        _print("Downloading photo from iCloud: \(progress)")
-                        guard let self = self else { return }
-                        self.showWaitHUD(self.manager.options.theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
-                    }
-                }
-                manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] success in
-                    guard let self = self else { return }
-                    switch success {
-                    case .success(let response):
-                        if !response.isDegraded {
-                            self.hideHUD()
-                            self.showEditor(response.image, identifier: asset.identifier, tag: indexPath.item)
+    func openEditor(asset: Asset<PHAsset>, indexPath: IndexPath) {
+        Task {
+            let options = manager.options
+            showWaitHUD(options.theme[string: .loading])
+            for try await result in asset.loadImage() {
+                switch result {
+                case .progress(let progress):
+                    showWaitHUD(options.theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
+                case .success(let loadResult):
+                    switch loadResult {
+                    case .preview(let image):
+                        hideHUD()
+                        if asset.mediaType == .photo {
+                            var photoOptions = options.editorPhotoOptions
+                            photoOptions.enableDebugLog = options.enableDebugLog
+                            photoOptions.cacheIdentifier = asset.identifier.replacingOccurrences(of: "/", with: "-")
+                            let controller = ImageEditorController(photo: image, options: photoOptions, delegate: self)
+                            controller.tag = indexPath.row
+                            present(controller, animated: true, completion: nil)
+                        } else if asset.phAsset.mediaType == .video {
+                            var videoOptions = options.editorVideoOptions
+                            videoOptions.enableDebugLog = options.enableDebugLog
+                            let controller = ImageEditorController(video: asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
+                            controller.tag = indexPath.row
+                            present(controller, animated: false, completion: nil)
                         }
-                    case .failure(let error):
-                        self.hideHUD()
-                        _print(error)
+                    default:
+                        break
                     }
                 }
             }
-        } else if asset.phAsset.mediaType == .video {
-            manager.cancelFetch(for: asset.identifier)
-            var videoOptions = manager.options.editorVideoOptions
-            videoOptions.enableDebugLog = manager.options.enableDebugLog
-            let image = asset._images[.initial]
-            let controller = ImageEditorController(video: asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
-            present(controller, animated: false, completion: nil)
         }
-    }
-    
-    private func showEditor(_ image: UIImage, identifier: String, tag: Int) {
-        var options = manager.options.editorPhotoOptions
-        options.enableDebugLog = manager.options.enableDebugLog
-        options.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
-        let controller = ImageEditorController(photo: image, options: options, delegate: self)
-        controller.tag = tag
-        present(controller, animated: true, completion: nil)
     }
 }
 
 // MARK: - ImageEditorControllerDelegate
 extension PhotoAssetCollectionViewController: ImageEditorControllerDelegate {
     
-    func imageEditorDidCancel(_ editor: ImageEditorController) {
+    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         editor.dismiss(animated: true, completion: nil)
-    }
-    
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing success: EditorResult) {
-//        editor.dismiss(animated: true, completion: nil)
-//        guard success.type == .photo else { return }
-//        guard let photoData = try? Data(contentsOf: success.mediaURL) else { return }
-//        guard let photo = UIImage(data: photoData) else { return }
-//        guard let album = album else { return }
-//        guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? PhotoAssetCell else { return }
-//        
-//        let asset = album.assets[editor.tag]
-//        asset._images[.edited] = success.isEdited ? photo : nil
-////        cell.setContent(asset, manager: manager)
-//        if !asset.isSelected { // Select
-//            selectItem(editor.tag)
-//            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
-//                doneButtonTapped(toolBar.doneButton)
-//            }
-//        }
+        guard result.type == .photo else { return }
+        guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
+        guard let photo = UIImage(data: photoData) else { return }
+        guard let photoLibrary = photoLibrary else { return }
+        let index = editor.tag
+        let indexPath = IndexPath(item: index, section: 0)
+        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell else { return }
+        guard let asset = photoLibrary[index].asset else { return }
+        
+        cell.setContent(asset)
+        if !asset.isSelected {
+            setSelected(index)
+        }
     }
 }
 
