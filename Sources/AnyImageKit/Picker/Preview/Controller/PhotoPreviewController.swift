@@ -324,7 +324,7 @@ extension PhotoPreviewController {
                 case .maximumOfVideos:
                     message = String(format: options.theme[string: .pickerSelectMaximumOfVideos], options.selectLimit)
                 case .disabled(let rule):
-                    message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                    message = rule.disabledMessage(for: asset, context: photoLibrary.checker.context)
                 }
                 self.showAlert(message: message, stringConfig: options.theme)
             }

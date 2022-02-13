@@ -146,77 +146,6 @@ extension ImagePickerController {
         
         return options
     }
-    
-    private func checkData() {
-        _showWaitHUD(self)
-        workQueue.async { [weak self] in
-            guard let self = self else { return }
-            let assets = self.manager.selectedAssets
-            let isReady = assets.filter{ !$0.isReady }.isEmpty
-            if !isReady && !assets.isEmpty { return }
-            self.saveEditPhotos(assets) { newAssets in
-                self.resizeImagesIfNeeded(newAssets)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    _hideHUD(self)
-                    let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
-                    self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
-                }
-            }
-        }
-    }
-    
-    private func saveEditPhotos(_ assets: [AssetOld], completion: @escaping (([AssetOld]) -> Void)) {
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        guard manager.options.saveEditedAsset else {
-            completion(assets)
-            return
-        }
-        var assets = assets
-        let selectOptions = manager.options.selectOptions
-        let group = DispatchGroup()
-        for (idx, asset) in assets.enumerated() {
-            guard let editedImage = asset._images[.edited] else { continue }
-            group.enter()
-            manager.savePhoto(image: editedImage) { success in
-                switch success {
-                case .success(let newAsset):
-                    assets[idx] = AssetOld(idx: asset.idx, asset: newAsset, selectOptions: selectOptions)
-                    assets[idx]._images[.initial] = editedImage
-                case .failure(let error):
-                    _print(error)
-                }
-                group.leave()
-            }
-        }
-        group.notify(queue: workQueue) {
-            completion(assets)
-        }
-        #else
-        completion(assets)
-        #endif
-    }
-    
-    private func resizeImagesIfNeeded(_ assets: [AssetOld]) {
-        if !manager.useOriginalImage {
-            let limitSize = CGSize(width: manager.options.photoMaxWidth,
-                                   height: manager.options.photoMaxWidth)
-            assets.forEach {
-                if let image = $0._image, image.size != .zero  {
-                    let resizedImage = UIImage.resize(from: image, limitSize: limitSize, isExact: true)
-                    $0._images[.output] = resizedImage
-                    $0._images[.edited] = nil
-                    $0._images[.initial] = nil
-                }
-            }
-        } else {
-            assets.forEach {
-                $0._images[.output] = $0._image
-                $0._images[.edited] = nil
-                $0._images[.initial] = nil
-            }
-        }
-    }
 }
 
 // MARK: - AssetPickerViewControllerDelegate
@@ -228,8 +157,6 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
     
     func assetPickerDidFinishPicking(_ controller: PhotoAssetCollectionViewController) {
         didFinishSelect = true
-        manager.resynchronizeAsset()
-        checkData()
     }
 }
 
@@ -252,7 +179,7 @@ extension ImagePickerController {
                 didFinishSelect = false
                 _showMessageHUD(self, message)
             } else {
-                checkData()
+                
             }
         }
     }

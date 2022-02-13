@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import Photos
 
 public struct PickerResult: Equatable {
     
-    public let assets: [AssetOld]
+    public let assets: [Asset<PHAsset>]
     public let useOriginalImage: Bool
     
-    init(assets: [AssetOld], useOriginalImage: Bool) {
+    init(assets: [Asset<PHAsset>], useOriginalImage: Bool) {
         self.assets = assets
         self.useOriginalImage = useOriginalImage
     }

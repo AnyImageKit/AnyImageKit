@@ -12,7 +12,7 @@ import AnyImageKit
 final class DisableCheckRuleViewController: UITableViewController {
     
     var enableVideoDurationCheck: Bool = true
-    var videoDuration: VideoDurationDisableCheckRule = .init(min: 3, max: 120)
+    var videoDuration: PhotoAssetVideoDurationDisableCheckRule = .init(min: 3, max: 120)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,9 +132,9 @@ extension DisableCheckRuleViewController {
             let value = TimeInterval(alert.textFields?.first?.text ?? "")
             switch rowType {
             case .minDuration:
-                self.videoDuration = VideoDurationDisableCheckRule(min: value ?? 3, max: self.videoDuration.maxDuration)
+                self.videoDuration = .init(min: value ?? 3, max: self.videoDuration.maxDuration)
             case .maxDuration:
-                self.videoDuration = VideoDurationDisableCheckRule(min: self.videoDuration.minDuration, max: value ?? 120)
+                self.videoDuration = .init(min: self.videoDuration.minDuration, max: value ?? 120)
             default:
                 return
             }

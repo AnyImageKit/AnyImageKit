@@ -87,6 +87,12 @@ extension Asset {
     }
 }
 
+// MARK: Edit
+extension Asset {
+    
+    
+}
+
 // MARK: CustomStringConvertible
 extension Asset: CustomStringConvertible {
     

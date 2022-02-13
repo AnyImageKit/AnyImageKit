@@ -140,7 +140,7 @@ extension PhotoAssetCollectionViewController {
                 case .maximumOfVideos:
                     message = String(format: options.theme[string: .pickerSelectMaximumOfVideos], options.selectLimit)
                 case .disabled(let rule):
-                    message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                    message = rule.disabledMessage(for: asset, context: photoLibrary.checker.context)
                 }
                 self.showAlert(message: message, stringConfig: options.theme)
             }
@@ -426,7 +426,7 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
             let options = manager.options
             if options.selectionTapAction == .openEditor {
                 if let rule = asset.state.disableCheckRule {
-                    let message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+                    let message = rule.disabledMessage(for: asset, context: photoLibrary.checker.context)
                     showAlert(message: message, stringConfig: manager.options.theme)
                 } else if asset.mediaType == .photo && options.editorOptions.contains(.photo) {
                     openEditor(asset: asset, indexPath: indexPath)
@@ -449,7 +449,7 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
                 doneButtonTapped(toolBar.doneButton)
             }
         } else if let rule = asset.state.disableCheckRule {
-            let message = rule.alertMessage(for: asset, context: photoLibrary.checker.context)
+            let message = rule.disabledMessage(for: asset, context: photoLibrary.checker.context)
             showAlert(message: message, stringConfig: options.theme)
             return
         } else if !asset.isSelected && photoLibrary.checker.isUpToLimit {
@@ -504,8 +504,9 @@ extension PhotoAssetCollectionViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
+        guard let photoLibrary = photoLibrary else { return }
         updateVisibleCellState()
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        toolBar.setEnable(!photoLibrary.selectedItems.isEmpty)
     }
     
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) {

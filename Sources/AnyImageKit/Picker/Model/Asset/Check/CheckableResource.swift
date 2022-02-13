@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Photos
 
 protocol CheckableResource {
     

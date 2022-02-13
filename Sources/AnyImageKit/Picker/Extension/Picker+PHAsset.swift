@@ -7,7 +7,6 @@
 //
 
 import Photos
-import MobileCoreServices
 
 extension PHAsset {
     

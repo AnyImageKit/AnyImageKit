@@ -1,33 +1,18 @@
 //
-//  AssetDisableCheckRule.swift
+//  AssetDisableCheckRule+PHAsset.swift
 //  AnyImageKit
 //
-//  Created by 刘栋 on 2022/1/16.
+//  Created by 刘栋 on 2022/2/13.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
 import Foundation
 import Photos
 
-open class AssetDisableCheckRule<Resource: IdentifiableResource>: IdentifiableResource {
-    
-    open var identifier: String {
-        fatalError("You must create subclass and override identifier!")
-    }
-
-    open func isDisable(for asset: Asset<Resource>, context: AssetCheckContext<Resource>) -> Bool {
-        fatalError("You must create subclass and override this function!")
-    }
-    
-    open func alertMessage(for asset: Asset<Resource>, context: AssetCheckContext<Resource>) -> String {
-        fatalError("You must create subclass and override this function!")
-    }
-}
-
-public final class VideoDurationDisableCheckRuleV2: AssetDisableCheckRule<PHAsset> {
+public final class PhotoAssetVideoDurationDisableCheckRule: AssetDisableCheckRule<PHAsset> {
     
     public override var identifier: String {
-        return "org.AnyImageKit.AssetDisableCheckRule.Buildin.VideoDuration"
+        return "org.AnyImageKit.AssetDisableCheckRule.Buildin.PHAsset.VideoDuration"
     }
     
     public let minDuration: TimeInterval
@@ -43,16 +28,16 @@ public final class VideoDurationDisableCheckRuleV2: AssetDisableCheckRule<PHAsse
         return asset.duration < minDuration || asset.duration > maxDuration
     }
     
-    public override func alertMessage(for asset: Asset<PHAsset>, context: AssetCheckContext<PHAsset>) -> String {
+    public override func disabledMessage(for asset: Asset<PHAsset>, context: AssetCheckContext<PHAsset>) -> String {
         let message = BundleHelper.localizedString(key: "DURATION_OF_SELECTED_VIDEO_RANGE", module: .picker)
         return String(format: message, arguments: [Int(minDuration), Int(maxDuration)])
     }
 }
 
-public final class PhotoOrVideoDisableCheckRuleV2: AssetDisableCheckRule<PHAsset> {
+public final class PhotoAssetPhotoOrVideoDisableCheckRule: AssetDisableCheckRule<PHAsset> {
     
     public override var identifier: String {
-        return "org.AnyImageKit.AssetDisableCheckRule.Buildin.PhotoOrVideo"
+        return "org.AnyImageKit.AssetDisableCheckRule.Buildin.PHAsset.PhotoOrVideo"
     }
     
     public let photoCount: Int
@@ -77,7 +62,7 @@ public final class PhotoOrVideoDisableCheckRuleV2: AssetDisableCheckRule<PHAsset
         }
     }
     
-    public override func alertMessage(for asset: Asset<PHAsset>, context: AssetCheckContext<PHAsset>) -> String {
+    public override func disabledMessage(for asset: Asset<PHAsset>, context: AssetCheckContext<PHAsset>) -> String {
         guard let first = context.selectedAssets.first else { return "" }
         if (asset.mediaType.isVideo && first.mediaType.isImage) || (asset.mediaType.isImage && first.mediaType.isVideo) {
             return BundleHelper.localizedString(key: "CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME", module: .picker)

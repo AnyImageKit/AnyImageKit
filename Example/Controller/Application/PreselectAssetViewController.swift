@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import Photos
 import AnyImageKit
 
 final class PreselectAssetViewController: UIViewController {
 
-    private var assets: [AssetOld] = []
+    private var assets: [Asset<PHAsset>] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -99,7 +100,7 @@ extension PreselectAssetViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as! PickerPreviewCell
-        cell.imageView.image = assets[indexPath.item].image
+//        cell.imageView.image = assets[indexPath.item].image
         cell.titleLabel.text = assets[indexPath.item].mediaType.description
         return cell
     }
