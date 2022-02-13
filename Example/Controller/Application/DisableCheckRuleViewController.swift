@@ -32,12 +32,19 @@ final class DisableCheckRuleViewController: UITableViewController {
     }
     
     @objc private func openPickerTapped() {
-        var options = PickerOptionsInfo()
-        options.selectOptions = [.video]
-        options.disableRules = [videoDuration]
-        let controller = ImagePickerController(options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true, completion: nil)
+        Task {
+            var options = PickerOptionsInfo()
+            options.selectOptions = [.video]
+            options.disableRules = [videoDuration]
+            let controller = ImagePickerController(options: options)
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true, completion: nil)
+            
+            guard let result = await controller.pick().result else { return }
+            let preview = PickerResultViewController()
+            preview.assets = result.assets
+            show(controller, sender: nil)
+        }
     }
 }
 
@@ -141,18 +148,6 @@ extension DisableCheckRuleViewController {
             self.tableView.reloadData()
         }))
         present(alert, animated: true, completion: nil)
-    }
-}
-
-// MARK: - ImagePickerControllerDelegate
-extension DisableCheckRuleViewController: ImagePickerControllerDelegate {
-    
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        print(result.assets)
-        let controller = PickerResultViewController()
-        controller.assets = result.assets
-        show(controller, sender: nil)
-        picker.dismiss(animated: true, completion: nil)
     }
 }
 

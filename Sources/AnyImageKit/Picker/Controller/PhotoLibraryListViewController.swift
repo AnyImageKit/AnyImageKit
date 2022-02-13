@@ -18,16 +18,7 @@ final class PhotoLibraryListViewController: AnyImageViewController {
     private var photoLibraryList: [PhotoLibraryAssetCollection] = []
     private var continuation: CheckedContinuation<UserInteractionResult<PhotoLibraryAssetCollection>, Never>?
     
-    let manager: PickerManager
-    
-    init(manager: PickerManager) {
-        self.manager = manager
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var options: PickerOptionsInfo = .init()
     
     deinit {
         removeNotifications()
@@ -38,7 +29,7 @@ final class PhotoLibraryListViewController: AnyImageViewController {
         addNotifications()
         updatePreferredContentSize(with: traitCollection)
         setupView()
-        update(options: manager.options)
+        update(options: options)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -181,7 +172,7 @@ extension PhotoLibraryListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(PhotoLibraryCell.self, for: indexPath)
         let photoLibrary = photoLibraryList[indexPath.row]
-        cell.setContent(photoLibrary, manager: manager)
+        cell.setContent(photoLibrary, options: options)
         cell.accessoryType = self.photoLibrary == photoLibrary ? .checkmark : .none
         return cell
     }

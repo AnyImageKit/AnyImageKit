@@ -83,11 +83,11 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     
     private var disposeBags: [IndexPath: AnyCancellable] = [:]
     
-    let manager: PickerManager
+    var options: PickerOptionsInfo = .init()
+    
     let photoLibrary: PhotoLibraryAssetCollection
     
-    init(manager: PickerManager, photoLibrary: PhotoLibraryAssetCollection) {
-        self.manager = manager
+    init(photoLibrary: PhotoLibraryAssetCollection) {
         self.photoLibrary = photoLibrary
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
@@ -104,7 +104,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
         super.viewDidLoad()
         addNotifications()
         setupViews()
-        update(options: manager.options)
+        update(options: options)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -209,7 +209,7 @@ extension PhotoPreviewController {
     
     private func makeToolBar() -> PickerToolBar {
         let view = PickerToolBar(style: .preview)
-        view.originalButton.isSelected = manager.useOriginalImage
+//        view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
@@ -245,7 +245,7 @@ extension PhotoPreviewController {
         if navigationBar.alpha == 1 && !hidden { return }
         if isNormal {
             setStatusBar(hidden: hidden)
-            let color = UIColor.create(style: manager.options.theme.style,
+            let color = UIColor.create(style: options.theme.style,
                                        light: .white,
                                        dark: .black)
             scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : color
@@ -287,7 +287,7 @@ extension PhotoPreviewController {
         navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
         indexView.assetIndex = assetIndex
         
-        if manager.options.allowUseOriginalImage {
+        if options.allowUseOriginalImage {
             toolBar.originalButton.isHidden = asset.mediaType != .photo
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
@@ -314,7 +314,6 @@ extension PhotoPreviewController {
             return true
         } catch {
             if let error = error as? AssetSelectedError<PHAsset> {
-                let options = manager.options
                 let message: String
                 switch error {
                 case .maximumOfPhotosOrVideos:
@@ -355,11 +354,11 @@ extension PhotoPreviewController {
     /// ToolBar - Original
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        manager.useOriginalImage = sender.isSelected
+        photoLibrary.useOriginalImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
         // Select current image
-        if manager.useOriginalImage && !photoLibrary.checker.isUpToLimit {
+        if photoLibrary.useOriginalImage && !photoLibrary.checker.isUpToLimit {
             guard let asset = photoLibrary.loadAsset(for: assetIndex) else { return }
             if !asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)
@@ -546,7 +545,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     /// 提供转场协调器
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
-        let color = UIColor.create(style: manager.options.theme.style, light: .white, dark: .black)
+        let color = UIColor.create(style: options.theme.style, light: .white, dark: .black)
         controller.maskView.backgroundColor = color
         scalePresentationController = controller
         return controller

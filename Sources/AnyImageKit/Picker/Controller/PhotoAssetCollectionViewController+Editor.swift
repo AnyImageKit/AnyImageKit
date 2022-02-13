@@ -15,7 +15,6 @@ extension PhotoAssetCollectionViewController {
     
     func openEditor(asset: Asset<PHAsset>, indexPath: IndexPath) {
         Task {
-            let options = manager.options
             showWaitHUD(options.theme[string: .loading])
             for try await result in asset.loadImage() {
                 switch result {

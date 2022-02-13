@@ -76,10 +76,10 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func showEditor(_ image: UIImage, identifier: String) {
-        var options = manager.options.editorPhotoOptions
-        options.enableDebugLog = manager.options.enableDebugLog
-        options.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
-        let controller = ImageEditorController(photo: image, options: options, delegate: self)
+        var editorOptions = options.editorPhotoOptions
+        editorOptions.enableDebugLog = options.enableDebugLog
+        editorOptions.cacheIdentifier = identifier.replacingOccurrences(of: "/", with: "-")
+        let controller = ImageEditorController(photo: image, options: editorOptions, delegate: self)
         present(controller, animated: false, completion: nil)
     }
 }

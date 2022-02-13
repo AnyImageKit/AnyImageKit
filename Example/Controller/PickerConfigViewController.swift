@@ -36,13 +36,18 @@ final class PickerConfigViewController: UITableViewController {
     // MARK: - Target
     
     @objc private func openPickerTapped() {
-        options.enableDebugLog = true
-        let controller = ImagePickerController(options: options, delegate: self)
-        controller.trackDelegate = self
-        if #available(iOS 13.0, *) {
+        Task {
+            options.enableDebugLog = true
+            let controller = ImagePickerController(options: options)
+            controller.trackDelegate = self
             controller.modalPresentationStyle = isFullScreen ? .fullScreen : .automatic
+            present(controller, animated: true, completion: nil)
+            
+            guard let result = await controller.pick().result else { return }
+            let preview = PickerResultViewController()
+            preview.assets = result.assets
+            show(controller, sender: nil)
         }
-        present(controller, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
@@ -75,18 +80,6 @@ final class PickerConfigViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 54
-    }
-}
-
-// MARK: - ImagePickerControllerDelegate
-extension PickerConfigViewController: ImagePickerControllerDelegate {
-    
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        print(result.assets)
-        let controller = PickerResultViewController()
-        controller.assets = result.assets
-        show(controller, sender: nil)
-        picker.dismiss(animated: true, completion: nil)
     }
 }
 

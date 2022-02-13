@@ -6,7 +6,6 @@
 //  Copyright © 2019-2022 AnyImageKit.org. All rights reserved.
 //
 
-import Foundation
 import Photos
 
 /// A wrapper for system photo smart album or user create album
@@ -70,6 +69,18 @@ extension PhotoLibraryAssetCollection {
     
     mutating func update(fetchResult: FetchResult<Resource>) {
         self.fetchResult = fetchResult
+    }
+}
+
+extension PhotoLibraryAssetCollection {
+    
+    var useOriginalImage: Bool {
+        get {
+            return false
+        }
+        nonmutating set {
+            
+        }
     }
 }
 

@@ -13,8 +13,12 @@ import Photos
 public struct PickerOptionsInfo {
     
     /// Theme
-    /// - Default: Auto
+    /// - Default: auto
     public var theme: PickerTheme = .init(style: .auto)
+    
+    /// Auto dismiss when select or cancel. If you want to handle by yourself, set `false`.
+    ///  - Default: true
+    public var autoDismiss: Bool = true
     
     /// Select Limit
     /// - Default: 9

@@ -9,38 +9,23 @@
 import UIKit
 import SnapKit
 
-public protocol ImagePickerControllerDelegate: AnyObject {
-    
-    func imagePickerDidCancel(_ picker: ImagePickerController)
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult)
-}
-
-extension ImagePickerControllerDelegate {
-    
-    public func imagePickerDidCancel(_ picker: ImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-}
-
 open class ImagePickerController: AnyImageNavigationController {
     
-    open weak var pickerDelegate: ImagePickerControllerDelegate?
-    
     private var containerSize: CGSize = .zero
-    private var didFinishSelect: Bool = false
-    private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
-    private let manager: PickerManager = .init()
+    private var options: PickerOptionsInfo = .init()
+    
+    private var photoAssetCollectionViewController: PhotoAssetCollectionViewController?
+    private var continuation: CheckedContinuation<UserInteractionResult<PickerResult>, Never>?
     
     public required init() {
         super.init(nibName: nil, bundle: nil)
     }
     
     /// Init Picker
-    public convenience init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
+    public convenience init(options: PickerOptionsInfo) {
         self.init()
         self.update(options: options)
-        self.pickerDelegate = delegate
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -48,23 +33,37 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     deinit {
-        removeNotifications()
+        endGeneratingDeviceOrientationNotifications()
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
         #endif
-        manager.clearAll()
     }
     
-    open override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
-        addNotifications()
+        beginGeneratingDeviceOrientationNotifications()
         
         #if ANYIMAGEKIT_ENABLE_EDITOR
         ImageEditorCache.clearDiskCache()
         #endif
+        
+        Task {
+            guard let photoAssetCollectionViewController = photoAssetCollectionViewController else {
+                debugPrint("Fail to setup")
+                return
+            }
+            let userInteraction = await photoAssetCollectionViewController.pick()
+            switch userInteraction {
+            case .cancel:
+                resume(result: .cancel)
+            case .interaction(let photoLibrary):
+                let result = PickerResult(assets: photoLibrary.selectedItems, useOriginalImage: true)
+                resume(result: .interaction(result))
+            }
+        }
     }
     
-    open override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let newSize = view.frame.size
         if containerSize != .zero, containerSize != newSize {
@@ -74,11 +73,28 @@ open class ImagePickerController: AnyImageNavigationController {
         containerSize = newSize
     }
     
-    open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
+    public override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
         if let _ = presentedViewController as? PhotoPreviewController {
             presentingViewController?.dismiss(animated: flag, completion: completion)
         } else {
             super.dismiss(animated: flag, completion: completion)
+        }
+    }
+}
+
+extension ImagePickerController {
+    
+    public func pick() async -> UserInteractionResult<PickerResult> {
+        return await withCheckedContinuation { continuation in
+            self.continuation = continuation
+        }
+    }
+    
+    private func resume(result: UserInteractionResult<PickerResult>) {
+        if let continuation = continuation {
+            continuation.resume(returning: result)
+            self.continuation = nil
+            
         }
     }
 }
@@ -90,16 +106,15 @@ extension ImagePickerController {
             return
         }
         enableDebugLog = options.enableDebugLog
-        manager.clearAll()
-        manager.options = check(options: options)
+        self.options = check(options: options)
         
-        let rootViewController = PhotoAssetCollectionViewController(manager: manager)
-        rootViewController.delegate = self
-        rootViewController.trackObserver = self
-        viewControllers = [rootViewController]
+        let photoAssetCollectionViewController = PhotoAssetCollectionViewController()
+        photoAssetCollectionViewController.trackObserver = self
+        viewControllers = [photoAssetCollectionViewController]
+        self.photoAssetCollectionViewController = photoAssetCollectionViewController
         
-        navigationBar.barTintColor = manager.options.theme[color: .background]
-        navigationBar.tintColor = manager.options.theme[color: .text]
+        navigationBar.barTintColor = options.theme[color: .background]
+        navigationBar.tintColor = options.theme[color: .text]
     }
 }
 
@@ -145,42 +160,5 @@ extension ImagePickerController {
         }
         
         return options
-    }
-}
-
-// MARK: - AssetPickerViewControllerDelegate
-extension ImagePickerController: AssetPickerViewControllerDelegate {
-    
-    func assetPickerDidCancel(_ picker: PhotoAssetCollectionViewController) {
-        pickerDelegate?.imagePickerDidCancel(self)
-    }
-    
-    func assetPickerDidFinishPicking(_ controller: PhotoAssetCollectionViewController) {
-        didFinishSelect = true
-    }
-}
-
-// MARK: - Notifications
-extension ImagePickerController {
-    
-    private func addNotifications() {
-        beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
-    }
-    
-    private func removeNotifications() {
-        NotificationCenter.default.removeObserver(self)
-        endGeneratingDeviceOrientationNotifications()
-    }
-    
-    @objc private func didSyncAsset(_ sender: Notification) {
-        if didFinishSelect {
-            if let message = sender.object as? String {
-                didFinishSelect = false
-                _showMessageHUD(self, message)
-            } else {
-                
-            }
-        }
     }
 }

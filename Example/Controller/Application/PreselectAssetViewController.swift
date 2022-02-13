@@ -66,23 +66,18 @@ final class PreselectAssetViewController: UIViewController {
 extension PreselectAssetViewController {
     
     @objc private func openPickerTapped() {
-        var options = PickerOptionsInfo()
-        options.editorOptions = [.photo]
-        options.preselectAssets = assets.map { $0.identifier }
-        let controller = ImagePickerController(options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true, completion: nil)
-    }
-}
-
-// MARK: - ImagePickerControllerDelegate
-extension PreselectAssetViewController: ImagePickerControllerDelegate {
-    
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        print(result.assets)
-        assets = result.assets
-        collectionView.reloadData()
-        picker.dismiss(animated: true, completion: nil)
+        Task {
+            var options = PickerOptionsInfo()
+            options.editorOptions = [.photo]
+            options.preselectAssets = assets.map { $0.identifier }
+            let controller = ImagePickerController(options: options)
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true, completion: nil)
+            
+            guard let result = await controller.pick().result else { return }
+            assets = result.assets
+            collectionView.reloadData()
+        }
     }
 }
 

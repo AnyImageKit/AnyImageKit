@@ -78,35 +78,35 @@ extension PhotoAssetCollectionViewController {
 extension PhotoAssetCollectionViewController: ImageCaptureControllerDelegate {
     
     func imageCapture(_ capture: ImageCaptureController, didFinishCapturing success: CaptureResult) {
-        capture.dismiss(animated: true, completion: nil)
-        showWaitHUD()
-        switch success.type {
-        case .photo:
-            trackObserver?.track(event: .pickerTakePhoto, userInfo: [:])
-            manager.savePhoto(url: success.mediaURL) { [weak self] (success) in
-                switch success {
-                case .success(let asset):
-                    self?.addPHAsset(asset)
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                }
-                self?.hideHUD()
-            }
-        case .video:
-            trackObserver?.track(event: .pickerTakeVideo, userInfo: [:])
-            manager.saveVideo(url: success.mediaURL) { [weak self] (success) in
-                switch success {
-                case .success(let asset):
-                    self?.addPHAsset(asset)
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                }
-                self?.hideHUD()
-            }
-        case .photoLive, .photoGIF:
-            // Not support yet
-            break
-        }
+//        capture.dismiss(animated: true, completion: nil)
+//        showWaitHUD()
+//        switch success.type {
+//        case .photo:
+//            trackObserver?.track(event: .pickerTakePhoto, userInfo: [:])
+//            manager.savePhoto(url: success.mediaURL) { [weak self] (success) in
+//                switch success {
+//                case .success(let asset):
+//                    self?.addPHAsset(asset)
+//                case .failure(let error):
+//                    _print(error.localizedDescription)
+//                }
+//                self?.hideHUD()
+//            }
+//        case .video:
+//            trackObserver?.track(event: .pickerTakeVideo, userInfo: [:])
+//            manager.saveVideo(url: success.mediaURL) { [weak self] (success) in
+//                switch success {
+//                case .success(let asset):
+//                    self?.addPHAsset(asset)
+//                case .failure(let error):
+//                    _print(error.localizedDescription)
+//                }
+//                self?.hideHUD()
+//            }
+//        case .photoLive, .photoGIF:
+//            // Not support yet
+//            break
+//        }
     }
 }
 

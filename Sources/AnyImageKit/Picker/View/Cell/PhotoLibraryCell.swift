@@ -100,10 +100,10 @@ extension PhotoLibraryCell {
 // MARK: - Content
 extension PhotoLibraryCell {
     
-    func setContent(_ photoLibrary: PhotoLibraryAssetCollection, manager: PickerManager) {
+    func setContent(_ photoLibrary: PhotoLibraryAssetCollection, options: PickerOptionsInfo) {
         task?.cancel()
         task = Task {
-            updateTheme(manager.options.theme)
+            updateTheme(options.theme)
             titleLabel.text = photoLibrary.localizedTitle
             subTitleLabel.text = "(\(photoLibrary.assetCount))"
             let targetSize = coverView.frame.size.displaySize

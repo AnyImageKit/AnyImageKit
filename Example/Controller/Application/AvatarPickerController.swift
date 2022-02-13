@@ -32,16 +32,23 @@ final class AvatarPickerController: UITableViewController {
     // MARK: - Target
     
     @IBAction func openPickerTapped() {
-        var options = PickerOptionsInfo()
-        options.selectLimit = 1
-        options.selectionTapAction = .openEditor
-        options.saveEditedAsset = false
-        options.editorOptions = [.photo]
-        options.editorPhotoOptions.toolOptions = [.crop]
-        options.editorPhotoOptions.cropOptions = [.custom(w: 1, h: 1)]
-        let controller = ImagePickerController(options: options, delegate: self)
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true, completion: nil)
+        Task {
+            var options = PickerOptionsInfo()
+            options.selectLimit = 1
+            options.selectionTapAction = .openEditor
+            options.saveEditedAsset = false
+            options.editorOptions = [.photo]
+            options.editorPhotoOptions.toolOptions = [.crop]
+            options.editorPhotoOptions.cropOptions = [.custom(w: 1, h: 1)]
+            let controller = ImagePickerController(options: options)
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true, completion: nil)
+        
+            guard let result = await controller.pick().result else { return }
+            let preview = EditorResultViewController()
+//            controller.imageView.image = try result.assets[0]
+            show(preview, sender: nil)
+        }
     }
     
     // MARK: - Table view data source
@@ -73,17 +80,6 @@ final class AvatarPickerController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 54
-    }
-}
-
-// MARK: - ImagePickerControllerDelegate
-extension AvatarPickerController: ImagePickerControllerDelegate {
-    
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        picker.dismiss(animated: true, completion: nil)
-        let controller = EditorResultViewController()
-//        controller.imageView.image = result.assets.first!.image
-        show(controller, sender: nil)
     }
 }
 

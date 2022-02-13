@@ -11,7 +11,6 @@ import Foundation
 extension Notification.Name {
     
     static let containerSizeDidChange = Notification.Name("org.AnyImageKit.Notification.Name.ContainerSizeDidChange")
-    static let didSyncAsset = Notification.Name("org.AnyImageKit.Notification.Name.DidSyncAsset")
 }
 
 let containerSizeKey: String = "org.AnyImageKit.Notification.Key.ContainerSize"

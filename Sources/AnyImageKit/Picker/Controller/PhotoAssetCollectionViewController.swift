@@ -12,19 +12,11 @@ import Photos
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
 
-protocol AssetPickerViewControllerDelegate: AnyObject {
-    
-    func assetPickerDidCancel(_ picker: PhotoAssetCollectionViewController)
-    func assetPickerDidFinishPicking(_ picker: PhotoAssetCollectionViewController)
-}
-
 final class PhotoAssetCollectionViewController: AnyImageViewController {
-    
-    weak var delegate: AssetPickerViewControllerDelegate?
     
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     
-    private(set) var listPicker: PhotoLibraryListViewController?
+    private(set) var photoLibraryListViewController: PhotoLibraryListViewController?
     private(set) var photoLibrary: PhotoLibraryAssetCollection?
     private(set) var photoLibraryList: [PhotoLibraryAssetCollection] = []
     
@@ -33,19 +25,12 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
     private(set) lazy var toolBar: PickerToolBar = makeToolBar()
     private(set) lazy var permissionDeniedView: PermissionDeniedView = makePermissionDeniedView()
     
-    let manager: PickerManager
+    private var continuation: CheckedContinuation<UserInteractionResult<PhotoLibraryAssetCollection>, Never>?
     
-    init(manager: PickerManager) {
-        self.manager = manager
-        super.init(nibName: nil, bundle: nil)
-    }
+    var options: PickerOptionsInfo = .init()
     
     deinit {
         unregisterPhotoLibraryChangeObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -54,11 +39,27 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
         setupNavigation()
         setupView()
         loadData()
-        update(options: manager.options)
+        update(options: options)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle(style: manager.options.theme.style)
+        return UIStatusBarStyle(style: options.theme.style)
+    }
+}
+
+extension PhotoAssetCollectionViewController {
+    
+    func pick() async -> UserInteractionResult<PhotoLibraryAssetCollection> {
+        return await withCheckedContinuation { continuation in
+            self.continuation = continuation
+        }
+    }
+    
+    private func resume(result: UserInteractionResult<PhotoLibraryAssetCollection>) {
+        if let continuation = continuation {
+            continuation.resume(returning: result)
+            self.continuation = nil
+        }
     }
 }
 
@@ -91,13 +92,13 @@ extension PhotoAssetCollectionViewController {
     }
     
     private func loadPhotoLibrary() async {
-        let library = await PhotoLibraryAssetCollection.fetchDefault(options: manager.options)
+        let library = await PhotoLibraryAssetCollection.fetchDefault(options: options)
         setPhotoLibrary(library)
         await loadPhotoLibraryList()
     }
     
     private func loadPhotoLibraryList() async {
-        let libraryList = await PhotoLibraryAssetCollection.fetchAll(options: manager.options)
+        let libraryList = await PhotoLibraryAssetCollection.fetchAll(options: options)
         setPhotoLibraryList(libraryList)
     }
     
@@ -111,7 +112,7 @@ extension PhotoAssetCollectionViewController {
     
     private func setPhotoLibraryList(_ libraryList: [PhotoLibraryAssetCollection]) {
         photoLibraryList = libraryList
-        if let listPicker = listPicker {
+        if let listPicker = photoLibraryListViewController {
             listPicker.config(library: photoLibrary, libraryList: libraryList)
         }
     }
@@ -130,7 +131,6 @@ extension PhotoAssetCollectionViewController {
             trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.state.isSelected, .page: AnyImagePage.pickerAsset])
         } catch {
             if let error = error as? AssetSelectedError<PHAsset> {
-                let options = manager.options
                 let message: String
                 switch error {
                 case .maximumOfPhotosOrVideos:
@@ -152,13 +152,13 @@ extension PhotoAssetCollectionViewController {
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? PhotoAssetCell, let asset = photoLibrary[indexPath.item].asset {
                 cell.updateState(asset, animated: index == indexPath.item)
-                cell.update(options: manager.options)
+                cell.update(options: options)
             }
         }
     }
     
     private func scrollToEnd(animated: Bool = false) {
-        if manager.options.orderByDate == .asc {
+        if options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: animated)
         } else {
             collectionView.scrollToFirst(at: .top, animated: animated)
@@ -190,7 +190,7 @@ extension PhotoAssetCollectionViewController {
     
     @objc private func titleViewTapped(_ sender: AssetCollectionTitleButton) {
         Task {
-            let controller = PhotoLibraryListViewController(manager: manager)
+            let controller = PhotoLibraryListViewController()
             controller.config(library: photoLibrary, libraryList: photoLibraryList)
             let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
             let isFullScreen = ScreenHelper.mainBounds.height == (navigationController?.view ?? view).frame.height
@@ -198,12 +198,12 @@ extension PhotoAssetCollectionViewController {
             presentationController.cornerRadius = 8
             presentationController.corners = [.bottomLeft, .bottomRight]
             controller.transitioningDelegate = presentationController
-            self.listPicker = controller
+            self.photoLibraryListViewController = controller
             present(controller, animated: true, completion: nil)
             trackObserver?.track(event: .pickerSwitchAlbum, userInfo: [:])
             
-            let result = await controller.pick()
-            switch result {
+            let userInteraction = await controller.pick()
+            switch userInteraction {
             case .interaction(let newLibrary):
                 setPhotoLibrary(newLibrary)
             case .cancel:
@@ -211,18 +211,18 @@ extension PhotoAssetCollectionViewController {
             }
             
             titleView.isSelected = false
-            listPicker = nil
+            photoLibraryListViewController = nil
         }
     }
     
     @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
-        delegate?.assetPickerDidCancel(self)
+        resume(result: .cancel)
         trackObserver?.track(event: .pickerCancel, userInfo: [:])
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
         guard let photoLibrary = photoLibrary, let asset = photoLibrary.selectedItems.first, let index = photoLibrary.loadAssetIndex(for: asset) else { return }
-        let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
+        let controller = PhotoPreviewController(photoLibrary: photoLibrary)
         controller.assetIndex = index
         controller.dataSource = self
         controller.delegate = self
@@ -232,14 +232,15 @@ extension PhotoAssetCollectionViewController {
     
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        manager.useOriginalImage = sender.isSelected
+        photoLibrary?.useOriginalImage = sender.isSelected
         trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         defer { sender.isEnabled = true }
         sender.isEnabled = false
-        delegate?.assetPickerDidFinishPicking(self)
+        guard let photoLibrary = photoLibrary else { return }
+        resume(result: .interaction(photoLibrary))
         trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
     }
     
@@ -287,7 +288,7 @@ extension PhotoAssetCollectionViewController {
     
     private func setupNavigation() {
         navigationItem.titleView = titleView
-        let cancel = UIBarButtonItem(title: manager.options.theme[string: .cancel], style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
+        let cancel = UIBarButtonItem(title: options.theme[string: .cancel], style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
     }
     
@@ -316,12 +317,12 @@ extension PhotoAssetCollectionViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.alwaysBounceVertical = true
         view.contentInsetAdjustmentBehavior = .automatic
-        let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
+        let hideToolBar = options.selectionTapAction.hideToolBar && options.selectLimit == 1
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
-        view.backgroundColor = manager.options.theme[color: .background]
+        view.backgroundColor = options.theme[color: .background]
         view.registerCell(PhotoAssetCell.self)
         view.registerCell(CameraCell.self)
         view.dataSource = self
@@ -333,7 +334,7 @@ extension PhotoAssetCollectionViewController {
         let view = PickerToolBar(style: .picker)
         view.setEnable(false)
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
-        view.originalButton.isSelected = manager.useOriginalImage
+        view.originalButton.isSelected = self.photoLibrary?.useOriginalImage ?? false
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
@@ -347,7 +348,7 @@ extension PhotoAssetCollectionViewController {
     
     private func addPermissionLimitedView() {
         if #available(iOS 14.0, *) {
-            let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
+            let hideToolBar = options.selectionTapAction.hideToolBar && options.selectLimit == 1
             let newToolBarHeight = (hideToolBar ? 0 : toolBarHeight) + toolBar.limitedViewHeight
             toolBar.isHidden = false
             toolBar.contentView.isHidden = hideToolBar
@@ -386,23 +387,23 @@ extension PhotoAssetCollectionViewController: UICollectionViewDataSource {
         case .prefix(let addition), .suffix(let addition):
             print(addition)
             let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
-            cell.update(options: manager.options)
+            cell.update(options: options)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
+            cell.accessibilityLabel = options.theme[string: .pickerTakePhoto]
             return cell
         case .asset(let asset):
             let cell = collectionView.dequeueReusableCell(PhotoAssetCell.self, for: indexPath)
             cell.tag = indexPath.item
             cell.setContent(asset)
-            cell.update(options: manager.options)
+            cell.update(options: options)
             cell.selectEvent.delegate(on: self) { (self, _) in
                 self.setSelected(indexPath.item)
             }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            let accessibilityLabel = manager.options.theme[string: asset.mediaType == .video ? .video : .photo]
+            let accessibilityLabel = options.theme[string: asset.mediaType == .video ? .video : .photo]
             cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
             return cell
         }
@@ -423,14 +424,13 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
             #endif
         case .asset(let asset):
             #if ANYIMAGEKIT_ENABLE_EDITOR
-            let options = manager.options
             if options.selectionTapAction == .openEditor {
                 if let rule = asset.state.disableCheckRule {
                     let message = rule.disabledMessage(for: asset, context: photoLibrary.checker.context)
-                    showAlert(message: message, stringConfig: manager.options.theme)
+                    showAlert(message: message, stringConfig: options.theme)
                 } else if asset.mediaType == .photo && options.editorOptions.contains(.photo) {
                     openEditor(asset: asset, indexPath: indexPath)
-                } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
+                } else if asset.phAsset.mediaType == .video && options.editorOptions.contains(.video) {
                     openEditor(asset: asset, indexPath: indexPath)
                 }
                 return
@@ -442,7 +442,6 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
     
     private func openPreview(asset: Asset<PHAsset>, indexPath: IndexPath) {
         guard let photoLibrary = photoLibrary else { return }
-        let options = manager.options
         if options.selectionTapAction == .quickPick {
             setSelected(indexPath.item)
             if options.selectLimit == 1 && photoLibrary.selectedItems.count == 1 {
@@ -455,7 +454,7 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
         } else if !asset.isSelected && photoLibrary.checker.isUpToLimit {
             return
         } else if let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell {
-            let controller = PhotoPreviewController(manager: manager, photoLibrary: photoLibrary)
+            let controller = PhotoPreviewController(photoLibrary: photoLibrary)
             let assetIndex = photoLibrary.convertIndexToAssetIndex(indexPath.item)
             controller.presentationScaleImage = cell.displayImage
             controller.assetIndex = assetIndex
@@ -472,8 +471,8 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let contentSize = collectionView.bounds.inset(by: collectionView.contentInset).size
         let columnNumber: CGFloat
-        if UIDevice.current.userInterfaceIdiom == .phone || !manager.options.autoCalculateColumnNumber {
-            columnNumber = CGFloat(manager.options.columnNumber)
+        if UIDevice.current.userInterfaceIdiom == .phone || !options.autoCalculateColumnNumber {
+            columnNumber = CGFloat(options.columnNumber)
         } else {
             let minWidth: CGFloat = 140
             columnNumber = max(CGFloat(Int(contentSize.width / minWidth)), 3)
@@ -514,7 +513,8 @@ extension PhotoAssetCollectionViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) {
-        delegate?.assetPickerDidFinishPicking(self)
+        guard let photoLibrary = photoLibrary else { return }
+        resume(result: .interaction(photoLibrary))
     }
     
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
