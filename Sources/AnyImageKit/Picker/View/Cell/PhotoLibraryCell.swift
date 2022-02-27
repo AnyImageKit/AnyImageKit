@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 final class PhotoLibraryCell: UITableViewCell {
     
@@ -14,8 +15,12 @@ final class PhotoLibraryCell: UITableViewCell {
     private lazy var titleLabel: UILabel = makeLabel()
     private lazy var subTitleLabel: UILabel = makeLabel()
     private lazy var separatorLine: UIView = makeSeparatorLine()
+    private lazy var customSelectedbackgroundView: UIView = makeSelectedbackgroundView()
     
+    private var optionsCancellable: AnyCancellable?
     private var task: Task<Void, Error>?
+    
+    @Published var options: PickerOptionsInfo = .init()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,6 +43,7 @@ final class PhotoLibraryCell: UITableViewCell {
 extension PhotoLibraryCell {
     
     private func setupView() {
+        selectedBackgroundView = customSelectedbackgroundView
         contentView.addSubview(coverView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subTitleLabel)
@@ -58,6 +64,10 @@ extension PhotoLibraryCell {
             maker.left.right.bottom.equalToSuperview()
             maker.height.equalTo(0.5)
         }
+        
+        optionsCancellable = $options.sink { [weak self] newOptions in
+            self?.update(options: newOptions)
+        }
     }
     
     private func makeCoverView() -> UIImageView {
@@ -77,33 +87,34 @@ extension PhotoLibraryCell {
         let view = UIView(frame: .zero)
         return view
     }
+    
+    private func makeSelectedbackgroundView() -> UIView {
+        let view = UIView(frame: .zero)
+        return view
+    }
 }
 
 // MARK: - Theme
-extension PhotoLibraryCell {
+extension PhotoLibraryCell: OptionsInfoUpdatableContent {
     
-    private func updateTheme(_ theme: PickerTheme) {
-        tintColor = theme[color: .primary]
-        backgroundColor = theme[color: .background]
-        let view = UIView(frame: .zero)
-        view.backgroundColor = theme[color: .selectedCell]
-        selectedBackgroundView = view
-        titleLabel.textColor = theme[color: .text]
-        subTitleLabel.textColor = theme[color: .subText]
-        separatorLine.backgroundColor = theme[color: .separatorLine]
-        
-        theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
-        theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)
+    func update(options: PickerOptionsInfo) {
+        tintColor = options.theme[color: .primary]
+        backgroundColor = options.theme[color: .background]
+        customSelectedbackgroundView.backgroundColor = options.theme[color: .selectedCell]
+        titleLabel.textColor = options.theme[color: .text]
+        subTitleLabel.textColor = options.theme[color: .subText]
+        separatorLine.backgroundColor = options.theme[color: .separatorLine]
+        options.theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
+        options.theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)
     }
 }
 
 // MARK: - Content
 extension PhotoLibraryCell {
     
-    func setContent(_ photoLibrary: PhotoLibraryAssetCollection, options: PickerOptionsInfo) {
+    func setContent(_ photoLibrary: PhotoLibraryAssetCollection) {
         task?.cancel()
         task = Task {
-            updateTheme(options.theme)
             titleLabel.text = photoLibrary.localizedTitle
             subTitleLabel.text = "(\(photoLibrary.assetCount))"
             let targetSize = coverView.frame.size.displaySize

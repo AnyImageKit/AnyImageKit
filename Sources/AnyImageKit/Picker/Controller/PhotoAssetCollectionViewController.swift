@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import Combine
 
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
@@ -25,9 +26,9 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
     private(set) lazy var toolBar: PickerToolBar = makeToolBar()
     private(set) lazy var permissionDeniedView: PermissionDeniedView = makePermissionDeniedView()
     
-    private var continuation: CheckedContinuation<UserInteractionResult<PhotoLibraryAssetCollection>, Never>?
+    private var continuation: CheckedContinuation<UserAction<PhotoLibraryAssetCollection>, Never>?
     
-    var options: PickerOptionsInfo = .init()
+    @Published var options: PickerOptionsInfo = .init()
     
     deinit {
         unregisterPhotoLibraryChangeObserver()
@@ -49,13 +50,13 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
 
 extension PhotoAssetCollectionViewController {
     
-    func pick() async -> UserInteractionResult<PhotoLibraryAssetCollection> {
+    func pick() async -> UserAction<PhotoLibraryAssetCollection> {
         return await withCheckedContinuation { continuation in
             self.continuation = continuation
         }
     }
     
-    private func resume(result: UserInteractionResult<PhotoLibraryAssetCollection>) {
+    private func resume(result: UserAction<PhotoLibraryAssetCollection>) {
         if let continuation = continuation {
             continuation.resume(returning: result)
             self.continuation = nil
@@ -189,6 +190,7 @@ extension PhotoAssetCollectionViewController {
 extension PhotoAssetCollectionViewController {
     
     @objc private func titleViewTapped(_ sender: AssetCollectionTitleButton) {
+        trackObserver?.track(event: .pickerSwitchAlbum, userInfo: [:])
         Task {
             let controller = PhotoLibraryListViewController()
             controller.config(library: photoLibrary, libraryList: photoLibraryList)
@@ -198,12 +200,12 @@ extension PhotoAssetCollectionViewController {
             presentationController.cornerRadius = 8
             presentationController.corners = [.bottomLeft, .bottomRight]
             controller.transitioningDelegate = presentationController
-            self.photoLibraryListViewController = controller
-            present(controller, animated: true, completion: nil)
-            trackObserver?.track(event: .pickerSwitchAlbum, userInfo: [:])
+            photoLibraryListViewController = controller
             
-            let userInteraction = await controller.pick()
-            switch userInteraction {
+            present(controller, animated: true, completion: nil)
+            
+            let userAction = await controller.pick()
+            switch userAction {
             case .interaction(let newLibrary):
                 setPhotoLibrary(newLibrary)
             case .cancel:
@@ -232,7 +234,7 @@ extension PhotoAssetCollectionViewController {
     
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        photoLibrary?.useOriginalImage = sender.isSelected
+        options.useOriginalImage = sender.isSelected
         trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
     }
     
@@ -334,7 +336,7 @@ extension PhotoAssetCollectionViewController {
         let view = PickerToolBar(style: .picker)
         view.setEnable(false)
         view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
-        view.originalButton.isSelected = self.photoLibrary?.useOriginalImage ?? false
+        view.originalButton.isSelected = options.useOriginalImage
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         view.permissionLimitedView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)

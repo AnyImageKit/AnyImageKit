@@ -7,29 +7,34 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
+
+protocol OptionsInfoUpdatableContent {
+    
+    associatedtype OptionsInfo
+    
+    var options: OptionsInfo { get set }
+    func update(options: OptionsInfo)
+}
 
 open class ImagePickerController: AnyImageNavigationController {
     
-    private var containerSize: CGSize = .zero
-    
-    private var options: PickerOptionsInfo = .init()
-    
-    private var photoAssetCollectionViewController: PhotoAssetCollectionViewController?
-    private var continuation: CheckedContinuation<UserInteractionResult<PickerResult>, Never>?
-    
-    public required init() {
-        super.init(nibName: nil, bundle: nil)
+    enum Mode {
+        case pending
+        case photoAsset(PhotoAssetCollectionViewController)
     }
+    
+    private var containerSize: CGSize = .zero
+    private var mode: Mode = .pending
+    private var continuation: CheckedContinuation<UserAction<PickerResult>, Never>?
+    
+    @Published public var options: PickerOptionsInfo = .init()
     
     /// Init Picker
     public convenience init(options: PickerOptionsInfo) {
         self.init()
-        self.update(options: options)
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        self.options = check(options: options)
     }
     
     deinit {
@@ -48,18 +53,7 @@ open class ImagePickerController: AnyImageNavigationController {
         #endif
         
         Task {
-            guard let photoAssetCollectionViewController = photoAssetCollectionViewController else {
-                debugPrint("Fail to setup")
-                return
-            }
-            let userInteraction = await photoAssetCollectionViewController.pick()
-            switch userInteraction {
-            case .cancel:
-                resume(result: .cancel)
-            case .interaction(let photoLibrary):
-                let result = PickerResult(assets: photoLibrary.selectedItems, useOriginalImage: true)
-                resume(result: .interaction(result))
-            }
+            await setupPhotoAssetPicker()
         }
     }
     
@@ -84,41 +78,58 @@ open class ImagePickerController: AnyImageNavigationController {
 
 extension ImagePickerController {
     
-    public func pick() async -> UserInteractionResult<PickerResult> {
-        return await withCheckedContinuation { continuation in
-            self.continuation = continuation
-        }
-    }
-    
-    private func resume(result: UserInteractionResult<PickerResult>) {
-        if let continuation = continuation {
-            continuation.resume(returning: result)
-            self.continuation = nil
-            
+    @MainActor
+    private func setupPhotoAssetPicker() async {
+        let photoAssetCollectionViewController = PhotoAssetCollectionViewController()
+        photoAssetCollectionViewController.trackObserver = self
+        viewControllers = [photoAssetCollectionViewController]
+        mode = .photoAsset(photoAssetCollectionViewController)
+        
+        $options
+            .assign(to: \.options, on: photoAssetCollectionViewController)
+            .store(in: &cancellables)
+        
+        $options
+            .sink { [weak self] newOptions in
+                self?.update(options: newOptions)
+            }
+            .store(in: &cancellables)
+        
+        let userAction = await photoAssetCollectionViewController.pick()
+        switch userAction {
+        case .cancel:
+            resume(result: .cancel)
+        case .interaction(let photoLibrary):
+            let result = PickerResult(assets: photoLibrary.selectedItems, useOriginalImage: options.useOriginalImage)
+            resume(result: .interaction(result))
         }
     }
 }
 
 extension ImagePickerController {
     
-    open func update(options: PickerOptionsInfo) {
-        guard viewControllers.isEmpty || enableForceUpdate else {
-            return
+    public func pick() async -> UserAction<PickerResult> {
+        return await withCheckedContinuation { continuation in
+            self.continuation = continuation
         }
-        enableDebugLog = options.enableDebugLog
-        self.options = check(options: options)
-        
-        let photoAssetCollectionViewController = PhotoAssetCollectionViewController()
-        photoAssetCollectionViewController.trackObserver = self
-        viewControllers = [photoAssetCollectionViewController]
-        self.photoAssetCollectionViewController = photoAssetCollectionViewController
-        
+    }
+    
+    private func resume(result: UserAction<PickerResult>) {
+        if let continuation = continuation {
+            continuation.resume(returning: result)
+            self.continuation = nil
+        }
+    }
+}
+
+extension ImagePickerController: OptionsInfoUpdatableContent {
+    
+    func update(options: PickerOptionsInfo) {
         navigationBar.barTintColor = options.theme[color: .background]
         navigationBar.tintColor = options.theme[color: .text]
     }
 }
 
-// MARK: - Private function
 extension ImagePickerController {
     
     private func check(options: PickerOptionsInfo) -> PickerOptionsInfo {

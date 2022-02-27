@@ -83,6 +83,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     
     private var disposeBags: [IndexPath: AnyCancellable] = [:]
     
+    @Published
     var options: PickerOptionsInfo = .init()
     
     let photoLibrary: PhotoLibraryAssetCollection
@@ -209,7 +210,7 @@ extension PhotoPreviewController {
     
     private func makeToolBar() -> PickerToolBar {
         let view = PickerToolBar(style: .preview)
-//        view.originalButton.isSelected = manager.useOriginalImage
+        view.originalButton.isSelected = options.useOriginalImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
@@ -354,11 +355,11 @@ extension PhotoPreviewController {
     /// ToolBar - Original
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        photoLibrary.useOriginalImage = sender.isSelected
+        options.useOriginalImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
         // Select current image
-        if photoLibrary.useOriginalImage && !photoLibrary.checker.isUpToLimit {
+        if options.useOriginalImage && !photoLibrary.checker.isUpToLimit {
             guard let asset = photoLibrary.loadAsset(for: assetIndex) else { return }
             if !asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)

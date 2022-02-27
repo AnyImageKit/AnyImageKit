@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 open class AnyImageNavigationController: UINavigationController {
     
     private var hasOverrideGeneratingDeviceOrientation: Bool = false
+    
+    var cancellables: Set<AnyCancellable> = .init()
     
     open weak var trackDelegate: ImageKitDataTrackDelegate?
     

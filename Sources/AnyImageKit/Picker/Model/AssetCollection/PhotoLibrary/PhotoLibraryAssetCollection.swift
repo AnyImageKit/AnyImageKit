@@ -74,18 +74,6 @@ extension PhotoLibraryAssetCollection {
 
 extension PhotoLibraryAssetCollection {
     
-    var useOriginalImage: Bool {
-        get {
-            return false
-        }
-        nonmutating set {
-            
-        }
-    }
-}
-
-extension PhotoLibraryAssetCollection {
-    
     var assetCount: Int {
         return fetchResult.count
     }

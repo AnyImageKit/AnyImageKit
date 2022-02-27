@@ -18,15 +18,16 @@ final class CameraCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.color(hex: 0xDEDFE0)
         setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setupView()
     }
     
     private func setupView() {
+        backgroundColor = UIColor.color(hex: 0xDEDFE0)
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { maker in
             maker.center.equalToSuperview()

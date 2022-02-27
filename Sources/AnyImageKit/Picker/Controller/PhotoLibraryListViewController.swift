@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 private let rowHeight: CGFloat = 55
 
@@ -16,9 +17,9 @@ final class PhotoLibraryListViewController: AnyImageViewController {
     
     private var photoLibrary: PhotoLibraryAssetCollection?
     private var photoLibraryList: [PhotoLibraryAssetCollection] = []
-    private var continuation: CheckedContinuation<UserInteractionResult<PhotoLibraryAssetCollection>, Never>?
+    private var continuation: CheckedContinuation<UserAction<PhotoLibraryAssetCollection>, Never>?
     
-    private var options: PickerOptionsInfo = .init()
+    @Published var options: PickerOptionsInfo = .init()
     
     deinit {
         removeNotifications()
@@ -66,13 +67,13 @@ extension PhotoLibraryListViewController {
         }
     }
     
-    func pick() async -> UserInteractionResult<PhotoLibraryAssetCollection> {
+    func pick() async -> UserAction<PhotoLibraryAssetCollection> {
         return await withCheckedContinuation { continuation in
             self.continuation = continuation
         }
     }
     
-    private func resume(result: UserInteractionResult<PhotoLibraryAssetCollection>) {
+    private func resume(result: UserAction<PhotoLibraryAssetCollection>) {
         if let continuation = continuation {
             continuation.resume(returning: result)
             self.continuation = nil
@@ -130,11 +131,10 @@ extension PhotoLibraryListViewController {
 }
 
 // MARK: - PickerOptionsConfigurable
-extension PhotoLibraryListViewController: PickerOptionsConfigurable {
+extension PhotoLibraryListViewController: OptionsInfoUpdatableContent {
     
     func update(options: PickerOptionsInfo) {
         tableView.backgroundColor = options.theme[color: .background]
-        updateChildrenConfigurable(options: options)
     }
 }
 
@@ -172,7 +172,8 @@ extension PhotoLibraryListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(PhotoLibraryCell.self, for: indexPath)
         let photoLibrary = photoLibraryList[indexPath.row]
-        cell.setContent(photoLibrary, options: options)
+        cell.setContent(photoLibrary)
+        listCancellables[indexPath] = $options.assign(to: \.options, on: cell)
         cell.accessoryType = self.photoLibrary == photoLibrary ? .checkmark : .none
         return cell
     }

@@ -1,5 +1,5 @@
 //
-//  UserInteractionResult.swift
+//  UserAction.swift
 //  AnyImageKit
 //
 //  Created by 刘栋 on 2022/1/20.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-public enum UserInteractionResult<Result> {
+public enum UserAction<Result> {
     
     case interaction(Result)
     case cancel
 }
 
-extension UserInteractionResult {
+extension UserAction {
     
     public var result: Result? {
         switch self {

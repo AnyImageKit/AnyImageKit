@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class AnyImageViewController: UIViewController {
     
@@ -16,6 +17,9 @@ class AnyImageViewController: UIViewController {
             setNeedsStatusBarAppearanceUpdate()
         }
     }
+    
+    var cancellables: Set<AnyCancellable> = .init()
+    var listCancellables: [IndexPath: AnyCancellable] = .init()
     
     weak var trackObserver: DataTrackObserver?
     

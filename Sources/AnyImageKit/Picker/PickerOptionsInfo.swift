@@ -40,13 +40,17 @@ public struct PickerOptionsInfo {
     /// - Default: 1800
     public var largePhotoMaxWidth: CGFloat = 1800
     
-    /// Allow Use Original Image
+    /// Allow Use Original Image, display or hidden button
     /// - Default: false
     public var allowUseOriginalImage: Bool = false
     
+    /// Use Original Image
+    /// - Default: false
+    public var useOriginalImage: Bool = false
+    
     /// Album Options
     /// - Default: smart album + user create album
-    public var albumOptions: PickerAlbumOption = [.smart, .userCreated]
+    public var albumOptions: PickerAlbumOption = [.smart, .userCreated, .shared]
     
     /// Select Options
     /// - Default: Photo
