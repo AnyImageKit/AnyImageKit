@@ -10,27 +10,12 @@ import UIKit
 import Photos
 import Kingfisher
 
-final class PhotoAssetCell: UICollectionViewCell, PickerOptionsConfigurableContent {
+final class PhotoAssetCell: AnyImageCollectionViewCell, PickerOptionsConfigurableContent {
     
-    let context: PickerOptionsConfigurableContext = .init()
-    let selectEvent: Delegate<Void, Void> = .init()
+    private lazy var imageView: UIImageView = makeImageView()
+    private lazy var gifView: AssetGIFHintView = makeGIFView()
+    private lazy var videoView: AssetVideoHintView = makeVideoView()
     
-    private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView(frame: .zero)
-        view.contentMode = .scaleAspectFill
-        view.layer.masksToBounds = true
-        return view
-    }()
-    private lazy var gifView: GIFView = {
-        let view = GIFView()
-        view.isHidden = true
-        return view
-    }()
-    private lazy var videoView: VideoView = {
-        let view = VideoView()
-        view.isHidden = true
-        return view
-    }()
     private lazy var editedView: EditedView = {
         let view = EditedView()
         view.isHidden = true
@@ -62,14 +47,19 @@ final class PhotoAssetCell: UICollectionViewCell, PickerOptionsConfigurableConte
     
     private var task: Task<Void, Error>?
     
+    let pickerContext: PickerOptionsConfigurableContext = .init()
+    let selectEvent: Delegate<Void, Void> = .init()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        setupDataBinding()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
+        setupDataBinding()
     }
     
     override func prepareForReuse() {
@@ -83,6 +73,19 @@ final class PhotoAssetCell: UICollectionViewCell, PickerOptionsConfigurableConte
         disableCoverView.isHidden = true
         borderView.isHidden = true
     }
+}
+
+// MARK: PickerOptionsConfigurableContent
+extension PhotoAssetCell {
+    
+    func update(options: PickerOptionsInfo) {
+        borderView.layer.borderColor = options.theme[color: .primary].cgColor
+        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+    }
+}
+
+// MARK: UI
+extension PhotoAssetCell {
     
     private func setupView() {
         contentView.addSubview(imageView)
@@ -120,13 +123,28 @@ final class PhotoAssetCell: UICollectionViewCell, PickerOptionsConfigurableConte
             maker.width.height.equalTo(40)
         }
     }
-}
-
-extension PhotoAssetCell {
     
-    func update(options: PickerOptionsInfo) {
-        borderView.layer.borderColor = options.theme[color: .primary].cgColor
-        selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+    private func setupDataBinding() {
+        sink().store(in: &cancellables)
+    }
+    
+    private func makeImageView() -> UIImageView {
+        let view = UIImageView(frame: .zero)
+        view.contentMode = .scaleAspectFill
+        view.layer.masksToBounds = true
+        return view
+    }
+    
+    private func makeGIFView() -> AssetGIFHintView {
+        let view = AssetGIFHintView()
+        view.isHidden = true
+        return view
+    }
+    
+    private func makeVideoView() -> AssetVideoHintView {
+        let view = AssetVideoHintView()
+        view.isHidden = true
+        return view
     }
 }
 
@@ -134,6 +152,10 @@ extension PhotoAssetCell {
     
     var displayImage: UIImage? {
         return imageView.image
+    }
+    
+    var displayContentView: UIImageView {
+        return imageView
     }
 }
 
@@ -145,6 +167,7 @@ extension PhotoAssetCell {
     }
 }
 
+// MARK:  Content
 extension PhotoAssetCell {
     
     func setContent(asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
@@ -153,10 +176,7 @@ extension PhotoAssetCell {
             do {
                 let targetSize = frame.size.displaySize
                 for try await result in asset.loadImage(options: .init(targetSize: targetSize)) {
-                    guard !Task.isCancelled else {
-                        print("\(String(describing: task)) isCancelled")
-                        return
-                    }
+                    guard !Task.isCancelled else { return }
                     switch result {
                     case .progress:
                         break
@@ -198,140 +218,6 @@ extension PhotoAssetCell {
                 disableCoverView.isHidden = !(asset.checker.isUpToLimit && !asset.isSelected)
             }
         }
-    }
-}
-
-
-// MARK: - VideoView
-private class VideoView: UIView {
-    
-    private lazy var videoImageView: UIImageView = {
-        let view = UIImageView(frame: .zero)
-        return view
-    }()
-    private lazy var videoLabel: UILabel = {
-        let view = UILabel(frame: .zero)
-        view.isHidden = true
-        view.textColor = UIColor.white
-        view.font = UIFont.systemFont(ofSize: 12)
-        return view
-    }()
-    private lazy var coverLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
-        layer.colors = [
-            UIColor.black.withAlphaComponent(0.5).cgColor,
-            UIColor.black.withAlphaComponent(0).cgColor]
-        layer.locations = [0, 1]
-        layer.startPoint = CGPoint(x: 0.5, y: 1)
-        layer.endPoint = CGPoint(x: 0.5, y: 0)
-        return layer
-    }()
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupView() {
-        layer.addSublayer(coverLayer)
-        addSubview(videoImageView)
-        addSubview(videoLabel)
-        
-        videoImageView.snp.makeConstraints { maker in
-            maker.left.bottom.equalToSuperview().inset(8)
-            maker.width.equalTo(24)
-            maker.height.equalTo(15)
-        }
-        videoLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(videoImageView.snp.right).offset(3)
-            maker.centerY.equalTo(videoImageView)
-        }
-    }
-    
-}
-
-extension VideoView {
-    
-    /// 设置视频时间，单位：秒
-    func setVideoTime(_ time: String) {
-        videoLabel.isHidden = false
-        videoLabel.text = time
-    }
-}
-
-// MARK: - PickerOptionsConfigurable
-extension VideoView: PickerOptionsConfigurable {
-    
-    func update(options: PickerOptionsInfo) {
-        videoImageView.image = options.theme[icon: .video]
-        updateChildrenConfigurable(options: options)
-        options.theme.labelConfiguration[.assetCellVideoDuration]?.configuration(videoLabel)
-    }
-}
-
-
-// MARK: - GIF View
-private class GIFView: UIView {
-
-    private lazy var gifLabel: UILabel = {
-        let view = UILabel(frame: .zero)
-        view.text = "GIF"
-        view.textColor = UIColor.white
-        view.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        return view
-    }()
-    private lazy var coverLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
-        layer.colors = [
-            UIColor.black.withAlphaComponent(0.5).cgColor,
-            UIColor.black.withAlphaComponent(0).cgColor]
-        layer.locations = [0, 1]
-        layer.startPoint = CGPoint(x: 0.5, y: 1)
-        layer.endPoint = CGPoint(x: 0.5, y: 0)
-        return layer
-    }()
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupView() {
-        layer.addSublayer(coverLayer)
-        addSubview(gifLabel)
-        
-        gifLabel.snp.makeConstraints { maker in
-            maker.left.bottom.equalToSuperview().inset(8)
-            maker.height.equalTo(15)
-        }
-    }
-}
-
-// MARK: - PickerOptionsConfigurable
-extension GIFView: PickerOptionsConfigurable {
-    
-    func update(options: PickerOptionsInfo) {
-        options.theme.labelConfiguration[.assetCellGIFMark]?.configuration(gifLabel)
     }
 }
 

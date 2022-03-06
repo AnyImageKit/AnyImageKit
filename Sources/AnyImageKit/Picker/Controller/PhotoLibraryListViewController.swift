@@ -19,7 +19,7 @@ final class PhotoLibraryListViewController: AnyImageViewController, PickerOption
     private var photoLibraryList: [PhotoLibraryAssetCollection] = []
     private var continuation: CheckedContinuation<UserAction<PhotoLibraryAssetCollection>, Never>?
     
-    let context: PickerOptionsConfigurableContext = .init()
+    let pickerContext: PickerOptionsConfigurableContext = .init()
     
     deinit {
         removeNotifications()
@@ -30,6 +30,7 @@ final class PhotoLibraryListViewController: AnyImageViewController, PickerOption
         addNotifications()
         updatePreferredContentSize(with: traitCollection)
         setupView()
+        setupDataBinding()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -56,6 +57,15 @@ final class PhotoLibraryListViewController: AnyImageViewController, PickerOption
     }
 }
 
+// MARK: PickerOptionsConfigurableContent
+extension PhotoLibraryListViewController {
+    
+    func update(options: PickerOptionsInfo) {
+        tableView.backgroundColor = options.theme[color: .background]
+    }
+}
+
+// MARK:
 extension PhotoLibraryListViewController {
     
     func config(library: PhotoLibraryAssetCollection?, libraryList: [PhotoLibraryAssetCollection]) {
@@ -129,14 +139,6 @@ extension PhotoLibraryListViewController {
     }
 }
 
-// MARK: - PickerOptionsConfigurable
-extension PhotoLibraryListViewController {
-    
-    func update(options: PickerOptionsInfo) {
-        tableView.backgroundColor = options.theme[color: .background]
-    }
-}
-
 // MARK: - UI
 extension PhotoLibraryListViewController {
     
@@ -145,8 +147,9 @@ extension PhotoLibraryListViewController {
         tableView.snp.makeConstraints { maker in
             maker.edges.equalTo(view.snp.edges)
         }
-        
-        // data binding
+    }
+    
+    private func setupDataBinding() {
         sink().store(in: &cancellables)
     }
     

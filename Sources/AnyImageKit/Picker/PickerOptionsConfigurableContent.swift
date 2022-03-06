@@ -31,26 +31,26 @@ extension PickerOptionsConfigurableContext {
 
 public protocol PickerOptionsConfigurableContent: AnyObject {
     
-    var context: PickerOptionsConfigurableContext { get }
+    var pickerContext: PickerOptionsConfigurableContext { get }
     func update(options: PickerOptionsInfo)
 }
 
 extension PickerOptionsConfigurableContent {
     
     var options: PickerOptionsInfo {
-        get { context.options }
-        set { context.options = newValue }
+        get { pickerContext.options }
+        set { pickerContext.options = newValue }
     }
 }
 
 extension PickerOptionsConfigurableContent {
     
     public func assign(on content: PickerOptionsConfigurableContent) -> AnyCancellable {
-        context.subject.assign(to: \.options, on: content)
+        pickerContext.subject.assign(to: \.options, on: content)
     }
     
     public func sink() -> AnyCancellable {
-        context.publisher.sink { [weak self] newOptions in
+        pickerContext.subject.sink { [weak self] newOptions in
             guard let self = self else { return }
             self.update(options: newOptions)
         }

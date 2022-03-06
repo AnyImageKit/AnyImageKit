@@ -20,7 +20,7 @@ final class PhotoLibraryCell: UITableViewCell, PickerOptionsConfigurableContent 
     private var optionsCancellable: AnyCancellable?
     private var task: Task<Void, Error>?
     
-    let context: PickerOptionsConfigurableContext = .init()
+    let pickerContext: PickerOptionsConfigurableContext = .init()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -32,11 +32,20 @@ final class PhotoLibraryCell: UITableViewCell, PickerOptionsConfigurableContent 
         setupView()
     }
     
+    deinit {
+        task?.cancel()
+        task = nil
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         task?.cancel()
         task = nil
     }
+}
+
+// MARK: PickerOptionsConfigurableContent
+extension PhotoLibraryCell {
     
     func update(options: PickerOptionsInfo) {
         tintColor = options.theme[color: .primary]
@@ -76,7 +85,7 @@ extension PhotoLibraryCell {
             maker.height.equalTo(0.5)
         }
         
-        optionsCancellable = context.publisher.sink { [weak self] newOptions in
+        optionsCancellable = pickerContext.publisher.sink { [weak self] newOptions in
             guard let self = self else { return }
             self.update(options: newOptions)
         }
@@ -116,6 +125,7 @@ extension PhotoLibraryCell {
             subTitleLabel.text = "(\(photoLibrary.assetCount))"
             let targetSize = coverView.frame.size.displaySize
             for try await cover in photoLibrary.loadCover(targetSize: targetSize) {
+                guard !Task.isCancelled else { return }
                 coverView.image = cover
             }
         }

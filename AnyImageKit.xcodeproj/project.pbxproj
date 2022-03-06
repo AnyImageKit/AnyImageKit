@@ -104,6 +104,10 @@
 		A03806B723BF358A002873A9 /* Core.strings in Resources */ = {isa = PBXBuildFile; fileRef = A04B045023B1AB7400DA4D47 /* Core.strings */; };
 		A03D7E6027D452EC002FA781 /* AssetPlugin+Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E5F27D452EC002FA781 /* AssetPlugin+Capture.swift */; };
 		A03D7E6227D47F66002FA781 /* PickerOptionsConfigurableContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6127D47F66002FA781 /* PickerOptionsConfigurableContent.swift */; };
+		A03D7E6427D4AD58002FA781 /* AssetVideoHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6327D4AD58002FA781 /* AssetVideoHintView.swift */; };
+		A03D7E6927D4ED21002FA781 /* AssetGIFHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6827D4ED21002FA781 /* AssetGIFHintView.swift */; };
+		A03D7E6B27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6A27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift */; };
+		A03D7E6D27D4F01D002FA781 /* AnyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6C27D4F01D002FA781 /* AnyImageView.swift */; };
 		A040C596277B4D47000D2569 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A040C595277B4D47000D2569 /* SnapKit */; };
 		A040C598277B4D52000D2569 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
 		A040C599277B4D52000D2569 /* AnyImageKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -433,6 +437,10 @@
 		A03AC1322616B8220001F150 /* PickerTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerTheme.swift; sourceTree = "<group>"; };
 		A03D7E5F27D452EC002FA781 /* AssetPlugin+Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssetPlugin+Capture.swift"; sourceTree = "<group>"; };
 		A03D7E6127D47F66002FA781 /* PickerOptionsConfigurableContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerOptionsConfigurableContent.swift; sourceTree = "<group>"; };
+		A03D7E6327D4AD58002FA781 /* AssetVideoHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetVideoHintView.swift; sourceTree = "<group>"; };
+		A03D7E6827D4ED21002FA781 /* AssetGIFHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetGIFHintView.swift; sourceTree = "<group>"; };
+		A03D7E6A27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		A03D7E6C27D4F01D002FA781 /* AnyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageView.swift; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A04A6DB127A415E80025757A /* MediaSelectOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSelectOption.swift; sourceTree = "<group>"; };
 		A04B044823B1A54F00DA4D47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Capture.strings; sourceTree = "<group>"; };
@@ -995,6 +1003,16 @@
 			path = AssetPlugin;
 			sourceTree = "<group>";
 		};
+		A03D7E6727D4AE79002FA781 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A0FFB23F25407E86000A7A45 /* GradientView.swift */,
+				A03D7E6C27D4F01D002FA781 /* AnyImageView.swift */,
+				A03D7E6A27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		A040C597277B4D52000D2569 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1241,6 +1259,7 @@
 			isa = PBXGroup;
 			children = (
 				A0B22EA1237AA1B3001F6066 /* Controller */,
+				A03D7E6727D4AE79002FA781 /* View */,
 				A0B22EA3237AA1B3001F6066 /* Model */,
 				71D552BB2734C98F0059345B /* Option */,
 				A0B22E9A237AA1B3001F6066 /* Util */,
@@ -1459,7 +1478,6 @@
 				A5ABEF29239F76EC00B50543 /* TextImageView.swift */,
 				71A3D0AA247B9626000A1B24 /* BigButton.swift */,
 				71CBF13425199C0D00F79D19 /* ColorWell.swift */,
-				A0FFB23F25407E86000A7A45 /* GradientView.swift */,
 				718DE32625996E36005C3159 /* CropLayerView.swift */,
 				718DE32A2599AD82005C3159 /* TextTrashView.swift */,
 				71A2F3BE2730E53100D4997B /* MirrorCropView.swift */,
@@ -1559,6 +1577,8 @@
 			children = (
 				A036C3912330B5D000D32ED8 /* PhotoLibraryCell.swift */,
 				A036C3922330B5D000D32ED8 /* PhotoAssetCell.swift */,
+				A03D7E6327D4AD58002FA781 /* AssetVideoHintView.swift */,
+				A03D7E6827D4ED21002FA781 /* AssetGIFHintView.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1831,6 +1851,7 @@
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
 				71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */,
 				A03D7E6027D452EC002FA781 /* AssetPlugin+Capture.swift in Sources */,
+				A03D7E6D27D4F01D002FA781 /* AnyImageView.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
 				A0CA28262797E90C00ED230E /* PhotoLibraryAssetCollection+Fetch.swift in Sources */,
@@ -1838,6 +1859,7 @@
 				A0F6A68E278C65DE00C02C01 /* IdentifiableResource+PHAsset.swift in Sources */,
 				A07D8794233CA257000108C7 /* Core+CGImagePropertyOrientation.swift in Sources */,
 				A5347D3023AA1FD400C93874 /* ExportTool+Video.swift in Sources */,
+				A03D7E6427D4AD58002FA781 /* AssetVideoHintView.swift in Sources */,
 				A0CA281F2794392B00ED230E /* AssetChecker.swift in Sources */,
 				716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */,
 				A0AF771F23A7762300A3DD9F /* CaptureRecordView.swift in Sources */,
@@ -1927,7 +1949,9 @@
 				71B3E93E2629893400710A7F /* EditorPenColorOption.swift in Sources */,
 				A07AC74823B5EC64002CB5AF /* Recorder.swift in Sources */,
 				A0147E0C23C4870D0071E9D5 /* AnyImageViewController.swift in Sources */,
+				A03D7E6927D4ED21002FA781 /* AssetGIFHintView.swift in Sources */,
 				A50B211C237AA24300A894A9 /* PhotoEditorContentView+Brush.swift in Sources */,
+				A03D7E6B27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift in Sources */,
 				A544372023AB61C9003C65F9 /* VideoEditorCropToolView.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,
 				713C206825AD32D800BB0F66 /* PhotoEditorAction.swift in Sources */,

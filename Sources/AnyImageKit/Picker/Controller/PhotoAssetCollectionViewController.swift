@@ -18,18 +18,18 @@ final class PhotoAssetCollectionViewController: AnyImageViewController, PickerOp
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     
     private var photoLibraryListCancellable: AnyCancellable?
-    private(set) var photoLibraryListViewController: PhotoLibraryListViewController?
-    private(set) var photoLibrary: PhotoLibraryAssetCollection?
-    private(set) var photoLibraryList: [PhotoLibraryAssetCollection] = []
+    private var photoLibraryListViewController: PhotoLibraryListViewController?
+    private var photoLibrary: PhotoLibraryAssetCollection?
+    private var photoLibraryList: [PhotoLibraryAssetCollection] = []
     
-    private(set) lazy var titleView: AssetCollectionTitleButton = makeTitleView()
-    private(set) lazy var collectionView: UICollectionView = makeCollectionView()
-    private(set) lazy var toolBar: PickerToolBar = makeToolBar()
-    private(set) lazy var permissionDeniedView: PermissionDeniedView = makePermissionDeniedView()
+    private lazy var titleView: AssetCollectionTitleButton = makeTitleView()
+    private lazy var collectionView: UICollectionView = makeCollectionView()
+    private lazy var toolBar: PickerToolBar = makeToolBar()
+    private lazy var permissionDeniedView: PermissionDeniedView = makePermissionDeniedView()
     
     private var continuation: CheckedContinuation<UserAction<PhotoLibraryAssetCollection>, Never>?
     
-    let context: PickerOptionsConfigurableContext = .init()
+    let pickerContext: PickerOptionsConfigurableContext = .init()
     
     deinit {
         unregisterPhotoLibraryChangeObserver()
@@ -40,6 +40,7 @@ final class PhotoAssetCollectionViewController: AnyImageViewController, PickerOp
         addNotifications()
         setupNavigation()
         setupView()
+        setupDataBinding()
         loadData()
     }
     
@@ -47,7 +48,22 @@ final class PhotoAssetCollectionViewController: AnyImageViewController, PickerOp
         return UIStatusBarStyle(style: options.theme.style)
     }
 }
+ 
+// MARK: PickerOptionsConfigurableContent
+extension PhotoAssetCollectionViewController {
+    
+    func update(options: PickerOptionsInfo) {
+        let hideToolBar = options.selectionTapAction.hideToolBar && options.selectLimit == 1
+        collectionView.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
+                                                   left: defaultAssetSpacing,
+                                                   bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
+                                                   right: defaultAssetSpacing)
+        collectionView.backgroundColor = options.theme[color: .background]
+        setNeedsStatusBarAppearanceUpdate()
+    }
+}
 
+// MARK: Concurrency
 extension PhotoAssetCollectionViewController {
     
     func pick() async -> UserAction<PhotoLibraryAssetCollection> {
@@ -61,14 +77,6 @@ extension PhotoAssetCollectionViewController {
             continuation.resume(returning: result)
             self.continuation = nil
         }
-    }
-}
-
-// MARK: - PickerOptionsConfigurable
-extension PhotoAssetCollectionViewController: PickerOptionsConfigurable {
-    
-    var childrenConfigurable: [PickerOptionsConfigurable] {
-        return preferredChildrenConfigurable + [titleView]
     }
 }
 
@@ -310,8 +318,9 @@ extension PhotoAssetCollectionViewController {
             maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-toolBarHeight)
             maker.left.right.bottom.equalToSuperview()
         }
-        
-        // data binding
+    }
+    
+    private func setupDataBinding() {
         // FIXME:
 //        assign(on: titleView).store(in: &cancellables)
         sink().store(in: &cancellables)
@@ -330,12 +339,6 @@ extension PhotoAssetCollectionViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.alwaysBounceVertical = true
         view.contentInsetAdjustmentBehavior = .automatic
-        let hideToolBar = options.selectionTapAction.hideToolBar && options.selectLimit == 1
-        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
-                                         left: defaultAssetSpacing,
-                                         bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
-                                         right: defaultAssetSpacing)
-        view.backgroundColor = options.theme[color: .background]
         view.registerCell(PhotoAssetCell.self)
         view.dataSource = self
         view.delegate = self
@@ -495,7 +498,7 @@ extension PhotoAssetCollectionViewController: PhotoPreviewControllerDataSource {
         let index = photoLibrary.convertAssetIndexToIndex(assetIndex)
         let indexPath = IndexPath(item: index, section: 0)
         let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell
-        return cell?.imageView
+        return cell?.displayContentView
     }
 }
 

@@ -46,7 +46,7 @@ final class CameraAssetCell: UICollectionViewCell, PickerOptionsConfigurableCont
     
     private var sinkCancellable: AnyCancellable?
     
-    let context: PickerOptionsConfigurableContext = .init()
+    let pickerContext: PickerOptionsConfigurableContext = .init()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -52,19 +52,19 @@ extension PhotoAssetCollectionViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         editor.dismiss(animated: true, completion: nil)
-        guard result.type == .photo else { return }
-        guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
-        guard let photo = UIImage(data: photoData) else { return }
-        guard let photoLibrary = photoLibrary else { return }
-        let index = editor.tag
-        let indexPath = IndexPath(item: index, section: 0)
-        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell else { return }
-        guard let asset = photoLibrary[index].asset else { return }
-        
-        cell.setContent(asset: asset)
-        if !asset.isSelected {
-            setSelected(index)
-        }
+//        guard result.type == .photo else { return }
+//        guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
+//        guard let photo = UIImage(data: photoData) else { return }
+//        guard let photoLibrary = photoLibrary else { return }
+//        let index = editor.tag
+//        let indexPath = IndexPath(item: index, section: 0)
+//        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell else { return }
+//        guard let asset = photoLibrary[index].asset else { return }
+//        
+//        cell.setContent(asset: asset)
+//        if !asset.isSelected {
+//            setSelected(index)
+//        }
     }
 }
 

@@ -21,7 +21,7 @@ open class ImagePickerController: AnyImageNavigationController, PickerOptionsCon
     private var mode: Mode = .pending
     private var continuation: CheckedContinuation<UserAction<PickerResult>, Never>?
     
-    public let context: PickerOptionsConfigurableContext = .init()
+    public let pickerContext: PickerOptionsConfigurableContext = .init()
     
     /// Init Picker
     public convenience init(options: PickerOptionsInfo) {
@@ -68,6 +68,7 @@ open class ImagePickerController: AnyImageNavigationController, PickerOptionsCon
     }
 }
 
+// MARK: PickerOptionsConfigurableContent
 extension ImagePickerController {
     
     public func update(options: PickerOptionsInfo) {
