@@ -61,7 +61,7 @@ extension PhotoAssetCollectionViewController: ImageEditorControllerDelegate {
         guard let cell = collectionView.cellForItem(at: indexPath) as? PhotoAssetCell else { return }
         guard let asset = photoLibrary[index].asset else { return }
         
-        cell.setContent(asset)
+        cell.setContent(asset: asset)
         if !asset.isSelected {
             setSelected(index)
         }

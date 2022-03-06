@@ -13,10 +13,11 @@ import Combine
 private let defaultAssetSpacing: CGFloat = 2
 private let toolBarHeight: CGFloat = 56
 
-final class PhotoAssetCollectionViewController: AnyImageViewController {
+final class PhotoAssetCollectionViewController: AnyImageViewController, PickerOptionsConfigurableContent {
     
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     
+    private var photoLibraryListCancellable: AnyCancellable?
     private(set) var photoLibraryListViewController: PhotoLibraryListViewController?
     private(set) var photoLibrary: PhotoLibraryAssetCollection?
     private(set) var photoLibraryList: [PhotoLibraryAssetCollection] = []
@@ -28,7 +29,7 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
     
     private var continuation: CheckedContinuation<UserAction<PhotoLibraryAssetCollection>, Never>?
     
-    @Published var options: PickerOptionsInfo = .init()
+    let context: PickerOptionsConfigurableContext = .init()
     
     deinit {
         unregisterPhotoLibraryChangeObserver()
@@ -40,7 +41,6 @@ final class PhotoAssetCollectionViewController: AnyImageViewController {
         setupNavigation()
         setupView()
         loadData()
-        update(options: options)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -105,6 +105,9 @@ extension PhotoAssetCollectionViewController {
     
     private func setPhotoLibrary(_ library: PhotoLibraryAssetCollection) {
         photoLibrary = library
+        for plugin in library.plugins {
+            plugin.register(.init(collectionView: collectionView))
+        }
         titleView.setTitle(library.localizedTitle)
         toolBar.setEnable(!library.selectedItems.isEmpty)
         collectionView.reloadData()
@@ -152,7 +155,7 @@ extension PhotoAssetCollectionViewController {
         guard let photoLibrary = photoLibrary else { return }
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? PhotoAssetCell, let asset = photoLibrary[indexPath.item].asset {
-                cell.updateState(asset, animated: index == indexPath.item)
+                cell.updateState(asset: asset, animated: index == indexPath.item)
                 cell.update(options: options)
             }
         }
@@ -194,13 +197,15 @@ extension PhotoAssetCollectionViewController {
         Task {
             let controller = PhotoLibraryListViewController()
             controller.config(library: photoLibrary, libraryList: photoLibraryList)
+            photoLibraryListCancellable = assign(on: controller)
+            photoLibraryListViewController = controller
+            
             let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
             let isFullScreen = ScreenHelper.mainBounds.height == (navigationController?.view ?? view).frame.height
             presentationController.isFullScreen = isFullScreen
             presentationController.cornerRadius = 8
             presentationController.corners = [.bottomLeft, .bottomRight]
             controller.transitioningDelegate = presentationController
-            photoLibraryListViewController = controller
             
             present(controller, animated: true, completion: nil)
             
@@ -214,6 +219,7 @@ extension PhotoAssetCollectionViewController {
             
             titleView.isSelected = false
             photoLibraryListViewController = nil
+            photoLibraryListCancellable = nil
         }
     }
     
@@ -234,7 +240,7 @@ extension PhotoAssetCollectionViewController {
     
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        options.useOriginalImage = sender.isSelected
+        self.options.useOriginalImage = sender.isSelected
         trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
     }
     
@@ -304,6 +310,11 @@ extension PhotoAssetCollectionViewController {
             maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-toolBarHeight)
             maker.left.right.bottom.equalToSuperview()
         }
+        
+        // data binding
+        // FIXME:
+//        assign(on: titleView).store(in: &cancellables)
+        sink().store(in: &cancellables)
     }
     
     private func makeTitleView() -> AssetCollectionTitleButton {
@@ -326,7 +337,6 @@ extension PhotoAssetCollectionViewController {
                                          right: defaultAssetSpacing)
         view.backgroundColor = options.theme[color: .background]
         view.registerCell(PhotoAssetCell.self)
-        view.registerCell(CameraCell.self)
         view.dataSource = self
         view.delegate = self
         return view
@@ -386,26 +396,22 @@ extension PhotoAssetCollectionViewController: UICollectionViewDataSource {
         guard let photoLibrary = photoLibrary else { return UICollectionViewCell() }
         let element = photoLibrary[indexPath.item]
         switch element {
-        case .prefix(let addition), .suffix(let addition):
-            print(addition)
-            let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
-            cell.update(options: options)
+        case .prefix(let plugin), .suffix(let plugin):
+            let cell = plugin.dequeue(.init(collectionView: collectionView, indexPath: indexPath))
+            listCancellables[indexPath] = assign(on: cell)
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            cell.accessibilityLabel = options.theme[string: .pickerTakePhoto]
             return cell
         case .asset(let asset):
             let cell = collectionView.dequeueReusableCell(PhotoAssetCell.self, for: indexPath)
-            cell.tag = indexPath.item
-            cell.setContent(asset)
-            cell.update(options: options)
+            listCancellables[indexPath] = assign(on: cell)
+            cell.setContent(asset: asset)
             cell.selectEvent.delegate(on: self) { (self, _) in
                 self.setSelected(indexPath.item)
             }
-            cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
             cell.accessibilityTraits = .button
-            let accessibilityLabel = options.theme[string: asset.mediaType == .video ? .video : .photo]
+            let accessibilityLabel = options.theme[string: asset.mediaType.isVideo ? .video : .photo]
             cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
             return cell
         }
@@ -420,10 +426,7 @@ extension PhotoAssetCollectionViewController: UICollectionViewDelegate {
         let element = photoLibrary[indexPath.item]
         switch element {
         case .prefix(let plugin), .suffix(let plugin):
-            print(plugin)
-            #if ANYIMAGEKIT_ENABLE_CAPTURE
-            showCapture()
-            #endif
+            plugin.select(.init(collectionView: collectionView, controller: self))
         case .asset(let asset):
             #if ANYIMAGEKIT_ENABLE_EDITOR
             if options.selectionTapAction == .openEditor {

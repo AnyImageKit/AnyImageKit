@@ -10,15 +10,7 @@ import UIKit
 import Combine
 import SnapKit
 
-protocol OptionsInfoUpdatableContent {
-    
-    associatedtype OptionsInfo
-    
-    var options: OptionsInfo { get set }
-    func update(options: OptionsInfo)
-}
-
-open class ImagePickerController: AnyImageNavigationController {
+open class ImagePickerController: AnyImageNavigationController, PickerOptionsConfigurableContent {
     
     enum Mode {
         case pending
@@ -29,7 +21,7 @@ open class ImagePickerController: AnyImageNavigationController {
     private var mode: Mode = .pending
     private var continuation: CheckedContinuation<UserAction<PickerResult>, Never>?
     
-    @Published public var options: PickerOptionsInfo = .init()
+    public let context: PickerOptionsConfigurableContext = .init()
     
     /// Init Picker
     public convenience init(options: PickerOptionsInfo) {
@@ -78,23 +70,26 @@ open class ImagePickerController: AnyImageNavigationController {
 
 extension ImagePickerController {
     
+    public func update(options: PickerOptionsInfo) {
+        navigationBar.barTintColor = options.theme[color: .background]
+        navigationBar.tintColor = options.theme[color: .text]
+    }
+}
+
+extension ImagePickerController {
+    
     @MainActor
     private func setupPhotoAssetPicker() async {
         let photoAssetCollectionViewController = PhotoAssetCollectionViewController()
         photoAssetCollectionViewController.trackObserver = self
         viewControllers = [photoAssetCollectionViewController]
         mode = .photoAsset(photoAssetCollectionViewController)
+                
+        // data binding
+        assign(on: photoAssetCollectionViewController).store(in: &cancellables)
+        sink().store(in: &cancellables)
         
-        $options
-            .assign(to: \.options, on: photoAssetCollectionViewController)
-            .store(in: &cancellables)
-        
-        $options
-            .sink { [weak self] newOptions in
-                self?.update(options: newOptions)
-            }
-            .store(in: &cancellables)
-        
+        // handle user aciton
         let userAction = await photoAssetCollectionViewController.pick()
         switch userAction {
         case .cancel:
@@ -119,14 +114,6 @@ extension ImagePickerController {
             continuation.resume(returning: result)
             self.continuation = nil
         }
-    }
-}
-
-extension ImagePickerController: OptionsInfoUpdatableContent {
-    
-    func update(options: PickerOptionsInfo) {
-        navigationBar.barTintColor = options.theme[color: .background]
-        navigationBar.tintColor = options.theme[color: .text]
     }
 }
 

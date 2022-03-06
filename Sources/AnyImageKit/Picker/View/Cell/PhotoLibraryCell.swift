@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-final class PhotoLibraryCell: UITableViewCell {
+final class PhotoLibraryCell: UITableViewCell, PickerOptionsConfigurableContent {
     
     private lazy var coverView: UIImageView = makeCoverView()
     private lazy var titleLabel: UILabel = makeLabel()
@@ -20,7 +20,7 @@ final class PhotoLibraryCell: UITableViewCell {
     private var optionsCancellable: AnyCancellable?
     private var task: Task<Void, Error>?
     
-    @Published var options: PickerOptionsInfo = .init()
+    let context: PickerOptionsConfigurableContext = .init()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,6 +36,17 @@ final class PhotoLibraryCell: UITableViewCell {
         super.prepareForReuse()
         task?.cancel()
         task = nil
+    }
+    
+    func update(options: PickerOptionsInfo) {
+        tintColor = options.theme[color: .primary]
+        backgroundColor = options.theme[color: .background]
+        customSelectedbackgroundView.backgroundColor = options.theme[color: .selectedCell]
+        titleLabel.textColor = options.theme[color: .text]
+        subTitleLabel.textColor = options.theme[color: .subText]
+        separatorLine.backgroundColor = options.theme[color: .separatorLine]
+        options.theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
+        options.theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)
     }
 }
 
@@ -65,8 +76,9 @@ extension PhotoLibraryCell {
             maker.height.equalTo(0.5)
         }
         
-        optionsCancellable = $options.sink { [weak self] newOptions in
-            self?.update(options: newOptions)
+        optionsCancellable = context.publisher.sink { [weak self] newOptions in
+            guard let self = self else { return }
+            self.update(options: newOptions)
         }
     }
     
@@ -91,21 +103,6 @@ extension PhotoLibraryCell {
     private func makeSelectedbackgroundView() -> UIView {
         let view = UIView(frame: .zero)
         return view
-    }
-}
-
-// MARK: - Theme
-extension PhotoLibraryCell: OptionsInfoUpdatableContent {
-    
-    func update(options: PickerOptionsInfo) {
-        tintColor = options.theme[color: .primary]
-        backgroundColor = options.theme[color: .background]
-        customSelectedbackgroundView.backgroundColor = options.theme[color: .selectedCell]
-        titleLabel.textColor = options.theme[color: .text]
-        subTitleLabel.textColor = options.theme[color: .subText]
-        separatorLine.backgroundColor = options.theme[color: .separatorLine]
-        options.theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
-        options.theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)
     }
 }
 

@@ -141,13 +141,13 @@ extension PreviewIndexView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(PhotoAssetCell.self, for: indexPath)
         let asset = photoLibrary.selectedItems[indexPath.item]
-        cell.setContent(asset, animated: false, isPreview: true)
+        cell.setContent(asset: asset, animated: false, isPreview: true)
         if let options = options {
             cell.update(options: options)
         }
         cell.selectButton.isHidden = true
         if let index = photoLibrary.loadAssetIndex(for: asset) {
-            cell.boxCoverView.isHidden = index != assetIndex
+            cell.borderView.isHidden = index != assetIndex
         }
         return cell
     }

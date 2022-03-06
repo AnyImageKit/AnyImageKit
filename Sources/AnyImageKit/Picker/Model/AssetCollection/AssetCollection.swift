@@ -82,3 +82,10 @@ extension AssetCollection {
         return i + 1
     }
 }
+
+extension AssetCollection {
+    
+    public var plugins: [AssetPlugin] {
+        return prefixPlugins + suffixPlugins
+    }
+}

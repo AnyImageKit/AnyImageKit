@@ -24,7 +24,7 @@ extension PhotoLibraryAssetCollection {
                     let plugins = createCollectionPlugins(with: options, isUserLibrary: true)
                     let checker = AssetChecker<Resource>(limitCount: options.selectLimit,
                                                          preselectedIdentifiers: options.preselectAssets,
-                                                         disableCheckRules: [])
+                                                         disableCheckRules: options.disableRules)
                     let result = PhotoLibraryAssetCollection(identifier: assetCollection.localIdentifier,
                                                              localizedTitle: assetCollection.localizedTitle,
                                                              fetchResult: assetfetchResult,
@@ -62,7 +62,7 @@ extension PhotoLibraryAssetCollection {
                 let plugins = createCollectionPlugins(with: options, isUserLibrary: isUserLibrary)
                 let checker = AssetChecker<Resource>(limitCount: options.selectLimit,
                                                      preselectedIdentifiers: options.preselectAssets,
-                                                     disableCheckRules: [])
+                                                     disableCheckRules: options.disableRules)
                 let assetCollection = PhotoLibraryAssetCollection(identifier: phCollection.localIdentifier,
                                                                   localizedTitle: phCollection.localizedTitle,
                                                                   fetchResult: fetchResult,
@@ -97,7 +97,7 @@ extension PhotoLibraryAssetCollection {
     
     private static func createCollectionPlugins(with options: PickerOptionsInfo, isUserLibrary: Bool) -> [AssetPlugin] {
         if !options.captureOptions.mediaOptions.isEmpty {
-            return [.camera]
+            return [CameraAssetPlugin()]
         } else {
             return []
         }

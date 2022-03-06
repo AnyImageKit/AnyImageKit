@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+/*
 #if ANYIMAGEKIT_ENABLE_CAPTURE
 
 // MARK: - Capture
@@ -17,9 +18,9 @@ extension PhotoAssetCollectionViewController {
     /// 打开相机
     func showCapture() {
         #if !targetEnvironment(simulator)
-        var options = manager.options.captureOptions
-        options.enableDebugLog = manager.options.enableDebugLog
-        let controller = ImageCaptureController(options: options, delegate: self)
+        var captureOptions = self.options.captureOptions
+        captureOptions.enableDebugLog = self.options.enableDebugLog
+        let controller = ImageCaptureController(options: captureOptions, delegate: self)
         present(controller, animated: true, completion: nil)
         #else
         let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
@@ -111,3 +112,4 @@ extension PhotoAssetCollectionViewController: ImageCaptureControllerDelegate {
 }
 
 #endif
+*/

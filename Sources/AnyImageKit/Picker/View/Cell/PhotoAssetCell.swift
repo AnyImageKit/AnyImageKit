@@ -10,8 +10,9 @@ import UIKit
 import Photos
 import Kingfisher
 
-final class PhotoAssetCell: UICollectionViewCell {
+final class PhotoAssetCell: UICollectionViewCell, PickerOptionsConfigurableContent {
     
+    let context: PickerOptionsConfigurableContext = .init()
     let selectEvent: Delegate<Void, Void> = .init()
     
     private(set) lazy var imageView: UIImageView = {
@@ -47,7 +48,7 @@ final class PhotoAssetCell: UICollectionViewCell {
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         return view
     }()
-    private(set) lazy var boxCoverView: UIView = {
+    private(set) lazy var borderView: UIView = {
         let view = UIView(frame: .zero)
         view.isHidden = true
         view.layer.borderWidth = 4
@@ -61,6 +62,16 @@ final class PhotoAssetCell: UICollectionViewCell {
     
     private var task: Task<Void, Error>?
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         task?.cancel()
@@ -70,16 +81,7 @@ final class PhotoAssetCell: UICollectionViewCell {
         videoView.isHidden = true
         editedView.isHidden = true
         disableCoverView.isHidden = true
-        boxCoverView.isHidden = true
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        borderView.isHidden = true
     }
     
     private func setupView() {
@@ -89,7 +91,7 @@ final class PhotoAssetCell: UICollectionViewCell {
         contentView.addSubview(videoView)
         contentView.addSubview(editedView)
         contentView.addSubview(disableCoverView)
-        contentView.addSubview(boxCoverView)
+        contentView.addSubview(borderView)
         contentView.addSubview(selectButton)
         
         imageView.snp.makeConstraints { maker in
@@ -110,7 +112,7 @@ final class PhotoAssetCell: UICollectionViewCell {
         disableCoverView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        boxCoverView.snp.makeConstraints { maker in
+        borderView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
         selectButton.snp.makeConstraints { maker in
@@ -120,13 +122,11 @@ final class PhotoAssetCell: UICollectionViewCell {
     }
 }
 
-// MARK: - PickerOptionsConfigurable
-extension PhotoAssetCell: PickerOptionsConfigurable {
+extension PhotoAssetCell {
     
     func update(options: PickerOptionsInfo) {
-        boxCoverView.layer.borderColor = options.theme[color: .primary].cgColor
+        borderView.layer.borderColor = options.theme[color: .primary].cgColor
         selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
-        updateChildrenConfigurable(options: options)
     }
 }
 
@@ -147,7 +147,7 @@ extension PhotoAssetCell {
 
 extension PhotoAssetCell {
     
-    func setContent(_ asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
+    func setContent(asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
         task?.cancel()
         task = Task {
             do {
@@ -176,10 +176,10 @@ extension PhotoAssetCell {
             }
         }
         
-        updateState(asset, animated: animated, isPreview: isPreview)
+        updateState(asset: asset, animated: animated, isPreview: isPreview)
     }
     
-    func updateState(_ asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
+    func updateState(asset: Asset<PHAsset>, animated: Bool = false, isPreview: Bool = false) {
         switch asset.mediaType {
         case .photoGIF:
             gifView.isHidden = false

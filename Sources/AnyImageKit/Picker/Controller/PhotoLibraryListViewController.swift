@@ -11,7 +11,7 @@ import Combine
 
 private let rowHeight: CGFloat = 55
 
-final class PhotoLibraryListViewController: AnyImageViewController {
+final class PhotoLibraryListViewController: AnyImageViewController, PickerOptionsConfigurableContent {
     
     private lazy var tableView: UITableView = makeTableView()
     
@@ -19,7 +19,7 @@ final class PhotoLibraryListViewController: AnyImageViewController {
     private var photoLibraryList: [PhotoLibraryAssetCollection] = []
     private var continuation: CheckedContinuation<UserAction<PhotoLibraryAssetCollection>, Never>?
     
-    @Published var options: PickerOptionsInfo = .init()
+    let context: PickerOptionsConfigurableContext = .init()
     
     deinit {
         removeNotifications()
@@ -30,7 +30,6 @@ final class PhotoLibraryListViewController: AnyImageViewController {
         addNotifications()
         updatePreferredContentSize(with: traitCollection)
         setupView()
-        update(options: options)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,7 +130,7 @@ extension PhotoLibraryListViewController {
 }
 
 // MARK: - PickerOptionsConfigurable
-extension PhotoLibraryListViewController: OptionsInfoUpdatableContent {
+extension PhotoLibraryListViewController {
     
     func update(options: PickerOptionsInfo) {
         tableView.backgroundColor = options.theme[color: .background]
@@ -146,6 +145,9 @@ extension PhotoLibraryListViewController {
         tableView.snp.makeConstraints { maker in
             maker.edges.equalTo(view.snp.edges)
         }
+        
+        // data binding
+        sink().store(in: &cancellables)
     }
     
     private func makeTableView() -> UITableView {
@@ -173,7 +175,7 @@ extension PhotoLibraryListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(PhotoLibraryCell.self, for: indexPath)
         let photoLibrary = photoLibraryList[indexPath.row]
         cell.setContent(photoLibrary)
-        listCancellables[indexPath] = $options.assign(to: \.options, on: cell)
+        listCancellables[indexPath] = assign(on: cell)
         cell.accessoryType = self.photoLibrary == photoLibrary ? .checkmark : .none
         return cell
     }
