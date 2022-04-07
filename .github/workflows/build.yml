@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Xcode
-      run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
+      run: sudo xcode-select --switch /Applications/Xcode_13.3.app/Contents/Developer
     - name: Archive for iOS Device slice
       run: xcrun xcodebuild archive -quiet -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS" -archivePath "Build/AnyImageKit-iphoneos.xcarchive" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES
     
@@ -37,7 +37,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Xcode
-      run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
+      run: sudo xcode-select --switch /Applications/Xcode_13.3.app/Contents/Developer
     - name: Archive for iOS Simulator slice
       run: xcrun xcodebuild archive -quiet -project AnyImageKit.xcodeproj -scheme AnyImageKit -configuration Release -destination "generic/platform=iOS Simulator" -archivePath "Build/AnyImageKit-iphonesimulator.xcarchive" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES
     
@@ -53,6 +53,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Xcode
-      run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
+      run: sudo xcode-select --switch /Applications/Xcode_13.3.app/Contents/Developer
     - name: Library Lint Check
       run: pod lib lint --allow-warnings
