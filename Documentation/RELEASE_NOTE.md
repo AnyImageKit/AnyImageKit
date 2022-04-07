@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.14.4
+
+### Resolved
+
+- Picker
+  - Fix can not add more photos when limit permission mode.([#144](https://github.com/AnyImageKit/AnyImageKit/pull/144))
+
 ## 0.14.3
 
 ### Resolved

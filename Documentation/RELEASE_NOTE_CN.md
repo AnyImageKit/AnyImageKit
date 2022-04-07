@@ -1,5 +1,12 @@
 # 更新日志
 
+## 0.14.4
+
+### 修复
+
+- Picker
+  - 修复相册权限为选中的照片时，无法展示添加更多照片提示的问题。([#144](https://github.com/AnyImageKit/AnyImageKit/pull/144))
+
 ## 0.14.3
 
 ### 修复
