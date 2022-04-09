@@ -9,13 +9,13 @@
 import UIKit
 import Combine
 
-final class AssetVideoHintView: AnyImageView, PickerOptionsConfigurableContent {
+final class AssetVideoHintView: UIView, PickerOptionsConfigurableContent {
     
     private lazy var gradientView: GradientView = makeGradientView()
     private lazy var imageView: UIImageView = makeImageView()
     private lazy var label: UILabel = makeLabel()
     
-    private var optionsCancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = .init()
     
     let pickerContext: PickerOptionsConfigurableContext = .init()
     

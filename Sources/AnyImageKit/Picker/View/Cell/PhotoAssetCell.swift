@@ -8,9 +8,10 @@
 
 import UIKit
 import Photos
+import Combine
 import Kingfisher
 
-final class PhotoAssetCell: AnyImageCollectionViewCell, PickerOptionsConfigurableContent {
+final class PhotoAssetCell: UICollectionViewCell, PickerOptionsConfigurableContent {
     
     private lazy var imageView: UIImageView = makeImageView()
     private lazy var gifView: AssetGIFHintView = makeGIFView()
@@ -46,6 +47,7 @@ final class PhotoAssetCell: AnyImageCollectionViewCell, PickerOptionsConfigurabl
     }()
     
     private var task: Task<Void, Error>?
+    private var cancellables: Set<AnyCancellable> = .init()
     
     let pickerContext: PickerOptionsConfigurableContext = .init()
     let selectEvent: Delegate<Void, Void> = .init()

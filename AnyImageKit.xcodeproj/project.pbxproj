@@ -106,8 +106,6 @@
 		A03D7E6227D47F66002FA781 /* PickerOptionsConfigurableContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6127D47F66002FA781 /* PickerOptionsConfigurableContent.swift */; };
 		A03D7E6427D4AD58002FA781 /* AssetVideoHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6327D4AD58002FA781 /* AssetVideoHintView.swift */; };
 		A03D7E6927D4ED21002FA781 /* AssetGIFHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6827D4ED21002FA781 /* AssetGIFHintView.swift */; };
-		A03D7E6B27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6A27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift */; };
-		A03D7E6D27D4F01D002FA781 /* AnyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D7E6C27D4F01D002FA781 /* AnyImageView.swift */; };
 		A040C596277B4D47000D2569 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A040C595277B4D47000D2569 /* SnapKit */; };
 		A040C598277B4D52000D2569 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
 		A040C599277B4D52000D2569 /* AnyImageKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -439,8 +437,6 @@
 		A03D7E6127D47F66002FA781 /* PickerOptionsConfigurableContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerOptionsConfigurableContent.swift; sourceTree = "<group>"; };
 		A03D7E6327D4AD58002FA781 /* AssetVideoHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetVideoHintView.swift; sourceTree = "<group>"; };
 		A03D7E6827D4ED21002FA781 /* AssetGIFHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetGIFHintView.swift; sourceTree = "<group>"; };
-		A03D7E6A27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		A03D7E6C27D4F01D002FA781 /* AnyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyImageView.swift; sourceTree = "<group>"; };
 		A03E9CAC23604373003C6335 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A04A6DB127A415E80025757A /* MediaSelectOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSelectOption.swift; sourceTree = "<group>"; };
 		A04B044823B1A54F00DA4D47 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Capture.strings; sourceTree = "<group>"; };
@@ -1007,8 +1003,6 @@
 			isa = PBXGroup;
 			children = (
 				A0FFB23F25407E86000A7A45 /* GradientView.swift */,
-				A03D7E6C27D4F01D002FA781 /* AnyImageView.swift */,
-				A03D7E6A27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1851,7 +1845,6 @@
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
 				71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */,
 				A03D7E6027D452EC002FA781 /* AssetPlugin+Capture.swift in Sources */,
-				A03D7E6D27D4F01D002FA781 /* AnyImageView.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,
 				A0CA28262797E90C00ED230E /* PhotoLibraryAssetCollection+Fetch.swift in Sources */,
@@ -1951,7 +1944,6 @@
 				A0147E0C23C4870D0071E9D5 /* AnyImageViewController.swift in Sources */,
 				A03D7E6927D4ED21002FA781 /* AssetGIFHintView.swift in Sources */,
 				A50B211C237AA24300A894A9 /* PhotoEditorContentView+Brush.swift in Sources */,
-				A03D7E6B27D4EF8D002FA781 /* AnyImageCollectionViewCell.swift in Sources */,
 				A544372023AB61C9003C65F9 /* VideoEditorCropToolView.swift in Sources */,
 				A5ACBFA32341969D00DFEE32 /* PermissionDeniedView.swift in Sources */,
 				713C206825AD32D800BB0F66 /* PhotoEditorAction.swift in Sources */,
