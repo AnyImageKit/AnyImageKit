@@ -116,24 +116,6 @@ extension EditorTheme {
         /// 25*25
         case trash = "Trash"
         
-        /// Adjust 25*25
-        
-        case adjustExposure = "AdjustExposure"
-        case adjustBrilliance = "AdjustBrilliance"
-        case adjustHighlights = "AdjustHighlights"
-        case adjustShadows = "AdjustShadows"
-        case adjustContrast = "AdjustContrast"
-        case adjustBrightness = "AdjustBrightness"
-        case adjustBlackPoint = "AdjustBlackPoint"
-        case adjustSaturation = "AdjustSaturation"
-        case adjustVibrance = "AdjustVibrance"
-        case adjustWarmth = "AdjustWarmth"
-        case adjustTint = "AdjustTint"
-        case adjustSharpness = "AdjustSharpness"
-        case adjustDefinition = "AdjustDefinition"
-        case adjustNoiseReduction = "AdjustNoiseReduction"
-        case adjustVignette = "AdjustVignette"
-        
         /// 20*50
         case videoCropLeft = "VideoCropLeft"
         /// 20*50
@@ -171,22 +153,6 @@ extension StringConfigKey {
     
     public static let editorDragHereToRemove = StringConfigKey(rawValue: "DRAG_HERE_TO_REMOVE")
     public static let editorReleaseToRemove = StringConfigKey(rawValue: "RELEASE_TO_REMOVE")
-    
-    public static let editorExposure = StringConfigKey(rawValue: "EXPOSURE")
-    public static let editorBrilliance = StringConfigKey(rawValue: "BRILLIANCE")
-    public static let editorHighlights = StringConfigKey(rawValue: "HIGHLIGHTS")
-    public static let editorShadows = StringConfigKey(rawValue: "SHADOWS")
-    public static let editorContrast = StringConfigKey(rawValue: "CONTRAST")
-    public static let editorBrightness = StringConfigKey(rawValue: "BRIGHTNESS")
-    public static let editorBlackPoint = StringConfigKey(rawValue: "BLACK_POINT")
-    public static let editorSaturation = StringConfigKey(rawValue: "SATURATION")
-    public static let editorVibrance = StringConfigKey(rawValue: "VIBRANCE")
-    public static let editorWarmth = StringConfigKey(rawValue: "WARMTH")
-    public static let editorTint = StringConfigKey(rawValue: "TINT")
-    public static let editorSharpness = StringConfigKey(rawValue: "SHARPNESS")
-    public static let editorDefinition = StringConfigKey(rawValue: "DEFINITION")
-    public static let editorNoiseReduction = StringConfigKey(rawValue: "NOISE_REDUCTION")
-    public static let editorVignette = StringConfigKey(rawValue: "VIGNETTE")
 }
 
 // MARK: - Label
