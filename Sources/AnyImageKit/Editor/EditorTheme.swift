@@ -97,10 +97,10 @@ extension EditorTheme {
         case photoToolCrop = "PhotoToolCrop"
         /// 25*25
         case photoToolMosaic = "PhotoToolMosaic"
-        /// 25*25
-        case photoToolAdjust = "PhotoToolAdjust"
-        /// 25*25
-        case photoToolFilter = "PhotoToolFilter"
+//        /// 25*25
+//        case photoToolAdjust = "PhotoToolAdjust"
+//        /// 25*25
+//        case photoToolFilter = "PhotoToolFilter"
         
         /// 25*25
         case photoToolUndo = "PhotoToolUndo"

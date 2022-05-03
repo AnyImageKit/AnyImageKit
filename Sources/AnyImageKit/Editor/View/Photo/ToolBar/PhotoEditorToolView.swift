@@ -51,14 +51,14 @@ final class PhotoEditorToolView: UIView {
         view.alpha = 0.0
         return view
     }()
-    private lazy var filterView: PhotoEditorFilterToolView = {
-        let view = PhotoEditorFilterToolView(viewModel: viewModel)
-        view.alpha = 0.0
-        return view
-    }()
+//    private lazy var filterView: PhotoEditorFilterToolView = {
+//        let view = PhotoEditorFilterToolView(viewModel: viewModel)
+//        view.alpha = 0.0
+//        return view
+//    }()
     
     private var subToolViews: [UIView] {
-        return [brushView, mosaicView, filterView]
+        return [brushView, mosaicView]
     }
     
     init(viewModel: PhotoEditorViewModel) {
@@ -147,7 +147,7 @@ extension PhotoEditorToolView {
         addSubview(optionsView)
         addSubview(brushView)
         addSubview(mosaicView)
-        addSubview(filterView)
+//        addSubview(filterView)
         
         layout()
     }
@@ -193,10 +193,10 @@ extension PhotoEditorToolView {
                 make.trailing.equalToSuperview().offset(-30)
                 make.width.equalTo(100)
             }
-            filterView.snp.remakeConstraints { make in
-                make.top.bottom.trailing.equalTo(brushView)
-                make.width.equalTo(120)
-            }
+//            filterView.snp.remakeConstraints { make in
+//                make.top.bottom.trailing.equalTo(brushView)
+//                make.width.equalTo(120)
+//            }
         } else { // iPhone
             doneButton.snp.remakeConstraints { make in
                 make.trailing.equalTo(bottomGuide).offset(-marginOffset)
@@ -212,10 +212,10 @@ extension PhotoEditorToolView {
                 make.leading.trailing.equalTo(bottomGuide)
                 make.height.equalTo(100)
             }
-            filterView.snp.remakeConstraints { make in
-                make.leading.trailing.bottom.equalTo(brushView)
-                make.height.equalTo(120)
-            }
+//            filterView.snp.remakeConstraints { make in
+//                make.leading.trailing.bottom.equalTo(brushView)
+//                make.height.equalTo(120)
+//            }
         }
         
         mosaicView.snp.remakeConstraints { make in
@@ -233,10 +233,10 @@ extension PhotoEditorToolView {
             return UIView()
         case .mosaic:
             return mosaicView
-        case .adjust:
-            return UIView()
-        case .filter:
-            return filterView
+//        case .adjust:
+//            return UIView()
+//        case .filter:
+//            return filterView
         }
     }
 }
