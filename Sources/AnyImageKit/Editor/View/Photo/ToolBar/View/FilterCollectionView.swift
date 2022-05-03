@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Combine
 
 final class FilterCollectionView: ArcBaseCollectionView {
     
     let images: [UIImage]
+    let selectedEvent = CurrentValueSubject<Int, Never>(0)
     
     init(option: ArcOption, images: [UIImage]) {
         self.images = images
@@ -33,6 +35,7 @@ final class FilterCollectionView: ArcBaseCollectionView {
     }
 }
 
+// MARK: - UI
 extension FilterCollectionView {
     
     private func setupView() {
@@ -50,7 +53,7 @@ extension FilterCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.selectItem(at: indexPath, animated: true, scrollPosition: isRegular ? .centeredVertically : .centeredHorizontally)
         selectedIndex = .index(indexPath.row)
-        // TODO: call
+        selectedEvent.send(selectedIndex.index)
     }
 }
 
@@ -76,10 +79,7 @@ extension FilterCollectionView: UICollectionViewDataSource {
 extension FilterCollectionView: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print(#function)
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print(#function)
+        selectedIndex = .index(Int(floor(max(scrollView.contentOffset.x, scrollView.contentOffset.y) / size.width)))
+        selectedEvent.send(selectedIndex.index)
     }
 }

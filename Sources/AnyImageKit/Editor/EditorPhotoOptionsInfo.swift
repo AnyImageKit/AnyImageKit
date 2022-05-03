@@ -73,6 +73,8 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: turnLeft
     public var rotationDirection: EditorRotationDirection = .turnLeft
     
+    public var adjust: EditorAdjustOption = .init()
+    
     /// Setting the cache identifier will cache the edit records.
     /// The next time you open the editor, it will load the edit records and restore it.
     ///

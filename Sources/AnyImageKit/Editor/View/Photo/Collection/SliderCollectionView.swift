@@ -7,16 +7,19 @@
 //
 
 import UIKit
+import Combine
 
 final class SliderCollectionView: ArcBaseCollectionView {
     
-    @Injected(\.photoOptions)
-    private var photoOptions: EditorPhotoOptionsInfo
-    
     let count: Int
+    let primaryColor: UIColor
     
-    init(option: ArcOption, count: Int) {
+    // 0 ~ 1
+    let valueChangeEvent = CurrentValueSubject<CGFloat, Never>(0)
+    
+    init(option: ArcOption, count: Int, primaryColor: UIColor) {
         self.count = count
+        self.primaryColor = primaryColor
         super.init(option: option)
         setupView()
     }
@@ -38,10 +41,21 @@ final class SliderCollectionView: ArcBaseCollectionView {
     override func updateLayout(isRegular: Bool) {
         super.updateLayout(isRegular: isRegular)
         guard isRegular != preIsRegular else { return }
-        selectedIndex = .present(1-selectedIndex.value)
+        selectedIndex = .present(1-selectedIndex.present)
     }
 }
 
+// MARK: - Public
+extension SliderCollectionView {
+    
+    /// 0 ~ 1
+    func setValue(_ value: CGFloat) {
+        selectedIndex = .present(value)
+        collectionView.contentOffset = offset(of: value)
+    }
+}
+
+// MARK: - UI
 extension SliderCollectionView {
     
     private func setupView() {
@@ -80,8 +94,10 @@ extension SliderCollectionView: UICollectionViewDataSource {
 extension SliderCollectionView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView.contentSize != .zero else { return }
         selectedIndex = .present(present(of: scrollView.contentOffset))
-        centerView.backgroundColor = photoOptions.theme[color: .primary]
+        valueChangeEvent.send(selectedIndex.present)
+        centerView.backgroundColor = primaryColor
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

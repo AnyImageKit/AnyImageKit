@@ -51,6 +51,11 @@ final class PhotoEditorToolView: UIView {
         view.alpha = 0.0
         return view
     }()
+    private lazy var adjustView: PhotoEditorAdjustToolView = {
+        let view = PhotoEditorAdjustToolView(viewModel: viewModel)
+        view.alpha = 0.0
+        return view
+    }()
     private lazy var filterView: PhotoEditorFilterToolView = {
         let view = PhotoEditorFilterToolView(viewModel: viewModel)
         view.alpha = 0.0
@@ -58,7 +63,7 @@ final class PhotoEditorToolView: UIView {
     }()
     
     private var subToolViews: [UIView] {
-        return [brushView, mosaicView, filterView]
+        return options.toolOptions.map { getSubToolView(with: $0) }
     }
     
     init(viewModel: PhotoEditorViewModel) {
@@ -147,6 +152,7 @@ extension PhotoEditorToolView {
         addSubview(optionsView)
         addSubview(brushView)
         addSubview(mosaicView)
+        addSubview(adjustView)
         addSubview(filterView)
         
         layout()
@@ -193,7 +199,7 @@ extension PhotoEditorToolView {
                 make.trailing.equalToSuperview().offset(-30)
                 make.width.equalTo(100)
             }
-            filterView.snp.remakeConstraints { make in
+            adjustView.snp.remakeConstraints { make in
                 make.top.bottom.trailing.equalTo(brushView)
                 make.width.equalTo(120)
             }
@@ -212,7 +218,7 @@ extension PhotoEditorToolView {
                 make.leading.trailing.equalTo(bottomGuide)
                 make.height.equalTo(100)
             }
-            filterView.snp.remakeConstraints { make in
+            adjustView.snp.remakeConstraints { make in
                 make.leading.trailing.bottom.equalTo(brushView)
                 make.height.equalTo(120)
             }
@@ -220,6 +226,9 @@ extension PhotoEditorToolView {
         
         mosaicView.snp.remakeConstraints { make in
             make.edges.equalTo(brushView)
+        }
+        filterView.snp.remakeConstraints { make in
+            make.edges.equalTo(adjustView)
         }
     }
     
@@ -234,7 +243,7 @@ extension PhotoEditorToolView {
         case .mosaic:
             return mosaicView
         case .adjust:
-            return UIView()
+            return adjustView
         case .filter:
             return filterView
         }

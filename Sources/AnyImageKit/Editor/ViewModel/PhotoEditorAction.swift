@@ -40,6 +40,10 @@ enum PhotoEditorAction {
     case textDidFinishMove(data: TextData, delete: Bool)
     case textCancel
     case textDone(TextData)
+    
+    case adjustChangeType(option: EditorAdjustTypeOption)
+    case adjustEnableType(option: EditorAdjustTypeOption, isEnabled: Bool)
+    case adjustValueChanged(present: CGFloat)
 }
 
 extension PhotoEditorAction {

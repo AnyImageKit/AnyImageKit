@@ -14,12 +14,27 @@ class ArcBaseCollectionView: UIView {
         case index(Int)
         case present(CGFloat)
         
-        var value: CGFloat {
+        var index: Int {
             switch self {
             case .index(let value):
-                return CGFloat(value)
-            case .present(let value):
                 return value
+            case .present(_):
+                return 0
+            }
+        }
+        
+        var present: CGFloat {
+            switch self {
+            case .index(_):
+                return 0
+            case .present(let value):
+                if value >= 1 {
+                    return 1.0
+                } else if value <= 0 {
+                    return 0.0
+                } else {
+                    return value
+                }
             }
         }
     }

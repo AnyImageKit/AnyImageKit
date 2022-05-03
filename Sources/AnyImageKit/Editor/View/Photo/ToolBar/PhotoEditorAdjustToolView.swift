@@ -1,38 +1,38 @@
 //
-//  PhotoEditorFilterToolView.swift
+//  PhotoEditorAdjustToolView.swift
 //  AnyImageKit
 //
-//  Created by 蒋惠 on 2022/2/4.
+//  Created by 蒋惠 on 2022/2/10.
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-final class PhotoEditorFilterToolView: UIView {
+final class PhotoEditorAdjustToolView: UIView {
     
     private var options: EditorPhotoOptionsInfo { viewModel.options }
     private let viewModel: PhotoEditorViewModel
     private var cancellable = Set<AnyCancellable>()
     
-    private lazy var selectedIndex = options.mosaic.defaultMosaicIndex
+    private lazy var selectedIndex = 0
     private var needLayout = false
     private var layoutWithAnimated = false
     
     private let itemWidth: CGFloat = 55
-    private var optionsCount: Int { options.mosaic.style.count }
+    private var optionsCount: Int { options.adjust.types.count }
     
     private let primaryGuide = UILayoutGuide()
     private let secondaryGuide = UILayoutGuide()
     
-    private lazy var collectionView: FilterCollectionView = {
-        let option = FilterCollectionView.ArcOption(size: .init(width: itemWidth, height: itemWidth),
-                                                    spacing: 2,
-                                                    topMargin: 15,
-                                                    bottomMargin: 5,
+    private lazy var collectionView: AdjustCollectionView = {
+        let option = AdjustCollectionView.ArcOption(size: .init(width: itemWidth, height: itemWidth),
+                                                    spacing: 20,
+                                                    topMargin: 0,
+                                                    bottomMargin: 0,
                                                     dotIndex: 0,
                                                     selectedIndex: .index(0))
-        let view = FilterCollectionView(option: option, images: createItems())
+        let view = AdjustCollectionView(arcOption: option, viewModel: viewModel)
         view.updateLayout(isRegular: viewModel.isRegular)
         return view
     }()
@@ -44,7 +44,8 @@ final class PhotoEditorFilterToolView: UIView {
                                                     dotIndex: 0,
                                                     selectedIndex: .present(0))
         let view = SliderCollectionView(option: option, count: 41, primaryColor: options.theme[color: .primary])
-        view.updateLayout(isRegular: viewModel.isRegular)
+//        view.setValue(0.5)
+//        view.updateLayout(isRegular: viewModel.isRegular)
         return view
     }()
     
@@ -53,6 +54,10 @@ final class PhotoEditorFilterToolView: UIView {
         super.init(frame: .zero)
         setupView()
         bindViewModel()
+        
+        if let option = options.adjust.types.first {
+            setSlider(with: option, value: AdjustParameter(option: option).range.defaultValue)
+        }
     }
     
     override func layoutSubviews() {
@@ -85,8 +90,20 @@ final class PhotoEditorFilterToolView: UIView {
     }
 }
 
+// MARK: - Public
+extension PhotoEditorAdjustToolView {
+    
+    private func setSlider(with option: EditorAdjustTypeOption, value: CGFloat) {
+        let model = AdjustParameter(option: option)
+        let present = model.range.present(of: value)
+        sliderCollectionView.set(dotIndex: Int(floor(41 * present)), selectedIndex: .present(present))
+        sliderCollectionView.setValue(present)
+        sliderCollectionView.updateLayout(isRegular: viewModel.isRegular)
+    }
+}
+
 // MARK: - Observer
-extension PhotoEditorFilterToolView {
+extension PhotoEditorAdjustToolView {
     
     private func bindViewModel() {
         viewModel.containerSizeSubject.sink { [weak self] _ in
@@ -109,10 +126,20 @@ extension PhotoEditorFilterToolView {
                 break
             }
         }.store(in: &cancellable)
+        
+        collectionView.selectedEvent.sink(on: self) { (self, index) in
+            self.viewModel.send(action: .adjustChangeType(option: self.options.adjust.types[index]))
+            // TODO:
+//            self.setSlider(with: <#T##EditorAdjustTypeOption#>, value: <#T##CGFloat#>)
+        }.store(in: &cancellable)
+        
+        sliderCollectionView.valueChangeEvent.sink(on: self) { (self, present) in
+            self.viewModel.send(action: .adjustValueChanged(present: present))
+        }.store(in: &cancellable)
     }
 }
 
-extension PhotoEditorFilterToolView {
+extension PhotoEditorAdjustToolView {
     
     private func setupView() {
         addLayoutGuide(primaryGuide)
@@ -126,13 +153,6 @@ extension PhotoEditorFilterToolView {
     }
     
     private func setupCenterView() {
-        let primaryCenterView = UIView(frame: .zero)
-        primaryCenterView.isUserInteractionEnabled = false
-        primaryCenterView.layer.borderWidth = 2.5
-        primaryCenterView.layer.cornerRadius = 6
-        primaryCenterView.layer.borderColor = UIColor.white.cgColor
-        collectionView.setCenterView(primaryCenterView, size: CGSize(width: itemWidth+4, height: itemWidth+4), topMargin: collectionView.topMargin-2.5)
-        
         let secondaryCenterView = UIView(frame: .zero)
         secondaryCenterView.isUserInteractionEnabled = false
         secondaryCenterView.backgroundColor = .white
@@ -173,7 +193,8 @@ extension PhotoEditorFilterToolView {
         if viewModel.isRegular { // iPad
             collectionView.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(primaryGuide).inset(30)
-                make.leading.trailing.equalTo(primaryGuide)
+                make.leading.equalTo(primaryGuide)
+                make.width.equalTo(itemWidth)
             }
             sliderCollectionView.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(collectionView)
@@ -181,24 +202,14 @@ extension PhotoEditorFilterToolView {
             }
         } else { // iPhone
             collectionView.snp.remakeConstraints { make in
-                make.top.bottom.equalTo(primaryGuide)
                 make.leading.trailing.equalTo(primaryGuide).inset(30)
+                make.top.equalTo(primaryGuide)
+                make.height.equalTo(itemWidth)
             }
             sliderCollectionView.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(secondaryGuide)
                 make.leading.trailing.equalTo(collectionView)
             }
-        }
-    }
-    
-    private func createItems() -> [UIImage] {
-        return Array(repeating: 0, count: 30).enumerated().map { (idx, style) -> UIImage in
-//            return createMosaicButton(idx: idx, style: style)
-//            let view = UIImageView(image: viewModel.image)
-//            view.contentMode = .scaleAspectFill
-//            view.clipsToBounds = true
-//            return view
-            return viewModel.image
         }
     }
     
@@ -210,8 +221,5 @@ extension PhotoEditorFilterToolView {
             return view
         }
     }
-    
-//    private func createMosaicButton(idx: Int, style: EditorMosaicStyleOption) -> UIButton {
-//    }
-    
 }
+

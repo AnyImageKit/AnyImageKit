@@ -31,21 +31,21 @@ final class PhotoEditorViewModel {
     
     // ##### Action #####
     
-    var actionSubject = PassthroughSubject<PhotoEditorAction, Never>()
+    let actionSubject = PassthroughSubject<PhotoEditorAction, Never>()
     
     // ##### Observe device properties change #####
     
     /// Container size
     var containerSize: CGSize { containerSizeSubject.value }
-    var containerSizeSubject = CurrentValueSubject<CGSize, Never>(.zero)
+    let containerSizeSubject = CurrentValueSubject<CGSize, Never>(.zero)
     
     /// Safe area
     var safeAreaInsets: UIEdgeInsets { safeAreaInsetsSubject.value }
-    var safeAreaInsetsSubject = CurrentValueSubject<UIEdgeInsets, Never>(.zero)
+    let safeAreaInsetsSubject = CurrentValueSubject<UIEdgeInsets, Never>(.zero)
     
     /// TraitCollection
     var traitCollection: UITraitCollection { traitCollectionSubject.value }
-    var traitCollectionSubject = CurrentValueSubject<UITraitCollection, Never>(.current)
+    let traitCollectionSubject = CurrentValueSubject<UITraitCollection, Never>(.current)
     
     // ##### Helper #####
     
@@ -142,6 +142,10 @@ extension PhotoEditorViewModel {
             stack.addMosaic(data)
         case .mosaicUndo:
             stack.mosaicUndo()
+        case .adjustChangeType(let option):
+            break
+        case .adjustValueChanged(let present): // 0 ~ 1
+            break
         default:
             break
         }
