@@ -13,13 +13,13 @@ extension PickerManager {
     private func createFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
         if !options.selectOptions.mediaTypes.contains(.video) {
-            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+            fetchOptions.predicate = NSPredicate(format: "mediaType != %ld", PHAssetMediaType.video.rawValue)
         }
         if !options.selectOptions.mediaTypes.contains(.image) {
-            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
+            fetchOptions.predicate = NSPredicate(format: "mediaType != %ld", PHAssetMediaType.image.rawValue)
         }
         if options.orderByDate == .desc {
-            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+            let sortDescriptor = NSSortDescriptor(key: "mediaType", ascending: false)
             fetchOptions.sortDescriptors = [sortDescriptor]
         }
         return fetchOptions
