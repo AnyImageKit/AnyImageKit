@@ -55,7 +55,7 @@
 
 - iOS 13.0+
 - Xcode 13.4.1+
-- Swift 5.5+
+- Swift 5.6+
 
 ## Installation
 
