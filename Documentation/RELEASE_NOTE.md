@@ -1,5 +1,11 @@
 # Release Notes
 
+## 0.14.6
+
+### Fix
+
+- Set SPM target platforms v13
+
 ## 0.14.5
 
 ### New Features
