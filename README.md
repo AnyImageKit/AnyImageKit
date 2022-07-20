@@ -29,7 +29,7 @@
     - [x] Video
     - [ ] Live Photo
     - [ ] GIF
-    - [ ] Fliter Support
+    - [ ] Filter Support
 - [ ] Edit image ( Technical Preview )
     - [x] Drawing
     - [ ] Emoji
@@ -37,7 +37,7 @@
     - [x] Cropping
     - [x] Mosaic
     - [x] Rotate
-    - [ ] Fliter Support
+    - [ ] Filter Support
 - [x] Multiple platform support
     - [x] iOS
     - [x] iPadOS
