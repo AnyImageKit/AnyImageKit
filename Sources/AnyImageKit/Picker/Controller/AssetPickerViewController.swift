@@ -31,18 +31,11 @@ final class AssetPickerViewController: AnyImageViewController {
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     private var containerSize: CGSize = ScreenHelper.mainBounds.size
     
-    #if swift(>=5.5)
-    /// Fix Xcode 13 beta bug.
-    @available(iOS 14.0, *)
     private lazy var dataSource: UICollectionViewDiffableDataSource<Section, Asset> = {
         return UICollectionViewDiffableDataSource<Section, Asset>(collectionView: collectionView) { (collectionView, indexPath, asset) -> UICollectionViewCell? in
             return nil
         }
     }()
-    #else
-    @available(iOS 14.0, *)
-    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
-    #endif
     
     lazy var stopReloadAlbum: Bool = false
     
