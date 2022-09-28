@@ -99,6 +99,8 @@ final class AssetPickerViewController: AnyImageViewController {
         #endif
     }
     
+    private weak var previewController: PhotoPreviewController?
+    
     let manager: PickerManager
     
     init(manager: PickerManager) {
@@ -567,6 +569,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             return
         } else {
             let controller = PhotoPreviewController(manager: manager)
+            self.previewController = controller
             controller.currentIndex = indexPath.item - itemOffset
             controller.dataSource = self
             controller.delegate = self
@@ -668,7 +671,9 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         let indexPath = IndexPath(item: idx, section: 0)
         reloadData(animated: false)
         if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
-            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            if idx < collectionView.numberOfItems(inSection: 0) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            }
         }
     }
 }
@@ -681,6 +686,7 @@ extension AssetPickerViewController {
     }
     
     private func reloadData(animated: Bool = true) {
+        previewController?.reloadWhenPhotoLibraryDidChange()
         if #available(iOS 14.0, *) {
             let snapshot = initialSnapshot()
             dataSource.apply(snapshot, animatingDifferences: animated)
