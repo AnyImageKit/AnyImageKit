@@ -83,21 +83,29 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override var shouldAutorotate: Bool {
-        return false
+        if manager.options.editorOptions.isEmpty {
+            return true
+        } else {
+            return false
+        }
     }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        switch UIApplication.shared.statusBarOrientation {
-        case .unknown:
-            return .portrait
-        case .portrait:
-            return .portrait
-        case .portraitUpsideDown:
-            return .portraitUpsideDown
-        case .landscapeLeft:
-            return .landscapeLeft
-        case .landscapeRight:
-            return .landscapeRight
+        if manager.options.editorOptions.isEmpty {
+            return .all
+        } else {
+            switch UIApplication.shared.statusBarOrientation {
+            case .unknown:
+                return .portrait
+            case .portrait:
+                return .portrait
+            case .portraitUpsideDown:
+                return .portraitUpsideDown
+            case .landscapeLeft:
+                return .landscapeLeft
+            case .landscapeRight:
+                return .landscapeRight
+            }
         }
     }
     
