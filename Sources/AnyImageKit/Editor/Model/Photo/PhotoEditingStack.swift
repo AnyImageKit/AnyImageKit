@@ -203,7 +203,9 @@ extension PhotoEditingStack {
             let context = rendererContext.cgContext
             context.translateBy(x: newSize.width/2, y: newSize.height/2)
             context.scaleBy(x: -1, y: 1)
-            context.rotate(by: CGFloat(radians))
+            if radians != RotateState.upsideDown.angle {
+                context.rotate(by: CGFloat(radians))
+            }
             context.draw(cgImage, in: CGRect(x: -image.size.width/2, y: -image.size.height/2, width: image.size.width, height: image.size.height))
         }
     }
