@@ -127,9 +127,7 @@ class PreviewCell: UICollectionViewCell {
         setupView()
         isAccessibilityElement = true
         
-        NotificationCenter.default.addObserver(forName: .containerSizeDidChange, object: nil, queue: .main) { noti in
-            self.layout()
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -215,6 +213,14 @@ extension PreviewCell: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         optionsDidUpdate(options: options)
         updateChildrenConfigurable(options: options)
+    }
+}
+
+// MARK: - Notification
+extension PreviewCell {
+    
+    @objc private func containerSizeDidChange(_ sender: Notification) {
+        layout()
     }
 }
 
