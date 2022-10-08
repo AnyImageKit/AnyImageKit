@@ -392,6 +392,7 @@ extension PhotoPreviewController {
             }
             selectButtonTapped(navigationBar.selectButton)
         }
+        scalePresentationController?.updateMask = false
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
         trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerPreview])

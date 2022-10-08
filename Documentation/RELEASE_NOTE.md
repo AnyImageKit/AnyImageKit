@@ -1,5 +1,30 @@
 # Release Notes
 
+## 0.14.6
+
+### Fix
+
+- Set SPM target platforms v13
+
+## 0.14.5
+
+### New Features
+
+- Use Xcode 13.4.1/Xcode 14.0 beta2
+- Set framework minimum deployment target to 13.0
+
+### Resolved
+
+- Picker
+  - Fix the issue that sort by adding time instead of creation time
+
+## 0.14.4
+
+### Resolved
+
+- Picker
+  - Fix can not add more photos when limit permission mode.([#144](https://github.com/AnyImageKit/AnyImageKit/pull/144))
+
 ## 0.14.3
 
 ### Resolved

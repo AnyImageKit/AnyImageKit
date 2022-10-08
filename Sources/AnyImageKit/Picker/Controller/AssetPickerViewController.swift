@@ -598,7 +598,6 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
         }
         let width = floor((maxSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber)
         return CGSize(width: width, height: width)
-            
     }
 }
 

@@ -29,7 +29,7 @@
     - [x] Video
     - [ ] Live Photo
     - [ ] GIF
-    - [ ] Fliter Support
+    - [ ] Filter Support
 - [ ] Edit image ( Technical Preview )
     - [x] Drawing
     - [ ] Emoji
@@ -37,7 +37,7 @@
     - [x] Cropping
     - [x] Mosaic
     - [x] Rotate
-    - [ ] Fliter Support
+    - [ ] Filter Support
 - [x] Multiple platform support
     - [x] iOS
     - [x] iPadOS
@@ -53,9 +53,9 @@
 
 ## Requirements
 
-- iOS 12.0+
-- Xcode 13.0+
-- Swift 5.5+
+- iOS 13.0+
+- Xcode 13.4.1+
+- Swift 5.6+
 
 ## Installation
 
@@ -131,6 +131,9 @@ extension ViewController: ImagePickerControllerDelegate {
 
 | Version | Release Date | Xcode | Swift | iOS |
 | ---- | ----  | ---- | ---- | ---- |
+| [v0.14.6](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0146) | 2022-07-06 | 13.4.1 | 5.6 | 13.0+ |
+| [v0.14.5](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0145) | 2022-07-05 | 13.4.1 | 5.6 | 13.0+ |
+| [v0.14.4](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0144) | 2022-04-06 | 13.3 | 5.5 | 12.0+ |
 | [v0.14.3](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0143) | 2021-12-28 | 13.2 | 5.5 | 12.0+ |
 | [v0.14.2](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0142) | 2021-12-16 | 13.2 | 5.5 | 12.0+ |
 | [v0.14.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE.md#0141) | 2021-11-23 | 13.1 | 5.5 | 12.0+ |
