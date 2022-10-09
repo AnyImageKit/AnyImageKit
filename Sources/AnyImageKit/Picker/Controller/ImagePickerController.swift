@@ -84,14 +84,19 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override var shouldAutorotate: Bool {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
         if manager.options.editorOptions.isEmpty {
             return true
         } else {
             return false
         }
+        #else
+        return true
+        #endif
     }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
         if manager.options.editorOptions.isEmpty {
             return .all
         } else {
@@ -108,6 +113,9 @@ open class ImagePickerController: AnyImageNavigationController {
                 return .landscapeRight
             }
         }
+        #else
+        return .all
+        #endif
     }
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
