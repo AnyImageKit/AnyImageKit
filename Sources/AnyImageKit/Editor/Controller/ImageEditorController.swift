@@ -66,10 +66,33 @@ open class ImageEditorController: AnyImageNavigationController {
         let newSize = view.frame.size
         if containerSize != .zero, containerSize != newSize {
             view.endEditing(true)
-            presentingViewController?.dismiss(animated: false, completion: nil)
+            dismiss(animated: false, completion: nil)
             editorDelegate?.imageEditorDidCancel(self)
         }
         containerSize = newSize
+    }
+    
+    open override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        switch UIApplication.shared.statusBarOrientation {
+        case .unknown:
+            return .portrait
+        case .portrait:
+            return .portrait
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        }
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIApplication.shared.statusBarOrientation
     }
 }
 
@@ -179,19 +202,10 @@ extension ImageEditorController {
     
     private func addNotification() {
         beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangeNotification(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     private func removeNotifications() {
         endGeneratingDeviceOrientationNotifications()
-    }
-    
-    @objc private func orientationDidChangeNotification(_ sender: Notification) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            view.endEditing(true)
-            presentingViewController?.dismiss(animated: false, completion: nil)
-            editorDelegate?.imageEditorDidCancel(self)
-        }
     }
 }
 

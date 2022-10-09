@@ -174,17 +174,27 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
         updateLayout()
     }
     
-    @available(iOS 11.0, *)
-    override var prefersHomeIndicatorAutoHidden: Bool {
-        return true
+    override var shouldAutorotate: Bool {
+        return false
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait]
+        switch UIApplication.shared.statusBarOrientation {
+        case .unknown:
+            return .portrait
+        case .portrait:
+            return .portrait
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        }
     }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return .portrait
+        return UIApplication.shared.statusBarOrientation
     }
     
     override func setStatusBar(hidden: Bool) {
@@ -332,9 +342,13 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     @objc private func containerSizeDidChange(_ sender: Notification) {
-        collectionView.reloadData()
-        let indexPath = IndexPath(item: currentIndex, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        collectionView.performBatchUpdates { [weak self] in
+            self?.collectionView.reloadData()
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            let indexPath = IndexPath(item: self.currentIndex, section: 0)
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        }
     }
     
     /// NavigationBar - Back
@@ -578,7 +592,8 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     
     /// 提供退场动画
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return makeDismissedAnimator()
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        return makeDismissedAnimator(indexPath: indexPath)
     }
     
     /// 提供转场协调器
@@ -603,8 +618,8 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
     }
     
     /// 创建缩放型退场动画
-    private func makeDismissedAnimator() -> UIViewControllerAnimatedTransitioning? {
-        guard let cell = collectionView.visibleCells.first as? PreviewCell else {
+    private func makeDismissedAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning? {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else {
             return nil
         }
         let imageView = UIImageView(image: cell.imageView.image)

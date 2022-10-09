@@ -82,6 +82,45 @@ open class ImagePickerController: AnyImageNavigationController {
             super.dismiss(animated: flag, completion: completion)
         }
     }
+    
+    open override var shouldAutorotate: Bool {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if manager.options.editorOptions.isEmpty {
+            return true
+        } else {
+            return false
+        }
+        #else
+        return true
+        #endif
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if manager.options.editorOptions.isEmpty {
+            return .all
+        } else {
+            switch UIApplication.shared.statusBarOrientation {
+            case .unknown:
+                return .portrait
+            case .portrait:
+                return .portrait
+            case .portraitUpsideDown:
+                return .portraitUpsideDown
+            case .landscapeLeft:
+                return .landscapeLeft
+            case .landscapeRight:
+                return .landscapeRight
+            }
+        }
+        #else
+        return .all
+        #endif
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIApplication.shared.statusBarOrientation
+    }
 }
 
 extension ImagePickerController {

@@ -206,6 +206,29 @@ final class InputTextViewController: AnyImageViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        switch UIApplication.shared.statusBarOrientation {
+        case .unknown:
+            return .portrait
+        case .portrait:
+            return .portrait
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        }
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIApplication.shared.statusBarOrientation
+    }
 }
 
 // MARK: - Target
@@ -295,6 +318,12 @@ extension InputTextViewController {
             updateCalculateLabel(string: array.last!)
             let lastLineWidth = calculateLabel.intrinsicContentSize.width + (hInset * 2)
             let offset = textCoverView.bounds.width - lastLineWidth + hInset
+            
+            // For iPad
+            var frame = textCoverView.frame
+            frame.size.width = lastLineWidth
+            textCoverView.frame = frame
+            
             textCoverView.snp.updateConstraints { maker in
                 maker.right.equalToSuperview().offset(-offset)
             }
