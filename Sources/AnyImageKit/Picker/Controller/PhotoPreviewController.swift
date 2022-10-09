@@ -204,6 +204,24 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
 }
 
+// MARK: - Public function
+extension PhotoPreviewController {
+    
+    func reloadWhenPhotoLibraryDidChange() {
+        collectionView.reloadData()
+        let count = collectionView.numberOfItems(inSection: 0)
+        if currentIndex >= count {
+            switch manager.options.orderByDate {
+            case .asc:
+                currentIndex = count - 1
+            case .desc:
+                currentIndex = 0
+            }
+            collectionView.reloadData()
+        }
+    }
+}
+
 // MARK: - Private function
 extension PhotoPreviewController {
     
