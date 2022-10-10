@@ -38,7 +38,7 @@ final class AvatarPickerController: UITableViewController {
         options.saveEditedAsset = false
         options.editorOptions = [.photo]
         options.editorPhotoOptions.toolOptions = [.crop]
-        options.editorPhotoOptions.cropOptions = [.custom(w: 1, h: 1)]
+        options.editorPhotoOptions.crop.sizes = [.custom(w: 1, h: 1)]
         let controller = ImagePickerController(options: options, delegate: self)
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)

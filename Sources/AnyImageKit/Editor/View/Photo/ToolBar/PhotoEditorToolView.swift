@@ -51,6 +51,12 @@ final class PhotoEditorToolView: UIView {
         view.alpha = 0.0
         return view
     }()
+    private lazy var cropView: PhotoEditorCropToolView = {
+        let view = PhotoEditorCropToolView(viewModel: viewModel)
+        view.alpha = 0.0
+        return view
+    }()
+    
 //    private lazy var filterView: PhotoEditorFilterToolView = {
 //        let view = PhotoEditorFilterToolView(viewModel: viewModel)
 //        view.alpha = 0.0
@@ -58,7 +64,7 @@ final class PhotoEditorToolView: UIView {
 //    }()
     
     private var subToolViews: [UIView] {
-        return [brushView, mosaicView]
+        return [brushView, mosaicView, cropView]
     }
     
     init(viewModel: PhotoEditorViewModel) {
@@ -147,6 +153,7 @@ extension PhotoEditorToolView {
         addSubview(optionsView)
         addSubview(brushView)
         addSubview(mosaicView)
+        addSubview(cropView)
 //        addSubview(filterView)
         
         layout()
@@ -221,6 +228,9 @@ extension PhotoEditorToolView {
         mosaicView.snp.remakeConstraints { make in
             make.edges.equalTo(brushView)
         }
+        cropView.snp.remakeConstraints { make in
+            make.edges.equalTo(brushView)
+        }
     }
     
     private func getSubToolView(with option: EditorPhotoToolOption) -> UIView {
@@ -230,7 +240,7 @@ extension PhotoEditorToolView {
         case .text:
             return UIView()
         case .crop:
-            return UIView()
+            return cropView
         case .mosaic:
             return mosaicView
 //        case .adjust:

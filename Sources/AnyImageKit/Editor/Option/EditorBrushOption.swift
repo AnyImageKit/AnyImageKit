@@ -8,14 +8,12 @@
 
 import UIKit
 
-public struct EditorBrushOption {
+public struct EditorBrushOption: Equatable {
     
     /// Colors of brush tool options, displayed at the top of the toolbar.
     /// Option sorting is arranged in a given array.
     ///
     /// For iOS 14 and later, the last color element will use dynamic color(UIColorWell) instead of static color.
-    ///
-    /// For the 320pt screen, the last color element will be hidden automatically.
     ///
     /// - Default: [white, black, red, yellow, green, blue, purple]
     public var colors: [EditorBrushColorOption] = EditorBrushColorOption.allCases

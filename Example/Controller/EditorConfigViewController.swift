@@ -221,19 +221,19 @@ extension EditorConfigViewController {
     private func cropOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Crop Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Free/1:1/3:4/4:3/9:16/16:9", style: .default, handler: { [weak self] (action) in
-            self?.options.cropOptions = EditorCropOption.allCases
+            self?.options.crop.sizes = EditorCropSizeOption.allCases
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Free", style: .default, handler: { [weak self] (action) in
-            self?.options.cropOptions = [.free]
+            self?.options.crop.sizes = [.free]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "1:1", style: .default, handler: { [weak self] (action) in
-            self?.options.cropOptions = [.custom(w: 1, h: 1)]
+            self?.options.crop.sizes = [.custom(w: 1, h: 1)]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Free/9:16/16:9", style: .default, handler: { [weak self] (action) in
-            self?.options.cropOptions = [.free, .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
+            self?.options.crop.sizes = [.free, .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
             (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

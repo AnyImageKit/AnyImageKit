@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct EditorMosaicOption {
+public struct EditorMosaicOption: Equatable {
     
     /// Mosaic style of mosaic tool options, displayed at the top of the toolbar.
     /// Option sorting is arranged in a given array.

@@ -56,22 +56,7 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: true
     public var calculateTextLastLineMask: Bool = true
     
-    /// Crop size of crop tool options.
-    /// Option sorting is arranged in a given array.
-    ///
-    /// You can customize crop size if you want.
-    ///
-    /// - Default: [free, 1:1, 3:4, 4:3, 9:16, 16:9]
-    public var cropOptions: [EditorCropOption] = EditorCropOption.allCases
-    
-    /// Rotation direction feature of crop toolbar.
-    ///
-    /// - Note: Custom crop option must appear in pairs if you turn on the rotation feature.
-    ///
-    /// For example, if you set cropOptions = [3:4, 9:16], editor will update cropOptions to [3:4, 4:3, 9:16, 16:9] automatically.
-    ///
-    /// - Default: turnLeft
-    public var rotationDirection: EditorRotationDirection = .turnLeft
+    public var crop: EditorCropOption = .init()
     
     /// Setting the cache identifier will cache the edit records.
     /// The next time you open the editor, it will load the edit records and restore it.

@@ -2,46 +2,28 @@
 //  EditorCropOption.swift
 //  AnyImageKit
 //
-//  Created by 蒋惠 on 2021/4/16.
-//  Copyright © 2021-2022 AnyImageKit.org. All rights reserved.
+//  Created by 蒋惠 on 2022/7/6.
+//  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-/// Crop option
-public enum EditorCropOption: Equatable {
+public struct EditorCropOption: Equatable {
     
-    /// Free crop, there is no crop size limit.
-    case free
+    /// Crop size of crop tool options.
+    /// Option sorting is arranged in a given array.
+    ///
+    /// You can customize crop size if you want.
+    ///
+    /// - Default: [free, 1:1, 3:4, 4:3, 9:16, 16:9]
+    public var sizes: [EditorCropSizeOption] = EditorCropSizeOption.allCases
     
-    /// Limit crop size, limit the cropping width and height ratio. Eg. w:3 h:4
-    case custom(w: UInt, h: UInt)
-}
-
-extension EditorCropOption: CaseIterable {
-    
-    public static var allCases: [EditorCropOption] {
-        return [.free, .custom(w: 1, h: 1), .custom(w: 3, h: 4), .custom(w: 4, h: 3), .custom(w: 9, h: 16), .custom(w: 16, h: 9)]
-    }
-}
-
-extension EditorCropOption {
-    
-    var ratioOfWidth: CGFloat {
-        switch self {
-        case .free:
-            return 1
-        case .custom(let w, let h):
-            return CGFloat(w)/CGFloat(h)
-        }
-    }
-    
-    var ratioOfHeight: CGFloat {
-        switch self {
-        case .free:
-            return 1
-        case .custom(let w, let h):
-            return CGFloat(h)/CGFloat(w)
-        }
-    }
+    /// Rotation direction feature of crop toolbar.
+    ///
+    /// - Note: Custom crop option must appear in pairs if you turn on the rotation feature.
+    ///
+    /// For example, if you set cropOptions = [3:4, 9:16], editor will update cropOptions to [3:4, 4:3, 9:16, 16:9] automatically.
+    ///
+    /// - Default: turnLeft
+    public var rotationDirection: EditorRotationDirection = .turnLeft
 }

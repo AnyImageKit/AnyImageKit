@@ -21,7 +21,7 @@ final class PhotoEditorCropContext {
     /// 裁剪框与imageView真实的位置
     var cropRealRect: CGRect = .zero
     /// 裁剪尺寸
-    var cropOption: EditorCropOption = .free
+    var cropOption: EditorCropSizeOption = .free
     /// 上次裁剪开始时ScrollView的Bounds
     var lastScrollViewBounds: CGRect = .zero
     /// 上次裁剪开始时图片的Bounds

@@ -105,6 +105,10 @@ extension EditorTheme {
         /// 25*25
         case photoToolUndo = "PhotoToolUndo"
         /// 25*25
+        case photoToolCropMirror = "PhotoToolCropMirror"
+        /// 25*25
+        case photoToolCropReset = "PhotoToolCropReset"
+        /// 25*25
         case photoToolCropTrunLeft = "PhotoToolCropTrunLeft"
         /// 25*25
         case photoToolCropTrunRight = "PhotoToolCropTrunRight"
@@ -150,6 +154,10 @@ extension StringConfigKey {
     public static let editorAdjust = StringConfigKey(rawValue: "ADJUST")
     public static let editorFilter = StringConfigKey(rawValue: "FILTER")
     public static let editorFree = StringConfigKey(rawValue: "FREE")
+    public static let editorTrunLeft = StringConfigKey(rawValue: "TRUN_LEFT")
+    public static let editorTrunRight = StringConfigKey(rawValue: "TRUN_RIGHT")
+    public static let editorMirror = StringConfigKey(rawValue: "MIRROR")
+    public static let editorReset = StringConfigKey(rawValue: "RESET")
     
     public static let editorDragHereToRemove = StringConfigKey(rawValue: "DRAG_HERE_TO_REMOVE")
     public static let editorReleaseToRemove = StringConfigKey(rawValue: "RELEASE_TO_REMOVE")
