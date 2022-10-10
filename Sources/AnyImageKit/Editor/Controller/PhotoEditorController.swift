@@ -43,6 +43,7 @@ final class PhotoEditorController: AnyImageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.traitCollectionSubject.send(traitCollection)
         navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .black
 //        view.backgroundColor = .lightGray

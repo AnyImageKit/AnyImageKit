@@ -73,12 +73,6 @@ final class PhotoEditorCropToolView: UIView {
         view.accessibilityLabel = options.theme[string: .reset]
         return view
     }()
-    private lazy var stackView: UIStackView = {
-        let view = UIStackView(arrangedSubviews: [mirrorButton, rotationButton])
-        view.spacing = 0
-        view.distribution = .fillEqually
-        return view
-    }()
     
     init(viewModel: PhotoEditorViewModel) {
         self.viewModel = viewModel
@@ -209,7 +203,8 @@ extension PhotoEditorCropToolView {
     
     private func setupView() {
         addLayoutGuide(primaryGuide)
-        addSubview(stackView)
+        addSubview(mirrorButton)
+        addSubview(rotationButton)
         addSubview(collectionView)
         addSubview(resetButton)
         
@@ -240,12 +235,17 @@ extension PhotoEditorCropToolView {
         
         if viewModel.isRegular { // iPad
             collectionViewFlowLayout.scrollDirection = .vertical
-            stackView.axis = .vertical
-            stackView.snp.remakeConstraints { make in
+            mirrorButton.snp.remakeConstraints { make in
                 make.top.leading.trailing.equalTo(primaryGuide)
+                make.height.equalTo(44)
+            }
+            rotationButton.snp.remakeConstraints { make in
+                make.top.equalTo(mirrorButton.snp.bottom)
+                make.leading.trailing.equalTo(primaryGuide)
+                make.height.equalTo(44)
             }
             collectionView.snp.remakeConstraints { make in
-                make.top.equalTo(stackView.snp.bottom).offset(10)
+                make.top.equalTo(rotationButton.snp.bottom).offset(10)
                 make.bottom.equalTo(resetButton.snp.top).offset(-10)
                 make.centerX.equalTo(primaryGuide)
                 make.width.equalTo(primaryGuide)
@@ -253,30 +253,29 @@ extension PhotoEditorCropToolView {
             resetButton.snp.remakeConstraints { make in
                 make.bottom.equalTo(primaryGuide)
                 make.centerX.equalTo(primaryGuide)
-                make.width.height.equalTo(44)
+                make.height.equalTo(44)
             }
         } else {
             collectionViewFlowLayout.scrollDirection = .horizontal
-            stackView.axis = .horizontal
-            stackView.snp.remakeConstraints { make in
-                make.top.bottom.equalTo(primaryGuide)
+            mirrorButton.snp.remakeConstraints { make in
                 make.leading.equalTo(primaryGuide).offset(15)
+                make.top.bottom.equalTo(primaryGuide)
+                make.width.equalTo(44)
+            }
+            rotationButton.snp.remakeConstraints { make in
+                make.leading.equalTo(mirrorButton.snp.trailing)
+                make.top.bottom.equalTo(primaryGuide)
+                make.width.equalTo(44)
             }
             collectionView.snp.remakeConstraints { make in
-                make.leading.equalTo(stackView.snp.trailing).offset(10)
+                make.leading.equalTo(rotationButton.snp.trailing).offset(10)
                 make.trailing.equalTo(resetButton.snp.leading).offset(-10)
                 make.top.bottom.equalTo(primaryGuide)
             }
             resetButton.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(primaryGuide)
                 make.trailing.equalTo(primaryGuide).offset(-15)
-                make.width.height.equalTo(44)
-            }
-        }
-        
-        [mirrorButton, rotationButton, resetButton].forEach {
-            $0.snp.makeConstraints { make in
-                make.width.height.equalTo(44)
+                make.width.equalTo(44)
             }
         }
     }
