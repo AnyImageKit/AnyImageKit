@@ -10,6 +10,15 @@ import UIKit
 
 struct ScreenHelper {
     
+    static var keyWindow: UIWindow? {
+        let connectedScenes = UIApplication.shared.connectedScenes
+        let scene = connectedScenes.first(where: { $0.activationState == .foregroundActive && $0 is UIWindowScene }) ?? connectedScenes.first(where: { $0.activationState == .foregroundInactive && $0 is UIWindowScene })
+        return scene
+            .flatMap({ $0 as? UIWindowScene })?
+            .windows
+            .first(where: { $0.isKeyWindow })
+    }
+    
     static var statusBarFrame: CGRect {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {

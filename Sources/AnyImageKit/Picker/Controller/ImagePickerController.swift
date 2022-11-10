@@ -188,7 +188,7 @@ extension ImagePickerController {
     }
     
     private func checkData() {
-        _showWaitHUD(self)
+        view.hud.show()
         workQueue.async { [weak self] in
             guard let self = self else { return }
             let assets = self.manager.selectedAssets
@@ -198,7 +198,7 @@ extension ImagePickerController {
                 self.resizeImagesIfNeeded(newAssets)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    _hideHUD(self)
+                    self.view.hud.hide()
                     let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
                     self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
                 }
@@ -290,7 +290,8 @@ extension ImagePickerController {
         if didFinishSelect {
             if let message = sender.object as? String {
                 didFinishSelect = false
-                _showMessageHUD(self, message)
+                view.hud.hide()
+                Toast.show(message: message)
             } else {
                 checkData()
             }

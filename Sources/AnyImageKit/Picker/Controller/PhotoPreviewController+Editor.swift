@@ -21,18 +21,18 @@ extension PhotoPreviewController {
             if let image = data.asset._images[.initial] {
                 showEditor(image, identifier: data.asset.identifier)
             } else {
-                showWaitHUD()
+                view.hud.show()
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth))
                 manager.requestPhoto(for: data.asset.phAsset, options: options) { [weak self] result in
                     guard let self = self else { return }
                     switch result {
                     case .success(let response):
                         if !response.isDegraded {
-                            self.hideHUD(animated: false)
+                            self.view.hud.hide()
                             self.showEditor(response.image, identifier: data.asset.identifier)
                         }
                     case .failure(let error):
-                        self.hideHUD()
+                        self.view.hud.hide()
                         _print(error)
                     }
                 }

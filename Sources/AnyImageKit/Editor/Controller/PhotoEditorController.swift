@@ -92,7 +92,7 @@ final class PhotoEditorController: AnyImageViewController {
                 self.setupMosaicView()
             case .failure(let error):
                 if error == .cannotFindInLocal {
-                    self.showWaitHUD()
+                    self.view.hud.show()
                     return
                 }
                 _print("Fetch image failed: \(error.localizedDescription)")
@@ -148,7 +148,7 @@ final class PhotoEditorController: AnyImageViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in // 这里稍微延迟一下，给马赛克图层创建留点时间
                     self?.contentView.isHidden = false
                     self?.placeholdImageView.isHidden = true
-                    self?.hideHUD()
+                    self?.view.hud.hide()
                 }
             }
         }
@@ -219,10 +219,10 @@ extension PhotoEditorController {
     
     private func showHUDIfNeeded() {
         if contentView.mosaic == nil {
-            showWaitHUD()
+            view.hud.show()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                 if self?.contentView.mosaic != nil {
-                    self?.hideHUD()
+                    self?.view.hud.hide()
                 }
             }
         }
@@ -441,7 +441,7 @@ extension PhotoEditorController {
             trackObserver?.track(event: .editorPhotoCrop, userInfo: [:])
         case .mosaic:
             if contentView.mosaic == nil {
-                showWaitHUD()
+                view.hud.show()
             }
             contentView.mosaic?.isUserInteractionEnabled = true
             trackObserver?.track(event: .editorPhotoMosaic, userInfo: [:])
