@@ -11,12 +11,16 @@ import UIKit
 struct ScreenHelper {
     
     static var keyWindow: UIWindow? {
-        let connectedScenes = UIApplication.shared.connectedScenes
-        let scene = connectedScenes.first(where: { $0.activationState == .foregroundActive && $0 is UIWindowScene }) ?? connectedScenes.first(where: { $0.activationState == .foregroundInactive && $0 is UIWindowScene })
-        return scene
-            .flatMap({ $0 as? UIWindowScene })?
-            .windows
-            .first(where: { $0.isKeyWindow })
+        if #available(iOS 13.0, *) {
+            let connectedScenes = UIApplication.shared.connectedScenes
+            let scene = connectedScenes.first(where: { $0.activationState == .foregroundActive && $0 is UIWindowScene }) ?? connectedScenes.first(where: { $0.activationState == .foregroundInactive && $0 is UIWindowScene })
+            return scene
+                .flatMap({ $0 as? UIWindowScene })?
+                .windows
+                .first(where: { $0.isKeyWindow })
+        } else {
+            return UIApplication.shared.keyWindow
+        }
     }
     
     static var statusBarFrame: CGRect {

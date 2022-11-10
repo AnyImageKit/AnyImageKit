@@ -19,7 +19,12 @@ final public class LoadingView: UIControl {
     }()
     
     private lazy var indicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .large)
+        let view: UIActivityIndicatorView
+        if #available(iOS 13, *) {
+            view = UIActivityIndicatorView(style: .large)
+        } else {
+            view = UIActivityIndicatorView(style: .whiteLarge)
+        }
         view.color = .white
         view.startAnimating()
         return view
