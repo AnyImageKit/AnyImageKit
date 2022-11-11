@@ -42,6 +42,10 @@
 		715D6B37256E449B004D9BF1 /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D6B36256E449B004D9BF1 /* Mosaic.swift */; };
 		715D6B3D256E4690004D9BF1 /* MosaicContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */; };
 		715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */; };
+		716A14D1291CD3A300164263 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716A14D0291CD3A300164263 /* Toast.swift */; };
+		716A14D3291CD6FC00164263 /* Core+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716A14D2291CD6FC00164263 /* Core+UIViewController.swift */; };
+		716A14D5291CD89E00164263 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716A14D4291CD89E00164263 /* HUD.swift */; };
+		716A14D7291CD8C900164263 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716A14D6291CD8C900164263 /* LoadingView.swift */; };
 		716F0EE823EFEFC3009788B0 /* Core+CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */; };
 		71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71723646249C4CD5003D23DB /* PadCaptureViewController.swift */; };
 		71735B9E27325F9300BE44AA /* EditorRotationDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */; };
@@ -157,10 +161,8 @@
 		A0B22EA7237AA1B3001F6066 /* Core+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E98237AA1B3001F6066 /* Core+UIColor.swift */; };
 		A0B22EA8237AA1B3001F6066 /* Core+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E99237AA1B3001F6066 /* Core+UITableView.swift */; };
 		A0B22EA9237AA1B3001F6066 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E9B237AA1B3001F6066 /* FileHelper.swift */; };
-		A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E9C237AA1B3001F6066 /* HUDHelper.swift */; };
 		A0B22EAB237AA1B3001F6066 /* BundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E9D237AA1B3001F6066 /* BundleHelper.swift */; };
 		A0B22EAD237AA1B3001F6066 /* ScreenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */; };
-		A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */; };
 		A0B398E0257F834700851253 /* EnableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B398DF257F834700851253 /* EnableCell.swift */; };
 		A0B3A0BE253D83A4003F7134 /* DataTrackObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B3A0BD253D83A4003F7134 /* DataTrackObserver.swift */; };
 		A0B50C3623A9EDDC002C9799 /* Capture+CGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */; };
@@ -338,6 +340,10 @@
 		715D6B36256E449B004D9BF1 /* Mosaic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mosaic.swift; sourceTree = "<group>"; };
 		715D6B3C256E4690004D9BF1 /* MosaicContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MosaicContentView.swift; sourceTree = "<group>"; };
 		715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreselectAssetViewController.swift; sourceTree = "<group>"; };
+		716A14D0291CD3A300164263 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		716A14D2291CD6FC00164263 /* Core+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+UIViewController.swift"; sourceTree = "<group>"; };
+		716A14D4291CD89E00164263 /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
+		716A14D6291CD8C900164263 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		716F0EE723EFEFC3009788B0 /* Core+CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core+CGFloat.swift"; sourceTree = "<group>"; };
 		71723646249C4CD5003D23DB /* PadCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadCaptureViewController.swift; sourceTree = "<group>"; };
 		71735B9D27325F9300BE44AA /* EditorRotationDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRotationDirection.swift; sourceTree = "<group>"; };
@@ -468,10 +474,8 @@
 		A0B22E98237AA1B3001F6066 /* Core+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UIColor.swift"; sourceTree = "<group>"; };
 		A0B22E99237AA1B3001F6066 /* Core+UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+UITableView.swift"; sourceTree = "<group>"; };
 		A0B22E9B237AA1B3001F6066 /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
-		A0B22E9C237AA1B3001F6066 /* HUDHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDHelper.swift; sourceTree = "<group>"; };
 		A0B22E9D237AA1B3001F6066 /* BundleHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BundleHelper.swift; sourceTree = "<group>"; };
 		A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenHelper.swift; sourceTree = "<group>"; };
-		A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDViewController.swift; sourceTree = "<group>"; };
 		A0B398DF257F834700851253 /* EnableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableCell.swift; sourceTree = "<group>"; };
 		A0B3A0BD253D83A4003F7134 /* DataTrackObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTrackObserver.swift; sourceTree = "<group>"; };
 		A0B50C3523A9EDDC002C9799 /* Capture+CGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Capture+CGImage.swift"; sourceTree = "<group>"; };
@@ -677,6 +681,16 @@
 				714869172744D88E003D4605 /* Info.plist */,
 			);
 			path = APITests;
+			sourceTree = "<group>";
+		};
+		716A14CF291CD39B00164263 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				716A14D0291CD3A300164263 /* Toast.swift */,
+				716A14D4291CD89E00164263 /* HUD.swift */,
+				716A14D6291CD8C900164263 /* LoadingView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		7176B7DF248DD7FE00B607BD /* Controller */ = {
@@ -1126,6 +1140,7 @@
 			isa = PBXGroup;
 			children = (
 				A0B22EA1237AA1B3001F6066 /* Controller */,
+				716A14CF291CD39B00164263 /* View */,
 				A0B22EA3237AA1B3001F6066 /* Model */,
 				71D552BB2734C98F0059345B /* Option */,
 				A0B22E9A237AA1B3001F6066 /* Util */,
@@ -1151,6 +1166,7 @@
 				71CBF1422519CC4B00F79D19 /* Core+UIView.swift */,
 				A0E14CBC251B8FAB00A9FC32 /* Core+Bundle.swift */,
 				71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */,
+				716A14D2291CD6FC00164263 /* Core+UIViewController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1172,7 +1188,6 @@
 			children = (
 				A076999623963A360006AC9B /* AnyImageNavigationController.swift */,
 				A0147E0B23C4870D0071E9D5 /* AnyImageViewController.swift */,
-				A0B22EA2237AA1B3001F6066 /* HUDViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1372,7 +1387,6 @@
 			children = (
 				A0B22E9D237AA1B3001F6066 /* BundleHelper.swift */,
 				A0B22E9B237AA1B3001F6066 /* FileHelper.swift */,
-				A0B22E9C237AA1B3001F6066 /* HUDHelper.swift */,
 				A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */,
 				A01C582C23B33CCA00691F11 /* DebugHelper.swift */,
 			);
@@ -1655,6 +1669,7 @@
 				71034F1D273A6992007BBF60 /* Shadow.swift in Sources */,
 				A50B2117237AA24300A894A9 /* PhotoEditorContentView.swift in Sources */,
 				713C206925AD32D800BB0F66 /* BrushData.swift in Sources */,
+				716A14D7291CD8C900164263 /* LoadingView.swift in Sources */,
 				71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */,
 				A519FA3223AB11ED0028CCC8 /* MediaType.swift in Sources */,
 				A561239723B5E7B90071C3E8 /* PickerOptionsInfo.swift in Sources */,
@@ -1705,7 +1720,6 @@
 				A544371E23AB4BA4003C65F9 /* VideoEditorToolView.swift in Sources */,
 				A56A3C8C2330BCA100EBFC48 /* PickerPreviewNavigationBar.swift in Sources */,
 				713C207325AD32D800BB0F66 /* PhotoEditorCropContext.swift in Sources */,
-				A0B22EAF237AA1B3001F6066 /* HUDViewController.swift in Sources */,
 				A029D04F2330856C00BC6720 /* Album.swift in Sources */,
 				A5DF1E89237AA32C00E3A32E /* Editor+UIBezierPath.swift in Sources */,
 				A5347D2423A9FC6300C93874 /* ExportTool.swift in Sources */,
@@ -1732,6 +1746,7 @@
 				A0839B6D23C2DBD700FF8FDE /* VideoExportPreset.swift in Sources */,
 				A507CD8223C4228F00E55A6B /* EditorPhotoResource.swift in Sources */,
 				A5A27BBD232F83DE00D966B8 /* NumberCircleButton.swift in Sources */,
+				716A14D1291CD3A300164263 /* Toast.swift in Sources */,
 				71208EC0256F8D93002C023A /* (null) in Sources */,
 				A005C30D253D33180021E323 /* AnyImageEvent.swift in Sources */,
 				A05C8DA3233DEFD7005B0F3C /* PickerManager+Photo.swift in Sources */,
@@ -1807,10 +1822,10 @@
 				71BAF335257619A3007AE60F /* CacheModule.swift in Sources */,
 				713585F627379CD400A70B9E /* EditorTheme.swift in Sources */,
 				A067AC1723C6FDD800FF681B /* CaptureTipsView.swift in Sources */,
+				716A14D3291CD6FC00164263 /* Core+UIViewController.swift in Sources */,
 				A067AC1B23C816DB00FF681B /* Core+CGSize.swift in Sources */,
 				A544372223AB6A60003C65F9 /* VideoEditorCropProgressView.swift in Sources */,
 				71B3E9122629784400710A7F /* CaptureMediaOption.swift in Sources */,
-				A0B22EAA237AA1B3001F6066 /* HUDHelper.swift in Sources */,
 				A5D4FDA6233DFC4E00A0B138 /* PreviewCell.swift in Sources */,
 				718DE32B2599AD82005C3159 /* TextTrashView.swift in Sources */,
 				A513C46023ACB6AC0071D0D5 /* Core+UIImageView.swift in Sources */,
@@ -1849,6 +1864,7 @@
 				A01C582D23B33CCA00691F11 /* DebugHelper.swift in Sources */,
 				A067AC1923C8105B00FF681B /* Core+CGImageSource.swift in Sources */,
 				A56123A323B5F43B0071C3E8 /* CaptureOptionsInfo.swift in Sources */,
+				716A14D5291CD89E00164263 /* HUD.swift in Sources */,
 				A0839B7423C44B1A00FF8FDE /* Permission.swift in Sources */,
 				A076999E23963F270006AC9B /* Capture.swift in Sources */,
 				A0950B802563C42B00213AD2 /* AssetDisableCheckRule.swift in Sources */,

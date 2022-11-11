@@ -199,19 +199,3 @@ extension AnyImageViewController {
         }
     }
 }
-
-// MARK: - HUD
-extension AnyImageViewController {
-    
-    func showWaitHUD(_ message: String = "") {
-        _showWaitHUD(self, message)
-    }
-
-    func showMessageHUD(_ message: String) {
-        _showMessageHUD(self, message)
-    }
-
-    func hideHUD(animated: Bool = true) {
-        _hideHUD(self, animated: animated)
-    }
-}
