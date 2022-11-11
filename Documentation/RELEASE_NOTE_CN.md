@@ -1,22 +1,40 @@
 # 更新日志
 
+## 0.15.0
+
+### 通用
+
+- 最低部署版本调整为 iOS 12.0（后续版本会抛弃 iOS 12.0）。 ([#153](https://github.com/AnyImageKit/AnyImageKit/pull/153))
+
+### 修复
+
+- 修复 iPad 上一些问题。 ([#158](https://github.com/AnyImageKit/AnyImageKit/pull/158))
+- 修复 HUD & Toast 有时无法消失的问题。 ([#161](https://github.com/AnyImageKit/AnyImageKit/pull/161))
+
+- Picker
+  - 修复当用户在系统相册删除图片后，再返回 AnyImageKit 可能会崩溃的问题。 ([#157](https://github.com/AnyImageKit/AnyImageKit/pull/157))
+- Editor
+  - 修复旋转 180 度不生效的问题。 ([#156](https://github.com/AnyImageKit/AnyImageKit/pull/156))
+- Capture
+  - 修复 Matal 会崩溃的问题。 ([#160](https://github.com/AnyImageKit/AnyImageKit/pull/160))
+
 ## 0.14.6
 
 ### 修复
 
-- SPM 部署版本调整为 v13
+- SPM 部署版本调整为 v13。
 
 ## 0.14.5
 
 ### 新增
 
-- 使用 Xcode 13.4.1/Xcode 14.0 beta2
-- 最低部署版本调整为 13.0
+- 使用 Xcode 13.4.1/Xcode 14.0 beta2。
+- 最低部署版本调整为 13.0。
 
 ### 修复
 
 - Picker
-  - 修复通过创建时间而不是添加时间进行排序的问题
+  - 修复通过创建时间而不是添加时间进行排序的问题。
 
 ## 0.14.4
 
