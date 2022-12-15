@@ -28,6 +28,7 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private var containerSize: CGSize = .zero
     private var didFinishSelect: Bool = false
+    private var didCallback: Bool = false
     private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
     private let manager: PickerManager = .init()
@@ -200,7 +201,9 @@ extension ImagePickerController {
                     guard let self = self else { return }
                     self.view.hud.hide()
                     let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
+                    guard self.didCallback == false else { return }
                     self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
+                    self.didCallback = true
                 }
             }
         }
@@ -287,13 +290,15 @@ extension ImagePickerController {
     }
     
     @objc private func didSyncAsset(_ sender: Notification) {
-        if didFinishSelect {
-            if let message = sender.object as? String {
-                didFinishSelect = false
-                view.hud.hide()
-                Toast.show(message: message)
-            } else {
-                checkData()
+        DispatchQueue.main.async {
+            if self.didFinishSelect {
+                if let message = sender.object as? String {
+                    self.didFinishSelect = false
+                    self.view.hud.hide()
+                    Toast.show(message: message)
+                } else {
+                    self.checkData()
+                }
             }
         }
     }

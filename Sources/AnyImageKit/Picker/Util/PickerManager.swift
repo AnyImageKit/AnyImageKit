@@ -177,9 +177,7 @@ extension PickerManager {
                             self.lock.unlock()
                             _print(error)
                             let message = self.options.theme[string: .pickerFetchFailedPleaseRetry]
-                            DispatchQueue.main.async {
-                                NotificationCenter.default.post(name: .didSyncAsset, object: message)
-                            }
+                            NotificationCenter.default.post(name: .didSyncAsset, object: message)
                         }
                     }
                 }
@@ -209,9 +207,7 @@ extension PickerManager {
                         self.lock.unlock()
                         _print(error)
                         let message = self.options.theme[string: .pickerFetchFailedPleaseRetry]
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(name: .didSyncAsset, object: message)
-                        }
+                        NotificationCenter.default.post(name: .didSyncAsset, object: message)
                     }
                 }
             }
@@ -233,9 +229,7 @@ extension PickerManager {
     private func didSyncAsset() {
         let isReady = selectedAssets.filter{ !$0.isReady }.isEmpty
         if isReady {
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: .didSyncAsset, object: nil)
-            }
+            NotificationCenter.default.post(name: .didSyncAsset, object: nil)
         }
     }
 }
