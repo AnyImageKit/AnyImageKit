@@ -408,11 +408,13 @@ extension AssetPickerViewController {
     }
     
     @objc private func didSyncAsset(_ sender: Notification) {
-        guard let _ = sender.object as? String else { return }
-        guard manager.options.selectLimit == 1 && manager.options.selectionTapAction.hideToolBar else { return }
-        guard let asset = manager.selectedAssets.first else { return }
-        guard let cell = collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
-        cell.selectEvent.call()
+        DispatchQueue.main.async {
+            guard let _ = sender.object as? String else { return }
+            guard self.manager.options.selectLimit == 1 && self.manager.options.selectionTapAction.hideToolBar else { return }
+            guard let asset = self.manager.selectedAssets.first else { return }
+            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
+            cell.selectEvent.call()
+        }
     }
 }
 
