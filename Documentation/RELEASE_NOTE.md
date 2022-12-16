@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.15.1
+
+### Resolved
+
+- Picker
+  - Crash that UI API not call on main thread.
+
 ## 0.15.0
 
 ### General
