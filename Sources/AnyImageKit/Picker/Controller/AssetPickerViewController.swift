@@ -102,6 +102,9 @@ final class AssetPickerViewController: AnyImageViewController {
     }()
     
     private var itemOffset: Int {
+        if !manager.previewAll {
+            return 0
+        }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         switch manager.options.orderByDate {
         case .asc:
@@ -445,9 +448,10 @@ extension AssetPickerViewController {
     @objc private func previewButtonTapped(_ sender: UIButton) {
         guard let asset = manager.selectedAssets.first else { return }
         let controller = PhotoPreviewController(manager: manager)
-        controller.currentIndex = asset.idx
+        controller.currentIndex = asset.selectedNum - 1
         controller.dataSource = self
         controller.delegate = self
+        manager.previewAll = false
         present(controller, animated: true, completion: nil)
         trackObserver?.track(event: .pickerPreview, userInfo: [:])
     }
@@ -592,6 +596,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             controller.currentIndex = indexPath.item - itemOffset
             controller.dataSource = self
             controller.delegate = self
+            manager.previewAll = true
             present(controller, animated: true, completion: nil)
         }
     }
@@ -646,14 +651,20 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
             return album.assets.count - 1
         }
         #endif
-        return album.assets.count
+        if manager.previewAll {
+            return album.assets.count
+        }
+        return manager.selectedAssets.count
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
         let idx = index + itemOffset
         let indexPath = IndexPath(item: idx, section: 0)
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-        return (cell?.image, album!.assets[idx])
+        if manager.previewAll {
+            return (cell?.image, album!.assets[idx])
+        }
+        return (cell?.image, manager.selectedAssets[idx])
     }
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {

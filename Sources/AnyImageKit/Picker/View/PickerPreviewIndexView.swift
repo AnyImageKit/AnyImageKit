@@ -73,12 +73,20 @@ final class PickerPreviewIndexView: UIView {
     
     private func didSetCurrentIndex() {
         isHidden = manager.selectedAssets.isEmpty
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        var _idx = manager.selectedAssets.firstIndex(where: { $0.selectedNum - 1 == currentIndex })
+        if manager.previewAll {
+            _idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex })
+        }
+        if let idx = _idx {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == lastIdx }) {
+        _idx = manager.selectedAssets.firstIndex(where: { $0.selectedNum - 1 == lastIdx })
+        if manager.previewAll {
+            _idx = manager.selectedAssets.firstIndex(where: { $0.idx == lastIdx })
+        }
+        if let idx = _idx {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
         }
     }
@@ -115,7 +123,11 @@ extension PickerPreviewIndexView {
     private func selectItemAtFirstTime() {
         if !isFirst { return }
         isFirst = false
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        var _idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex })
+        if !manager.previewAll {
+            _idx = manager.selectedAssets.firstIndex(where: { $0.selectedNum - 1 == currentIndex })
+        }
+        if let idx = _idx {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
@@ -135,7 +147,11 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
         let asset = manager.selectedAssets[indexPath.item]
         cell.setContent(asset, manager: manager, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
-        cell.boxCoverView.isHidden = asset.idx != currentIndex
+        if manager.previewAll {
+            cell.boxCoverView.isHidden = asset.idx != currentIndex
+        } else {
+            cell.boxCoverView.isHidden = asset.selectedNum - 1 != currentIndex
+        }
         return cell
     }
 }
@@ -144,6 +160,10 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
 extension PickerPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item].idx)
+        if manager.previewAll {
+            delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item].idx)
+            return
+        }
+        delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item].selectedNum - 1)
     }
 }

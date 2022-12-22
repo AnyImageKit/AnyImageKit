@@ -244,6 +244,7 @@ extension PhotoPreviewController {
         view.addSubview(indexView)
         setupLayout()
         setBar(hidden: true, animated: false, isNormal: false)
+        navigationBar.selectButton.isUserInteractionEnabled = manager.previewAll
     }
     
     /// 设置视图布局
