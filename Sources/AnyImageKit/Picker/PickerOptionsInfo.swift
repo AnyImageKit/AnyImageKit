@@ -54,7 +54,7 @@ public struct PickerOptionsInfo {
     public var selectionTapAction: PickerSelectionTapAction = .preview
     
     /// preview all photo
-    /// - Deault: trueß
+    /// - Deault: true
     public var previewAll = true
     
     /// Order by date
