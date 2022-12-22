@@ -451,7 +451,9 @@ extension AssetPickerViewController {
         controller.currentIndex = asset.selectedNum - 1
         controller.dataSource = self
         controller.delegate = self
-        manager.previewAll = false
+        if !manager.options.previewAll {
+            manager.previewAll = false
+        }
         present(controller, animated: true, completion: nil)
         trackObserver?.track(event: .pickerPreview, userInfo: [:])
     }

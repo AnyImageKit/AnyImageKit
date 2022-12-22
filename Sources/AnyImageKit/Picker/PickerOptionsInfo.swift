@@ -53,6 +53,10 @@ public struct PickerOptionsInfo {
     /// - Default: Preview
     public var selectionTapAction: PickerSelectionTapAction = .preview
     
+    /// preview all photo
+    /// - Deault: trueß
+    public var previewAll = true
+    
     /// Order by date
     /// - Default: ASC
     public var orderByDate: Sort = .asc
