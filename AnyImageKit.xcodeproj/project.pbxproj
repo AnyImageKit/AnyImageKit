@@ -142,6 +142,7 @@
 		714BA83E2992442500854D86 /* AnyImageViewController+Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714BA83D2992442500854D86 /* AnyImageViewController+Permission.swift */; };
 		714BA8402992445400854D86 /* EditorCropItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714BA83F2992445400854D86 /* EditorCropItemCell.swift */; };
 		714BA8432992447D00854D86 /* ConfigurableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714BA8422992447D00854D86 /* ConfigurableProtocol.swift */; };
+		714BA84F2992514E00854D86 /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714BA84E2992514E00854D86 /* Delegate.swift */; };
 		71522F982786F60800020AC6 /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71522F952786F60800020AC6 /* Injected.swift */; };
 		71522F992786F60800020AC6 /* InjectedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71522F962786F60800020AC6 /* InjectedValues.swift */; };
 		71522F9A2786F60800020AC6 /* InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71522F972786F60800020AC6 /* InjectionKey.swift */; };
@@ -518,6 +519,7 @@
 		714BA83D2992442500854D86 /* AnyImageViewController+Permission.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyImageViewController+Permission.swift"; sourceTree = "<group>"; };
 		714BA83F2992445400854D86 /* EditorCropItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorCropItemCell.swift; sourceTree = "<group>"; };
 		714BA8422992447D00854D86 /* ConfigurableProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurableProtocol.swift; sourceTree = "<group>"; };
+		714BA84E2992514E00854D86 /* Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delegate.swift; sourceTree = "<group>"; };
 		71522F952786F60800020AC6 /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
 		71522F962786F60800020AC6 /* InjectedValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InjectedValues.swift; sourceTree = "<group>"; };
 		71522F972786F60800020AC6 /* InjectionKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InjectionKey.swift; sourceTree = "<group>"; };
@@ -1880,6 +1882,7 @@
 				A0B22E9B237AA1B3001F6066 /* FileHelper.swift */,
 				A0B22E9F237AA1B3001F6066 /* ScreenHelper.swift */,
 				A01C582C23B33CCA00691F11 /* DebugHelper.swift */,
+				714BA84E2992514E00854D86 /* Delegate.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2383,6 +2386,7 @@
 				A082D24623C2D57B001F3D51 /* Picker+MediaType.swift in Sources */,
 				A09FFE6123404923000DEF87 /* PickerManager+Video.swift in Sources */,
 				7195A84C273E5C6900C3D5D5 /* Editor+AnyImageEvent.swift in Sources */,
+				714BA84F2992514E00854D86 /* Delegate.swift in Sources */,
 				A5347D2A23AA1B9A00C93874 /* ExportTool+PhotoURL.swift in Sources */,
 				71A8A126279BA254001D83CB /* PhotoEditorOptionsView.swift in Sources */,
 				71C6B6132603428D00A345C7 /* RotateData.swift in Sources */,
