@@ -55,8 +55,8 @@ extension PadCaptureViewController: UIImagePickerControllerDelegate, UINavigatio
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         func exit() {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.view.hud.hide()
                 self.delegate?.captureDidCancel(self)
             }
         }
@@ -70,16 +70,17 @@ extension PadCaptureViewController: UIImagePickerControllerDelegate, UINavigatio
             guard let image = info[infoKey.originalImage] as? UIImage else { exit(); return }
             guard let imageData = image.jpegData(compressionQuality: 1.0) else { exit(); return }
             guard let url = FileHelper.write(photoData: imageData, fileType: .jpeg) else { exit(); return }
-            delegate?.capture(self, didOutput: url, type: .photo)
+            DispatchQueue.main.async {
+                self.delegate?.capture(self, didOutput: url, type: .photo)
+            }
         case .video:
             trackObserver?.track(event: .captureVideo, userInfo: [:])
             guard let url = info[infoKey.mediaURL] as? URL else { exit(); return }
             view.hud.show()
             convertMovToMp4(url) { [weak self] (outputURL) in
-                self?.view.hud.hide()
-                guard let outputURL = outputURL else { exit(); return }
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                guard let self = self, let outputURL = outputURL else { exit(); return }
+                DispatchQueue.main.async {
+                    self.view.hud.hide()
                     self.delegate?.capture(self, didOutput: outputURL, type: .video)
                 }
             }

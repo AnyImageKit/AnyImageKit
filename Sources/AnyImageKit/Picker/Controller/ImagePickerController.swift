@@ -197,8 +197,7 @@ extension ImagePickerController {
             if !isReady && !assets.isEmpty { return }
             self.saveEditPhotos(assets) { newAssets in
                 self.resizeImagesIfNeeded(newAssets)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                DispatchQueue.main.async {
                     self.view.hud.hide()
                     let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
                     guard self.didCallback == false else { return }

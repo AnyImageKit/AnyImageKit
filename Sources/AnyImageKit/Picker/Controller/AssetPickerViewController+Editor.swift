@@ -34,23 +34,24 @@ extension AssetPickerViewController {
             } else {
                 view.hud.show(text: manager.options.theme[string: .loading])
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
-                    DispatchQueue.main.async { [weak self] in
+                    DispatchQueue.main.async {
                         _print("Downloading photo from iCloud: \(progress)")
-                        guard let self = self else { return }
                         self.view.hud.show(text: self.manager.options.theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
                     }
                 }
                 manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
                     guard let self = self else { return }
-                    switch result {
-                    case .success(let response):
-                        if !response.isDegraded {
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let response):
+                            if !response.isDegraded {
+                                self.view.hud.hide()
+                                self.showEditor(response.image, identifier: asset.identifier, tag: indexPath.item)
+                            }
+                        case .failure(let error):
                             self.view.hud.hide()
-                            self.showEditor(response.image, identifier: asset.identifier, tag: indexPath.item)
+                            _print(error)
                         }
-                    case .failure(let error):
-                        self.view.hud.hide()
-                        _print(error)
                     }
                 }
             }
