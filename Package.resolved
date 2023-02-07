@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "318e319998bf555c3e914d5c3adb6da05af86a32",
-          "version": "7.1.1"
+          "revision": "2235a22ca249199cb736237f4bb9cc12b6ed416a",
+          "version": "7.3.0"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/SnapKit/SnapKit",
         "state": {
           "branch": null,
-          "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
-          "version": "5.0.1"
+          "revision": "f222cbdf325885926566172f6f5f06af95473158",
+          "version": "5.6.0"
         }
       }
     ]

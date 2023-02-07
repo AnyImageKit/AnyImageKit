@@ -47,8 +47,8 @@
 ## 要求
 
 - iOS 12.0+
-- Xcode 13.0+
-- Swift 5.5+
+- Xcode 14.1+
+- Swift 5.7+
 
 ## 安装
 
@@ -58,7 +58,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/AnyImageKit/AnyImageKit.git", .upToNextMajor(from: "0.14.0"))
+    .package(url: "https://github.com/AnyImageKit/AnyImageKit.git", .upToNextMajor(from: "0.15.1"))
 ]
 ```
 
@@ -126,6 +126,11 @@ extension ViewController: ImagePickerControllerDelegate {
 
 | 版本 | 发布时间 | Xcode | Swift | iOS |
 | ---- | ----  | ---- | ---- | ---- |
+| [v0.15.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0151) | 2022-12-15 | 14.1 | 5.7 | 12.0+ |
+| [v0.15.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0150) | 2022-11-11 | 14.1 | 5.7 | 12.0+ |
+| [v0.14.6](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0146) | 2022-07-06 | 13.4.1 | 5.6 | 13.0+ |
+| [v0.14.5](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0145) | 2022-07-05 | 13.4.1 | 5.6 | 13.0+ |
+| [v0.14.4](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0144) | 2022-04-06 | 13.3 | 5.5 | 12.0+ |
 | [v0.14.3](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0143) | 2021-12-28 | 13.2 | 5.5 | 12.0+ |
 | [v0.14.2](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0142) | 2021-12-16 | 13.2 | 5.5 | 12.0+ |
 | [v0.14.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0141) | 2021-11-23 | 13.1 | 5.5 | 12.0+ |

@@ -74,9 +74,9 @@ extension PadCaptureViewController: UIImagePickerControllerDelegate, UINavigatio
         case .video:
             trackObserver?.track(event: .captureVideo, userInfo: [:])
             guard let url = info[infoKey.mediaURL] as? URL else { exit(); return }
-            showWaitHUD()
+            view.hud.show()
             convertMovToMp4(url) { [weak self] (outputURL) in
-                self?.hideHUD()
+                self?.view.hud.hide()
                 guard let outputURL = outputURL else { exit(); return }
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }

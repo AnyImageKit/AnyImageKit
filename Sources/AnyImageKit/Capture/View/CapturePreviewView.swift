@@ -135,8 +135,7 @@ extension CapturePreviewView {
     
     func draw(_ sampleBuffer: CMSampleBuffer) {
         guard isRunning else { return }
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        previewContentView.draw(pixelBuffer: pixelBuffer)
+        previewContentView.draw(sampleBuffer: sampleBuffer)
     }
 }
 

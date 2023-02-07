@@ -95,7 +95,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
     
     func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: CaptureResult) {
         capture.dismiss(animated: true, completion: nil)
-        showWaitHUD()
+        view.hud.show()
         switch result.type {
         case .photo:
             trackObserver?.track(event: .pickerTakePhoto, userInfo: [:])
@@ -106,7 +106,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
-                self?.hideHUD()
+                self?.view.hud.hide()
             }
         case .video:
             trackObserver?.track(event: .pickerTakeVideo, userInfo: [:])
@@ -117,7 +117,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
                 case .failure(let error):
                     _print(error.localizedDescription)
                 }
-                self?.hideHUD()
+                self?.view.hud.hide()
             }
         case .photoLive, .photoGIF:
             // Not support yet

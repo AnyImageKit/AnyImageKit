@@ -1,5 +1,55 @@
 # Release Notes
 
+## 0.15.1
+
+### Resolved
+
+- Picker
+  - Crash that UI API not call on main thread.
+
+## 0.15.0
+
+### General
+
+- Support back to iOS 12 (May drop iOS 12 in next version). ([#153](https://github.com/AnyImageKit/AnyImageKit/pull/153))
+
+### Resolved
+
+- Fix few issue on iPad. ([#158](https://github.com/AnyImageKit/AnyImageKit/pull/158))
+- Fix HUD and Toast sometimes could not disappear correctly. ([#161](https://github.com/AnyImageKit/AnyImageKit/pull/161))
+
+- Picker
+  - When user deletes photos in system Photos app and back to AnyImagePicker, it may crash. ([#157](https://github.com/AnyImageKit/AnyImageKit/pull/157))
+- Editor
+  - Upside down rotation dose not work. ([#156](https://github.com/AnyImageKit/AnyImageKit/pull/156))
+- Capture
+  - Capturing with Matal may crash. ([#160](https://github.com/AnyImageKit/AnyImageKit/pull/160))
+
+## 0.14.6
+
+### Fix
+
+- Set SPM target platforms v13.
+
+## 0.14.5
+
+### New Features
+
+- Use Xcode 13.4.1/Xcode 14.0 beta2.
+- Set framework minimum deployment target to 13.0.
+
+### Resolved
+
+- Picker
+  - Fix the issue that sort by adding time instead of creation time.
+
+## 0.14.4
+
+### Resolved
+
+- Picker
+  - Fix can not add more photos when limit permission mode.([#144](https://github.com/AnyImageKit/AnyImageKit/pull/144))
+
 ## 0.14.3
 
 ### Resolved

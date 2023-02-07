@@ -28,6 +28,7 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private var containerSize: CGSize = .zero
     private var didFinishSelect: Bool = false
+    private var didCallback: Bool = false
     private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
     private let manager: PickerManager = .init()
@@ -75,11 +76,51 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override func dismiss(animated flag: Bool, completion: (() -> Void)?) {
-        if let _ = presentedViewController as? PhotoPreviewController {
+        if let previewController = presentedViewController as? PhotoPreviewController {
+            previewController.transitioningDelegate = nil
             presentingViewController?.dismiss(animated: flag, completion: completion)
         } else {
             super.dismiss(animated: flag, completion: completion)
         }
+    }
+    
+    open override var shouldAutorotate: Bool {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if manager.options.editorOptions.isEmpty {
+            return true
+        } else {
+            return false
+        }
+        #else
+        return true
+        #endif
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        if manager.options.editorOptions.isEmpty {
+            return .all
+        } else {
+            switch UIApplication.shared.statusBarOrientation {
+            case .unknown:
+                return .portrait
+            case .portrait:
+                return .portrait
+            case .portraitUpsideDown:
+                return .portraitUpsideDown
+            case .landscapeLeft:
+                return .landscapeLeft
+            case .landscapeRight:
+                return .landscapeRight
+            }
+        }
+        #else
+        return .all
+        #endif
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return UIApplication.shared.statusBarOrientation
     }
 }
 
@@ -148,7 +189,7 @@ extension ImagePickerController {
     }
     
     private func checkData() {
-        _showWaitHUD(self)
+        view.hud.show()
         workQueue.async { [weak self] in
             guard let self = self else { return }
             let assets = self.manager.selectedAssets
@@ -158,9 +199,11 @@ extension ImagePickerController {
                 self.resizeImagesIfNeeded(newAssets)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    _hideHUD(self)
+                    self.view.hud.hide()
                     let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
+                    guard self.didCallback == false else { return }
                     self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
+                    self.didCallback = true
                 }
             }
         }
@@ -247,12 +290,15 @@ extension ImagePickerController {
     }
     
     @objc private func didSyncAsset(_ sender: Notification) {
-        if didFinishSelect {
-            if let message = sender.object as? String {
-                didFinishSelect = false
-                _showMessageHUD(self, message)
-            } else {
-                checkData()
+        DispatchQueue.main.async {
+            if self.didFinishSelect {
+                if let message = sender.object as? String {
+                    self.didFinishSelect = false
+                    self.view.hud.hide()
+                    Toast.show(message: message)
+                } else {
+                    self.checkData()
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'AnyImageKit'
-    s.version = '0.14.3'
+    s.version = '0.15.1'
     s.license = 'MIT'
     s.summary = 'AnyImageKit is a toolbox for picking and editing photos.'
     s.homepage = 'https://github.com/AnyImageKit/AnyImageKit'
@@ -43,11 +43,10 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'Capture' do |capture|
-        capture.source_files = 'Sources/AnyImageKit/Capture/**/*.{swift,metal}'
+        capture.source_files = 'Sources/AnyImageKit/Capture/**/*.{swift}'
         capture.resource_bundles = {
             'AnyImageKit_Capture' => ['Sources/AnyImageKit/Resources/Capture/**/*']
         }
-        capture.ios.pod_target_xcconfig = { 'METAL_LIBRARY_OUTPUT_DIR' => '${TARGET_BUILD_DIR}/AnyImageKit_Capture.bundle/' }
         capture.dependency 'AnyImageKit/Core'
         capture.pod_target_xcconfig = { 'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => 'ANYIMAGEKIT_ENABLE_CAPTURE' }
     end

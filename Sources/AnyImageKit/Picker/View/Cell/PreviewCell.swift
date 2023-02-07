@@ -106,8 +106,9 @@ class PreviewCell: UICollectionViewCell {
     /// 取图片适屏frame
     var fitFrame: CGRect {
         let size = fitSize
+        let x = (scrollView.bounds.width - size.width) > 0 ? (scrollView.bounds.width - size.width) * 0.5 : 0
         let y = (scrollView.bounds.height - size.height) > 0 ? (scrollView.bounds.height - size.height) * 0.5 : 0
-        return CGRect(x: 0, y: y, width: size.width, height: size.height)
+        return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
     
     /// 记录pan手势开始时imageView的位置
@@ -116,11 +117,17 @@ class PreviewCell: UICollectionViewCell {
     /// 记录pan手势开始时，手势位置
     private var beganTouch = CGPoint.zero
     
+    private var needLayout: Bool = false
+
+    private var containerSize: CGSize = .zero
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
         setupView()
         isAccessibilityElement = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -139,14 +146,18 @@ class PreviewCell: UICollectionViewCell {
         imageView.image = image
         if image != nil {
             layout()
+            needLayout = true
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if UIDevice.current.userInterfaceIdiom == .pad { // Optimize performance, fit size classes
+        let newContainerSize = contentView.bounds.size
+        if needLayout || containerSize != newContainerSize {
+            needLayout = false
             layout()
         }
+        containerSize = newContainerSize
     }
     
     /// 重新布局
@@ -202,6 +213,14 @@ extension PreviewCell: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         optionsDidUpdate(options: options)
         updateChildrenConfigurable(options: options)
+    }
+}
+
+// MARK: - Notification
+extension PreviewCell {
+    
+    @objc private func containerSizeDidChange(_ sender: Notification) {
+        layout()
     }
 }
 
@@ -317,15 +336,8 @@ extension PreviewCell {
     private func endPan() {
         panScale(1.0)
         panEnded(false)
-        // 如果图片当前显示的size小于原size，则重置为原size
-        let size = fitSize
-        let needResetSize = imageView.bounds.size.width < size.width
-            || imageView.bounds.size.height < size.height
         UIView.animate(withDuration: 0.25) {
-            self.imageView.center = self.centerOfContentSize
-            if needResetSize {
-                self.imageView.bounds.size = size
-            }
+            self.imageView.frame = self.beganFrame
         }
     }
 }

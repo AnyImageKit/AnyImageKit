@@ -18,18 +18,18 @@ class Album: IdentifiableResource {
     let isCameraRoll: Bool
     private(set) var assets: [Asset] = []
     
-    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption) {
+    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption, sort: Sort) {
         self.fetchResult = fetchResult
         self.identifier = identifier
         self.title = title ?? ""
         self.isCameraRoll = isCameraRoll
-        fetchAssets(result: fetchResult, selectOptions: selectOptions)
+        fetchAssets(result: fetchResult, selectOptions: selectOptions, sort: sort)
     }
 }
 
 extension Album {
     
-    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: PickerSelectOption) {
+    private func fetchAssets(result: PHFetchResult<PHAsset>, selectOptions: PickerSelectOption, sort: Sort) {
         var array: [Asset] = []
         let selectPhoto = selectOptions.contains(.photo)
         let selectVideo = selectOptions.contains(.video)
@@ -57,7 +57,14 @@ extension Album {
                 }
             }
         }
-        assets = array
+        
+        switch sort {
+        case .asc:
+            assets = array
+        case .desc:
+            assets = array.reversed()
+        }
+        
     }
 }
 
