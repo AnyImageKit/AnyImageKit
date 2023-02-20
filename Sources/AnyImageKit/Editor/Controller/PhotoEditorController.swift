@@ -43,7 +43,12 @@ final class PhotoEditorController: AnyImageViewController {
         return view
     }()
     
-    private var image: UIImage = UIImage()
+    private var isReady: Bool = false
+    private var image: UIImage = UIImage() {
+        didSet {
+            isReady = true
+        }
+    }
     private let resource: EditorPhotoResource
     private let options: EditorPhotoOptionsInfo
     private let context: PhotoEditorContext
@@ -220,11 +225,11 @@ extension PhotoEditorController {
     }
     
     private func showHUDIfNeeded() {
-        if contentView.mosaic == nil {
+        if !isReady || contentView.mosaic == nil {
             view.hud.show()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                if self?.contentView.mosaic != nil {
-                    self?.view.hud.hide()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if self.isReady &&  self.contentView.mosaic != nil {
+                    self.view.hud.hide()
                 }
             }
         }
