@@ -10,7 +10,7 @@ import UIKit
 
 enum PhotoEditorAction {
     case empty
-    case back
+    case cancel
     case done
     case toolOptionChanged(EditorPhotoToolOption?)
     

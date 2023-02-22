@@ -25,12 +25,12 @@ final class VideoEditorController: AnyImageViewController {
     private var url: URL?
     private var didAddPlayerObserver = false
     
-    private lazy var backButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let view = UIButton(type: .custom)
         view.contentEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         view.setImage(options.theme[icon: .returnBackButton], for: .normal)
-        view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = options.theme[string: .back]
+        view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
+        view.accessibilityLabel = options.theme[string: .cancel]
         return view
     }()
     private lazy var videoPreview: VideoPreview = {
@@ -80,7 +80,7 @@ final class VideoEditorController: AnyImageViewController {
     private func setupView() {
         view.backgroundColor = .black
         view.addSubview(videoPreview)
-        view.addSubview(backButton)
+        view.addSubview(cancelButton)
         view.addSubview(toolView)
         view.addSubview(cropToolView)
         
@@ -93,7 +93,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(cropToolView.snp.top).offset(-30)
         }
-        backButton.snp.makeConstraints { maker in
+        cancelButton.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
                 let topOffset = ScreenHelper.statusBarFrame.height <= 20 ? 20 : 10
                 maker.top.equalTo(view.safeAreaLayoutGuide).offset(topOffset)
@@ -118,7 +118,7 @@ final class VideoEditorController: AnyImageViewController {
             maker.height.equalTo(50)
         }
         
-        options.theme.buttonConfiguration[.back]?.configuration(backButton)
+        options.theme.buttonConfiguration[.cancel]?.configuration(cancelButton)
     }
     
     private func loadData() {
@@ -159,9 +159,9 @@ final class VideoEditorController: AnyImageViewController {
 // MARK: - Target
 extension VideoEditorController {
     
-    @objc private func backButtonTapped(_ sender: UIButton) {
+    @objc private func cancelButtonTapped(_ sender: UIButton) {
         delegate?.videoEditorDidCancel(self)
-        trackObserver?.track(event: .editorBack, userInfo: [.page: AnyImagePage.editorVideo])
+        trackObserver?.track(event: .editorCancel, userInfo: [.page: AnyImagePage.editorVideo])
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {

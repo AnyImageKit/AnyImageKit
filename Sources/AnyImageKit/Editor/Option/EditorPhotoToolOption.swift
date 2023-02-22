@@ -9,7 +9,7 @@
 import Foundation
 
 /// Photo tool option
-public enum EditorPhotoToolOption: Equatable {
+public enum EditorPhotoToolOption: Equatable, Hashable {
     
     case brush
     case text

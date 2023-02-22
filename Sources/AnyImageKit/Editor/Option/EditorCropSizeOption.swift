@@ -9,7 +9,7 @@
 import UIKit
 
 /// Crop option
-public enum EditorCropSizeOption: Equatable {
+public enum EditorCropSizeOption: Equatable, Hashable {
     
     /// Free crop, there is no crop size limit.
     case free

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct EditorCropOption: Equatable {
+public struct EditorCropOption: Equatable, Hashable {
     
     /// Crop size of crop tool options.
     /// Option sorting is arranged in a given array.
@@ -26,4 +26,8 @@ public struct EditorCropOption: Equatable {
     ///
     /// - Default: turnLeft
     public var rotationDirection: EditorRotationDirection = .turnLeft
+    
+    public var enableFlip: Bool = true
+    
+    public var needDoubleCheck: Bool = false
 }

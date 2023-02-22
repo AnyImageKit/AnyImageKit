@@ -105,7 +105,7 @@ extension EditorTheme {
         /// 25*25
         case photoToolUndo = "PhotoToolUndo"
         /// 25*25
-        case photoToolCropMirror = "PhotoToolCropMirror"
+        case photoToolCropFlip = "PhotoToolCropMirror" // TODO: Rename
         /// 25*25
         case photoToolCropReset = "PhotoToolCropReset"
         /// 25*25
@@ -156,7 +156,7 @@ extension StringConfigKey {
     public static let editorFree = StringConfigKey(rawValue: "FREE")
     public static let editorTrunLeft = StringConfigKey(rawValue: "TRUN_LEFT")
     public static let editorTrunRight = StringConfigKey(rawValue: "TRUN_RIGHT")
-    public static let editorMirror = StringConfigKey(rawValue: "MIRROR")
+    public static let editorFlip = StringConfigKey(rawValue: "FLIP")
     public static let editorReset = StringConfigKey(rawValue: "RESET")
     
     public static let editorDragHereToRemove = StringConfigKey(rawValue: "DRAG_HERE_TO_REMOVE")
@@ -177,7 +177,7 @@ extension EditorTheme {
     
     public enum LabelConfigKey: Hashable {
         
-        case cropOption
+        case cropOption(EditorCropSizeOption)
         case trash
         case videoTimeline
     }
@@ -197,7 +197,6 @@ extension EditorTheme {
     
     public enum ButtonConfigKey: Hashable {
         
-        case back
         case cancel
         case done
         

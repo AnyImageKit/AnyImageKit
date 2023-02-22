@@ -9,7 +9,7 @@
 import Foundation
 
 /// Video tool option
-public enum EditorVideoToolOption: Equatable, CaseIterable {
+public enum EditorVideoToolOption: Equatable, Hashable, CaseIterable {
     
     case clip
 }

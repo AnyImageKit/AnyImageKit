@@ -19,6 +19,8 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: [brush, text, crop, mosaic]
     public var toolOptions: [EditorPhotoToolOption] = EditorPhotoToolOption.allCases
     
+    public var toolStyle: EditorToolStyle = .system
+    
     public var brush: EditorBrushOption = .init()
     
     public var mosaic: EditorMosaicOption = .init()

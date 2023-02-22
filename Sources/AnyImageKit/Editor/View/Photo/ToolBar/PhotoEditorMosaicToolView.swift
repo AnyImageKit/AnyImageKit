@@ -15,24 +15,18 @@ final class PhotoEditorMosaicToolView: UIView {
     private let viewModel: PhotoEditorViewModel
     private var cancellable = Set<AnyCancellable>()
     
-    private lazy var selectedIndex = options.mosaic.defaultMosaicIndex
-    private var needLayout = false
-    private var layoutWithAnimated = false
-    
     private let iconWidth: CGFloat = 24
     private let itemWidth: CGFloat = 34
-    private let minSpacing: CGFloat = 50
-    private let maxCountMinSpacing: CGFloat = 20
-    private let maxCount: Int = 4
+    private let minSpacing: CGFloat = 30
+    private let maxCount: Int = 5
     private var optionsCount: Int { options.mosaic.style.count }
     
     private let primaryGuide = UILayoutGuide()
     private let secondaryGuide = UILayoutGuide()
     
-    private lazy var collectionView: ToolCollectionView = {
-        let view = ToolCollectionView(items: createItems(), size: itemWidth, spacing: calculateSpacing())
-        return view
-    }()
+    private lazy var sectionView = SKCollectionView()
+    private lazy var section = EditorMosaicSection(viewModel: viewModel)
+    
     private lazy var undoButton: UIButton = {
         let view = UIButton(type: .custom)
         view.isEnabled = false
@@ -60,18 +54,6 @@ final class PhotoEditorMosaicToolView: UIView {
         super.init(frame: .zero)
         setupView()
         bindViewModel()
-        updateSelectedStyle()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard needLayout else { return }
-        needLayout = false
-        UIView.animate(withDuration: layoutWithAnimated ? 0.25 : 0) {
-            self.collectionView.spacing = self.calculateSpacing()
-            self.collectionView.collectionView.reloadData()
-        }
-        layoutWithAnimated = false
     }
     
     required init?(coder: NSCoder) {
@@ -97,13 +79,15 @@ extension PhotoEditorMosaicToolView {
     private func bindViewModel() {
         viewModel.containerSizeSubject.sink { [weak self] _ in
             guard let self = self else { return }
-            self.needLayout = true
+            self.layout()
+            self.updatePlugin()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.section.scrollToSelectedItem(animated: false)
+            }
         }.store(in: &cancellable)
         viewModel.traitCollectionSubject.sink { [weak self] traitCollection in
             guard let self = self else { return }
             self.layout()
-            self.needLayout = true
-            self.layoutWithAnimated = true
         }.store(in: &cancellable)
         
         viewModel.actionSubject.sink { [weak self] action in
@@ -124,14 +108,6 @@ extension PhotoEditorMosaicToolView {
     @objc private func undoButtonTapped(_ sender: UIButton) {
         viewModel.send(action: .mosaicUndo)
         sender.isEnabled = viewModel.stack.edit.mosaicCanUndo
-    }
-    
-    @objc private func mosaicButtonTapped(_ sender: UIButton) {
-        if selectedIndex != sender.tag {
-            selectedIndex = sender.tag
-            updateSelectedStyle()
-        }
-        viewModel.send(action: .mosaicChangeImage(selectedIndex))
     }
     
     @objc private func sliderValueChanged(_ sender: UISlider) {
@@ -155,10 +131,13 @@ extension PhotoEditorMosaicToolView {
 extension PhotoEditorMosaicToolView {
     
     private func setupView() {
+        sectionView.backgroundColor = .clear
+        sectionView.manager.reload(section)
+        
         addLayoutGuide(primaryGuide)
         addLayoutGuide(secondaryGuide)
         
-        addSubview(collectionView)
+        addSubview(sectionView)
         addSubview(undoButton)
         addSubview(slider)
         
@@ -173,7 +152,7 @@ extension PhotoEditorMosaicToolView {
                 make.trailing.equalToSuperview()
                 make.centerY.equalToSuperview()
                 make.width.equalTo(50)
-                make.height.equalTo(calculateViewLength(count: maxCount, maxCount: maxCount) + 10 + 44)
+                make.height.equalTo(30 + calculateSectionViewLength() + 20 + 44)
             }
             secondaryGuide.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(primaryGuide)
@@ -197,9 +176,10 @@ extension PhotoEditorMosaicToolView {
         layoutGuide()
         
         if viewModel.isRegular { // iPad
-            collectionView.snp.remakeConstraints { make in
-                make.top.equalTo(primaryGuide)
-                make.bottom.equalTo(undoButton.snp.top).offset(-10)
+            sectionView.scrollDirection = .vertical
+            sectionView.snp.remakeConstraints { make in
+                make.top.equalTo(primaryGuide).offset(30)
+                make.bottom.equalTo(undoButton.snp.top).offset(-20)
                 make.centerX.equalTo(primaryGuide)
                 make.width.equalTo(itemWidth)
             }
@@ -214,9 +194,10 @@ extension PhotoEditorMosaicToolView {
                 make.center.equalTo(secondaryGuide)
             }
         } else { // iPhone
-            collectionView.snp.remakeConstraints { make in
+            sectionView.scrollDirection = .horizontal
+            sectionView.snp.remakeConstraints { make in
                 make.leading.equalTo(primaryGuide).offset(15)
-                make.trailing.equalTo(undoButton.snp.leading).offset(-20)
+                make.trailing.equalTo(undoButton.snp.leading).offset(-15)
                 make.centerY.equalTo(primaryGuide)
                 make.height.height.equalTo(itemWidth)
             }
@@ -231,93 +212,36 @@ extension PhotoEditorMosaicToolView {
                 make.centerY.equalTo(secondaryGuide)
             }
         }
-        
-        let count = options.mosaic.style.count
-        let value = calculateViewLength(count: count, maxCount: maxCount)
-        collectionView.layout(style: count >= maxCount ? .full : .center(value: value, offset: 30), isRegular: viewModel.isRegular)
+        updatePlugin()
     }
     
-    private func updateSelectedStyle() {
-        let style = options.mosaic.style[selectedIndex]
-        let mosaicButtons = collectionView.items.map { $0 as! UIButton }
-        switch style {
-        case .default:
-            for button in mosaicButtons {
-                button.tintColor = options.theme[color: .primary]
-                button.imageView?.layer.borderWidth = 0
-            }
-        default:
-            for (idx, button) in mosaicButtons.enumerated() {
-                button.tintColor = .white
-                button.imageView?.layer.borderWidth = idx == selectedIndex ? 2 : 0
-            }
-        }
-    }
-    
-    private func createItems() -> [UIView] {
-        return options.mosaic.style.enumerated().map { (idx, style) -> UIView in
-            return createMosaicButton(idx: idx, style: style)
-        }
-    }
-    
-    private func createMosaicButton(idx: Int, style: EditorMosaicStyleOption) -> UIButton {
-        let image: UIImage?
-        switch style {
-        case .default:
-            image = options.theme[icon: .photoToolMosaicDefault]?.withRenderingMode(.alwaysTemplate)
-        case .custom(let icon, let mosaic):
-            image = icon ?? mosaic
-        }
-        let inset = (itemWidth - iconWidth) / 2
-        let button = UIButton(type: .custom)
-        button.tag = idx
-        button.tintColor = .white
-        button.clipsToBounds = true
-        button.setImage(image, for: .normal)
-        button.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-        button.imageView?.layer.cornerRadius = style == .default ? 0 : 2
-        button.imageView?.layer.borderColor = UIColor.white.cgColor
-        button.addTarget(self, action: #selector(mosaicButtonTapped(_:)), for: .touchUpInside)
-        options.theme.buttonConfiguration[.mosaic(style)]?.configuration(button)
-        return button
-    }
-    
-    private func calculateViewLength(count: Int, maxCount: Int = 0) -> CGFloat {
-        var optionsCount = CGFloat(count)
-        let maxCount = CGFloat(maxCount)
-        if maxCount > 0 {
-            optionsCount = optionsCount > maxCount ? maxCount : optionsCount
-        }
-        
-        if optionsCount >= maxCount {
-            return itemWidth * optionsCount + (optionsCount - 1) * maxCountMinSpacing
-        } else {
-            return itemWidth * optionsCount + (optionsCount - 1) * minSpacing
-        }
-    }
-    
-    private func calculateSpacing() -> CGFloat {
-        if optionsCount < maxCount {
-            return minSpacing
-        }
-        
-        var spacing: CGFloat = maxCountMinSpacing
-        let count = CGFloat(optionsCount)
-        
-        let maxSize: CGFloat
+    private func updatePlugin() {
         if viewModel.isRegular { // iPad
-            maxSize = primaryGuide.layoutFrame.height - 15 - 44
-        } else { // iPhone
-            maxSize = primaryGuide.layoutFrame.width - 15 - 20 - 44 - 15
+            sectionView.contentInset = .zero
+            sectionView.set(pluginModes: [])
+        } else {
+            let width = calculateSectionViewLength()
+            let maxWidth = viewModel.containerSize.width - 15 * 2 - (44 + 20) * 2
+            if width < maxWidth {
+                sectionView.contentInset = UIEdgeInsets(top: 0, left: 32, bottom: 0, right: 0)
+                sectionView.set(pluginModes: [.centerX])
+            } else {
+                sectionView.contentInset = .zero
+                sectionView.set(pluginModes: [])
+            }
         }
-        
-        if primaryGuide.layoutFrame == .zero {
-            needLayout = true
+    }
+    
+    private func calculateSectionViewLength() -> CGFloat {
+        var count = CGFloat(optionsCount)
+        if viewModel.isRegular { // iPad
+            if optionsCount > maxCount {
+                count = CGFloat(maxCount)
+                return itemWidth * count + (count - 1) * minSpacing + (minSpacing + itemWidth / 2)
+            }
+            return itemWidth * count + (count - 1) * minSpacing
+        } else {
+            return itemWidth * count + (count - 1) * minSpacing
         }
-
-        if calculateViewLength(count: optionsCount) < maxSize {
-            spacing = (maxSize - itemWidth * count) / (count - 1)
-        }
-        return spacing
     }
 }

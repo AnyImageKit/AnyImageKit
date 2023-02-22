@@ -18,14 +18,14 @@ final class PhotoEditorToolView: UIView {
     private let topGuide = UILayoutGuide()
     private let bottomGuide = UILayoutGuide()
     
-    private lazy var backButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let view = UIButton(type: .system)
-        view.setTitle(options.theme[string: .back], for: .normal)
+        view.setTitle(options.theme[string: .cancel], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         view.contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
-        view.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.accessibilityLabel = options.theme[string: .back]
+        view.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
+        view.accessibilityLabel = options.theme[string: .cancel]
         return view
     }()
     private lazy var doneButton: UIButton = {
@@ -133,8 +133,8 @@ extension PhotoEditorToolView {
 // MARK: - Target
 extension PhotoEditorToolView {
     
-    @objc private func backButtonTapped(_ sender: UIButton) {
-        viewModel.send(action: .back)
+    @objc private func cancelButtonTapped(_ sender: UIButton) {
+        viewModel.send(action: .cancel)
     }
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
@@ -148,7 +148,7 @@ extension PhotoEditorToolView {
     private func setupView() {
         addLayoutGuide(topGuide)
         addLayoutGuide(bottomGuide)
-        addSubview(backButton)
+        addSubview(cancelButton)
         addSubview(doneButton)
         addSubview(optionsView)
         addSubview(brushView)
@@ -178,12 +178,11 @@ extension PhotoEditorToolView {
         subviews.forEach { $0.snp.removeConstraints() }
         layoutGuide()
         
-        backButton.snp.remakeConstraints { make in
-            make.leading.equalToSuperview().offset(marginOffset)
-            make.centerY.equalTo(topGuide)
-        }
-        
         if viewModel.isRegular { // iPad
+            cancelButton.snp.remakeConstraints { make in
+                make.leading.equalToSuperview().offset(marginOffset)
+                make.centerY.equalTo(topGuide)
+            }
             doneButton.snp.remakeConstraints { make in
                 make.trailing.equalToSuperview().offset(-marginOffset)
                 make.centerY.equalTo(topGuide)
@@ -205,14 +204,28 @@ extension PhotoEditorToolView {
 //                make.width.equalTo(120)
 //            }
         } else { // iPhone
+            cancelButton.snp.remakeConstraints { make in
+                make.leading.equalToSuperview().offset(marginOffset)
+                switch options.toolStyle {
+                case .default:
+                    make.centerY.equalTo(topGuide)
+                case .system:
+                    make.centerY.equalTo(bottomGuide)
+                }
+            }
             doneButton.snp.remakeConstraints { make in
                 make.trailing.equalTo(bottomGuide).offset(-marginOffset)
                 make.centerY.equalTo(bottomGuide)
             }
             optionsView.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(bottomGuide)
-                make.leading.equalTo(bottomGuide).offset(marginOffset)
                 make.trailing.equalTo(doneButton.snp.leading).offset(-marginOffset)
+                switch options.toolStyle {
+                case .default:
+                    make.leading.equalTo(bottomGuide).offset(marginOffset)
+                case .system:
+                    make.leading.equalTo(cancelButton.snp.trailing).offset(marginOffset)
+                }
             }
             brushView.snp.remakeConstraints { make in
                 make.bottom.equalTo(bottomGuide.snp.top)

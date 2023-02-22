@@ -14,12 +14,7 @@ final class PhotoEditorBrushToolView: UIView {
     private var options: EditorPhotoOptionsInfo { viewModel.options }
     private let viewModel: PhotoEditorViewModel
     private var cancellable = Set<AnyCancellable>()
-    
-    private lazy var selectedIndex = options.brush.defaultColorIndex
-    private var needLayout = false
-    private var layoutWithAnimated = false
-    
-    private let colorWidth: CGFloat = 24
+        
     private let itemWidth: CGFloat = 34
     private let minSpacing: CGFloat = 10
     private let maxCount: Int = 7
@@ -28,10 +23,9 @@ final class PhotoEditorBrushToolView: UIView {
     private let primaryGuide = UILayoutGuide()
     private let secondaryGuide = UILayoutGuide()
     
-    private lazy var collectionView: ToolCollectionView = {
-        let view = ToolCollectionView(items: createItems(), size: itemWidth, spacing: calculateSpacing())
-        return view
-    }()
+    private lazy var sectionView = SKCollectionView()
+    private lazy var section = EditorBrushSection(viewModel: viewModel)
+    
     private lazy var undoButton: UIButton = {
         let view = UIButton(type: .custom)
         view.isEnabled = false
@@ -59,18 +53,6 @@ final class PhotoEditorBrushToolView: UIView {
         super.init(frame: .zero)
         setupView()
         bindViewModel()
-        updateSelectedStyle()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard needLayout else { return }
-        needLayout = false
-        UIView.animate(withDuration: layoutWithAnimated ? 0.25 : 0) {
-            self.collectionView.spacing = self.calculateSpacing()
-            self.collectionView.collectionView.reloadData()
-        }
-        layoutWithAnimated = false
     }
     
     required init?(coder: NSCoder) {
@@ -96,13 +78,15 @@ extension PhotoEditorBrushToolView {
     private func bindViewModel() {
         viewModel.containerSizeSubject.sink { [weak self] _ in
             guard let self = self else { return }
-            self.needLayout = true
+            self.updatePlugin()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.section.scrollToSelectedItem(animated: false)
+            }
         }.store(in: &cancellable)
+        
         viewModel.traitCollectionSubject.sink { [weak self] traitCollection in
             guard let self = self else { return }
             self.layout()
-            self.needLayout = true
-            self.layoutWithAnimated = true
         }.store(in: &cancellable)
         
         viewModel.actionSubject.sink { [weak self] action in
@@ -123,28 +107,6 @@ extension PhotoEditorBrushToolView {
     @objc private func undoButtonTapped(_ sender: UIButton) {
         viewModel.send(action: .brushUndo)
         sender.isEnabled = viewModel.stack.edit.brushCanUndo
-    }
-    
-    @objc private func colorButtonTapped(_ sender: UIButton) {
-        if selectedIndex != sender.tag {
-            selectedIndex = sender.tag
-            updateSelectedStyle()
-        }
-        viewModel.send(action: .brushChangeColor(options.brush.colors[selectedIndex].color))
-    }
-    
-    @available(iOS 14, *)
-    @objc private func colorWellTapped(_ sender: ColorWell) {
-        if selectedIndex != sender.tag {
-            selectedIndex = sender.tag
-            updateSelectedStyle()
-        }
-        viewModel.send(action: .brushChangeColor(sender.selectedColor ?? .white))
-    }
-    
-    @available(iOS 14, *)
-    @objc private func colorWellValueChanged(_ sender: ColorWell) {
-        viewModel.send(action: .brushChangeColor(sender.selectedColor ?? .white))
     }
     
     @objc private func sliderValueChanged(_ sender: UISlider) {
@@ -168,10 +130,12 @@ extension PhotoEditorBrushToolView {
 extension PhotoEditorBrushToolView {
     
     private func setupView() {
+        sectionView.backgroundColor = .clear
+        sectionView.manager.reload(section)
         addLayoutGuide(primaryGuide)
         addLayoutGuide(secondaryGuide)
         
-        addSubview(collectionView)
+        addSubview(sectionView)
         addSubview(undoButton)
         addSubview(slider)
         
@@ -186,7 +150,7 @@ extension PhotoEditorBrushToolView {
                 make.trailing.equalToSuperview()
                 make.centerY.equalToSuperview()
                 make.width.equalTo(50)
-                make.height.equalTo(calculateViewLength(count: optionsCount, maxCount: maxCount) + 10 + 44)
+                make.height.equalTo(calculateSectionViewLength() + 10 + 44)
             }
             secondaryGuide.snp.remakeConstraints { make in
                 make.top.bottom.equalTo(primaryGuide)
@@ -210,7 +174,8 @@ extension PhotoEditorBrushToolView {
         layoutGuide()
         
         if viewModel.isRegular { // iPad
-            collectionView.snp.remakeConstraints { make in
+            sectionView.scrollDirection = .vertical
+            sectionView.snp.remakeConstraints { make in
                 make.top.equalTo(primaryGuide)
                 make.bottom.equalTo(undoButton.snp.top).offset(-10)
                 make.centerX.equalTo(primaryGuide)
@@ -227,7 +192,8 @@ extension PhotoEditorBrushToolView {
                 make.center.equalTo(secondaryGuide)
             }
         } else { // iPhone
-            collectionView.snp.remakeConstraints { make in
+            sectionView.scrollDirection = .horizontal
+            sectionView.snp.remakeConstraints { make in
                 make.leading.equalTo(primaryGuide).offset(15)
                 make.trailing.equalTo(undoButton.snp.leading).offset(-15)
                 make.centerY.equalTo(primaryGuide)
@@ -244,82 +210,36 @@ extension PhotoEditorBrushToolView {
                 make.centerY.equalTo(secondaryGuide)
             }
         }
+        updatePlugin()
     }
     
-    private func updateSelectedStyle() {
-        for (index, item) in collectionView.items.enumerated() {
-            let scale: CGFloat = index == selectedIndex ? 1.25 : 1.0
-            if let button = item as? ColorButton {
-                button.colorView.transform = CGAffineTransform(scaleX: scale, y: scale)
-                button.isSelected = index == selectedIndex
-            }
-            if #available(iOS 14.0, *) {
-                if let colorWell = item as? ColorWell {
-                    colorWell.transform = CGAffineTransform(scaleX: scale, y: scale)
-                }
-            }
-        }
-    }
-    
-    private func createItems() -> [UIView] {
-        return options.brush.colors.enumerated().map { (idx, option) -> UIView in
-            return createColorButton(idx: idx, option: option)
-        }
-    }
-    
-    private func createColorButton(idx: Int, option: EditorBrushColorOption) -> UIView {
-        switch option {
-        case .custom(let color):
-            let button = ColorButton(tag: idx, size: colorWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
-            button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
-            options.theme.buttonConfiguration[.brush(option)]?.configuration(button.colorView)
-            return button
-        case .colorWell(let color):
-            if #available(iOS 14.0, *) {
-                let colorWell = ColorWell(itemSize: colorWidth, borderWidth: 2)
-                colorWell.backgroundColor = .clear
-                colorWell.tag = idx
-                colorWell.selectedColor = color
-                colorWell.supportsAlpha = false
-                colorWell.addTarget(self, action: #selector(colorWellTapped(_:)), for: .touchUpInside)
-                colorWell.addTarget(self, action: #selector(colorWellValueChanged(_:)), for: .valueChanged)
-                return colorWell
-            } else {
-                let button = ColorButton(tag: idx, size: colorWidth, color: color, borderWidth: 2, borderColor: UIColor.white)
-                button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
-                options.theme.buttonConfiguration[.brush(option)]?.configuration(button.colorView)
-                return button
-            }
-        }
-    }
-    
-    private func calculateViewLength(count: Int, maxCount: Int = 0) -> CGFloat {
-        var optionsCount = CGFloat(count)
-        let maxCount = CGFloat(maxCount)
-        if maxCount > 0 {
-            optionsCount = optionsCount > maxCount ? maxCount : optionsCount
-        }
-        return itemWidth * optionsCount + (optionsCount - 1) * minSpacing
-    }
-    
-    private func calculateSpacing() -> CGFloat {
-        var spacing: CGFloat = minSpacing
-        let count = CGFloat(optionsCount)
-        
-        let maxSize: CGFloat
+    private func updatePlugin() {
         if viewModel.isRegular { // iPad
-            maxSize = primaryGuide.layoutFrame.height - 15 - 44
-        } else { // iPhone
-            maxSize = primaryGuide.layoutFrame.width - 15 - 15 - 44 - 15
+            sectionView.contentInset = .zero
+            sectionView.set(pluginModes: [])
+        } else {
+            let width = calculateSectionViewLength()
+            let maxWidth = viewModel.containerSize.width - 15 * 2 - (44 + 10) * 2
+            if width < maxWidth {
+                sectionView.contentInset = UIEdgeInsets(top: 0, left: 27, bottom: 0, right: 0)
+                sectionView.set(pluginModes: [.centerX])
+            } else {
+                sectionView.contentInset = .zero
+                sectionView.set(pluginModes: [])
+            }
         }
-        
-        if primaryGuide.layoutFrame == .zero {
-            needLayout = true
+    }
+    
+    private func calculateSectionViewLength() -> CGFloat {
+        var count = CGFloat(optionsCount)
+        if viewModel.isRegular { // iPad
+            if optionsCount > maxCount {
+                count = CGFloat(maxCount)
+                return itemWidth * count + (count - 1) * minSpacing + (minSpacing + itemWidth / 2)
+            }
+            return itemWidth * count + (count - 1) * minSpacing
+        } else {
+            return itemWidth * count + (count - 1) * minSpacing
         }
-
-        if calculateViewLength(count: optionsCount) < maxSize {
-            spacing = (maxSize - itemWidth * count) / (count - 1)
-        }
-        return spacing
     }
 }

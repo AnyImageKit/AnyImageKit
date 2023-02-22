@@ -12,9 +12,6 @@ extension AnyImageEvent {
     
     // MARK: - Common
     /// UserInfo: [page: (editorPhoto|editorVideo)]
-    public static let editorBack: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_BACK"
-    
-    /// UserInfo: [page: (editorPhoto|editorVideo)]
     public static let editorDone: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_DONE"
     
     /// UserInfo: [page: (editorPhoto|editorVideo)]

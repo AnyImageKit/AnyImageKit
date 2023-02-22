@@ -160,12 +160,6 @@ extension ImageEditorController {
         if options.cacheIdentifier.firstIndex(of: "/") != nil {
             options.cacheIdentifier = options.cacheIdentifier.replacingOccurrences(of: "/", with: "-")
         }
-        if options.brushColors.count > 7 {
-            options.brushColors = Array(options.brushColors.prefix(upTo: 7))
-        }
-        if options.mosaicOptions.count > 5 {
-            options.mosaicOptions = Array(options.mosaicOptions.prefix(upTo: 5))
-        }
         if options.cropOptions.isEmpty {
             options.cropOptions = [.free]
         }

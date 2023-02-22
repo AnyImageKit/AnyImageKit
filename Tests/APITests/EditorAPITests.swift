@@ -142,7 +142,7 @@ class EditorAPITests: XCTestCase {
         theme.configurationLabel(for: .trash, configuration: { _ in })
         theme.configurationLabel(for: .videoTimeline, configuration: { _ in })
         
-        theme.configurationButton(for: .back, configuration: { _ in })
+        theme.configurationButton(for: .cancel, configuration: { _ in })
         theme.configurationButton(for: .cancel, configuration: { _ in })
         theme.configurationButton(for: .done, configuration: { _ in })
         theme.configurationButton(for: .photoOptions(.brush), configuration: { _ in })

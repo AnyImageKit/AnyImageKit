@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum EditorRotationDirection: Equatable {
+public enum EditorRotationDirection: Equatable, Hashable {
     
     /// Turn off rotation feature
     case turnOff

@@ -92,7 +92,7 @@ extension PhotoEditorController {
         viewModel.actionSubject.sink { [weak self] action in
             guard let self = self else { return }
             switch action {
-            case .back:
+            case .cancel:
                 self.continuation?.resume(throwing: AnyImageError.exportCanceled)
             case .done:
                 self.output()
