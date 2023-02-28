@@ -252,10 +252,20 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.title)
-        manager.removeAllSelectedAsset()
+		if manager.options.clearSelectionAfterChangeAlbum {
+			manager.removeAllSelectedAsset()
+		}
         manager.cancelAllFetch()
-        toolBar.setEnable(false)
-        album.assets.forEach { $0.state = .unchecked }
+		toolBar.setEnable(!manager.selectedAssets.isEmpty)
+		album.assets.forEach { asset in
+			if !manager.options.clearSelectionAfterChangeAlbum,
+			   let selectAsset = manager.selectedAssets.first(where: { asset == $0 }) {
+				asset.state = .selected
+				asset.selectedNum = selectAsset.selectedNum
+			} else {
+				asset.state = .unchecked
+			}
+		}
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
