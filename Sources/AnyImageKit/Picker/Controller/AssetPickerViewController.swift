@@ -665,6 +665,11 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
         return (cell?.image, album!.assets[idx])
     }
+	
+	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData? {
+		guard let album, let currentAsset = album.assets.first(where: { asset == $0 }) else { return nil }
+		return previewController(controller, assetOfIndex: currentAsset.idx)
+	}
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
         let idx = index + itemOffset

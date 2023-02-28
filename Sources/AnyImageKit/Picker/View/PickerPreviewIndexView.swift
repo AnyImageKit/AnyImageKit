@@ -10,7 +10,7 @@ import UIKit
 
 protocol PickerPreviewIndexViewDelegate: AnyObject {
     
-    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int)
+    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset)
 }
 
 final class PickerPreviewIndexView: UIView {
@@ -144,6 +144,6 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
 extension PickerPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item].idx)
+        delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item])
     }
 }

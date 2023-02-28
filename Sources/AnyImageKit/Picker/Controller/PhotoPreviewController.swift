@@ -19,6 +19,9 @@ protocol PhotoPreviewControllerDataSource: AnyObject {
     /// 获取索引对应的数据模型
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData
     
+	/// 获取数据模型
+	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData?
+	
     /// 获取转场动画时的缩略图所在的 view
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
 }
@@ -566,9 +569,13 @@ extension PhotoPreviewController: PreviewCellDelegate {
 // MARK: - PickerPreviewIndexViewDelegate
 extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     
-    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int) {
-        currentIndex = idx
-        collectionView.scrollToItem(at: IndexPath(item: idx, section: 0), at: .left, animated: false)
+	func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset) {
+		guard let currentAsset = dataSource?.previewController(self, asset: asset)?.asset else {
+			Toast.show(message: manager.options.theme[string: .cantPreviewAssetInOtherAlbum])
+			return
+		}
+		currentIndex = currentAsset.idx
+		collectionView.scrollToItem(at: IndexPath(item: currentAsset.idx, section: 0), at: .left, animated: false)
         #if ANYIMAGEKIT_ENABLE_EDITOR
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.autoSetEditorButtonHidden()
