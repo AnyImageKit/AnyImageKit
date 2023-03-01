@@ -492,7 +492,20 @@ extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
         guard let album = album, let changeDetails = changeInstance.changeDetails(for: album.fetchResult) else { return }
         
         if #available(iOS 14.0, *), Permission.photos.status == .limited {
-            reloadAlbum(album)
+            if album.isCameraRoll {
+                reloadAlbum(album)
+            } else {
+                DispatchQueue.main.async {
+                    if !self.manager.options.clearSelectionAfterSwitchingAlbum,
+                       let smartAlbum = self.albums.first(where: { $0.isCameraRoll }) {
+                        self.setAlbum(smartAlbum)
+                        self.reloadAlbum(smartAlbum)
+                        self.updateAlbum(smartAlbum)
+                    } else {
+                        self.reloadAlbum(album)
+                    }
+                }
+            }
             return
         } else {
             guard changeDetails.hasIncrementalChanges else { return }
