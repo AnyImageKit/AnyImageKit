@@ -47,4 +47,6 @@ extension StringConfigKey {
     public static let noPhotosPermissionTips     = StringConfigKey(rawValue: "NO_PHOTOS_PERMISSION_TIPS")
     public static let noCameraPermissionTips     = StringConfigKey(rawValue: "NO_CAMERA_PERMISSION_TIPS")
     public static let noMicrophonePermissionTips = StringConfigKey(rawValue: "NO_MICROPHONE_PERMISSION_TIPS")
+	
+	public static let cantPreviewAssetInOtherAlbum	= StringConfigKey(rawValue: "CANT_PREVIEW_ASSET_IN_OTHER_ALBUM")
 }

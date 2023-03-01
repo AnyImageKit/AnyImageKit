@@ -252,10 +252,20 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.title)
-        manager.removeAllSelectedAsset()
+		if manager.options.clearSelectionAfterChangeAlbum {
+			manager.removeAllSelectedAsset()
+		}
         manager.cancelAllFetch()
-        toolBar.setEnable(false)
-        album.assets.forEach { $0.state = .unchecked }
+		toolBar.setEnable(!manager.selectedAssets.isEmpty)
+		album.assets.forEach { asset in
+			if !manager.options.clearSelectionAfterChangeAlbum,
+			   let selectAsset = manager.selectedAssets.first(where: { asset == $0 }) {
+				asset.state = .selected
+				asset.selectedNum = selectAsset.selectedNum
+			} else {
+				asset.state = .unchecked
+			}
+		}
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
@@ -655,6 +665,11 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
         let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
         return (cell?.image, album!.assets[idx])
     }
+	
+	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData? {
+		guard let album, let currentAsset = album.assets.first(where: { asset == $0 }) else { return nil }
+		return previewController(controller, assetOfIndex: currentAsset.idx)
+	}
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
         let idx = index + itemOffset

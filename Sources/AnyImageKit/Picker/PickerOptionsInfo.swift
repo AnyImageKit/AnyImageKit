@@ -64,6 +64,10 @@ public struct PickerOptionsInfo {
     /// Disable Rules
     /// - Default: []
     public var disableRules: [AssetDisableCheckRule] = []
+	
+	/// Clear all selected assets after change album
+	/// - Default: false
+	public var clearSelectionAfterChangeAlbum: Bool = false
     
     /// Enable Debug Log
     /// - Default: false
