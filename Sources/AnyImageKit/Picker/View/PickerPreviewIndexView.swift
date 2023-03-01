@@ -17,15 +17,15 @@ final class PickerPreviewIndexView: UIView {
     
     weak var delegate: PickerPreviewIndexViewDelegate?
     
-    var currentIndex: Int = 0 {
+    var currentAsset: Asset? {
         didSet {
-            lastIdx = oldValue
-            didSetCurrentIndex()
+            lastAsset = oldValue
+            didSetCurrentAsset()
         }
     }
     
     private var isFirst = true
-    private var lastIdx: Int = 0
+    private var lastAsset: Asset?
     private var lastAssetList: [Asset] = []
     
     private lazy var collectionView: UICollectionView = {
@@ -71,14 +71,14 @@ final class PickerPreviewIndexView: UIView {
         lastAssetList = manager.selectedAssets
     }
     
-    private func didSetCurrentIndex() {
+    private func didSetCurrentAsset() {
         isHidden = manager.selectedAssets.isEmpty
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        if let idx = manager.selectedAssets.firstIndex(where: { $0 == currentAsset }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == lastIdx }) {
+        if let idx = manager.selectedAssets.firstIndex(where: { $0 == lastAsset }) {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
         }
     }
@@ -115,7 +115,7 @@ extension PickerPreviewIndexView {
     private func selectItemAtFirstTime() {
         if !isFirst { return }
         isFirst = false
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        if let idx = manager.selectedAssets.firstIndex(where: { $0 == currentAsset }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
@@ -135,7 +135,7 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
         let asset = manager.selectedAssets[indexPath.item]
         cell.setContent(asset, manager: manager, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
-        cell.boxCoverView.isHidden = asset.idx != currentIndex
+        cell.boxCoverView.isHidden = asset != currentAsset
         return cell
     }
 }

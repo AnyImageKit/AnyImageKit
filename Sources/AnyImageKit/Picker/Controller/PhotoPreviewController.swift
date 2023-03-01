@@ -330,7 +330,7 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        indexView.currentIndex = currentIndex
+        indexView.currentAsset = data.asset
         
         if manager.options.allowUseOriginalImage {
             toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
