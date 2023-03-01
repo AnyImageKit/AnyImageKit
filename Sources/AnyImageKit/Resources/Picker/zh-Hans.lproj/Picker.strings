@@ -17,6 +17,7 @@
 "FETCH_FAILED_PLEASE_RETRY" = "获取内容失败，请重试";
 "A11Y_SWITCH_ALBUM_TIPS" = "切换相册，当前相册是%@";
 "LIMITED_PHOTOS_PERMISSION_TIPS" = "无法查看相册全部照片\n点击选择更多照片";
+"CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM" = "当前相册不支持预览该素材";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "选取视频长度应在 %d-%d 秒之间";

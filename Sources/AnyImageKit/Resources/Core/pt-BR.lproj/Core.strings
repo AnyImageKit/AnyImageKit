@@ -34,5 +34,3 @@
 "NO_PHOTOS_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso ao seu álbum vá em \"Configurações > Privacidade > Fotos\"";
 "NO_CAMERA_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso à sua câmera vá em \"Configurações > Privacidade > Câmera\"";
 "NO_MICROPHONE_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso ao seu microfone vá em \"Configurações > Privacidade > Microfone\"";
-
-"CANT_PREVIEW_ASSET_IN_OTHER_ALBUM" = "Não é possível visualizar este ativo no álbum atual";

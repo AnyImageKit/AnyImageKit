@@ -34,5 +34,3 @@
 "NO_PHOTOS_PERMISSION_TIPS" = "Allow %@ to access your album in \"Settings > Privacy > Photos\"";
 "NO_CAMERA_PERMISSION_TIPS" = "Allow %@ to access your camera in \"Settings > Privacy > Camera\"";
 "NO_MICROPHONE_PERMISSION_TIPS" = "Allow %@ to access your microphone in \"Settings > Privacy > Microphone\"";
-
-"CANT_PREVIEW_ASSET_IN_OTHER_ALBUM" = "Can't preview this asset in current album";
