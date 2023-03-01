@@ -252,16 +252,17 @@ extension AssetPickerViewController {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.title)
-		if manager.options.clearSelectionAfterChangeAlbum {
+		if manager.options.clearSelectionAfterSwitchingAlbum {
 			manager.removeAllSelectedAsset()
 		}
         manager.cancelAllFetch()
 		toolBar.setEnable(!manager.selectedAssets.isEmpty)
 		album.assets.forEach { asset in
-			if !manager.options.clearSelectionAfterChangeAlbum,
+			if !manager.options.clearSelectionAfterSwitchingAlbum,
 			   let selectAsset = manager.selectedAssets.first(where: { asset == $0 }) {
 				asset.state = .selected
 				asset.selectedNum = selectAsset.selectedNum
+                manager.updateAsset(asset) // The asset selected from other albums, so it should be replaced.
 			} else {
 				asset.state = .unchecked
 			}
@@ -453,9 +454,9 @@ extension AssetPickerViewController {
     }
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
-        guard let asset = manager.selectedAssets.first else { return }
-        let controller = PhotoPreviewController(manager: manager)
-        controller.currentIndex = asset.idx
+        manager.lastSelectedAssets = manager.selectedAssets
+        let controller = PhotoPreviewController(manager: manager, sourceType: .selectedAssets)
+        controller.currentIndex = 0
         controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
@@ -597,7 +598,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         } else if !asset.isSelected && manager.isUpToLimit {
             return
         } else {
-            let controller = PhotoPreviewController(manager: manager)
+            let controller = PhotoPreviewController(manager: manager, sourceType: .album)
             self.previewController = controller
             controller.currentIndex = indexPath.item - itemOffset
             controller.dataSource = self
@@ -650,31 +651,58 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
 extension AssetPickerViewController: PhotoPreviewControllerDataSource {
     
     func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
-        guard let album = album else { return 0 }
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if album.isCameraRoll && !manager.options.captureOptions.mediaOptions.isEmpty {
-            return album.assets.count - 1
+        switch controller.sourceType {
+        case .album:
+            guard let album = album else { return 0 }
+            #if ANYIMAGEKIT_ENABLE_CAPTURE
+            if album.isCameraRoll && !manager.options.captureOptions.mediaOptions.isEmpty {
+                return album.assets.count - 1
+            }
+            #endif
+            return album.assets.count
+        case .selectedAssets:
+            return manager.lastSelectedAssets.count
         }
-        #endif
-        return album.assets.count
     }
     
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
-        let idx = index + itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
-        let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-        return (cell?.image, album!.assets[idx])
+        switch controller.sourceType {
+        case .album:
+            let idx = index + itemOffset
+            let indexPath = IndexPath(item: idx, section: 0)
+            let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
+            return (cell?.image, album!.assets[idx])
+        case .selectedAssets:
+            let asset = manager.lastSelectedAssets[index]
+            return (asset.image, asset) // Warning: asset.image may not get thumbnail image
+        }
     }
 	
 	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData? {
-		guard let album, let currentAsset = album.assets.first(where: { asset == $0 }) else { return nil }
-		return previewController(controller, assetOfIndex: currentAsset.idx)
+        switch controller.sourceType {
+        case .album:
+            guard let album, asset.idx < album.assets.count else { return nil }
+            if album.assets[asset.idx] == asset {
+                return previewController(controller, assetOfIndex: asset.idx)
+            } else if let currentAsset = album.assets.first(where: { asset == $0 }) {
+                return previewController(controller, assetOfIndex: currentAsset.idx)
+            } else {
+                return nil
+            }
+        case .selectedAssets:
+            return (asset.image, asset)
+        }
 	}
     
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
-        let idx = index + itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
-        return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
+        switch controller.sourceType {
+        case .album:
+            let idx = index + itemOffset
+            let indexPath = IndexPath(item: idx, section: 0)
+            return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
+        case .selectedAssets:
+            return nil // Considering performance issues, searches are not performed.
+        }
     }
 }
 
@@ -701,13 +729,18 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
     
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
-        let idx = controller.currentIndex + itemOffset
-        let indexPath = IndexPath(item: idx, section: 0)
-        reloadData(animated: false)
-        if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
-            if idx < collectionView.numberOfItems(inSection: 0) {
-                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+        switch controller.sourceType {
+        case .album:
+            let idx = controller.currentIndex + itemOffset
+            let indexPath = IndexPath(item: idx, section: 0)
+            reloadData(animated: false)
+            if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
+                if idx < collectionView.numberOfItems(inSection: 0) {
+                    collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+                }
             }
+        case .selectedAssets:
+            break
         }
     }
 }

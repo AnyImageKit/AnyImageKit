@@ -27,6 +27,8 @@ final class PickerManager {
     
     /// 已选中的资源
     private(set) var selectedAssets: [Asset] = []
+    /// The selected assets before user enter the preview controller
+    internal var lastSelectedAssets: [Asset] = []
     /// 获取失败的资源
     private var failedAssets: [Asset] = []
     /// 管理 failedAssets 队列的锁
@@ -147,6 +149,11 @@ extension PickerManager {
         asset.state = .normal
         asset._images[.initial] = nil
         return true
+    }
+    
+    func updateAsset(_ asset: Asset) {
+        guard let idx = selectedAssets.firstIndex(of: asset) else { return }
+        selectedAssets[idx] = asset
     }
     
     func removeAllSelectedAsset() {

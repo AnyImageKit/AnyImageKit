@@ -57,6 +57,11 @@ extension PhotoPreviewControllerDelegate {
 
 final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigurable {
     
+    enum SourceType {
+        case album
+        case selectedAssets
+    }
+    
     weak var delegate: PhotoPreviewControllerDelegate?
     weak var dataSource: PhotoPreviewControllerDataSource?
     
@@ -124,17 +129,18 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
         return view
     }()
     private lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView(frame: .zero)
-        view.setManager(manager)
+        let view = PickerPreviewIndexView(manager: manager, sourceType: sourceType)
         view.isHidden = true
         view.delegate = self
         return view
     }()
     
     let manager: PickerManager
+    let sourceType: SourceType
     
-    init(manager: PickerManager) {
+    init(manager: PickerManager, sourceType: SourceType) {
         self.manager = manager
+        self.sourceType = sourceType
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
@@ -382,6 +388,10 @@ extension PhotoPreviewController {
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
         trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
+        
+        if sourceType == .selectedAssets {
+            toolBar.setDoneEnable(!manager.selectedAssets.isEmpty)
+        }
     }
     
     /// ToolBar - Original
@@ -570,12 +580,20 @@ extension PhotoPreviewController: PreviewCellDelegate {
 extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     
 	func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset) {
-		guard let currentAsset = dataSource?.previewController(self, asset: asset)?.asset else {
-			Toast.show(message: manager.options.theme[string: .cantPreviewAssetInOtherAlbum])
-			return
-		}
-		currentIndex = currentAsset.idx
-		collectionView.scrollToItem(at: IndexPath(item: currentAsset.idx, section: 0), at: .left, animated: false)
+        switch sourceType {
+        case .album:
+            guard let currentAsset = dataSource?.previewController(self, asset: asset)?.asset else {
+                Toast.show(message: manager.options.theme[string: .pickerCannotPreviewAssetInOtherAlbum])
+                return
+            }
+            currentIndex = currentAsset.idx
+            collectionView.scrollToItem(at: IndexPath(item: currentAsset.idx, section: 0), at: .left, animated: false)
+        case .selectedAssets:
+            guard let index = manager.selectedAssets.firstIndex(of: asset) else { return }
+            currentIndex = index
+            collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .left, animated: false)
+        }
+        
         #if ANYIMAGEKIT_ENABLE_EDITOR
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.autoSetEditorButtonHidden()
@@ -594,7 +612,11 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
         collectionView.reloadData()
         collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
         collectionView.layoutIfNeeded()
-        return makeScalePresentationAnimator(indexPath: indexPath)
+        if relatedView != nil {
+            return makeScalePresentationAnimator(indexPath: indexPath)
+        } else {
+            return nil
+        }
     }
     
     /// 提供退场动画
