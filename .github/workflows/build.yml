@@ -11,7 +11,7 @@ on:
 jobs:
   iOS:
     name: Test iOS
-    runs-on: macos-13
+    runs-on: macos-12
       
     strategy:
       matrix:
@@ -27,7 +27,7 @@ jobs:
     
   iOS_Simulator:
     name: Test iOS Simulator
-    runs-on: macOS-13
+    runs-on: macOS-12
 
     strategy:
       matrix:
@@ -43,7 +43,7 @@ jobs:
     
   CocoaPods:
     name: CocoaPods Library Lint
-    runs-on: macOS-13
+    runs-on: macOS-12
 
     strategy:
       matrix:
