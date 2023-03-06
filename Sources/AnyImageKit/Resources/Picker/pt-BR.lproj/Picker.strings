@@ -17,7 +17,8 @@
 "FETCH_FAILED_PLEASE_RETRY" = "A busca falhou, tente novamente";
 "A11Y_SWITCH_ALBUM_TIPS" = "Trocar de álbum, o álbum atual é %@";
 "LIMITED_PHOTOS_PERMISSION_TIPS" = "Não foi possível recuperar todas as fotos\nClique para selecionar mais fotos";
+"CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM" = "Não é possível visualizar este ativo no álbum atual";
 
 // Asset Disable Check Rule
-"DURATION_OF_SELECTED_VIDEO_RANGE" = "A duração do vídeo selecionado deve ser entre %d-%d segundos.";
-"CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME" = "Cannot select photos and videos at the same time.";
+"DURATION_OF_SELECTED_VIDEO_RANGE" = "A duração do vídeo selecionado deve ser entre %d-%d segundos";
+"CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME" = "Não é possível selecionar imagens e vídeos ao mesmo tempo";

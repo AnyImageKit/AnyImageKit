@@ -10,23 +10,32 @@ import UIKit
 
 protocol PickerPreviewIndexViewDelegate: AnyObject {
     
-    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int)
+    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset)
 }
 
 final class PickerPreviewIndexView: UIView {
     
     weak var delegate: PickerPreviewIndexViewDelegate?
     
-    var currentIndex: Int = 0 {
+    var currentAsset: Asset? {
         didSet {
-            lastIdx = oldValue
-            didSetCurrentIndex()
+            lastAsset = oldValue
+            didSetCurrentAsset()
         }
     }
     
     private var isFirst = true
-    private var lastIdx: Int = 0
+    private var lastAsset: Asset?
     private var lastAssetList: [Asset] = []
+    
+    private var selectedAssets: [Asset] {
+        switch sourceType {
+        case .album:
+            return manager.selectedAssets
+        case .selectedAssets:
+            return manager.lastSelectedAssets
+        }
+    }
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -43,10 +52,14 @@ final class PickerPreviewIndexView: UIView {
         return view
     }()
     
-    private var manager: PickerManager!
+    private let manager: PickerManager
+    private let sourceType: PhotoPreviewController.SourceType
     
-     override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(manager: PickerManager, sourceType: PhotoPreviewController.SourceType) {
+        self.manager = manager
+        self.sourceType = sourceType
+        super.init(frame: .zero)
+        lastAssetList = manager.selectedAssets
         setupView()
     }
     
@@ -66,19 +79,14 @@ final class PickerPreviewIndexView: UIView {
         }
     }
     
-    func setManager(_ manager: PickerManager) {
-        self.manager = manager
-        lastAssetList = manager.selectedAssets
-    }
-    
-    private func didSetCurrentIndex() {
-        isHidden = manager.selectedAssets.isEmpty
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
+    private func didSetCurrentAsset() {
+        isHidden = selectedAssets.isEmpty
+        if let idx = selectedAssets.firstIndex(where: { $0 == currentAsset }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == lastIdx }) {
+        if let idx = selectedAssets.firstIndex(where: { $0 == lastAsset }) {
             collectionView.reloadItems(at: [IndexPath(item: idx, section: 0)])
         }
     }
@@ -96,26 +104,31 @@ extension PickerPreviewIndexView: PickerOptionsConfigurable {
 extension PickerPreviewIndexView {
     
     func didChangeSelectedAsset() {
-        let assetList = manager.selectedAssets
-        self.isHidden = assetList.isEmpty
-        if lastAssetList.count < assetList.count {
-            collectionView.insertItems(at: [IndexPath(item: assetList.count-1, section: 0)])
-            collectionView.scrollToLast(at: .right, animated: true)
-        } else if lastAssetList.count > assetList.count {
-            for (idx, asset) in lastAssetList.enumerated() {
-                if !assetList.contains(asset) {
-                    collectionView.deleteItems(at: [IndexPath(item: idx, section: 0)])
-                    break
+        switch sourceType {
+        case .album:
+            let assetList = selectedAssets
+            self.isHidden = assetList.isEmpty
+            if lastAssetList.count < assetList.count {
+                collectionView.insertItems(at: [IndexPath(item: assetList.count-1, section: 0)])
+                collectionView.scrollToLast(at: .right, animated: true)
+            } else if lastAssetList.count > assetList.count {
+                for (idx, asset) in lastAssetList.enumerated() {
+                    if !assetList.contains(asset) {
+                        collectionView.deleteItems(at: [IndexPath(item: idx, section: 0)])
+                        break
+                    }
                 }
             }
+            lastAssetList = assetList
+        case .selectedAssets:
+            collectionView.reloadData()
         }
-        lastAssetList = assetList
     }
     
     private func selectItemAtFirstTime() {
         if !isFirst { return }
         isFirst = false
-        if let idx = manager.selectedAssets.firstIndex(where: { $0.idx == currentIndex }) {
+        if let idx = selectedAssets.firstIndex(where: { $0 == currentAsset }) {
             let indexPath = IndexPath(item: idx, section: 0)
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
@@ -127,15 +140,15 @@ extension PickerPreviewIndexView {
 extension PickerPreviewIndexView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return manager.selectedAssets.count
+        return selectedAssets.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        let asset = manager.selectedAssets[indexPath.item]
+        let asset = selectedAssets[indexPath.item]
         cell.setContent(asset, manager: manager, animated: false, isPreview: true)
         cell.selectButton.isHidden = true
-        cell.boxCoverView.isHidden = asset.idx != currentIndex
+        cell.boxCoverView.isHidden = asset != currentAsset
         return cell
     }
 }
@@ -144,6 +157,6 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
 extension PickerPreviewIndexView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.pickerPreviewIndexView(self, didSelect: manager.selectedAssets[indexPath.item].idx)
+        delegate?.pickerPreviewIndexView(self, didSelect: selectedAssets[indexPath.item])
     }
 }

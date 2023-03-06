@@ -162,6 +162,10 @@ extension PickerToolBar {
     
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
+        setDoneEnable(enable)
+    }
+    
+    func setDoneEnable(_ enable: Bool) {
         doneButton.isEnabled = enable
         doneButton.alpha = enable ? 1.0 : 0.5
     }
