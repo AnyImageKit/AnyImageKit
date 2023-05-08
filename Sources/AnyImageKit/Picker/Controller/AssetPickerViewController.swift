@@ -687,7 +687,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
             return (cell?.image, album!.assets[idx])
         case .selectedAssets:
             let asset = manager.lastSelectedAssets[index]
-            return (asset.image, asset) // Warning: asset.image may not get thumbnail image
+            return (asset._image ?? asset._images[.thumbnail], asset)
         }
     }
 	

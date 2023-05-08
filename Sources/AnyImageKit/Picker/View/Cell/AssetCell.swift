@@ -153,6 +153,7 @@ extension AssetCell {
             switch result {
             case .success(let response):
                 guard self.identifier == asset.identifier else { return }
+                asset._images[.thumbnail] = response.image
                 self.imageView.image = asset._image ?? response.image
                 if asset.mediaType == .video && !isPreview {
                     self.videoView.setVideoTime(asset.durationDescription)

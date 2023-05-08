@@ -204,6 +204,7 @@ extension Asset {
     
     enum ImageKey: String, Hashable {
         
+        case thumbnail
         case initial
         case edited
         case output
