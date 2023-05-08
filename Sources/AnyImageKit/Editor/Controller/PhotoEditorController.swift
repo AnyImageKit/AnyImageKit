@@ -43,7 +43,12 @@ final class PhotoEditorController: AnyImageViewController {
         return view
     }()
     
-    private var image: UIImage = UIImage()
+    private var isReady: Bool = false
+    private var image: UIImage = UIImage() {
+        didSet {
+            isReady = true
+        }
+    }
     private let resource: EditorPhotoResource
     private let options: EditorPhotoOptionsInfo
     private let context: PhotoEditorContext
@@ -84,19 +89,21 @@ final class PhotoEditorController: AnyImageViewController {
     
     private func loadData() {
         resource.loadImage { [weak self] (result) in
-            guard let self = self else { return }
-            switch result {
-            case .success(let image):
-                self.image = image
-                self.setupView()
-                self.setupMosaicView()
-            case .failure(let error):
-                if error == .cannotFindInLocal {
-                    self.view.hud.show()
-                    return
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success(let image):
+                    self.image = image
+                    self.setupView()
+                    self.setupMosaicView()
+                case .failure(let error):
+                    if error == .cannotFindInLocal {
+                        self.view.hud.show()
+                        return
+                    }
+                    _print("Fetch image failed: \(error.localizedDescription)")
+                    self.delegate?.photoEditorDidCancel(self)
                 }
-                _print("Fetch image failed: \(error.localizedDescription)")
-                self.delegate?.photoEditorDidCancel(self)
             }
         }
     }
@@ -218,11 +225,11 @@ extension PhotoEditorController {
     }
     
     private func showHUDIfNeeded() {
-        if contentView.mosaic == nil {
+        if !isReady || contentView.mosaic == nil {
             view.hud.show()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                if self?.contentView.mosaic != nil {
-                    self?.view.hud.hide()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if self.isReady &&  self.contentView.mosaic != nil {
+                    self.view.hud.hide()
                 }
             }
         }

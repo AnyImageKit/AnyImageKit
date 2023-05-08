@@ -77,7 +77,9 @@ extension PHAsset: EditorPhotoResource {
                     completion(.success(resizedImage))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }
     }

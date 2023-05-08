@@ -123,12 +123,11 @@ final class VideoEditorController: AnyImageViewController {
     
     private func loadData() {
         resource.loadURL { [weak self] (result) in
-            guard let self = self else { return }
-            switch result {
-            case .success(let url):
-                self.view.hud.hide()
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success(let url):
+                    self.view.hud.hide()
                     self.url = url
                     self.toolView.isHidden = false
                     if self.toolView.selectOption(.clip) {
@@ -139,14 +138,14 @@ final class VideoEditorController: AnyImageViewController {
                         self?.videoPreview.setupPlayer(url: url)
                         self?.setupProgressImage(url: url, image: image)
                     }
+                case .failure(let error):
+                    if error == .cannotFindInLocal {
+                        self.view.hud.show()
+                        return
+                    }
+                    _print("Fetch URL failed: \(error.localizedDescription)")
+                    self.delegate?.videoEditorDidCancel(self)
                 }
-            case .failure(let error):
-                if error == .cannotFindInLocal {
-                    self.view.hud.show()
-                    return
-                }
-                _print("Fetch URL failed: \(error.localizedDescription)")
-                self.delegate?.videoEditorDidCancel(self)
             }
         }
     }
