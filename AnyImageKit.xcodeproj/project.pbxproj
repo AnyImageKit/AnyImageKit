@@ -2244,7 +2244,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.15.0;
+				MARKETING_VERSION = 0.16.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageKit.Example;
 				PRODUCT_NAME = Example;
 				SUPPORTS_MACCATALYST = YES;
@@ -2267,7 +2267,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.15.0;
+				MARKETING_VERSION = 0.16.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.AnyImageKit.Example;
 				PRODUCT_NAME = Example;
 				SUPPORTS_MACCATALYST = YES;

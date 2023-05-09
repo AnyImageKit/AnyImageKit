@@ -1,5 +1,19 @@
 # 更新日志
 
+## 0.16.0
+
+### 新增
+
+- Picker
+  - 切换相册后保留所选资源。
+  - 预览功能进行拆分。([#167](https://github.com/AnyImageKit/AnyImageKit/pull/167))
+  - 新增配置 `clearSelectionAfterSwitchingAlbum` 用于切换相册后保留/删除已选中的资源。
+
+### 修复
+
+- Picker
+  - 修复未再主线程调用 UI 问题。
+
 ## 0.15.1
 
 ### 修复

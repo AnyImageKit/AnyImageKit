@@ -1,5 +1,19 @@
 # Release Notes
 
+## 0.16.0
+
+### New Features
+
+- Picker
+  - Keep selected resources when switching albums.
+  - Split the preview function into "Album Preview" and "Selected Resource Preview".([#167](https://github.com/AnyImageKit/AnyImageKit/pull/167))
+  - Added a new configuration clearSelectionAfterSwitchingAlbum to keep **OR** delete selected resources when switching albums.
+
+### Resolved
+
+- Picker
+  - Crash that UI API not call on main thread.
+
 ## 0.15.1
 
 ### Resolved

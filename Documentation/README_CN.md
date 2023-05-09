@@ -124,6 +124,15 @@ extension ViewController: ImagePickerControllerDelegate {
 
 ## 更新日志
 
+### 最新版本
+
+| Version | Release Date | Xcode | Swift | iOS |
+| ---- | ----  | ---- | ---- | ---- |
+| [v0.16.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0160) | 2023-05-09 | 14.3 | 5.8 | 12.0+ |
+
+<details>
+   <summary>历史版本</summary>  
+
 | 版本 | 发布时间 | Xcode | Swift | iOS |
 | ---- | ----  | ---- | ---- | ---- |
 | [v0.15.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0151) | 2022-12-15 | 14.1 | 5.7 | 12.0+ |
@@ -145,6 +154,8 @@ extension ViewController: ImagePickerControllerDelegate {
 | [v0.11.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0110) | 2020-12-18 | 12.2 | 5.3 | 10.0+ |
 | [v0.10.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0100) | 2020-11-03 | 12.1 | 5.3 | 10.0+ |
 | [v0.9.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#090) | 2020-10-09 | 12.0 | 5.3 | 10.0+ |
+
+</details>
 
 ## 版权协议
 
