@@ -10,7 +10,7 @@ import UIKit
 
 final class HomeViewController: UITableViewController {
     
-    private var versionButton: UIButton = {
+    private lazy var versionButton: UIButton = {
         let view = UIButton(frame: .zero)
         if let info = Bundle.main.infoDictionary, let version = info["CFBundleShortVersionString"] as? String {
             view.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
