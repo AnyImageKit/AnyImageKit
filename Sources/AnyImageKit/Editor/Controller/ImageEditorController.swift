@@ -98,7 +98,7 @@ open class ImageEditorController: AnyImageNavigationController {
 
 extension ImageEditorController {
     
-    open func update(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
+    public func update(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
         guard viewControllers.isEmpty || enableForceUpdate else {
             return
         }
@@ -109,7 +109,7 @@ extension ImageEditorController {
         viewControllers = [rootViewController]
     }
     
-    open func update(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo) {
+    public func update(video resource: EditorVideoResource, placeholderImage: UIImage?, options: EditorVideoOptionsInfo) {
         enableDebugLog = options.enableDebugLog
         let checkedOptions = check(resource: resource, options: options)
         let rootViewController = VideoEditorController(resource: resource, placeholderImage: placeholderImage, options: checkedOptions, delegate: self)
