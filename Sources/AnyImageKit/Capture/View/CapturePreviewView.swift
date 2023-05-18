@@ -49,7 +49,7 @@ final class CapturePreviewView: UIView {
         self.options = options
         super.init(frame: frame)
         setupView()
-        setupGestrue()
+        setupGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -75,7 +75,7 @@ final class CapturePreviewView: UIView {
         }
     }
     
-    private func setupGestrue() {
+    private func setupGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTapped(_:)))
         addGestureRecognizer(tap)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))

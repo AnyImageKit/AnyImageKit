@@ -104,14 +104,14 @@ extension Capture {
         let base: Float = 0.0
         if level < 0.5 { // [minExposureTargetBias, exposureBiasBaseline)
             let systemMin = videoIO.minExposureTargetBias
-            let avaiableRange: Float = 0.5
-            let min = systemMin + (base-systemMin)*avaiableRange
+            let availableRange: Float = 0.5
+            let min = systemMin + (base-systemMin)*availableRange
             let newBias = min + (base-min)*(level/0.5)
             videoIO.setExposure(bias: newBias)
         } else { // [exposureBiasBaseline, maxExposureTargetBias]
             let systemMax = videoIO.maxExposureTargetBias
-            let avaiableRange: Float = 0.4
-            let max = base + (systemMax-base)*avaiableRange
+            let availableRange: Float = 0.4
+            let max = base + (systemMax-base)*availableRange
             let newBias = base + (max - base)*((level-0.5)/0.5)
             videoIO.setExposure(bias: newBias)
         }

@@ -160,7 +160,7 @@ extension PhotoEditingStack.Edit: Equatable {
 // MARK: - Output
 extension PhotoEditingStack {
     
-    private func prepareOutout() {
+    private func prepareOutput() {
         drawer = []
         guard let sourceImage = CIImage(image: originImage) else { return }
         let imageSize = sourceImage.extent.size
@@ -211,7 +211,7 @@ extension PhotoEditingStack {
     }
     
     func output() -> UIImage? {
-        prepareOutout()
+        prepareOutput()
         guard let cgImage = getCGImage(originImage), let ciImage = CIImage(image: originImage) else { return nil }
         let canvasSize = ciImage.extent.size
         

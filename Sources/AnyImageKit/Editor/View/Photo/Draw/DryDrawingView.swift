@@ -125,12 +125,12 @@ extension DryDrawingView {
             control = points[step]
         }
         
-        /// segements are based on distance about start and end point
+        /// segments are based on distance about start and end point
         let dis = begin.distance(to: end)
-        let segements = max(Int(dis / 5), 2)
+        let segments = max(Int(dis / 5), 2)
 
-        for i in 0 ..< segements {
-            let t = CGFloat(i) / CGFloat(segements)
+        for i in 0 ..< segments {
+            let t = CGFloat(i) / CGFloat(segments)
             let x = pow(1 - t, 2) * begin.x + 2.0 * (1 - t) * t * control.x + t * t * end.x
             let y = pow(1 - t, 2) * begin.y + 2.0 * (1 - t) * t * control.y + t * t * end.y
             vertices.append(CGPoint(x: x, y: y))

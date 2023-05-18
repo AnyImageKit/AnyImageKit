@@ -34,7 +34,7 @@ extension PhotoEditorContentView {
             if !self.cropOrRotate {
                 self.layoutStartCrop()
             } else {
-                self.layoutStartCroped()
+                self.layoutStartCropped()
             }
             self.updateSubviewFrame()
         }, completion: { _ in
@@ -173,7 +173,7 @@ extension PhotoEditorContentView {
     }
     
     /// 布局开始裁剪 - 已裁剪过
-    private func layoutStartCroped() {
+    private func layoutStartCropped() {
         let oldImageViewFrame = imageView.frame
         let top = cropY
         let bottom = cropBottomOffset
