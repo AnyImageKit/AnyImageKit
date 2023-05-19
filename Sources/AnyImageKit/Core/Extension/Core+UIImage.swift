@@ -35,10 +35,10 @@ extension UIImage {
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels,
         ]
-        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
+        guard let downSampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
             return nil
         }
-        return UIImage(cgImage: downsampledImage, scale: 1.0, orientation: .up)
+        return UIImage(cgImage: downSampledImage, scale: 1.0, orientation: .up)
     }
     
     private static func calculate(from originalSize: CGSize, to limitSize: CGSize) -> CGSize {

@@ -82,7 +82,7 @@ final class EditorCropToolView: UIView {
         view.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private(set) lazy var resetbutton: UIButton = {
+    private(set) lazy var resetButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setTitle(options.theme[string: .reset], for: .normal)
         view.setTitleColor(UIColor.white, for: .normal)
@@ -112,7 +112,7 @@ final class EditorCropToolView: UIView {
         addSubview(line)
         addSubview(cancelButton)
         addSubview(doneButton)
-        addSubview(resetbutton)
+        addSubview(resetButton)
         
         rotateButton.isHidden = options.rotationDirection == .turnOff
         collectionView.isHidden = options.cropOptions.count <= 1
@@ -150,7 +150,7 @@ final class EditorCropToolView: UIView {
             maker.centerY.equalTo(content)
             maker.width.height.equalTo(40)
         }
-        resetbutton.snp.makeConstraints { maker in
+        resetButton.snp.makeConstraints { maker in
             maker.top.bottom.equalTo(content)
             maker.centerX.equalTo(content)
             maker.width.equalTo(60)
@@ -158,7 +158,7 @@ final class EditorCropToolView: UIView {
         
         options.theme.buttonConfiguration[.cropRotation]?.configuration(rotateButton)
         options.theme.buttonConfiguration[.cropCancel]?.configuration(cancelButton)
-        options.theme.buttonConfiguration[.cropReset]?.configuration(resetbutton)
+        options.theme.buttonConfiguration[.cropReset]?.configuration(resetButton)
         options.theme.buttonConfiguration[.cropDone]?.configuration(doneButton)
     }
 }

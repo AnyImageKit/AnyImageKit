@@ -25,8 +25,8 @@ extension CanvasMask: GraphicsDrawing {
     func draw(in context: CGContext, size: CGSize) {
         guard !paths.isEmpty else { return }
         guard
-            let cglayer = CGLayer(context, size: size, auxiliaryInfo: nil),
-            let layerContext = cglayer.context else {
+            let cgLayer = CGLayer(context, size: size, auxiliaryInfo: nil),
+            let layerContext = cgLayer.context else {
             assert(false, "Failed to create CGLayer")
             return
         }
@@ -41,7 +41,7 @@ extension CanvasMask: GraphicsDrawing {
         UIGraphicsPopContext()
         
         UIGraphicsPushContext(context)
-        context.draw(cglayer, at: .zero)
+        context.draw(cgLayer, at: .zero)
         UIGraphicsPopContext()
     }
 }
