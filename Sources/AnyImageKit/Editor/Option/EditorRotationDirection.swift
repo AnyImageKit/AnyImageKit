@@ -25,11 +25,11 @@ extension EditorRotationDirection {
     var iconKey: EditorTheme.IconConfigKey {
         switch self {
         case .turnOff:
-            return .photoToolCropTrunLeft
+            return .photoToolCropTurnLeft
         case .turnLeft:
-            return .photoToolCropTrunLeft
+            return .photoToolCropTurnLeft
         case .turnRight:
-            return .photoToolCropTrunRight
+            return .photoToolCropTurnRight
         }
     }
 }

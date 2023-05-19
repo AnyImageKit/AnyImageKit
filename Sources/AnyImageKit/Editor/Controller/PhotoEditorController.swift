@@ -21,7 +21,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.canvas.setBrush(color: options.brushColors[options.defaultBrushIndex].color)
         return view
     }()
-    private lazy var placeholdImageView: UIImageView = {
+    private lazy var placeholderImageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         view.backgroundColor = .black
         view.isHidden = true
@@ -113,7 +113,7 @@ final class PhotoEditorController: AnyImageViewController {
         view.addSubview(contentView)
         view.addSubview(toolView)
         view.addSubview(backButton)
-        view.addSubview(placeholdImageView)
+        view.addSubview(placeholderImageView)
         
         contentView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview()
@@ -131,12 +131,12 @@ final class PhotoEditorController: AnyImageViewController {
             maker.left.equalToSuperview().offset(10)
             maker.width.height.equalTo(50)
         }
-        placeholdImageView.snp.makeConstraints { maker in
+        placeholderImageView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
         
         if let data = stack.edit.outputImageData, let image = UIImage(data: data) {
-            setPlaceholdImage(image)
+            setPlaceholderImage(image)
         }
         
         options.theme.buttonConfiguration[.back]?.configuration(backButton)
@@ -154,7 +154,7 @@ final class PhotoEditorController: AnyImageViewController {
                 let delay = (self?.stack.edit.mosaicData.isEmpty ?? true) ? 0.0 : 0.25
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in // 这里稍微延迟一下，给马赛克图层创建留点时间
                     self?.contentView.isHidden = false
-                    self?.placeholdImageView.isHidden = true
+                    self?.placeholderImageView.isHidden = true
                     self?.view.hud.hide()
                 }
             }
@@ -168,17 +168,17 @@ final class PhotoEditorController: AnyImageViewController {
         toolView.selectFirstItemIfNeeded()
     }
     
-    private func setPlaceholdImage(_ image: UIImage) {
+    private func setPlaceholderImage(_ image: UIImage) {
         contentView.isHidden = true
-        placeholdImageView.image = image
-        placeholdImageView.isHidden = false
-        placeholdImageView.contentMode = .scaleAspectFit
+        placeholderImageView.image = image
+        placeholderImageView.isHidden = false
+        placeholderImageView.contentMode = .scaleAspectFit
         let screen = ScreenHelper.mainBounds.size
         let h = image.size.height / image.size.width * screen.width
         if h > screen.height {
             let offsetY = (h - screen.height) / 2
-            placeholdImageView.contentMode = .scaleAspectFill
-            placeholdImageView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: offsetY)
+            placeholderImageView.contentMode = .scaleAspectFill
+            placeholderImageView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: offsetY)
         }
     }
     
@@ -261,7 +261,7 @@ extension PhotoEditorController {
     }
     
     /// 已经结束裁剪
-    private func didEndCroping() {
+    private func didEndCropping() {
         contentView.canvas.isHidden = false
         contentView.mosaic?.isHidden = false
         contentView.updateTextFrameWhenCropEnd()
@@ -305,7 +305,7 @@ extension PhotoEditorController {
     }
     
     /// 已经结束输入文本
-    private func didEndInputing() {
+    private func didEndInputting() {
         backButton.isHidden = false
         toolView.topCoverView.isHidden = false
         toolView.bottomCoverView.isHidden = false
@@ -344,7 +344,7 @@ extension PhotoEditorController {
         case .done:
             contentView.deactivateAllTextView()
             guard let image = getResultImage() else { return false }
-            setPlaceholdImage(image)
+            setPlaceholderImage(image)
             stack.setOutputImage(image)
             saveEditPath()
             delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
@@ -386,14 +386,14 @@ extension PhotoEditorController {
             }
             backButton.isHidden = false
             contentView.cropCancel { [weak self] (_) in
-                self?.didEndCroping()
+                self?.didEndCropping()
             }
         case .cropDone:
             trackObserver?.track(event: .editorPhotoCropDone, userInfo: [:])
             backButton.isHidden = false
             contentView.cropDone { [weak self] (_) in
                 guard let self = self else { return }
-                self.didEndCroping()
+                self.didEndCropping()
                 if self.options.toolOptions.count == 1 {
                     self.context.action(.done)
                 }
@@ -413,10 +413,10 @@ extension PhotoEditorController {
                 stack.removeTextData(data)
             }
         case .textCancel:
-            didEndInputing()
+            didEndInputting()
             contentView.restoreHiddenTextView()
         case .textDone(let data):
-            didEndInputing()
+            didEndInputting()
             contentView.removeHiddenTextView()
             if !data.text.isEmpty {
                 stack.addTextData(data)

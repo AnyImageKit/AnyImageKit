@@ -340,17 +340,17 @@ extension VideoEditorController {
         }
         compositionTrack.preferredTransform = assetVideoTrack.preferredTransform
         
-        let videolayerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionTrack)
-        videolayerInstruction.setOpacity(0.0, at: asset.duration)
+        let videoLayerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionTrack)
+        videoLayerInstruction.setOpacity(0.0, at: asset.duration)
         
-        let videoCompositionInstrution = AVMutableVideoCompositionInstruction()
-        videoCompositionInstrution.timeRange = CMTimeRange(start: .zero, duration: compositionTrack.asset!.duration)
-        videoCompositionInstrution.layerInstructions = [videolayerInstruction]
+        let videoCompositionInstruction = AVMutableVideoCompositionInstruction()
+        videoCompositionInstruction.timeRange = CMTimeRange(start: .zero, duration: compositionTrack.asset!.duration)
+        videoCompositionInstruction.layerInstructions = [videoLayerInstruction]
         
         let videoComposition = AVMutableVideoComposition()
         videoComposition.renderSize = compositionTrack.naturalSize
         videoComposition.frameDuration = CMTime(seconds: 1, preferredTimescale: 30)
-        videoComposition.instructions = [videoCompositionInstrution]
+        videoComposition.instructions = [videoCompositionInstruction]
         return videoComposition
     }
     

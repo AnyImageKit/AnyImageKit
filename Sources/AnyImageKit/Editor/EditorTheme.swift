@@ -101,9 +101,9 @@ extension EditorTheme {
         /// 25*25
         case photoToolUndo = "PhotoToolUndo"
         /// 25*25
-        case photoToolCropTrunLeft = "PhotoToolCropTrunLeft"
+        case photoToolCropTurnLeft = "PhotoToolCropTurnLeft"
         /// 25*25
-        case photoToolCropTrunRight = "PhotoToolCropTrunRight"
+        case photoToolCropTurnRight = "PhotoToolCropTurnRight"
         /// 25*25
         case photoToolMosaicDefault = "PhotoToolMosaicDefault"
         

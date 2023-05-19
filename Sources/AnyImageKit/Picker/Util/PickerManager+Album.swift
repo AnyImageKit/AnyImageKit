@@ -28,8 +28,8 @@ extension PickerManager {
         for assetCollection in assetCollections {
             if assetCollection.estimatedAssetCount <= 0 { continue }
             if assetCollection.isCameraRoll {
-                let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                let result = Album(fetchResult: assetsfetchResult,
+                let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+                let result = Album(fetchResult: assetsFetchResult,
                                    identifier: assetCollection.localIdentifier,
                                    title: assetCollection.localizedTitle,
                                    isCameraRoll: true,
@@ -50,8 +50,8 @@ extension PickerManager {
             for assetCollection in assetCollections {
                 if assetCollection.estimatedAssetCount <= 0 { continue }
                 if assetCollection.localIdentifier == album.identifier {
-                    let assetsfetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                    let result = Album(fetchResult: assetsfetchResult,
+                    let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+                    let result = Album(fetchResult: assetsFetchResult,
                                        identifier: assetCollection.localIdentifier,
                                        title: assetCollection.localizedTitle,
                                        isCameraRoll: assetCollection.isCameraRoll,
@@ -109,10 +109,10 @@ extension PickerManager {
             if self.options.albumOptions.contains(.smart) {
                 let subTypes: [PHAssetCollectionSubtype] = [.albumRegular,
                                                             .albumSyncedAlbum]
-                let assetCollectionsfetchResults = subTypes.map {
+                let assetCollectionsFetchResults = subTypes.map {
                     PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: $0, options: nil)
                 }
-                for assetCollectionsFetchResult in assetCollectionsfetchResults {
+                for assetCollectionsFetchResult in assetCollectionsFetchResults {
                     let smartCollections = assetCollectionsFetchResult.objects()
                     load(assetCollections: smartCollections)
                 }
@@ -129,10 +129,10 @@ extension PickerManager {
             if self.options.albumOptions.contains(.shared) {
                 let subTypes: [PHAssetCollectionSubtype] = [.albumMyPhotoStream,
                                                             .albumCloudShared]
-                let assetCollectionsfetchResults = subTypes.map {
+                let assetCollectionsFetchResults = subTypes.map {
                     PHAssetCollection.fetchAssetCollections(with: .album, subtype: $0, options: nil)
                 }
-                for assetCollectionsFetchResult in assetCollectionsfetchResults {
+                for assetCollectionsFetchResult in assetCollectionsFetchResults {
                     let smartCollections = assetCollectionsFetchResult.objects()
                     load(assetCollections: smartCollections)
                 }
