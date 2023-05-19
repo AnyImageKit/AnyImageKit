@@ -187,17 +187,17 @@ final class InputTextViewController: AnyImageViewController {
         options.theme.buttonConfiguration[.done]?.configuration(doneButton)
     }
     
-    private func layoutToolView(bottonOffset: CGFloat = 0) {
+    private func layoutToolView(buttonOffset: CGFloat = 0) {
         toolView.snp.remakeConstraints { maker in
             maker.left.right.equalToSuperview()
-            if bottonOffset == 0 {
+            if buttonOffset == 0 {
                 if #available(iOS 11.0, *) {
                     maker.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
                 } else {
                     maker.bottom.equalToSuperview().offset(-40)
                 }
             } else {
-                maker.bottom.equalToSuperview().offset(-bottonOffset-20)
+                maker.bottom.equalToSuperview().offset(-buttonOffset-20)
             }
             maker.height.equalTo(40)
         }
@@ -411,7 +411,7 @@ extension InputTextViewController {
     @objc private func keyboardFrameChanged(_ notification: Notification) {
         guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let offset = UIScreen.main.bounds.height - frame.origin.y
-        layoutToolView(bottonOffset: offset)
+        layoutToolView(buttonOffset: offset)
         view.layoutIfNeeded()
     }
 }

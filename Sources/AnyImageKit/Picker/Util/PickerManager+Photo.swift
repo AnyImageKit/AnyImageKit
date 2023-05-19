@@ -212,7 +212,7 @@ struct PhotoGIFFetchResponse {
 
 extension PickerManager {
     
-    func requsetPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping _PhotoGIFFetchCompletion) {
+    func requestPhotoGIF(for asset: PHAsset, options: PhotoGIFFetchOptions = .init(), completion: @escaping _PhotoGIFFetchCompletion) {
         let photoDataOptions = PhotoDataFetchOptions(version: .unadjusted,
                                                      isNetworkAccessAllowed: options.isNetworkAccessAllowed,
                                                      progressHandler: options.progressHandler)

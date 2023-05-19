@@ -65,7 +65,7 @@ extension PhotoGIFPreviewCell {
                 self.setDownloadingProgress(progress)
             }
         }
-        manager.requsetPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
+        manager.requestPhotoGIF(for: asset.phAsset, options: options) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let response):

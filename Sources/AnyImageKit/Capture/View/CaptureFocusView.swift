@@ -75,7 +75,7 @@ extension CaptureFocusView {
         stopTimer()
         self.alpha = 0.5
         isFocusing = true
-        exposureView.resotre()
+        exposureView.restore()
         rectView.isHidden = false
         exposureView.isHidden = isAuto
         
@@ -431,7 +431,7 @@ extension CaptureExposureView {
         }
     }
     
-    func resotre() {
+    func restore() {
         value = 0.5
         topLine.isHidden = true
         bottomLine.isHidden = true
