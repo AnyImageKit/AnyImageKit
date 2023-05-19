@@ -39,7 +39,7 @@ class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        // 判断是presentataion动画还是dismissal动画
+        // 判断是presentation动画还是dismissal动画
         guard let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to) else {
                 transitionContext.completeTransition(false)
