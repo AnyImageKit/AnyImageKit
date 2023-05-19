@@ -1,17 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "PhotoToolCropTrunLeft.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "PhotoToolCropTrunLeft@2x.png",
+      "filename" : "PhotoToolCropTurnLeft@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "PhotoToolCropTrunLeft@3x.png",
+      "filename" : "PhotoToolCropTurnLeft@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
