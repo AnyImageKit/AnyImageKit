@@ -134,9 +134,11 @@ final class VideoEditorController: AnyImageViewController {
                         self.cropToolView.isHidden = false
                     }
                     self.getProgressImage(url: url) { [weak self] (image) in
-                        self?.videoPreview.setThumbnail(image)
-                        self?.videoPreview.setupPlayer(url: url)
-                        self?.setupProgressImage(url: url, image: image)
+                        guard let self else { return }
+                        self.videoPreview.setThumbnail(image)
+                        self.videoPreview.setupPlayer(url: url)
+                        self.setupProgressImage(url: url, image: image)
+                        self.cropToolView.progressView.setCropProgress(self.options.clipRange)
                     }
                 case .failure(let error):
                     if error == .cannotFindInLocal {

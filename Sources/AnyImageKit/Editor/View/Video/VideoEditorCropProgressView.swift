@@ -242,6 +242,14 @@ extension VideoEditorCropProgressView {
             timelineLabel.text = String(format: "%02ld:%02ld", min, sec)
         }
     }
+    
+    func setCropProgress(_ range: ClosedRange<CGFloat>) {
+        left = range.lowerBound
+        right = range.upperBound
+        setProgress(left)
+        layout(updateProgress: true)
+        delegate?.cropProgress(self, didUpdate: left)
+    }
 }
 
 // MARK: - Target

@@ -121,6 +121,24 @@ extension VideoEditorConfigViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
+    private func cropRangeTapped(_ indexPath: IndexPath) {
+        let alert = UIAlertController(title: "ClipRange", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "0...1", style: .default, handler: { [weak self] (action) in
+            self?.options.clipRange = 0...1
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "0.25...0.75", style: .default, handler: { [weak self] (action) in
+            self?.options.clipRange = 0.25...0.75
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "0...0.5", style: .default, handler: { [weak self] (action) in
+            self?.options.clipRange = 0...0.5
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Enum
@@ -128,11 +146,14 @@ extension VideoEditorConfigViewController {
     
     enum RowType: Int, CaseIterable, RowTypeRule {
         case editOptions = 0
+        case clipRange
         
         var title: String {
             switch self {
             case .editOptions:
                 return "EditOptions"
+            case .clipRange:
+                return "ClipRange"
             }
         }
         
@@ -140,6 +161,8 @@ extension VideoEditorConfigViewController {
             switch self {
             case .editOptions:
                 return ".editOptions"
+            case .clipRange:
+                return ".clipRange"
             }
         }
         
@@ -147,6 +170,8 @@ extension VideoEditorConfigViewController {
             switch self {
             case .editOptions:
                 return "Clip"
+            case .clipRange:
+                return "0...1"
             }
         }
         
@@ -155,6 +180,8 @@ extension VideoEditorConfigViewController {
             switch self {
             case .editOptions:
                 return controller.editOptionsTapped
+            case .clipRange:
+                return controller.cropRangeTapped
             }
         }
     }
