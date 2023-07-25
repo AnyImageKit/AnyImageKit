@@ -106,15 +106,18 @@ extension HomeViewController {
     // MARK: - ModuleRowType
     enum ModuleRowType: CaseIterable, HomeRowTypeRule {
         case picker
-        case editor
+        case imageEditor
+        case videoEditor
         case capture
         
         var title: String {
             switch self {
             case .picker:
                 return "Picker"
-            case .editor:
-                return "Editor"
+            case .imageEditor:
+                return "ImageEditor"
+            case .videoEditor:
+                return "VideoEditor"
             case .capture:
                 return "Capture"
             }
@@ -130,8 +133,10 @@ extension HomeViewController {
             switch self {
             case .picker:
                 return PickerConfigViewController(style: style)
-            case .editor:
-                return EditorConfigViewController(style: style)
+            case .imageEditor:
+                return ImageEditorConfigViewController(style: style)
+            case .videoEditor:
+                return VideoEditorConfigViewController(style: style)
             case .capture:
                 return CaptureConfigViewController(style: style)
             }

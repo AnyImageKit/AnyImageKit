@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37A87A7F2A6FC31F00C69507 /* VideoEditorConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */; };
+		37A87A852A6FC66C00C69507 /* EditorTestVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */; };
 		7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */; };
 		71034F1D273A6992007BBF60 /* Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1C273A6992007BBF60 /* Shadow.swift */; };
 		71034F1F273A6AEA007BBF60 /* Core+CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */; };
@@ -203,7 +205,7 @@
 		A52E1D8B237AAEB40002174A /* PickerConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */; };
 		A52E1D91237AAF360002174A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52E1D93237AAF360002174A /* Localizable.strings */; };
 		A52E1D97237AB01D0002174A /* RowTypeRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D96237AB01D0002174A /* RowTypeRule.swift */; };
-		A52E1D99237AB3F60002174A /* EditorConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D98237AB3F60002174A /* EditorConfigViewController.swift */; };
+		A52E1D99237AB3F60002174A /* ImageEditorConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D98237AB3F60002174A /* ImageEditorConfigViewController.swift */; };
 		A52E1D9B237AB6430002174A /* PickerResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D9A237AB6430002174A /* PickerResultViewController.swift */; };
 		A52E1D9E237AB6980002174A /* PickerPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D9D237AB6980002174A /* PickerPreviewCell.swift */; };
 		A52E1DA0237AB6DA0002174A /* EditorResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52E1D9F237AB6DA0002174A /* EditorResultViewController.swift */; };
@@ -306,6 +308,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorConfigViewController.swift; sourceTree = "<group>"; };
+		37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = EditorTestVideo.mp4; sourceTree = "<group>"; };
 		67A8466225AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Core.strings; sourceTree = "<group>"; };
 		67A8466325AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Picker.strings; sourceTree = "<group>"; };
 		67A8466425AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Editor.strings; sourceTree = "<group>"; };
@@ -519,7 +523,7 @@
 		A52E1D92237AAF360002174A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A52E1D94237AAF3B0002174A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A52E1D96237AB01D0002174A /* RowTypeRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowTypeRule.swift; sourceTree = "<group>"; };
-		A52E1D98237AB3F60002174A /* EditorConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorConfigViewController.swift; sourceTree = "<group>"; };
+		A52E1D98237AB3F60002174A /* ImageEditorConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditorConfigViewController.swift; sourceTree = "<group>"; };
 		A52E1D9A237AB6430002174A /* PickerResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerResultViewController.swift; sourceTree = "<group>"; };
 		A52E1D9D237AB6980002174A /* PickerPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerPreviewCell.swift; sourceTree = "<group>"; };
 		A52E1D9F237AB6DA0002174A /* EditorResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorResultViewController.swift; sourceTree = "<group>"; };
@@ -699,7 +703,8 @@
 				A52E1D88237AAD420002174A /* HomeViewController.swift */,
 				A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */,
 				A52E1D9A237AB6430002174A /* PickerResultViewController.swift */,
-				A52E1D98237AB3F60002174A /* EditorConfigViewController.swift */,
+				A52E1D98237AB3F60002174A /* ImageEditorConfigViewController.swift */,
+				37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */,
 				A52E1D9F237AB6DA0002174A /* EditorResultViewController.swift */,
 				A026C99E23978DF400931028 /* CaptureConfigViewController.swift */,
 				A085EF692573EA49003F5FD6 /* Application */,
@@ -1222,6 +1227,7 @@
 		A0BF11D72519D00D0032C5BF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */,
 				A5A27BB1232F82B000D966B8 /* Assets.xcassets */,
 				A5601D4F233B0FE500D0E95E /* Example.entitlements */,
 				A5A27BB3232F82B000D966B8 /* LaunchScreen.storyboard */,
@@ -1633,6 +1639,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37A87A852A6FC66C00C69507 /* EditorTestVideo.mp4 in Resources */,
 				A5A27BB5232F82B000D966B8 /* LaunchScreen.storyboard in Resources */,
 				A52E1D91237AAF360002174A /* Localizable.strings in Resources */,
 				A5A27BB2232F82B000D966B8 /* Assets.xcassets in Resources */,
@@ -1899,13 +1906,14 @@
 				A52E1D9E237AB6980002174A /* PickerPreviewCell.swift in Sources */,
 				A0FDB2D825526D1500FDE93E /* Ex+UITableViewCell.swift in Sources */,
 				A085EF6B2573EAE1003F5FD6 /* DisableCheckRuleViewController.swift in Sources */,
+				37A87A7F2A6FC31F00C69507 /* VideoEditorConfigViewController.swift in Sources */,
 				A52E1D89237AAD420002174A /* HomeViewController.swift in Sources */,
 				715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */,
 				A0C452E623D007D90087B412 /* ConfigCell.swift in Sources */,
 				A52E1D9B237AB6430002174A /* PickerResultViewController.swift in Sources */,
 				A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
-				A52E1D99237AB3F60002174A /* EditorConfigViewController.swift in Sources */,
+				A52E1D99237AB3F60002174A /* ImageEditorConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

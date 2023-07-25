@@ -1,5 +1,5 @@
 //
-//  EditorConfigViewController.swift
+//  ImageEditorConfigViewController.swift
 //  Example
 //
 //  Created by 蒋惠 on 2019/11/12.
@@ -9,13 +9,13 @@
 import UIKit
 import AnyImageKit
 
-final class EditorConfigViewController: UITableViewController {
+final class ImageEditorConfigViewController: UITableViewController {
 
     var options = EditorPhotoOptionsInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Editor"
+        self.title = "ImageEditor"
         setupView()
         setupNavigation()
     }
@@ -74,7 +74,7 @@ final class EditorConfigViewController: UITableViewController {
 }
 
 // MARK: - ImageKitDataTrackDelegate
-extension EditorConfigViewController: ImageKitDataTrackDelegate {
+extension ImageEditorConfigViewController: ImageKitDataTrackDelegate {
     
     func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
         switch state {
@@ -91,7 +91,7 @@ extension EditorConfigViewController: ImageKitDataTrackDelegate {
 }
 
 // MARK: - ImageEditorPhotoDelegate
-extension EditorConfigViewController: ImageEditorControllerDelegate {
+extension ImageEditorConfigViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         if result.type == .photo {
@@ -106,7 +106,7 @@ extension EditorConfigViewController: ImageEditorControllerDelegate {
 }
 
 // MARK: - Tapped
-extension EditorConfigViewController {
+extension ImageEditorConfigViewController {
     
     private func editOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Edit Options", message: nil, preferredStyle: .alert)
@@ -242,7 +242,7 @@ extension EditorConfigViewController {
 }
 
 // MARK: - Enum
-extension EditorConfigViewController {
+extension ImageEditorConfigViewController {
     
     enum RowType: Int, CaseIterable, RowTypeRule {
         case editOptions = 0
@@ -304,7 +304,7 @@ extension EditorConfigViewController {
         }
         
         func getFunction<T>(_ controller: T) -> ((IndexPath) -> Void) where T : UIViewController {
-            guard let controller = controller as? EditorConfigViewController else { return { _ in } }
+            guard let controller = controller as? ImageEditorConfigViewController else { return { _ in } }
             switch self {
             case .editOptions:
                 return controller.editOptionsTapped
