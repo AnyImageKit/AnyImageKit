@@ -8,6 +8,7 @@
 
 import UIKit
 import AnyImageKit
+import AVKit
 
 final class VideoEditorConfigViewController: UITableViewController {
 
@@ -99,11 +100,9 @@ extension VideoEditorConfigViewController: ImageKitDataTrackDelegate {
 extension VideoEditorConfigViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
-        if result.type == .photo {
-            guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
-            guard let photo = UIImage(data: photoData) else { return }
-            let controller = EditorResultViewController()
-            controller.imageView.image = photo
+        if result.type == .video {
+            let controller = AVPlayerViewController()
+            controller.player = AVPlayer(url: result.mediaURL)
             show(controller, sender: nil)
             editor.dismiss(animated: true, completion: nil)
         }
