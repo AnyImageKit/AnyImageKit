@@ -15,7 +15,7 @@ final class VideoEditorConfigViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ImageEditor"
+        self.title = "VideoEditor"
         setupView()
         setupNavigation()
     }
