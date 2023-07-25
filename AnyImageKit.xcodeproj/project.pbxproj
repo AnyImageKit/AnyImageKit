@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		37A87A7F2A6FC31F00C69507 /* VideoEditorConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */; };
 		37A87A852A6FC66C00C69507 /* EditorTestVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */; };
+		37A87A872A702A0600C69507 /* EditorResultVideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A87A862A702A0600C69507 /* EditorResultVideoInfo.swift */; };
 		7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100AADC261D513F00D92741 /* Picker+UIBlurEffect.swift */; };
 		71034F1D273A6992007BBF60 /* Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1C273A6992007BBF60 /* Shadow.swift */; };
 		71034F1F273A6AEA007BBF60 /* Core+CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71034F1E273A6AEA007BBF60 /* Core+CALayer.swift */; };
@@ -310,6 +311,7 @@
 /* Begin PBXFileReference section */
 		37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorConfigViewController.swift; sourceTree = "<group>"; };
 		37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = EditorTestVideo.mp4; sourceTree = "<group>"; };
+		37A87A862A702A0600C69507 /* EditorResultVideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorResultVideoInfo.swift; sourceTree = "<group>"; };
 		67A8466225AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Core.strings; sourceTree = "<group>"; };
 		67A8466325AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Picker.strings; sourceTree = "<group>"; };
 		67A8466425AE30A60066BC51 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Editor.strings; sourceTree = "<group>"; };
@@ -1254,6 +1256,7 @@
 				A561239E23B5EE4F0071C3E8 /* EditorVideoOptionsInfo.swift */,
 				713585F527379CD400A70B9E /* EditorTheme.swift */,
 				A01A59362522206A00FABD22 /* EditorResult.swift */,
+				37A87A862A702A0600C69507 /* EditorResultVideoInfo.swift */,
 				71B3E93C2629892800710A7F /* Option */,
 				A50B20D4237AA24200A894A9 /* Controller */,
 				A50B20E6237AA24200A894A9 /* View */,
@@ -1737,6 +1740,7 @@
 				A01A59372522206A00FABD22 /* EditorResult.swift in Sources */,
 				7100AADD261D513F00D92741 /* Picker+UIBlurEffect.swift in Sources */,
 				71B3E952262989A600710A7F /* EditorPhotoToolOption.swift in Sources */,
+				37A87A872A702A0600C69507 /* EditorResultVideoInfo.swift in Sources */,
 				A5DF1E84237AA32C00E3A32E /* Editor+UIView.swift in Sources */,
 				A5EFE3F9237D3E060071F39F /* PhotoPreviewController+Editor.swift in Sources */,
 				A0769995239638630006AC9B /* ImageCaptureController.swift in Sources */,

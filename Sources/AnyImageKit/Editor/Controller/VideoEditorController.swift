@@ -12,7 +12,7 @@ import Photos
 protocol VideoEditorControllerDelegate: AnyObject {
     
     func videoEditorDidCancel(_ editor: VideoEditorController)
-    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool)
+    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, clipRange: ClosedRange<CGFloat>, isEdited: Bool)
 }
 
 final class VideoEditorController: AnyImageViewController {
@@ -169,10 +169,11 @@ extension VideoEditorController {
         guard let url = url else { return }
         let start = cropToolView.progressView.left
         let end = cropToolView.progressView.right
-        let isEdited = end - start != 1
+        let clipRange = start...end
+        let isEdited = clipRange.lowerBound.distance(to: clipRange.upperBound) != 1
         if let url = resource as? URL, !isEdited {
             _print("Export video at \(url)")
-            delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+            delegate?.videoEditor(self, didFinishEditing: url, clipRange: clipRange, isEdited: isEdited)
             trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             return
         }
@@ -181,7 +182,7 @@ extension VideoEditorController {
             switch result {
             case .success(let url):
                 _print("Export video at \(url)")
-                self.delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+                self.delegate?.videoEditor(self, didFinishEditing: url, clipRange: clipRange, isEdited: isEdited)
                 self.trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             case .failure(let error):
                 _print(error.localizedDescription)
