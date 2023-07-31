@@ -232,10 +232,10 @@ extension VideoEditorCropProgressView {
         }
         
         // Label
-        if videoDuration == 0 {
+        if videoDuration == 0 || videoDuration.isNaN {
             videoDuration = delegate?.cropProgressDurationOfVideo(self) ?? 0.0
         }
-        if videoDuration != 0 && !timeline.isHidden {
+        if videoDuration != 0 && !timeline.isHidden && !videoDuration.isNaN {
             let time = Int(videoDuration*progress)
             let min = time / 60
             let sec = time % 60
