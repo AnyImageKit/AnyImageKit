@@ -22,6 +22,7 @@ final class VideoEditorCropProgressView: UIView {
     private(set) var leftProgress: CGFloat = 0
     private(set) var rightProgress: CGFloat = 1
     private var clipRange: ClosedRange<CGFloat> = 0...1
+    private let minClipLength: CGFloat = 0.2
     
     public var progress: CGFloat {
         let x = contentView.frame.origin.x + progressView.frame.origin.x
@@ -275,11 +276,15 @@ extension VideoEditorCropProgressView {
 
         let clipLength = clipRange.upperBound - clipRange.lowerBound
         if clipLength == 1 {
-            setLeftButton(tmpLeft)
-        } else {
-            if setRightButton(tmpLeft + clipLength) {
-                setLeftButton(tmpLeft)
+            if rightProgress - tmpLeft < minClipLength {
+                setLeftButton(tmpLeft, clipLength: minClipLength)
+                setRightButton(tmpLeft + minClipLength, clipLength: minClipLength)
+            } else {
+                setLeftButton(tmpLeft, clipLength: minClipLength)
             }
+        } else {
+            setLeftButton(tmpLeft, clipLength: clipLength)
+            setRightButton(tmpLeft + clipLength, clipLength: clipLength)
         }
         
         setProgress(leftProgress)
@@ -295,11 +300,15 @@ extension VideoEditorCropProgressView {
 
         let clipLength = clipRange.upperBound - clipRange.lowerBound
         if clipLength == 1 {
-            setRightButton(tmpRight)
-        } else {
-            if setLeftButton(tmpRight - clipLength) {
-                setRightButton(tmpRight)
+            if tmpRight - leftProgress < minClipLength {
+                setLeftButton(tmpRight - minClipLength, clipLength: minClipLength)
+                setRightButton(tmpRight, clipLength: minClipLength)
+            } else {
+                setRightButton(tmpRight, clipLength: minClipLength)
             }
+        } else {
+            setLeftButton(tmpRight - clipLength, clipLength: clipLength)
+            setRightButton(tmpRight, clipLength: clipLength)
         }
         
         setProgress(rightProgress)
@@ -312,22 +321,12 @@ extension VideoEditorCropProgressView {
         }
     }
     
-    @discardableResult
-    private func setLeftButton(_ offset: CGFloat) -> Bool {
-        if offset < 0 || rightProgress - offset < 0.2 {
-            return false
-        }
-        leftProgress = offset
-        return true
+    private func setLeftButton(_ offset: CGFloat, clipLength: CGFloat) {
+        leftProgress = max(0, min(offset, 1 - clipLength))
     }
     
-    @discardableResult
-    private func setRightButton(_ offset: CGFloat) -> Bool {
-        if offset > 1 || offset - leftProgress < 0.2 {
-            return false
-        }
-        rightProgress = offset
-        return true
+    private func setRightButton(_ offset: CGFloat, clipLength: CGFloat) {
+        rightProgress = min(1, max(offset, clipLength))
     }
 }
 
