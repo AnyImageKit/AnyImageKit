@@ -129,7 +129,6 @@ extension EditorPhotoResource {
             canvasSize = canvasSize.reversed(isLandscapeMode)
             imageSize = imageSize.reversed(isLandscapeMode)
         }
-        print(Date().timeIntervalSince1970)
         
         // Correcting image orientation
         let fixedImage = UIGraphicsImageRenderer.init(size: canvasSize, format: getImageRendererFormat()).image { rendererContext in
