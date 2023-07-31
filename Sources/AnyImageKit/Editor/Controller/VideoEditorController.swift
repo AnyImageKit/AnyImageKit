@@ -167,8 +167,8 @@ extension VideoEditorController {
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         guard let url = url else { return }
-        let start = cropToolView.progressView.left
-        let end = cropToolView.progressView.right
+        let start = cropToolView.progressView.leftProgress
+        let end = cropToolView.progressView.rightProgress
         let clipRange = start...end
         let isEdited = clipRange.lowerBound.distance(to: clipRange.upperBound) != 1
         if let url = resource as? URL, !isEdited {
@@ -196,7 +196,7 @@ extension VideoEditorController: VideoPreviewDelegate {
     
     func previewPlayerDidPlayToEndTime(_ view: VideoPreview) {
         cropToolView.playButton.isSelected = view.isPlaying
-        view.setProgress(cropToolView.progressView.left)
+        view.setProgress(cropToolView.progressView.leftProgress)
     }
 }
 
@@ -303,11 +303,11 @@ extension VideoEditorController {
                 let progress = CGFloat(current.seconds / total.seconds)
                 let progressView = self.cropToolView.progressView
                 self.cropToolView.progressView.setProgress(progress)
-                if progress >= progressView.right {
+                if progress >= progressView.rightProgress {
                     self.videoPreview.player?.pause()
                     self.cropToolView.playButton.isSelected = self.videoPreview.isPlaying
-                    self.cropToolView.progressView.setProgress(self.cropToolView.progressView.left)
-                    self.videoPreview.setProgress(self.cropToolView.progressView.left)
+                    self.cropToolView.progressView.setProgress(self.cropToolView.progressView.leftProgress)
+                    self.videoPreview.setProgress(self.cropToolView.progressView.leftProgress)
                 }
             })
         }
