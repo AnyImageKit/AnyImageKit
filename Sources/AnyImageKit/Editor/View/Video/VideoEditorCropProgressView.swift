@@ -21,6 +21,7 @@ final class VideoEditorCropProgressView: UIView {
     
     private(set) var left: CGFloat = 0
     private(set) var right: CGFloat = 1
+    private var clipRange: ClosedRange<CGFloat> = 0...1
     
     public var progress: CGFloat {
         let x = contentView.frame.origin.x + progressView.frame.origin.x
@@ -244,6 +245,7 @@ extension VideoEditorCropProgressView {
     }
     
     func setCropProgress(_ range: ClosedRange<CGFloat>) {
+        clipRange = range
         left = range.lowerBound
         right = range.upperBound
         setProgress(left)
@@ -270,10 +272,16 @@ extension VideoEditorCropProgressView {
         let point = pan.location(in: self)
         let x = point.x < 0 ? 0 : point.x
         let tmpLeft = x / bounds.width
-        if right - tmpLeft < 0.2 {
-            return
+
+        let clipLength = clipRange.upperBound - clipRange.lowerBound
+        if clipLength == 1 {
+            setLeftButton(tmpLeft)
+        } else {
+            if setRightButton(tmpLeft + clipLength) {
+                setLeftButton(tmpLeft)
+            }
         }
-        left = tmpLeft
+        
         setProgress(left)
         layout(updateProgress: false)
         delegate?.cropProgress(self, didUpdate: left)
@@ -284,10 +292,16 @@ extension VideoEditorCropProgressView {
         let point = pan.location(in: self)
         let x = point.x > bounds.width ? bounds.width : point.x
         let tmpRight = x / bounds.width
-        if tmpRight - left < 0.2 {
-            return
+
+        let clipLength = clipRange.upperBound - clipRange.lowerBound
+        if clipLength == 1 {
+            setRightButton(tmpRight)
+        } else {
+            if setLeftButton(tmpRight - clipLength) {
+                setRightButton(tmpRight)
+            }
         }
-        right = tmpRight
+        
         setProgress(right)
         layout(updateProgress: false)
         delegate?.cropProgress(self, didUpdate: right)
@@ -296,6 +310,24 @@ extension VideoEditorCropProgressView {
             setProgress(left)
             delegate?.cropProgress(self, didUpdate: left)
         }
+    }
+    
+    @discardableResult
+    private func setLeftButton(_ offset: CGFloat) -> Bool {
+        if offset < 0 || right - offset < 0.2 {
+            return false
+        }
+        left = offset
+        return true
+    }
+    
+    @discardableResult
+    private func setRightButton(_ offset: CGFloat) -> Bool {
+        if offset > 1 || offset - left < 0.2 {
+            return false
+        }
+        right = offset
+        return true
     }
 }
 
