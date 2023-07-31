@@ -189,8 +189,6 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         switch UIApplication.shared.statusBarOrientation {
-        case .unknown:
-            return .portrait
         case .portrait:
             return .portrait
         case .portraitUpsideDown:
@@ -199,6 +197,10 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
             return .landscapeLeft
         case .landscapeRight:
             return .landscapeRight
+        case .unknown:
+            return .portrait
+        @unknown default:
+            return .portrait
         }
     }
     

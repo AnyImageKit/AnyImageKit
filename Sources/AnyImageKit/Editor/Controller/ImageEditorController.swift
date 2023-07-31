@@ -78,8 +78,6 @@ open class ImageEditorController: AnyImageNavigationController {
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         switch UIApplication.shared.statusBarOrientation {
-        case .unknown:
-            return .portrait
         case .portrait:
             return .portrait
         case .portraitUpsideDown:
@@ -88,6 +86,10 @@ open class ImageEditorController: AnyImageNavigationController {
             return .landscapeLeft
         case .landscapeRight:
             return .landscapeRight
+        case .unknown:
+            return .portrait
+        @unknown default:
+            return .portrait
         }
     }
     
