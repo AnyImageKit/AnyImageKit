@@ -94,9 +94,6 @@ open class ImageEditorController: AnyImageNavigationController {
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIApplication.shared.statusBarOrientation
     }
-}
-
-extension ImageEditorController {
     
     open func update(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {
         guard viewControllers.isEmpty || enableForceUpdate else {

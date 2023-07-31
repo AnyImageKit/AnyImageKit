@@ -122,9 +122,6 @@ open class ImagePickerController: AnyImageNavigationController {
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIApplication.shared.statusBarOrientation
     }
-}
-
-extension ImagePickerController {
     
     open func update(options: PickerOptionsInfo) {
         guard viewControllers.isEmpty || enableForceUpdate else {
