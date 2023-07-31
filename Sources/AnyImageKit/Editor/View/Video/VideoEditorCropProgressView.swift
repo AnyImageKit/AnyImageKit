@@ -19,8 +19,8 @@ final class VideoEditorCropProgressView: UIView {
     public weak var delegate: VideoEditorCropProgressViewDelegate?
     private let options: EditorVideoOptionsInfo
     
-    private(set) var left: CGFloat = 0
-    private(set) var right: CGFloat = 1
+    private(set) var leftProgress: CGFloat = 0
+    private(set) var rightProgress: CGFloat = 1
     private var clipRange: ClosedRange<CGFloat> = 0...1
     
     public var progress: CGFloat {
@@ -163,14 +163,14 @@ final class VideoEditorCropProgressView: UIView {
     }
     
     private func layout(updateProgress: Bool) {
-        let isSelected = right - left != 1
+        let isSelected = rightProgress - leftProgress != 1
         leftButton.isSelected = isSelected
         rightButton.isSelected = isSelected
         contentLayer.isHidden = !isSelected
         
         contentView.snp.updateConstraints { maker in
-            maker.left.equalToSuperview().offset(left*bounds.width)
-            maker.right.equalToSuperview().offset(-((1-right)*(bounds.width)))
+            maker.left.equalToSuperview().offset(leftProgress*bounds.width)
+            maker.right.equalToSuperview().offset(-((1-rightProgress)*(bounds.width)))
         }
         if updateProgress {
             progressView.snp.updateConstraints { maker in
@@ -226,8 +226,8 @@ extension VideoEditorCropProgressView {
     
     public func setProgress(_ progress: CGFloat) {
         var progress = progress < 0 ? 0 : (progress > 1 ? 1 : progress)
-        progress = progress < left ? left : (progress > right ? right : progress)
-        let offset = (progress - left) / (right - left) * (progressContentView.frame.width - progressView.frame.width)
+        progress = progress < leftProgress ? leftProgress : (progress > rightProgress ? rightProgress : progress)
+        let offset = (progress - leftProgress) / (rightProgress - leftProgress) * (progressContentView.frame.width - progressView.frame.width)
         progressView.snp.updateConstraints { maker in
             maker.left.equalToSuperview().offset(offset)
         }
@@ -246,11 +246,11 @@ extension VideoEditorCropProgressView {
     
     func setCropProgress(_ range: ClosedRange<CGFloat>) {
         clipRange = range
-        left = range.lowerBound
-        right = range.upperBound
-        setProgress(left)
+        leftProgress = range.lowerBound
+        rightProgress = range.upperBound
+        setProgress(leftProgress)
         layout(updateProgress: true)
-        delegate?.cropProgress(self, didUpdate: left)
+        delegate?.cropProgress(self, didUpdate: leftProgress)
     }
 }
 
@@ -261,7 +261,7 @@ extension VideoEditorCropProgressView {
         let point = pan.location(in: self)
         let progress = point.x / bounds.width
         setProgress(progress)
-        if progress < left || progress > right {
+        if progress < leftProgress || progress > rightProgress {
             return
         }
         delegate?.cropProgress(self, didUpdate: progress)
@@ -282,9 +282,9 @@ extension VideoEditorCropProgressView {
             }
         }
         
-        setProgress(left)
+        setProgress(leftProgress)
         layout(updateProgress: false)
-        delegate?.cropProgress(self, didUpdate: left)
+        delegate?.cropProgress(self, didUpdate: leftProgress)
         setTimeline(hidden: pan.state != .changed)
     }
     
@@ -302,31 +302,31 @@ extension VideoEditorCropProgressView {
             }
         }
         
-        setProgress(right)
+        setProgress(rightProgress)
         layout(updateProgress: false)
-        delegate?.cropProgress(self, didUpdate: right)
+        delegate?.cropProgress(self, didUpdate: rightProgress)
         setTimeline(hidden: pan.state != .changed)
         if pan.state == .ended || pan.state == .cancelled {
-            setProgress(left)
-            delegate?.cropProgress(self, didUpdate: left)
+            setProgress(leftProgress)
+            delegate?.cropProgress(self, didUpdate: leftProgress)
         }
     }
     
     @discardableResult
     private func setLeftButton(_ offset: CGFloat) -> Bool {
-        if offset < 0 || right - offset < 0.2 {
+        if offset < 0 || rightProgress - offset < 0.2 {
             return false
         }
-        left = offset
+        leftProgress = offset
         return true
     }
     
     @discardableResult
     private func setRightButton(_ offset: CGFloat) -> Bool {
-        if offset > 1 || offset - left < 0.2 {
+        if offset > 1 || offset - leftProgress < 0.2 {
             return false
         }
-        right = offset
+        rightProgress = offset
         return true
     }
 }
