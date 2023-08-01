@@ -544,7 +544,7 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let asset = album?.assets[indexPath.item] else { return UICollectionViewCell() }
+        guard let asset = album?.assets[indexPath.item] else { return collectionView.dequeueReusableCell(UICollectionViewCell.self, for: indexPath) }
         
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera {
