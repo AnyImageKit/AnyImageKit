@@ -12,7 +12,7 @@ import Photos
 protocol VideoEditorControllerDelegate: AnyObject {
     
     func videoEditorDidCancel(_ editor: VideoEditorController)
-    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool)
+    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, clipRange: ClosedRange<CGFloat>, isEdited: Bool)
 }
 
 final class VideoEditorController: AnyImageViewController {
@@ -134,9 +134,11 @@ final class VideoEditorController: AnyImageViewController {
                         self.cropToolView.isHidden = false
                     }
                     self.getProgressImage(url: url) { [weak self] (image) in
-                        self?.videoPreview.setThumbnail(image)
-                        self?.videoPreview.setupPlayer(url: url)
-                        self?.setupProgressImage(url: url, image: image)
+                        guard let self else { return }
+                        self.videoPreview.setThumbnail(image)
+                        self.videoPreview.setupPlayer(url: url)
+                        self.setupProgressImage(url: url, image: image)
+                        self.cropToolView.progressView.setCropProgress(self.options.clipRange)
                     }
                 case .failure(let error):
                     if error == .cannotFindInLocal {
@@ -165,12 +167,13 @@ extension VideoEditorController {
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         guard let url = url else { return }
-        let start = cropToolView.progressView.left
-        let end = cropToolView.progressView.right
-        let isEdited = end - start != 1
+        let start = cropToolView.progressView.leftProgress
+        let end = cropToolView.progressView.rightProgress
+        let clipRange = start...end
+        let isEdited = clipRange.lowerBound.distance(to: clipRange.upperBound) != 1
         if let url = resource as? URL, !isEdited {
             _print("Export video at \(url)")
-            delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+            delegate?.videoEditor(self, didFinishEditing: url, clipRange: clipRange, isEdited: isEdited)
             trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             return
         }
@@ -179,7 +182,7 @@ extension VideoEditorController {
             switch result {
             case .success(let url):
                 _print("Export video at \(url)")
-                self.delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+                self.delegate?.videoEditor(self, didFinishEditing: url, clipRange: clipRange, isEdited: isEdited)
                 self.trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             case .failure(let error):
                 _print(error.localizedDescription)
@@ -193,7 +196,7 @@ extension VideoEditorController: VideoPreviewDelegate {
     
     func previewPlayerDidPlayToEndTime(_ view: VideoPreview) {
         cropToolView.playButton.isSelected = view.isPlaying
-        view.setProgress(cropToolView.progressView.left)
+        view.setProgress(cropToolView.progressView.leftProgress)
     }
 }
 
@@ -300,11 +303,11 @@ extension VideoEditorController {
                 let progress = CGFloat(current.seconds / total.seconds)
                 let progressView = self.cropToolView.progressView
                 self.cropToolView.progressView.setProgress(progress)
-                if progress >= progressView.right {
+                if progress >= progressView.rightProgress {
                     self.videoPreview.player?.pause()
                     self.cropToolView.playButton.isSelected = self.videoPreview.isPlaying
-                    self.cropToolView.progressView.setProgress(self.cropToolView.progressView.left)
-                    self.videoPreview.setProgress(self.cropToolView.progressView.left)
+                    self.cropToolView.progressView.setProgress(self.cropToolView.progressView.leftProgress)
+                    self.videoPreview.setProgress(self.cropToolView.progressView.leftProgress)
                 }
             })
         }

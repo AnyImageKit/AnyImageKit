@@ -33,6 +33,7 @@ final class VideoPreview: UIView {
         return view
     }()
     private(set) var player: AVPlayer?
+    private var itemStatusObservation: NSKeyValueObservation?
     private var playerLayer: AVPlayerLayer?
     
     private var image: UIImage?
@@ -49,12 +50,32 @@ final class VideoPreview: UIView {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        itemStatusObservation = nil
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.frame = fitFrame
         playerLayer?.frame = imageView.frame
+    }
+}
+
+// MARK: - Private
+extension VideoPreview {
+    func setProgressWhenReady(_ progress: CGFloat) {
+        itemStatusObservation = player?
+            .currentItem?
+            .observe(\.status, changeHandler: { [weak self] playerItem, change in
+                switch playerItem.status {
+                case .readyToPlay:
+                    self?.setProgress(progress)
+                case .failed, .unknown:
+                    break
+                @unknown default:
+                    break
+                }
+            }
+        )
     }
 }
 
@@ -67,6 +88,7 @@ extension VideoPreview {
         playerLayer = AVPlayerLayer(player: player)
         layer.addSublayer(playerLayer!)
         playerLayer?.frame = imageView.frame
+        
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayToEndTime(_:)), name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
     
@@ -87,7 +109,13 @@ extension VideoPreview {
     
     public func setProgress(_ progress: CGFloat) {
         if player == nil { return }
-        guard let duration = player?.currentItem?.duration, duration.isValid else { return }
+        guard let currentItem = player?.currentItem else { return }
+        guard currentItem.status == .readyToPlay else {
+            setProgressWhenReady(progress)
+            return
+        }
+        let duration = currentItem.duration
+        guard duration.isValid else { return }
         imageView.isHidden = true
         let time = CMTime(seconds: duration.seconds * Double(progress), preferredTimescale: duration.timescale)
         guard time.isValid else { return }

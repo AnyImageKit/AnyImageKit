@@ -17,12 +17,16 @@ public struct EditorResult: Equatable {
     /// Media type
     public let type: MediaType
     
+    /// Video editing info
+    public let videoEditingInfo: EditorResultVideoInfo?
+    
     /// Media is edited or not
     public let isEdited: Bool
     
-    init(mediaURL: URL, type: MediaType, isEdited: Bool) {
+    init(mediaURL: URL, type: MediaType, videoEditingInfo: EditorResultVideoInfo?, isEdited: Bool) {
         self.mediaURL = mediaURL
         self.type = type
+        self.videoEditingInfo = videoEditingInfo
         self.isEdited = isEdited
     }
 }

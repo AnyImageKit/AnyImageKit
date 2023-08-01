@@ -19,6 +19,13 @@ public struct EditorVideoOptionsInfo {
     /// - Default: [clip]
     public var toolOptions: [EditorVideoToolOption] = [.clip]
     
+    /// Range of clip tool options.
+    ///
+    /// - Note: The value exceeding the range of 0 to 1 is not allowed.
+    ///
+    /// - Default: 0...1
+    public var clipRange: ClosedRange<CGFloat> = 0...1
+    
     /// Enable debug log
     /// - Default: false
     public var enableDebugLog: Bool = false

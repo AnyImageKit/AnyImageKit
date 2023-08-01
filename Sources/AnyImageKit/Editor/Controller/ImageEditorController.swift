@@ -220,7 +220,7 @@ extension ImageEditorController: PhotoEditorControllerDelegate {
         let outputResult = output(photo: photo, fileType: .jpeg)
         switch outputResult {
         case .success(let url):
-            let result = EditorResult(mediaURL: url, type: .photo, isEdited: isEdited)
+            let result = EditorResult(mediaURL: url, type: .photo, videoEditingInfo: nil, isEdited: isEdited)
             editorDelegate?.imageEditor(self, didFinishEditing: result)
         case .failure(let error):
             _print(error.localizedDescription)
@@ -235,8 +235,9 @@ extension ImageEditorController: VideoEditorControllerDelegate {
         editorDelegate?.imageEditorDidCancel(self)
     }
     
-    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool) {
-        let result = EditorResult(mediaURL: video, type: .video, isEdited: isEdited)
+    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, clipRange: ClosedRange<CGFloat>, isEdited: Bool) {
+        let editingInfo = EditorResultVideoInfo(clipRange: clipRange)
+        let result = EditorResult(mediaURL: video, type: .video, videoEditingInfo: editingInfo, isEdited: isEdited)
         editorDelegate?.imageEditor(self, didFinishEditing: result)
     }
 }
