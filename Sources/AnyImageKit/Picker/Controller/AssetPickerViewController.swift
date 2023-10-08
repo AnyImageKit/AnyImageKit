@@ -424,7 +424,7 @@ extension AssetPickerViewController {
             guard self.manager.options.selectLimit == 1 && self.manager.options.selectionTapAction.hideToolBar else { return }
             guard let asset = self.manager.selectedAssets.first else { return }
             guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
-            cell.selectEvent.call()
+            cell.selectEvent?()
         }
     }
 }
@@ -560,8 +560,8 @@ extension AssetPickerViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
         cell.tag = indexPath.row
         cell.setContent(asset, manager: manager)
-        cell.selectEvent.delegate(on: self) { (self, _) in
-            self.selectItem(indexPath.row)
+        cell.selectEvent = { [weak self] in
+            self?.selectItem(indexPath.row)
         }
         cell.backgroundColor = UIColor.white
         cell.isAccessibilityElement = true
@@ -600,7 +600,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         
         if manager.options.selectionTapAction == .quickPick {
             guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-            cell.selectEvent.call()
+            cell.selectEvent?()
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
                 doneButtonTapped(toolBar.doneButton)
             }
@@ -802,8 +802,8 @@ extension AssetPickerViewController {
             guard let self = self else { return }
             cell.tag = indexPath.row
             cell.setContent(asset, manager: self.manager)
-            cell.selectEvent.delegate(on: self) { (self, _) in
-                self.selectItem(indexPath.row)
+            cell.selectEvent = { [weak self] in
+                self?.selectItem(indexPath.row)
             }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
