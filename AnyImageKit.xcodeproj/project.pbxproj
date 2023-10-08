@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		376E00782AD267DA0034455F /* ImageCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E00772AD267DA0034455F /* ImageCacheTool.swift */; };
 		37A87A7F2A6FC31F00C69507 /* VideoEditorConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */; };
 		37A87A852A6FC66C00C69507 /* EditorTestVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */; };
 		37A87A872A702A0600C69507 /* EditorResultVideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A87A862A702A0600C69507 /* EditorResultVideoInfo.swift */; };
@@ -74,7 +75,7 @@
 		71B3E952262989A600710A7F /* EditorPhotoToolOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E951262989A600710A7F /* EditorPhotoToolOption.swift */; };
 		71B3E957262989BE00710A7F /* EditorVideoToolOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3E956262989BE00710A7F /* EditorVideoToolOption.swift */; };
 		71BAF335257619A3007AE60F /* CacheModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF334257619A3007AE60F /* CacheModule.swift */; };
-		71BAF33925761A35007AE60F /* ImageCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33825761A35007AE60F /* ImageCacheTool.swift */; };
+		71BAF33925761A35007AE60F /* ImageCacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33825761A35007AE60F /* ImageCacheable.swift */; };
 		71BAF33D25761C48007AE60F /* CodableCacheTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAF33C25761C48007AE60F /* CodableCacheTool.swift */; };
 		71C6B6132603428D00A345C7 /* RotateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C6B6122603428D00A345C7 /* RotateData.swift */; };
 		71CBF13525199C0D00F79D19 /* ColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CBF13425199C0D00F79D19 /* ColorWell.swift */; };
@@ -309,6 +310,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		376E00772AD267DA0034455F /* ImageCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheTool.swift; sourceTree = "<group>"; };
 		37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorConfigViewController.swift; sourceTree = "<group>"; };
 		37A87A842A6FC66C00C69507 /* EditorTestVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = EditorTestVideo.mp4; sourceTree = "<group>"; };
 		37A87A862A702A0600C69507 /* EditorResultVideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorResultVideoInfo.swift; sourceTree = "<group>"; };
@@ -375,7 +377,7 @@
 		71B3E951262989A600710A7F /* EditorPhotoToolOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorPhotoToolOption.swift; sourceTree = "<group>"; };
 		71B3E956262989BE00710A7F /* EditorVideoToolOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVideoToolOption.swift; sourceTree = "<group>"; };
 		71BAF334257619A3007AE60F /* CacheModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheModule.swift; sourceTree = "<group>"; };
-		71BAF33825761A35007AE60F /* ImageCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheTool.swift; sourceTree = "<group>"; };
+		71BAF33825761A35007AE60F /* ImageCacheable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheable.swift; sourceTree = "<group>"; };
 		71BAF33C25761C48007AE60F /* CodableCacheTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableCacheTool.swift; sourceTree = "<group>"; };
 		71C6B6122603428D00A345C7 /* RotateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateData.swift; sourceTree = "<group>"; };
 		71CBF13425199C0D00F79D19 /* ColorWell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWell.swift; sourceTree = "<group>"; };
@@ -833,7 +835,7 @@
 			children = (
 				71BAF334257619A3007AE60F /* CacheModule.swift */,
 				713C204F25AD32AA00BB0F66 /* Cacheable.swift */,
-				71BAF33825761A35007AE60F /* ImageCacheTool.swift */,
+				71BAF33825761A35007AE60F /* ImageCacheable.swift */,
 				71BAF33C25761C48007AE60F /* CodableCacheTool.swift */,
 			);
 			path = Cache;
@@ -1343,6 +1345,7 @@
 			isa = PBXGroup;
 			children = (
 				A0FDB2D725526D1500FDE93E /* Ex+UITableViewCell.swift */,
+				376E00772AD267DA0034455F /* ImageCacheTool.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1686,7 +1689,7 @@
 				7195A844273E5BC000C3D5D5 /* Picker+AnyImagePage.swift in Sources */,
 				717DCADA256CEEC700568A6C /* Canvas.swift in Sources */,
 				A012D2D226203B2D006B5261 /* IdentifiableResource.swift in Sources */,
-				71BAF33925761A35007AE60F /* ImageCacheTool.swift in Sources */,
+				71BAF33925761A35007AE60F /* ImageCacheable.swift in Sources */,
 				A05C8DA7233DFC71005B0F3C /* PickerManager+Album.swift in Sources */,
 				71B3E9482629897B00710A7F /* EditorTextColor.swift in Sources */,
 				71723647249C4CD5003D23DB /* PadCaptureViewController.swift in Sources */,
@@ -1911,6 +1914,7 @@
 				A0FDB2D825526D1500FDE93E /* Ex+UITableViewCell.swift in Sources */,
 				A085EF6B2573EAE1003F5FD6 /* DisableCheckRuleViewController.swift in Sources */,
 				37A87A7F2A6FC31F00C69507 /* VideoEditorConfigViewController.swift in Sources */,
+				376E00782AD267DA0034455F /* ImageCacheTool.swift in Sources */,
 				A52E1D89237AAD420002174A /* HomeViewController.swift in Sources */,
 				715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */,
 				A0C452E623D007D90087B412 /* ConfigCell.swift in Sources */,

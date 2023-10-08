@@ -100,6 +100,8 @@ public struct PickerOptionsInfo {
     public var useSameEditorOptionsInCapture: Bool = true
     #endif
     
+    public var imageCache: any ImageCacheable = InMemoryImageCache()
+    
     public init() {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         captureOptions.mediaOptions = []

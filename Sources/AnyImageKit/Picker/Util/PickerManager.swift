@@ -38,9 +38,11 @@ final class PickerManager {
     private var fetchRecords = [FetchRecord]()
     
     /// 缓存
-    let cache = ImageCacheTool(module: .picker(.default), memoryCountLimit: 10, useDiskCache: false)
+    let cache: any ImageCacheable
     
-    init() { }
+    init(cache: any ImageCacheable) {
+        self.cache = cache
+    }
     
     let workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.PickerManager")
     let resizeSemaphore = DispatchSemaphore(value: 3)

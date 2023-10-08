@@ -31,21 +31,22 @@ open class ImagePickerController: AnyImageNavigationController {
     private var didCallback: Bool = false
     private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
-    private let manager: PickerManager = .init()
+    private let manager: PickerManager
     
-    public required init() {
+    init(manager: PickerManager) {
+        self.manager = manager
         super.init(nibName: nil, bundle: nil)
     }
     
     /// Init Picker
     public convenience init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
-        self.init()
+        self.init(manager: PickerManager(cache: options.imageCache))
         self.update(options: options)
         self.pickerDelegate = delegate
     }
     
     public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError()
     }
     
     deinit {
