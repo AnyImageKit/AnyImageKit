@@ -9,6 +9,8 @@
 
 ### Resolved
 
+- General
+  - Fixed some warnings and typos.
 - Picker
   - Fixed an issue that callbacks were occasionally not triggered.([#182](https://github.com/AnyImageKit/AnyImageKit/pull/182))
 - Editor

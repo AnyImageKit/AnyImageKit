@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
     s.homepage = 'https://github.com/AnyImageKit/AnyImageKit'
     s.authors = {
         'anotheren' => 'liudong.edward@gmail.com',
-        'RayJiang16' => '1184731421@qq.com',
+        'RayJiang16' => 'is.rayjiang@outlook.com',
     }
     s.source = { :git => 'https://github.com/AnyImageKit/AnyImageKit.git', :tag => s.version }
     s.ios.deployment_target = '12.0'

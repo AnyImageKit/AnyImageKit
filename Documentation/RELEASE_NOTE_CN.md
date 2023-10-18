@@ -9,6 +9,8 @@
 
 ### 修复
 
+- 通用
+  - 修复了一些警告和错别字
 - Picker
   - 修复回调偶尔不会触发的问题。([#182](https://github.com/AnyImageKit/AnyImageKit/pull/182))
 - Editor
