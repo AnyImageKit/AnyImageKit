@@ -1,5 +1,20 @@
 # Release Notes
 
+## 0.17.0
+
+### New Features
+
+- Editor
+  - Added a new configuration `clipRange` to set the range for video clipping.
+
+### Resolved
+
+- Picker
+  - Fixed an issue that callbacks were occasionally not triggered.([#182](https://github.com/AnyImageKit/AnyImageKit/pull/182))
+- Editor
+  - Fixed an issue that images with orientation information in their EXIF data were not correctly handled.
+  - Fixed a crash that could occur when dragging the progress bar during video editing.
+
 ## 0.16.0
 
 ### New Features
@@ -7,7 +22,7 @@
 - Picker
   - Keep selected resources when switching albums.
   - Split the preview function into "Album Preview" and "Selected Resource Preview".([#167](https://github.com/AnyImageKit/AnyImageKit/pull/167))
-  - Added a new configuration clearSelectionAfterSwitchingAlbum to keep **OR** delete selected resources when switching albums.
+  - Added a new configuration `clearSelectionAfterSwitchingAlbum` to keep **OR** delete selected resources when switching albums.
 
 ### Resolved
 
