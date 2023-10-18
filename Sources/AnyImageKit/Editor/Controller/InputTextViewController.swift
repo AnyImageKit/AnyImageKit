@@ -213,8 +213,6 @@ final class InputTextViewController: AnyImageViewController {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         switch UIApplication.shared.statusBarOrientation {
-        case .unknown:
-            return .portrait
         case .portrait:
             return .portrait
         case .portraitUpsideDown:
@@ -223,6 +221,10 @@ final class InputTextViewController: AnyImageViewController {
             return .landscapeLeft
         case .landscapeRight:
             return .landscapeRight
+        case .unknown:
+            return .portrait
+        @unknown default:
+            return .portrait
         }
     }
     

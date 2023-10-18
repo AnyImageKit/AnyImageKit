@@ -102,8 +102,6 @@ open class ImagePickerController: AnyImageNavigationController {
             return .all
         } else {
             switch UIApplication.shared.statusBarOrientation {
-            case .unknown:
-                return .portrait
             case .portrait:
                 return .portrait
             case .portraitUpsideDown:
@@ -112,6 +110,10 @@ open class ImagePickerController: AnyImageNavigationController {
                 return .landscapeLeft
             case .landscapeRight:
                 return .landscapeRight
+            case .unknown:
+                return .portrait
+            @unknown default:
+                return .portrait
             }
         }
         #else
@@ -122,9 +124,6 @@ open class ImagePickerController: AnyImageNavigationController {
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIApplication.shared.statusBarOrientation
     }
-}
-
-extension ImagePickerController {
     
     open func update(options: PickerOptionsInfo) {
         guard viewControllers.isEmpty || enableForceUpdate else {

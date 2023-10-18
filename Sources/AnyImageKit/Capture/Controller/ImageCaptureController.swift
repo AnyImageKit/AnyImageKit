@@ -60,9 +60,6 @@ open class ImageCaptureController: AnyImageNavigationController {
             }
         }
     }
-}
-
-extension ImageCaptureController {
     
     open func update(options: CaptureOptionsInfo) {
         guard viewControllers.isEmpty || enableForceUpdate else {
