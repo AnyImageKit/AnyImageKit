@@ -139,7 +139,7 @@ extension Recorder {
     
     private func createWriter() -> AVAssetWriter? {
         do {
-            let outputURL = FileHelper.getTemporaryUrl(by: .video, fileType: .mp4)
+            let outputURL = FileHelper.getTemporaryURL(by: .video, fileType: .mp4)
             _print("Create AVAssetWriter at utl: \(outputURL)")
             return try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
         } catch {

@@ -115,7 +115,7 @@ extension PadCaptureViewController {
     
     private func convertMovToMp4(_ url: URL, completion: @escaping ((URL?) -> Void)) {
         let avAsset = AVURLAsset(url: url, options: nil)
-        let outputURL = FileHelper.getTemporaryUrl(by: .video, fileType: .mp4)
+        let outputURL = FileHelper.getTemporaryURL(by: .video, fileType: .mp4)
         
         let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputURL = outputURL

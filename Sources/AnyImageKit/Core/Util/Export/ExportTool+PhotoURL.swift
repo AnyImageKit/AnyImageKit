@@ -50,7 +50,7 @@ extension ExportTool {
         return ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { result, requestID in
             switch result {
             case .success(let response):
-                guard let outputURL = FileHelper.write(photoData: response.data, utType: response.dataUTI as CFString) else {
+                guard let outputURL = FileHelper.write(photoData: response.data, utType: response.dataUTI as CFString, dir: options.preferredOutputPath) else {
                     completion(.failure(.fileWriteFailed), requestID)
                     return
                 }

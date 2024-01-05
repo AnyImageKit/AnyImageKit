@@ -40,13 +40,13 @@ struct FileHelper {
 extension FileHelper {
     
     @discardableResult
-    static func write(photoData: Data, fileType: FileType, filename: String = "") -> URL? {
-        write(photoData: photoData, utType: fileType.utType, filename: filename)
+    static func write(photoData: Data, fileType: FileType, dir: String = "", filename: String = "") -> URL? {
+        write(photoData: photoData, utType: fileType.utType, dir: dir, filename: filename)
     }
     
     @discardableResult
-    static func write(photoData: Data, utType: CFString, filename: String = "") -> URL? {
-        let url = getTemporaryUrl(by: .photo, utType: utType, filename: filename)
+    static func write(photoData: Data, utType: CFString, dir: String = "", filename: String = "") -> URL? {
+        let url = getOutputURL(by: .photo, utType: utType, dir: dir, filename: filename)
         do {
             try photoData.write(to: url)
             return url
@@ -61,7 +61,7 @@ extension FileHelper {
     }
     
     static func read(utType: CFString, filename: String) -> Data? {
-        let url = getTemporaryUrl(by: .photo, utType: utType, filename: filename)
+        let url = getTemporaryURL(by: .photo, utType: utType, filename: filename)
         if !FileManager.default.fileExists(atPath: url.path) { return nil }
         do {
             return try Data(contentsOf: url)
@@ -89,15 +89,27 @@ extension FileHelper {
         }
     }
     
-    static func getTemporaryUrl(by type: MediaType, fileType: FileType, filename: String = "") -> URL {
-        return getTemporaryUrl(by: type, utType: fileType.utType, filename: filename)
+    static func getTemporaryURL(by type: MediaType, fileType: FileType, filename: String = "") -> URL {
+        return getTemporaryURL(by: type, utType: fileType.utType, filename: filename)
     }
     
-    static func getTemporaryUrl(by type: MediaType, utType: CFString, filename: String = "") -> URL {
+    static func getTemporaryURL(by type: MediaType, utType: CFString, filename: String = "") -> URL {
         let tmpPath = temporaryDirectory(for: type)
         let name = filename.isEmpty ? dateString() : filename
         let filePath = tmpPath.appending("\(name).\(fileExtension(from: utType))")
         createDirectory(at: tmpPath)
         return URL(fileURLWithPath: filePath)
+    }
+    
+    static func getOutputURL(by type: MediaType, utType: CFString, dir: String = "", filename: String = "") -> URL {
+        if dir.isEmpty {
+            return getTemporaryURL(by: .photo, utType: utType, filename: filename)
+        } else {
+            let dirURL = URL(fileURLWithPath: dir)
+            let name = filename.isEmpty ? dateString() : filename
+            let fileURL = dirURL.appendingPathComponent("\(name).\(fileExtension(from: utType))")
+            createDirectory(at: dir)
+            return fileURL
+        }
     }
 }
