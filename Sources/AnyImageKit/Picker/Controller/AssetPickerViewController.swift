@@ -626,6 +626,11 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             cell.updateState(asset, manager: manager, animated: false)
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
+        asset.cleanImageIfNeeded()
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
