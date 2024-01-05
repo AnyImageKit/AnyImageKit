@@ -94,8 +94,8 @@ extension ExportTool {
         }
         // Prepare Output URL
         let dateString = FileHelper.dateString()
-        let outputPath = options.preferredOutputPath.appending("VIDEO-\(dateString).mp4")
-        let outputURL = URL(fileURLWithPath: outputPath)
+        let outputDir = URL(fileURLWithPath: options.preferredOutputPath)
+        let outputURL = outputDir.appendingPathComponent("VIDEO-\(dateString).mp4")
         // Setup Export Session
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.outputFileType = .mp4
