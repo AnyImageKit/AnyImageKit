@@ -27,19 +27,25 @@ struct ScreenHelper {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
                 return statusBarFrame
+            } else {
+                return .zero
             }
+        } else {
+            return UIApplication.shared.statusBarFrame
         }
-        return UIApplication.shared.statusBarFrame
     }
     
     static var mainBounds: CGRect {
         if #available(iOS 13.0, *) {
-            for scene in UIApplication.shared.connectedScenes {
-                if scene.activationState == .foregroundActive, let delegate = scene.delegate as? UIWindowSceneDelegate, let bounds = delegate.window??.bounds {
-                    return bounds
-                }
-            }
+            let keyWindow = UIApplication.shared.connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .map { $0 as? UIWindowScene }
+                .compactMap { $0 }
+                .first?.windows
+                .filter { $0.isKeyWindow }.first
+            return keyWindow?.bounds ?? .zero
+        } else {
+            return UIApplication.shared.windows[0].bounds
         }
-        return UIApplication.shared.windows[0].bounds
     }
 }
