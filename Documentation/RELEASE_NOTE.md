@@ -1,5 +1,13 @@
 # Release Notes
 
+## 0.17.1
+
+### Resolved
+
+- Picker
+  - Fixed an issue that `preferredOutputPath` dose not work.([#187](https://github.com/AnyImageKit/AnyImageKit/pull/187))
+  - Fixed an issue that memory leak when scrolling the picker.([#188](https://github.com/AnyImageKit/AnyImageKit/pull/188))
+
 ## 0.17.0
 
 ### New Features

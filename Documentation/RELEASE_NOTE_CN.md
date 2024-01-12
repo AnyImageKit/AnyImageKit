@@ -1,5 +1,13 @@
 # 更新日志
 
+## 0.17.1
+
+### 修复
+
+- Picker
+  - 修复 `preferredOutputPath` 未生效问题。([#187](https://github.com/AnyImageKit/AnyImageKit/pull/187))
+  - 修复 Picker 滚动时内存泄露问题。([#188](https://github.com/AnyImageKit/AnyImageKit/pull/188))
+
 ## 0.17.0
 
 ### 新增
