@@ -628,7 +628,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
+        guard indexPath.item < (album?.assets.count ?? 0), let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
         asset.cleanImageIfNeeded()
     }
 }
