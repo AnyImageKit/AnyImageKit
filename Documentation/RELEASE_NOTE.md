@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.17.2
+
+### Resolved
+
+- Picker
+  - Index out of range when switch album.
+
 ## 0.17.1
 
 ### Resolved
