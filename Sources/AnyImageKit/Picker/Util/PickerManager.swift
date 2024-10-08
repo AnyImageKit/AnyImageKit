@@ -38,7 +38,7 @@ final class PickerManager {
     private var fetchRecords = [FetchRecord]()
     
     /// 缓存
-    let cache = ImageCacheTool(module: .picker(.default), memoryCountLimit: 10, useDiskCache: false)
+    let cache = ImageCacheTool(module: .picker(.default), memoryCountLimit: 10)
     
     init() { }
     
