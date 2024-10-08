@@ -1,5 +1,16 @@
 # 更新日志
 
+## 0.18.0
+
+### General
+
+- 支持 Kingfisher 8.0 版本。
+
+### Resolved
+
+- Picker
+  - 临时修复 Xcode 16 无法获取资源的问题（可能是系统的问题），目前 `albumOptions` （相册类型）配置会失效。([#190](https://github.com/AnyImageKit/AnyImageKit/issues/190))
+
 ## 0.17.2
 
 ### Resolved

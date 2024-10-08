@@ -1,5 +1,16 @@
 # Release Notes
 
+## 0.18.0
+
+### General
+
+- Support Kingfisher 8.0
+
+### Resolved
+
+- Picker
+  - Temporary workaround for Xcode 16 failing to retrieve resources (possibly a system issue), where the `albumOptions` configuration is currently ineffective.([#190](https://github.com/AnyImageKit/AnyImageKit/issues/190))
+
 ## 0.17.2
 
 ### Resolved

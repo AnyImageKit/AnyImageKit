@@ -1,6 +1,6 @@
 {
   "name": "AnyImageKit",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "license": "MIT",
   "summary": "AnyImageKit is a toolbox for picking and editing photos.",
   "homepage": "https://github.com/AnyImageKit/AnyImageKit",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/AnyImageKit/AnyImageKit.git",
-    "tag": "0.17.2"
+    "tag": "0.18.0"
   },
   "platforms": {
     "ios": "12.0"
