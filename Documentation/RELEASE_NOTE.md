@@ -1,10 +1,13 @@
 # Release Notes
 
-## 0.18.0
+## 0.18.1
 
 ### General
 
+- Set framework minimum deployment target to 13.0
 - Support Kingfisher 8.0
+
+## 0.18.0
 
 ### Resolved
 

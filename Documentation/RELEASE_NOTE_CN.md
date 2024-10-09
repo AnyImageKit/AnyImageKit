@@ -1,19 +1,22 @@
 # 更新日志
 
-## 0.18.0
+## 0.18.1
 
-### General
+### 通用
 
+- 最低部署版本调整为 iOS 13.0
 - 支持 Kingfisher 8.0 版本。
 
-### Resolved
+## 0.18.0
+
+### 修复
 
 - Picker
   - 临时修复 Xcode 16 无法获取资源的问题（可能是系统的问题），目前 `albumOptions` （相册类型）配置会失效。([#190](https://github.com/AnyImageKit/AnyImageKit/issues/190))
 
 ## 0.17.2
 
-### Resolved
+### 修复
 
 - Picker
   - 修复切换相册时闪退问题。

@@ -46,7 +46,7 @@
 
 ## 要求
 
-- iOS 12.0+
+- iOS 13.0+
 - Xcode 14.1+
 - Swift 5.7+
 
@@ -58,7 +58,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/AnyImageKit/AnyImageKit.git", .upToNextMajor(from: "0.15.1"))
+    .package(url: "https://github.com/AnyImageKit/AnyImageKit.git", .upToNextMajor(from: "0.18.1"))
 ]
 ```
 
@@ -128,6 +128,7 @@ extension ViewController: ImagePickerControllerDelegate {
 
 | Version | Release Date | Xcode | Swift | iOS |
 | ---- | ----  | ---- | ---- | ---- |
+| [v0.18.1](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0181) | 2024-10-09 | 16.0 | 5.10 | 13.0+ |
 | [v0.18.0](https://github.com/AnyImageKit/AnyImageKit/blob/master/Documentation/RELEASE_NOTE_CN.md#0180) | 2024-10-08 | 16.0 | 5.10 | 12.0+ |
 
 
