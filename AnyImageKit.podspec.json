@@ -13,7 +13,7 @@
     "tag": "0.18.0"
   },
   "platforms": {
-    "ios": "12.0"
+    "ios": "13.0"
   },
   "swift_versions": [
     "5.3"
