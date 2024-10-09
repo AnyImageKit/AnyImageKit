@@ -101,7 +101,7 @@ open class ImagePickerController: AnyImageNavigationController {
         if manager.options.editorOptions.isEmpty {
             return .all
         } else {
-            switch UIApplication.shared.statusBarOrientation {
+            switch ScreenHelper.interfaceOrientation {
             case .portrait:
                 return .portrait
             case .portraitUpsideDown:
@@ -122,7 +122,7 @@ open class ImagePickerController: AnyImageNavigationController {
     }
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIApplication.shared.statusBarOrientation
+        return ScreenHelper.interfaceOrientation
     }
     
     open func update(options: PickerOptionsInfo) {

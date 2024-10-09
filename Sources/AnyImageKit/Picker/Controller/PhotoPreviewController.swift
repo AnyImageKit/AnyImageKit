@@ -188,7 +188,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        switch UIApplication.shared.statusBarOrientation {
+        switch ScreenHelper.interfaceOrientation {
         case .portrait:
             return .portrait
         case .portraitUpsideDown:
@@ -205,7 +205,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIApplication.shared.statusBarOrientation
+        return ScreenHelper.interfaceOrientation
     }
     
     override func setStatusBar(hidden: Bool) {

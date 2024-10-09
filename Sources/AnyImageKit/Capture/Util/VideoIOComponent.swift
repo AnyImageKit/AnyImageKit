@@ -373,9 +373,6 @@ extension VideoIOComponent {
         self.orientation = orientation
         let settings = AVCapturePhotoSettings()
         settings.flashMode = flashMode.rawValue
-        #if !targetEnvironment(macCatalyst)
-        settings.isAutoStillImageStabilizationEnabled = photoOutput.isStillImageStabilizationSupported
-        #endif
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
 }

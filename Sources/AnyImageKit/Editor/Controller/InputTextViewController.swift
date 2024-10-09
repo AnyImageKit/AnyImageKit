@@ -212,7 +212,7 @@ final class InputTextViewController: AnyImageViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        switch UIApplication.shared.statusBarOrientation {
+        switch ScreenHelper.interfaceOrientation {
         case .portrait:
             return .portrait
         case .portraitUpsideDown:
@@ -229,7 +229,7 @@ final class InputTextViewController: AnyImageViewController {
     }
     
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIApplication.shared.statusBarOrientation
+        return ScreenHelper.interfaceOrientation
     }
 }
 

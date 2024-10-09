@@ -77,7 +77,7 @@ open class ImageEditorController: AnyImageNavigationController {
     }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        switch UIApplication.shared.statusBarOrientation {
+        switch ScreenHelper.interfaceOrientation {
         case .portrait:
             return .portrait
         case .portraitUpsideDown:
@@ -94,7 +94,7 @@ open class ImageEditorController: AnyImageNavigationController {
     }
     
     open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIApplication.shared.statusBarOrientation
+        return ScreenHelper.interfaceOrientation
     }
     
     open func update(photo resource: EditorPhotoResource, options: EditorPhotoOptionsInfo) {

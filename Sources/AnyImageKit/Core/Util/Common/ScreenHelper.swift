@@ -10,28 +10,31 @@ import UIKit
 
 struct ScreenHelper {
     
+    static var windowScene: UIWindowScene? {
+        let connectedScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        return (connectedScenes.first(where: { $0.activationState == .foregroundActive })) ?? connectedScenes.first(where: { $0.activationState == .foregroundInactive })
+    }
+    
     static var keyWindow: UIWindow? {
-        if #available(iOS 13.0, *) {
-            let connectedScenes = UIApplication.shared.connectedScenes
-            let scene = connectedScenes.first(where: { $0.activationState == .foregroundActive && $0 is UIWindowScene }) ?? connectedScenes.first(where: { $0.activationState == .foregroundInactive && $0 is UIWindowScene })
-            return scene
-                .flatMap({ $0 as? UIWindowScene })?
-                .windows
-                .first(where: { $0.isKeyWindow })
-        } else {
-            return UIApplication.shared.keyWindow
-        }
+        return windowScene?
+            .windows
+            .first(where: { $0.isKeyWindow })
     }
     
     static var statusBarFrame: CGRect {
-        if #available(iOS 13.0, *) {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
-                return statusBarFrame
-            } else {
-                return .zero
-            }
+        if let windowScene = windowScene,
+           let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
+            return statusBarFrame
         } else {
-            return UIApplication.shared.statusBarFrame
+            return .zero
+        }
+    }
+    
+    static var interfaceOrientation: UIInterfaceOrientation {
+        if let windowScene = windowScene {
+            return windowScene.interfaceOrientation
+        } else {
+            return .portrait
         }
     }
     
