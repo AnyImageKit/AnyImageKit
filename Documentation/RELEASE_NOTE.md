@@ -1,5 +1,14 @@
 # Release Notes
 
+## 0.18.2
+
+### Resolved
+
+- Picker
+  - Try to fix crash ([#191](https://github.com/AnyImageKit/AnyImageKit/issues/191))
+- Editor
+  - Some Video thumbnail generation failure ([#192](https://github.com/AnyImageKit/AnyImageKit/issues/192))
+
 ## 0.18.1
 
 ### General
@@ -115,6 +124,7 @@
 ### Resolved
 
 - Picker
+
   - Fix the issue that disable rule is not checked when selecting photos after taking photos.
   - Fix asset collection view will be offset when `contentInsetAdjustmentBehavior` is modified globally.
 
@@ -183,8 +193,8 @@
 
 ### New Features
 
-- Use Xcode 13.0 and Kingfisher 7.0.0 
-- Set framework minimum deployment target to 12.0 
+- Use Xcode 13.0 and Kingfisher 7.0.0
+- Set framework minimum deployment target to 12.0
 
 ## 0.13.3
 
@@ -245,7 +255,7 @@
 ### New Features
 
 - Picker
-  - Add a new protocol `AssetDisableCheckRule` to allow custom asset disable check rules. AnyImageKit contains a buildin implement  `VideoDurationDisableCheckRule` to support video duration check.
+  - Add a new protocol `AssetDisableCheckRule` to allow custom asset disable check rules. AnyImageKit contains a buildin implement `VideoDurationDisableCheckRule` to support video duration check.
 - Editor
   - Auto set `.modalPresentationStyle = .fullScreen` in `ImageEditorController`'s init function.
 - Capture
@@ -360,8 +370,3 @@ func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: 
 ### Known Issues
 
 - Remove from support as Xcode 12.0 can't support Mac Catalyst 14.0 features.
-
-
-
-
-

@@ -1,5 +1,14 @@
 # 更新日志
 
+## 0.18.2
+
+### 修复
+
+- Picker
+  - 尝试修复崩溃 ([#191](https://github.com/AnyImageKit/AnyImageKit/issues/191))
+- Editor
+  - 部分视频无法加载 ([#192](https://github.com/AnyImageKit/AnyImageKit/issues/192))
+
 ## 0.18.1
 
 ### 通用
@@ -115,6 +124,7 @@
 ### 修复
 
 - Picker
+
   - 修复拍照之后没有检查资源是否符合禁用规则就进行了选中。
   - 修复 `contentInsetAdjustmentBehavior` 被业务方全局替换后，视图出现偏移的问题。
 
@@ -304,7 +314,7 @@ Xcode 13 beta 无法编译错误。([#95](https://github.com/AnyImageKit/AnyImag
 ### 新增
 
 - Picker
-  - 适配 iOS 14  “Limited Photos Library” 模式
+  - 适配 iOS 14 “Limited Photos Library” 模式
 - Editor
   - 画笔在 iOS 14 中支持 `UIColorWell`。
 
