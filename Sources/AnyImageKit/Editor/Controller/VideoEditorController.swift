@@ -277,10 +277,10 @@ extension VideoEditorController {
         asset.loadValuesAsynchronously(forKeys: ["duration"]) {
             let generator = AVAssetImageGenerator(asset: asset)
             generator.appliesPreferredTrackTransform = true
-            generator.requestedTimeToleranceAfter = .zero
-            generator.requestedTimeToleranceBefore = .zero
+            generator.requestedTimeToleranceAfter = .positiveInfinity
+            generator.requestedTimeToleranceBefore = .positiveInfinity
             let seconds = asset.duration.seconds
-            let array = (1...count).map{ NSValue(time: CMTime(seconds: Double($0)*(seconds/Double(count)), preferredTimescale: 1000)) }
+            let array = (1...count).map{ NSValue(time: CMTime(seconds: Double($0)*(seconds/Double(count)), preferredTimescale: 600)) }
             var i = 0
             generator.generateCGImagesAsynchronously(forTimes: array) { (requestedTime, cgImage, actualTime, result, error) in
                 i += 1
