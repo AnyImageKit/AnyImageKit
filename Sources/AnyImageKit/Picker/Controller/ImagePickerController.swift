@@ -210,8 +210,8 @@ extension ImagePickerController {
                     Toast.show(message: message)
                 } else {
                     self.saveEditPhotos(assets) { newAssets in
-                        self.resizeImagesIfNeeded(newAssets)
                         DispatchQueue.main.async {
+                            self.resizeImagesIfNeeded(newAssets)
                             self.view.hud.hide()
                             let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
                             guard self.didCallback == false else { return }

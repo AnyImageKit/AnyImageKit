@@ -41,7 +41,15 @@ extension Asset {
     }
     
     var _image: UIImage? {
-        return (_images[.output] ?? _images[.edited]) ?? _images[.initial]
+        if let image = _images[.output] {
+            return image
+        } else if let image = _images[.edited] {
+            return image
+        } else if let image = _images[.initial] {
+            return image
+        } else {
+            return nil
+        }
     }
     
     var duration: TimeInterval {
