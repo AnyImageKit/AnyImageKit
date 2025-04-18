@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.18.3
+
+### Resolved
+
+- Picker
+  - Fixed UI issues caused by album changes during preview.
+
 ## 0.18.2
 
 ### Resolved
