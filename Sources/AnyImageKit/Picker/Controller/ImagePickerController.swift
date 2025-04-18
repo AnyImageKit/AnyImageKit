@@ -27,7 +27,6 @@ open class ImagePickerController: AnyImageNavigationController {
     open weak var pickerDelegate: ImagePickerControllerDelegate?
     
     private var containerSize: CGSize = .zero
-    private var didFinishSelect: Bool = false
     private var didCallback: Bool = false
     private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
@@ -206,7 +205,6 @@ extension ImagePickerController {
                 guard let self = self else { return }
                 self.view.hud.hide()
                 if let message = message {
-                    self.didFinishSelect = false
                     Toast.show(message: message)
                 } else {
                     self.saveEditPhotos(assets) { newAssets in
@@ -285,7 +283,7 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
     }
     
     func assetPickerDidFinishPicking(_ controller: AssetPickerViewController) {
-        didFinishSelect = true
+        didCallback = false
         manager.resynchronizeAsset()
         finishSelect()
     }

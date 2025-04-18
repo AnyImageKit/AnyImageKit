@@ -219,17 +219,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
 extension PhotoPreviewController {
     
     func reloadWhenPhotoLibraryDidChange() {
-        collectionView.reloadData()
-        let count = collectionView.numberOfItems(inSection: 0)
-        if currentIndex >= count {
-            switch manager.options.orderByDate {
-            case .asc:
-                currentIndex = count - 1
-            case .desc:
-                currentIndex = 0
-            }
-            collectionView.reloadData()
-        }
+        dismiss(animated: true)
     }
 }
 
