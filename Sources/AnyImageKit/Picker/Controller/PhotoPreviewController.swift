@@ -325,7 +325,12 @@ extension PhotoPreviewController {
     }
     
     private func didSetCurrentIdx() {
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        guard
+            let count = dataSource?.numberOfPhotos(in: self),
+            currentIndex < count,
+            let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else {
+            return
+        }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
         indexView.currentAsset = data.asset
