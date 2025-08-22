@@ -12,11 +12,6 @@ jobs:
   iOS:
     name: Test iOS
     runs-on: macOS-15
-      
-    strategy:
-      matrix:
-        destination: ["OS=18.5,name=iPhone 16 Pro"]
-        xcode: [16.3]
 
     steps:
     - uses: actions/checkout@v4
@@ -27,11 +22,6 @@ jobs:
     name: Test iOS Simulator
     runs-on: macOS-15
 
-    strategy:
-      matrix:
-        destination: ["OS=18.5,name=iPhone 16 Pro"]
-        xcode: [16.3]
-
     steps:
     - uses: actions/checkout@v4
     - name: Archive for iOS Simulator slice
@@ -41,12 +31,7 @@ jobs:
     name: CocoaPods Library Lint
     runs-on: macOS-15
 
-    strategy:
-      matrix:
-        destination: ["OS=18.5,name=iPhone 16 Pro"]
-        xcode: [16.3]
-
     steps:
     - uses: actions/checkout@v4
     - name: Library Lint Check
-      run: pod lib lint --allow-warnings
+      run: pod lib lint --allow-warnings --skip-tests --platforms=iOS --verbose
