@@ -1,5 +1,12 @@
 # 更新日志
 
+## 0.18.5
+
+### 修复
+
+- Picker
+  - 修复 UICollectionViewCell 计算出负数的 Size 时闪退。
+
 ## 0.18.4
 
 ### 修复

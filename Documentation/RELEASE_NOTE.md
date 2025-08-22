@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.18.5
+
+### Resolved
+
+- Picker
+  - Fixed UICollectionViewCell crash with negative size.
+
 ## 0.18.4
 
 ### Resolved
