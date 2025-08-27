@@ -381,6 +381,7 @@ extension AssetPickerViewController {
     
     func selectItem(_ idx: Int) {
         guard let album = album else { return }
+        guard idx >= 0 && idx < album.assets.count else { return }
         let asset = album.assets[idx]
         
         if !asset.isSelected {
@@ -582,6 +583,7 @@ extension AssetPickerViewController: UICollectionViewDelegate {
             asset = item
         } else {
             guard let album = album else { return }
+            guard indexPath.item >= 0 && indexPath.item < album.assets.count else { return }
             asset = album.assets[indexPath.item]
         }
         
@@ -621,7 +623,9 @@ extension AssetPickerViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
+        guard let album = album, indexPath.item < album.assets.count else { return }
+        let asset = album.assets[indexPath.item]
+        guard !asset.isCamera else { return }
         if let cell = cell as? AssetCell {
             cell.updateState(asset, manager: manager, animated: false)
         }
@@ -716,6 +720,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDataSource {
         switch controller.sourceType {
         case .album:
             let idx = index + itemOffset
+            guard let album = album, idx >= 0 && idx < album.assets.count else { return nil }
             let indexPath = IndexPath(item: idx, section: 0)
             return collectionView.cellForItem(at: indexPath)
         case .selectedAssets:
@@ -774,14 +779,20 @@ extension AssetPickerViewController {
     }
     
     private func reloadData(animated: Bool = true, reloadPreview: Bool = true) {
+        collectionView.isUserInteractionEnabled = false
         if reloadPreview {
             previewController?.reloadWhenPhotoLibraryDidChange()
         }
         if #available(iOS 14.0, *) {
             let snapshot = initialSnapshot()
-            dataSource.apply(snapshot, animatingDifferences: animated)
+            dataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+                self?.collectionView.isUserInteractionEnabled = true
+            }
         } else {
             collectionView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.isUserInteractionEnabled = true
+            }
         }
     }
     
