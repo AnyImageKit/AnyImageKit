@@ -784,6 +784,7 @@ extension AssetPickerViewController {
             previewController?.reloadWhenPhotoLibraryDidChange()
         }
         if #available(iOS 14.0, *) {
+            setupDataSource()
             let snapshot = initialSnapshot()
             dataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
                 self?.collectionView.isUserInteractionEnabled = true
