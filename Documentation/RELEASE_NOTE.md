@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.18.6
+
+### Resolved
+
+- Picker
+  - Recreate data source on album switch to fix unresponsive cells.
+
 ## 0.18.5
 
 ### Resolved
