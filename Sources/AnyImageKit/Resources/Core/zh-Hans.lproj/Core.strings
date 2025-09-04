@@ -34,3 +34,6 @@
 "NO_PHOTOS_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-照片\"选项中，\n允许%@访问相册。";
 "NO_CAMERA_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-相机\"选项中，\n允许%@访问相机。";
 "NO_MICROPHONE_PERMISSION_TIPS" = "请在您设备的\"设置-隐私-麦克风\"选项中，\n允许%@访问麦克风。";
+
+"FULL_DATE_FORMAT" = "yyyy年M月d日";
+"MONTH_DAY_FORMAT" = "M月d日";

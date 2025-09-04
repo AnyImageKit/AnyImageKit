@@ -174,6 +174,9 @@ extension PickerTheme {
         /// 20*20, Light/Dark
         case warning
         
+        /// 20*30, Light/Dark
+        case indicator
+        
         func defaultValue(for style: UserInterfaceStyle) -> UIImage? {
             switch self {
             case .albumArrow:
@@ -202,6 +205,8 @@ extension PickerTheme {
                 return BundleHelper.image(named: "VideoPlay", module: .picker)
             case .warning:
                 return BundleHelper.image(named: "Warning", style: style, module: .picker)
+            case .indicator:
+                return BundleHelper.image(named: "Indicator", style: .light, module: .picker)
             }
         }
     }

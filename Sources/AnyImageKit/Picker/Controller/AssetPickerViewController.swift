@@ -65,6 +65,7 @@ final class AssetPickerViewController: AnyImageViewController {
         layout.minimumLineSpacing = defaultAssetSpacing
         layout.minimumInteritemSpacing = defaultAssetSpacing
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.showsVerticalScrollIndicator = manager.options.scrollIndicator == .none
         view.alwaysBounceVertical = true
         view.contentInsetAdjustmentBehavior = .automatic
         let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
@@ -95,9 +96,22 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private lazy var permissionView: PermissionDeniedView = {
+    private(set) lazy var permissionView: PermissionDeniedView = {
         let view = PermissionDeniedView(frame: .zero)
         view.isHidden = true
+        return view
+    }()
+    
+    private(set) lazy var indicatorView: PickerIndicatorView = {
+        let view = PickerIndicatorView(frame: .zero)
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panIndicator(gr:))))
+        return view
+    }()
+    
+    private(set) lazy var topDateIndicatorView: PickerDateIndicatorView = {
+        let view = PickerDateIndicatorView(frame: .zero)
+        view.alpha = 0.0
         return view
     }()
     
@@ -150,6 +164,7 @@ final class AssetPickerViewController: AnyImageViewController {
             scrollToEnd()
             autoScrollToLatest = false
         }
+        updateIndicator()
     }
     
     private func setupNavigation() {
@@ -160,10 +175,19 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private func setupView() {
         view.addSubview(collectionView)
+        view.addSubview(indicatorView)
         view.addSubview(toolBar)
         view.addSubview(permissionView)
+        view.addSubview(topDateIndicatorView)
+        
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
+        }
+        indicatorView.snp.makeConstraints { make in
+            make.top.equalTo(collectionView)
+            make.right.equalToSuperview()
+            make.width.equalTo(52)
+            make.height.equalTo(55)
         }
         toolBar.snp.makeConstraints { maker in
             if #available(iOS 11.0, *) {
@@ -180,6 +204,9 @@ final class AssetPickerViewController: AnyImageViewController {
                 maker.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
             }
             maker.left.right.bottom.equalToSuperview()
+        }
+        topDateIndicatorView.snp.makeConstraints { maker in
+            maker.top.left.right.equalToSuperview()
         }
     }
     
@@ -654,6 +681,30 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - UIScrollViewDelegate
+extension AssetPickerViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        handleIndicatorWhenScrollViewDidScroll(scrollView)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        showIndicator(true)
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            showIndicator(false)
+        }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if !indicatorView.inPan {
+            showIndicator(false)
+        }
+    }
+}
+
 // MARK: - AlbumPickerViewControllerDelegate
 extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
@@ -794,6 +845,9 @@ extension AssetPickerViewController {
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.isUserInteractionEnabled = true
             }
+        }
+        if manager.options.scrollIndicator != .none {
+            indicatorView.isHidden = (album?.assets.count ?? 0) <= 50
         }
     }
     

@@ -34,3 +34,6 @@
 "NO_PHOTOS_PERMISSION_TIPS" = "%@, albümüne erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Fotoğraflar\"";
 "NO_CAMERA_PERMISSION_TIPS" = "%@, kamerana erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Kamera\"";
 "NO_MICROPHONE_PERMISSION_TIPS" = "%@, mikrofonuna erişmek istiyor, izin vermek için: \"Ayarlar > Gizlilik > Mikrofon\"";
+
+"FULL_DATE_FORMAT" = "d MMM yyyy";
+"MONTH_DAY_FORMAT" = "d MMM";

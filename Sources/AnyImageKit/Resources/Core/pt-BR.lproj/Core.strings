@@ -34,3 +34,6 @@
 "NO_PHOTOS_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso ao seu álbum vá em \"Configurações > Privacidade > Fotos\"";
 "NO_CAMERA_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso à sua câmera vá em \"Configurações > Privacidade > Câmera\"";
 "NO_MICROPHONE_PERMISSION_TIPS" = "Para permitir que %@ tenha acesso ao seu microfone vá em \"Configurações > Privacidade > Microfone\"";
+
+"FULL_DATE_FORMAT" = "d 'de' MMMM. 'de' yyyy";
+"MONTH_DAY_FORMAT" = "d 'de' MMMM";

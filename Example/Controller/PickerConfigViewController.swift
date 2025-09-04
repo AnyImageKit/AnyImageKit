@@ -19,6 +19,7 @@ final class PickerConfigViewController: UITableViewController {
         super.viewDidLoad()
         setupNavigation()
         setupView()
+        setupOptions()
     }
     
     private func setupNavigation() {
@@ -31,6 +32,12 @@ final class PickerConfigViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.register(ConfigCell.self, forCellReuseIdentifier: ConfigCell.reuseIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
+    }
+    
+    private func setupOptions() {
+        options.scrollIndicator = .horizontalBar
+        options.selectOptions = [.photo, .video]
+        options.editorOptions = .photo
     }
     
     // MARK: - Target
@@ -249,6 +256,24 @@ extension PickerConfigViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func scrollIndicatorTapped(_ indexPath: IndexPath) {
+        let alert = UIAlertController(title: "Scroll Indicator", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
+            self?.options.scrollIndicator = .none
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Horizontal Bar", style: .default, handler: { [weak self] (action) in
+            self?.options.scrollIndicator = .horizontalBar
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Vertical Bar", style: .default, handler: { [weak self] (action) in
+            self?.options.scrollIndicator = .verticalBar
+            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func editorOptionsTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Editor Options", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "None", style: .default, handler: { [weak self] (action) in
@@ -345,6 +370,7 @@ extension PickerConfigViewController {
         case albumOptions
         case selectOptions
         case orderByDate
+        case scrollIndicator
         
         var title: String {
             switch self {
@@ -364,6 +390,8 @@ extension PickerConfigViewController {
                 return "SelectOptions"
             case .orderByDate:
                 return "OrderByDate"
+            case .scrollIndicator:
+                return "ScrollIndicator"
             }
         }
         
@@ -385,6 +413,8 @@ extension PickerConfigViewController {
                 return ".selectOptions"
             case .orderByDate:
                 return ".orderByDate"
+            case .scrollIndicator:
+                return ".scrollIndicator"
             }
         }
         
@@ -403,9 +433,11 @@ extension PickerConfigViewController {
             case .albumOptions:
                 return "Smart+User Created"
             case .selectOptions:
-                return "Photo"
+                return "Photo+Video"
             case .orderByDate:
                 return "ASC"
+            case .scrollIndicator:
+                return "Horizontal Bar"
             }
         }
 
@@ -428,6 +460,8 @@ extension PickerConfigViewController {
                 return controller.selectOptionsTapped
             case .orderByDate:
                 return controller.orderbyDateTapped
+            case .scrollIndicator:
+                return controller.scrollIndicatorTapped
             }
         }
     }
@@ -458,7 +492,7 @@ extension PickerConfigViewController {
         var defaultValue: String {
             switch self {
             case .editorOptions:
-                return "None"
+                return "Photo"
             case .saveEditedAsset:
                 return "true"
             }

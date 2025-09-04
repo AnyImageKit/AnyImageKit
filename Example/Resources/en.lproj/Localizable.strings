@@ -20,6 +20,7 @@
 "EditorOptions" = "Editor Options";
 "CaptureOptions" = "Capture Options";
 "FullScreen" = "Full Screen";
+"ScrollIndicator" = "Scroll Indicator";
 
 // Editor
 "OpenEditor" = "Open Editor";

@@ -20,6 +20,7 @@
 "EditorOptions" = "编辑类型";
 "CaptureOptions" = "拍摄类型";
 "FullScreen" = "是否全屏";
+"ScrollIndicator" = "滚动指示器";
 
 // Editor
 "OpenEditor" = "打开编辑器";

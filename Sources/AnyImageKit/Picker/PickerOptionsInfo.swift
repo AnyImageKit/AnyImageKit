@@ -53,6 +53,10 @@ public struct PickerOptionsInfo {
     /// - Default: Preview
     public var selectionTapAction: PickerSelectionTapAction = .preview
     
+    /// Scroll Indicator
+    /// - Default: None
+    public var scrollIndicator: PickerScrollIndicator = .none
+    
     /// Order by date
     /// - Default: ASC
     public var orderByDate: Sort = .asc
@@ -112,10 +116,13 @@ public struct PickerSelectOption: OptionSet {
     
     /// Photo
     public static let photo = PickerSelectOption(rawValue: 1 << 0)
+    
     /// Video
     public static let video = PickerSelectOption(rawValue: 1 << 1)
+    
     /// GIF
     public static let photoGIF = PickerSelectOption(rawValue: 1 << 2)
+    
     /// Live Photo
     public static let photoLive = PickerSelectOption(rawValue: 1 << 3)
     
@@ -153,8 +160,10 @@ public struct PickerAlbumOption: OptionSet {
     
     /// Smart Album, managed by system
     public static let smart = PickerAlbumOption(rawValue: 1 << 0)
+    
     /// User Created Album
     public static let userCreated = PickerAlbumOption(rawValue: 1 << 1)
+    
     /// Shared Album
     public static let shared = PickerAlbumOption(rawValue: 1 << 2)
     
@@ -170,6 +179,7 @@ public struct PickerEditorOption: OptionSet {
     
     /// Photo
     public static let photo = PickerEditorOption(rawValue: 1 << 0)
+    
     /// Video: - TODO
     /*public*/ static let video = PickerEditorOption(rawValue: 1 << 1)
 
@@ -186,9 +196,11 @@ public enum PickerSelectionTapAction: Equatable {
     /// Preview
     /// - Default value
     case preview
+    
     /// Quick pick
     /// - It will select photo instead of show preview controller when you click photo on asset picker controller
     case quickPick
+    
     /// Open editor
     /// - It will open Editor instead of show preview controller when you click photo on asset picker controller
     case openEditor
@@ -204,4 +216,19 @@ extension PickerSelectionTapAction {
             return false
         }
     }
+}
+
+// MARK: - PickerScrollIndicator
+public enum PickerScrollIndicator {
+    
+    /// Do not show custom scroll indicator
+    case none
+    
+    /// Horizontal bar
+    /// - Show the date of the first visible photo on the bar
+    case horizontalBar
+    
+    /// Vertical bar
+    /// - Show the date of the first visible photo at the top while scrolling
+    case verticalBar
 }
