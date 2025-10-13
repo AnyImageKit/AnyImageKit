@@ -2,7 +2,7 @@
 //  PickerDateIndicatorView.swift
 //  AnyImageKit
 //
-//  Created by Ray Jiang on 2024/10/31.
+//  Created by 蒋惠 on 2024/10/31.
 //  Copyright © 2024 AnyImageKit.org. All rights reserved.
 //
 

@@ -9,23 +9,6 @@
 import UIKit
 import Photos
 
-protocol PhotoPreviewControllerDataSource: AnyObject {
-    
-    typealias PreviewData = (thumbnail: UIImage?, asset: Asset)
-    
-    /// 获取需要展示图片的数量
-    func numberOfPhotos(in controller: PhotoPreviewController) -> Int
-    
-    /// 获取索引对应的数据模型
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData
-    
-	/// 获取数据模型
-	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData?
-	
-    /// 获取转场动画时的缩略图所在的 view
-    func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
-}
-
 protocol PhotoPreviewControllerDelegate: AnyObject {
     
     /// 选择一张图片，需要返回所选图片的序号
@@ -55,7 +38,7 @@ extension PhotoPreviewControllerDelegate {
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
 }
 
-final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigurable {
+final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable {
     
     enum SourceType {
         case album
@@ -63,54 +46,24 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
     
     weak var delegate: PhotoPreviewControllerDelegate?
-    weak var dataSource: PhotoPreviewControllerDataSource?
     
-    /// 图片索引
-    var currentIndex: Int = 0 {
-        didSet {
-            didSetCurrentIdx()
-        }
-    }
-    /// 左右两张图之间的间隙
-    var photoSpacing: CGFloat = 30
-    /// 图片缩放模式
-    var imageScaleMode: UIView.ContentMode = .scaleAspectFill
-    /// 双击放大图片时的目标比例
-    var imageZoomScaleForDoubleTap: CGFloat = 2.0
+    let manager: PickerManager
+    let sourceType: SourceType
+    let assets: [Asset]
     
-    // MARK: - Private
-    
-    /// 当前正在显示视图的前一个页面关联视图
-    private var relatedView: UIView? {
-        return dataSource?.previewController(self, thumbnailViewForIndex: currentIndex)
-    }
-    /// 缩放型转场协调器
-    private weak var scalePresentationController: ScalePresentationController?
-    /// ToolBar 缩放动画前的状态
     private var toolBarHiddenStateBeforePan = false
     
-    private lazy var flowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        return layout
-    }()
-    private(set) lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = UIColor.clear
-        view.decelerationRate = UIScrollView.DecelerationRate.fast
-        view.showsVerticalScrollIndicator = false
-        view.showsHorizontalScrollIndicator = false
-        view.delegate = self
-        view.dataSource = self
-        view.registerCell(PhotoPreviewCell.self)
-        view.registerCell(PhotoGIFPreviewCell.self)
-        view.registerCell(VideoPreviewCell.self)
-        view.registerCell(PhotoLivePreviewCell.self)
-        view.isPagingEnabled = true
-        view.alwaysBounceHorizontal = false
-        view.isPrefetchingEnabled = false
-        return view
-    }()
+    init(manager: PickerManager, sourceType: SourceType, assets: [Asset], options: BrowserOptionsInfo) {
+        self.manager = manager
+        self.sourceType = sourceType
+        self.assets = assets
+        super.init(options: options)
+    }
+    
+    @MainActor public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
         let view = PickerPreviewNavigationBar(frame: .zero)
         view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
@@ -135,52 +88,27 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
         return view
     }()
     
-    let manager: PickerManager
-    let sourceType: SourceType
-    
-    init(manager: PickerManager, sourceType: SourceType) {
-        self.manager = manager
-        self.sourceType = sourceType
-        super.init(nibName: nil, bundle: nil)
-        transitioningDelegate = self
-        modalPresentationStyle = .custom
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PreviewCell, !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.identifier)
-            }
-        }
-    }
-    
-    // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         addNotifications()
         setupViews()
         update(options: manager.options)
+        
+//        if #available(iOS 18.0, *) {
+//            preferredTransition = .zoom(sourceViewProvider: { [weak self] context in
+//                guard let self = self else { return nil }
+//                return self.options.relatedView?(self.currentIndex)
+//            })
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        didSetCurrentIdx()
-        setGIF(animated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setBar(hidden: false, animated: true)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateLayout()
     }
     
     override var shouldAutorotate: Bool {
@@ -213,6 +141,51 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
             controller.setStatusBar(hidden: hidden)
         }
     }
+    
+    // MARK: - override
+    
+    override func browser(_ browser: BrowserController, didChangeIndex index: Int) {
+        let asset = assets[index]
+        navigationBar.selectButton.isEnabled = true
+        navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
+        indexView.currentAsset = asset
+
+        if manager.options.allowUseOriginalImage {
+            toolBar.originalButton.isHidden = asset.phAsset.mediaType != .image
+        }
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        autoSetEditorButtonHidden()
+        #endif
+    }
+    
+    override func browserDidBeginPan(_ browser: BrowserController) {
+        super.browserDidBeginPan(browser)
+        toolBarHiddenStateBeforePan = navigationBar.alpha == 0
+    }
+    
+    override func browser(_ browser: BrowserController, didPanScale scale: CGFloat) {
+        super.browser(browser, didPanScale: scale)
+        setBar(hidden: true, isNormal: false)
+    }
+    
+    override func browser(_ browser: BrowserController, didEndPanWithExit isExit: Bool) {
+        super.browser(browser, didEndPanWithExit: isExit)
+        if isExit {
+            setStatusBar(hidden: false)
+        } else if !toolBarHiddenStateBeforePan {
+            setBar(hidden: false, isNormal: false)
+        }
+    }
+    
+    override func browserDidSingleTap(_ browser: BrowserController) {
+        setBar(hidden: navigationBar.alpha == 1, animated: false)
+        super.browserDidSingleTap(browser)
+        updateSafeAreaLayoutGuide(isAnimated: true)
+    }
+    
+    override func shouldHideToolBar(in browser: BrowserController) -> Bool {
+        return navigationBar.alpha == 0
+    }
 }
 
 // MARK: - Public function
@@ -227,7 +200,6 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     private func addNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(containerSizeDidChange(_:)), name: .containerSizeDidChange, object: nil)
         #if ANYIMAGEKIT_ENABLE_EDITOR
         NotificationCenter.default.addObserver(self, selector: #selector(previewCellDidDownloadResource(_:)), name: .previewCellDidDownloadResource, object: nil)
         #endif
@@ -235,14 +207,12 @@ extension PhotoPreviewController {
     
     /// 添加视图
     private func setupViews() {
-        view.backgroundColor = UIColor.clear
-        if #available(iOS 11.0, *) {
-            collectionView.contentInsetAdjustmentBehavior = .never
-        }
-        view.addSubview(collectionView)
         view.addSubview(navigationBar)
         view.addSubview(toolBar)
         view.addSubview(indexView)
+        let color = UIColor.create(style: manager.options.theme.style, light: .white, dark: .black)
+        transition.presentationController?.maskView.backgroundColor = color
+        
         setupLayout()
         setBar(hidden: true, animated: false, isNormal: false)
     }
@@ -252,34 +222,30 @@ extension PhotoPreviewController {
         navigationBar.snp.makeConstraints { maker in
             maker.top.equalToSuperview()
             maker.left.right.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
-            } else {
-                maker.bottom.equalTo(topLayoutGuide.snp.bottom).offset(44)
-            }
+            maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
         }
         toolBar.snp.makeConstraints { maker in
             maker.left.right.bottom.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
-            } else {
-                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-56)
-            }
+            maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
         }
         indexView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(toolBar.snp.top)
             maker.height.equalTo(96)
         }
+        updateSafeAreaLayoutGuide()
     }
     
-    /// 更新视图布局
-    private func updateLayout() {
-        flowLayout.minimumLineSpacing = photoSpacing
-        flowLayout.itemSize = ScreenHelper.mainBounds.size
-        collectionView.frame = ScreenHelper.mainBounds
-        collectionView.frame.size.width = ScreenHelper.mainBounds.width + photoSpacing
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: photoSpacing)
+    private func updateSafeAreaLayoutGuide(isAnimated: Bool = false) {
+        updateContentSafeAreaLayoutGuide(isAnimated: isAnimated) { make in
+            make.top.equalTo(navigationBar.snp.bottom)
+            make.left.right.equalToSuperview()
+            if indexView.isHidden || navigationBar.alpha == 0 {
+                make.bottom.equalTo(toolBar.snp.top)
+            } else {
+                make.bottom.equalTo(indexView.snp.top)
+            }
+        }
     }
     
     /// 显示/隐藏工具栏
@@ -288,74 +254,20 @@ extension PhotoPreviewController {
         if navigationBar.alpha == 1 && !hidden { return }
         if isNormal {
             setStatusBar(hidden: hidden)
-            let color = UIColor.create(style: manager.options.theme.style,
-                                       light: .white,
-                                       dark: .black)
-            scalePresentationController?.maskView.backgroundColor = hidden ? UIColor.black : color
+            let color = UIColor.create(style: manager.options.theme.style, light: .white, dark: .black)
+            transition.presentationController?.maskView.backgroundColor = hidden ? UIColor.black : color
         }
-        
+
         UIView.animate(withDuration: animated ? 0.25 : 0) {
             self.navigationBar.alpha = hidden ? 0 : 1
             self.toolBar.alpha = hidden ? 0 : 1
             self.indexView.alpha = hidden ? 0 : 1
         }
     }
-    
-    /// 播放/暂停 GIF
-    /// - Parameter animated: true-播放；false-暂停
-    private func setGIF(animated: Bool) {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? PhotoGIFPreviewCell {
-                if animated {
-                    cell.imageView.startAnimating()
-                } else {
-                    cell.imageView.stopAnimating()
-                }
-            }
-        }
-    }
-    
-    /// 暂停视频
-    private func stopVideo() {
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? VideoPreviewCell {
-                cell.pause()
-            }
-        }
-    }
-    
-    private func didSetCurrentIdx() {
-        guard
-            let count = dataSource?.numberOfPhotos(in: self),
-            currentIndex < count,
-            let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else {
-            return
-        }
-        navigationBar.selectButton.isEnabled = true
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        indexView.currentAsset = data.asset
-        
-        if manager.options.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
-        }
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        autoSetEditorButtonHidden()
-        #endif
-    }
 }
 
 // MARK: - Target
 extension PhotoPreviewController {
-    
-    @objc private func containerSizeDidChange(_ sender: Notification) {
-        collectionView.performBatchUpdates { [weak self] in
-            self?.collectionView.reloadData()
-        } completion: { [weak self] _ in
-            guard let self = self else { return }
-            let indexPath = IndexPath(item: self.currentIndex, section: 0)
-            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-        }
-    }
     
     /// NavigationBar - Back
     @objc private func backButtonTapped(_ sender: UIButton) {
@@ -367,8 +279,7 @@ extension PhotoPreviewController {
     
     /// NavigationBar - Select
     @objc func selectButtonTapped(_ sender: NumberCircleButton) {
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-        let asset = data.asset
+        let asset = assets[currentIndex]
         
         if !asset.isSelected {
             let result = manager.addSelectedAsset(asset)
@@ -382,13 +293,14 @@ extension PhotoPreviewController {
             delegate?.previewController(self, didDeselected: currentIndex)
         }
         
-        navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
+        navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
-        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
+        trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerPreview])
         
         if sourceType == .selectedAssets {
             toolBar.setDoneEnable(!manager.selectedAssets.isEmpty)
         }
+        updateSafeAreaLayoutGuide(isAnimated: true)
     }
     
     /// ToolBar - Original
@@ -399,8 +311,8 @@ extension PhotoPreviewController {
         
         // 选择当前照片
         if manager.useOriginalImage && !manager.isUpToLimit {
-            guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-            if !data.asset.isSelected {
+            let asset = assets[currentIndex]
+            if !asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)
             }
         }
@@ -411,246 +323,38 @@ extension PhotoPreviewController {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         defer { sender.isEnabled = true }
         sender.isEnabled = false
-        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
+        let asset = assets[currentIndex]
         if manager.selectedAssets.isEmpty {
-            if case .disable(let rule) = data.asset.state {
-                let message = rule.alertMessage(for: data.asset, assetList: manager.selectedAssets)
+            if case .disable(let rule) = asset.state {
+                let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
                 showAlert(message: message, stringConfig: manager.options.theme)
                 return
             }
             selectButtonTapped(navigationBar.selectButton)
         }
-        scalePresentationController?.updateMask = false
+        transition.presentationController?.updateMask = false
         delegate?.previewControllerWillDisappear(self)
         delegate?.previewControllerDidClickDone(self)
         trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerPreview])
     }
 }
 
-// MARK: - UICollectionViewDataSource
-extension PhotoPreviewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfPhotos(in: self) ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return UICollectionViewCell() }
-        let cell: PreviewCell
-        data.asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
-        switch data.asset.mediaType {
-        case .photo:
-            let photoCell = collectionView.dequeueReusableCell(PhotoPreviewCell.self, for: indexPath)
-            photoCell.imageView.contentMode = imageScaleMode
-            photoCell.imageZoomScaleForDoubleTap = imageZoomScaleForDoubleTap
-            cell = photoCell
-        case .video:
-            cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
-            cell.imageView.contentMode = imageScaleMode
-        case .photoGIF:
-            cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
-        case .photoLive:
-            cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
-            cell.imageView.contentMode = imageScaleMode
-        }
-        cell.delegate = self
-        cell.asset = data.asset
-        cell.manager = manager
-        return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-extension PhotoPreviewController: UICollectionViewDelegate {
-    
-    /// Cell 进入屏幕 - 请求数据
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let data = dataSource?.previewController(self, assetOfIndex: indexPath.row) else { return }
-        switch cell {
-        case let cell as PhotoPreviewCell:
-            if data.asset._image != nil {
-                cell.setImage(data.asset._image)
-                cell.setDownloadingProgress(1.0)
-            } else {
-                if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
-                    cell.setImage(originalImage)
-                    cell.setDownloadingProgress(1.0)
-                } else {
-                    cell.setImage(data.thumbnail)
-                    cell.requestPhoto()
-                }
-            }
-        case let cell as VideoPreviewCell:
-            if let originalImage = manager.cache.retrieveImage(forKey: cell.asset.identifier) {
-                cell.setImage(originalImage)
-            } else {
-                cell.setImage(data.thumbnail)
-                cell.requestPhoto()
-            }
-            cell.requestVideo()
-        case let cell as PhotoGIFPreviewCell:
-            cell.setImage(data.thumbnail)
-            cell.requestGIF()
-        case let cell as PhotoLivePreviewCell:
-            cell.setImage(data.thumbnail)
-            cell.requestLivePhoto()
-        default:
-            break
-        }
-    }
-    
-    /// Cell 离开屏幕 - 重设状态
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        switch cell {
-        case let cell as PreviewCell:
-            cell.reset()
-            if !cell.asset.isSelected {
-                manager.cancelFetch(for: cell.asset.identifier)
-            }
-        default:
-            break
-        }
-    }
-}
-
-// MARK: - UIScrollViewDelegate
-extension PhotoPreviewController: UIScrollViewDelegate {
-    
-    /// 开始滑动 - 停止 GIF 和视频
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        setGIF(animated: false)
-        stopVideo()
-    }
-    
-    /// 停止滑动 - 开始 GIF
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        setGIF(animated: true)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentSize.width - scrollView.contentOffset.x < scrollView.bounds.width { return } // isLast
-        var idx = Int(scrollView.contentOffset.x / scrollView.bounds.width)
-        let x = scrollView.contentOffset.x.truncatingRemainder(dividingBy: scrollView.bounds.width)
-        if x > scrollView.bounds.width / 2 {
-            idx += 1
-        }
-        if idx != currentIndex {
-            currentIndex = idx
-        }
-    }
-}
-
-// MARK: - PreviewCellDelegate
-extension PhotoPreviewController: PreviewCellDelegate {
-    
-    func previewCellDidBeginPan(_ cell: PreviewCell) {
-        delegate?.previewControllerWillDisappear(self)
-        toolBarHiddenStateBeforePan = navigationBar.alpha == 0
-    }
-    
-    func previewCell(_ cell: PreviewCell, didPanScale scale: CGFloat) {
-        // 实测用 scale 的平方，效果比线性好些
-        let alpha = scale * scale
-        scalePresentationController?.maskAlpha = alpha
-        setBar(hidden: true, isNormal: false)
-    }
-    
-    func previewCell(_ cell: PreviewCell, didEndPanWithExit isExit: Bool) {
-        if isExit {
-            dismiss(animated: true, completion: nil)
-            setStatusBar(hidden: false)
-        } else if !toolBarHiddenStateBeforePan {
-            setBar(hidden: false, isNormal: false)
-        }
-    }
-    
-    func previewCellDidSingleTap(_ cell: PreviewCell) {
-        setBar(hidden: navigationBar.alpha == 1, animated: false)
-    }
-    
-    func previewCellGetToolBarHiddenState() -> Bool {
-        return navigationBar.alpha == 0
-    }
-}
-
 // MARK: - PickerPreviewIndexViewDelegate
 extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
-    
-	func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset) {
+
+    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset) {
         switch sourceType {
         case .album:
-            guard let currentAsset = dataSource?.previewController(self, asset: asset)?.asset else {
-                Toast.show(message: manager.options.theme[string: .pickerCannotPreviewAssetInOtherAlbum])
-                return
-            }
-            currentIndex = currentAsset.idx
-            collectionView.scrollToItem(at: IndexPath(item: currentAsset.idx, section: 0), at: .left, animated: false)
+            currentIndex = asset.idx
         case .selectedAssets:
-            guard let index = manager.selectedAssets.firstIndex(of: asset) else { return }
+            guard let index = assets.firstIndex(of: asset) else { return }
             currentIndex = index
-            collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .left, animated: false)
         }
-        
+
         #if ANYIMAGEKIT_ENABLE_EDITOR
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.autoSetEditorButtonHidden()
         }
         #endif
-    }
-}
-
-// MARK: - UIViewControllerTransitioningDelegate
-extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
-    /// 提供进场动画
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        updateLayout()
-        // 立即加载collectionView
-        let indexPath = IndexPath(item: currentIndex, section: 0)
-        collectionView.reloadData()
-        collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
-        collectionView.layoutIfNeeded()
-        if relatedView != nil {
-            return makeScalePresentationAnimator(indexPath: indexPath)
-        } else {
-            return nil
-        }
-    }
-    
-    /// 提供退场动画
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let indexPath = IndexPath(item: currentIndex, section: 0)
-        return makeDismissedAnimator(indexPath: indexPath)
-    }
-    
-    /// 提供转场协调器
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
-        let color = UIColor.create(style: manager.options.theme.style,
-                                   light: .white,
-                                   dark: .black)
-        controller.maskView.backgroundColor = color
-        scalePresentationController = controller
-        return controller
-    }
-    
-    /// 创建缩放型进场动画
-    private func makeScalePresentationAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning {
-        let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell
-        let imageView = UIImageView(image: cell?.imageView.image)
-        imageView.contentMode = imageScaleMode
-        imageView.clipsToBounds = true
-        // 创建animator
-        return ScaleAnimator(startView: relatedView, endView: cell?.imageView, scaleView: imageView)
-    }
-    
-    /// 创建缩放型退场动画
-    private func makeDismissedAnimator(indexPath: IndexPath) -> UIViewControllerAnimatedTransitioning? {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else {
-            return nil
-        }
-        let imageView = UIImageView(image: cell.imageView.image)
-        imageView.contentMode = imageScaleMode
-        imageView.clipsToBounds = true
-        return ScaleAnimator(startView: cell.imageView, endView: relatedView, scaleView: imageView)
     }
 }

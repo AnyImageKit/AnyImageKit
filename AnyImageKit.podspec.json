@@ -44,6 +44,23 @@
       }
     },
     {
+      "name": "Browser",
+      "source_files": "Sources/AnyImageKit/Browser/**/*.swift",
+      "resource_bundles": {
+        "AnyImageKit_Browser": [
+          "Sources/AnyImageKit/Resources/Browser/**/*"
+        ]
+      },
+      "dependencies": {
+        "AnyImageKit/Core": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "ANYIMAGEKIT_ENABLE_BROWSER"
+      }
+    },
+    {
       "name": "Picker",
       "source_files": "Sources/AnyImageKit/Picker/**/*.swift",
       "resource_bundles": {
@@ -54,6 +71,9 @@
       "dependencies": {
         "AnyImageKit/Core": [
 
+        ],
+        "AnyImageKit/Browser": [
+            
         ]
       },
       "pod_target_xcconfig": {

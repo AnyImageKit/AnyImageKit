@@ -21,6 +21,16 @@ extension Bundle {
         return resource
     }()
     
+    #if ANYIMAGEKIT_ENABLE_BROWSER
+    static let anyImageKitBrowser: Bundle = {
+        let bundle = Bundle(for: _BundleClass.self)
+        guard let url = bundle.url(forResource: "AnyImageKit_Browser", withExtension: "bundle"), let resource = Bundle(url: url) else {
+            return bundle
+        }
+        return resource
+    }()
+    #endif
+    
     #if ANYIMAGEKIT_ENABLE_PICKER
     static let anyImageKitPicker: Bundle = {
         let bundle = Bundle(for: _BundleClass.self)

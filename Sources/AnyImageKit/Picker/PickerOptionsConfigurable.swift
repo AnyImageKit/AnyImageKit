@@ -17,15 +17,15 @@ public protocol PickerOptionsConfigurable {
 
 extension PickerOptionsConfigurable {
     
-    var childrenConfigurable: [PickerOptionsConfigurable] {
+    public var childrenConfigurable: [PickerOptionsConfigurable] {
         return []
     }
     
-    func update(options: PickerOptionsInfo) {
+    public func update(options: PickerOptionsInfo) {
         updateChildrenConfigurable(options: options)
     }
     
-    func updateChildrenConfigurable(options: PickerOptionsInfo)  {
+    public func updateChildrenConfigurable(options: PickerOptionsInfo)  {
         for child in childrenConfigurable {
             child.update(options: options)
         }
@@ -34,44 +34,44 @@ extension PickerOptionsConfigurable {
 
 extension PickerOptionsConfigurable where Self: UIViewController {
     
-    var childrenConfigurable: [PickerOptionsConfigurable] {
+    public var childrenConfigurable: [PickerOptionsConfigurable] {
         return preferredChildrenConfigurable
     }
     
-    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+    public var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
         return view.subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }
 
 extension PickerOptionsConfigurable where Self: UIView {
     
-    var childrenConfigurable: [PickerOptionsConfigurable] {
+    public var childrenConfigurable: [PickerOptionsConfigurable] {
         return preferredChildrenConfigurable
     }
     
-    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+    public var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
         return subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }
 
 extension PickerOptionsConfigurable where Self: UICollectionViewCell {
     
-    var childrenConfigurable: [PickerOptionsConfigurable] {
+    public var childrenConfigurable: [PickerOptionsConfigurable] {
         return preferredChildrenConfigurable
     }
     
-    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+    public var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
         return contentView.subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }
 
 extension PickerOptionsConfigurable where Self: UITableViewCell {
     
-    var childrenConfigurable: [PickerOptionsConfigurable] {
+    public var childrenConfigurable: [PickerOptionsConfigurable] {
         return preferredChildrenConfigurable
     }
     
-    var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
+    public var preferredChildrenConfigurable: [PickerOptionsConfigurable] {
         return contentView.subviews.compactMap { $0 as? PickerOptionsConfigurable }
     }
 }

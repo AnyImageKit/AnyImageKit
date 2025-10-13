@@ -483,9 +483,12 @@ extension AssetPickerViewController {
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
         manager.lastSelectedAssets = manager.selectedAssets
-        let controller = PhotoPreviewController(manager: manager, sourceType: .selectedAssets)
+        let resources = manager.selectedAssets.compactMap{ $0.phAsset }
+        let options = BrowserOptionsInfo(index: 0, resources: resources) { [weak sender] index in
+            sender
+        }
+        let controller = PhotoPreviewController(manager: manager, sourceType: .selectedAssets, assets: manager.selectedAssets, options: options)
         controller.currentIndex = 0
-        controller.dataSource = self
         controller.delegate = self
         present(controller, animated: true, completion: nil)
         trackObserver?.track(event: .pickerPreview, userInfo: [:])
@@ -640,10 +643,21 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         } else if !asset.isSelected && manager.isUpToLimit {
             return
         } else {
-            let controller = PhotoPreviewController(manager: manager, sourceType: .album)
+            let assets = album?.assets.compactMap{ $0.phAsset } ?? []
+            let options = BrowserOptionsInfo(index: indexPath.item - itemOffset, resources: assets) { index in
+                guard let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? AssetCell else { return nil }
+                return cell
+            }
+            let controller = PhotoPreviewController(manager: manager, sourceType: .album, assets: album?.assets ?? [], options: options)
+            
+//            if #available(iOS 18.0, *) {
+//                guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
+//                controller.preferredTransition = .zoom(sourceViewProvider: { context in
+//                    return cell
+//                })
+//            }
+            
             self.previewController = controller
-            controller.currentIndex = indexPath.item - itemOffset
-            controller.dataSource = self
             controller.delegate = self
             present(controller, animated: true, completion: nil)
         }
@@ -717,69 +731,6 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {
         titleView.isSelected = false
         albumsPicker = nil
-    }
-}
-
-// MARK: - PhotoPreviewControllerDataSource
-extension AssetPickerViewController: PhotoPreviewControllerDataSource {
-    
-    func numberOfPhotos(in controller: PhotoPreviewController) -> Int {
-        switch controller.sourceType {
-        case .album:
-            guard let album = album else { return 0 }
-            #if ANYIMAGEKIT_ENABLE_CAPTURE
-            if album.isCameraRoll && !manager.options.captureOptions.mediaOptions.isEmpty {
-                return album.assets.count - 1
-            }
-            #endif
-            return album.assets.count
-        case .selectedAssets:
-            return manager.lastSelectedAssets.count
-        }
-    }
-    
-    func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData {
-        switch controller.sourceType {
-        case .album:
-            let idx = index + itemOffset
-            let indexPath = IndexPath(item: idx, section: 0)
-            let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
-            return (cell?.image, album!.assets[idx])
-        case .selectedAssets:
-            let asset = manager.lastSelectedAssets[index]
-            return (asset._image ?? asset._images[.thumbnail], asset)
-        }
-    }
-	
-	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData? {
-        switch controller.sourceType {
-        case .album:
-            guard let album, asset.idx < album.assets.count else { return nil }
-            if album.assets[asset.idx] == asset {
-                return previewController(controller, assetOfIndex: asset.idx)
-            } else if let currentAsset = album.assets.first(where: { asset == $0 }) {
-                return previewController(controller, assetOfIndex: currentAsset.idx)
-            } else {
-                return nil
-            }
-        case .selectedAssets:
-            return (asset.image, asset)
-        }
-	}
-    
-    func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView? {
-        switch controller.sourceType {
-        case .album:
-            let idx = index + itemOffset
-            guard let album = album, idx >= 0 && idx < album.assets.count else { return nil }
-            let indexPath = IndexPath(item: idx, section: 0)
-            return collectionView.cellForItem(at: indexPath)
-        case .selectedAssets:
-            let asset = manager.lastSelectedAssets[index]
-            let idx = asset.idx + itemOffset
-            let indexPath = IndexPath(item: idx, section: 0)
-            return collectionView.cellForItem(at: indexPath) ?? toolBar.leftButton
-        }
     }
 }
 

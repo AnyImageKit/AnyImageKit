@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  AnyImageKit
+
+  Created by 蒋惠 on 2025/10/13.
+  Copyright © 2025 AnyImageKit.org. All rights reserved.
+*/
+
+"DOWNLOADING_FROM_ICLOUD" = "Downloading from iCloud";
+"FETCH_FAILED_PLEASE_RETRY" = "Fetch failed, please retry";

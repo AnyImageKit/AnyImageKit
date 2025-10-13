@@ -33,6 +33,10 @@ extension BundleHelper {
         
         case core = "Core"
         
+        #if ANYIMAGEKIT_ENABLE_BROWSER
+        case browser = "Browser"
+        #endif
+        
         #if ANYIMAGEKIT_ENABLE_PICKER
         case picker = "Picker"
         #endif
@@ -53,6 +57,11 @@ extension BundleHelper {
         switch module {
         case .core:
             return Bundle.anyImageKitCore
+           
+        #if ANYIMAGEKIT_ENABLE_BROWSER
+        case .browser:
+            return Bundle.anyImageKitBrowser
+        #endif
             
         #if ANYIMAGEKIT_ENABLE_PICKER
         case .picker:

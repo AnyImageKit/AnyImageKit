@@ -2,7 +2,7 @@
 //  AssetPickerViewController+Indicator.swift
 //  AnyImageKit
 //
-//  Created by Ray Jiang on 2025/9/4.
+//  Created by 蒋惠 on 2025/9/4.
 //  Copyright © 2025 AnyImageKit.org. All rights reserved.
 //
 

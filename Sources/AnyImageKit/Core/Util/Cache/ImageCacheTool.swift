@@ -11,20 +11,17 @@ import Kingfisher
 
 struct ImageCacheTool: Cacheable {
     
+    static let `default` = ImageCache(name: "AnyImageKitImageCache")
+    
     let module: CacheModule
     let path: String
     let workQueue: DispatchQueue
-    let cache: ImageCache
+    let cache: ImageCache = ImageCacheTool.default
     
-    init(module: CacheModule, path: String = "", memoryCountLimit: Int = 5) {
+    init(module: CacheModule, path: String = "", memoryCountLimit: Int = 20) {
         self.module = module
         self.path = path.isEmpty ? module.path : path
         self.workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.CacheTool.\(module.title).\(module.subTitle)")
-        do {
-            self.cache = try ImageCache(name: "AnyImageKitImageCache", cacheDirectoryURL: URL(fileURLWithPath: self.path))
-        } catch {
-            self.cache = ImageCache.default
-        }
         FileHelper.createDirectory(at: self.path)
         cache.memoryStorage.config.countLimit = memoryCountLimit
     }
@@ -43,14 +40,14 @@ extension ImageCacheTool {
     ///   - image: 图片
     ///   - key: 标识符
     func store(_ image: UIImage, forKey key: String) {
-        cache.store(image, forKey: key, toDisk: false)
+        cache.store(image, forKey: path + key, toDisk: false)
     }
     
     /// 读取缓存
     /// - Parameters:
     ///   - key: 标识符
     func retrieveImage(forKey key: String) -> UIImage? {
-        if let image = cache.retrieveImageInMemoryCache(forKey: key) {
+        if let image = cache.retrieveImageInMemoryCache(forKey: path + key) {
             return image
         }
         return nil

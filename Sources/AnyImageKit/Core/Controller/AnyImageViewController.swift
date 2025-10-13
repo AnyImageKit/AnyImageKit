@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AnyImageViewController: UIViewController {
+open class AnyImageViewController: UIViewController {
     
     private var page: AnyImagePage = .undefined
     private var isStatusBarHidden: Bool = false {
@@ -19,39 +19,39 @@ class AnyImageViewController: UIViewController {
     
     weak var trackObserver: DataTrackObserver?
     
-    override func viewDidLoad() {
+    override open  func viewDidLoad() {
         super.viewDidLoad()
         setTrackPage()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override open  func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         trackObserver?.track(page: page, state: .enter)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         trackObserver?.track(page: page, state: .leave)
     }
    
-    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+    override open func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         setTrackObserverOrDelegate(viewControllerToPresent)
         super.present(viewControllerToPresent, animated: flag, completion: completion)
     }
     
-    override var prefersStatusBarHidden: Bool {
+    override open var prefersStatusBarHidden: Bool {
         return isStatusBarHidden
     }
     
-    override var shouldAutorotate: Bool {
+    override open var shouldAutorotate: Bool {
         return false
     }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return [.portrait]
     }
     
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
     }
     
@@ -75,6 +75,11 @@ extension AnyImageViewController {
     
     private func setTrackPage() {
         switch self {
+        #if ANYIMAGEKIT_ENABLE_BROWSER
+        case _ as BrowserController:
+            page = .browserPreview
+        #endif
+            
         #if ANYIMAGEKIT_ENABLE_PICKER
         case _ as AlbumPickerViewController:
             page = .pickerAlbum
