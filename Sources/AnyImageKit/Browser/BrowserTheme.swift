@@ -78,6 +78,8 @@ extension BrowserTheme {
         /// Text Color
         case text
         
+        case loadingIndicator
+        
         /// Background Color
         case background
         
@@ -87,18 +89,21 @@ extension BrowserTheme {
                 switch self {
                 case .primary: return UIColor.primaryColor
                 case .text: return UIColor.subText
+                case .loadingIndicator: return .create(light: .black, dark: .white)
                 case .background: return UIColor.background
                 }
             case .light:
                 switch self {
                 case .primary: return UIColor.primaryColor
                 case .text: return UIColor.subTextLight
+                case .loadingIndicator: return .black
                 case .background: return UIColor.backgroundLight
                 }
             case .dark:
                 switch self {
                 case .primary: return UIColor.primaryColor
                 case .text: return UIColor.subTextDark
+                case .loadingIndicator: return .white
                 case .background: return UIColor.backgroundDark
                 }
             }

@@ -52,6 +52,10 @@ extension Asset {
         }
     }
     
+    var placeholdImage: UIImage? {
+        return _image ?? _images[.thumbnail]
+    }
+    
     var duration: TimeInterval {
         return phAsset.duration
     }

@@ -59,6 +59,19 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
     
     // MARK: - override
     
+    open override func viewDidAppear() {
+        super.viewDidAppear()
+        playWhenViewAppear()
+    }
+    
+    open override func viewDidDisappear() {
+        super.viewDidDisappear()
+        if isPlaying {
+            playPauseButtonTapped()
+            playerLayer?.player?.seek(to: .zero)
+        }
+    }
+    
     open override func config(_ model: any BrowserResource) {
         super.config(model)
         if let asset = model as? PHAsset {
@@ -134,14 +147,6 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
         addObservers()
     }
     
-    public func playWhenViewAppear() {
-        if let player {
-            player.play()
-        } else {
-            playWhenLoaded = true
-        }
-    }
-    
     // MARK: - Setup
     
     private func setupView() {
@@ -201,6 +206,14 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
         remainingTimeLabel.snp.makeConstraints { make in
             make.right.equalTo(progress)
             make.centerY.equalTo(playPauseButton)
+        }
+    }
+    
+    private func playWhenViewAppear() {
+        if let player {
+            player.play()
+        } else {
+            playWhenLoaded = true
         }
     }
     

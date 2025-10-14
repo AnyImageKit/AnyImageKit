@@ -12,15 +12,15 @@ import Photos
 open class BrowserPreviewController: AnyImageViewController, BrowserChildController, BrowserOptionsConfigurable {
     
     let needSyncLayoutGuideEvent = Delegate<Void, Void>()
+    var contentView: UIView { previewView.imageView }
     
     public lazy var previewView: BrowserPreviewView = {
         let view = BrowserPreviewView(contentSafeAreaLayoutGuide)
         return view
     }()
     
-    var contentView: UIView { previewView.imageView }
-    
     public private(set) var options: BrowserOptionsInfo
+    public internal(set) var placeholdImage: UIImage?
     
     private let contentSafeAreaLayoutGuide = UILayoutGuide()
     private var guideTopConstraint: NSLayoutConstraint!
@@ -46,24 +46,22 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         needSyncLayoutGuideEvent.call()
+        previewView.viewWillAppear()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let previewView = previewView as? BrowserVideoPreviewView {
-            previewView.playWhenViewAppear()
-        }
+        previewView.viewDidAppear()
+    }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        previewView.viewWillDisappear()
     }
     
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        previewView.scrollView.setZoomScale(previewView.scrollView.minimumZoomScale, animated: false)
-        if let previewView = previewView as? BrowserVideoPreviewView {
-            if previewView.isPlaying {
-                previewView.playPauseButtonTapped()
-                previewView.playerLayer?.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 600))
-            }
-        }
+        previewView.viewDidDisappear()
     }
     
     // MARK: - Override Methods
@@ -76,6 +74,7 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
         previewView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        previewView.imageView.image = placeholdImage
         previewView.config(model)
         previewView.update(options: options)
     }

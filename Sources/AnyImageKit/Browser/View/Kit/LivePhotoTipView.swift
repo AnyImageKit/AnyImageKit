@@ -39,7 +39,7 @@ final class LivePhotoTipView: UIView {
             maker.centerY.equalToSuperview()
         }
         label.snp.makeConstraints { maker in
-            maker.left.equalTo(imageView.snp.right).offset(4)
+            maker.left.equalTo(imageView.snp.right).offset(4).priority(.high)
             maker.right.equalToSuperview().offset(-4)
             maker.centerY.equalToSuperview()
         }

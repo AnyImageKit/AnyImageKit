@@ -52,7 +52,7 @@ final public class LoadingiCloudView: UIView {
             maker.height.equalTo(20)
         }
         tipsLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(imageView.snp.right).offset(4)
+            maker.left.equalTo(imageView.snp.right).offset(4).priority(.high)
             maker.centerY.equalToSuperview()
         }
         progressLabel.snp.makeConstraints { maker in

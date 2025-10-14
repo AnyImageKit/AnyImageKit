@@ -483,9 +483,9 @@ extension AssetPickerViewController {
     
     @objc private func previewButtonTapped(_ sender: UIButton) {
         manager.lastSelectedAssets = manager.selectedAssets
-        let resources = manager.selectedAssets.compactMap{ $0.phAsset }
-        let options = BrowserOptionsInfo(index: 0, resources: resources) { [weak sender] index in
-            sender
+        let resources = manager.selectedAssets.compactMap { $0.phAsset }
+        let options = BrowserOptionsInfo(index: 0, resources: resources, placeholdImage: manager.selectedAssets.first?.image) { [weak sender] index in
+            sender // TODO: try find asset cell
         }
         let controller = PhotoPreviewController(manager: manager, sourceType: .selectedAssets, assets: manager.selectedAssets, options: options)
         controller.currentIndex = 0
@@ -643,8 +643,10 @@ extension AssetPickerViewController: UICollectionViewDelegate {
         } else if !asset.isSelected && manager.isUpToLimit {
             return
         } else {
-            let assets = album?.assets.compactMap{ $0.phAsset } ?? []
-            let options = BrowserOptionsInfo(index: indexPath.item - itemOffset, resources: assets) { index in
+            let index = indexPath.item - itemOffset
+            let assets = album?.assets.map { $0.phAsset } ?? []
+            let placeholdImage = index < assets.count ? album?.assets[index].placeholdImage : nil
+            let options = BrowserOptionsInfo(index: index, resources: assets, placeholdImage: placeholdImage) { index in
                 guard let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? AssetCell else { return nil }
                 return cell
             }

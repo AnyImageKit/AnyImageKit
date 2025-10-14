@@ -54,6 +54,16 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
         return view
     }()
     
+    /// Loading indicator for network images
+    public private(set) lazy var loadingView: UIActivityIndicatorView = {
+        let view: UIActivityIndicatorView
+        view = UIActivityIndicatorView(style: .large)
+        view.color = .white
+        view.hidesWhenStopped = true
+        view.isHidden = true
+        return view
+    }()
+    
     /// 单击手势
     public private(set) lazy var singleTap: UITapGestureRecognizer = {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
@@ -86,6 +96,7 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     private var needLayout: Bool = false
 
     private var containerSize: CGSize = .zero
+    private var isResourceFromPHAsset: Bool = false
     
     public var options: BrowserOptionsInfo = .init()
     public let contentSafeAreaLayoutGuide: UILayoutGuide
@@ -120,14 +131,29 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     
     // MARK: - Override
     
+    open func viewWillAppear() { }
+    open func viewDidAppear() { }
+    open func viewWillDisappear() { }
+    
+    open func viewDidDisappear() {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    }
+    
     /// Updates the view with new browser options.
     open func update(options: BrowserOptionsInfo) {
         self.options = options
         updateChildrenConfigurable(options: options)
+        loadingView.color = options.theme[color: .loadingIndicator]
     }
     
     /// Configures the view with a resource model.
     open func config(_ model: any BrowserResource) {
+        isResourceFromPHAsset = model is PHAsset
+        if imageView.image == nil && model is URL {
+            loadingView.isHidden = false
+            loadingView.startAnimating()
+        }
+        
         model.loadImage { [weak self] result in
             guard let self else { return }
             if Thread.isMainThread {
@@ -146,6 +172,9 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
             maker.top.equalTo(contentSafeAreaLayoutGuide).offset(16)
             maker.left.equalTo(contentSafeAreaLayoutGuide).offset(8)
             maker.height.equalTo(25)
+        }
+        loadingView.snp.makeConstraints { maker in
+            maker.center.equalToSuperview()
         }
     }
     
@@ -186,7 +215,7 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     
     /// 取图片适屏size
     open var fitSize: CGSize {
-        guard let image = imageView.image else { return CGSize.zero }
+        guard let image = imageView.image, image.size != .zero else { return CGSize.zero }
         let screenSize = ScreenHelper.mainBounds.size
         let scale = image.size.height / image.size.width
         var size = CGSize(width: screenSize.width, height: scale * screenSize.width)
@@ -222,6 +251,7 @@ extension BrowserPreviewView {
         addSubview(scrollView)
         scrollView.addSubview(imageView)
         addSubview(iCloudView)
+        addSubview(loadingView)
         
         // 添加手势
         addGestureRecognizer(singleTap)
@@ -270,15 +300,29 @@ extension BrowserPreviewView {
             }
         case .failure(_):
             self.imageView.image = nil
+            self.loadingView.stopAnimating()
+            self.iCloudView.isHidden = true
         }
     }
     
     /// 设置 iCloud 下载进度
     internal func setDownloadingProgress(_ progress: Double) {
-        isDownloaded = progress == 1
-        iCloudView.isHidden = progress == 1
-        iCloudView.setProgress(progress)
-        if progress == 1 {
+        isDownloaded = progress >= 1.0
+        
+        if isResourceFromPHAsset {
+            iCloudView.isHidden = isDownloaded
+            iCloudView.setProgress(progress)
+            loadingView.stopAnimating()
+        } else {
+            iCloudView.isHidden = true
+            loadingView.isHidden = false
+            if isDownloaded {
+                loadingView.stopAnimating()
+                loadingView.isHidden = true
+            }
+        }
+        
+        if isDownloaded {
 //            NotificationCenter.default.post(name: .previewCellDidDownloadResource, object: asset)
         }
     }

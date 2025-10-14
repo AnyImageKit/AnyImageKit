@@ -9,6 +9,7 @@
 
 import UIKit
 import Photos
+import Kingfisher
 
 // TODO: Move to core
 
@@ -35,7 +36,7 @@ extension UIImage: BrowserResource {
 extension URL: BrowserResource {
     
     public func loadImage(completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
-        if self.isFileURL { // TODO: Support remote url
+        if isFileURL {
             do {
                 let data = try Data(contentsOf: self)
                 if let image = UIImage(data: data) {
@@ -48,7 +49,18 @@ extension URL: BrowserResource {
                 completion(.failure(.invalidData))
             }
         } else {
-            completion(.failure(.invalidURL))
+            KingfisherManager.shared.retrieveImage(with: self, options: nil, progressBlock: { receivedSize, totalSize in
+                let progress = CGFloat(receivedSize) / CGFloat(totalSize)
+                completion(.success(.init(nil, progress)))
+            }) { result in
+                switch result {
+                case .success(let value):
+                    completion(.success(.init(value.image, 1.0)))
+                case .failure(let error):
+                    _print(error.localizedDescription)
+                    completion(.failure(.invalidURL))
+                }
+            }
         }
     }
 }

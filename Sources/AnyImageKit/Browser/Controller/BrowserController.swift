@@ -36,6 +36,7 @@ open class BrowserController: AnyImageViewController {
     private var cancellables = Set<AnyCancellable>()
     private var lastKnownSafeAreaInsets: UIEdgeInsets?
     private var isFirstLayout = true
+    private var isFirstLoad = true
     private var viewControllers: [WeakBox] = []
     
     public private(set) lazy var transition = getTransition()
@@ -124,6 +125,10 @@ extension BrowserController {
                 .withController { [weak self] context in
                     guard let self = self else { return UIViewController() }
                     let controller = self.options.previewClass.init(options: self.options)
+                    if let image = self.options.placeholdImage, self.isFirstLoad {
+                        self.isFirstLoad = false
+                        controller.placeholdImage = image
+                    }
                     controller.config(resource)
                     controller.previewView.delegate = self
                     controller.needSyncLayoutGuideEvent.delegate(on: self) { (self, _)  in

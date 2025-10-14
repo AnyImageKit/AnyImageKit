@@ -19,6 +19,8 @@ public struct BrowserOptionsInfo {
     /// All resources displayed in the list.
     public var resources: [any BrowserResource] = []
     
+    public var placeholdImage: UIImage?
+    
     public var previewClass: BrowserPreviewController.Type = BrowserPreviewController.self
     
     public var relatedView: ((_ index: Int) -> UIView?)? = nil
