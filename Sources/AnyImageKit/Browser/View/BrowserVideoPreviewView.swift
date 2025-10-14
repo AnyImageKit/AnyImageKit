@@ -72,9 +72,11 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
         }
     }
     
-    open override func config(_ model: any BrowserResource) {
+    open override func config(_ model: BrowserResource) {
         super.config(model)
-        if let asset = model as? PHAsset {
+        
+        switch model {
+        case .phAsset(let asset):
             let options = VideoFetchOptions(isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -98,6 +100,24 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
                     _print(error)
                 }
             }
+            
+        case .localFile(let url):
+            let item = AVPlayerItem(url: url)
+            self.setPlayerItem(item)
+            self.setDownloadingProgress(1.0)
+            if self.playWhenLoaded {
+                self.player?.play()
+                self.playWhenLoaded = false
+            }
+            
+        case .remoteVideo(let url, _):
+            let item = AVPlayerItem(url: url)
+            self.setPlayerItem(item)
+            // TODO: Observe player status to update loading progress
+            
+        default:
+            _print("BrowserVideoPreviewView received an unsupported resource type: \(model)")
+            break
         }
     }
     

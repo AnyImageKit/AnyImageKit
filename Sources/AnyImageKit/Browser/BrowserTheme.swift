@@ -76,7 +76,7 @@ extension BrowserTheme {
         case primary
         
         /// Text Color
-        case text
+        case tipsText
         
         case loadingIndicator
         
@@ -87,22 +87,22 @@ extension BrowserTheme {
             switch style {
             case .auto:
                 switch self {
-                case .primary: return UIColor.primaryColor
-                case .text: return UIColor.subText
+                case .primary: return UIColor.primaryText
+                case .tipsText: return UIColor.subText
                 case .loadingIndicator: return .create(light: .black, dark: .white)
                 case .background: return UIColor.background
                 }
             case .light:
                 switch self {
-                case .primary: return UIColor.primaryColor
-                case .text: return UIColor.subTextLight
+                case .primary: return UIColor.primaryText
+                case .tipsText: return UIColor.subTextLight
                 case .loadingIndicator: return .black
                 case .background: return UIColor.backgroundLight
                 }
             case .dark:
                 switch self {
-                case .primary: return UIColor.primaryColor
-                case .text: return UIColor.subTextDark
+                case .primary: return UIColor.primaryText
+                case .tipsText: return UIColor.subTextDark
                 case .loadingIndicator: return .white
                 case .background: return UIColor.backgroundDark
                 }
@@ -116,6 +116,8 @@ extension BrowserTheme {
     
     public enum IconConfigKey: Hashable {
         
+        case closeButton
+        
         case iCloud
         case livePhoto
         
@@ -126,6 +128,8 @@ extension BrowserTheme {
         
         func defaultValue(for style: UserInterfaceStyle) -> UIImage? {
             switch self {
+            case .closeButton:
+                return UIImage(systemName: "xmark")
             case .iCloud:
                 return UIImage(systemName: "icloud")
             case .livePhoto:

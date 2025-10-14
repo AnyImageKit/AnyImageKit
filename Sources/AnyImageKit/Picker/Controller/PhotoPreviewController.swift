@@ -145,6 +145,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     // MARK: - override
     
     override func browser(_ browser: BrowserController, didChangeIndex index: Int) {
+        super.browser(browser, didChangeIndex: index)
         let asset = assets[index]
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
@@ -207,6 +208,8 @@ extension PhotoPreviewController {
     
     /// 添加视图
     private func setupViews() {
+        closeButton.isHidden = true
+        pageLabel.isHidden = true
         view.addSubview(navigationBar)
         view.addSubview(toolBar)
         view.addSubview(indexView)

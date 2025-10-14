@@ -6,12 +6,11 @@
 //  Copyright © 2025 AnyImageKit.org. All rights reserved.
 //
 
-
 import UIKit
 import Photos
 import Kingfisher
-
-// TODO: Move to core
+import AVFoundation
+import MobileCoreServices
 
 public struct BrowserFetchResult {
     public let image: UIImage?
@@ -23,70 +22,68 @@ public struct BrowserFetchResult {
     }
 }
 
-public protocol BrowserResource {
-    func loadImage(completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void)
-}
-
-extension UIImage: BrowserResource {
-    public func loadImage(completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
-        completion(.success(.init(self, 1.0)))
-    }
-}
-
-extension URL: BrowserResource {
+/// 浏览器资源类型枚举
+public enum BrowserResource {
+    /// A UIImage object already in memory.
+    case image(UIImage)
     
+    /// An asset from the PhotoKit library. Can be an image, video, or Live Photo.
+    case phAsset(PHAsset)
+    
+    /// A remote image specified by a URL.
+    case remoteImage(URL)
+    
+    /// A local file specified by a URL. The framework will determine if it's an image or video.
+    case localFile(URL)
+    
+    /// A remote video. Requires a video URL and an optional thumbnail URL.
+    case remoteVideo(url: URL, thumbnailURL: URL?)
+}
+
+// MARK: - Centralized Logic
+extension BrowserResource {
+    
+    /// 加载与资源对应的图片
     public func loadImage(completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
-        if isFileURL {
-            do {
-                let data = try Data(contentsOf: self)
-                if let image = UIImage(data: data) {
-                    completion(.success(.init(image, 1.0)))
-                } else {
-                    completion(.failure(.invalidImage))
-                }
-            } catch {
-                _print(error.localizedDescription)
-                completion(.failure(.invalidData))
+        switch self {
+        case .image(let image):
+            completion(.success(.init(image, 1.0)))
+            
+        case .phAsset(let asset):
+            loadPHAsset(asset, completion: completion)
+            
+        case .remoteImage(let url):
+            loadRemoteImage(url, completion: completion)
+            
+        case .localFile(let url):
+            loadLocalFile(url, completion: completion)
+            
+        case .remoteVideo(_, let thumbnailURL):
+            guard let url = thumbnailURL else {
+                completion(.failure(.invalidURL))
+                return
             }
-        } else {
-            KingfisherManager.shared.retrieveImage(with: self, options: nil, progressBlock: { receivedSize, totalSize in
-                let progress = CGFloat(receivedSize) / CGFloat(totalSize)
-                completion(.success(.init(nil, progress)))
-            }) { result in
-                switch result {
-                case .success(let value):
-                    completion(.success(.init(value.image, 1.0)))
-                case .failure(let error):
-                    _print(error.localizedDescription)
-                    completion(.failure(.invalidURL))
-                }
-            }
+            loadRemoteImage(url, completion: completion)
         }
     }
-}
-
-extension PHAsset: BrowserResource {
     
-    public func loadImage(completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
+    // MARK: - Private Helper Functions
+    
+    private func loadPHAsset(_ asset: PHAsset, completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
         let cache = ImageCacheTool(module: .picker(.default), memoryCountLimit: 20)
-        loadImage(cache: cache, completion: completion)
-    }
-    
-    func loadImage(cache: ImageCacheTool, completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
-        if let image = cache.retrieveImage(forKey: localIdentifier) {
+        if let image = cache.retrieveImage(forKey: asset.localIdentifier) {
             completion(.success(.init(image, 1.0)))
             return
         }
         
         let targetSize = CGSize(width: 1800, height: 1800)
         let fetchOptions = PhotoFetchOptions(size: targetSize)
-        ExportTool.requestPhoto(for: self, options: fetchOptions) { [weak self] (result, requestID) in
-            guard let self = self else { return }
+        ExportTool.requestPhoto(for: asset, options: fetchOptions) { (result, requestID) in
             switch result {
             case .success(let response):
                 completion(.success(.init(response.image, 1.0)))
                 if !response.isDegraded {
-                    cache.store(response.image, forKey: self.localIdentifier)
+                    cache.store(response.image, forKey: asset.localIdentifier)
                 }
             case .failure(let error):
                 guard error == .cannotFindInLocal else {
@@ -97,21 +94,73 @@ extension PHAsset: BrowserResource {
                 let photoDataOptions = PhotoDataFetchOptions { (progress, error, isAtEnd, info) in
                     completion(.success(.init(nil, progress)))
                 }
-                ExportTool.requestPhotoData(for: self, options: photoDataOptions) { [weak self] (result, requestID) in
-                    guard let self = self else { return }
+                ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { (result, requestID) in
                     switch result {
                     case .success(let response):
                         guard let resizedImage = UIImage.resize(from: response.data, limitSize: targetSize) else {
                             completion(.failure(.invalidData))
                             return
                         }
-                        cache.store(resizedImage, forKey: self.localIdentifier)
+                        cache.store(resizedImage, forKey: asset.localIdentifier)
                         completion(.success(.init(resizedImage, 1.0)))
                     case .failure(let error):
                         completion(.failure(error))
                     }
                 }
             }
+        }
+    }
+    
+    private func loadRemoteImage(_ url: URL, completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
+        KingfisherManager.shared.retrieveImage(with: url, options: nil, progressBlock: { receivedSize, totalSize in
+            let progress = CGFloat(receivedSize) / CGFloat(totalSize)
+            completion(.success(.init(nil, progress)))
+        }) { result in
+            switch result {
+            case .success(let value):
+                completion(.success(.init(value.image, 1.0)))
+            case .failure(let error):
+                _print(error.localizedDescription)
+                completion(.failure(.invalidURL))
+            }
+        }
+    }
+    
+    private func loadLocalFile(_ url: URL, completion: @escaping (Result<BrowserFetchResult, AnyImageError>) -> Void) {
+        guard let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, url.pathExtension as CFString, nil)?.takeRetainedValue() else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        if UTTypeConformsTo(uti, kUTTypeMovie) {
+            // 提取视频缩略图
+            let asset = AVURLAsset(url: url)
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            let time = CMTime(seconds: 0.1, preferredTimescale: 600)
+            generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { (_, cgImage, _, _, _) in
+                DispatchQueue.main.async {
+                    if let cgImage = cgImage {
+                        completion(.success(.init(UIImage(cgImage: cgImage), 1.0)))
+                    } else {
+                        completion(.failure(.invalidData))
+                    }
+                }
+            }
+        } else if UTTypeConformsTo(uti, kUTTypeImage) {
+            // 加载本地图片
+            do {
+                let data = try Data(contentsOf: url)
+                if let image = UIImage(data: data) {
+                    completion(.success(.init(image, 1.0)))
+                } else {
+                    completion(.failure(.invalidImage))
+                }
+            } catch {
+                completion(.failure(.invalidData))
+            }
+        } else {
+            completion(.failure(.invalidURL))
         }
     }
 }

@@ -15,7 +15,7 @@ protocol BrowserChildController {
     var contentView: UIView { get }
 }
 
-open class BrowserController: AnyImageViewController {
+open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable {
     
     private class WeakBox {
         weak var controller: BrowserPreviewController?
@@ -43,6 +43,26 @@ open class BrowserController: AnyImageViewController {
     
     private let contentSafeAreaLayoutGuide = UILayoutGuide()
     
+    public private(set) lazy var closeButton: UIButton = {
+        let view = UIButton(type: .system)
+        view.addTarget(self, action: #selector(closeButtonTapped(_:)), for: .touchUpInside)
+        if #available(iOS 15.0, *) {
+            var configuration = UIButton.Configuration.plain()
+            configuration.preferredSymbolConfigurationForImage = .init(pointSize: 18, weight: .regular)
+            view.configuration = configuration
+        } else { // TODO: need Test
+            view.imageView?.contentMode = .scaleAspectFit
+            view.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+            view.imageView?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        }
+        return view
+    }()
+    public private(set) lazy var pageLabel: UILabel = {
+        let view = UILabel(frame: .zero)
+        view.font = UIFont.systemFont(ofSize: 16)
+        return view
+    }()
+    
     public init(options: BrowserOptionsInfo) {
         self.options = options
         self.pageManager = .init()
@@ -59,6 +79,7 @@ open class BrowserController: AnyImageViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        update(options: options)
     }
     
     open override func viewDidLayoutSubviews() {
@@ -68,6 +89,24 @@ open class BrowserController: AnyImageViewController {
     
     // MARK: - Override Methods
     
+    open func update(options: BrowserOptionsInfo) {
+        setStatusBar(hidden: !options.showStatusBar)
+        viewControllers.forEach {
+            $0.controller?.update(options: options)
+        }
+        if #available(iOS 15.0, *) {
+            closeButton.configuration?.baseForegroundColor = options.theme[color: .primary]
+            closeButton.configuration?.image = options.theme[icon: .closeButton]
+        } else {
+            closeButton.tintColor = options.theme[color: .primary]
+            closeButton.setImage(options.theme[icon: .closeButton], for: .normal)
+        }
+        
+        pageLabel.textColor = options.theme[color: .primary]
+        pageLabel.text = "\(options.index + 1)/\(options.resources.count)"
+        // TODO: Update resources
+    }
+    
     /// Updates the safe area layout guide for content.
     open func updateContentSafeAreaLayoutGuide(isAnimated: Bool, _ closure: (_ make: ConstraintMaker) -> Void) {
         contentSafeAreaLayoutGuide.snp.remakeConstraints(closure)
@@ -76,7 +115,7 @@ open class BrowserController: AnyImageViewController {
     
     /// Called when the browser's page index changes.
     open func browser(_ browser: BrowserController, didChangeIndex index: Int) {
-        
+        pageLabel.text = "\(index + 1)/\(options.resources.count)"
     }
     
     /// Called when the pan gesture for dismissal begins.
@@ -88,7 +127,7 @@ open class BrowserController: AnyImageViewController {
     open func browser(_ browser: BrowserController, didPanScale scale: CGFloat) {
         let alpha = scale * scale
         transition.presentationController?.maskAlpha = alpha
-        (pageManager.currentModel?.controller as? BrowserPreviewController)?.hideToolBar(isHidden: true)
+        hideToolBar(isHidden: true)
     }
     
     /// Called when the pan gesture ends. The `isExit` parameter indicates whether the view should be dismissed.
@@ -96,18 +135,26 @@ open class BrowserController: AnyImageViewController {
         if isExit {
             dismiss(animated: true, completion: nil)
         } else {
-            (pageManager.currentModel?.controller as? BrowserPreviewController)?.hideToolBar(isHidden: false)
+            hideToolBar(isHidden: false)
         }
     }
     
     /// Called when a single tap is detected in the browser.
     open func browserDidSingleTap(_ browser: BrowserController) {
-        (pageManager.currentModel?.controller as? BrowserPreviewController)?.hideToolBar(isHidden: shouldHideToolBar(in: self), isAnimated: false)
+        hideToolBar(isHidden: shouldHideToolBar(in: self), isAnimated: false)
     }
     
     /// Asks the delegate whether the toolbar should be hidden.
     open func shouldHideToolBar(in browser: BrowserController) -> Bool {
         return false
+    }
+    
+    open func hideToolBar(isHidden: Bool, isAnimated: Bool = true) {
+        viewControllers.compactMap { $0.controller }.forEach({
+            $0.hideToolBar(isHidden: isHidden, isAnimated: false)
+        })
+        closeButton.alpha = isHidden ? 0 : 1
+        pageLabel.alpha = isHidden ? 0 : 1
     }
 }
 
@@ -117,7 +164,7 @@ extension BrowserController {
     private func setupView() {
         view.addLayoutGuide(contentSafeAreaLayoutGuide)
         contentSafeAreaLayoutGuide.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         pageManager.spacing = 30
@@ -130,6 +177,7 @@ extension BrowserController {
                         controller.placeholdImage = image
                     }
                     controller.config(resource)
+                    controller.hideToolBar(isHidden: self.shouldHideToolBar(in: self), isAnimated: false)
                     controller.previewView.delegate = self
                     controller.needSyncLayoutGuideEvent.delegate(on: self) { (self, _)  in
                         self.syncLayoutGuide(isAnimated: false, force: true)
@@ -156,6 +204,17 @@ extension BrowserController {
         }
         pageController.renderUI()
         view.backgroundColor = .clear
+        
+        view.addSubview(closeButton)
+        view.addSubview(pageLabel)
+        closeButton.snp.makeConstraints { make in
+            make.top.left.equalTo(contentSafeAreaLayoutGuide).offset(8)
+            make.width.height.equalTo(35)
+        }
+        pageLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(contentSafeAreaLayoutGuide)
+            make.centerY.equalTo(closeButton)
+        }
     }
     
     private func getTransition() -> ScaleTransition {
@@ -188,6 +247,13 @@ extension BrowserController {
     }
 }
 
+// MARK: - Target
+extension BrowserController {
+    
+    @objc private func closeButtonTapped(_ sender: UIButton) {
+        dismiss(animated: true)
+    }
+}
 
 // MARK: - BrowserPreviewViewDelegate
 extension BrowserController: BrowserPreviewViewDelegate {

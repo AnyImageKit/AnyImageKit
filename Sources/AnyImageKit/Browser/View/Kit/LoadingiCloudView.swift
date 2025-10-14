@@ -67,7 +67,7 @@ final public class LoadingiCloudView: UIView {
 extension LoadingiCloudView: BrowserOptionsConfigurable {
     
     public func update(options: BrowserOptionsInfo) {
-        let color = options.theme[color: .text]
+        let color = options.theme[color: .tipsText]
         progressLabel.textColor = color
         tipsLabel.textColor = color
         tipsLabel.text = options.theme[string: .browserDownloadingFromiCloud]

@@ -50,7 +50,7 @@ final class LivePhotoTipView: UIView {
 extension LivePhotoTipView: BrowserOptionsConfigurable {
     
     func update(options: BrowserOptionsInfo) {
-        let color = options.theme[color: .text]
+        let color = options.theme[color: .tipsText]
         label.textColor = color
         label.text = options.theme[string: .livePhoto]
         imageView.tintColor = color

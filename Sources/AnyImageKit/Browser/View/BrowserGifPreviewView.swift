@@ -51,7 +51,7 @@ open class BrowserGifPreviewView: BrowserPreviewView {
         return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
     
-    open override func config(_ model: any BrowserResource) {
+    open override func config(_ model: BrowserResource) {
         model.loadImage { [weak self] result in
             guard let self, !self.didLoadGif else { return }
             if Thread.isMainThread {
@@ -63,9 +63,12 @@ open class BrowserGifPreviewView: BrowserPreviewView {
             }
         }
         
-        if let asset = model as? PHAsset {
+        switch model {
+        case .phAsset(let asset):
             let options = PhotoDataFetchOptions(version: .current, isNetworkAccessAllowed: true) { (progress, error, isAtEnd, info) in
-                
+                DispatchQueue.main.async {
+                    self.setDownloadingProgress(progress)
+                }
             }
             ExportTool.requestPhotoData(for: asset, options: options) { result, requestID in
                 switch result {
@@ -85,6 +88,8 @@ open class BrowserGifPreviewView: BrowserPreviewView {
                     _print(error)
                 }
             }
+        default:
+            break
         }
     }
 }

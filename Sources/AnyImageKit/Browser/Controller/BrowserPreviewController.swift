@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import MobileCoreServices
 
 open class BrowserPreviewController: AnyImageViewController, BrowserChildController, BrowserOptionsConfigurable {
     
@@ -67,7 +68,7 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
     // MARK: - Override Methods
     
     /// Configures the controller with a resource model.
-    open func config(_ model: any BrowserResource) {
+    open func config(_ model: BrowserResource) {
         previewView = createPreview(with: getMediaType(resource: model))
         
         view.addSubview(previewView)
@@ -97,24 +98,31 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
         }
     }
     
-    open func getMediaType(resource: any BrowserResource) -> MediaType {
-        if let asset = resource as? PHAsset {
-            switch asset.mediaType {
-            case .image:
-                if options.supportType.contains(.photoLive) && asset.isLivePhoto {
-                    return .photoLive
-                } else if options.supportType.contains(.photoGIF) && asset.isGIF {
-                    return .photoGIF
-                }
-            case .video:
-                if options.supportType.contains(.video) {
+    open func getMediaType(resource: BrowserResource) -> MediaType {
+        switch resource {
+        case .image, .remoteImage:
+            return .photo
+        case .phAsset(let asset):
+            if options.supportType.contains(.video) && asset.mediaType == .video {
+                return .video
+            }
+            if options.supportType.contains(.photoLive) && asset.isLivePhoto {
+                return .photoLive
+            }
+            if options.supportType.contains(.photoGIF) && asset.isGIF {
+                return .photoGIF
+            }
+            return .photo
+        case .localFile(let url):
+            if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, url.pathExtension as CFString, nil)?.takeRetainedValue() {
+                if UTTypeConformsTo(uti, kUTTypeMovie) {
                     return .video
                 }
-            default:
-                break
             }
+            return .photo
+        case .remoteVideo:
+            return .video
         }
-        return .photo
     }
     
 }

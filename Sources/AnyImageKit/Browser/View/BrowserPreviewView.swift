@@ -147,9 +147,10 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     }
     
     /// Configures the view with a resource model.
-    open func config(_ model: any BrowserResource) {
-        isResourceFromPHAsset = model is PHAsset
-        if imageView.image == nil && model is URL {
+    open func config(_ model: BrowserResource) {
+        if case .phAsset = model {
+            isResourceFromPHAsset = true
+        } else if case .remoteImage = model, imageView.image == nil {
             loadingView.isHidden = false
             loadingView.startAnimating()
         }
@@ -299,7 +300,6 @@ extension BrowserPreviewView {
                 self.needLayout = true
             }
         case .failure(_):
-            self.imageView.image = nil
             self.loadingView.stopAnimating()
             self.iCloudView.isHidden = true
         }

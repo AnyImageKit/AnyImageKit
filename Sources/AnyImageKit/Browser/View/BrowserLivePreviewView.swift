@@ -72,12 +72,12 @@ open class BrowserLivePreviewView: BrowserPreviewView {
         }
     }
     
-    open override func config(_ model: any BrowserResource) {
+    open override func config(_ model: BrowserResource) {
         super.config(model)
-        if let asset = model as? PHAsset {
+        switch model {
+        case .phAsset(let asset):
             let options = PhotoLiveFetchOptions(targetSize: PHImageManagerMaximumSize)  { (progress, error, isAtEnd, info) in
                 DispatchQueue.main.async {
-                    _print("Download live photo from iCloud: \(progress)")
                     self.setDownloadingProgress(progress)
                 }
             }
@@ -93,6 +93,8 @@ open class BrowserLivePreviewView: BrowserPreviewView {
                     }
                 }
             }
+        default:
+            break
         }
     }
     

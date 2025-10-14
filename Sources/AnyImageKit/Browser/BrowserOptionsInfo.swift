@@ -17,7 +17,7 @@ public struct BrowserOptionsInfo {
     public var index: Int = 0
     
     /// All resources displayed in the list.
-    public var resources: [any BrowserResource] = []
+    public var resources: [BrowserResource] = []
     
     public var placeholdImage: UIImage?
     
@@ -25,5 +25,8 @@ public struct BrowserOptionsInfo {
     
     public var relatedView: ((_ index: Int) -> UIView?)? = nil
     
+    public var showStatusBar: Bool = false
+    
+    // ph asset support type
     public var supportType: PickerSelectOption = [.photo, .video, .photoGIF, .photoLive]
 }
