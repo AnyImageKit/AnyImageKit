@@ -103,45 +103,6 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public static func make(for resource: any BrowserResource, options: BrowserOptionsInfo, contentSafeAreaLayoutGuide: UILayoutGuide) -> BrowserPreviewView {
-        
-        let mediaType: MediaType
-        if let asset = resource as? PHAsset {
-            switch asset.mediaType {
-            case .image:
-                if options.supportType.contains(.photoLive) && asset.isLivePhoto {
-                    mediaType = .photoLive
-                } else if options.supportType.contains(.photoGIF) && asset.isGIF {
-                    mediaType = .photoGIF
-                } else {
-                    mediaType = .photo
-                }
-            case .video:
-                if options.supportType.contains(.video) {
-                    mediaType = .video
-                } else {
-                    mediaType = .photo
-                }
-            default:
-                mediaType = .photo
-            }
-        } else {
-            // Fallback for other resource types like URL, UIImage
-            mediaType = .photo
-        }
-        
-        switch mediaType {
-        case .photo:
-            return BrowserPhotoPreviewView(contentSafeAreaLayoutGuide)
-        case .video:
-            return BrowserVideoPreviewView(contentSafeAreaLayoutGuide)
-        case .photoGIF:
-            return BrowserGifPreviewView(contentSafeAreaLayoutGuide)
-        case .photoLive:
-            return BrowserLivePreviewView(contentSafeAreaLayoutGuide)
-        }
-    }
-    
     open override func layoutSubviews() {
         super.layoutSubviews()
         if isFirstLayout {

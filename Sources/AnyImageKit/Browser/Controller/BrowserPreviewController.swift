@@ -70,7 +70,7 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
     
     /// Configures the controller with a resource model.
     open func config(_ model: any BrowserResource) {
-        previewView = BrowserPreviewView.make(for: model, options: options, contentSafeAreaLayoutGuide: contentSafeAreaLayoutGuide)
+        previewView = createPreview(with: getMediaType(resource: model))
         
         view.addSubview(previewView)
         previewView.snp.makeConstraints { make in
@@ -83,6 +83,39 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
     /// Hides or shows the toolbar.
     open func hideToolBar(isHidden: Bool, isAnimated: Bool = true) {
         previewView.hideToolBar(isHidden: isHidden, isAnimated: isAnimated)
+    }
+    
+    open func createPreview(with mediaType: MediaType) -> BrowserPreviewView {
+        switch mediaType {
+        case .photo:
+            return BrowserPhotoPreviewView(contentSafeAreaLayoutGuide)
+        case .video:
+            return BrowserVideoPreviewView(contentSafeAreaLayoutGuide)
+        case .photoGIF:
+            return BrowserGifPreviewView(contentSafeAreaLayoutGuide)
+        case .photoLive:
+            return BrowserLivePreviewView(contentSafeAreaLayoutGuide)
+        }
+    }
+    
+    open func getMediaType(resource: any BrowserResource) -> MediaType {
+        if let asset = resource as? PHAsset {
+            switch asset.mediaType {
+            case .image:
+                if options.supportType.contains(.photoLive) && asset.isLivePhoto {
+                    return .photoLive
+                } else if options.supportType.contains(.photoGIF) && asset.isGIF {
+                    return .photoGIF
+                }
+            case .video:
+                if options.supportType.contains(.video) {
+                    return .video
+                }
+            default:
+                break
+            }
+        }
+        return .photo
     }
     
 }
