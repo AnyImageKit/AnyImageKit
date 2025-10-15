@@ -109,6 +109,7 @@ extension HomeViewController {
         case imageEditor
         case videoEditor
         case capture
+        case browser
         
         var title: String {
             switch self {
@@ -120,6 +121,8 @@ extension HomeViewController {
                 return "VideoEditor"
             case .capture:
                 return "Capture"
+            case .browser:
+                return "Browser"
             }
         }
         
@@ -139,6 +142,8 @@ extension HomeViewController {
                 return VideoEditorConfigViewController(style: style)
             case .capture:
                 return CaptureConfigViewController(style: style)
+            case .browser:
+                return BrowserConfigViewController(style: style)
             }
         }
     }

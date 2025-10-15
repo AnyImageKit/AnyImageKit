@@ -93,13 +93,14 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     private var beganTouch = CGPoint.zero
     
     private var isFirstLayout: Bool = true
-    private var needLayout: Bool = false
+    public var needLayout: Bool = false
 
     private var containerSize: CGSize = .zero
     private var isResourceFromPHAsset: Bool = false
     
     public var options: BrowserOptionsInfo = .init()
     public let contentSafeAreaLayoutGuide: UILayoutGuide
+    public var isToolBarHidden = true
     
     init(_ contentSafeAreaLayoutGuide: UILayoutGuide) {
         self.contentSafeAreaLayoutGuide = contentSafeAreaLayoutGuide
@@ -193,6 +194,7 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     
     /// Hides or shows the toolbar and other UI elements.
     open func hideToolBar(isHidden: Bool, isAnimated: Bool = true) {
+        isToolBarHidden = isHidden
         let animation = {
             self.iCloudView.alpha = isHidden ? 0 : 1
             self.layoutIfNeeded()
@@ -214,11 +216,17 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
                        y: scrollView.contentSize.height * 0.5 + offsetY)
     }
     
+    open var imageSize: CGSize {
+        guard let image = imageView.image, image.size != .zero else { return CGSize.zero }
+        return image.size
+    }
+    
     /// 取图片适屏size
     open var fitSize: CGSize {
-        guard let image = imageView.image, image.size != .zero else { return CGSize.zero }
+        let imageSize = self.imageSize
+        if imageSize == .zero { return .zero }
         let screenSize = ScreenHelper.mainBounds.size
-        let scale = image.size.height / image.size.width
+        let scale = imageSize.height / imageSize.width
         var size = CGSize(width: screenSize.width, height: scale * screenSize.width)
         if size.width > size.height {
             size.width = size.width * screenSize.height / size.height
@@ -264,9 +272,10 @@ extension BrowserPreviewView {
     
     /// 获取缩放比例
     private func getDefaultScale() -> CGFloat {
-        guard let image = imageView.image else { return 1.0 }
+        let imageSize = self.imageSize
+        if imageSize == .zero { return 1.0 }
         let width = scrollView.bounds.width
-        let scale = image.size.height / image.size.width
+        let scale = imageSize.height / imageSize.width
         let size = CGSize(width: width, height: scale * width)
         let screenSize = ScreenHelper.mainBounds.size
         if size.width > size.height {
@@ -274,7 +283,7 @@ extension BrowserPreviewView {
         }
         if UIDevice.current.userInterfaceIdiom == .pad {
             let height = scrollView.bounds.height
-            let scale = image.size.width / image.size.height
+            let scale = imageSize.width / imageSize.height
             let size = CGSize(width: height * scale, height: height)
             if size.height > size.width {
                 return size.width / screenSize.width
@@ -284,8 +293,9 @@ extension BrowserPreviewView {
     }
     
     private func getMaxZoomScale(with minZoomScale: CGFloat) -> CGFloat {
-        guard let image = imageView.image else { return 1.0 }
-        var maxZoomScale = (image.size.width / ScreenHelper.mainBounds.width) * 2
+        let imageSize = self.imageSize
+        if imageSize == .zero { return 1.0 }
+        var maxZoomScale = (imageSize.width / ScreenHelper.mainBounds.width) * 2
         maxZoomScale = maxZoomScale / (1.0 / minZoomScale)
         return maxZoomScale < 1.0 ? 1.0 : maxZoomScale
     }

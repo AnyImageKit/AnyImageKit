@@ -44,6 +44,18 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
     private var isDraggingProgress = false
     private var playWhenLoaded = false
     
+    private var _imageSize: CGSize? {
+        didSet {
+            needLayout = true
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+    }
+    
+    open override var imageSize: CGSize {
+        return _imageSize ?? super.imageSize
+    }
+    
     override init(_ contentSafeAreaLayoutGuide: UILayoutGuide) {
         super.init(contentSafeAreaLayoutGuide)
         setupView()
@@ -72,6 +84,11 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
         }
     }
     
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        playerLayer?.frame = imageView.bounds
+    }
+    
     open override func config(_ model: BrowserResource) {
         super.config(model)
         
@@ -91,10 +108,6 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
                         guard let self = self else { return }
                         self.setPlayerItem(response.playerItem)
                         self.setDownloadingProgress(1.0)
-                        if self.playWhenLoaded {
-                            self.player?.play()
-                            self.playWhenLoaded = false
-                        }
                     }
                 case .failure(let error):
                     _print(error)
@@ -105,28 +118,58 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
             let item = AVPlayerItem(url: url)
             self.setPlayerItem(item)
             self.setDownloadingProgress(1.0)
-            if self.playWhenLoaded {
-                self.player?.play()
-                self.playWhenLoaded = false
-            }
             
         case .remoteVideo(let url, _):
-            let item = AVPlayerItem(url: url)
-            self.setPlayerItem(item)
-            // TODO: Observe player status to update loading progress
+            loadingView.isHidden = false
+            loadingView.startAnimating()
+            hideToolBar(isHidden: true, isAnimated: false)
+            let asset = AVAsset(url: url)
             
+            // 第一步：异步加载 tracks
+            asset.loadValuesAsynchronously(forKeys: ["tracks"]) { [weak self] in
+                guard let self = self else { return }
+                var error: NSError?
+                let status = asset.statusOfValue(forKey: "tracks", error: &error)
+                
+                // 确保 track 加载完成
+                guard status == .loaded, let track = asset.tracks(withMediaType: .video).first else {
+                    return
+                }
+                
+                // 第二步：异步加载 track 的 naturalSize / preferredTransform
+                track.loadValuesAsynchronously(forKeys: ["naturalSize", "preferredTransform"]) { [weak self] in
+                    guard let self = self else { return }
+                    var videoSize: CGSize?
+                    var error: NSError?
+                    
+                    let sizeStatus = track.statusOfValue(forKey: "naturalSize", error: &error)
+                    let transformStatus = track.statusOfValue(forKey: "preferredTransform", error: &error)
+                    
+                    if sizeStatus == .loaded, transformStatus == .loaded {
+                        let transformed = track.naturalSize.applying(track.preferredTransform)
+                        videoSize = CGSize(width: abs(transformed.width), height: abs(transformed.height))
+                    }
+                    DispatchQueue.main.async {
+                        if let size = videoSize {
+                            self._imageSize = size
+                        }
+                        let item = AVPlayerItem(asset: asset)
+                        self.setPlayerItem(item)
+                        self.setDownloadingProgress(1.0)
+                    }
+                }
+            }
         default:
             _print("BrowserVideoPreviewView received an unsupported resource type: \(model)")
             break
         }
     }
     
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-        playerLayer?.frame = imageView.bounds
-    }
-    
     open override func hideToolBar(isHidden: Bool, isAnimated: Bool = true) {
+        isToolBarHidden = isHidden
+        if !isHidden && loadingView.isAnimating && !loadingView.isHidden {
+            return
+        }
         let animation = {
             self.iCloudView.alpha = isHidden ? 0 : 1
             self.progress.alpha = isHidden ? 0 : 1
@@ -165,6 +208,12 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
             ]
         }
         addObservers()
+        if playWhenLoaded {
+            player?.play()
+            playWhenLoaded = false
+        }
+        loadingView.stopAnimating()
+        hideToolBar(isHidden: isToolBarHidden)
     }
     
     // MARK: - Setup

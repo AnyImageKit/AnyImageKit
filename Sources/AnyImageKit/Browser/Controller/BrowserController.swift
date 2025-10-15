@@ -11,10 +11,6 @@ import Photos
 import Combine
 import SnapKit
 
-protocol BrowserChildController {
-    var contentView: UIView { get }
-}
-
 open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable {
     
     private class WeakBox {

@@ -105,6 +105,9 @@ final public class ElasticVideoProgressView: UIControl {
     }
     
     private func updateLayers(animated: Bool) {
+        if value.isNaN || value.isInfinite {
+            return
+        }
         let width = bounds.width
         let height = bounds.height
         let trackY = height / 2

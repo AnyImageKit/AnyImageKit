@@ -29,4 +29,8 @@ public struct BrowserOptionsInfo {
     
     // ph asset support type
     public var supportType: PickerSelectOption = [.photo, .video, .photoGIF, .photoLive]
+    
+    public init() {
+        
+    }
 }
