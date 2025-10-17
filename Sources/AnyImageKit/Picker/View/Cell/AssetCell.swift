@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import Kingfisher
 
-final class AssetCell: UICollectionViewCell {
+final class AssetCell: UICollectionViewCell, SKLoadViewProtocol {
     
     let selectEvent: Delegate<Void, Void> = .init()
     
-    private lazy var imageView: UIImageView = {
+    private(set) lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
         view.contentMode = .scaleAspectFill
         view.layer.masksToBounds = true
@@ -59,6 +58,7 @@ final class AssetCell: UICollectionViewCell {
     }()
     
     private var identifier: String = ""
+    private(set) var model: Model?
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -143,27 +143,51 @@ extension AssetCell {
     }
 }
 
-extension AssetCell {
+// MARK: - SKConfigurableView
+extension AssetCell: SKConfigurableView {
     
-    func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
+    struct Model {
+        let asset: Asset
+        let manager: PickerManager
+        let isPreview: Bool
+        
+        init(asset: Asset, manager: PickerManager, isPreview: Bool = false) {
+            self.asset = asset
+            self.manager = manager
+            self.isPreview = isPreview
+        }
+    }
+    
+    static func preferredSize(limit size: CGSize, model: Model?) -> CGSize {
+        return CGSize(width: 64, height: 64)
+    }
+    
+    func config(_ model: Model) {
+        self.model = model
+        if let image = model.asset._images[.edited] {
+            self.imageView.image = image
+            updateState(model.asset, manager: model.manager, isPreview: model.isPreview)
+            return
+        }
+        
         let options = _PhotoFetchOptions(sizeMode: .thumbnail(100*UIScreen.main.nativeScale), needCache: false)
-        identifier = asset.identifier
-        manager.requestPhoto(for: asset.phAsset, options: options, completion: { [weak self] result in
+        identifier = model.asset.identifier
+        model.manager.requestPhoto(for: model.asset.phAsset, options: options, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let response):
-                guard self.identifier == asset.identifier else { return }
-                asset._images[.thumbnail] = response.image
-                self.imageView.image = asset._image ?? response.image
-                if asset.mediaType == .video && !isPreview {
-                    self.videoView.setVideoTime(asset.durationDescription)
+                guard self.identifier == model.asset.identifier else { return }
+                model.asset._images[.thumbnail] = response.image
+                self.imageView.image = model.asset._image ?? response.image
+                if model.asset.mediaType == .video && !model.isPreview {
+                    self.videoView.setVideoTime(model.asset.durationDescription)
                 }
             case .failure(let error):
                 _print(error)
             }
         })
         
-        updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
+        updateState(model.asset, manager: model.manager, isPreview: model.isPreview)
     }
     
     func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {

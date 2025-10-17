@@ -15,7 +15,7 @@ import Photos
 extension AssetPickerViewController {
     
     /// 打开相机
-    func showCapture() {
+    func openCapture() {
         #if !targetEnvironment(simulator)
         var options = manager.options.captureOptions
         options.enableDebugLog = manager.options.enableDebugLog

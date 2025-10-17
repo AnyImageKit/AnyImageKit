@@ -22,7 +22,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     weak var delegate: AssetPickerViewControllerDelegate?
     
-    private(set) var albumsPicker: AlbumPickerViewController?
+    internal var albumsPicker: AlbumPickerViewController?
     private(set) var album: Album?
     private(set) var albums = [Album]()
     
@@ -30,27 +30,6 @@ final class AssetPickerViewController: AnyImageViewController {
     private var autoScrollToLatest: Bool = false
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     private var containerSize: CGSize = ScreenHelper.mainBounds.size
-    
-    #if swift(>=5.5)
-    private var _dataSource: Any?
-    @available(iOS 14.0, *)
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Asset> {
-        get {
-            if _dataSource == nil {
-                _dataSource = UICollectionViewDiffableDataSource<Section, Asset>(collectionView: collectionView) { (collectionView, indexPath, asset) -> UICollectionViewCell? in
-                    return nil
-                }
-            }
-            return _dataSource as! UICollectionViewDiffableDataSource<Section, Asset>
-        }
-        set {
-            _dataSource = newValue
-        }
-    }
-    #else
-    @available(iOS 14.0, *)
-    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Asset>()
-    #endif
     
     lazy var stopReloadAlbum: Bool = false
     
@@ -60,28 +39,18 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private(set) lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = defaultAssetSpacing
-        layout.minimumInteritemSpacing = defaultAssetSpacing
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.showsVerticalScrollIndicator = manager.options.scrollIndicator == .none
+    private(set) lazy var section = AssetSection(manager: manager)
+    private(set) lazy var collectionView: SKCollectionView = {
+        let view = SKCollectionView()
         view.alwaysBounceVertical = true
         view.contentInsetAdjustmentBehavior = .automatic
+        view.showsVerticalScrollIndicator = manager.options.scrollIndicator == .none
         let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
         view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
         view.backgroundColor = manager.options.theme[color: .background]
-        if #available(iOS 14.0, *) {
-            
-        } else {
-            view.registerCell(AssetCell.self)
-            view.registerCell(CameraCell.self)
-            view.dataSource = self
-        }
-        view.delegate = self
         return view
     }()
     
@@ -115,21 +84,7 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private var itemOffset: Int {
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        switch manager.options.orderByDate {
-        case .asc:
-            return 0
-        case .desc:
-            guard !manager.options.captureOptions.mediaOptions.isEmpty else { return 0 }
-            return ((album?.hasCamera ?? false) ? 1 : 0)
-        }
-        #else
-        return 0
-        #endif
-    }
-    
-    private weak var previewController: PhotoPreviewController?
+    weak var previewController: PhotoPreviewController?
     
     let manager: PickerManager
     
@@ -151,9 +106,7 @@ final class AssetPickerViewController: AnyImageViewController {
         addNotifications()
         setupNavigation()
         setupView()
-        if #available(iOS 14.0, *) {
-            setupDataSource()
-        }
+        setupSection()
         checkPermission()
         update(options: manager.options)
     }
@@ -167,6 +120,10 @@ final class AssetPickerViewController: AnyImageViewController {
         updateIndicator()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle(style: manager.options.theme.style)
+    }
+    
     private func setupNavigation() {
         navigationItem.titleView = titleView
         let cancel = UIBarButtonItem(title: manager.options.theme[string: .cancel], style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
@@ -174,6 +131,8 @@ final class AssetPickerViewController: AnyImageViewController {
     }
     
     private func setupView() {
+        collectionView.manager.reload(section)
+        
         view.addSubview(collectionView)
         view.addSubview(indicatorView)
         view.addSubview(toolBar)
@@ -210,8 +169,38 @@ final class AssetPickerViewController: AnyImageViewController {
         }
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle(style: manager.options.theme.style)
+    private func setupSection() {
+        section.selectedEvent.delegate(on: self) { (self, index) in
+            self.selectItem(index)
+            if self.manager.options.selectLimit == 1 && self.manager.selectedAssets.count == 1 {
+                self.doneButtonTapped(self.toolBar.doneButton)
+            }
+        }
+        section.openCaptureEvent.delegate(on: self) { (self, _) in
+            self.openCapture()
+        }
+        section.openEditorEvent.delegate(on: self) { (self, asset) in
+            self.openEditor(with: asset)
+        }
+        section.openPreviewEvent.delegate(on: self) { (self, asset) in
+            self.openPreview(asset: asset, assets: self.section.assets.filter { !$0.isCamera }, index: asset.idx, sourceType: .album)
+        }
+        section.showAlertEvent.delegate(on: self) { (self, message) in
+            self.showAlert(message: message, stringConfig: self.manager.options.theme)
+        }
+    }
+    
+    private func reloadData(animated: Bool = true, reloadPreview: Bool = true) {
+        collectionView.isUserInteractionEnabled = false
+        if reloadPreview {
+            previewController?.reloadWhenPhotoLibraryDidChange()
+        }
+        section.config(assets: album?.assets ?? [], columnCount: manager.options.columnNumber)
+        collectionView.isUserInteractionEnabled = true
+        
+        if manager.options.scrollIndicator != .none && section.itemCount <= 50 {
+            indicatorView.isHidden = true
+        }
     }
 }
 
@@ -457,66 +446,7 @@ extension AssetPickerViewController {
     }
 }
 
-// MARK: - Target
-extension AssetPickerViewController {
-    
-    @objc private func titleViewTapped(_ sender: PickerArrowButton) {
-        let controller = AlbumPickerViewController(manager: manager)
-        controller.album = album
-        controller.albums = albums
-        controller.delegate = self
-        let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
-        let isFullScreen = ScreenHelper.mainBounds.height == (navigationController?.view ?? view).frame.height
-        presentationController.isFullScreen = isFullScreen
-        presentationController.cornerRadius = 8
-        presentationController.corners = [.bottomLeft, .bottomRight]
-        controller.transitioningDelegate = presentationController
-        self.albumsPicker = controller
-        present(controller, animated: true, completion: nil)
-        trackObserver?.track(event: .pickerSwitchAlbum, userInfo: [:])
-    }
-    
-    @objc private func cancelButtonTapped(_ sender: UIBarButtonItem) {
-        delegate?.assetPickerDidCancel(self)
-        trackObserver?.track(event: .pickerCancel, userInfo: [:])
-    }
-    
-    @objc private func previewButtonTapped(_ sender: UIButton) {
-        manager.lastSelectedAssets = manager.selectedAssets
-        var options = BrowserOptionsInfo()
-        options.resources = manager.selectedAssets.compactMap { .phAsset($0.phAsset) }
-        options.placeholdImage = manager.selectedAssets.first?.image
-        options.relatedView = { [weak sender] index in
-            sender // TODO: try find asset cell
-        }
-        let controller = PhotoPreviewController(manager: manager, sourceType: .selectedAssets, assets: manager.selectedAssets, options: options)
-        controller.currentIndex = 0
-        controller.delegate = self
-        present(controller, animated: true, completion: nil)
-        trackObserver?.track(event: .pickerPreview, userInfo: [:])
-    }
-    
-    @objc private func originalImageButtonTapped(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        manager.useOriginalImage = sender.isSelected
-        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
-    }
-    
-    @objc func doneButtonTapped(_ sender: UIButton) {
-        defer { sender.isEnabled = true }
-        sender.isEnabled = false
-        stopReloadAlbum = true
-        delegate?.assetPickerDidFinishPicking(self)
-        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
-    }
-    
-    @objc private func limitedButtonTapped(_ sender: UIButton) {
-        if #available(iOS 14.0, *) {
-            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
-            trackObserver?.track(event: .pickerLimitedLibrary, userInfo: [:])
-        }
-    }
-}
+
 
 // MARK: - PHPhotoLibraryChangeObserver
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
@@ -565,140 +495,23 @@ extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     }
 }
 
-// MARK: - UICollectionViewDataSource
-extension AssetPickerViewController: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return album?.assets.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let asset = album?.assets[indexPath.item] else { return collectionView.dequeueReusableCell(UICollectionViewCell.self, for: indexPath) }
-        
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if asset.isCamera {
-            let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
-            cell.update(options: manager.options)
-            cell.isAccessibilityElement = true
-            cell.accessibilityTraits = .button
-            cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
-            return cell
-        }
-        #endif
-        
-        let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
-        cell.tag = indexPath.row
-        cell.setContent(asset, manager: manager)
-        cell.selectEvent.delegate(on: self) { (self, _) in
-            self.selectItem(indexPath.row)
-        }
-        cell.backgroundColor = UIColor.white
-        cell.isAccessibilityElement = true
-        cell.accessibilityTraits = .button
-        let accessibilityLabel = manager.options.theme[string: asset.mediaType == .video ? .video : .photo]
-        cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
-        return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-extension AssetPickerViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let asset: Asset
-        if #available(iOS 14.0, *) {
-            guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-            asset = item
-        } else {
-            guard let album = album else { return }
-            guard indexPath.item >= 0 && indexPath.item < album.assets.count else { return }
-            asset = album.assets[indexPath.item]
-        }
-        
-        #if ANYIMAGEKIT_ENABLE_CAPTURE
-        if asset.isCamera { // 点击拍照 Item
-            showCapture()
-            return
-        }
-        #endif
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
-            openEditor(with: asset, indexPath: indexPath)
-            return
-        }
-        #endif
-        
-        if manager.options.selectionTapAction == .quickPick {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-            cell.selectEvent.call()
-            if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
-                doneButtonTapped(toolBar.doneButton)
-            }
-        } else if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return
-        } else if !asset.isSelected && manager.isUpToLimit {
-            return
-        } else {
-            let index = indexPath.item - itemOffset
-            var options = BrowserOptionsInfo()
-            options.resources = album?.assets.map { .phAsset($0.phAsset) } ?? []
-            options.placeholdImage = album?.assets[index].placeholdImage
-            options.relatedView = { index in
-                guard let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? AssetCell else { return nil }
-                return cell
-            }
-            let controller = PhotoPreviewController(manager: manager, sourceType: .album, assets: album?.assets ?? [], options: options)
-            
-//            if #available(iOS 18.0, *) {
-//                guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-//                controller.preferredTransition = .zoom(sourceViewProvider: { context in
-//                    return cell
-//                })
-//            }
-            
-            self.previewController = controller
-            controller.delegate = self
-            present(controller, animated: true, completion: nil)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let album = album, indexPath.item < album.assets.count else { return }
-        let asset = album.assets[indexPath.item]
-        guard !asset.isCamera else { return }
-        if let cell = cell as? AssetCell {
-            cell.updateState(asset, manager: manager, animated: false)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard indexPath.item < (album?.assets.count ?? 0), let asset = album?.assets[indexPath.item], !asset.isCamera else { return }
-        asset.cleanImageIfNeeded()
-    }
-}
-
-// MARK: - UICollectionViewDelegateFlowLayout
-extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let maxSize = CGRect(origin: .zero, size: containerSize).inset(by: collectionView.contentInset).size
-        let columnNumber: CGFloat
-        if UIDevice.current.userInterfaceIdiom == .phone || !manager.options.autoCalculateColumnNumber {
-            columnNumber = CGFloat(manager.options.columnNumber)
-        } else {
-            let minWidth: CGFloat = 135
-            columnNumber = max(CGFloat(Int(maxSize.width / minWidth)), 3)
-        }
-        let width = max(0, floor((maxSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber))
-        return CGSize(width: width, height: width)
-    }
-}
+//
+//// MARK: - UICollectionViewDelegateFlowLayout
+//extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let maxSize = CGRect(origin: .zero, size: containerSize).inset(by: collectionView.contentInset).size
+//        let columnNumber: CGFloat
+//        if UIDevice.current.userInterfaceIdiom == .phone || !manager.options.autoCalculateColumnNumber {
+//            columnNumber = CGFloat(manager.options.columnNumber)
+//        } else {
+//            let minWidth: CGFloat = 135
+//            columnNumber = max(CGFloat(Int(maxSize.width / minWidth)), 3)
+//        }
+//        let width = max(0, floor((maxSize.width-(columnNumber-1)*defaultAssetSpacing)/columnNumber))
+//        return CGSize(width: width, height: width)
+//    }
+//}
 
 // MARK: - UIScrollViewDelegate
 extension AssetPickerViewController: UIScrollViewDelegate {
@@ -764,7 +577,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
         switch controller.sourceType {
         case .album:
-            let idx = controller.currentIndex + itemOffset
+            let idx = controller.currentIndex + section.itemOffset
             let indexPath = IndexPath(item: idx, section: 0)
             reloadData(animated: false, reloadPreview: false)
             if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
@@ -774,77 +587,6 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
             }
         case .selectedAssets:
             break
-        }
-    }
-}
-
-// MARK: - UICollectionViewDiffable
-extension AssetPickerViewController {
-    
-    enum Section {
-        case main
-    }
-    
-    private func reloadData(animated: Bool = true, reloadPreview: Bool = true) {
-        collectionView.isUserInteractionEnabled = false
-        if reloadPreview {
-            previewController?.reloadWhenPhotoLibraryDidChange()
-        }
-        if #available(iOS 14.0, *) {
-            setupDataSource()
-            let snapshot = initialSnapshot()
-            dataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
-                self?.collectionView.isUserInteractionEnabled = true
-            }
-        } else {
-            collectionView.reloadData()
-            DispatchQueue.main.async { [weak self] in
-                self?.collectionView.isUserInteractionEnabled = true
-            }
-        }
-        if manager.options.scrollIndicator != .none {
-            indicatorView.isHidden = (album?.assets.count ?? 0) <= 50
-        }
-    }
-    
-    @available(iOS 14.0, *)
-    private func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, Asset> {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Asset>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(album?.assets ?? [], toSection: .main)
-        return snapshot
-    }
-    
-    @available(iOS 14.0, *)
-    private func setupDataSource() {
-        let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { [weak self] cell, indexPath, asset in
-            guard let self = self else { return }
-            cell.update(options: self.manager.options)
-            cell.isAccessibilityElement = true
-            cell.accessibilityTraits = .button
-            cell.accessibilityLabel = self.manager.options.theme[string: .pickerTakePhoto]
-        }
-        
-        let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
-            guard let self = self else { return }
-            cell.tag = indexPath.row
-            cell.setContent(asset, manager: self.manager)
-            cell.selectEvent.delegate(on: self) { (self, _) in
-                self.selectItem(indexPath.row)
-            }
-            cell.backgroundColor = UIColor.white
-            cell.isAccessibilityElement = true
-            cell.accessibilityTraits = .button
-            let accessibilityLabel = self.manager.options.theme[string: asset.mediaType == .video ? .video : .photo]
-            cell.accessibilityLabel = "\(accessibilityLabel)\(indexPath.row)"
-        }
-        
-        dataSource = UICollectionViewDiffableDataSource<Section, Asset>(collectionView: collectionView) { (collectionView, indexPath, asset) -> UICollectionViewCell? in
-            if asset.isCamera {
-                return collectionView.dequeueConfiguredReusableCell(using: cameraCellRegistration, for: indexPath, item: asset)
-            } else {
-                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: asset)
-            }
         }
     }
 }

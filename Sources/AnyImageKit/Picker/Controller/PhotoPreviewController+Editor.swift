@@ -46,14 +46,6 @@ extension PhotoPreviewController {
             present(controller, animated: false, completion: nil)
         }
     }
-    
-    @objc func previewCellDidDownloadResource(_ notification: Notification) {
-        // TODO: 改成点击编辑，如果没下载完成，重新开始一个新的下载任务，完成再进去
-//        guard let asset = notification.object as? Asset else { return }
-//        guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
-//        guard asset == data.asset else { return }
-//        autoSetEditorButtonHidden()
-    }
 }
 
 // MARK: - Internal function
@@ -62,8 +54,6 @@ extension PhotoPreviewController {
     internal func autoSetEditorButtonHidden() {
         toolBar.leftButton.isHidden = true
         let asset = assets[currentIndex]
-        // TODO: 这里要判断是否下载完成
-        
         if asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
             toolBar.leftButton.isHidden = false
         } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
@@ -89,11 +79,6 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
         editor.dismiss(animated: false, completion: nil)
-        // TODO: 这里似乎不用改
-//        let indexPath = IndexPath(item: currentIndex, section: 0)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-//        }
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
@@ -102,10 +87,10 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
         let asset = assets[currentIndex]
-        // TODO: 重新设置数据源
-//        guard let cell = collectionView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PhotoPreviewCell else { return }
-//        data.asset._images[.edited] = result.isEdited ? photo : nil
-//        cell.setImage(photo)
+        asset._images[.edited] = result.isEdited ? photo : nil
+        
+        options.resources[currentIndex] = result.isEdited ? .image(photo) : .phAsset(asset.phAsset)
+        super.update(options: options)
         
         // 选择当前照片
         if !manager.isUpToLimit {
@@ -113,6 +98,7 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
                 selectButtonTapped(navigationBar.selectButton)
             }
         }
+        indexView.didSetCurrentAsset()
         delegate?.previewController(self, didSelected: currentIndex)
     }
 }

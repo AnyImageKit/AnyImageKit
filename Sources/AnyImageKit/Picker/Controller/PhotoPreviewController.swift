@@ -81,7 +81,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private lazy var indexView: PickerPreviewIndexView = {
+    private(set) lazy var indexView: PickerPreviewIndexView = {
         let view = PickerPreviewIndexView(manager: manager, sourceType: sourceType)
         view.isHidden = true
         view.delegate = self
@@ -90,7 +90,6 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNotifications()
         setupViews()
         update(options: manager.options)
         
@@ -172,6 +171,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     override func browser(_ browser: BrowserController, didEndPanWithExit isExit: Bool) {
         super.browser(browser, didEndPanWithExit: isExit)
         if isExit {
+            delegate?.previewControllerWillDisappear(self)
             setStatusBar(hidden: false)
         } else if !toolBarHiddenStateBeforePan {
             setBar(hidden: false, isNormal: false)
@@ -199,12 +199,6 @@ extension PhotoPreviewController {
 
 // MARK: - Private function
 extension PhotoPreviewController {
-    
-    private func addNotifications() {
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        NotificationCenter.default.addObserver(self, selector: #selector(previewCellDidDownloadResource(_:)), name: .previewCellDidDownloadResource, object: nil)
-        #endif
-    }
     
     /// 添加视图
     private func setupViews() {

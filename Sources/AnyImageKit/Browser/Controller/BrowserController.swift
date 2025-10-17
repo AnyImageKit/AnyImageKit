@@ -27,7 +27,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
             pageManager.selection = newValue
         }
     }
-    public let options: BrowserOptionsInfo
+    public var options: BrowserOptionsInfo
     public let pageManager: SKPageManager
     private var cancellables = Set<AnyCancellable>()
     private var lastKnownSafeAreaInsets: UIEdgeInsets?
@@ -87,6 +87,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     // MARK: - Override Methods
     
     open func update(options: BrowserOptionsInfo) {
+        self.options = options
         transition.presentationController?.maskView.backgroundColor = options.theme[color: .background]
         setStatusBar(hidden: !options.showStatusBar)
         viewControllers.forEach {
@@ -105,7 +106,12 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         
         options.theme.buttonConfiguration[.close]?.configuration(closeButton)
         options.theme.labelConfiguration[.page]?.configuration(pageLabel)
-        // TODO: Update resources
+        
+        viewControllers.forEach {
+            if let controller = $0.controller {
+                controller.previewView.config(options.resources[controller.index])
+            }
+        }
     }
     
     /// Updates the safe area layout guide for content.
@@ -162,13 +168,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
 // MARK: - UI
 extension BrowserController {
     
-    private func setupView() {
-        view.addLayoutGuide(contentSafeAreaLayoutGuide)
-        contentSafeAreaLayoutGuide.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-        
-        pageManager.spacing = 30
+    private func setupPageManager() {
         pageManager.childs = options.resources.map { resource in
                 .withController { [weak self] context in
                     guard let self = self else { return UIViewController() }
@@ -178,6 +178,7 @@ extension BrowserController {
                         controller.placeholdImage = image
                     }
                     controller.config(resource)
+                    controller.index = context.index
                     controller.hideToolBar(isHidden: self.shouldHideToolBar(in: self), isAnimated: false)
                     controller.previewView.delegate = self
                     controller.needSyncLayoutGuideEvent.delegate(on: self) { (self, _)  in
@@ -188,6 +189,16 @@ extension BrowserController {
                     return controller
                 }
         }
+    }
+    
+    private func setupView() {
+        view.addLayoutGuide(contentSafeAreaLayoutGuide)
+        contentSafeAreaLayoutGuide.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        pageManager.spacing = 30
+        setupPageManager()
         
         pageManager.$current
             .compactMap({ $0 })

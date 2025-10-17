@@ -11,26 +11,11 @@ import UIKit
 #if ANYIMAGEKIT_ENABLE_EDITOR
 
 extension AssetPickerViewController {
-    
-    func canOpenEditor(with asset: Asset) -> Bool {
-        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
-        if case .disable(let rule) = asset.state {
-            let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
-            showAlert(message: message, stringConfig: manager.options.theme)
-            return false
-        }
-        if asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
-            return true
-        } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
-            return true
-        }
-        return false
-    }
-    
-    func openEditor(with asset: Asset, indexPath: IndexPath) {
+
+    func openEditor(with asset: Asset) {
         if asset.mediaType == .photo {
             if let image = asset._images[.initial] {
-                showEditor(image, identifier: asset.identifier, tag: indexPath.item)
+                showEditor(image, identifier: asset.identifier, tag: asset.idx)
             } else {
                 view.hud.show(text: manager.options.theme[string: .loading])
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
@@ -46,7 +31,7 @@ extension AssetPickerViewController {
                         case .success(let response):
                             if !response.isDegraded {
                                 self.view.hud.hide()
-                                self.showEditor(response.image, identifier: asset.identifier, tag: indexPath.item)
+                                self.showEditor(response.image, identifier: asset.identifier, tag: asset.idx)
                             }
                         case .failure(let error):
                             self.view.hud.hide()
@@ -84,15 +69,16 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         editor.dismiss(animated: true, completion: nil)
+        let index = editor.tag + section.itemOffset
         guard result.type == .photo else { return }
         guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
         guard let album = album else { return }
-        guard let cell = collectionView.cellForItem(at: IndexPath(item: editor.tag, section: 0)) as? AssetCell else { return }
+        guard let cell = section.cellForItem(at: index) as? AssetCell else { return }
         
-        let asset = album.assets[editor.tag]
+        let asset = album.assets[index]
         asset._images[.edited] = result.isEdited ? photo : nil
-        cell.setContent(asset, manager: manager)
+        cell.config(.init(asset: asset, manager: manager))
         if !asset.isSelected { // Select
             selectItem(editor.tag)
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {

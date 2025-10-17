@@ -22,6 +22,7 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
     
     public private(set) var options: BrowserOptionsInfo
     public internal(set) var placeholdImage: UIImage?
+    var index: Int = 0
     
     private let contentSafeAreaLayoutGuide = UILayoutGuide()
     private var guideTopConstraint: NSLayoutConstraint!

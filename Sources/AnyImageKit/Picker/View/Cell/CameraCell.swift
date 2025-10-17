@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CameraCell: UICollectionViewCell {
+final class CameraCell: UICollectionViewCell, SKLoadViewProtocol {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(frame: .zero)
@@ -41,5 +41,18 @@ extension CameraCell: PickerOptionsConfigurable {
     func update(options: PickerOptionsInfo) {
         imageView.image = options.theme[icon: .camera]
         updateChildrenConfigurable(options: options)
+    }
+}
+
+extension CameraCell: SKConfigurableView {
+    
+    typealias Model = Void
+    
+    func config(_ model: Model) {
+        
+    }
+    
+    static func preferredSize(limit size: CGSize, model: Model?) -> CGSize {
+        .zero
     }
 }

@@ -519,9 +519,3 @@ extension BrowserPreviewView: UIScrollViewDelegate {
         imageView.center = centerOfContentSize
     }
 }
-
-extension Notification.Name {
-    
-    // TODO:
-    static let previewCellDidDownloadResource = Notification.Name("org.AnyImageKit.Notification.Name.Picker.PreviewCellDidDownloadResource")
-}

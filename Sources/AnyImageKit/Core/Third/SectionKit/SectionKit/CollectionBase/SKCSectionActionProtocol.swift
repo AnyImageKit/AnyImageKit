@@ -71,6 +71,15 @@ public extension SKCSectionActionProtocol {
         sectionInjection?.delete(cell: row)
     }
     
+    func insert(at row: Int, before: (() -> Void)?) {
+        insert(at: [row], before: before)
+    }
+    
+    func insert(at row: [Int], before: (() -> Void)?) {
+        before?()
+        sectionInjection?.insert(cell: row)
+    }
+    
 }
 
 public extension SKCSectionActionProtocol {
