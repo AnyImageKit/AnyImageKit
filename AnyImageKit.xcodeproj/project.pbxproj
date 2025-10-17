@@ -210,13 +210,13 @@
 			isa = PBXGroup;
 			children = (
 				A52E1D88237AAD420002174A /* HomeViewController.swift */,
-				71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */,
 				A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */,
 				A52E1D9A237AB6430002174A /* PickerResultViewController.swift */,
 				A52E1D98237AB3F60002174A /* ImageEditorConfigViewController.swift */,
 				37A87A7E2A6FC31F00C69507 /* VideoEditorConfigViewController.swift */,
 				A52E1D9F237AB6DA0002174A /* EditorResultViewController.swift */,
 				A026C99E23978DF400931028 /* CaptureConfigViewController.swift */,
+				71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */,
 				A085EF692573EA49003F5FD6 /* Application */,
 			);
 			path = Controller;

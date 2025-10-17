@@ -55,9 +55,7 @@ final class BrowserConfigViewController: UITableViewController {
             options.resources = resources
         case .localURL:
             let resources: [URL] = [
-                URL(fileURLWithPath: ""),
-                URL(fileURLWithPath: ""),
-                URL(fileURLWithPath: ""),
+                Bundle.main.url(forResource: "EditorTestVideo", withExtension: "mp4")!
             ]
             options.resources = resources.map { .localFile($0) }
         }

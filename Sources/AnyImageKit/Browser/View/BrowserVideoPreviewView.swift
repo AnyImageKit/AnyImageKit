@@ -241,16 +241,6 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
         progress.layer.masksToBounds = false
         
         updateControls(isDragging: false, animated: false)
-        
-        dragEndSubject
-            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-            .sink { [weak self] in
-                guard let self = self else { return }
-                if !self.isDraggingProgress {
-                    self.updateControls(isDragging: false)
-                }
-            }
-            .store(in: &cancellables)
     }
 
     open override func setupLayout() {
@@ -325,6 +315,16 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
             .sink { [weak self] _ in
                 self?.player?.seek(to: .zero)
                 self?.updatePlayButton(isPlaying: false)
+            }
+            .store(in: &cancellables)
+        
+        dragEndSubject
+            .debounce(for: .seconds(1), scheduler: RunLoop.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                if !self.isDraggingProgress {
+                    self.updateControls(isDragging: false)
+                }
             }
             .store(in: &cancellables)
     }

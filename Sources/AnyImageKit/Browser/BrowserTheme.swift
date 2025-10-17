@@ -88,20 +88,20 @@ extension BrowserTheme {
             case .auto:
                 switch self {
                 case .primary: return UIColor.primaryText
-                case .tipsText: return .create(light: UIColor.subText, dark: .white)
+                case .tipsText: return .create(light: UIColor.subTextLight, dark: .white)
                 case .loadingIndicator: return .create(light: .black, dark: .white)
                 case .background: return UIColor.background
                 }
             case .light:
                 switch self {
-                case .primary: return UIColor.primaryText
+                case .primary: return UIColor.primaryTextLight
                 case .tipsText: return UIColor.subTextLight
                 case .loadingIndicator: return .black
                 case .background: return UIColor.backgroundLight
                 }
             case .dark:
                 switch self {
-                case .primary: return UIColor.primaryText
+                case .primary: return UIColor.primaryTextDark
                 case .tipsText: return .white
                 case .loadingIndicator: return .white
                 case .background: return UIColor.backgroundDark
