@@ -35,7 +35,8 @@ extension StringConfigKey {
     public static let video       = StringConfigKey(rawValue: "VIDEO")
     public static let livePhoto   = StringConfigKey(rawValue: "LIVE_PHOTO")
     public static let loading     = StringConfigKey(rawValue: "LOADING")
-
+    public static let reload      = StringConfigKey(rawValue: "RELOAD")
+    
     public static let undo        = StringConfigKey(rawValue: "UNDO")
     public static let play        = StringConfigKey(rawValue: "PLAY")
     public static let pause       = StringConfigKey(rawValue: "PAUSE")
@@ -50,4 +51,5 @@ extension StringConfigKey {
     
     public static let fullDateFormat = StringConfigKey(rawValue: "FULL_DATE_FORMAT")
     public static let monthDayFormat = StringConfigKey(rawValue: "MONTH_DAY_FORMAT")
+    
 }

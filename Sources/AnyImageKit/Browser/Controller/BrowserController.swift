@@ -66,6 +66,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         super.init(nibName: nil, bundle: nil)
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = transition
+        self.modalPresentationCapturesStatusBarAppearance = true
     }
     
     public required init?(coder: NSCoder) {
@@ -82,10 +83,11 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         super.viewDidLayoutSubviews()
         syncLayoutGuide(isAnimated: false)
     }
-    
+        
     // MARK: - Override Methods
     
     open func update(options: BrowserOptionsInfo) {
+        transition.presentationController?.maskView.backgroundColor = options.theme[color: .background]
         setStatusBar(hidden: !options.showStatusBar)
         viewControllers.forEach {
             $0.controller?.update(options: options)
@@ -100,6 +102,9 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         
         pageLabel.textColor = options.theme[color: .primary]
         pageLabel.text = "\(options.index + 1)/\(options.resources.count)"
+        
+        options.theme.buttonConfiguration[.close]?.configuration(closeButton)
+        options.theme.labelConfiguration[.page]?.configuration(pageLabel)
         // TODO: Update resources
     }
     

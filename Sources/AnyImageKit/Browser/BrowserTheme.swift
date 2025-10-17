@@ -88,7 +88,7 @@ extension BrowserTheme {
             case .auto:
                 switch self {
                 case .primary: return UIColor.primaryText
-                case .tipsText: return UIColor.subText
+                case .tipsText: return .create(light: UIColor.subText, dark: .white)
                 case .loadingIndicator: return .create(light: .black, dark: .white)
                 case .background: return UIColor.background
                 }
@@ -102,7 +102,7 @@ extension BrowserTheme {
             case .dark:
                 switch self {
                 case .primary: return UIColor.primaryText
-                case .tipsText: return UIColor.subTextDark
+                case .tipsText: return .white
                 case .loadingIndicator: return .white
                 case .background: return UIColor.backgroundDark
                 }
@@ -179,6 +179,7 @@ extension BrowserTheme {
     
     public enum LabelConfigKey: Hashable {
 
+        case page
         case livePhotoMark
         case loadingFromiCloudTips
         case loadingFromiCloudProgress
@@ -199,8 +200,12 @@ extension BrowserTheme {
     
     public enum ButtonConfigKey: Hashable {
         
+        case close
+        
         case playPause
         /// mute and unmute
         case mute
+        
+        case reload
     }
 }

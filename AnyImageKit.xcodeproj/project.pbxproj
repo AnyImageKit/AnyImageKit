@@ -21,6 +21,7 @@
 		714869272744EC86003D4605 /* CaptureAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714869262744EC86003D4605 /* CaptureAPITests.swift */; };
 		715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */; };
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
+		71C8696F2E9E55E70042F69A /* BrowserConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */; };
 		A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026C99E23978DF400931028 /* CaptureConfigViewController.swift */; };
 		A040C596277B4D47000D2569 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A040C595277B4D47000D2569 /* SnapKit */; };
 		A040C598277B4D52000D2569 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
@@ -96,6 +97,7 @@
 		714869262744EC86003D4605 /* CaptureAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureAPITests.swift; sourceTree = "<group>"; };
 		715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreselectAssetViewController.swift; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
+		71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserConfigViewController.swift; sourceTree = "<group>"; };
 		71F3BEAF2CB526A5008954D1 /* AnyImageKit.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AnyImageKit.podspec.json; sourceTree = "<group>"; };
 		A026C99E23978DF400931028 /* CaptureConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureConfigViewController.swift; sourceTree = "<group>"; };
 		A032AEC4255588AF00776FCF /* RELEASE_NOTE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_NOTE.md; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				A52E1D88237AAD420002174A /* HomeViewController.swift */,
+				71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */,
 				A52E1D8A237AAEB40002174A /* PickerConfigViewController.swift */,
 				A52E1D9A237AB6430002174A /* PickerResultViewController.swift */,
 				A52E1D98237AB3F60002174A /* ImageEditorConfigViewController.swift */,
@@ -573,6 +576,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0FDB2CE255268A500FDE93E /* TitleMapCell.swift in Sources */,
+				71C8696F2E9E55E70042F69A /* BrowserConfigViewController.swift in Sources */,
 				7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */,
 				A0B398E0257F834700851253 /* EnableCell.swift in Sources */,
 				A52E1D8B237AAEB40002174A /* PickerConfigViewController.swift in Sources */,

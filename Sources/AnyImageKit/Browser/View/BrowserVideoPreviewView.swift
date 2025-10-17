@@ -133,6 +133,7 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
                 
                 // 确保 track 加载完成
                 guard status == .loaded, let track = asset.tracks(withMediaType: .video).first else {
+                    self.loadFailed(error: AnyImageError.invalidData)
                     return
                 }
                 
@@ -144,6 +145,11 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
                     
                     let sizeStatus = track.statusOfValue(forKey: "naturalSize", error: &error)
                     let transformStatus = track.statusOfValue(forKey: "preferredTransform", error: &error)
+                    
+                    if let error {
+                        self.loadFailed(error: error)
+                        return
+                    }
                     
                     if sizeStatus == .loaded, transformStatus == .loaded {
                         let transformed = track.naturalSize.applying(track.preferredTransform)

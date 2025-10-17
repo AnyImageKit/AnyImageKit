@@ -22,6 +22,7 @@
 "VIDEO" = "Vídeo";
 "LIVE_PHOTO" = "LIVE";
 "LOADING" = "Carregando";
+"RELOAD" = "Recarregar";
 
 "UNDO" = "Desfazer";
 "PLAY" = "Reproduzir";
@@ -37,3 +38,21 @@
 
 "FULL_DATE_FORMAT" = "d 'de' MMMM. 'de' yyyy";
 "MONTH_DAY_FORMAT" = "d 'de' MMMM";
+
+"ERROR_INVALID_MEDIA_TYPE" = "Tipo de mídia inválido";
+"ERROR_INVALID_INFO" = "Informação inválida";
+"ERROR_INVALID_URL" = "URL inválida";
+"ERROR_INVALID_DATA" = "Dados inválidos";
+"ERROR_INVALID_DATA_UTI" = "UTI de dados inválido";
+"ERROR_INVALID_IMAGE" = "Imagem inválida";
+"ERROR_INVALID_VIDEO" = "Vídeo inválido";
+"ERROR_INVALID_LIVE_PHOTO" = "Foto ao vivo inválida";
+"ERROR_INVALID_EXPORT_PRESET" = "Predefinição de exportação inválida";
+"ERROR_INVALID_EXPORT_SESSION" = "Sessão de exportação inválida";
+"ERROR_UNSUPPORTED_FILE_TYPE" = "Tipo de arquivo não suportado";
+"ERROR_FILE_WRITE_FAILED" = "Falha na escrita do arquivo";
+"ERROR_EXPORT_FAILED" = "Falha na exportação";
+"ERROR_EXPORT_CANCELED" = "Exportação cancelada";
+"ERROR_CANNOT_FIND_IN_LOCAL" = "Não foi possível encontrar no local";
+"ERROR_SAVE_PHOTO_FAILED" = "Falha ao salvar a foto";
+"ERROR_SAVE_VIDEO_FAILED" = "Falha ao salvar o vídeo";

@@ -25,7 +25,7 @@ public struct BrowserOptionsInfo {
     
     public var relatedView: ((_ index: Int) -> UIView?)? = nil
     
-    public var showStatusBar: Bool = false
+    public var showStatusBar: Bool = true
     
     // ph asset support type
     public var supportType: PickerSelectOption = [.photo, .video, .photoGIF, .photoLive]

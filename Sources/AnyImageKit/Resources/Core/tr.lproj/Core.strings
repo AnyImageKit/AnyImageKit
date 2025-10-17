@@ -22,6 +22,7 @@
 "VIDEO" = "Video";
 "LIVE_PHOTO" = "CANLI";
 "LOADING" = "Yükleniyor";
+"RELOAD" = "Yeniden Yükle";
 
 "UNDO" = "Geri Al";
 "PLAY" = "Oynat";
@@ -37,3 +38,21 @@
 
 "FULL_DATE_FORMAT" = "d MMM yyyy";
 "MONTH_DAY_FORMAT" = "d MMM";
+
+"ERROR_INVALID_MEDIA_TYPE" = "Geçersiz medya türü";
+"ERROR_INVALID_INFO" = "Geçersiz bilgi";
+"ERROR_INVALID_URL" = "Geçersiz URL";
+"ERROR_INVALID_DATA" = "Geçersiz veri";
+"ERROR_INVALID_DATA_UTI" = "Geçersiz veri UTI'si";
+"ERROR_INVALID_IMAGE" = "Geçersiz resim";
+"ERROR_INVALID_VIDEO" = "Geçersiz video";
+"ERROR_INVALID_LIVE_PHOTO" = "Geçersiz canlı fotoğraf";
+"ERROR_INVALID_EXPORT_PRESET" = "Geçersiz dışa aktarma ön ayarı";
+"ERROR_INVALID_EXPORT_SESSION" = "Geçersiz dışa aktarma oturumu";
+"ERROR_UNSUPPORTED_FILE_TYPE" = "Desteklenmeyen dosya türü";
+"ERROR_FILE_WRITE_FAILED" = "Dosya yazma başarısız";
+"ERROR_EXPORT_FAILED" = "Dışa aktarma başarısız";
+"ERROR_EXPORT_CANCELED" = "Dışa aktarma iptal edildi";
+"ERROR_CANNOT_FIND_IN_LOCAL" = "Yerelde bulunamıyor";
+"ERROR_SAVE_PHOTO_FAILED" = "Fotoğraf kaydedilemedi";
+"ERROR_SAVE_VIDEO_FAILED" = "Video kaydedilemedi";

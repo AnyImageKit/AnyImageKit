@@ -22,6 +22,7 @@
 "VIDEO" = "视频";
 "LIVE_PHOTO" = "实况";
 "LOADING" = "正在加载";
+"RELOAD" = "重新加载";
 
 "UNDO" = "撤销";
 "PLAY" = "播放";
@@ -37,3 +38,21 @@
 
 "FULL_DATE_FORMAT" = "yyyy年M月d日";
 "MONTH_DAY_FORMAT" = "M月d日";
+
+"ERROR_INVALID_MEDIA_TYPE" = "无效的媒体类型";
+"ERROR_INVALID_INFO" = "无效的信息";
+"ERROR_INVALID_URL" = "无效的URL";
+"ERROR_INVALID_DATA" = "无效的数据";
+"ERROR_INVALID_DATA_UTI" = "无效的数据UTI";
+"ERROR_INVALID_IMAGE" = "无效的图片";
+"ERROR_INVALID_VIDEO" = "无效的视频";
+"ERROR_INVALID_LIVE_PHOTO" = "无效的实况照片";
+"ERROR_INVALID_EXPORT_PRESET" = "无效的导出预设";
+"ERROR_INVALID_EXPORT_SESSION" = "无效的导出会话";
+"ERROR_UNSUPPORTED_FILE_TYPE" = "不支持的文件类型";
+"ERROR_FILE_WRITE_FAILED" = "文件写入失败";
+"ERROR_EXPORT_FAILED" = "导出失败";
+"ERROR_EXPORT_CANCELED" = "导出取消";
+"ERROR_CANNOT_FIND_IN_LOCAL" = "在本地找不到";
+"ERROR_SAVE_PHOTO_FAILED" = "照片保存失败";
+"ERROR_SAVE_VIDEO_FAILED" = "视频保存失败";

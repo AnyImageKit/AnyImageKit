@@ -22,6 +22,7 @@
 "VIDEO" = "Video";
 "LIVE_PHOTO" = "LIVE";
 "LOADING" = "Loading";
+"RELOAD" = "Reload";
 
 "UNDO" = "Undo";
 "PLAY" = "Play";
@@ -37,3 +38,21 @@
 
 "FULL_DATE_FORMAT" = "MMM d, yyyy";
 "MONTH_DAY_FORMAT" = "MMM d";
+
+"ERROR_INVALID_MEDIA_TYPE" = "Invalid media type";
+"ERROR_INVALID_INFO" = "Invalid info";
+"ERROR_INVALID_URL" = "Invalid URL";
+"ERROR_INVALID_DATA" = "Invalid data";
+"ERROR_INVALID_DATA_UTI" = "Invalid data UTI";
+"ERROR_INVALID_IMAGE" = "Invalid image";
+"ERROR_INVALID_VIDEO" = "Invalid video";
+"ERROR_INVALID_LIVE_PHOTO" = "Invalid live photo";
+"ERROR_INVALID_EXPORT_PRESET" = "Invalid export preset";
+"ERROR_INVALID_EXPORT_SESSION" = "Invalid export session";
+"ERROR_UNSUPPORTED_FILE_TYPE" = "Unsupported file type";
+"ERROR_FILE_WRITE_FAILED" = "File write failed";
+"ERROR_EXPORT_FAILED" = "Export failed";
+"ERROR_EXPORT_CANCELED" = "Export canceled";
+"ERROR_CANNOT_FIND_IN_LOCAL" = "Cannot find in local";
+"ERROR_SAVE_PHOTO_FAILED" = "Save photo failed";
+"ERROR_SAVE_VIDEO_FAILED" = "Save video failed";

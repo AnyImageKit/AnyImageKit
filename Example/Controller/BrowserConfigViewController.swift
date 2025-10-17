@@ -193,7 +193,7 @@ extension BrowserConfigViewController {
             case .theme:
                 return "Auto"
             case .resource:
-                return "UIImage"
+                return "Image and Video URL"
             case .showStatusBar:
                 return "true"
             }

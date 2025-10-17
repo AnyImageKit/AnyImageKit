@@ -64,6 +64,15 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
         return view
     }()
     
+    private(set) lazy var reloadButton: UIButton = {
+        let view = UIButton(type: .custom)
+        view.isHidden = true
+        view.layer.cornerRadius = 20
+        view.addTarget(self, action: #selector(reloadButtonTapped(_:)), for: .touchUpInside)
+        view.titleLabel?.font = .systemFont(ofSize: 18)
+        return view
+    }()
+    
     /// 单击手势
     public private(set) lazy var singleTap: UITapGestureRecognizer = {
         return UITapGestureRecognizer(target: self, action: #selector(onSingleTap))
@@ -97,6 +106,7 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
 
     private var containerSize: CGSize = .zero
     private var isResourceFromPHAsset: Bool = false
+    private var model: BrowserResource?
     
     public var options: BrowserOptionsInfo = .init()
     public let contentSafeAreaLayoutGuide: UILayoutGuide
@@ -145,15 +155,34 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
         self.options = options
         updateChildrenConfigurable(options: options)
         loadingView.color = options.theme[color: .loadingIndicator]
+        reloadButton.setTitle(options.theme[string: .reload], for: .normal)
+        reloadButton.setTitleColor(options.theme[color: .primary], for: .normal)
+        reloadButton.backgroundColor = options.theme[color: .primary].withAlphaComponent(0.1)
+        options.theme.buttonConfiguration[.reload]?.configuration(reloadButton)
     }
     
     /// Configures the view with a resource model.
     open func config(_ model: BrowserResource) {
-        if case .phAsset = model {
+        self.model = model
+        switch model {
+        case .phAsset:
             isResourceFromPHAsset = true
-        } else if case .remoteImage = model, imageView.image == nil {
-            loadingView.isHidden = false
-            loadingView.startAnimating()
+        case .remoteImage:
+            if imageView.image == nil {
+                loadingView.isHidden = false
+                loadingView.startAnimating()
+            }
+        case .remoteVideo(_, let thumbnailURL):
+            if imageView.image == nil {
+                if thumbnailURL != nil {
+                    loadingView.isHidden = false
+                    loadingView.startAnimating()
+                } else {
+                    return
+                }
+            }
+        default:
+            break
         }
         
         model.loadImage { [weak self] result in
@@ -176,7 +205,12 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
             maker.height.equalTo(25)
         }
         loadingView.snp.makeConstraints { maker in
-            maker.center.equalToSuperview()
+            maker.center.equalTo(contentSafeAreaLayoutGuide)
+        }
+        reloadButton.snp.makeConstraints { maker in
+            maker.center.equalTo(contentSafeAreaLayoutGuide)
+            maker.width.equalTo(120)
+            maker.height.equalTo(40)
         }
     }
     
@@ -242,6 +276,15 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
         let y = (scrollView.bounds.height - size.height) > 0 ? (scrollView.bounds.height - size.height) * 0.5 : 0
         return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
+    
+    open func loadFailed(error: Error) {
+        DispatchQueue.main.async {
+            self.loadingView.stopAnimating()
+            self.iCloudView.isHidden = true
+            self.reloadButton.isHidden = false
+            Toast.show(message: error.localizedDescription, in: self)
+        }
+    }
 }
 
 // MARK: - Notification
@@ -261,6 +304,7 @@ extension BrowserPreviewView {
         scrollView.addSubview(imageView)
         addSubview(iCloudView)
         addSubview(loadingView)
+        addSubview(reloadButton)
         
         // 添加手势
         addGestureRecognizer(singleTap)
@@ -303,15 +347,15 @@ extension BrowserPreviewView {
     func didLoadImage(result: Result<BrowserFetchResult, AnyImageError>) {
         switch result {
         case .success(let response):
+            self.reloadButton.isHidden = true
             self.setDownloadingProgress(response.progress)
             if let image = response.image {
                 self.imageView.image = image
                 self.layout()
                 self.needLayout = true
             }
-        case .failure(_):
-            self.loadingView.stopAnimating()
-            self.iCloudView.isHidden = true
+        case .failure(let error):
+            self.loadFailed(error: error)
         }
     }
     
@@ -427,6 +471,13 @@ extension BrowserPreviewView {
         delegate?.preview(self, didEndPanWithExit: false)
         UIView.animate(withDuration: 0.25) {
             self.imageView.frame = self.beganFrame
+        }
+    }
+    
+    @objc private func reloadButtonTapped(_ sender: UIButton) {
+        if let model {
+            reloadButton.isHidden = true
+            config(model)
         }
     }
 }
