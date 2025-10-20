@@ -40,7 +40,7 @@ extension PhotoPreviewControllerDelegate {
 
 final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable {
     
-    enum SourceType {
+    enum SourceType: Int {
         case album
         case selectedAssets
     }
@@ -53,11 +53,11 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     
     private var toolBarHiddenStateBeforePan = false
     
-    init(manager: PickerManager, sourceType: SourceType, assets: [Asset], options: BrowserOptionsInfo) {
+    init(manager: PickerManager, sourceType: SourceType, assets: [Asset], options: BrowserOptionsInfo, browserDelegate: BrowserControllerDelegate) {
         self.manager = manager
         self.sourceType = sourceType
         self.assets = assets
-        super.init(options: options)
+        super.init(options: options, delegate: browserDelegate)
     }
     
     @MainActor public required init?(coder: NSCoder) {

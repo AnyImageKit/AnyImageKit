@@ -60,7 +60,7 @@ final class BrowserConfigViewController: UITableViewController {
             options.resources = resources.map { .localFile($0) }
         }
         
-        let controller = BrowserController(options: options)
+        let controller = BrowserController(options: options, delegate: self)
         present(controller, animated: true, completion: nil)
     }
     
@@ -226,4 +226,8 @@ extension BrowserConfigViewController {
             }
         }
     }
+}
+
+extension BrowserConfigViewController: BrowserControllerDelegate {
+    
 }

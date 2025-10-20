@@ -47,7 +47,7 @@ public struct PickerOptionsInfo {
     /// Select Options
     /// - Default: Photo
     /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
-    public var selectOptions: PickerSelectOption = [.photo]
+    public var selectOptions: MediaTypeOption = [.photo]
     
     /// Selection Tap Action
     /// - Default: Preview
@@ -108,50 +108,6 @@ public struct PickerOptionsInfo {
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         captureOptions.mediaOptions = []
         #endif
-    }
-}
-
-// MARK: - Select Options
-public struct PickerSelectOption: OptionSet {
-    
-    /// Photo
-    public static let photo = PickerSelectOption(rawValue: 1 << 0)
-    
-    /// Video
-    public static let video = PickerSelectOption(rawValue: 1 << 1)
-    
-    /// GIF
-    public static let photoGIF = PickerSelectOption(rawValue: 1 << 2)
-    
-    /// Live Photo
-    public static let photoLive = PickerSelectOption(rawValue: 1 << 3)
-    
-    public let rawValue: Int
-    
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-    
-    public var isPhoto: Bool {
-        return contains(.photo) || contains(.photoGIF) || contains(.photoLive)
-    }
-    
-    public var isVideo: Bool {
-        return contains(.video)
-    }
-}
-
-extension PickerSelectOption {
-    
-    var mediaTypes: [PHAssetMediaType] {
-        var result: [PHAssetMediaType] = []
-        if contains(.photo) || contains(.photoGIF) || contains(.photoLive) {
-            result.append(.image)
-        }
-        if contains(.video) {
-            result.append(.video)
-        }
-        return result
     }
 }
 
@@ -232,3 +188,6 @@ public enum PickerScrollIndicator {
     /// - Show the date of the first visible photo at the top while scrolling
     case verticalBar
 }
+
+@available(*, deprecated, message: "Will be removed in feature, Please use `MediaTypeOption` instead.")
+public typealias PickerSelectOption = MediaTypeOption

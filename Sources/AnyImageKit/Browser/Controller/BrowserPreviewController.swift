@@ -104,13 +104,13 @@ open class BrowserPreviewController: AnyImageViewController, BrowserChildControl
         case .image, .remoteImage:
             return .photo
         case .phAsset(let asset):
-            if options.supportType.contains(.video) && asset.mediaType == .video {
+            if options.phAssetSupportedTypes.contains(.video) && asset.mediaType == .video {
                 return .video
             }
-            if options.supportType.contains(.photoLive) && asset.isLivePhoto {
+            if options.phAssetSupportedTypes.contains(.photoLive) && asset.isLivePhoto {
                 return .photoLive
             }
-            if options.supportType.contains(.photoGIF) && asset.isGIF {
+            if options.phAssetSupportedTypes.contains(.photoGIF) && asset.isGIF {
                 return .photoGIF
             }
             return .photo

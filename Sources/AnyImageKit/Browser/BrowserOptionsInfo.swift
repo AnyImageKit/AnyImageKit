@@ -22,13 +22,11 @@ public struct BrowserOptionsInfo {
     public var placeholdImage: UIImage?
     
     public var previewClass: BrowserPreviewController.Type = BrowserPreviewController.self
-    
-    public var relatedView: ((_ index: Int) -> UIView?)? = nil
-    
+
     public var showStatusBar: Bool = true
     
-    // ph asset support type
-    public var supportType: PickerSelectOption = [.photo, .video, .photoGIF, .photoLive]
+    // PHAsset supported types
+    public var phAssetSupportedTypes: MediaTypeOption = [.photo, .video, .photoGIF, .photoLive]
     
     public init() {
         

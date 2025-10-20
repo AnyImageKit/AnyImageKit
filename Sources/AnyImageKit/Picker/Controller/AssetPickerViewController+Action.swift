@@ -62,7 +62,7 @@ extension AssetPickerViewController {
     }
 }
 
-extension AssetPickerViewController {
+extension AssetPickerViewController: BrowserControllerDelegate {
     
     func openPreview(asset: Asset, assets: [Asset], index: Int, sourceType: PhotoPreviewController.SourceType) {
         var options = BrowserOptionsInfo()
@@ -75,16 +75,9 @@ extension AssetPickerViewController {
             }
         }
         options.placeholdImage = asset.placeholdImage
-        options.relatedView = { index in
-            switch sourceType {
-            case .album:
-                return (self.section.cellForItem(at: index) as? AssetCell)?.imageView
-            case .selectedAssets:
-                return (self.section.cellForItem(at: self.manager.selectedAssets[index].idx + self.section.itemOffset) as? AssetCell)?.imageView
-            }
-        }
-        let controller = PhotoPreviewController(manager: manager, sourceType: sourceType, assets: assets, options: options)
-        
+        options.phAssetSupportedTypes = manager.options.selectOptions
+        let controller = PhotoPreviewController(manager: manager, sourceType: sourceType, assets: assets, options: options, browserDelegate: self)
+        controller.view.tag = sourceType.rawValue
         //            if #available(iOS 18.0, *) {
         //                guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
         //                controller.preferredTransition = .zoom(sourceViewProvider: { context in
@@ -95,5 +88,15 @@ extension AssetPickerViewController {
         self.previewController = controller
         controller.delegate = self
         present(controller, animated: true, completion: nil)
+    }
+    
+    func browser(_ browser: BrowserController, relatedViewAt index: Int) -> UIView? {
+        let sourceType = PhotoPreviewController.SourceType(rawValue: browser.view.tag) ?? .album
+        switch sourceType {
+        case .album:
+            return (section.cellForItem(at: index) as? AssetCell)?.imageView
+        case .selectedAssets:
+            return (section.cellForItem(at: manager.selectedAssets[index].idx + section.itemOffset) as? AssetCell)?.imageView
+        }
     }
 }

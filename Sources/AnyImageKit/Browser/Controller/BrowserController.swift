@@ -11,6 +11,22 @@ import Photos
 import Combine
 import SnapKit
 
+public protocol BrowserControllerDelegate: AnyObject {
+    
+    func browser(_ browser: BrowserController, relatedViewAt index: Int) -> UIView?
+    func browser(_ browser: BrowserController, singleTappedOnItem at: Int)
+    func browserWillDismiss(_ browser: BrowserController)
+    func browserDidDismiss(_ browser: BrowserController)
+}
+
+extension BrowserControllerDelegate {
+    
+    public func browser(_ browser: BrowserController, relatedViewAt index: Int) -> UIView? { return nil }
+    public func browser(_ browser: BrowserController, singleTappedOnItem at: Int) { }
+    public func browserWillDismiss(_ browser: BrowserController) { }
+    public func browserDidDismiss(_ browser: BrowserController) { }
+}
+
 open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable {
     
     private class WeakBox {
@@ -29,6 +45,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     }
     public var options: BrowserOptionsInfo
     public let pageManager: SKPageManager
+    open weak var browserDelegate: BrowserControllerDelegate?
     private var cancellables = Set<AnyCancellable>()
     private var lastKnownSafeAreaInsets: UIEdgeInsets?
     private var isFirstLayout = true
@@ -59,8 +76,9 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         return view
     }()
     
-    public init(options: BrowserOptionsInfo) {
+    public init(options: BrowserOptionsInfo, delegate: BrowserControllerDelegate) {
         self.options = options
+        self.browserDelegate = delegate
         self.pageManager = .init()
         self.pageManager.selection = options.index
         super.init(nibName: nil, bundle: nil)
@@ -140,7 +158,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     /// Called when the pan gesture ends. The `isExit` parameter indicates whether the view should be dismissed.
     open func browser(_ browser: BrowserController, didEndPanWithExit isExit: Bool) {
         if isExit {
-            dismiss(animated: true, completion: nil)
+            dismiss()
         } else {
             hideToolBar(isHidden: false)
         }
@@ -148,6 +166,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     
     /// Called when a single tap is detected in the browser.
     open func browserDidSingleTap(_ browser: BrowserController) {
+        browserDelegate?.browser(self, singleTappedOnItem: currentIndex)
         hideToolBar(isHidden: shouldHideToolBar(in: self), isAnimated: false)
     }
     
@@ -232,7 +251,7 @@ extension BrowserController {
     private func getTransition() -> ScaleTransition {
         ScaleTransition { [weak self] in
             guard let self = self else { return nil }
-            return options.relatedView?(pageManager.selection)
+            return browserDelegate?.browser(self, relatedViewAt: currentIndex)
         } to: { [weak self] in
             guard let self = self else { return nil }
             self.view.layoutIfNeeded()
@@ -257,13 +276,21 @@ extension BrowserController {
             self.lastKnownSafeAreaInsets = insets
         }
     }
+    
+    private func dismiss() {
+        browserDelegate?.browserWillDismiss(self)
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            self.browserDelegate?.browserDidDismiss(self)
+        }
+    }
 }
 
 // MARK: - Target
 extension BrowserController {
     
     @objc private func closeButtonTapped(_ sender: UIButton) {
-        dismiss(animated: true)
+        dismiss()
     }
 }
 
