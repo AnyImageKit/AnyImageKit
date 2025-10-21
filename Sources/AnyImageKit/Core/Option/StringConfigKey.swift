@@ -31,6 +31,7 @@ extension StringConfigKey {
     public static let microphone  = StringConfigKey(rawValue: "MICROPHONE")
     public static let settings    = StringConfigKey(rawValue: "SETTINGS")
     
+    public static let all         = StringConfigKey(rawValue: "ALL")
     public static let photo       = StringConfigKey(rawValue: "PHOTO")
     public static let video       = StringConfigKey(rawValue: "VIDEO")
     public static let livePhoto   = StringConfigKey(rawValue: "LIVE_PHOTO")

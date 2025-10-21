@@ -18,6 +18,7 @@
 "MICROPHONE" = "麦克风";
 "SETTINGS" = "设置";
 
+"ALL" = "全部";
 "PHOTO" = "照片";
 "VIDEO" = "视频";
 "LIVE_PHOTO" = "实况";

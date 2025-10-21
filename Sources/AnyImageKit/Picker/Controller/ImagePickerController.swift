@@ -183,6 +183,12 @@ extension ImagePickerController {
             options.preselectAssets.removeLast(options.preselectAssets.count-options.selectLimit)
         }
         
+        if !options.mediaTypeFilter.isEmpty {
+            if !(options.selectOptions.mediaTypes.contains(.image) && options.selectOptions.mediaTypes.contains(.video)) {
+                options.mediaTypeFilter = []
+            }
+        }
+        
         return options
     }
     

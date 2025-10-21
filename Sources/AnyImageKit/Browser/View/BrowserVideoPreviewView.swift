@@ -199,7 +199,6 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
         cancellables = Set<AnyCancellable>()
         player = AVPlayer(playerItem: item)
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.player?.seek(to: .zero)
         if let playerLayer = playerLayer {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
@@ -214,10 +213,6 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
             ]
         }
         addObservers()
-        if playWhenLoaded {
-            player?.play()
-            playWhenLoaded = false
-        }
         loadingView.stopAnimating()
         hideToolBar(isHidden: isToolBarHidden)
     }
@@ -275,7 +270,7 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
     }
     
     private func playWhenViewAppear() {
-        if let player {
+        if let player, player.currentItem?.status == .readyToPlay {
             player.play()
         } else {
             playWhenLoaded = true
@@ -326,6 +321,18 @@ open class BrowserVideoPreviewView: BrowserPreviewView {
                     self.updateControls(isDragging: false)
                 }
             }
+            .store(in: &cancellables)
+            
+        // 监听状态
+        player.currentItem?.publisher(for: \.status)
+            .filter { $0 == .readyToPlay }
+            .sink(receiveValue: { [weak self] _ in
+                guard let self = self else { return }
+                if self.playWhenLoaded {
+                    self.player?.play()
+                    self.playWhenLoaded = false
+                }
+            })
             .store(in: &cancellables)
     }
     

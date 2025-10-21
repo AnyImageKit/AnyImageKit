@@ -10,10 +10,12 @@ import UIKit
 
 final class AssetSection: SKCSectionProtocol {
     
-    let selectedEvent = Delegate<Int, Void>()
+    typealias AssetSectionCallback = (index: Int, asset: Asset)
+    
+    let selectedEvent = Delegate<AssetSectionCallback, Void>()
     let openCaptureEvent = Delegate<Void, Void>()
-    let openEditorEvent = Delegate<Asset, Void>()
-    let openPreviewEvent = Delegate<Asset, Void>()
+    let openEditorEvent = Delegate<AssetSectionCallback, Void>()
+    let openPreviewEvent = Delegate<AssetSectionCallback, Void>()
     let showAlertEvent = Delegate<String, Void>()
     let configCellEvent = Delegate<AssetCell, Void>()
     
@@ -87,7 +89,7 @@ extension AssetSection {
             let cell = dequeue(at: row) as AssetCell
             cell.config(model)
             cell.selectEvent.delegate(on: self) { (self, _) in
-                self.selectedEvent.call(row)
+                self.selectedEvent.call((row, self.assets[row]))
             }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
@@ -136,13 +138,13 @@ extension AssetSection {
 #endif
 #if ANYIMAGEKIT_ENABLE_EDITOR
         if manager.options.selectionTapAction == .openEditor && canOpenEditor(with: asset) {
-            openEditorEvent.call(asset)
+            openEditorEvent.call((row, asset))
             return
         }
 #endif
         
         if manager.options.selectionTapAction == .quickPick {
-            selectedEvent.call(row)
+            selectedEvent.call((row, asset))
         } else if case .disable(let rule) = asset.state {
             let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
             showAlertEvent.call(message)
@@ -150,7 +152,7 @@ extension AssetSection {
         } else if !asset.isSelected && manager.isUpToLimit {
             return
         } else {
-            openPreviewEvent.call(asset)
+            openPreviewEvent.call((row, asset))
         }
     }
     

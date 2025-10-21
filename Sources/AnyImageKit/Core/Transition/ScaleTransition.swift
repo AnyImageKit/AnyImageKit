@@ -12,10 +12,12 @@ public class ScaleTransition: NSObject, UIViewControllerTransitioningDelegate {
     public private(set) weak var presentationController: ScalePresentationController?
     public let fromView: (() -> UIView?)?
     public let toView: (() -> UIView?)?
+    public let backgroundColor: UIColor
     
-    public init(from: (() -> UIView?)? = nil, to: (() -> UIView?)? = nil) {
+    public init(backgroundColor: UIColor, from: (() -> UIView?)? = nil, to: (() -> UIView?)? = nil) {
         self.fromView = from
         self.toView = to
+        self.backgroundColor = backgroundColor
         super.init()
     }
     
@@ -32,7 +34,7 @@ public class ScaleTransition: NSObject, UIViewControllerTransitioningDelegate {
     /// 提供转场协调器
     public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = ScalePresentationController(presentedViewController: presented, presenting: presenting)
-        controller.maskView.backgroundColor = .white // TODO: Color
+        controller.maskView.backgroundColor = backgroundColor
         presentationController = controller
         return controller
     }

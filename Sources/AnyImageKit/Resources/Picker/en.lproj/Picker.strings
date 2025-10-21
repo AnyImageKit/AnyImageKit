@@ -21,4 +21,7 @@
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "The duration of the selected video should be between %d-%d seconds";
-"CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME" = "Cannot select photos and videos at the same time";
+"CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME" = "Can't select photos and videos at the same time";
+
+"EMPTY_ALBUM_PHOTO_TIP" = "No photos in the album";
+"EMPTY_ALBUM_VIDEO_TIP" = "No videos in the album";

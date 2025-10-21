@@ -234,6 +234,8 @@ extension StringConfigKey {
     public static let pickerA11ySwitchAlbumTips = StringConfigKey(rawValue: "A11Y_SWITCH_ALBUM_TIPS")
     public static let pickerLimitedPhotosPermissionTips = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_TIPS")
     public static let pickerCannotPreviewAssetInOtherAlbum = StringConfigKey(rawValue: "CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM")
+    public static let emptyAlbumPhotoTip = StringConfigKey(rawValue: "EMPTY_ALBUM_PHOTO_TIP")
+    public static let emptyAlbumVideoTip = StringConfigKey(rawValue: "EMPTY_ALBUM_VIDEO_TIP")
 }
 
 // MARK: - Label

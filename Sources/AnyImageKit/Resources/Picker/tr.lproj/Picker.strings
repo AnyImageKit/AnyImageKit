@@ -22,3 +22,6 @@
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "Seçilen videonun süresi %d-%d saniye arasında olmalıdır";
 "CANNOT_SELECT_PHOTOS_AND_VIDEOS_AT_SAME_TIME" = "Resimler ve videolar aynı anda seçilemez";
+
+"EMPTY_ALBUM_PHOTO_TIP" = "Albümde hiç fotoğraf yok";
+"EMPTY_ALBUM_VIDEO_TIP" = "Albümde hiç video yok";

@@ -51,6 +51,9 @@ extension AssetPickerViewController {
     
     /// Show or hide the indicator and tool bar.
     func showIndicator(_ show: Bool) {
+        if show {
+            indicatorView.isHidden = false
+        }
         switch manager.options.scrollIndicator {
         case .none:
             break

@@ -28,6 +28,8 @@ protocol PhotoPreviewControllerDelegate: AnyObject {
     
     /// 即将消失
     func previewControllerWillDisappear(_ controller: PhotoPreviewController)
+    
+    func preview(_ controller: PhotoPreviewController, didChangeIndex index: Int)
 }
 
 extension PhotoPreviewControllerDelegate {
@@ -36,6 +38,8 @@ extension PhotoPreviewControllerDelegate {
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) { }
     func previewControllerDidClickBack(_ controller: PhotoPreviewController) { }
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
+    func previewControllerWillDisappear(_ controller: PhotoPreviewController) { }
+    func preview(_ controller: PhotoPreviewController, didChangeIndex index: Int) { }
 }
 
 final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable {
@@ -156,6 +160,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
         #if ANYIMAGEKIT_ENABLE_EDITOR
         autoSetEditorButtonHidden()
         #endif
+        delegate?.preview(self, didChangeIndex: index)
     }
     
     override func browserDidBeginPan(_ browser: BrowserController) {

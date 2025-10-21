@@ -166,7 +166,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     
     /// Called when a single tap is detected in the browser.
     open func browserDidSingleTap(_ browser: BrowserController) {
-        browserDelegate?.browser(self, singleTappedOnItem: currentIndex)
+        browserDelegate?.browser(self, singleTappedOnItem: pageManager.selection)
         hideToolBar(isHidden: shouldHideToolBar(in: self), isAnimated: false)
     }
     
@@ -249,9 +249,9 @@ extension BrowserController {
     }
     
     private func getTransition() -> ScaleTransition {
-        ScaleTransition { [weak self] in
+        ScaleTransition(backgroundColor: options.theme[color: .background]) { [weak self] in
             guard let self = self else { return nil }
-            return browserDelegate?.browser(self, relatedViewAt: currentIndex)
+            return browserDelegate?.browser(self, relatedViewAt: self.pageManager.selection)
         } to: { [weak self] in
             guard let self = self else { return nil }
             self.view.layoutIfNeeded()

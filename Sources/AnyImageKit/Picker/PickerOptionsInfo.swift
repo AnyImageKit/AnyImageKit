@@ -61,6 +61,11 @@ public struct PickerOptionsInfo {
     /// - Default: ASC
     public var orderByDate: Sort = .asc
     
+    /// Media type filter for the picker UI.
+    /// Only effective when `selectOptions` contains both `.photo` and `.video`.
+    /// - Default: `[.all, .photo, .video]`
+    public var mediaTypeFilter: [PickerMediaTypeFilter] = [.all, .photo, .video]
+    
     /// Preselect assets
     /// - Default: []
     public var preselectAssets: [String] = []
@@ -187,6 +192,37 @@ public enum PickerScrollIndicator {
     /// Vertical bar
     /// - Show the date of the first visible photo at the top while scrolling
     case verticalBar
+}
+
+// MARK: - PickerMediaTypeFilter
+public struct PickerMediaTypeFilter: OptionSet {
+    
+    /// All
+    public static let all = PickerMediaTypeFilter(rawValue: 1 << 0)
+    
+    /// Photo
+    public static let photo = PickerMediaTypeFilter(rawValue: 1 << 1)
+    
+    /// Video
+    public static let video = PickerMediaTypeFilter(rawValue: 1 << 2)
+
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+extension PickerMediaTypeFilter {
+    
+    public var title: String {
+        switch self {
+        case .all: return BundleHelper.localizedString(key: "ALL", module: .core)
+        case .photo: return BundleHelper.localizedString(key: "PHOTO", module: .core)
+        case .video: return BundleHelper.localizedString(key: "VIDEO", module: .core)
+        default: return ""
+        }
+    }
 }
 
 @available(*, deprecated, message: "Will be removed in feature, Please use `MediaTypeOption` instead.")

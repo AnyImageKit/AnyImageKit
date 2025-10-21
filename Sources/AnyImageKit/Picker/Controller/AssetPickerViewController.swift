@@ -46,7 +46,8 @@ final class AssetPickerViewController: AnyImageViewController {
         view.contentInsetAdjustmentBehavior = .automatic
         view.showsVerticalScrollIndicator = manager.options.scrollIndicator == .none
         let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
-        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
+        let hideFilterBar = manager.options.mediaTypeFilter.isEmpty
+        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing + (hideFilterBar ? 0 : 44),
                                          left: defaultAssetSpacing,
                                          bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
                                          right: defaultAssetSpacing)
@@ -83,6 +84,36 @@ final class AssetPickerViewController: AnyImageViewController {
         view.alpha = 0.0
         return view
     }()
+    
+    private lazy var filterBar: PickerFilterBar = {
+        let view = PickerFilterBar(frame: .zero)
+        view.isHidden = manager.options.mediaTypeFilter.isEmpty
+        view.selectEvent.delegate(on: self) { (self, _) in
+            self.reloadData()
+        }
+        return view
+    }()
+    
+    private lazy var filterTipsLabel: UILabel = {
+        let view = UILabel(frame: .zero)
+        view.backgroundColor = manager.options.theme[color: .toolBar]
+        view.isHidden = true
+        view.textAlignment = .center
+        view.font = UIFont.systemFont(ofSize: 16)
+        return view
+    }()
+    
+    private var assets: [Asset] {
+        var assets = album?.assets ?? []
+        switch filterBar.selectedType {
+        case .photo:
+            assets = assets.filter { $0.mediaType.isImage || $0.isCamera }
+        case .video:
+            assets = assets.filter { $0.mediaType.isVideo || $0.isCamera }
+        default: break
+        }
+        return assets
+    }
     
     weak var previewController: PhotoPreviewController?
     
@@ -128,19 +159,31 @@ final class AssetPickerViewController: AnyImageViewController {
         navigationItem.titleView = titleView
         let cancel = UIBarButtonItem(title: manager.options.theme[string: .cancel], style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
+        if !manager.options.mediaTypeFilter.isEmpty {
+            navigationController?.navigationBar.standardAppearance.shadowColor = nil
+            navigationController?.navigationBar.standardAppearance.backgroundColor = manager.options.theme[color: .toolBar]
+            navigationController?.navigationBar.backgroundColor = manager.options.theme[color: .toolBar]
+        }
     }
     
     private func setupView() {
         collectionView.manager.reload(section)
-        
+        view.backgroundColor = manager.options.theme[color: .toolBar]
+        collectionView.backgroundColor = manager.options.theme[color: .background]
         view.addSubview(collectionView)
         view.addSubview(indicatorView)
         view.addSubview(toolBar)
         view.addSubview(permissionView)
         view.addSubview(topDateIndicatorView)
+        view.addSubview(filterTipsLabel)
+        view.addSubview(filterBar)
         
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
+        }
+        filterBar.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
         }
         indicatorView.snp.makeConstraints { make in
             make.top.equalTo(collectionView)
@@ -157,21 +200,20 @@ final class AssetPickerViewController: AnyImageViewController {
             maker.left.right.bottom.equalToSuperview()
         }
         permissionView.snp.makeConstraints { maker in
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            } else {
-                maker.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
-            }
+            maker.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             maker.left.right.bottom.equalToSuperview()
         }
         topDateIndicatorView.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview()
         }
+        filterTipsLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     private func setupSection() {
-        section.selectedEvent.delegate(on: self) { (self, index) in
-            self.selectItem(index)
+        section.selectedEvent.delegate(on: self) { (self, model) in
+            self.selectItem(model.index)
             if self.manager.options.selectLimit == 1 && self.manager.selectedAssets.count == 1 {
                 self.doneButtonTapped(self.toolBar.doneButton)
             }
@@ -179,11 +221,11 @@ final class AssetPickerViewController: AnyImageViewController {
         section.openCaptureEvent.delegate(on: self) { (self, _) in
             self.openCapture()
         }
-        section.openEditorEvent.delegate(on: self) { (self, asset) in
-            self.openEditor(with: asset)
+        section.openEditorEvent.delegate(on: self) { (self, model) in
+            self.openEditor(with: model.asset)
         }
-        section.openPreviewEvent.delegate(on: self) { (self, asset) in
-            self.openPreview(asset: asset, assets: self.section.assets.filter { !$0.isCamera }, index: asset.idx, sourceType: .album)
+        section.openPreviewEvent.delegate(on: self) { (self, model) in
+            self.openPreview(asset: model.asset, assets: self.section.assets.filter { !$0.isCamera }, index: model.index, sourceType: .album)
         }
         section.showAlertEvent.delegate(on: self) { (self, message) in
             self.showAlert(message: message, stringConfig: self.manager.options.theme)
@@ -195,11 +237,27 @@ final class AssetPickerViewController: AnyImageViewController {
         if reloadPreview {
             previewController?.reloadWhenPhotoLibraryDidChange()
         }
-        section.config(assets: album?.assets ?? [], columnCount: manager.options.columnNumber)
+        
+        UIView.performWithoutAnimation {
+            section.config(assets: assets, columnCount: manager.options.columnNumber)
+            scrollToEnd(animated: false)
+        }
         collectionView.isUserInteractionEnabled = true
         
         if manager.options.scrollIndicator != .none && section.itemCount <= 50 {
             indicatorView.isHidden = true
+        }
+        
+        if !filterBar.isHidden {
+            filterTipsLabel.isHidden = !section.assets.isEmpty
+            switch filterBar.selectedType {
+            case .photo:
+                filterTipsLabel.text = manager.options.theme[string: .emptyAlbumPhotoTip]
+            case .video:
+                filterTipsLabel.text = manager.options.theme[string: .emptyAlbumVideoTip]
+            default:
+                filterTipsLabel.text = ""
+            }
         }
     }
 }
@@ -359,10 +417,9 @@ extension AssetPickerViewController {
     }
     
     func updateVisibleCellState(_ animatedItem: Int = -1) {
-        guard let album = album else { return }
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                cell.updateState(album.assets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
+                cell.updateState(assets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
             }
         }
     }
@@ -371,7 +428,7 @@ extension AssetPickerViewController {
         let preselectAssets = manager.options.preselectAssets
         var selectedAssets: [Asset] = []
         if preselectAssets.isEmpty { return }
-        for asset in (album?.assets ?? []).reversed() {
+        for asset in assets.reversed() {
             if preselectAssets.contains(asset.identifier) {
                 selectedAssets.append(asset)
                 if selectedAssets.count == preselectAssets.count {
@@ -396,9 +453,7 @@ extension AssetPickerViewController {
     }
     
     func selectItem(_ idx: Int) {
-        guard let album = album else { return }
-        guard idx >= 0 && idx < album.assets.count else { return }
-        let asset = album.assets[idx]
+        let asset = assets[idx]
         
         if !asset.isSelected {
             let result = manager.addSelectedAsset(asset)
@@ -574,13 +629,12 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         delegate?.assetPickerDidFinishPicking(self)
     }
     
-    func previewControllerWillDisappear(_ controller: PhotoPreviewController) {
+    func preview(_ controller: PhotoPreviewController, didChangeIndex index: Int) {
         switch controller.sourceType {
         case .album:
             let idx = controller.currentIndex + section.itemOffset
             let indexPath = IndexPath(item: idx, section: 0)
-            reloadData(animated: false, reloadPreview: false)
-            if !(collectionView.visibleCells.map{ $0.tag }).contains(idx) {
+            if !(collectionView.visibleCells.compactMap { $0 as? AssetCell }.compactMap { $0.model?.asset.idx }).contains(idx) {
                 if idx < collectionView.numberOfItems(inSection: 0) {
                     collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
                 }
@@ -589,4 +643,6 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
             break
         }
     }
+    
+    
 }
