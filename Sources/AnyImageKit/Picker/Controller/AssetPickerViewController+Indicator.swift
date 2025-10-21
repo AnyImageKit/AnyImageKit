@@ -51,6 +51,10 @@ extension AssetPickerViewController {
     
     /// Show or hide the indicator and tool bar.
     func showIndicator(_ show: Bool) {
+        if section.itemCount <= 50 {
+            indicatorView.isHidden = true
+            return
+        }
         if show {
             indicatorView.isHidden = false
         }
@@ -79,6 +83,7 @@ extension AssetPickerViewController {
             UIView.animate(withDuration: 0.25) {
                 self.indicatorView.indicatorImageView.alpha = show ? 1 : 0.4
                 self.navigationController?.navigationBar.alpha = hiddenToolBar ? 0.01 : 1
+                self.filterBar.alpha = hiddenToolBar ? 0.01 : 1
                 self.toolBar.alpha = hiddenToolBar ? 0.01 : 1
                 self.permissionView.alpha = hiddenToolBar ? 0.01 : 1
                 self.topDateIndicatorView.alpha = hiddenToolBar ? 1 : 0.0
@@ -117,9 +122,17 @@ extension AssetPickerViewController {
 // MARK: - Calculation
 extension AssetPickerViewController {
     
+    private func getTopSafeMargin() -> CGFloat {
+        return view.safeAreaInsets.top + (filterBar.isHidden ? 0 : 44)
+    }
+    
+    private func getBottomSafeMargin() -> CGFloat {
+        return permissionView.isHidden ? toolBar.frame.height : toolBar.frame.height + permissionView.frame.height
+    }
+    
     private func getIndicatorY(from contentOffsetY: CGFloat) -> CGFloat {
-        let topSafeMargin: CGFloat = view.safeAreaInsets.top
-        let bottomSafeMargin: CGFloat = permissionView.isHidden ? toolBar.frame.height : toolBar.frame.height + permissionView.frame.height
+        let topSafeMargin: CGFloat = getTopSafeMargin()
+        let bottomSafeMargin: CGFloat = getBottomSafeMargin()
         
         let totalScrollableHeight = collectionView.contentSize.height - collectionView.frame.height + topSafeMargin + bottomSafeMargin
         guard totalScrollableHeight > 0 else { return topSafeMargin }
@@ -138,8 +151,8 @@ extension AssetPickerViewController {
     }
 
     private func getContentOffsetY(from indicatorY: CGFloat) -> CGFloat {
-        let topSafeMargin: CGFloat = view.safeAreaInsets.top
-        let bottomSafeMargin: CGFloat = permissionView.isHidden ? toolBar.frame.height : toolBar.frame.height + permissionView.frame.height
+        let topSafeMargin: CGFloat = getTopSafeMargin()
+        let bottomSafeMargin: CGFloat = getBottomSafeMargin()
         
         let maxIndicatorY = collectionView.frame.height - bottomSafeMargin - indicatorView.frame.height
         let clampedIndicatorY = max(topSafeMargin, min(indicatorY, maxIndicatorY))

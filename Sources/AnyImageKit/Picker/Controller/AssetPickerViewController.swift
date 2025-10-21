@@ -85,7 +85,7 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private lazy var filterBar: PickerFilterBar = {
+    private(set) lazy var filterBar: PickerFilterBar = {
         let view = PickerFilterBar(frame: .zero)
         view.isHidden = manager.options.mediaTypeFilter.isEmpty
         view.selectEvent.delegate(on: self) { (self, _) in
@@ -170,6 +170,8 @@ final class AssetPickerViewController: AnyImageViewController {
         collectionView.manager.reload(section)
         view.backgroundColor = manager.options.theme[color: .toolBar]
         collectionView.backgroundColor = manager.options.theme[color: .background]
+        collectionView.manager.scrollObserver.add(self)
+        
         view.addSubview(collectionView)
         view.addSubview(indicatorView)
         view.addSubview(toolBar)
