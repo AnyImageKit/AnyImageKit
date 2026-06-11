@@ -14,7 +14,7 @@ import UIKit
 extension PhotoPreviewController {
     
     /// ToolBar - Edit
-    @objc func editButtonTapped(_ sender: UIButton) {
+    @objc func editButtonTapped() {
         let asset = assets[currentIndex]
         trackObserver?.track(event: .pickerEdit, userInfo: [:])
         if asset.mediaType == .photo {
@@ -44,20 +44,6 @@ extension PhotoPreviewController {
             let image = asset._images[.initial]
             let controller = ImageEditorController(video: asset.phAsset, placeholderImage: image, options: videoOptions, delegate: self)
             present(controller, animated: false, completion: nil)
-        }
-    }
-}
-
-// MARK: - Internal function
-extension PhotoPreviewController {
-    
-    internal func autoSetEditorButtonHidden() {
-        toolBar.leftButton.isHidden = true
-        let asset = assets[currentIndex]
-        if asset.mediaType == .photo && manager.options.editorOptions.contains(.photo) {
-            toolBar.leftButton.isHidden = false
-        } else if asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video) {
-            toolBar.leftButton.isHidden = false
         }
     }
 }
@@ -95,10 +81,10 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         // 选择当前照片
         if !manager.isUpToLimit {
             if !asset.isSelected {
-                selectButtonTapped(navigationBar.selectButton)
+                selectButtonTapped()
             }
         }
-        indexView.didSetCurrentAsset()
+//        thumbnailPreviewView.reloadSelectionState() TODO : 本次
         delegate?.previewController(self, didSelected: currentIndex)
     }
 }

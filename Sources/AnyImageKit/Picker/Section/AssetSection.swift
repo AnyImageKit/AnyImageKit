@@ -112,7 +112,8 @@ extension AssetSection {
     func itemSize(at row: Int) -> CGSize {
         let size = defaultSafeSizeProvider.size
         let spacing: CGFloat = 2
-        let itemWidth = ceil((size.width - (columnCount - 1) * spacing) / columnCount)
+        // Use floor so the total width never exceeds the available row width.
+        let itemWidth = max(0, floor((size.width - (columnCount - 1) * spacing) / columnCount))
         return CGSize(width: itemWidth, height: itemWidth)
     }
     

@@ -25,7 +25,7 @@ final class NumberCircleButton: UIControl {
     }()
     
     private let style: Style
-    private var a11ySelectPhoto: String = BundleHelper.localizedString(key: "UNSELECT_PHOTO", module: .picker)
+    private var a11ySelectPhoto: String = BundleHelper.localizedString(key: "SELECT_PHOTO", module: .picker)
     private var a11yUnselectPhoto: String = BundleHelper.localizedString(key: "UNSELECT_PHOTO", module: .picker)
     
     init(frame: CGRect, style: Style) {
@@ -110,7 +110,7 @@ extension NumberCircleButton {
         self.isSelected = isSelected
         numLabel.text = num.description
         showNumber(animated)
-        accessibilityLabel = isSelected ? a11ySelectPhoto : a11yUnselectPhoto
+        accessibilityLabel = isSelected ? a11yUnselectPhoto : a11ySelectPhoto
     }
 }
 

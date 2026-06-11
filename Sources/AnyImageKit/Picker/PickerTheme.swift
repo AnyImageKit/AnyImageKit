@@ -177,6 +177,11 @@ extension PickerTheme {
         /// 20*30, Light/Dark
         case indicator
         
+        case closeButton
+        case doneButton
+        case previewButton
+        case moreButton
+        
         func defaultValue(for style: UserInterfaceStyle) -> UIImage? {
             switch self {
             case .albumArrow:
@@ -198,7 +203,7 @@ extension PickerTheme {
             case .pickerCircle:
                 return BundleHelper.image(named: "PickerCircle", style: style, module: .picker)
             case .returnButton:
-                return BundleHelper.image(named: "ReturnButton", style: style, module: .picker)
+                return UIImage(systemName: "chevron.backward")
             case .video:
                 return BundleHelper.image(named: "Video", module: .picker)
             case .videoPlay:
@@ -207,6 +212,14 @@ extension PickerTheme {
                 return BundleHelper.image(named: "Warning", style: style, module: .picker)
             case .indicator:
                 return BundleHelper.image(named: "Indicator", style: .light, module: .picker)
+            case .closeButton:
+                return UIImage(systemName: "xmark")
+            case .doneButton:
+                return UIImage(systemName: "checkmark")
+            case .previewButton:
+                return UIImage(systemName: "photo.badge.checkmark")
+            case .moreButton:
+                return UIImage(systemName: "line.3.horizontal.decrease")
             }
         }
     }
@@ -233,7 +246,13 @@ extension StringConfigKey {
     public static let pickerFetchFailedPleaseRetry = StringConfigKey(rawValue: "FETCH_FAILED_PLEASE_RETRY")
     public static let pickerA11ySwitchAlbumTips = StringConfigKey(rawValue: "A11Y_SWITCH_ALBUM_TIPS")
     public static let pickerLimitedPhotosPermissionTips = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_TIPS")
+    public static let pickerLimitedPhotosPermissionButtonTitle = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_BUTTON_TITLE")
     public static let pickerCannotPreviewAssetInOtherAlbum = StringConfigKey(rawValue: "CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM")
+    public static let pickerRecentAlbumTitle = StringConfigKey(rawValue: "RECENT_ALBUM_TITLE")
+    public static let pickerDisplayOptions = StringConfigKey(rawValue: "DISPLAY_OPTIONS")
+    public static let pickerZoomIn = StringConfigKey(rawValue: "ZOOM_IN")
+    public static let pickerZoomOut = StringConfigKey(rawValue: "ZOOM_OUT")
+    public static let pickerMoreOptions = StringConfigKey(rawValue: "MORE_OPTIONS")
     public static let emptyAlbumPhotoTip = StringConfigKey(rawValue: "EMPTY_ALBUM_PHOTO_TIP")
     public static let emptyAlbumVideoTip = StringConfigKey(rawValue: "EMPTY_ALBUM_VIDEO_TIP")
 }

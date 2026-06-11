@@ -85,6 +85,8 @@ extension AssetPickerViewController {
                 self.navigationController?.navigationBar.alpha = hiddenToolBar ? 0.01 : 1
                 self.filterBar.alpha = hiddenToolBar ? 0.01 : 1
                 self.toolBar.alpha = hiddenToolBar ? 0.01 : 1
+                self.lgView.toolBar.alpha = hiddenToolBar ? 0.01 : 1
+                self.lgView.limitedButton.alpha = hiddenToolBar ? 0.01 : 1
                 self.permissionView.alpha = hiddenToolBar ? 0.01 : 1
                 self.topDateIndicatorView.alpha = hiddenToolBar ? 1 : 0.0
             }
@@ -123,10 +125,19 @@ extension AssetPickerViewController {
 extension AssetPickerViewController {
     
     private func getTopSafeMargin() -> CGFloat {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            let navigationBarMaxY = navigationController?.navigationBar.frame.maxY ?? view.safeAreaInsets.top
+            return max(view.safeAreaInsets.top, navigationBarMaxY - collectionView.frame.minY)
+        }
         return view.safeAreaInsets.top + (filterBar.isHidden ? 0 : 44)
     }
     
     private func getBottomSafeMargin() -> CGFloat {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            let limitedHeight = lgView.limitedButton.isHidden ? 0 : (view.bounds.height - lgView.limitedButton.frame.minY)
+            let toolBarHeight = view.bounds.height - lgView.toolBar.frame.minY
+            return max(toolBarHeight, limitedHeight)
+        }
         return permissionView.isHidden ? toolBar.frame.height : toolBar.frame.height + permissionView.frame.height
     }
     

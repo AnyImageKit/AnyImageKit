@@ -68,10 +68,31 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
         fatalError("init(coder:) has not been implemented")
     }
     
+    private(set) lazy var lgView: PreviewLGView = {
+        let view = PreviewLGView(frame: .zero)
+        return view
+    }()
     private(set) lazy var navigationBar: PickerPreviewNavigationBar = {
         let view = PickerPreviewNavigationBar(frame: .zero)
-        view.backButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        view.selectButton.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
+        view.useOriginalImage = manager.useOriginalImage
+        view.backEvent.delegate(on: self) { (self, _) in
+            self.backButtonTapped()
+        }
+        view.selectEvent.delegate(on: self) { (self, _) in
+            self.selectButtonTapped()
+        }
+        view.editEvent.delegate(on: self) { (self, _) in
+            self.editButtonTapped()
+        }
+        view.useOriginalImageEvent.delegate(on: self) { (self, flag) in
+            self.updateOriginalImage(flag)
+        }
+        return view
+    }()
+    private lazy var thumbnailPreviewView: PickerThumbnailPreviewView = {
+        let view = PickerThumbnailPreviewView(frame: .zero)
+        view.delegate = self
+        view.configure(with: assets, manager: manager, currentIndex: options.index)
         return view
     }()
     private(set) lazy var toolBar: PickerToolBar = {
@@ -79,16 +100,19 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
         view.originalButton.isSelected = manager.useOriginalImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
-        view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
+        view.leftButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         #endif
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
-    private(set) lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView(manager: manager, sourceType: sourceType)
-        view.isHidden = true
-        view.delegate = self
+    private(set) lazy var lgToolBar: PreviewLGToolBar = {
+        let view = PreviewLGToolBar(frame: .zero)
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        view.editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+        #endif
+        view.originalButton.addTarget(self, action: #selector(lgOriginalImageButtonTapped(_:)), for: .touchUpInside)
+        view.doneButton.addTarget(self, action: #selector(lgDoneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -96,13 +120,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
         super.viewDidLoad()
         setupViews()
         update(options: manager.options)
-        
-//        if #available(iOS 18.0, *) {
-//            preferredTransition = .zoom(sourceViewProvider: { [weak self] context in
-//                guard let self = self else { return nil }
-//                return self.options.relatedView?(self.currentIndex)
-//            })
-//        }
+        syncPreviewToolBar(for: assets[currentIndex])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,6 +130,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setBar(hidden: false, animated: true)
+        updateSafeAreaLayoutGuide(isAnimated: true)
     }
     
     override var shouldAutorotate: Bool {
@@ -150,16 +169,10 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     override func browser(_ browser: BrowserController, didChangeIndex index: Int) {
         super.browser(browser, didChangeIndex: index)
         let asset = assets[index]
-        navigationBar.selectButton.isEnabled = true
-        navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
-        indexView.currentAsset = asset
-
-        if manager.options.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = asset.phAsset.mediaType != .image
-        }
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        autoSetEditorButtonHidden()
-        #endif
+        navigationBar.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
+        thumbnailPreviewView.reloadSelectionState()
+        syncPreviewToolBar(for: asset)
+        thumbnailPreviewView.setCurrentIndex(index, animated: false)
         delegate?.preview(self, didChangeIndex: index)
     }
     
@@ -180,6 +193,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
             setStatusBar(hidden: false)
         } else if !toolBarHiddenStateBeforePan {
             setBar(hidden: false, isNormal: false)
+            updateSafeAreaLayoutGuide(isAnimated: true)
         }
     }
     
@@ -210,13 +224,21 @@ extension PhotoPreviewController {
         closeButton.isHidden = true
         pageLabel.isHidden = true
         view.addSubview(navigationBar)
-        view.addSubview(toolBar)
-        view.addSubview(indexView)
+        view.addSubview(previewToolBarView)
+        view.addSubview(thumbnailPreviewView)
         let color = UIColor.create(style: manager.options.theme.style, light: .white, dark: .black)
         transition.presentationController?.maskView.backgroundColor = color
         
         setupLayout()
         setBar(hidden: true, animated: false, isNormal: false)
+        updateSafeAreaLayoutGuide()
+        
+        for subview in (pageManager.container?.view.subviews ?? []) {
+            if let scrollView = subview as? UIScrollView {
+                scrollView.delegate = self
+                break
+            }
+        }
     }
     
     /// 设置视图布局
@@ -226,14 +248,22 @@ extension PhotoPreviewController {
             maker.left.right.equalToSuperview()
             maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
         }
-        toolBar.snp.makeConstraints { maker in
-            maker.left.right.bottom.equalToSuperview()
-            maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
+        thumbnailPreviewView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(previewToolBarView.snp.top)
+            make.height.equalTo(45)
         }
-        indexView.snp.makeConstraints { maker in
+        previewToolBarView.isHidden = false
+        
+        previewToolBarView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
-            maker.bottom.equalTo(toolBar.snp.top)
-            maker.height.equalTo(96)
+            if isLiquidGlassEnabled {
+                maker.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                maker.height.equalTo(56)
+            } else {
+                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-56)
+                maker.bottom.equalToSuperview()
+            }
         }
         updateSafeAreaLayoutGuide()
     }
@@ -242,10 +272,10 @@ extension PhotoPreviewController {
         updateContentSafeAreaLayoutGuide(isAnimated: isAnimated) { make in
             make.top.equalTo(navigationBar.snp.bottom)
             make.left.right.equalToSuperview()
-            if indexView.isHidden || navigationBar.alpha == 0 {
-                make.bottom.equalTo(toolBar.snp.top)
+            if self.navigationBar.alpha == 0 {
+                make.bottom.equalToSuperview()
             } else {
-                make.bottom.equalTo(indexView.snp.top)
+                make.bottom.equalTo(self.thumbnailPreviewView.snp.top)
             }
         }
     }
@@ -262,9 +292,42 @@ extension PhotoPreviewController {
 
         UIView.animate(withDuration: animated ? 0.25 : 0) {
             self.navigationBar.alpha = hidden ? 0 : 1
-            self.toolBar.alpha = hidden ? 0 : 1
-            self.indexView.alpha = hidden ? 0 : 1
+            self.previewToolBarView.alpha = hidden ? 0 : 1
+            self.thumbnailPreviewView.alpha = hidden ? 0 : 1
         }
+    }
+    
+    private var isLiquidGlassEnabled: Bool {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            return true
+        }
+        return false
+    }
+    
+    private var previewToolBarView: UIView {
+        isLiquidGlassEnabled ? lgToolBar : toolBar
+    }
+    
+    private func syncPreviewToolBar(for asset: Asset) {
+        let showOriginal = manager.options.allowUseOriginalImage && asset.phAsset.mediaType == .image
+        toolBar.originalButton.isHidden = !showOriginal
+        toolBar.originalButton.isSelected = manager.useOriginalImage
+        lgToolBar.setShowsOriginal(showOriginal)
+        lgToolBar.setOriginalSelected(manager.useOriginalImage)
+        
+        let doneEnabled = sourceType == .selectedAssets ? !manager.selectedAssets.isEmpty : true
+        toolBar.setDoneEnable(doneEnabled)
+        lgToolBar.setDoneEnable(doneEnabled)
+        
+        #if ANYIMAGEKIT_ENABLE_EDITOR
+        let canEdit = (asset.mediaType == .photo && manager.options.editorOptions.contains(.photo))
+            || (asset.phAsset.mediaType == .video && manager.options.editorOptions.contains(.video))
+        toolBar.leftButton.isHidden = !canEdit
+        lgToolBar.setShowsEdit(canEdit)
+        #else
+        toolBar.leftButton.isHidden = true
+        lgToolBar.setShowsEdit(false)
+        #endif
     }
 }
 
@@ -272,7 +335,7 @@ extension PhotoPreviewController {
 extension PhotoPreviewController {
     
     /// NavigationBar - Back
-    @objc private func backButtonTapped(_ sender: UIButton) {
+    @objc func backButtonTapped() {
         delegate?.previewControllerWillDisappear(self)
         dismiss(animated: true, completion: nil)
         setStatusBar(hidden: false)
@@ -280,7 +343,7 @@ extension PhotoPreviewController {
     }
     
     /// NavigationBar - Select
-    @objc func selectButtonTapped(_ sender: NumberCircleButton) {
+    @objc func selectButtonTapped() {
         let asset = assets[currentIndex]
         
         if !asset.isSelected {
@@ -295,36 +358,53 @@ extension PhotoPreviewController {
             delegate?.previewController(self, didDeselected: currentIndex)
         }
         
-        navigationBar.selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: true)
-        indexView.didChangeSelectedAsset()
+        navigationBar.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: true)
+        thumbnailPreviewView.reloadSelectionState()
+        syncPreviewToolBar(for: asset)
         trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerPreview])
         
-        if sourceType == .selectedAssets {
-            toolBar.setDoneEnable(!manager.selectedAssets.isEmpty)
-        }
         updateSafeAreaLayoutGuide(isAnimated: true)
     }
     
     /// ToolBar - Original
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        manager.useOriginalImage = sender.isSelected
-        delegate?.previewController(self, useOriginalImage: sender.isSelected)
+        updateOriginalImage(sender.isSelected)
+    }
+    
+    @objc private func lgOriginalImageButtonTapped(_ sender: UIButton) {
+        updateOriginalImage(!manager.useOriginalImage)
+    }
+    
+    private func updateOriginalImage(_ flag: Bool) {
+        manager.useOriginalImage = flag
+        delegate?.previewController(self, useOriginalImage: flag)
         
         // 选择当前照片
         if manager.useOriginalImage && !manager.isUpToLimit {
             let asset = assets[currentIndex]
             if !asset.isSelected {
-                selectButtonTapped(navigationBar.selectButton)
+                selectButtonTapped()
             }
         }
-        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerPreview])
+        syncPreviewToolBar(for: assets[currentIndex])
+        trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: flag, .page: AnyImagePage.pickerPreview])
     }
     
     /// ToolBar - Done
     @objc private func doneButtonTapped(_ sender: UIButton) {
         defer { sender.isEnabled = true }
         sender.isEnabled = false
+        handleDoneAction()
+    }
+    
+    @objc private func lgDoneButtonTapped(_ sender: UIButton) {
+        defer { sender.isEnabled = true }
+        sender.isEnabled = false
+        handleDoneAction()
+    }
+    
+    private func handleDoneAction() {
         let asset = assets[currentIndex]
         if manager.selectedAssets.isEmpty {
             if case .disable(let rule) = asset.state {
@@ -332,7 +412,7 @@ extension PhotoPreviewController {
                 showAlert(message: message, stringConfig: manager.options.theme)
                 return
             }
-            selectButtonTapped(navigationBar.selectButton)
+            selectButtonTapped()
         }
         transition.presentationController?.updateMask = false
         delegate?.previewControllerWillDisappear(self)
@@ -341,22 +421,51 @@ extension PhotoPreviewController {
     }
 }
 
-// MARK: - PickerPreviewIndexViewDelegate
-extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
-
-    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset) {
-        switch sourceType {
-        case .album:
-            currentIndex = asset.idx
-        case .selectedAssets:
-            guard let index = assets.firstIndex(of: asset) else { return }
-            currentIndex = index
+// MARK: - BrowserPreviewViewDelegate
+extension PhotoPreviewController: UIScrollViewDelegate {
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let viewportWidth = scrollView.bounds.width
+        let pageSpan: CGFloat
+        if scrollView.contentSize.width > viewportWidth {
+            pageSpan = (scrollView.contentSize.width - viewportWidth) / 2
+        } else {
+            pageSpan = viewportWidth + pageManager.spacing
         }
-
-        #if ANYIMAGEKIT_ENABLE_EDITOR
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.autoSetEditorButtonHidden()
+        guard pageSpan > 0 else { return }
+        
+        let contentOffsetX = scrollView.contentOffset.x
+        let baseOffset = pageSpan
+        let offsetFromBase = contentOffsetX - baseOffset
+        
+        if abs(offsetFromBase) < 1 { return }
+        
+        let fromIndex = currentIndex
+        let toIndex: Int
+        let progress: CGFloat
+        
+        if offsetFromBase > 0 {
+            toIndex = min(fromIndex + 1, assets.count - 1)
+            guard toIndex > fromIndex else { return }
+            progress = offsetFromBase / pageSpan
+        } else {
+            toIndex = max(fromIndex - 1, 0)
+            guard toIndex < fromIndex else { return }
+            progress = abs(offsetFromBase) / pageSpan
         }
-        #endif
+        
+        thumbnailPreviewView.updateScrollProgress(
+            fromIndex: fromIndex,
+            toIndex: toIndex,
+            progress: progress
+        )
+    }
+}
+
+// MARK: - PickerThumbnailPreviewViewDelegate
+extension PhotoPreviewController: PickerThumbnailPreviewViewDelegate {
+    
+    func thumbnailPreviewView(_ view: PickerThumbnailPreviewView, didSelectAt index: Int) {
+        currentIndex = index
     }
 }

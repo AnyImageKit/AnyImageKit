@@ -32,9 +32,20 @@ final class PickerFilterBar: UIView {
         return view
     }()
     
+    private(set) lazy var segmentedControl: UISegmentedControl = {
+        guard #available(iOS 26.0, *) else {
+            return UISegmentedControl(items: [])
+        }
+        let view = UISegmentedControl(frame: .zero, actions: [])
+        view.selectedSegmentIndex = 0
+        return view
+    }()
+    private(set) var segmentedActions: [UIAction] = []
+    
+    private var isFirst = true
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
     }
     
     required init?(coder: NSCoder) {
@@ -66,10 +77,16 @@ extension PickerFilterBar {
 extension PickerFilterBar: PickerOptionsConfigurable {
     
     func update(options: PickerOptionsInfo) {
+        setupView(options: options)
         if options.mediaTypeFilter != currentOptions {
             currentOptions = options.mediaTypeFilter
-            setupButtons()
+            setupButtons(options: options)
         }
+        
+        if #available(iOS 26.0, *), !options.designRequiresCompatibility {
+            return
+        }
+        
         backgroundColor = options.theme[color: .toolBar]
         indicator.backgroundColor = options.theme[color: .primary]
         
@@ -83,7 +100,19 @@ extension PickerFilterBar: PickerOptionsConfigurable {
 // MARK: - UI
 extension PickerFilterBar {
     
-    private func setupView() {
+    private func setupView(options: PickerOptionsInfo) {
+        guard isFirst else { return }
+        isFirst = false
+        if #available(iOS 26.0, *), !options.designRequiresCompatibility {
+            addSubview(segmentedControl)
+            segmentedControl.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+//                make.width.equalTo(180)
+                make.height.equalTo(48)
+            }
+            return
+        }
+        
         addSubview(hStackView)
         addSubview(indicator)
         hStackView.snp.makeConstraints { make in
@@ -98,7 +127,24 @@ extension PickerFilterBar {
         }
     }
     
-    private func setupButtons() {
+    private func setupButtons(options: PickerOptionsInfo) {
+        if #available(iOS 26.0, *), !options.designRequiresCompatibility {
+            segmentedControl.removeAllSegments()
+            segmentedActions = []
+            for (index, option) in currentOptions.enumerated() {
+                let action = UIAction(title: option.title) { [weak self] _ in
+                    guard let self = self else { return }
+                    guard self.selectedType != self.currentOptions[index] else { return }
+                    self.selectedType = self.currentOptions[index]
+                    self.selectEvent.call(self.currentOptions[index])
+                }
+                segmentedActions.append(action)
+                segmentedControl.insertSegment(action: action, at: segmentedActions.count-1, animated: false)
+            }
+            segmentedControl.selectedSegmentIndex = 0
+            return
+        }
+        
         hStackView.arrangedSubviews.forEach {
             hStackView.removeArrangedSubview($0)
         }

@@ -17,7 +17,13 @@
 "FETCH_FAILED_PLEASE_RETRY" = "A busca falhou, tente novamente";
 "A11Y_SWITCH_ALBUM_TIPS" = "Trocar de álbum, o álbum atual é %@";
 "LIMITED_PHOTOS_PERMISSION_TIPS" = "Não foi possível recuperar todas as fotos\nClique para selecionar mais fotos";
+"LIMITED_PHOTOS_PERMISSION_BUTTON_TITLE" = "Não foi possível recuperar todas as fotos, toque para selecionar mais fotos";
 "CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM" = "Não é possível visualizar este ativo no álbum atual";
+"RECENT_ALBUM_TITLE" = "Recentes";
+"DISPLAY_OPTIONS" = "Opções de Exibição";
+"ZOOM_IN" = "Ampliar";
+"ZOOM_OUT" = "Reduzir";
+"MORE_OPTIONS" = "Mais Opções";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "A duração do vídeo selecionado deve ser entre %d-%d segundos";

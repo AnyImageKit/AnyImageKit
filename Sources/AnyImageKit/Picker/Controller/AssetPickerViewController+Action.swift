@@ -32,7 +32,7 @@ extension AssetPickerViewController {
         trackObserver?.track(event: .pickerCancel, userInfo: [:])
     }
     
-    @objc func previewButtonTapped(_ sender: UIButton) {
+    @objc func previewButtonTapped() {
         manager.lastSelectedAssets = manager.selectedAssets
         if let asset = manager.selectedAssets.first {
             openPreview(asset: asset, assets: manager.selectedAssets, index: 0, sourceType: .selectedAssets)
@@ -54,11 +54,31 @@ extension AssetPickerViewController {
         trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
     }
     
+    @objc func lgDoneButtonTapped(_ sender: UIBarButtonItem) {
+        defer { sender.isEnabled = true }
+        sender.isEnabled = false
+        stopReloadAlbum = true
+        delegate?.assetPickerDidFinishPicking(self)
+        trackObserver?.track(event: .pickerDone, userInfo: [.page: AnyImagePage.pickerAsset])
+    }
+    
     @objc func limitedButtonTapped(_ sender: UIButton) {
         if #available(iOS 14.0, *) {
             PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
             trackObserver?.track(event: .pickerLimitedLibrary, userInfo: [:])
         }
+    }
+}
+
+extension AssetPickerViewController {
+    
+    func toolBarSetEnable(_ enable: Bool) {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            lgView.previewButton.isEnabled = enable
+            lgView.doneButton.isEnabled = enable
+            return
+        }
+        toolBar.setEnable(enable)
     }
 }
 
@@ -78,12 +98,6 @@ extension AssetPickerViewController: BrowserControllerDelegate {
         options.phAssetSupportedTypes = manager.options.selectOptions
         let controller = PhotoPreviewController(manager: manager, sourceType: sourceType, assets: assets, options: options, browserDelegate: self)
         controller.view.tag = sourceType.rawValue
-        //            if #available(iOS 18.0, *) {
-        //                guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell else { return }
-        //                controller.preferredTransition = .zoom(sourceViewProvider: { context in
-        //                    return cell
-        //                })
-        //            }
         
         self.previewController = controller
         controller.delegate = self

@@ -8,6 +8,16 @@
 
 import UIKit
 
+private extension CAGradientLayer {
+    
+    func aik_setFrameWithoutAnimation(_ frame: CGRect) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        self.frame = frame
+        CATransaction.commit()
+    }
+}
+
 final class AssetCell: UICollectionViewCell, SKLoadViewProtocol {
     
     let selectEvent: Delegate<Void, Void> = .init()
@@ -237,7 +247,7 @@ private class VideoView: UIView {
     }()
     private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
+        layer.aik_setFrameWithoutAnimation(CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35))
         layer.colors = [
             UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor]
@@ -249,7 +259,7 @@ private class VideoView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
+        coverLayer.aik_setFrameWithoutAnimation(CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35))
     }
     
     override init(frame: CGRect) {
@@ -311,7 +321,7 @@ private class GIFView: UIView {
     }()
     private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
+        layer.aik_setFrameWithoutAnimation(CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35))
         layer.colors = [
             UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor]
@@ -323,7 +333,7 @@ private class GIFView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
+        coverLayer.aik_setFrameWithoutAnimation(CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35))
     }
     
     override init(frame: CGRect) {
@@ -364,7 +374,7 @@ private class EditedView: UIView {
     
     private lazy var coverLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
+        layer.aik_setFrameWithoutAnimation(CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35))
         layer.colors = [
             UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.black.withAlphaComponent(0).cgColor]
@@ -376,7 +386,7 @@ private class EditedView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        coverLayer.frame = CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35)
+        coverLayer.aik_setFrameWithoutAnimation(CGRect(x: 0, y: self.bounds.height-35, width: self.bounds.width, height: 35))
     }
     
     override init(frame: CGRect) {

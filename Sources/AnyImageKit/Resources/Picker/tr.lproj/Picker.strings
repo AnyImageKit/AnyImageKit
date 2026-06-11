@@ -17,7 +17,13 @@
 "FETCH_FAILED_PLEASE_RETRY" = "İndirme başarısız, tekrar deneyin";
 "A11Y_SWITCH_ALBUM_TIPS" = "Albümü değiştir. Mevcut albüm %@";
 "LIMITED_PHOTOS_PERMISSION_TIPS" = "Tüm fotoğraflar getirilemiyor\nDaha fazla fotoğraf seçmek için tıklayın";
+"LIMITED_PHOTOS_PERMISSION_BUTTON_TITLE" = "Tüm fotoğraflar getirilemiyor, daha fazla fotoğraf seçmek için dokunun";
 "CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM" = "Bu varlığın önizlemesi mevcut albümde yapılamıyor";
+"RECENT_ALBUM_TITLE" = "Son Kullanılanlar";
+"DISPLAY_OPTIONS" = "Görüntüleme Seçenekleri";
+"ZOOM_IN" = "Yakınlaştır";
+"ZOOM_OUT" = "Uzaklaştır";
+"MORE_OPTIONS" = "Daha Fazla Seçenek";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "Seçilen videonun süresi %d-%d saniye arasında olmalıdır";

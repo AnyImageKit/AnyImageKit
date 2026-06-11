@@ -73,10 +73,17 @@ public struct PickerOptionsInfo {
     /// Disable Rules
     /// - Default: []
     public var disableRules: [AssetDisableCheckRule] = []
-	
-	/// Clear all selected assets after switching album
-	/// - Default: false
-	public var clearSelectionAfterSwitchingAlbum: Bool = false
+    
+    /// Clear all selected assets after switching album.
+    /// - Default: false
+    public var clearSelectionAfterSwitchingAlbum: Bool = false
+    
+    /// Indicates whether to use the legacy UI design.
+    /// Reads `UIDesignRequiresCompatibility` from the host app's Info.plist.
+    /// When the value is `true`, the library will switch to the old-style UI instead of using the new Liquid Glass design (iOS 26+).
+    public var designRequiresCompatibility: Bool {
+        Bundle.main.object(forInfoDictionaryKey: "UIDesignRequiresCompatibility") as? Bool ?? false
+    }
     
     /// Enable Debug Log
     /// - Default: false

@@ -30,6 +30,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private var autoScrollToLatest: Bool = false
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     private var containerSize: CGSize = ScreenHelper.mainBounds.size
+    private(set) var didAppear: Bool = false
     
     lazy var stopReloadAlbum: Bool = false
     
@@ -45,12 +46,19 @@ final class AssetPickerViewController: AnyImageViewController {
         view.alwaysBounceVertical = true
         view.contentInsetAdjustmentBehavior = .automatic
         view.showsVerticalScrollIndicator = manager.options.scrollIndicator == .none
-        let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
-        let hideFilterBar = manager.options.mediaTypeFilter.isEmpty
-        view.contentInset = UIEdgeInsets(top: defaultAssetSpacing + (hideFilterBar ? 0 : 44),
-                                         left: defaultAssetSpacing,
-                                         bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
-                                         right: defaultAssetSpacing)
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            view.contentInset = UIEdgeInsets(top: defaultAssetSpacing,
+                                             left: defaultAssetSpacing,
+                                             bottom: defaultAssetSpacing + toolBarHeight,
+                                             right: defaultAssetSpacing)
+        } else {
+            let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
+            let hideFilterBar = !showsMediaTypeFilterBar
+            view.contentInset = UIEdgeInsets(top: defaultAssetSpacing + (hideFilterBar ? 0 : 44),
+                                             left: defaultAssetSpacing,
+                                             bottom: defaultAssetSpacing + (hideToolBar ? 0 : toolBarHeight),
+                                             right: defaultAssetSpacing)
+        }
         view.backgroundColor = manager.options.theme[color: .background]
         return view
     }()
@@ -58,7 +66,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private(set) lazy var toolBar: PickerToolBar = {
         let view = PickerToolBar(style: .picker)
         view.setEnable(false)
-        view.leftButton.addTarget(self, action: #selector(previewButtonTapped(_:)), for: .touchUpInside)
+        view.leftButton.addTarget(self, action: #selector(previewButtonTapped), for: .touchUpInside)
         view.originalButton.isSelected = manager.useOriginalImage
         view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
@@ -87,7 +95,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     private(set) lazy var filterBar: PickerFilterBar = {
         let view = PickerFilterBar(frame: .zero)
-        view.isHidden = manager.options.mediaTypeFilter.isEmpty
+        view.isHidden = !showsMediaTypeFilterBar
         view.selectEvent.delegate(on: self) { (self, _) in
             self.reloadData()
         }
@@ -100,6 +108,11 @@ final class AssetPickerViewController: AnyImageViewController {
         view.isHidden = true
         view.textAlignment = .center
         view.font = UIFont.systemFont(ofSize: 16)
+        return view
+    }()
+    
+    private(set) lazy var lgView: AssetLGView = {
+        let view = AssetLGView(frame: .zero)
         return view
     }()
     
@@ -118,6 +131,13 @@ final class AssetPickerViewController: AnyImageViewController {
     weak var previewController: PhotoPreviewController?
     
     let manager: PickerManager
+    
+    var showsMediaTypeFilterBar: Bool {
+        let mediaTypes = manager.options.selectOptions.mediaTypes
+        return !manager.options.mediaTypeFilter.isEmpty
+            && mediaTypes.contains(.image)
+            && mediaTypes.contains(.video)
+    }
     
     init(manager: PickerManager) {
         self.manager = manager
@@ -142,8 +162,14 @@ final class AssetPickerViewController: AnyImageViewController {
         update(options: manager.options)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        didAppear = true
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        lgUpdateToolBarLayout()
         if autoScrollToLatest {
             scrollToEnd()
             autoScrollToLatest = false
@@ -156,10 +182,14 @@ final class AssetPickerViewController: AnyImageViewController {
     }
     
     private func setupNavigation() {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            lgSetupNavigation()
+            return
+        }
         navigationItem.titleView = titleView
         let cancel = UIBarButtonItem(title: manager.options.theme[string: .cancel], style: .plain, target: self, action: #selector(cancelButtonTapped(_:)))
         navigationItem.leftBarButtonItem = cancel
-        if !manager.options.mediaTypeFilter.isEmpty {
+        if showsMediaTypeFilterBar {
             navigationController?.navigationBar.standardAppearance.shadowColor = nil
             navigationController?.navigationBar.standardAppearance.backgroundColor = manager.options.theme[color: .toolBar]
             navigationController?.navigationBar.backgroundColor = manager.options.theme[color: .toolBar]
@@ -174,32 +204,20 @@ final class AssetPickerViewController: AnyImageViewController {
         
         view.addSubview(collectionView)
         view.addSubview(indicatorView)
-        view.addSubview(toolBar)
         view.addSubview(permissionView)
         view.addSubview(topDateIndicatorView)
         view.addSubview(filterTipsLabel)
-        view.addSubview(filterBar)
+        
+        setupToolBar()
         
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
-        }
-        filterBar.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
         }
         indicatorView.snp.makeConstraints { make in
             make.top.equalTo(collectionView)
             make.right.equalToSuperview()
             make.width.equalTo(52)
             make.height.equalTo(55)
-        }
-        toolBar.snp.makeConstraints { maker in
-            if #available(iOS 11.0, *) {
-                maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-toolBarHeight)
-            } else {
-                maker.top.equalTo(bottomLayoutGuide.snp.top).offset(-toolBarHeight)
-            }
-            maker.left.right.bottom.equalToSuperview()
         }
         permissionView.snp.makeConstraints { maker in
             maker.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -210,6 +228,24 @@ final class AssetPickerViewController: AnyImageViewController {
         }
         filterTipsLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+    }
+    
+    private func setupToolBar() {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            lgSetupToolBar()
+            return
+        }
+        view.addSubview(toolBar)
+        view.addSubview(filterBar)
+        
+        toolBar.snp.makeConstraints { maker in
+            maker.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-toolBarHeight)
+            maker.left.right.bottom.equalToSuperview()
+        }
+        filterBar.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
         }
     }
     
@@ -234,7 +270,7 @@ final class AssetPickerViewController: AnyImageViewController {
         }
     }
     
-    private func reloadData(animated: Bool = true, reloadPreview: Bool = true) {
+    func reloadData(animated: Bool = true, reloadPreview: Bool = true) {
         collectionView.isUserInteractionEnabled = false
         if reloadPreview {
             previewController?.reloadWhenPhotoLibraryDidChange()
@@ -268,7 +304,12 @@ final class AssetPickerViewController: AnyImageViewController {
 extension AssetPickerViewController: PickerOptionsConfigurable {
     
     var childrenConfigurable: [PickerOptionsConfigurable] {
-        return preferredChildrenConfigurable + [titleView]
+        return preferredChildrenConfigurable + [titleView, lgView]
+    }
+
+    func update(options: PickerOptionsInfo) {
+        updateChildrenConfigurable(options: options)
+        lgUpdateBarButtonAppearance(options: options)
     }
 }
 
@@ -324,15 +365,16 @@ extension AssetPickerViewController {
         }
     }
     
-    private func setAlbum(_ album: Album) {
+    func setAlbum(_ album: Album) {
         guard self.album != album else { return }
         self.album = album
         titleView.setTitle(album.title)
-		if manager.options.clearSelectionAfterSwitchingAlbum {
-			manager.removeAllSelectedAsset()
-		}
+        lgView.setAlbumTitle(album.title)
+        if manager.options.clearSelectionAfterSwitchingAlbum {
+            manager.removeAllSelectedAsset()
+        }
         manager.cancelAllFetch()
-		toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        toolBarSetEnable(!manager.selectedAssets.isEmpty)
 		album.assets.forEach { asset in
 			if !manager.options.clearSelectionAfterSwitchingAlbum,
 			   let selectAsset = manager.selectedAssets.first(where: { asset == $0 }) {
@@ -354,6 +396,7 @@ extension AssetPickerViewController {
             albumsPicker.albums = albums
             albumsPicker.reloadData()
         }
+        lgSetupAlbumMenu()
     }
     
     private func reloadAlbums() {
@@ -390,7 +433,7 @@ extension AssetPickerViewController {
                 manager.addSelectedAsset(album.assets[idx])
             }
         }
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        toolBarSetEnable(!manager.selectedAssets.isEmpty)
         
         self.album = album
         #if ANYIMAGEKIT_ENABLE_CAPTURE
@@ -405,6 +448,10 @@ extension AssetPickerViewController {
     }
     
     private func showLimitedView() {
+        if #available(iOS 26.0, *), !manager.options.designRequiresCompatibility {
+            lgView.limitedButton.isHidden = false
+            return
+        }
         if #available(iOS 14.0, *) {
             let hideToolBar = manager.options.selectionTapAction.hideToolBar && manager.options.selectLimit == 1
             let newToolBarHeight = (hideToolBar ? 0 : toolBarHeight) + toolBar.limitedViewHeight
@@ -443,10 +490,10 @@ extension AssetPickerViewController {
                 manager.addSelectedAsset(asset)
             }
         }
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        toolBarSetEnable(!manager.selectedAssets.isEmpty)
     }
     
-    private func scrollToEnd(animated: Bool = false) {
+    func scrollToEnd(animated: Bool = false) {
         if manager.options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: animated)
         } else {
@@ -467,7 +514,7 @@ extension AssetPickerViewController {
         }
         updateVisibleCellState(idx)
         
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        toolBarSetEnable(!manager.selectedAssets.isEmpty)
         trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: asset.isSelected, .page: AnyImagePage.pickerAsset])
     }
 }
@@ -575,6 +622,7 @@ extension AssetPickerViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         handleIndicatorWhenScrollViewDidScroll(scrollView)
+        updateLimitedButton()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -614,12 +662,12 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) {
         updateVisibleCellState()
-        toolBar.setEnable(true)
+        toolBarSetEnable(true)
     }
     
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) {
         updateVisibleCellState()
-        toolBar.setEnable(!manager.selectedAssets.isEmpty)
+        toolBarSetEnable(!manager.selectedAssets.isEmpty)
     }
     
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) {
