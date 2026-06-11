@@ -10,9 +10,6 @@ import UIKit
 
 /// UI Theme for Browser
 public final class BrowserTheme: ThemeConfigurable {
-
-    /// User Interface Style
-    public let style: UserInterfaceStyle
     
     /// Custom color storage
     private var colors: [ColorConfigKey: UIColor] = [:]
@@ -29,21 +26,21 @@ public final class BrowserTheme: ThemeConfigurable {
     /// Config button
     internal var buttonConfiguration: [ButtonConfigKey: ButtonConfigObject] = [:]
     
-    public init(style: UserInterfaceStyle) {
-        self.style = style
+    public init() {
+        
     }
     
     /// Set custom color
     /// - Note: Please set dynamic color if your app support dark mode
     public subscript(color key: ColorConfigKey) -> UIColor {
-        get { colors[key] ?? key.defaultValue(for: style) }
+        get { colors[key] ?? key.defaultValue() }
         set { colors[key] = newValue }
     }
     
     /// Set custom icon
     /// - Note: Please set dynamic image if your app support dark mode
     public subscript(icon key: IconConfigKey) -> UIImage? {
-        get { icons[key] ?? key.defaultValue(for: style) }
+        get { icons[key] ?? key.defaultValue() }
         set { icons[key] = newValue }
     }
     
@@ -83,29 +80,12 @@ extension BrowserTheme {
         /// Background Color
         case background
         
-        func defaultValue(for style: UserInterfaceStyle) -> UIColor {
-            switch style {
-            case .auto:
-                switch self {
-                case .primary: return UIColor.primaryText
-                case .tipsText: return .create(light: UIColor.subTextLight, dark: .white)
-                case .loadingIndicator: return .create(light: .black, dark: .white)
-                case .background: return UIColor.background
-                }
-            case .light:
-                switch self {
-                case .primary: return UIColor.primaryTextLight
-                case .tipsText: return UIColor.subTextLight
-                case .loadingIndicator: return .black
-                case .background: return UIColor.backgroundLight
-                }
-            case .dark:
-                switch self {
-                case .primary: return UIColor.primaryTextDark
-                case .tipsText: return .white
-                case .loadingIndicator: return .white
-                case .background: return UIColor.backgroundDark
-                }
+        func defaultValue() -> UIColor {
+            switch self {
+            case .primary: return .white
+            case .tipsText: return .white
+            case .loadingIndicator: return .white
+            case .background: return .black
             }
         }
     }
@@ -126,7 +106,7 @@ extension BrowserTheme {
         case muteButton
         case unmuteButton
         
-        func defaultValue(for style: UserInterfaceStyle) -> UIImage? {
+        func defaultValue() -> UIImage? {
             switch self {
             case .closeButton:
                 return UIImage(systemName: "xmark")

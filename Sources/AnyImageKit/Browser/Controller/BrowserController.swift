@@ -38,9 +38,9 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     
     public var currentIndex: Int {
         get {
-            pageManager.selection
+            pageManager.currentIndex
         } set {
-            pageManager.selection = newValue
+            pageManager.currentIndex = newValue
         }
     }
     public var options: BrowserOptionsInfo
@@ -58,21 +58,23 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     
     public private(set) lazy var closeButton: UIButton = {
         let view = UIButton(type: .system)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
         view.addTarget(self, action: #selector(closeButtonTapped(_:)), for: .touchUpInside)
         if #available(iOS 15.0, *) {
             var configuration = UIButton.Configuration.plain()
-            configuration.preferredSymbolConfigurationForImage = .init(pointSize: 18, weight: .regular)
+            configuration.preferredSymbolConfigurationForImage = .init(pointSize: 14, weight: .regular)
             view.configuration = configuration
         } else { // TODO: need Test
             view.imageView?.contentMode = .scaleAspectFit
-            view.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-            view.imageView?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            view.imageEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         }
         return view
     }()
     public private(set) lazy var pageLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.font = UIFont.systemFont(ofSize: 16)
+        view.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return view
     }()
     
@@ -80,8 +82,8 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         self.options = options
         self.browserDelegate = delegate
         self.pageManager = .init()
-        self.pageManager.selection = options.index
         super.init(nibName: nil, bundle: nil)
+        self.currentIndex = options.index
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = transition
         self.modalPresentationCapturesStatusBarAppearance = true
@@ -166,8 +168,13 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     
     /// Called when a single tap is detected in the browser.
     open func browserDidSingleTap(_ browser: BrowserController) {
-        browserDelegate?.browser(self, singleTappedOnItem: pageManager.selection)
-        hideToolBar(isHidden: shouldHideToolBar(in: self), isAnimated: false)
+        browserDelegate?.browser(self, singleTappedOnItem: currentIndex)
+        switch options.singleTapAction {
+        case .none:
+            hideToolBar(isHidden: shouldHideToolBar(in: self), isAnimated: false)
+        case .dismiss:
+            dismiss()
+        }
     }
     
     /// Asks the delegate whether the toolbar should be hidden.
@@ -251,7 +258,7 @@ extension BrowserController {
     private func getTransition() -> ScaleTransition {
         ScaleTransition(backgroundColor: options.theme[color: .background]) { [weak self] in
             guard let self = self else { return nil }
-            return browserDelegate?.browser(self, relatedViewAt: self.pageManager.selection)
+            return browserDelegate?.browser(self, relatedViewAt: self.currentIndex)
         } to: { [weak self] in
             guard let self = self else { return nil }
             self.view.layoutIfNeeded()

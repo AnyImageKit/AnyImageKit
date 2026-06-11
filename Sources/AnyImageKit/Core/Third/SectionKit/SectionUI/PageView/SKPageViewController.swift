@@ -37,7 +37,15 @@ public final class SKPageManager: NSObject {
         var value: Value
     }
     
-    @SKPublished public var selection = 0
+    public var currentIndex: Int {
+        get {
+            current?.index ?? selection
+        } set {
+            selection = newValue
+        }
+    }
+    
+    @SKPublished private var selection = 0
     @SKPublished public var scrollDirection: UICollectionView.ScrollDirection = .horizontal
     @SKPublished public var spacing: CGFloat = 0
     @SKPublished public var childs = [Child]()
@@ -105,7 +113,6 @@ extension SKPageManager {
                                               animated: false,
                                               completion: nil)
             }
-            self.selection = item.value
             self.current = .init(index: item.value, controller: (child as? SKPageChildController)?.model?.controller)
         }.store(in: &cancellables)
         container = controller

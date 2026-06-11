@@ -107,7 +107,6 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     private var containerSize: CGSize = .zero
     private var isResourceFromPHAsset: Bool = false
     private var model: BrowserResource?
-    
     public var options: BrowserOptionsInfo = .init()
     public let contentSafeAreaLayoutGuide: UILayoutGuide
     public var isToolBarHidden = true
@@ -217,7 +216,6 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     /// Re-layouts the view and its subviews.
     open func layout() {
         scrollView.frame = bounds
-        scrollView.setZoomScale(1.0, animated: false)
         imageView.frame = fitFrame
         let minZoomScale = getDefaultScale()
         let maxZoomScale = getMaxZoomScale(with: minZoomScale)
@@ -259,14 +257,9 @@ open class BrowserPreviewView: UIView, BrowserOptionsConfigurable {
     open var fitSize: CGSize {
         let imageSize = self.imageSize
         if imageSize == .zero { return .zero }
-        let screenSize = ScreenHelper.mainBounds.size
+        let width = scrollView.bounds.width > 0 ? scrollView.bounds.width : ScreenHelper.mainBounds.width
         let scale = imageSize.height / imageSize.width
-        var size = CGSize(width: screenSize.width, height: scale * screenSize.width)
-        if size.width > size.height {
-            size.width = size.width * screenSize.height / size.height
-            size.height = screenSize.height
-        }
-        return size
+        return CGSize(width: width, height: scale * width)
     }
     
     /// 取图片适屏frame
@@ -316,23 +309,6 @@ extension BrowserPreviewView {
     
     /// 获取缩放比例
     private func getDefaultScale() -> CGFloat {
-        let imageSize = self.imageSize
-        if imageSize == .zero { return 1.0 }
-        let width = scrollView.bounds.width
-        let scale = imageSize.height / imageSize.width
-        let size = CGSize(width: width, height: scale * width)
-        let screenSize = ScreenHelper.mainBounds.size
-        if size.width > size.height {
-            return size.height / screenSize.height
-        }
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            let height = scrollView.bounds.height
-            let scale = imageSize.width / imageSize.height
-            let size = CGSize(width: height * scale, height: height)
-            if size.height > size.width {
-                return size.width / screenSize.width
-            }
-        }
         return 1.0
     }
     
@@ -351,8 +327,8 @@ extension BrowserPreviewView {
             self.setDownloadingProgress(response.progress)
             if let image = response.image {
                 self.imageView.image = image
-                self.layout()
                 self.needLayout = true
+                self.setNeedsLayout()
             }
         case .failure(let error):
             self.loadFailed(error: error)

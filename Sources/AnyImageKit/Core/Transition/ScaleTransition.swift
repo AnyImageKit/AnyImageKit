@@ -44,7 +44,7 @@ public class ScaleTransition: NSObject, UIViewControllerTransitioningDelegate {
         direction: AnimatedTransitionDirection
     ) -> UIViewControllerAnimatedTransitioning? {
         guard let from = fromView?(), let to = toView?() else {
-            return nil
+            return FadeAnimator(direction: direction)
         }
 
         let image: UIImage?

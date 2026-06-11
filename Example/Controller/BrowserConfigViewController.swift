@@ -100,24 +100,6 @@ final class BrowserConfigViewController: UITableViewController {
 // MARK: - Tapped
 extension BrowserConfigViewController {
     
-    private func themeTapped(_ indexPath: IndexPath) {
-        let alert = UIAlertController(title: "Theme", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Auto", style: .default, handler: { [weak self] (action) in
-            self?.options.theme = .init(style: .auto)
-            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
-        }))
-        alert.addAction(UIAlertAction(title: "Light", style: .default, handler: { [weak self] (action) in
-            self?.options.theme = .init(style: .light)
-            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
-        }))
-        alert.addAction(UIAlertAction(title: "Dark", style: .default, handler: { [weak self] (action) in
-            self?.options.theme = .init(style: .dark)
-            (self?.tableView.cellForRow(at: indexPath) as? ConfigCell)?.contentLabel.text = action.title
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-    
     private func resourceTapped(_ indexPath: IndexPath) {
         let alert = UIAlertController(title: "Resource", message: nil, preferredStyle: .alert)
         for type in ResourceType.allCases {
@@ -160,14 +142,11 @@ extension BrowserConfigViewController {
     
     // MARK: - Config
     enum ConfigRowType: Int, CaseIterable, RowTypeRule {
-        case theme = 0
-        case resource
+        case resource = 0
         case showStatusBar
         
         var title: String {
             switch self {
-            case .theme:
-                return "Theme"
             case .resource:
                 return "ResourceType"
             case .showStatusBar:
@@ -177,8 +156,6 @@ extension BrowserConfigViewController {
         
         var options: String {
             switch self {
-            case .theme:
-                return ".theme"
             case .resource:
                 return ".resources"
             case .showStatusBar:
@@ -188,8 +165,6 @@ extension BrowserConfigViewController {
         
         var defaultValue: String {
             switch self {
-            case .theme:
-                return "Auto"
             case .resource:
                 return "Image and Video URL"
             case .showStatusBar:
@@ -200,8 +175,6 @@ extension BrowserConfigViewController {
         func getFunction<T: UIViewController>(_ controller: T) -> ((IndexPath) -> Void) {
             guard let controller = controller as? BrowserConfigViewController else { return { _ in } }
             switch self {
-            case .theme:
-                return controller.themeTapped
             case .resource:
                 return controller.resourceTapped
             case .showStatusBar:
