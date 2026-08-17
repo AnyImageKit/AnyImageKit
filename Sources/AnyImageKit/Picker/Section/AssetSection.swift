@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class AssetSection: SKCSectionProtocol {
+final class AssetSection: SKCSectionProtocol, SKCViewDataSourcePrefetchingProtocol {
     
     typealias AssetSectionCallback = (index: Int, asset: Asset)
     
@@ -19,19 +19,13 @@ final class AssetSection: SKCSectionProtocol {
     let showAlertEvent = Delegate<String, Void>()
     let configCellEvent = Delegate<AssetCell, Void>()
     
-    private enum CellType {
-        case asset(AssetCell.Model)
-        case camera(CameraCell.Model)
-    }
-    
-    private var cellTypes: [CellType] = []
-    var itemCount: Int { cellTypes.count }
+    var itemCount: Int { album?.itemCount ?? 0 }
     var minimumLineSpacing: CGFloat = 2
     var minimumInteritemSpacing: CGFloat = 2
     var sectionInjection: SKCSectionInjection?
     
     private let manager: PickerManager
-    private(set) var assets: [Asset] = []
+    private var album: Album?
     private var columnCount: CGFloat = 4
     private var hasCamera = false
     
@@ -58,19 +52,20 @@ final class AssetSection: SKCSectionProtocol {
 // MARK: - Public function
 extension AssetSection {
     
-    func config(assets: [Asset], columnCount: Int) {
-        self.assets = assets
+    func config(album: Album?, columnCount: Int) {
+        self.album = album
         self.columnCount = CGFloat(columnCount)
-        self.hasCamera = false
-        cellTypes = assets.map {
-            if $0.isCamera {
-                self.hasCamera = true
-                return .camera(())
-            } else {
-                return .asset(.init(asset: $0, manager: manager))
-            }
-        }
+        self.hasCamera = album?.hasCamera ?? false
         reload()
+    }
+
+    func asset(at row: Int) -> Asset? {
+        guard let album, let asset = album.asset(at: row) else { return nil }
+        if let selectedAsset = manager.selectedAssets.first(where: { $0.identifier == asset.identifier }), selectedAsset !== asset {
+            album.cache(selectedAsset)
+            return selectedAsset
+        }
+        return asset
     }
     
 }
@@ -84,12 +79,22 @@ extension AssetSection {
     }
     
     func item(at row: Int) -> UICollectionViewCell {
-        switch cellTypes[row] {
-        case .asset(let model):
+        guard let asset = asset(at: row) else { return dequeue(at: row) as AssetCell }
+        if asset.isCamera {
+            let cell = dequeue(at: row) as CameraCell
+            cell.config(())
+            cell.update(options: manager.options)
+            cell.isAccessibilityElement = true
+            cell.accessibilityTraits = .button
+            cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
+            return cell
+        } else {
+            let model = AssetCell.Model(asset: asset, manager: manager)
             let cell = dequeue(at: row) as AssetCell
             cell.config(model)
             cell.selectEvent.delegate(on: self) { (self, _) in
-                self.selectedEvent.call((row, self.assets[row]))
+                guard let asset = self.asset(at: row) else { return }
+                self.selectedEvent.call((row, asset))
             }
             cell.backgroundColor = UIColor.white
             cell.isAccessibilityElement = true
@@ -97,14 +102,6 @@ extension AssetSection {
             let accessibilityLabel = manager.options.theme[string: model.asset.mediaType == .video ? .video : .photo]
             cell.accessibilityLabel = "\(accessibilityLabel)\(row)"
             configCellEvent.call(cell)
-            return cell
-        case .camera(let model):
-            let cell = dequeue(at: row) as CameraCell
-            cell.config(model)
-            cell.update(options: manager.options)
-            cell.isAccessibilityElement = true
-            cell.accessibilityTraits = .button
-            cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
             return cell
         }
     }
@@ -118,19 +115,17 @@ extension AssetSection {
     }
     
     func item(willDisplay view: UICollectionViewCell, row: Int) {
-        guard let cell = view as? AssetCell else { return }
-        cell.updateState(assets[row], manager: manager, animated: false)
+        guard let cell = view as? AssetCell, let asset = asset(at: row) else { return }
+        cell.updateState(asset, manager: manager, animated: false)
     }
     
     func item(didEndDisplaying view: UICollectionViewCell, row: Int) {
         guard let _ = view as? AssetCell else { return }
-        if row < assets.count {
-            assets[row].cleanImageIfNeeded()
-        }
+        asset(at: row)?.cleanImageIfNeeded()
     }
     
     func item(selected row: Int) {
-        let asset = assets[row]
+        guard let asset = asset(at: row) else { return }
 #if ANYIMAGEKIT_ENABLE_CAPTURE
         if asset.isCamera { // 点击拍照 Item
             openCaptureEvent.call()
@@ -156,6 +151,12 @@ extension AssetSection {
             openPreviewEvent.call((row, asset))
         }
     }
+
+    func prefetch(at rows: [Int]) {
+        rows.forEach { _ = asset(at: $0) }
+    }
+
+    func cancelPrefetching(at rows: [Int]) { }
     
 #if ANYIMAGEKIT_ENABLE_EDITOR
     func canOpenEditor(with asset: Asset) -> Bool {

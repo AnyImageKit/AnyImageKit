@@ -15,7 +15,7 @@ extension PhotoPreviewController {
     
     /// ToolBar - Edit
     @objc func editButtonTapped() {
-        let asset = assets[currentIndex]
+        guard let asset = asset(at: currentIndex) else { return }
         trackObserver?.track(event: .pickerEdit, userInfo: [:])
         if asset.mediaType == .photo {
             if let image = asset._images[.initial] {
@@ -72,10 +72,9 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         guard result.type == .photo else { return }
         guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
-        let asset = assets[currentIndex]
+        guard let asset = asset(at: currentIndex) else { return }
         asset._images[.edited] = result.isEdited ? photo : nil
         
-        options.resources[currentIndex] = result.isEdited ? .image(photo) : .phAsset(asset.phAsset)
         super.update(options: options)
         reloadThumbnailPreview()
         delegate?.previewController(self, didFinishEditing: currentIndex)

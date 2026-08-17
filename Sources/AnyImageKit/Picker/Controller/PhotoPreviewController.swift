@@ -46,6 +46,37 @@ extension PhotoPreviewControllerDelegate {
     func preview(_ controller: PhotoPreviewController, didChangeIndex index: Int) { }
 }
 
+protocol PickerAssetProvider: AnyObject {
+    var count: Int { get }
+    func asset(at index: Int) -> Asset?
+}
+
+final class PickerArrayAssetProvider: PickerAssetProvider {
+    private let assets: [Asset]
+    var count: Int { assets.count }
+
+    init(assets: [Asset]) {
+        self.assets = assets
+    }
+
+    func asset(at index: Int) -> Asset? {
+        assets.indices.contains(index) ? assets[index] : nil
+    }
+}
+
+final class PickerAlbumAssetProvider: PickerAssetProvider {
+    private let album: Album
+    var count: Int { album.count }
+
+    init(album: Album) {
+        self.album = album
+    }
+
+    func asset(at index: Int) -> Asset? {
+        album.mediaAsset(at: index)
+    }
+}
+
 final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable {
     
     enum SourceType: Int {
@@ -57,14 +88,20 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     
     let manager: PickerManager
     let sourceType: SourceType
-    let assets: [Asset]
+    let assetProvider: PickerAssetProvider
+
+    var assetCount: Int { assetProvider.count }
+
+    func asset(at index: Int) -> Asset? {
+        assetProvider.asset(at: index)
+    }
     
     private var toolBarHiddenStateBeforePan = false
     
-    init(manager: PickerManager, sourceType: SourceType, assets: [Asset], options: BrowserOptionsInfo, browserDelegate: BrowserControllerDelegate) {
+    init(manager: PickerManager, sourceType: SourceType, assetProvider: PickerAssetProvider, options: BrowserOptionsInfo, browserDelegate: BrowserControllerDelegate) {
         self.manager = manager
         self.sourceType = sourceType
-        self.assets = assets
+        self.assetProvider = assetProvider
         super.init(options: options, delegate: browserDelegate)
     }
     
@@ -96,7 +133,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     private lazy var thumbnailPreviewView: PickerThumbnailPreviewView = {
         let view = PickerThumbnailPreviewView(frame: .zero)
         view.delegate = self
-        view.configure(with: assets, manager: manager, currentIndex: options.index)
+        view.configure(with: assetProvider, manager: manager, currentIndex: options.index)
         return view
     }()
     private(set) lazy var toolBar: PickerToolBar = {
@@ -124,7 +161,9 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
         super.viewDidLoad()
         setupViews()
         update(options: manager.options)
-        syncPreviewToolBar(for: assets[currentIndex])
+        if let asset = asset(at: currentIndex) {
+            syncPreviewToolBar(for: asset)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -172,7 +211,7 @@ final class PhotoPreviewController: BrowserController, PickerOptionsConfigurable
     
     override func browser(_ browser: BrowserController, didChangeIndex index: Int) {
         super.browser(browser, didChangeIndex: index)
-        let asset = assets[index]
+        guard let asset = asset(at: index) else { return }
         navigationBar.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: false)
         thumbnailPreviewView.reloadSelectionState()
         syncPreviewToolBar(for: asset)
@@ -352,7 +391,7 @@ extension PhotoPreviewController {
     
     /// NavigationBar - Select
     @objc func selectButtonTapped() {
-        let asset = assets[currentIndex]
+        guard let asset = asset(at: currentIndex) else { return }
         
         if !asset.isSelected {
             let result = manager.addSelectedAsset(asset)
@@ -389,13 +428,14 @@ extension PhotoPreviewController {
         delegate?.previewController(self, useOriginalImage: flag)
         
         // 选择当前照片
-        if manager.useOriginalImage && !manager.isUpToLimit {
-            let asset = assets[currentIndex]
+        if manager.useOriginalImage && !manager.isUpToLimit, let asset = asset(at: currentIndex) {
             if !asset.isSelected {
                 selectButtonTapped()
             }
         }
-        syncPreviewToolBar(for: assets[currentIndex])
+        if let asset = asset(at: currentIndex) {
+            syncPreviewToolBar(for: asset)
+        }
         trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: flag, .page: AnyImagePage.pickerPreview])
     }
     
@@ -413,7 +453,7 @@ extension PhotoPreviewController {
     }
     
     private func handleDoneAction() {
-        let asset = assets[currentIndex]
+        guard let asset = asset(at: currentIndex) else { return }
         if manager.selectedAssets.isEmpty {
             if case .disable(let rule) = asset.state {
                 let message = rule.alertMessage(for: asset, assetList: manager.selectedAssets)
@@ -453,7 +493,7 @@ extension PhotoPreviewController: UIScrollViewDelegate {
         let progress: CGFloat
         
         if offsetFromBase > 0 {
-            toIndex = min(fromIndex + 1, assets.count - 1)
+            toIndex = min(fromIndex + 1, assetCount - 1)
             guard toIndex > fromIndex else { return }
             progress = offsetFromBase / pageSpan
         } else {

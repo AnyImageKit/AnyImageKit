@@ -31,7 +31,8 @@ final class PickerThumbnailPreviewView: UIView {
         }
     }
     
-    private var assets: [Asset] = []
+    private var assetProvider: PickerAssetProvider?
+    private var assetCount: Int { assetProvider?.count ?? 0 }
     private var options: PickerOptionsInfo?
     private weak var manager: PickerManager?
     private var lastNotifiedIndex = -1
@@ -51,7 +52,7 @@ final class PickerThumbnailPreviewView: UIView {
         let layout = ThumbnailLayout()
         layout.normalItemSize = CGSize(width: Constants.thumbnailWidth, height: Constants.thumbnailHeight)
         layout.maxCenterHeight = Constants.thumbnailHeight
-        layout.assetsProvider = { [weak self] in self?.assets ?? [] }
+        layout.assetProvider = { [weak self] index in self?.asset(at: index) }
         return layout
     }()
     
@@ -114,8 +115,8 @@ final class PickerThumbnailPreviewView: UIView {
         gradientMaskLayer.locations = [0, leftStop, leftStop2, rightStop2, rightStop, 1]
     }
     
-    func configure(with assets: [Asset], manager: PickerManager, currentIndex: Int = 0) {
-        self.assets = assets
+    func configure(with assetProvider: PickerAssetProvider, manager: PickerManager, currentIndex: Int = 0) {
+        self.assetProvider = assetProvider
         self.manager = manager
         self.currentIndex = currentIndex
         self.lastNotifiedIndex = currentIndex
@@ -126,19 +127,23 @@ final class PickerThumbnailPreviewView: UIView {
             self?.scrollToItem(at: currentIndex, animated: false)
         }
     }
+
+    private func asset(at index: Int) -> Asset? {
+        assetProvider?.asset(at: index)
+    }
     
     func reloadSelectionState() {
         for indexPath in collectionView.indexPathsForVisibleItems {
-            guard indexPath.item < assets.count,
+            guard let asset = asset(at: indexPath.item),
                   let cell = collectionView.cellForItem(at: indexPath) as? ThumbnailCell else {
                 continue
             }
-            cell.configure(with: assets[indexPath.item], options: options, manager: manager)
+            cell.configure(with: asset, options: options, manager: manager)
         }
     }
     
     func setCurrentIndex(_ index: Int, animated: Bool) {
-        guard index >= 0 && index < assets.count else { return }
+        guard index >= 0 && index < assetCount else { return }
         isSyncingCurrentIndex = true
         currentIndex = index
         isSyncingCurrentIndex = false
@@ -158,8 +163,8 @@ final class PickerThumbnailPreviewView: UIView {
     func updateScrollProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
         guard !isUserScrolling else { return }
         guard !isIgnoringExternalScroll else { return }
-        guard fromIndex >= 0 && fromIndex < assets.count,
-              toIndex >= 0 && toIndex < assets.count else {
+        guard fromIndex >= 0 && fromIndex < assetCount,
+              toIndex >= 0 && toIndex < assetCount else {
             return
         }
         
@@ -197,7 +202,7 @@ final class PickerThumbnailPreviewView: UIView {
     }
     
     func scrollToItem(at index: Int, animated: Bool) {
-        guard index >= 0 && index < assets.count else { return }
+        guard index >= 0 && index < assetCount else { return }
         let targetOffset = calculateExpandedOffset(for: index)
         
         if animated {
@@ -228,7 +233,7 @@ final class PickerThumbnailPreviewView: UIView {
     private func calculateExpandedOffset(for index: Int) -> CGFloat {
         let itemCenterX = ThumbnailLayout.calculateExpandedCenterX(
             for: index,
-            assets: assets,
+            assetProvider: { [weak self] in self?.asset(at: $0) },
             normalItemSize: layout.normalItemSize,
             maxCenterHeight: layout.maxCenterHeight
         )
@@ -244,28 +249,28 @@ final class PickerThumbnailPreviewView: UIView {
     }
     
     private func calculateCollapsedCenterIndex() -> Int {
-        guard assets.count > 0 else { return 0 }
+        guard assetCount > 0 else { return 0 }
         let centerX = collectionView.contentOffset.x + collectionView.bounds.width / 2
         let itemStride = layout.normalItemSize.width + Constants.normalSpacing
         guard itemStride > 0 else { return 0 }
         let index = Int(round((centerX - layout.normalItemSize.width / 2) / itemStride))
-        return max(0, min(assets.count - 1, index))
+        return max(0, min(assetCount - 1, index))
     }
     
     private func calculateExpandedCenterIndex() -> Int {
         let centerX = collectionView.contentOffset.x + collectionView.bounds.width / 2
         return ThumbnailLayout.calculateClosestExpandedIndex(
             to: centerX,
-            assets: assets,
+            assetProvider: { [weak self] in self?.asset(at: $0) },
             normalItemSize: layout.normalItemSize,
             maxCenterHeight: layout.maxCenterHeight,
-            itemCount: assets.count
+            itemCount: assetCount
         )
     }
     
     private func notifyCenterIndexIfChanged() {
         let centerIndex = calculateCollapsedCenterIndex()
-        if centerIndex != lastNotifiedIndex && centerIndex >= 0 && centerIndex < assets.count {
+        if centerIndex != lastNotifiedIndex && centerIndex >= 0 && centerIndex < assetCount {
             lastNotifiedIndex = centerIndex
             feedbackGenerator.selectionChanged()
             feedbackGenerator.prepare()
@@ -305,12 +310,14 @@ final class PickerThumbnailPreviewView: UIView {
 extension PickerThumbnailPreviewView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        assets.count
+        assetCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ThumbnailCell", for: indexPath) as! ThumbnailCell
-        cell.configure(with: assets[indexPath.item], options: options, manager: manager)
+        if let asset = asset(at: indexPath.item) {
+            cell.configure(with: asset, options: options, manager: manager)
+        }
         return cell
     }
 }
@@ -365,7 +372,7 @@ extension PickerThumbnailPreviewView: UICollectionViewDelegate {
         let proposedOffsetX = targetContentOffset.pointee.x
         let proposedCenterX = proposedOffsetX + collectionView.bounds.width / 2
         let itemWidth = Constants.thumbnailWidth + Constants.normalSpacing
-        let targetIndex = max(0, min(assets.count - 1, Int(round((proposedCenterX - Constants.thumbnailWidth / 2) / itemWidth))))
+        let targetIndex = max(0, min(assetCount - 1, Int(round((proposedCenterX - Constants.thumbnailWidth / 2) / itemWidth))))
         let snappedCenterX = ThumbnailLayout.calculateCollapsedCenterX(
             for: targetIndex,
             normalItemSize: layout.normalItemSize
@@ -396,12 +403,11 @@ private final class ThumbnailLayout: UICollectionViewLayout {
     
     var normalItemSize: CGSize = CGSize(width: 20, height: 30)
     var maxCenterHeight: CGFloat = 30
-    var assetsProvider: (() -> [Asset])?
+    var assetProvider: ((Int) -> Asset?)?
     
     private var state: State = .collapsed
     private var cachedContentSize: CGSize = .zero
     private var cachedItemCount: Int = 0
-    private var cachedAssets: [Asset] = []
     private var cachedCenterY: CGFloat = 0
     
     func setState(_ state: State) {
@@ -420,11 +426,10 @@ private final class ThumbnailLayout: UICollectionViewLayout {
             return
         }
         
-        cachedAssets = assetsProvider?() ?? []
         cachedCenterY = collectionView.bounds.height / 2
         
         // 计算 contentSize（O(1)，不遍历所有 item）
-        cachedContentSize = calculateContentSize(state: state, itemCount: itemCount, assets: cachedAssets, collectionView: collectionView)
+        cachedContentSize = calculateContentSize(state: state, itemCount: itemCount, collectionView: collectionView)
     }
     
     override var collectionViewContentSize: CGSize {
@@ -439,13 +444,13 @@ private final class ThumbnailLayout: UICollectionViewLayout {
             let range = collapsedVisibleRange(in: rect, itemCount: cachedItemCount)
             return makeCollapsedAttributes(range: range, centerY: cachedCenterY)
         case .expanded(let centerIndex):
-            let range = expandedVisibleRange(in: rect, centerIndex: centerIndex, itemCount: cachedItemCount, assets: cachedAssets)
-            return makeExpandedAttributes(centerIndex: centerIndex, range: range, assets: cachedAssets, centerY: cachedCenterY)
+            let range = expandedVisibleRange(in: rect, centerIndex: centerIndex, itemCount: cachedItemCount)
+            return makeExpandedAttributes(centerIndex: centerIndex, range: range, centerY: cachedCenterY)
         case .transition(let fromIndex, let toIndex, let progress):
-            let range1 = expandedVisibleRange(in: rect, centerIndex: fromIndex, itemCount: cachedItemCount, assets: cachedAssets)
-            let range2 = expandedVisibleRange(in: rect, centerIndex: toIndex, itemCount: cachedItemCount, assets: cachedAssets)
+            let range1 = expandedVisibleRange(in: rect, centerIndex: fromIndex, itemCount: cachedItemCount)
+            let range2 = expandedVisibleRange(in: rect, centerIndex: toIndex, itemCount: cachedItemCount)
             let mergedRange = min(range1.lowerBound, range2.lowerBound)..<max(range1.upperBound, range2.upperBound)
-            return makeTransitionAttributes(fromIndex: fromIndex, toIndex: toIndex, progress: progress, range: mergedRange, assets: cachedAssets, centerY: cachedCenterY)
+            return makeTransitionAttributes(fromIndex: fromIndex, toIndex: toIndex, progress: progress, range: mergedRange, centerY: cachedCenterY)
         }
     }
     
@@ -468,7 +473,7 @@ private final class ThumbnailLayout: UICollectionViewLayout {
             attr.zIndex = 1
         case .expanded(let centerIndex):
             let centerWidth = Self.calculateCenterItemWidth(
-                for: cachedAssets.indices.contains(centerIndex) ? cachedAssets[centerIndex] : nil,
+                for: assetProvider?(centerIndex),
                 maxHeight: maxCenterHeight, minWidth: normalItemSize.width
             )
             let isCenterItem = index == centerIndex
@@ -478,11 +483,11 @@ private final class ThumbnailLayout: UICollectionViewLayout {
             attr.zIndex = isCenterItem ? 1000 : max(1, 1000 - abs(index - centerIndex))
         case .transition(let fromIndex, let toIndex, let progress):
             let fromCW = Self.calculateCenterItemWidth(
-                for: cachedAssets.indices.contains(fromIndex) ? cachedAssets[fromIndex] : nil,
+                for: assetProvider?(fromIndex),
                 maxHeight: maxCenterHeight, minWidth: normalItemSize.width
             )
             let toCW = Self.calculateCenterItemWidth(
-                for: cachedAssets.indices.contains(toIndex) ? cachedAssets[toIndex] : nil,
+                for: assetProvider?(toIndex),
                 maxHeight: maxCenterHeight, minWidth: normalItemSize.width
             )
             let fromIsCenter = index == fromIndex
@@ -516,26 +521,26 @@ private final class ThumbnailLayout: UICollectionViewLayout {
     
     // MARK: - Content Size (O(1))
     
-    private func calculateContentSize(state: State, itemCount: Int, assets: [Asset], collectionView: UICollectionView) -> CGSize {
+    private func calculateContentSize(state: State, itemCount: Int, collectionView: UICollectionView) -> CGSize {
         let height = collectionView.bounds.height
         let width: CGFloat
         switch state {
         case .collapsed:
             width = CGFloat(itemCount) * normalItemSize.width + CGFloat(max(0, itemCount - 1)) * Constants.normalSpacing
         case .expanded(let centerIndex):
-            width = expandedContentWidth(centerIndex: centerIndex, itemCount: itemCount, assets: assets)
+            width = expandedContentWidth(centerIndex: centerIndex, itemCount: itemCount)
         case .transition(let fromIndex, let toIndex, let progress):
-            let fromW = expandedContentWidth(centerIndex: fromIndex, itemCount: itemCount, assets: assets)
-            let toW = expandedContentWidth(centerIndex: toIndex, itemCount: itemCount, assets: assets)
+            let fromW = expandedContentWidth(centerIndex: fromIndex, itemCount: itemCount)
+            let toW = expandedContentWidth(centerIndex: toIndex, itemCount: itemCount)
             width = fromW + (toW - fromW) * progress
         }
         return CGSize(width: width, height: height)
     }
     
-    private func expandedContentWidth(centerIndex: Int, itemCount: Int, assets: [Asset]) -> CGFloat {
+    private func expandedContentWidth(centerIndex: Int, itemCount: Int) -> CGFloat {
         // All items are normalItemSize except centerIndex which is wider, and centerIndex has centerSpacing on both sides
         let centerWidth = Self.calculateCenterItemWidth(
-            for: assets.indices.contains(centerIndex) ? assets[centerIndex] : nil,
+            for: assetProvider?(centerIndex),
             maxHeight: maxCenterHeight,
             minWidth: normalItemSize.width
         )
@@ -565,7 +570,7 @@ private final class ThumbnailLayout: UICollectionViewLayout {
         return start..<max(start, end)
     }
     
-    private func expandedVisibleRange(in rect: CGRect, centerIndex: Int, itemCount: Int, assets: [Asset]) -> Range<Int> {
+    private func expandedVisibleRange(in rect: CGRect, centerIndex: Int, itemCount: Int) -> Range<Int> {
         // 中心 item 宽度不同，但其他 item 都是 normalItemSize
         // 用公式近似：先用 normalSpacing stride 估算，再向两侧各扩展几个 item 作为安全余量
         let itemStride = normalItemSize.width + Constants.normalSpacing
@@ -629,11 +634,10 @@ private final class ThumbnailLayout: UICollectionViewLayout {
     private func makeExpandedAttributes(
         centerIndex: Int,
         range: Range<Int>,
-        assets: [Asset],
         centerY: CGFloat
     ) -> [UICollectionViewLayoutAttributes] {
         let centerWidth = Self.calculateCenterItemWidth(
-            for: assets.indices.contains(centerIndex) ? assets[centerIndex] : nil,
+            for: assetProvider?(centerIndex),
             maxHeight: maxCenterHeight,
             minWidth: normalItemSize.width
         )
@@ -655,16 +659,15 @@ private final class ThumbnailLayout: UICollectionViewLayout {
         toIndex: Int,
         progress: CGFloat,
         range: Range<Int>,
-        assets: [Asset],
         centerY: CGFloat
     ) -> [UICollectionViewLayoutAttributes] {
         let fromCenterWidth = Self.calculateCenterItemWidth(
-            for: assets.indices.contains(fromIndex) ? assets[fromIndex] : nil,
+            for: assetProvider?(fromIndex),
             maxHeight: maxCenterHeight,
             minWidth: normalItemSize.width
         )
         let toCenterWidth = Self.calculateCenterItemWidth(
-            for: assets.indices.contains(toIndex) ? assets[toIndex] : nil,
+            for: assetProvider?(toIndex),
             maxHeight: maxCenterHeight,
             minWidth: normalItemSize.width
         )
@@ -708,7 +711,7 @@ private final class ThumbnailLayout: UICollectionViewLayout {
     
     static func calculateExpandedCenterX(
         for index: Int,
-        assets: [Asset],
+        assetProvider: (Int) -> Asset?,
         normalItemSize: CGSize,
         maxCenterHeight: CGFloat
     ) -> CGFloat {
@@ -728,7 +731,7 @@ private final class ThumbnailLayout: UICollectionViewLayout {
         }
         
         let centerWidth = calculateCenterItemWidth(
-            for: assets.indices.contains(index) ? assets[index] : nil,
+            for: assetProvider(index),
             maxHeight: maxCenterHeight,
             minWidth: normalItemSize.width
         )
@@ -737,7 +740,7 @@ private final class ThumbnailLayout: UICollectionViewLayout {
     
     static func calculateClosestExpandedIndex(
         to centerX: CGFloat,
-        assets: [Asset],
+        assetProvider: (Int) -> Asset?,
         normalItemSize: CGSize,
         maxCenterHeight: CGFloat,
         itemCount: Int
@@ -756,7 +759,7 @@ private final class ThumbnailLayout: UICollectionViewLayout {
         for index in lo...hi {
             let itemCenterX = calculateExpandedCenterX(
                 for: index,
-                assets: assets,
+                assetProvider: assetProvider,
                 normalItemSize: normalItemSize,
                 maxCenterHeight: maxCenterHeight
             )

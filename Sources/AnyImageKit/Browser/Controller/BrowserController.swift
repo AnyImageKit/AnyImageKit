@@ -122,14 +122,14 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
         }
         
         pageLabel.textColor = options.theme[color: .primary]
-        pageLabel.text = "\(options.index + 1)/\(options.resources.count)"
+        pageLabel.text = "\(options.index + 1)/\(options.resourceCount)"
         
         options.theme.buttonConfiguration[.close]?.configuration(closeButton)
         options.theme.labelConfiguration[.page]?.configuration(pageLabel)
         
         viewControllers.forEach {
             if let controller = $0.controller {
-                controller.previewView.config(options.resources[controller.index])
+                controller.previewView.config(options.resource(at: controller.index))
             }
         }
     }
@@ -142,7 +142,7 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
     
     /// Called when the browser's page index changes.
     open func browser(_ browser: BrowserController, didChangeIndex index: Int) {
-        pageLabel.text = "\(index + 1)/\(options.resources.count)"
+        pageLabel.text = "\(index + 1)/\(options.resourceCount)"
     }
     
     /// Called when the pan gesture for dismissal begins.
@@ -195,26 +195,25 @@ open class BrowserController: AnyImageViewController, BrowserOptionsConfigurable
 extension BrowserController {
     
     private func setupPageManager() {
-        pageManager.childs = options.resources.map { resource in
-                .withController { [weak self] context in
-                    guard let self = self else { return UIViewController() }
-                    let controller = self.options.previewClass.init(options: self.options)
-                    if let image = self.options.placeholdImage, self.isFirstLoad {
-                        self.isFirstLoad = false
-                        controller.placeholdImage = image
-                    }
-                    controller.config(resource)
-                    controller.index = context.index
-                    controller.hideToolBar(isHidden: self.shouldHideToolBar(in: self), isAnimated: false)
-                    controller.previewView.delegate = self
-                    controller.needSyncLayoutGuideEvent.delegate(on: self) { (self, _)  in
-                        self.syncLayoutGuide(isAnimated: false, force: true)
-                    }
-                    self.viewControllers.removeAll(where: { $0.controller == nil })
-                    self.viewControllers.append(.init(controller))
-                    return controller
-                }
+        let child = SKPageManager.Child.withController { [weak self] context in
+            guard let self = self else { return UIViewController() }
+            let controller = self.options.previewClass.init(options: self.options)
+            if let image = self.options.placeholdImage, self.isFirstLoad {
+                self.isFirstLoad = false
+                controller.placeholdImage = image
+            }
+            controller.config(self.options.resource(at: context.index))
+            controller.index = context.index
+            controller.hideToolBar(isHidden: self.shouldHideToolBar(in: self), isAnimated: false)
+            controller.previewView.delegate = self
+            controller.needSyncLayoutGuideEvent.delegate(on: self) { (self, _)  in
+                self.syncLayoutGuide(isAnimated: false, force: true)
+            }
+            self.viewControllers.removeAll(where: { $0.controller == nil })
+            self.viewControllers.append(.init(controller))
+            return controller
         }
+        pageManager.childs = Array(repeating: child, count: options.resourceCount)
     }
     
     private func setupView() {

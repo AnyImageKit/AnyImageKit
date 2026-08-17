@@ -85,19 +85,29 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: BrowserControllerDelegate {
     
     func openPreview(asset: Asset, assets: [Asset], index: Int, sourceType: PhotoPreviewController.SourceType) {
+        openPreview(asset: asset, assetProvider: PickerArrayAssetProvider(assets: assets), index: index, sourceType: sourceType)
+    }
+
+    func openPreview(asset: Asset, album: Album, index: Int) {
+        openPreview(asset: asset, assetProvider: PickerAlbumAssetProvider(album: album), index: index, sourceType: .album)
+    }
+
+    private func openPreview(asset: Asset, assetProvider: PickerAssetProvider, index: Int, sourceType: PhotoPreviewController.SourceType) {
         var options = BrowserOptionsInfo()
         options.index = index
-        options.resources = assets.map {
-            if let image = $0._images[.edited] {
+        options.lazyResourceCount = assetProvider.count
+        options.lazyResourceProvider = { index in
+            guard let asset = assetProvider.asset(at: index) else { return .image(.init()) }
+            if let image = asset._images[.edited] {
                 return .image(image)
             } else {
-                return .phAsset($0.phAsset)
+                return .phAsset(asset.phAsset)
             }
         }
         options.placeholdImage = asset.placeholdImage
         options.phAssetSupportedTypes = manager.options.selectOptions
         options.theme[color: .background] = UIColor.create(style: manager.options.theme.style, light: .white, dark: .black)
-        let controller = PhotoPreviewController(manager: manager, sourceType: sourceType, assets: assets, options: options, browserDelegate: self)
+        let controller = PhotoPreviewController(manager: manager, sourceType: sourceType, assetProvider: assetProvider, options: options, browserDelegate: self)
         controller.view.tag = sourceType.rawValue
         
         self.previewController = controller
@@ -110,8 +120,8 @@ extension AssetPickerViewController: BrowserControllerDelegate {
         switch sourceType {
         case .album:
             guard let controller = previewController,
-                  controller.assets.indices.contains(index),
-                  let idx = displayIndex(for: controller.assets[index]) else {
+                  let asset = controller.asset(at: index),
+                  let idx = displayIndex(for: asset) else {
                 return nil
             }
             return (section.cellForItem(at: idx) as? AssetCell)?.imageView

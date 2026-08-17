@@ -33,48 +33,16 @@ extension AssetPickerViewController {
         guard let album = album, album.isCameraRoll else { return }
         if album.hasCamera { return }
         let options = manager.options
-        let sortType = options.orderByDate
         if !options.captureOptions.mediaOptions.isEmpty {
-            switch sortType {
-            case .asc:
-                album.addAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), atLast: true)
-            case .desc:
-                album.insertAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions), at: 0, sort: options.orderByDate)
-            }
+            album.addCameraAsset(Asset(idx: Asset.cameraItemIdx, asset: .init(), selectOptions: options.selectOptions))
         }
     }
     
     /// 拍照结束后，插入 PHAsset
     func addPHAsset(_ phAsset: PHAsset) {
         guard let album = album else { return }
-        let sortType = manager.options.orderByDate
-        let asset: Asset
-        switch sortType {
-        case .asc:
-            asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
-            album.addAsset(asset, atLast: false)
-            if #available(iOS 14.0, *) {
-                // iOS 14 将会监听相册，自动刷新
-            } else {
-                collectionView.performBatchUpdates { [weak self] in
-                    self?.collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
-                } completion: { [weak self] _ in
-                    self?.collectionView.reloadData()
-                }
-            }
-        case .desc:
-            asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
-            album.insertAsset(asset, at: 1, sort: manager.options.orderByDate)
-            if #available(iOS 14.0, *) {
-                // iOS 14 将会监听相册，自动刷新
-            } else {
-                collectionView.performBatchUpdates { [weak self] in
-                    self?.collectionView.insertItems(at: [IndexPath(item: 1, section: 0)])
-                } completion: { [weak self] _ in
-                    self?.collectionView.reloadData()
-                }
-            }
-        }
+        let asset = Asset(idx: 0, asset: phAsset, selectOptions: manager.options.selectOptions)
+        album.cache(asset)
         
         updateVisibleCellState()
         toolBar.setEnable(true)
@@ -85,6 +53,8 @@ extension AssetPickerViewController {
             if manager.options.selectLimit == 1 {
                 stopReloadAlbum = true
                 delegate?.assetPickerDidFinishPicking(self)
+            } else {
+                reloadAlbum(album)
             }
         }
     }

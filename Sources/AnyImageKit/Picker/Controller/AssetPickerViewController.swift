@@ -66,6 +66,7 @@ final class AssetPickerViewController: AnyImageViewController {
                                              right: defaultAssetSpacing)
         }
         view.backgroundColor = manager.options.theme[color: .background]
+        view.manager.prefetching.isEnable = true
         return view
     }()
     
@@ -122,55 +123,9 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    private var assets: [Asset] {
-        var assets = album?.assets ?? []
-        switch filterBar.selectedType {
-        case .photo:
-            assets = assets.filter { $0.mediaType.isImage || $0.isCamera }
-        case .video:
-            assets = assets.filter { $0.mediaType.isVideo || $0.isCamera }
-        default: break
-        }
-        if lgAssetSortOption == .capturedDate {
-            assets = sortByCapturedDate(assets)
-        }
-        return assets
-    }
-
-    private func sortByCapturedDate(_ assets: [Asset]) -> [Asset] {
-        let cameraAsset = assets.first(where: \.isCamera)
-        let mediaAssets = assets.enumerated()
-            .filter { !$0.element.isCamera }
-            .sorted { lhs, rhs in
-                let lhsDate = lhs.element.phAsset.creationDate
-                let rhsDate = rhs.element.phAsset.creationDate
-                if lhsDate == rhsDate {
-                    return lhs.offset < rhs.offset
-                }
-                switch (lhsDate, rhsDate) {
-                case let (lhsDate?, rhsDate?):
-                    return manager.options.orderByDate == .asc ? lhsDate < rhsDate : lhsDate > rhsDate
-                case (_?, nil):
-                    return true
-                case (nil, _?):
-                    return false
-                case (nil, nil):
-                    return lhs.offset < rhs.offset
-                }
-            }
-            .map(\.element)
-
-        guard let cameraAsset else { return mediaAssets }
-        switch manager.options.orderByDate {
-        case .asc:
-            return mediaAssets + [cameraAsset]
-        case .desc:
-            return [cameraAsset] + mediaAssets
-        }
-    }
-
-    func currentDisplayAssets() -> [Asset] {
-        assets
+    func configureAlbumDisplay() {
+        let displaySort: Album.DisplaySort = lgAssetSortOption == .capturedDate ? .capturedDate : .recentlyAdded
+        album?.configure(filter: filterBar.selectedType, displaySort: displaySort)
     }
     
     weak var previewController: PhotoPreviewController?
@@ -308,9 +263,10 @@ final class AssetPickerViewController: AnyImageViewController {
             self.openEditor(with: model.asset)
         }
         section.openPreviewEvent.delegate(on: self) { (self, model) in
-            let previewAssets = self.section.assets.filter { !$0.isCamera }
-            guard let previewIndex = previewAssets.firstIndex(of: model.asset) else { return }
-            self.openPreview(asset: model.asset, assets: previewAssets, index: previewIndex, sourceType: .album)
+            guard let album = self.album,
+                  let displayIndex = album.displayIndex(for: model.asset) else { return }
+            let previewIndex = displayIndex - (self.manager.options.orderByDate == .desc && album.hasCamera ? 1 : 0)
+            self.openPreview(asset: model.asset, album: album, index: previewIndex)
         }
         section.showAlertEvent.delegate(on: self) { (self, message) in
             self.showAlert(message: message, stringConfig: self.manager.options.theme)
@@ -324,7 +280,8 @@ final class AssetPickerViewController: AnyImageViewController {
         }
         
         UIView.performWithoutAnimation {
-            section.config(assets: assets, columnCount: manager.options.columnNumber)
+            configureAlbumDisplay()
+            section.config(album: album, columnCount: manager.options.columnNumber)
             scrollToEnd(animated: false)
         }
         collectionView.isUserInteractionEnabled = true
@@ -334,7 +291,7 @@ final class AssetPickerViewController: AnyImageViewController {
         }
         
         if !filterBar.isHidden {
-            filterTipsLabel.isHidden = !section.assets.isEmpty
+            filterTipsLabel.isHidden = (album?.count ?? 0) > 0
             switch filterBar.selectedType {
             case .photo:
                 filterTipsLabel.text = manager.options.theme[string: .emptyAlbumPhotoTip]
@@ -422,23 +379,16 @@ extension AssetPickerViewController {
         }
         manager.cancelAllFetch()
         toolBarSetEnable(!manager.selectedAssets.isEmpty)
-		album.assets.forEach { asset in
-			if !manager.options.clearSelectionAfterSwitchingAlbum,
-			   let selectAsset = manager.selectedAssets.first(where: { asset == $0 }) {
-				asset.state = .selected
-				asset.selectedNum = selectAsset.selectedNum
-                manager.updateAsset(asset) // The asset selected from other albums, so it should be replaced.
-			} else {
-				asset.state = .unchecked
-			}
-		}
+        if !manager.options.clearSelectionAfterSwitchingAlbum {
+            manager.selectedAssets.forEach(album.cache)
+        }
         #if ANYIMAGEKIT_ENABLE_CAPTURE
         addCameraAssetIfNeeded()
         #endif
     }
     
     private func setAlbums(_ albums: [Album]) {
-        self.albums = albums.filter{ !$0.assets.isEmpty }
+        self.albums = albums.filter { $0.count > 0 }
         if let albumsPicker = albumsPicker {
             albumsPicker.albums = albums
             albumsPicker.reloadData()
@@ -458,7 +408,7 @@ extension AssetPickerViewController {
         }
     }
     
-    private func reloadAlbum(_ album: Album) {
+    func reloadAlbum(_ album: Album) {
         guard !stopReloadAlbum else { return }
         manager.fetchAlbum(album) { [weak self] newAlbum in
             guard let self = self else { return }
@@ -470,15 +420,12 @@ extension AssetPickerViewController {
     private func updateAlbum(_ album: Album) {
         // Update selected assets when album assets changed
         for asset in manager.selectedAssets.reversed() {
-            if !(album.assets.contains { $0 == asset }) {
+            if !album.contains(identifier: asset.identifier) {
                 manager.removeSelectedAsset(asset)
             }
         }
         for asset in manager.selectedAssets {
-            if let idx = (album.assets.firstIndex { $0 == asset }) {
-                manager.removeSelectedAsset(asset)
-                manager.addSelectedAsset(album.assets[idx])
-            }
+            album.cache(asset)
         }
         toolBarSetEnable(!manager.selectedAssets.isEmpty)
         
@@ -513,34 +460,25 @@ extension AssetPickerViewController {
     }
     
     func updateVisibleCellState(_ animatedItem: Int = -1) {
-        let visibleAssets = section.assets
         for cell in collectionView.visibleCells {
             if let indexPath = collectionView.indexPath(for: cell),
-               visibleAssets.indices.contains(indexPath.item),
+               let asset = section.asset(at: indexPath.item),
                let cell = cell as? AssetCell {
-                cell.updateState(visibleAssets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
+                cell.updateState(asset, manager: manager, animated: animatedItem == indexPath.item)
             }
         }
     }
     
     func displayIndex(for asset: Asset) -> Int? {
-        return section.assets.firstIndex(of: asset)
+        album?.displayIndex(for: asset)
     }
     
     private func preselectAssets() {
         let preselectAssets = manager.options.preselectAssets
-        var selectedAssets: [Asset] = []
         if preselectAssets.isEmpty { return }
-        for asset in assets.reversed() {
-            if preselectAssets.contains(asset.identifier) {
-                selectedAssets.append(asset)
-                if selectedAssets.count == preselectAssets.count {
-                    break
-                }
-            }
-        }
         for identifier in preselectAssets {
-            if let asset = (selectedAssets.filter{ $0.identifier == identifier }).first {
+            if let index = album?.displayIndex(forIdentifier: identifier),
+               let asset = album?.asset(at: index) {
                 manager.addSelectedAsset(asset)
             }
         }
@@ -556,8 +494,7 @@ extension AssetPickerViewController {
     }
     
     func selectItem(_ idx: Int) {
-        guard section.assets.indices.contains(idx) else { return }
-        let asset = section.assets[idx]
+        guard let asset = section.asset(at: idx) else { return }
         
         if !asset.isSelected {
             let result = manager.addSelectedAsset(asset)
@@ -727,8 +664,7 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     }
 
     func previewController(_ controller: PhotoPreviewController, didFinishEditing index: Int) {
-        guard controller.assets.indices.contains(index) else { return }
-        let asset = controller.assets[index]
+        guard let asset = controller.asset(at: index) else { return }
         guard let displayIndex = displayIndex(for: asset),
               let cell = section.cellForItem(at: displayIndex) as? AssetCell else { return }
         cell.config(.init(asset: asset, manager: manager))
@@ -746,8 +682,8 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     func preview(_ controller: PhotoPreviewController, didChangeIndex index: Int) {
         switch controller.sourceType {
         case .album:
-            guard controller.assets.indices.contains(index),
-                  let idx = displayIndex(for: controller.assets[index]) else { return }
+            guard let asset = controller.asset(at: index),
+                  let idx = displayIndex(for: asset) else { return }
             let indexPath = IndexPath(item: idx, section: 0)
             if !collectionView.indexPathsForVisibleItems.contains(indexPath),
                idx < collectionView.numberOfItems(inSection: 0) {

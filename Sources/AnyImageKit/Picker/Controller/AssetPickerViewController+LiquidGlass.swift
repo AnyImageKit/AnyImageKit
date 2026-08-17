@@ -264,7 +264,8 @@ extension AssetPickerViewController {
     private func lgReloadDataWithoutScrolling() {
         collectionView.isUserInteractionEnabled = false
         UIView.performWithoutAnimation {
-            section.config(assets: lgFilteredAssets(), columnCount: manager.options.columnNumber)
+            configureAlbumDisplay()
+            section.config(album: album, columnCount: manager.options.columnNumber)
             collectionView.manager.reload(section)
             collectionView.collectionViewLayout.invalidateLayout()
             collectionView.layoutIfNeeded()
@@ -276,10 +277,6 @@ extension AssetPickerViewController {
         }
     }
     
-    private func lgFilteredAssets() -> [Asset] {
-        currentDisplayAssets()
-    }
-
     private func changeLGAssetSortOption(_ option: LGAssetSortOption) {
         guard option != lgAssetSortOption else { return }
         lgAssetSortOption = option

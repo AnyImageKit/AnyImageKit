@@ -18,6 +18,20 @@ public struct BrowserOptionsInfo {
     
     /// All resources displayed in the list.
     public var resources: [BrowserResource] = []
+
+    var lazyResourceCount: Int?
+    var lazyResourceProvider: ((Int) -> BrowserResource)?
+
+    var resourceCount: Int {
+        lazyResourceCount ?? resources.count
+    }
+
+    func resource(at index: Int) -> BrowserResource {
+        if let lazyResourceProvider {
+            return lazyResourceProvider(index)
+        }
+        return resources[index]
+    }
     
     public var placeholdImage: UIImage?
     

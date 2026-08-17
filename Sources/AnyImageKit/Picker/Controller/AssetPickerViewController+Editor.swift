@@ -73,9 +73,7 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
         guard result.type == .photo else { return }
         guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
-        guard section.assets.indices.contains(editor.tag) else { return }
-        
-        let asset = section.assets[editor.tag]
+        guard let asset = section.asset(at: editor.tag) else { return }
         asset._images[.edited] = result.isEdited ? photo : nil
         if let cell = section.cellForItem(at: editor.tag) as? AssetCell {
             cell.config(.init(asset: asset, manager: manager))

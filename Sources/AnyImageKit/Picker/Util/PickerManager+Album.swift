@@ -22,25 +22,30 @@ extension PickerManager {
     }
     
     func fetchCameraRollAlbum(completion: @escaping (Album) -> Void) {
-        let fetchOptions = createFetchOptions()
+        workQueue.async { [weak self] in
+            guard let self else { return }
+            let fetchOptions = self.createFetchOptions()
 #if compiler(>=6)
-        let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+            let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
 #else
-        let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+            let assetCollectionsFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
 #endif
-        let assetCollections = assetCollectionsFetchResult.objects()
-        for assetCollection in assetCollections {
-            if assetCollection.estimatedAssetCount <= 0 { continue }
-            if assetCollection.isCameraRoll {
-                let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-                let result = Album(fetchResult: assetsFetchResult,
-                                   identifier: assetCollection.localIdentifier,
-                                   title: assetCollection.localizedTitle,
-                                   isCameraRoll: true,
-                                   selectOptions: options.selectOptions,
-                                   sort: options.orderByDate)
-                completion(result)
-                return
+            let assetCollections = assetCollectionsFetchResult.objects()
+            for assetCollection in assetCollections {
+                if assetCollection.estimatedAssetCount <= 0 { continue }
+                if assetCollection.isCameraRoll {
+                    let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+                    let result = Album(fetchResult: assetsFetchResult,
+                                       identifier: assetCollection.localIdentifier,
+                                       title: assetCollection.localizedTitle,
+                                       isCameraRoll: true,
+                                       selectOptions: self.options.selectOptions,
+                                       sort: self.options.orderByDate)
+                    DispatchQueue.main.async {
+                        completion(result)
+                    }
+                    return
+                }
             }
         }
     }

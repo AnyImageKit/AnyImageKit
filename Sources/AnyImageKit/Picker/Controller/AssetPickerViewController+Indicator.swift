@@ -113,9 +113,8 @@ extension AssetPickerViewController {
     
     private func getFirstVisibleAsset() -> Asset? {
         let indexPaths = collectionView.indexPathsForVisibleItems
-        if let assets = album?.assets, let first = indexPaths.first {
-            let asset = first.item < assets.count ? assets[first.item] : assets.first
-            return asset
+        if let first = indexPaths.min() {
+            return section.asset(at: first.item)
         }
         return nil
     }
