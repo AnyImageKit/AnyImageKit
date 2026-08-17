@@ -676,6 +676,14 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
         updateVisibleCellState()
         toolBarSetEnable(!manager.selectedAssets.isEmpty)
     }
+
+    func previewController(_ controller: PhotoPreviewController, didFinishEditing index: Int) {
+        guard controller.assets.indices.contains(index) else { return }
+        let asset = controller.assets[index]
+        guard let displayIndex = displayIndex(for: asset),
+              let cell = section.cellForItem(at: displayIndex) as? AssetCell else { return }
+        cell.config(.init(asset: asset, manager: manager))
+    }
     
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) {
         toolBar.originalButton.isSelected = useOriginalImage

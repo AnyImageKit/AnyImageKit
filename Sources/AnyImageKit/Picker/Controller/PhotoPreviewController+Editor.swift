@@ -77,6 +77,8 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
         
         options.resources[currentIndex] = result.isEdited ? .image(photo) : .phAsset(asset.phAsset)
         super.update(options: options)
+        reloadThumbnailPreview()
+        delegate?.previewController(self, didFinishEditing: currentIndex)
         
         // 选择当前照片
         if !manager.isUpToLimit {
@@ -84,8 +86,6 @@ extension PhotoPreviewController: ImageEditorControllerDelegate {
                 selectButtonTapped()
             }
         }
-//        thumbnailPreviewView.reloadSelectionState() TODO : 本次
-        delegate?.previewController(self, didSelected: currentIndex)
     }
 }
 

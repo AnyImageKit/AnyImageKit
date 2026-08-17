@@ -16,6 +16,9 @@ protocol PhotoPreviewControllerDelegate: AnyObject {
     
     /// 取消选择一张图片
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int)
+
+    /// 编辑完成，需要刷新对应资源
+    func previewController(_ controller: PhotoPreviewController, didFinishEditing index: Int)
     
     /// 开启/关闭原图
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool)
@@ -35,6 +38,7 @@ protocol PhotoPreviewControllerDelegate: AnyObject {
 extension PhotoPreviewControllerDelegate {
     func previewController(_ controller: PhotoPreviewController, didSelected index: Int) { }
     func previewController(_ controller: PhotoPreviewController, didDeselected index: Int) { }
+    func previewController(_ controller: PhotoPreviewController, didFinishEditing index: Int) { }
     func previewController(_ controller: PhotoPreviewController, useOriginalImage: Bool) { }
     func previewControllerDidClickBack(_ controller: PhotoPreviewController) { }
     func previewControllerDidClickDone(_ controller: PhotoPreviewController) { }
@@ -213,6 +217,10 @@ extension PhotoPreviewController {
     
     func reloadWhenPhotoLibraryDidChange() {
         dismiss(animated: true)
+    }
+
+    func reloadThumbnailPreview() {
+        thumbnailPreviewView.reloadSelectionState()
     }
 }
 

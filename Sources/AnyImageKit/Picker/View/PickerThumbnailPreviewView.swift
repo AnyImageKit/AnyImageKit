@@ -848,19 +848,19 @@ private final class ThumbnailCell: UICollectionViewCell {
     }
     
     func configure(with asset: Asset, options: PickerOptionsInfo?, manager: PickerManager?) {
-        if let image = asset._images[.thumbnail] ?? asset._image {
+        identifier = asset.identifier
+        if let image = asset._images[.edited] ?? asset._images[.thumbnail] ?? asset._image {
             imageView.image = image
         } else {
             imageView.image = nil
             // Request thumbnail from PHImageManager if not yet loaded
-            let id = asset.identifier
-            identifier = id
+            let id = identifier
             let fetchOptions = _PhotoFetchOptions(sizeMode: .thumbnail(100 * UIScreen.main.nativeScale), needCache: false)
             manager?.requestPhoto(for: asset.phAsset, options: fetchOptions) { [weak self] result in
                 guard let self = self, self.identifier == id else { return }
                 if case .success(let response) = result {
                     asset._images[.thumbnail] = response.image
-                    self.imageView.image = response.image
+                    self.imageView.image = asset._images[.edited] ?? response.image
                 }
             }
         }

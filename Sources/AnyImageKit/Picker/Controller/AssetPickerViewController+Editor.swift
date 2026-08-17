@@ -13,9 +13,10 @@ import UIKit
 extension AssetPickerViewController {
 
     func openEditor(with asset: Asset) {
+        guard let displayIndex = displayIndex(for: asset) else { return }
         if asset.mediaType == .photo {
             if let image = asset._images[.initial] {
-                showEditor(image, identifier: asset.identifier, tag: asset.idx)
+                showEditor(image, identifier: asset.identifier, tag: displayIndex)
             } else {
                 view.hud.show(text: manager.options.theme[string: .loading])
                 let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { (progress, error, isAtEnd, info) in
@@ -31,7 +32,7 @@ extension AssetPickerViewController {
                         case .success(let response):
                             if !response.isDegraded {
                                 self.view.hud.hide()
-                                self.showEditor(response.image, identifier: asset.identifier, tag: asset.idx)
+                                self.showEditor(response.image, identifier: asset.identifier, tag: displayIndex)
                             }
                         case .failure(let error):
                             self.view.hud.hide()
@@ -69,16 +70,16 @@ extension AssetPickerViewController: ImageEditorControllerDelegate {
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         editor.dismiss(animated: true, completion: nil)
-        let index = editor.tag + section.itemOffset
         guard result.type == .photo else { return }
         guard let photoData = try? Data(contentsOf: result.mediaURL) else { return }
         guard let photo = UIImage(data: photoData) else { return }
-        guard let album = album else { return }
-        guard let cell = section.cellForItem(at: index) as? AssetCell else { return }
+        guard section.assets.indices.contains(editor.tag) else { return }
         
-        let asset = album.assets[index]
+        let asset = section.assets[editor.tag]
         asset._images[.edited] = result.isEdited ? photo : nil
-        cell.config(.init(asset: asset, manager: manager))
+        if let cell = section.cellForItem(at: editor.tag) as? AssetCell {
+            cell.config(.init(asset: asset, manager: manager))
+        }
         if !asset.isSelected { // Select
             selectItem(editor.tag)
             if manager.options.selectLimit == 1 && manager.selectedAssets.count == 1 {
