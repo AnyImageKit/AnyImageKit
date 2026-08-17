@@ -104,6 +104,7 @@ class PickerAPITests: XCTestCase {
         theme[icon: .photoEdited] = UIImage()
         theme[icon: .pickerCircle] = UIImage()
         theme[icon: .returnButton] = UIImage()
+        theme[icon: .returnButtonLiquidGlass] = UIImage()
         theme[icon: .video] = UIImage()
         theme[icon: .videoPlay] = UIImage()
         theme[icon: .warning] = UIImage()

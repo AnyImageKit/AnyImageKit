@@ -164,6 +164,9 @@ extension PickerTheme {
         
         /// 14*24, Light/Dark
         case returnButton
+
+        /// Return button for Liquid Glass
+        case returnButtonLiquidGlass
         
         /// 24*15
         case video
@@ -203,6 +206,8 @@ extension PickerTheme {
             case .pickerCircle:
                 return BundleHelper.image(named: "PickerCircle", style: style, module: .picker)
             case .returnButton:
+                return BundleHelper.image(named: "ReturnButton", style: style, module: .picker)
+            case .returnButtonLiquidGlass:
                 return UIImage(systemName: "chevron.backward")
             case .video:
                 return BundleHelper.image(named: "Video", module: .picker)
