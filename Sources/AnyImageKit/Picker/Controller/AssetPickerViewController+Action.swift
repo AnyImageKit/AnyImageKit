@@ -96,6 +96,7 @@ extension AssetPickerViewController: BrowserControllerDelegate {
         }
         options.placeholdImage = asset.placeholdImage
         options.phAssetSupportedTypes = manager.options.selectOptions
+        options.theme[color: .background] = UIColor.create(style: manager.options.theme.style, light: .white, dark: .black)
         let controller = PhotoPreviewController(manager: manager, sourceType: sourceType, assets: assets, options: options, browserDelegate: self)
         controller.view.tag = sourceType.rawValue
         

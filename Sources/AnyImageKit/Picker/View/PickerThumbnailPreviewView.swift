@@ -88,14 +88,14 @@ final class PickerThumbnailPreviewView: UIView {
         collectionView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
-        layer.addSublayer(gradientLayer)
+        layer.mask = gradientMaskLayer
     }
     
-    private let gradientLayer: CAGradientLayer = {
+    private let gradientMaskLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.colors = [
-            UIColor.white.cgColor, UIColor.white.cgColor, UIColor.white.withAlphaComponent(0.0).cgColor,
-            UIColor.white.withAlphaComponent(0.0).cgColor, UIColor.white.cgColor, UIColor.white.cgColor
+            CGColor(gray: 1, alpha: 0), CGColor(gray: 1, alpha: 0), CGColor(gray: 1, alpha: 1),
+            CGColor(gray: 1, alpha: 1), CGColor(gray: 1, alpha: 0), CGColor(gray: 1, alpha: 0)
         ]
         layer.startPoint = CGPoint(x: 0, y: 0.5)
         layer.endPoint = CGPoint(x: 1, y: 0.5)
@@ -104,14 +104,14 @@ final class PickerThumbnailPreviewView: UIView {
     
     private func updateGradientMask() {
         guard bounds.width > 0 else { return }
-        gradientLayer.frame = bounds
+        gradientMaskLayer.frame = bounds
         let fadeWidth: CGFloat = 15
         let fadeWidth2: CGFloat = 40
         let leftStop = NSNumber(value: Float(fadeWidth / bounds.width))
         let leftStop2 = NSNumber(value: Float(fadeWidth2 / bounds.width))
         let rightStop = NSNumber(value: Float(1 - fadeWidth / bounds.width))
         let rightStop2 = NSNumber(value: Float(1 - fadeWidth2 / bounds.width))
-        gradientLayer.locations = [0, leftStop, leftStop2, rightStop2, rightStop, 1]
+        gradientMaskLayer.locations = [0, leftStop, leftStop2, rightStop2, rightStop, 1]
     }
     
     func configure(with assets: [Asset], manager: PickerManager, currentIndex: Int = 0) {
