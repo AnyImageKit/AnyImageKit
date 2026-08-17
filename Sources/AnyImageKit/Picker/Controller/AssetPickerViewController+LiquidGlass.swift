@@ -38,8 +38,13 @@ extension AssetPickerViewController {
             return UIAction(title: "\(album.title) (\(album.count.description))", image: nil, state: self.album == album ? .on : .off) { [weak self] _ in
                 guard let self = self else { return }
                 self.setAlbum(album)
-                self.reloadData(animated: false)
-                self.scrollToEnd()
+                if album.filter == self.filterBar.selectedType,
+                   album.displaySort == self.currentAlbumDisplaySort {
+                    self.reloadData(animated: false)
+                    self.scrollToEnd()
+                } else {
+                    self.reloadAlbumForCurrentDisplay()
+                }
                 self.lgSetupAlbumMenu()
                 self.lgView.setAlbumTitle(album.title)
             }
@@ -264,7 +269,6 @@ extension AssetPickerViewController {
     private func lgReloadDataWithoutScrolling() {
         collectionView.isUserInteractionEnabled = false
         UIView.performWithoutAnimation {
-            configureAlbumDisplay()
             section.config(album: album, columnCount: manager.options.columnNumber)
             collectionView.manager.reload(section)
             collectionView.collectionViewLayout.invalidateLayout()
@@ -280,8 +284,7 @@ extension AssetPickerViewController {
     private func changeLGAssetSortOption(_ option: LGAssetSortOption) {
         guard option != lgAssetSortOption else { return }
         lgAssetSortOption = option
-        lgReloadDataWithoutScrolling()
-        scrollToEnd()
+        reloadAlbumForCurrentDisplay()
         refreshLGMoreMenu()
     }
     

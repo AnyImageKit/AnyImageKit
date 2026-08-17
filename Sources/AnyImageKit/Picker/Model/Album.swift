@@ -23,8 +23,9 @@ final class Album: IdentifiableResource {
 
     private let selectOptions: PickerSelectOption
     private let sort: Sort
+    let filter: PickerMediaTypeFilter
+    let displaySort: DisplaySort
     private var baseIndexes: [Int]?
-    private var displayIndexes: [Int]?
     private let cachedAssets: NSCache<NSString, Asset> = {
         let cache = NSCache<NSString, Asset>()
         cache.countLimit = 500
@@ -33,13 +34,22 @@ final class Album: IdentifiableResource {
     private var retainedAssets: [String: Asset] = [:]
     private var cameraAsset: Asset?
 
-    init(fetchResult: PHFetchResult<PHAsset>, identifier: String, title: String?, isCameraRoll: Bool, selectOptions: PickerSelectOption, sort: Sort) {
+    init(fetchResult: PHFetchResult<PHAsset>,
+         identifier: String,
+         title: String?,
+         isCameraRoll: Bool,
+         selectOptions: PickerSelectOption,
+         sort: Sort,
+         filter: PickerMediaTypeFilter = .all,
+         displaySort: DisplaySort = .recentlyAdded) {
         self.fetchResult = fetchResult
         self.identifier = identifier
         self.title = title ?? ""
         self.isCameraRoll = isCameraRoll
         self.selectOptions = selectOptions
         self.sort = sort
+        self.filter = filter
+        self.displaySort = displaySort
 
         // Plain photo selection accepts every image returned by PhotoKit. More
         // specific GIF/Live Photo combinations need an exact source index map.
@@ -61,7 +71,7 @@ final class Album: IdentifiableResource {
     }
 
     var count: Int {
-        displayIndexes?.count ?? baseIndexes?.count ?? fetchResult.count
+        baseIndexes?.count ?? fetchResult.count
     }
 
     var itemCount: Int {
@@ -70,45 +80,6 @@ final class Album: IdentifiableResource {
 
     var hasCamera: Bool {
         cameraAsset != nil
-    }
-
-    func configure(filter: PickerMediaTypeFilter, displaySort: DisplaySort) {
-        let needsMediaFilter = filter == .photo || filter == .video
-        let needsCapturedDateSort = displaySort == .capturedDate
-
-        guard needsMediaFilter || needsCapturedDateSort else {
-            displayIndexes = nil
-            return
-        }
-
-        var indexes = baseIndexes ?? Array(0..<fetchResult.count)
-        if needsMediaFilter {
-            indexes = indexes.filter { index in
-                let mediaType = fetchResult.object(at: index).mediaType
-                return filter == .photo ? mediaType == .image : mediaType == .video
-            }
-        }
-
-        if needsCapturedDateSort {
-            indexes.sort { lhs, rhs in
-                let lhsDate = fetchResult.object(at: lhs).creationDate
-                let rhsDate = fetchResult.object(at: rhs).creationDate
-                if lhsDate == rhsDate { return sort == .asc ? lhs < rhs : lhs > rhs }
-                switch (lhsDate, rhsDate) {
-                case let (lhsDate?, rhsDate?):
-                    return sort == .asc ? lhsDate < rhsDate : lhsDate > rhsDate
-                case (_?, nil):
-                    return true
-                case (nil, _?):
-                    return false
-                case (nil, nil):
-                    return false
-                }
-            }
-        } else if sort == .desc {
-            indexes.reverse()
-        }
-        displayIndexes = indexes
     }
 
     func asset(at displayIndex: Int) -> Asset? {
@@ -145,9 +116,7 @@ final class Album: IdentifiableResource {
         guard sourceIndex != NSNotFound else { return nil }
 
         let logicalIndex: Int?
-        if let displayIndexes {
-            logicalIndex = displayIndexes.firstIndex(of: sourceIndex)
-        } else if let baseIndexes {
+        if let baseIndexes {
             guard let index = baseIndexes.firstIndex(of: sourceIndex) else { return nil }
             logicalIndex = sort == .asc ? index : count - index - 1
         } else {
@@ -192,9 +161,6 @@ final class Album: IdentifiableResource {
     private func sourceIndex(for displayIndex: Int) -> Int? {
         let logicalIndex = displayIndex - cameraOffset
         guard logicalIndex >= 0 && logicalIndex < count else { return nil }
-        if let displayIndexes {
-            return displayIndexes[logicalIndex]
-        }
         if let baseIndexes {
             return sort == .asc ? baseIndexes[logicalIndex] : baseIndexes[count - logicalIndex - 1]
         }

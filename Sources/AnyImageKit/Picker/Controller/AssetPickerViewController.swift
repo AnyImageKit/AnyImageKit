@@ -35,6 +35,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private var autoScrollToLatest: Bool = false
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     private var containerSize: CGSize = ScreenHelper.mainBounds.size
+    private var albumQueryGeneration: UInt = 0
     private(set) var didAppear: Bool = false
     var lgAssetSortOption: LGAssetSortOption = .recentlyAdded
     
@@ -104,7 +105,7 @@ final class AssetPickerViewController: AnyImageViewController {
         let view = PickerFilterBar(frame: .zero)
         view.isHidden = !showsMediaTypeFilterBar
         view.selectEvent.delegate(on: self) { (self, _) in
-            self.reloadData()
+            self.reloadAlbumForCurrentDisplay()
         }
         return view
     }()
@@ -123,9 +124,8 @@ final class AssetPickerViewController: AnyImageViewController {
         return view
     }()
     
-    func configureAlbumDisplay() {
-        let displaySort: Album.DisplaySort = lgAssetSortOption == .capturedDate ? .capturedDate : .recentlyAdded
-        album?.configure(filter: filterBar.selectedType, displaySort: displaySort)
+    var currentAlbumDisplaySort: Album.DisplaySort {
+        lgAssetSortOption == .capturedDate ? .capturedDate : .recentlyAdded
     }
     
     weak var previewController: PhotoPreviewController?
@@ -280,7 +280,6 @@ final class AssetPickerViewController: AnyImageViewController {
         }
         
         UIView.performWithoutAnimation {
-            configureAlbumDisplay()
             section.config(album: album, columnCount: manager.options.columnNumber)
             scrollToEnd(animated: false)
         }
@@ -371,6 +370,7 @@ extension AssetPickerViewController {
     
     func setAlbum(_ album: Album) {
         guard self.album != album else { return }
+        albumQueryGeneration &+= 1
         self.album = album
         titleView.setTitle(album.title)
         lgView.setAlbumTitle(album.title)
@@ -409,19 +409,46 @@ extension AssetPickerViewController {
     }
     
     func reloadAlbum(_ album: Album) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadAlbum(album)
+            }
+            return
+        }
         guard !stopReloadAlbum else { return }
-        manager.fetchAlbum(album) { [weak self] newAlbum in
+        fetchAlbum(album, preLoadAlbumsAfterwards: true)
+    }
+
+    func reloadAlbumForCurrentDisplay() {
+        guard let album else { return }
+        fetchAlbum(album, preLoadAlbumsAfterwards: false)
+    }
+
+    private func fetchAlbum(_ album: Album, preLoadAlbumsAfterwards: Bool) {
+        albumQueryGeneration &+= 1
+        let generation = albumQueryGeneration
+        let filter = filterBar.selectedType
+        let displaySort = currentAlbumDisplaySort
+        manager.fetchAlbum(album, filter: filter, displaySort: displaySort) { [weak self] newAlbum in
             guard let self = self else { return }
-            self.updateAlbum(newAlbum)
-            self.preLoadAlbums()
+            guard self.albumQueryGeneration == generation,
+                  self.album?.identifier == album.identifier,
+                  self.filterBar.selectedType == filter,
+                  self.currentAlbumDisplaySort == displaySort else { return }
+            self.updateAlbum(newAlbum, removeMissingSelectedAssets: filter == .all)
+            if preLoadAlbumsAfterwards {
+                self.preLoadAlbums()
+            }
         }
     }
     
-    private func updateAlbum(_ album: Album) {
+    private func updateAlbum(_ album: Album, removeMissingSelectedAssets: Bool = true) {
         // Update selected assets when album assets changed
-        for asset in manager.selectedAssets.reversed() {
-            if !album.contains(identifier: asset.identifier) {
-                manager.removeSelectedAsset(asset)
+        if removeMissingSelectedAssets {
+            for asset in manager.selectedAssets.reversed() {
+                if !album.contains(identifier: asset.identifier) {
+                    manager.removeSelectedAsset(asset)
+                }
             }
         }
         for asset in manager.selectedAssets {
@@ -640,8 +667,13 @@ extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
         setAlbum(album)
-        reloadData(animated: false)
-        scrollToEnd()
+        if album.filter == filterBar.selectedType,
+           album.displaySort == currentAlbumDisplaySort {
+            reloadData(animated: false)
+            scrollToEnd()
+        } else {
+            reloadAlbumForCurrentDisplay()
+        }
     }
     
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {
