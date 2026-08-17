@@ -263,7 +263,9 @@ final class AssetPickerViewController: AnyImageViewController {
             self.openEditor(with: model.asset)
         }
         section.openPreviewEvent.delegate(on: self) { (self, model) in
-            self.openPreview(asset: model.asset, assets: self.section.assets.filter { !$0.isCamera }, index: model.index, sourceType: .album)
+            let previewAssets = self.section.assets.filter { !$0.isCamera }
+            guard let previewIndex = previewAssets.firstIndex(of: model.asset) else { return }
+            self.openPreview(asset: model.asset, assets: previewAssets, index: previewIndex, sourceType: .album)
         }
         section.showAlertEvent.delegate(on: self) { (self, message) in
             self.showAlert(message: message, stringConfig: self.manager.options.theme)
@@ -473,6 +475,10 @@ extension AssetPickerViewController {
         }
     }
     
+    func displayIndex(for asset: Asset) -> Int? {
+        return assets.firstIndex(of: asset)
+    }
+    
     private func preselectAssets() {
         let preselectAssets = manager.options.preselectAssets
         var selectedAssets: [Asset] = []
@@ -544,7 +550,8 @@ extension AssetPickerViewController {
             guard let _ = sender.object as? String else { return }
             guard self.manager.options.selectLimit == 1 && self.manager.options.selectionTapAction.hideToolBar else { return }
             guard let asset = self.manager.selectedAssets.first else { return }
-            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
+            guard let idx = self.displayIndex(for: asset) else { return }
+            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: idx, section: 0)) as? AssetCell else { return }
             cell.selectEvent.call()
         }
     }
@@ -682,12 +689,12 @@ extension AssetPickerViewController: PhotoPreviewControllerDelegate {
     func preview(_ controller: PhotoPreviewController, didChangeIndex index: Int) {
         switch controller.sourceType {
         case .album:
-            let idx = controller.currentIndex + section.itemOffset
+            guard controller.assets.indices.contains(index),
+                  let idx = displayIndex(for: controller.assets[index]) else { return }
             let indexPath = IndexPath(item: idx, section: 0)
-            if !(collectionView.visibleCells.compactMap { $0 as? AssetCell }.compactMap { $0.model?.asset.idx }).contains(idx) {
-                if idx < collectionView.numberOfItems(inSection: 0) {
-                    collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                }
+            if !collectionView.indexPathsForVisibleItems.contains(indexPath),
+               idx < collectionView.numberOfItems(inSection: 0) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
             }
         case .selectedAssets:
             break

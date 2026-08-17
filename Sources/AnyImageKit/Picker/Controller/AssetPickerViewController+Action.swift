@@ -108,9 +108,18 @@ extension AssetPickerViewController: BrowserControllerDelegate {
         let sourceType = PhotoPreviewController.SourceType(rawValue: browser.view.tag) ?? .album
         switch sourceType {
         case .album:
-            return (section.cellForItem(at: index) as? AssetCell)?.imageView
+            guard let controller = previewController,
+                  controller.assets.indices.contains(index),
+                  let idx = displayIndex(for: controller.assets[index]) else {
+                return nil
+            }
+            return (section.cellForItem(at: idx) as? AssetCell)?.imageView
         case .selectedAssets:
-            return (section.cellForItem(at: manager.selectedAssets[index].idx + section.itemOffset) as? AssetCell)?.imageView
+            guard manager.selectedAssets.indices.contains(index),
+                  let idx = displayIndex(for: manager.selectedAssets[index]) else {
+                return nil
+            }
+            return (section.cellForItem(at: idx) as? AssetCell)?.imageView
         }
     }
 }
