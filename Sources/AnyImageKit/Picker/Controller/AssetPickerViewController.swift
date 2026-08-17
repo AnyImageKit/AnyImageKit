@@ -20,6 +20,17 @@ protocol AssetPickerViewControllerDelegate: AnyObject {
 
 final class AssetPickerViewController: AnyImageViewController {
 
+    private struct AlbumQueryKey: Hashable {
+        let identifier: String
+        let filterRawValue: Int
+        let displaySort: Album.DisplaySort
+    }
+
+    private struct CachedAlbum {
+        let album: Album
+        let revision: UInt
+    }
+
     enum LGAssetSortOption: Equatable {
         case recentlyAdded
         case capturedDate
@@ -36,6 +47,8 @@ final class AssetPickerViewController: AnyImageViewController {
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     private var containerSize: CGSize = ScreenHelper.mainBounds.size
     private var albumQueryGeneration: UInt = 0
+    private var photoLibraryRevision: UInt = 0
+    private var albumQueryCache: [AlbumQueryKey: CachedAlbum] = [:]
     private(set) var didAppear: Bool = false
     var lgAssetSortOption: LGAssetSortOption = .recentlyAdded
     
@@ -350,8 +363,10 @@ extension AssetPickerViewController {
     
     private func loadDefaultAlbumIfNeeded() {
         guard album == nil else { return }
+        let revision = photoLibraryRevision
         manager.fetchCameraRollAlbum { [weak self] album in
             guard let self = self else { return }
+            self.cacheAlbum(album, revision: revision)
             self.setAlbum(album)
             self.preselectAssets()
             self.reloadData(animated: false)
@@ -362,9 +377,10 @@ extension AssetPickerViewController {
     }
     
     private func preLoadAlbums() {
+        let revision = photoLibraryRevision
         manager.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
-            self.setAlbums(albums)
+            self.setAlbums(albums, revision: revision)
         }
     }
     
@@ -387,7 +403,8 @@ extension AssetPickerViewController {
         #endif
     }
     
-    private func setAlbums(_ albums: [Album]) {
+    private func setAlbums(_ albums: [Album], revision: UInt) {
+        albums.forEach { cacheAlbum($0, revision: revision) }
         self.albums = albums.filter { $0.count > 0 }
         if let albumsPicker = albumsPicker {
             albumsPicker.albums = albums
@@ -397,9 +414,10 @@ extension AssetPickerViewController {
     }
     
     private func reloadAlbums() {
+        let revision = photoLibraryRevision
         manager.fetchAllAlbums { [weak self] albums in
             guard let self = self else { return }
-            self.setAlbums(albums)
+            self.setAlbums(albums, revision: revision)
             if let identifier = self.album?.identifier {
                 if let idx = (albums.firstIndex { $0.identifier == identifier }) {
                     self.updateAlbum(albums[idx])
@@ -424,9 +442,21 @@ extension AssetPickerViewController {
         fetchAlbum(album, preLoadAlbumsAfterwards: false)
     }
 
+    func displayAlbum(_ sourceAlbum: Album) {
+        if let cachedAlbum = cachedAlbum(for: sourceAlbum.identifier) {
+            setAlbum(cachedAlbum)
+            reloadData(animated: false)
+            scrollToEnd()
+        } else {
+            setAlbum(sourceAlbum)
+            reloadAlbumForCurrentDisplay()
+        }
+    }
+
     private func fetchAlbum(_ album: Album, preLoadAlbumsAfterwards: Bool) {
         albumQueryGeneration &+= 1
         let generation = albumQueryGeneration
+        let revision = photoLibraryRevision
         let filter = filterBar.selectedType
         let displaySort = currentAlbumDisplaySort
         manager.fetchAlbum(album, filter: filter, displaySort: displaySort) { [weak self] newAlbum in
@@ -435,22 +465,48 @@ extension AssetPickerViewController {
                   self.album?.identifier == album.identifier,
                   self.filterBar.selectedType == filter,
                   self.currentAlbumDisplaySort == displaySort else { return }
-            self.updateAlbum(newAlbum, removeMissingSelectedAssets: filter == .all)
+            self.cacheAlbum(newAlbum, revision: revision)
+            self.removeUnavailableSelectedAssets()
+            self.updateAlbum(newAlbum)
             if preLoadAlbumsAfterwards {
                 self.preLoadAlbums()
             }
         }
     }
+
+    private func cacheAlbum(_ album: Album, revision: UInt) {
+        let key = AlbumQueryKey(identifier: album.identifier,
+                                filterRawValue: album.filter.rawValue,
+                                displaySort: album.displaySort)
+        if let cachedAlbum = albumQueryCache[key], cachedAlbum.revision > revision { return }
+        albumQueryCache[key] = CachedAlbum(album: album, revision: revision)
+    }
+
+    private func cachedAlbum(for identifier: String) -> Album? {
+        let key = AlbumQueryKey(identifier: identifier,
+                                filterRawValue: filterBar.selectedType.rawValue,
+                                displaySort: currentAlbumDisplaySort)
+        guard let cachedAlbum = albumQueryCache[key],
+              cachedAlbum.revision == photoLibraryRevision else { return nil }
+        return cachedAlbum.album
+    }
     
-    private func updateAlbum(_ album: Album, removeMissingSelectedAssets: Bool = true) {
-        // Update selected assets when album assets changed
-        if removeMissingSelectedAssets {
-            for asset in manager.selectedAssets.reversed() {
-                if !album.contains(identifier: asset.identifier) {
-                    manager.removeSelectedAsset(asset)
-                }
-            }
+    private func removeUnavailableSelectedAssets() {
+        let selectedAssets = manager.selectedAssets
+        guard !selectedAssets.isEmpty else { return }
+
+        let identifiers = selectedAssets.map(\.identifier)
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        var availableIdentifiers = Set<String>()
+        fetchResult.enumerateObjects { asset, _, _ in
+            availableIdentifiers.insert(asset.localIdentifier)
         }
+        for asset in selectedAssets.reversed() where !availableIdentifiers.contains(asset.identifier) {
+            manager.removeSelectedAsset(asset)
+        }
+    }
+
+    private func updateAlbum(_ album: Album) {
         for asset in manager.selectedAssets {
             album.cache(asset)
         }
@@ -576,21 +632,39 @@ extension AssetPickerViewController {
 extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        guard let album = album, let changeDetails = changeInstance.changeDetails(for: album.fetchResult) else { return }
+        let observedAlbum = album
+        let changeDetails = observedAlbum.flatMap { changeInstance.changeDetails(for: $0.fetchResult) }
+        let hasAssetContentChanges = changeDetails?.changedObjects.contains {
+            changeInstance.changeDetails(for: $0)?.assetContentChanged == true
+        } ?? false
+
+        DispatchQueue.main.async { [weak self] in
+            self?.handlePhotoLibraryChange(observedAlbumIdentifier: observedAlbum?.identifier,
+                                           changeDetails: changeDetails,
+                                           hasAssetContentChanges: hasAssetContentChanges)
+        }
+    }
+
+    private func handlePhotoLibraryChange(observedAlbumIdentifier: String?,
+                                          changeDetails: PHFetchResultChangeDetails<PHAsset>?,
+                                          hasAssetContentChanges: Bool) {
+        photoLibraryRevision &+= 1
+        albumQueryCache.removeAll()
+        guard let album = album,
+              album.identifier == observedAlbumIdentifier,
+              let changeDetails else { return }
         
         if #available(iOS 14.0, *), Permission.photos.status == .limited {
             if album.isCameraRoll {
                 reloadAlbum(album)
             } else {
-                DispatchQueue.main.async {
-                    if !self.manager.options.clearSelectionAfterSwitchingAlbum,
-                       let smartAlbum = self.albums.first(where: { $0.isCameraRoll }) {
-                        self.setAlbum(smartAlbum)
-                        self.reloadAlbum(smartAlbum)
-                        self.updateAlbum(smartAlbum)
-                    } else {
-                        self.reloadAlbum(album)
-                    }
+                if !manager.options.clearSelectionAfterSwitchingAlbum,
+                   let smartAlbum = albums.first(where: { $0.isCameraRoll }) {
+                    setAlbum(smartAlbum)
+                    reloadAlbum(smartAlbum)
+                    updateAlbum(smartAlbum)
+                } else {
+                    reloadAlbum(album)
                 }
             }
             return
@@ -611,8 +685,7 @@ extension AssetPickerViewController: PHPhotoLibraryChangeObserver {
             return
         }
         // Check Change
-        let changedObjects = changeDetails.changedObjects.filter{ changeInstance.changeDetails(for: $0)?.assetContentChanged == true }
-        if !changedObjects.isEmpty {
+        if hasAssetContentChanges {
             reloadAlbum(album)
             return
         }
@@ -666,14 +739,7 @@ extension AssetPickerViewController: UIScrollViewDelegate {
 extension AssetPickerViewController: AlbumPickerViewControllerDelegate {
     
     func albumPicker(_ picker: AlbumPickerViewController, didSelected album: Album) {
-        setAlbum(album)
-        if album.filter == filterBar.selectedType,
-           album.displaySort == currentAlbumDisplaySort {
-            reloadData(animated: false)
-            scrollToEnd()
-        } else {
-            reloadAlbumForCurrentDisplay()
-        }
+        displayAlbum(album)
     }
     
     func albumPickerWillDisappear(_ picker: AlbumPickerViewController) {

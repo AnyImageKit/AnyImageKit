@@ -37,14 +37,7 @@ extension AssetPickerViewController {
         let children: [UIMenuElement] = albums.map { album in
             return UIAction(title: "\(album.title) (\(album.count.description))", image: nil, state: self.album == album ? .on : .off) { [weak self] _ in
                 guard let self = self else { return }
-                self.setAlbum(album)
-                if album.filter == self.filterBar.selectedType,
-                   album.displaySort == self.currentAlbumDisplaySort {
-                    self.reloadData(animated: false)
-                    self.scrollToEnd()
-                } else {
-                    self.reloadAlbumForCurrentDisplay()
-                }
+                self.displayAlbum(album)
                 self.lgSetupAlbumMenu()
                 self.lgView.setAlbumTitle(album.title)
             }

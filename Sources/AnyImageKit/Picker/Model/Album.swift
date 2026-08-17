@@ -11,7 +11,7 @@ import Photos
 
 final class Album: IdentifiableResource {
 
-    enum DisplaySort {
+    enum DisplaySort: Hashable {
         case recentlyAdded
         case capturedDate
     }
