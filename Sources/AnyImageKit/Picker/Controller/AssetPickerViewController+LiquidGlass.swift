@@ -190,6 +190,19 @@ extension AssetPickerViewController {
                 }
             ])
         )
+
+        children.append(
+            UIMenu(title: "", options: .displayInline, children: [
+                UIAction(title: manager.options.theme[string: .pickerSortByDateCaptured],
+                         state: lgAssetSortOption == .capturedDate ? .on : .off) { [weak self] _ in
+                    self?.changeLGAssetSortOption(.capturedDate)
+                },
+                UIAction(title: manager.options.theme[string: .pickerSortByRecentlyAdded],
+                         state: lgAssetSortOption == .recentlyAdded ? .on : .off) { [weak self] _ in
+                    self?.changeLGAssetSortOption(.recentlyAdded)
+                }
+            ])
+        )
         
         return UIMenu(title: "", children: children)
     }
@@ -264,16 +277,15 @@ extension AssetPickerViewController {
     }
     
     private func lgFilteredAssets() -> [Asset] {
-        var currentAssets = album?.assets ?? []
-        switch filterBar.selectedType {
-        case .photo:
-            currentAssets = currentAssets.filter { $0.mediaType.isImage || $0.isCamera }
-        case .video:
-            currentAssets = currentAssets.filter { $0.mediaType.isVideo || $0.isCamera }
-        default:
-            break
-        }
-        return currentAssets
+        currentDisplayAssets()
+    }
+
+    private func changeLGAssetSortOption(_ option: LGAssetSortOption) {
+        guard option != lgAssetSortOption else { return }
+        lgAssetSortOption = option
+        lgReloadDataWithoutScrolling()
+        scrollToEnd()
+        refreshLGMoreMenu()
     }
     
     private func captureLGScrollAnchor() -> LGScrollAnchor? {

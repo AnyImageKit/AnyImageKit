@@ -253,6 +253,8 @@ extension StringConfigKey {
     public static let pickerZoomIn = StringConfigKey(rawValue: "ZOOM_IN")
     public static let pickerZoomOut = StringConfigKey(rawValue: "ZOOM_OUT")
     public static let pickerMoreOptions = StringConfigKey(rawValue: "MORE_OPTIONS")
+    public static let pickerSortByRecentlyAdded = StringConfigKey(rawValue: "SORT_BY_RECENTLY_ADDED")
+    public static let pickerSortByDateCaptured = StringConfigKey(rawValue: "SORT_BY_DATE_CAPTURED")
     public static let emptyAlbumPhotoTip = StringConfigKey(rawValue: "EMPTY_ALBUM_PHOTO_TIP")
     public static let emptyAlbumVideoTip = StringConfigKey(rawValue: "EMPTY_ALBUM_VIDEO_TIP")
 }

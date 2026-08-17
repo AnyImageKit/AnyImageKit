@@ -24,6 +24,8 @@
 "ZOOM_IN" = "Zoom In";
 "ZOOM_OUT" = "Zoom Out";
 "MORE_OPTIONS" = "More Options";
+"SORT_BY_RECENTLY_ADDED" = "Sort by Recently Added";
+"SORT_BY_DATE_CAPTURED" = "Sort by Date Captured";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "The duration of the selected video should be between %d-%d seconds";

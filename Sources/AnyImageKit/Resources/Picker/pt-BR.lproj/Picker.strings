@@ -24,6 +24,8 @@
 "ZOOM_IN" = "Ampliar";
 "ZOOM_OUT" = "Reduzir";
 "MORE_OPTIONS" = "Mais Opções";
+"SORT_BY_RECENTLY_ADDED" = "Ordenar por adicionados recentemente";
+"SORT_BY_DATE_CAPTURED" = "Ordenar por data de captura";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "A duração do vídeo selecionado deve ser entre %d-%d segundos";

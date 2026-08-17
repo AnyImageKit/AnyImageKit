@@ -19,6 +19,11 @@ protocol AssetPickerViewControllerDelegate: AnyObject {
 }
 
 final class AssetPickerViewController: AnyImageViewController {
+
+    enum LGAssetSortOption: Equatable {
+        case recentlyAdded
+        case capturedDate
+    }
     
     weak var delegate: AssetPickerViewControllerDelegate?
     
@@ -31,6 +36,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private var didRegisterPhotoLibraryChangeObserver: Bool = false
     private var containerSize: CGSize = ScreenHelper.mainBounds.size
     private(set) var didAppear: Bool = false
+    var lgAssetSortOption: LGAssetSortOption = .recentlyAdded
     
     lazy var stopReloadAlbum: Bool = false
     
@@ -125,7 +131,46 @@ final class AssetPickerViewController: AnyImageViewController {
             assets = assets.filter { $0.mediaType.isVideo || $0.isCamera }
         default: break
         }
+        if lgAssetSortOption == .capturedDate {
+            assets = sortByCapturedDate(assets)
+        }
         return assets
+    }
+
+    private func sortByCapturedDate(_ assets: [Asset]) -> [Asset] {
+        let cameraAsset = assets.first(where: \.isCamera)
+        let mediaAssets = assets.enumerated()
+            .filter { !$0.element.isCamera }
+            .sorted { lhs, rhs in
+                let lhsDate = lhs.element.phAsset.creationDate
+                let rhsDate = rhs.element.phAsset.creationDate
+                if lhsDate == rhsDate {
+                    return lhs.offset < rhs.offset
+                }
+                switch (lhsDate, rhsDate) {
+                case let (lhsDate?, rhsDate?):
+                    return manager.options.orderByDate == .asc ? lhsDate < rhsDate : lhsDate > rhsDate
+                case (_?, nil):
+                    return true
+                case (nil, _?):
+                    return false
+                case (nil, nil):
+                    return lhs.offset < rhs.offset
+                }
+            }
+            .map(\.element)
+
+        guard let cameraAsset else { return mediaAssets }
+        switch manager.options.orderByDate {
+        case .asc:
+            return mediaAssets + [cameraAsset]
+        case .desc:
+            return [cameraAsset] + mediaAssets
+        }
+    }
+
+    func currentDisplayAssets() -> [Asset] {
+        assets
     }
     
     weak var previewController: PhotoPreviewController?
@@ -468,15 +513,18 @@ extension AssetPickerViewController {
     }
     
     func updateVisibleCellState(_ animatedItem: Int = -1) {
+        let visibleAssets = section.assets
         for cell in collectionView.visibleCells {
-            if let indexPath = collectionView.indexPath(for: cell), let cell = cell as? AssetCell {
-                cell.updateState(assets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
+            if let indexPath = collectionView.indexPath(for: cell),
+               visibleAssets.indices.contains(indexPath.item),
+               let cell = cell as? AssetCell {
+                cell.updateState(visibleAssets[indexPath.item], manager: manager, animated: animatedItem == indexPath.item)
             }
         }
     }
     
     func displayIndex(for asset: Asset) -> Int? {
-        return assets.firstIndex(of: asset)
+        return section.assets.firstIndex(of: asset)
     }
     
     private func preselectAssets() {
@@ -508,7 +556,8 @@ extension AssetPickerViewController {
     }
     
     func selectItem(_ idx: Int) {
-        let asset = assets[idx]
+        guard section.assets.indices.contains(idx) else { return }
+        let asset = section.assets[idx]
         
         if !asset.isSelected {
             let result = manager.addSelectedAsset(asset)

@@ -24,6 +24,8 @@
 "ZOOM_IN" = "Yakınlaştır";
 "ZOOM_OUT" = "Uzaklaştır";
 "MORE_OPTIONS" = "Daha Fazla Seçenek";
+"SORT_BY_RECENTLY_ADDED" = "Son eklenenlere göre sırala";
+"SORT_BY_DATE_CAPTURED" = "Çekim tarihine göre sırala";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "Seçilen videonun süresi %d-%d saniye arasında olmalıdır";

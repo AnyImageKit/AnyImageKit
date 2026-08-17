@@ -24,6 +24,8 @@
 "ZOOM_IN" = "放大";
 "ZOOM_OUT" = "缩小";
 "MORE_OPTIONS" = "更多选项";
+"SORT_BY_RECENTLY_ADDED" = "按最近添加排序";
+"SORT_BY_DATE_CAPTURED" = "按拍摄日期排序";
 
 // Asset Disable Check Rule
 "DURATION_OF_SELECTED_VIDEO_RANGE" = "选取视频长度应在 %d-%d 秒之间";
