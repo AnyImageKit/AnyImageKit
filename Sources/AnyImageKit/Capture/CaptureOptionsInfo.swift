@@ -10,6 +10,12 @@ import UIKit
 import AVFoundation
 
 public struct CaptureOptionsInfo {
+
+    /// Creates the capture content view controller used on iPhone.
+    ///
+    /// The factory is also honored when capture is opened from `ImagePickerController`.
+    /// iPad continues to use the system image picker.
+    public var viewControllerFactory: (@MainActor (CaptureOptionsInfo) -> CaptureViewController)?
     
     /// Theme
     public var theme: CaptureTheme = .init()

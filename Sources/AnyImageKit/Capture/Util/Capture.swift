@@ -30,6 +30,9 @@ final class Capture {
     
     var orientation: DeviceOrientation = .portrait
     var isSwitchingCamera = false
+    var canCapturePhoto: Bool {
+        session.isRunning && videoIO.canCapturePhoto
+    }
     
     init(options: CaptureOptionsInfo) {
         self.options = options
@@ -121,8 +124,10 @@ extension Capture {
 // MARK: - Photo
 extension Capture {
     
-    func capturePhoto() {
-        videoIO.capturePhoto(orientation: orientation)
+    @discardableResult
+    func capturePhoto() -> Bool {
+        guard session.isRunning else { return false }
+        return videoIO.capturePhoto(orientation: orientation)
     }
 }
 

@@ -369,11 +369,19 @@ extension VideoIOComponent {
 // MARK: - Photo
 extension VideoIOComponent {
     
-    func capturePhoto(orientation: DeviceOrientation) {
+    var canCapturePhoto: Bool {
+        guard let connection = photoOutput.connection(with: .video) else { return false }
+        return connection.isEnabled && connection.isActive
+    }
+
+    @discardableResult
+    func capturePhoto(orientation: DeviceOrientation) -> Bool {
+        guard canCapturePhoto else { return false }
         self.orientation = orientation
         let settings = AVCapturePhotoSettings()
         settings.flashMode = flashMode.rawValue
         photoOutput.capturePhoto(with: settings, delegate: self)
+        return true
     }
 }
 

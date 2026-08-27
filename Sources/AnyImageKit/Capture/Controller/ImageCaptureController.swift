@@ -72,11 +72,23 @@ open class ImageCaptureController: AnyImageNavigationController {
             rootViewController.trackObserver = self
             viewControllers = [rootViewController]
         } else {
-            let rootViewController = CaptureViewController(options: options)
+            let rootViewController = makeCaptureViewController(options: options)
             rootViewController.delegate = self
             rootViewController.trackObserver = self
             viewControllers = [rootViewController]
         }
+    }
+
+    /// Creates the capture content view controller used on iPhone.
+    ///
+    /// Override this method to customize controller creation for a specific
+    /// `ImageCaptureController` subclass. `CaptureOptionsInfo.viewControllerFactory`
+    /// takes precedence when it is set.
+    open func makeCaptureViewController(options: CaptureOptionsInfo) -> CaptureViewController {
+        if let factory = options.viewControllerFactory {
+            return factory(options)
+        }
+        return CaptureViewController(options: options)
     }
 }
  

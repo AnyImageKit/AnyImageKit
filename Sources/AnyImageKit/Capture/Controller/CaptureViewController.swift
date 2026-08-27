@@ -15,9 +15,46 @@ protocol CaptureViewControllerDelegate: AnyObject {
     func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType)
 }
 
-final class CaptureViewController: AnyImageViewController {
+open class CaptureViewController: AnyImageViewController {
     
     weak var delegate: CaptureViewControllerDelegate?
+
+    /// The options used to configure this capture session.
+    public private(set) var options: CaptureOptionsInfo
+
+    /// The layout guide containing the default 9:16 capture interface.
+    public let containerLayoutGuide = UILayoutGuide()
+
+    /// The layout guide matching the camera preview view.
+    public let previewLayoutGuide = UILayoutGuide()
+
+    /// The layout guide matching the default capture controls.
+    public let controlsLayoutGuide = UILayoutGuide()
+
+    /// The default capture control.
+    public var captureButton: UIControl {
+        toolView.captureButton
+    }
+
+    /// The default cancel button.
+    public var cancelButton: UIButton {
+        toolView.cancelButton
+    }
+
+    /// The default camera switching button.
+    public var switchCameraButton: UIButton {
+        toolView.switchButton
+    }
+
+    /// The view containing the default capture tips.
+    public var tipsContentView: UIView {
+        tipsView
+    }
+
+    /// The view containing the camera preview.
+    public var previewContentView: UIView {
+        previewView
+    }
     
     private lazy var previewView: CapturePreviewView = {
         let view = CapturePreviewView(frame: .zero, options: options)
@@ -63,21 +100,22 @@ final class CaptureViewController: AnyImageViewController {
     }()
     
     private var permissionsChecked: Bool = false
-    private let options: CaptureOptionsInfo
     
-    init(options: CaptureOptionsInfo) {
+    public init(options: CaptureOptionsInfo) {
         self.options = options
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigation()
-        setupView()
+        setupCaptureNavigation()
+        setupCaptureViews()
+        setupCaptureConstraints()
         var permissions: [Permission] = [.camera]
         if options.mediaOptions.contains(.video) {
             permissions.append(.microphone)
@@ -93,17 +131,17 @@ final class CaptureViewController: AnyImageViewController {
         })
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.shared.isIdleTimerDisabled = true
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.isIdleTimerDisabled = false
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tipsView.showTips(hideAfter: 3, animated: true)
         if permissionsChecked {
@@ -113,31 +151,48 @@ final class CaptureViewController: AnyImageViewController {
         }
     }
     
-    private func setupNavigation() {
+    /// Configures the default navigation appearance.
+    open func setupCaptureNavigation() {
         navigationController?.navigationBar.isHidden = true
     }
     
-    private func setupView() {
+    /// Adds the default capture views and public layout guides.
+    ///
+    /// Call `super` when overriding to retain the built-in capture interface.
+    open func setupCaptureViews() {
         view.backgroundColor = .black
-        let layoutGuide = UILayoutGuide()
-        view.addLayoutGuide(layoutGuide)
+        view.addLayoutGuide(containerLayoutGuide)
+        view.addLayoutGuide(previewLayoutGuide)
+        view.addLayoutGuide(controlsLayoutGuide)
         view.addSubview(previewView)
         view.addSubview(toolView)
         view.addSubview(tipsView)
+    }
+
+    /// Installs constraints for the default capture interface.
+    ///
+    /// Call `super` when overriding to retain the built-in layout.
+    open func setupCaptureConstraints() {
         previewView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.center.equalToSuperview()
             maker.width.equalTo(previewView.snp.height).multipliedBy(9.0/16.0)
         }
-        layoutGuide.snp.makeConstraints { maker in
+        previewLayoutGuide.snp.makeConstraints { maker in
+            maker.edges.equalTo(previewView)
+        }
+        containerLayoutGuide.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
             maker.center.equalToSuperview()
-            maker.width.equalTo(layoutGuide.snp.height).multipliedBy(9.0/16.0)
+            maker.width.equalTo(containerLayoutGuide.snp.height).multipliedBy(9.0/16.0)
         }
         toolView.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
-            maker.bottom.equalTo(layoutGuide.snp.bottom)
+            maker.bottom.equalTo(containerLayoutGuide.snp.bottom)
             maker.height.equalTo(88)
+        }
+        controlsLayoutGuide.snp.makeConstraints { maker in
+            maker.edges.equalTo(toolView)
         }
         tipsView.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
@@ -145,7 +200,7 @@ final class CaptureViewController: AnyImageViewController {
         }
     }
     
-    override var prefersStatusBarHidden: Bool {
+    open override var prefersStatusBarHidden: Bool {
         return true
     }
 }
@@ -191,10 +246,10 @@ extension CaptureViewController {
 extension CaptureViewController: CaptureButtonDelegate {
     
     func captureButtonDidTapped(_ button: CaptureButton) {
-        guard !capture.isSwitchingCamera else { return }
+        guard !capture.isSwitchingCamera, capture.canCapturePhoto else { return }
         impactFeedback()
+        guard capture.capturePhoto() else { return }
         button.startProcessing()
-        capture.capturePhoto()
     }
     
     func captureButtonDidBeganLongPress(_ button: CaptureButton) {
@@ -338,14 +393,14 @@ extension CaptureViewController: DeviceOrientationUtilDelegate {
 // MARK: - ImageEditorControllerDelegate
 extension CaptureViewController: ImageEditorControllerDelegate {
     
-    func imageEditorDidCancel(_ editor: ImageEditorController) {
+    public func imageEditorDidCancel(_ editor: ImageEditorController) {
         capture.startRunning()
         orientationUtil.startRunning()
         previewView.isRunning = true
         editor.dismiss(animated: false, completion: nil)
     }
     
-    func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
+    public func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
         delegate?.capture(self, didOutput: result.mediaURL, type: result.type)
     }
 }

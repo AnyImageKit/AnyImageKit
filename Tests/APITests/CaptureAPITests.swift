@@ -19,6 +19,43 @@ class CaptureAPITests: XCTestCase {
         capture.trackDelegate = testImageKitDataTrackDelegate
     }
 
+    func testCustomCaptureViewController() {
+        var options = CaptureOptionsInfo()
+        options.viewControllerFactory = { options in
+            CustomCaptureViewController(options: options)
+        }
+
+        let capture = ImageCaptureController(options: options, delegate: testImageCaptureControllerDelegate)
+        guard let controller = capture.viewControllers.first as? CustomCaptureViewController else {
+            return XCTFail("The configured capture view controller factory was not used")
+        }
+
+        XCTAssertEqual(controller.options.mediaOptions, options.mediaOptions)
+        XCTAssertNotNil(controller.captureButton)
+        XCTAssertNotNil(controller.cancelButton)
+        XCTAssertNotNil(controller.switchCameraButton)
+        XCTAssertNotNil(controller.tipsContentView)
+        XCTAssertNotNil(controller.previewContentView)
+        XCTAssertNotNil(controller.containerLayoutGuide)
+        XCTAssertNotNil(controller.previewLayoutGuide)
+        XCTAssertNotNil(controller.controlsLayoutGuide)
+    }
+
+    private final class CustomCaptureViewController: CaptureViewController {
+
+        override func setupCaptureNavigation() {
+            super.setupCaptureNavigation()
+        }
+
+        override func setupCaptureViews() {
+            super.setupCaptureViews()
+        }
+
+        override func setupCaptureConstraints() {
+            super.setupCaptureConstraints()
+        }
+    }
+
     class TestImageCaptureControllerDelegate: ImageCaptureControllerDelegate {
         
         func imageCaptureDidCancel(_ capture: ImageCaptureController) {
