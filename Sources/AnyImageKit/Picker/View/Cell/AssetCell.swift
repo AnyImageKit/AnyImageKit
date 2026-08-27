@@ -201,7 +201,9 @@ extension AssetCell: SKConfigurableView {
     }
     
     func updateState(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
-        asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
+        if !manager.isDraggingScrollIndicator {
+            asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
+        }
         update(options: manager.options)
         if asset._images[.edited] != nil {
             editedView.isHidden = false

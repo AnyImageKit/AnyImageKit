@@ -15,6 +15,7 @@ extension AssetPickerViewController {
     @objc func panIndicator(gr: UIPanGestureRecognizer) {
         if gr.state == .began {
             indicatorView.inPan = true
+            manager.isDraggingScrollIndicator = true
             showIndicator(true)
         }
         
@@ -32,7 +33,11 @@ extension AssetPickerViewController {
         
         if gr.state == .ended || gr.state == .cancelled || gr.state == .failed {
             indicatorView.inPan = false
+            manager.isDraggingScrollIndicator = false
             showIndicator(false)
+            DispatchQueue.main.async { [weak self] in
+                self?.updateVisibleCellState()
+            }
         }
     }
     

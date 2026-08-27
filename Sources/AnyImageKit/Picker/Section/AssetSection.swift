@@ -113,7 +113,7 @@ extension AssetSection {
         let itemWidth = max(0, floor((size.width - (columnCount - 1) * spacing) / columnCount))
         return CGSize(width: itemWidth, height: itemWidth)
     }
-    
+
     func item(willDisplay view: UICollectionViewCell, row: Int) {
         guard let cell = view as? AssetCell, let asset = asset(at: row) else { return }
         cell.updateState(asset, manager: manager, animated: false)
