@@ -95,11 +95,11 @@ open class ImageCaptureController: AnyImageNavigationController {
 // MARK: - CaptureViewControllerDelegate
 extension ImageCaptureController: CaptureViewControllerDelegate {
     
-    func captureDidCancel(_ capture: CaptureViewController) {
+    public func captureDidCancel(_ capture: CaptureViewController) {
         captureDelegate?.imageCaptureDidCancel(self)
     }
     
-    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType) {
+    public func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType) {
         let result = CaptureResult(mediaURL: mediaURL, type: type)
         captureDelegate?.imageCapture(self, didFinishCapturing: result)
     }

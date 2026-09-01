@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-protocol CaptureViewControllerDelegate: AnyObject {
+public protocol CaptureViewControllerDelegate: AnyObject {
     
     func captureDidCancel(_ capture: CaptureViewController)
     func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType)
@@ -17,7 +17,7 @@ protocol CaptureViewControllerDelegate: AnyObject {
 
 open class CaptureViewController: AnyImageViewController {
     
-    weak var delegate: CaptureViewControllerDelegate?
+    public weak var delegate: CaptureViewControllerDelegate?
 
     /// The options used to configure this capture session.
     public private(set) var options: CaptureOptionsInfo

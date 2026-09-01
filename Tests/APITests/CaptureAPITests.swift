@@ -12,6 +12,7 @@ import AnyImageKit
 class CaptureAPITests: XCTestCase {
 
     let testImageCaptureControllerDelegate = TestImageCaptureControllerDelegate()
+    let testCaptureViewControllerDelegate = TestCaptureViewControllerDelegate()
     let testImageKitDataTrackDelegate = TestImageKitDataTrackDelegate()
     
     func testOpen() {
@@ -30,6 +31,7 @@ class CaptureAPITests: XCTestCase {
             return XCTFail("The configured capture view controller factory was not used")
         }
 
+        controller.delegate = testCaptureViewControllerDelegate
         XCTAssertEqual(controller.options.mediaOptions, options.mediaOptions)
         XCTAssertNotNil(controller.captureButton)
         XCTAssertNotNil(controller.cancelButton)
@@ -53,6 +55,17 @@ class CaptureAPITests: XCTestCase {
 
         override func setupCaptureConstraints() {
             super.setupCaptureConstraints()
+        }
+    }
+
+    class TestCaptureViewControllerDelegate: CaptureViewControllerDelegate {
+
+        func captureDidCancel(_ capture: CaptureViewController) {
+
+        }
+
+        func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType) {
+
         }
     }
 
