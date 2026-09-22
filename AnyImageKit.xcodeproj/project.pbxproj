@@ -22,6 +22,7 @@
 		715F962A253EAD2900632D0D /* PreselectAssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */; };
 		7176B7E3248DD86800B607BD /* AvatarPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176B7E2248DD86800B607BD /* AvatarPickerController.swift */; };
 		71C8696F2E9E55E70042F69A /* BrowserConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */; };
+		71D8A0112F1A00010042F69A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8A0102F1A00010042F69A /* SceneDelegate.swift */; };
 		A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026C99E23978DF400931028 /* CaptureConfigViewController.swift */; };
 		A040C596277B4D47000D2569 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A040C595277B4D47000D2569 /* SnapKit */; };
 		A040C598277B4D52000D2569 /* AnyImageKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A099CC60232F3BF70023CC3D /* AnyImageKit.framework */; };
@@ -98,6 +99,7 @@
 		715F9629253EAD2900632D0D /* PreselectAssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreselectAssetViewController.swift; sourceTree = "<group>"; };
 		7176B7E2248DD86800B607BD /* AvatarPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerController.swift; sourceTree = "<group>"; };
 		71C8696E2E9E55E70042F69A /* BrowserConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserConfigViewController.swift; sourceTree = "<group>"; };
+		71D8A0102F1A00010042F69A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		71F3BEAF2CB526A5008954D1 /* AnyImageKit.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AnyImageKit.podspec.json; sourceTree = "<group>"; };
 		A026C99E23978DF400931028 /* CaptureConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureConfigViewController.swift; sourceTree = "<group>"; };
 		A032AEC4255588AF00776FCF /* RELEASE_NOTE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_NOTE.md; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 			children = (
 				A5A27BB6232F82B000D966B8 /* Info.plist */,
 				A5A27BA8232F82AE00D966B8 /* AppDelegate.swift */,
+				71D8A0102F1A00010042F69A /* SceneDelegate.swift */,
 				7176B7DF248DD7FE00B607BD /* Controller */,
 				A52E1D9C237AB6860002174A /* View */,
 				A52E1D95237AB0040002174A /* Protocol */,
@@ -592,6 +595,7 @@
 				A52E1D9B237AB6430002174A /* PickerResultViewController.swift in Sources */,
 				A026C99F23978DF400931028 /* CaptureConfigViewController.swift in Sources */,
 				A5A27BA9232F82AE00D966B8 /* AppDelegate.swift in Sources */,
+				71D8A0112F1A00010042F69A /* SceneDelegate.swift in Sources */,
 				A52E1D99237AB3F60002174A /* ImageEditorConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
