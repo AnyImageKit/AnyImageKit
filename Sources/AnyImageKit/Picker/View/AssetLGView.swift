@@ -10,14 +10,35 @@ import UIKit
 
 final class AssetLGView: UIView {
     
-    let toolBar = UIToolbar()
+    let toolBar = UIView()
     var closeButton = UIBarButtonItem()
     var doneButton = UIBarButtonItem()
-    var previewButton = UIBarButtonItem()
-    var moreButton = UIBarButtonItem()
-    let filterBarContainer = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 48))
-    private var filterBarWidthConstraint: NSLayoutConstraint?
+    let filterBarContainer = UIView()
     private var albumTitle: String?
+    
+    private(set) lazy var previewButton: UIButton = {
+        guard #available(iOS 26.0, *) else {
+            return UIButton()
+        }
+        let view = UIButton(type: .system)
+        var config = UIButton.Configuration.glass()
+        config.image = UIImage(systemName: "photo.badge.checkmark")
+        view.configuration = config
+        view.isEnabled = false
+        return view
+    }()
+    
+    private(set) lazy var moreButton: UIButton = {
+        guard #available(iOS 26.0, *) else {
+            return UIButton()
+        }
+        let view = UIButton(type: .system)
+        var config = UIButton.Configuration.glass()
+        config.image = UIImage(systemName: "line.3.horizontal.decrease")
+        view.configuration = config
+        view.showsMenuAsPrimaryAction = true
+        return view
+    }()
     
     private(set) lazy var albumButton: UIButton = {
         guard #available(iOS 26.0, *) else {
@@ -59,13 +80,6 @@ final class AssetLGView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateFilterBarWidth(_ width: CGFloat) {
-        let finalWidth = max(width, 120)
-        filterBarContainer.frame.size = CGSize(width: finalWidth, height: 48)
-        filterBarWidthConstraint?.constant = finalWidth
-        filterBarContainer.layoutIfNeeded()
-    }
-    
     func setAlbumTitle(_ title: String) {
         albumTitle = title
         albumButton.accessibilityLabel = String(format: BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker), title)
@@ -78,10 +92,6 @@ final class AssetLGView: UIView {
 
     private func setupFilterBarContainer() {
         filterBarContainer.backgroundColor = .clear
-        filterBarContainer.translatesAutoresizingMaskIntoConstraints = false
-        filterBarWidthConstraint = filterBarContainer.widthAnchor.constraint(equalToConstant: 200)
-        filterBarWidthConstraint?.isActive = true
-        filterBarContainer.heightAnchor.constraint(equalToConstant: 48).isActive = true
     }
 }
 

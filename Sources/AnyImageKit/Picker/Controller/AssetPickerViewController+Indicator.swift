@@ -91,6 +91,7 @@ extension AssetPickerViewController {
                 self.filterBar.alpha = hiddenToolBar ? 0.01 : 1
                 self.toolBar.alpha = hiddenToolBar ? 0.01 : 1
                 self.lgView.toolBar.alpha = hiddenToolBar ? 0.01 : 1
+                self.lgView.filterBarContainer.alpha = hiddenToolBar ? 0.01 : 1
                 self.lgView.limitedButton.alpha = hiddenToolBar ? 0.01 : 1
                 self.permissionView.alpha = hiddenToolBar ? 0.01 : 1
                 self.topDateIndicatorView.alpha = hiddenToolBar ? 1 : 0.0

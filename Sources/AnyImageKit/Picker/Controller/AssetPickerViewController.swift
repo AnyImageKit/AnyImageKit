@@ -190,6 +190,12 @@ final class AssetPickerViewController: AnyImageViewController {
         updateIndicator()
     }
     
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        collectionView.collectionViewLayout.invalidateLayout()
+        lgUpdateToolBarLayout()
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle(style: manager.options.theme.style)
     }
@@ -223,8 +229,9 @@ final class AssetPickerViewController: AnyImageViewController {
         
         setupToolBar()
         
-        collectionView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
+        collectionView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalTo(view.safeAreaLayoutGuide)
         }
         indicatorView.snp.makeConstraints { make in
             make.top.equalTo(collectionView)

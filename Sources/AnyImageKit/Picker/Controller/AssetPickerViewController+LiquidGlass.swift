@@ -68,14 +68,37 @@ extension AssetPickerViewController {
         
         view.addSubview(lgView.toolBar)
         lgView.toolBar.snp.makeConstraints { maker in
-            maker.left.right.equalToSuperview()
+            maker.left.right.equalTo(view.safeAreaLayoutGuide).inset(15)
             maker.bottom.equalTo(view.safeAreaLayoutGuide)
+            maker.height.equalTo(48)
+        }
+        
+        lgView.toolBar.addSubview(lgView.previewButton)
+        lgView.previewButton.snp.makeConstraints { make in
+            make.left.centerY.equalToSuperview()
+            make.width.height.equalTo(48)
+        }
+        
+        lgView.toolBar.addSubview(lgView.moreButton)
+        lgView.moreButton.snp.makeConstraints { make in
+            make.right.centerY.equalToSuperview()
+            make.width.height.equalTo(48)
+        }
+        
+        if showsMediaTypeFilterBar {
+            lgView.toolBar.addSubview(lgView.filterBarContainer)
+            lgView.filterBarContainer.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                make.height.equalTo(48)
+                make.left.equalTo(lgView.previewButton.snp.right).offset(15)
+                make.right.equalTo(lgView.moreButton.snp.left).offset(-15)
+            }
         }
         
         lgView.limitedButton.addTarget(self, action: #selector(limitedButtonTapped(_:)), for: .touchUpInside)
         view.addSubview(lgView.limitedButton)
         lgView.limitedButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(15)
+            make.left.right.equalTo(view.safeAreaLayoutGuide).inset(15)
             make.bottom.equalTo(lgView.toolBar.snp.top).offset(-16)
             make.height.equalTo(48)
         }
@@ -86,36 +109,10 @@ extension AssetPickerViewController {
     func lgSetupToolBarMenu() {
         guard #available(iOS 26.0, *), !manager.options.designRequiresCompatibility else { return }
         
-        lgView.previewButton = UIBarButtonItem(image: manager.options.theme[icon: .previewButton], landscapeImagePhone: nil, style: .plain, target: self, action: #selector(previewButtonTapped))
+        lgView.previewButton.addTarget(self, action: #selector(previewButtonTapped), for: .touchUpInside)
         lgView.previewButton.isEnabled = false
-        lgView.previewButton.width = 44
-        lgView.moreButton = UIBarButtonItem(image: manager.options.theme[icon: .moreButton], primaryAction: nil, menu: makeLGToolBarMenu())
-        lgView.moreButton.width = 44
+        lgView.moreButton.menu = makeLGToolBarMenu()
         lgUpdateBarButtonAppearance(options: manager.options)
-        if showsMediaTypeFilterBar {
-            let leadingSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-            leadingSpace.width = 8
-            let trailingSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-            trailingSpace.width = 8
-            
-            lgView.toolBar.items = [
-                lgView.previewButton,
-                leadingSpace,
-                UIBarButtonItem(customView: lgView.filterBarContainer),
-                trailingSpace,
-                lgView.moreButton
-            ]
-        } else {
-            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            
-            lgView.toolBar.items = [
-                lgView.previewButton,
-                flexibleSpace,
-                lgView.moreButton
-            ]
-        }
-        
-        lgUpdateToolBarLayout()
     }
     
     func updateLimitedButton() {
@@ -142,10 +139,10 @@ extension AssetPickerViewController {
         lgView.doneButton.tintColor = options.theme[color: .primary]
         lgView.doneButton.accessibilityLabel = options.theme[string: .done]
 
-        lgView.previewButton.image = options.theme[icon: .previewButton]
+        lgView.previewButton.configuration?.image = options.theme[icon: .previewButton]
         lgView.previewButton.accessibilityLabel = options.theme[string: .preview]
 
-        lgView.moreButton.image = options.theme[icon: .moreButton]
+        lgView.moreButton.configuration?.image = options.theme[icon: .moreButton]
         lgView.moreButton.accessibilityLabel = options.theme[string: .pickerMoreOptions]
     }
 
@@ -339,11 +336,6 @@ extension AssetPickerViewController {
     
     func lgUpdateToolBarLayout() {
         guard #available(iOS 26.0, *), !manager.options.designRequiresCompatibility else { return }
-        guard showsMediaTypeFilterBar else { return }
-        let horizontalMargins = lgView.toolBar.layoutMargins.left + lgView.toolBar.layoutMargins.right
-        let buttonReservedWidth: CGFloat = 72
-        let availableWidth = lgView.toolBar.bounds.width - horizontalMargins - buttonReservedWidth - buttonReservedWidth - 8 - 8
-        lgView.updateFilterBarWidth(availableWidth)
     }
     
     private func refreshLGMoreMenu() {
