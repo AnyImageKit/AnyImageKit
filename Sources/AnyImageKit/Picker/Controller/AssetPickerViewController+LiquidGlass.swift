@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-private struct LGScrollAnchor {
+struct LGScrollAnchor {
     let indexPath: IndexPath
     let relativePositionInCell: CGFloat
     let viewportAnchorY: CGFloat
@@ -278,7 +278,7 @@ extension AssetPickerViewController {
         refreshLGMoreMenu()
     }
     
-    private func captureLGScrollAnchor() -> LGScrollAnchor? {
+    func captureLGScrollAnchor() -> LGScrollAnchor? {
         let minOffsetY = -collectionView.adjustedContentInset.top
         let maxOffsetY = max(minOffsetY, collectionView.contentSize.height - collectionView.bounds.height + collectionView.adjustedContentInset.bottom)
         let epsilon: CGFloat = 2
@@ -315,7 +315,7 @@ extension AssetPickerViewController {
                               viewportAnchorY: viewportAnchorY)
     }
     
-    private func restoreLGScrollAnchor(_ anchor: LGScrollAnchor?) {
+    func restoreLGScrollAnchor(_ anchor: LGScrollAnchor?) {
         guard let anchor else { return }
         
         collectionView.layoutIfNeeded()

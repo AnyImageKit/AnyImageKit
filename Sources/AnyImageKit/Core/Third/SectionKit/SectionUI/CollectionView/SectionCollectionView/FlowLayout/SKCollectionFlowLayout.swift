@@ -249,7 +249,12 @@ open class SKCollectionFlowLayout: UICollectionViewFlowLayout, SKCDelegateObserv
     open override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
         layoutStore = .init(attributes: [])
         layoutTempStore = nil
-        return super.invalidationContext(forBoundsChange: newBounds)
+        let context = super.invalidationContext(forBoundsChange: newBounds)
+        if let flowContext = context as? UICollectionViewFlowLayoutInvalidationContext, oldBounds.size != newBounds.size {
+            flowContext.invalidateFlowLayoutDelegateMetrics = true
+            flowContext.invalidateFlowLayoutAttributes = true
+        }
+        return context
     }
     
     open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {

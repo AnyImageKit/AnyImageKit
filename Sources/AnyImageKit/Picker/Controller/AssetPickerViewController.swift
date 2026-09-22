@@ -182,6 +182,7 @@ final class AssetPickerViewController: AnyImageViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        relayoutCollectionItemsIfNeeded()
         lgUpdateToolBarLayout()
         if autoScrollToLatest {
             scrollToEnd()
@@ -192,8 +193,19 @@ final class AssetPickerViewController: AnyImageViewController {
     
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        collectionView.collectionViewLayout.invalidateLayout()
+        preferredCollectionWidth = .zero
         lgUpdateToolBarLayout()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        let scrollAnchor = captureLGScrollAnchor()
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.invalidateCollectionItemSizes()
+        }, completion: { [weak self] _ in
+            self?.invalidateCollectionItemSizes()
+            self?.restoreLGScrollAnchor(scrollAnchor)
+        })
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -575,6 +587,23 @@ extension AssetPickerViewController {
         toolBarSetEnable(!manager.selectedAssets.isEmpty)
     }
     
+    private func relayoutCollectionItemsIfNeeded() {
+        let width = collectionView.bounds.width
+        guard width > 0, abs(width - preferredCollectionWidth) > 0.5 else { return }
+        let scrollAnchor = captureLGScrollAnchor()
+        invalidateCollectionItemSizes()
+        restoreLGScrollAnchor(scrollAnchor)
+    }
+    
+    private func invalidateCollectionItemSizes() {
+        preferredCollectionWidth = collectionView.bounds.width
+        let context = UICollectionViewFlowLayoutInvalidationContext()
+        context.invalidateFlowLayoutDelegateMetrics = true
+        context.invalidateFlowLayoutAttributes = true
+        collectionView.collectionViewLayout.invalidateLayout(with: context)
+        collectionView.layoutIfNeeded()
+    }
+    
     func scrollToEnd(animated: Bool = false) {
         if manager.options.orderByDate == .asc {
             collectionView.scrollToLast(at: .bottom, animated: animated)
@@ -611,14 +640,9 @@ extension AssetPickerViewController {
     
     @objc private func containerSizeDidChange(_ sender: Notification) {
         containerSize = (sender.userInfo?[containerSizeKey] as? CGSize) ?? ScreenHelper.mainBounds.size
-        guard collectionView.visibleCells.count > 0 else { return }
-        let visibleCellRows = collectionView.visibleCells.map{ $0.tag }.sorted()
-        let row = visibleCellRows[visibleCellRows.count / 2]
-        let indexPath = IndexPath(row: row, section: 0)
-        reloadData(animated: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-        }
+        let scrollAnchor = captureLGScrollAnchor()
+        invalidateCollectionItemSizes()
+        restoreLGScrollAnchor(scrollAnchor)
     }
     
     @objc private func didSyncAsset(_ sender: Notification) {
