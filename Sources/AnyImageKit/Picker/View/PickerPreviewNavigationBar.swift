@@ -129,16 +129,19 @@ extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
         }
         
         if #available(iOS 26.0, *), !options.designRequiresCompatibility {
-            lgBackButton.configuration?.image = options.theme[icon: .returnButtonLiquidGlass]
+            var config = lgBackButton.configuration
+            config?.image = options.theme[icon: .returnButtonLiquidGlass]
+            lgBackButton.configuration = config
             lgBackButton.accessibilityLabel = options.theme[string: .back]
+            options.theme.applyGlassButtonConfiguration(.back, to: lgBackButton)
         } else {
             backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
             backButton.setImage(options.theme[icon: .returnButton], for: .normal)
             backButton.accessibilityLabel = options.theme[string: .back]
+            options.theme.buttonConfiguration[.backInPreview]?.configuration(backButton)
         }
         
         updateChildrenConfigurable(options: options)
-        options.theme.buttonConfiguration[.backInPreview]?.configuration(backButton)
     }
 }
 

@@ -29,6 +29,12 @@ public final class PickerTheme: ThemeConfigurable {
     /// Config button
     internal var buttonConfiguration: [ButtonConfigKey: ButtonConfigObject] = [:]
     
+    /// Config Liquid Glass bar button
+    internal var barButtonConfiguration: [BarButtonConfigKey: BarButtonConfigObject] = [:]
+    
+    /// Config Liquid Glass button
+    internal var glassButtonConfiguration: [GlassButtonConfigKey: GlassButtonConfigObject] = [:]
+    
     public init(style: UserInterfaceStyle) {
         self.style = style
     }
@@ -64,6 +70,26 @@ public final class PickerTheme: ThemeConfigurable {
     /// - Note: ⚠️ DO NOT set hidden/enable properties
     public func configurationButton(for key: ButtonConfigKey, configuration: @escaping ((UIButton) -> Void)) {
         buttonConfiguration[key] = ButtonConfigObject(key: key, configuration: configuration)
+    }
+    
+    /// Configure a Liquid Glass bar button.
+    /// - Note: ⚠️ DO NOT set isHidden/isEnabled. Applied only when Liquid Glass is enabled. The closure may run again when bar appearance refreshes; keep it idempotent.
+    public func configurationBarButton(for key: BarButtonConfigKey, configuration: @escaping (UIBarButtonItem) -> Void) {
+        barButtonConfiguration[key] = BarButtonConfigObject(key: key, configuration: configuration)
+    }
+    
+    /// Configure a Liquid Glass button.
+    /// - Note: ⚠️ DO NOT set isHidden/isEnabled. Applied only when Liquid Glass is enabled.
+    /// On iOS 26, the preview back button uses `.back` instead of `configurationButton(for: .backInPreview)`.
+    /// The closure can run again when appearance refreshes. Keep it cheap and idempotent, and do not add targets or actions inside it.
+    /// The picker owns behavior and restores it after the closure:
+    /// - `.album`: `title`, `accessibilityLabel`, `menu`, and `showsMenuAsPrimaryAction`. Customize color, font, and image only.
+    /// - `.limitedPermission`: `title`, including the title cleared when the button collapses on scroll. Customize color, font, and image only.
+    /// - `.select`: selection appearance. Do not replace `configuration`, `image`, or `attributedTitle`. Customize color, font, and identifier only.
+    /// - `.originalImage`: the check image. Customize color and font only. Change the icon with `checkOn` and `checkOff`.
+    /// Menu items are not customizable.
+    public func configurationGlassButton(for key: GlassButtonConfigKey, configuration: @escaping (UIButton) -> Void) {
+        glassButtonConfiguration[key] = GlassButtonConfigObject(key: key, configuration: configuration)
     }
 }
 
@@ -317,5 +343,54 @@ extension PickerTheme {
         case done
         case backInPreview
         case goSettings
+    }
+    
+    func applyBarButtonConfiguration(_ key: BarButtonConfigKey, to item: UIBarButtonItem) {
+        barButtonConfiguration[key]?.configuration(item)
+    }
+    
+    func applyGlassButtonConfiguration(_ key: GlassButtonConfigKey, to button: UIButton) {
+        glassButtonConfiguration[key]?.configuration(button)
+    }
+}
+
+// MARK: - Liquid Glass
+extension PickerTheme {
+    
+    struct BarButtonConfigObject: Equatable {
+        let key: BarButtonConfigKey
+        let configuration: (UIBarButtonItem) -> Void
+        
+        static func == (lhs: PickerTheme.BarButtonConfigObject, rhs: PickerTheme.BarButtonConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum BarButtonConfigKey: Hashable {
+        
+        case close
+        case done
+        case preview
+        case more
+    }
+    
+    struct GlassButtonConfigObject: Equatable {
+        let key: GlassButtonConfigKey
+        let configuration: (UIButton) -> Void
+        
+        static func == (lhs: PickerTheme.GlassButtonConfigObject, rhs: PickerTheme.GlassButtonConfigObject) -> Bool {
+            return lhs.key == rhs.key
+        }
+    }
+    
+    public enum GlassButtonConfigKey: Hashable {
+        
+        case album
+        case limitedPermission
+        case edit
+        case originalImage
+        case done
+        case back
+        case select
     }
 }

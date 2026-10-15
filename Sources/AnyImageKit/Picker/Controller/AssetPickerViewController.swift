@@ -50,6 +50,7 @@ final class AssetPickerViewController: AnyImageViewController {
     private var photoLibraryRevision: UInt = 0
     private var albumQueryCache: [AlbumQueryKey: CachedAlbum] = [:]
     private(set) var didAppear: Bool = false
+    var didCollapseLimitedButton = false
     var lgAssetSortOption: LGAssetSortOption = .recentlyAdded
     
     lazy var stopReloadAlbum: Bool = false

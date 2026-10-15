@@ -7,7 +7,8 @@
 //
 
 import XCTest
-import AnyImageKit
+import ObjectiveC
+@testable import AnyImageKit
 
 class PickerAPITests: XCTestCase {
 
@@ -140,5 +141,143 @@ class PickerAPITests: XCTestCase {
         theme.configurationButton(for: .done, configuration: { _ in })
         theme.configurationButton(for: .backInPreview, configuration: { _ in })
         theme.configurationButton(for: .goSettings, configuration: { _ in })
+        
+        theme.configurationBarButton(for: .close, configuration: { _ in })
+        theme.configurationBarButton(for: .done, configuration: { _ in })
+        theme.configurationBarButton(for: .preview, configuration: { _ in })
+        theme.configurationBarButton(for: .more, configuration: { _ in })
+        
+        theme.configurationGlassButton(for: .album, configuration: { _ in })
+        theme.configurationGlassButton(for: .limitedPermission, configuration: { _ in })
+        theme.configurationGlassButton(for: .edit, configuration: { _ in })
+        theme.configurationGlassButton(for: .originalImage, configuration: { _ in })
+        theme.configurationGlassButton(for: .done, configuration: { _ in })
+        theme.configurationGlassButton(for: .back, configuration: { _ in })
+        theme.configurationGlassButton(for: .select, configuration: { _ in })
+    }
+    
+    func testGlassButtonConfigurationIsLastWriter() {
+        guard #available(iOS 26.0, *) else { return }
+        
+        let theme = PickerTheme(style: .light)
+        theme[string: .pickerA11ySwitchAlbumTips] = "Album %@"
+        theme.configurationGlassButton(for: .album) { button in
+            button.menu = nil
+            button.showsMenuAsPrimaryAction = false
+            button.accessibilityLabel = "custom-album"
+            var config = button.configuration ?? .clearGlass()
+            config.title = "pinned-album"
+            button.configuration = config
+        }
+        theme.configurationGlassButton(for: .limitedPermission) { button in
+            button.accessibilityLabel = "custom-limited"
+            var config = button.configuration ?? .glass()
+            config.title = "pinned-limited"
+            button.configuration = config
+        }
+        let checkOff = UIImage(systemName: "circle")
+        let checkOn = UIImage(systemName: "checkmark.circle")
+        theme[icon: .checkOff] = checkOff
+        theme[icon: .checkOn] = checkOn
+        theme.configurationGlassButton(for: .originalImage) { button in
+            var config = button.configuration ?? .glass()
+            config.image = UIImage(systemName: "xmark")
+            button.configuration = config
+        }
+        theme.configurationGlassButton(for: .select) { button in
+            button.accessibilityIdentifier = "select-configured"
+            button.accessibilityLabel = "custom-select"
+        }
+        var options = PickerOptionsInfo()
+        options.theme = theme
+        
+        let view = AssetLGView(frame: .zero)
+        view.update(options: options)
+        let albumMenu = UIMenu(title: "albums", children: [])
+        view.albumButton.menu = albumMenu
+        view.albumButton.showsMenuAsPrimaryAction = true
+        view.setAlbumTitle("Trip")
+        XCTAssertEqual(view.albumButton.configuration?.title, "Trip")
+        XCTAssertEqual(view.albumButton.accessibilityLabel, "Album Trip")
+        XCTAssertTrue(view.albumButton.showsMenuAsPrimaryAction)
+        XCTAssertEqual(view.albumButton.menu?.title, "albums")
+        XCTAssertEqual(view.limitedButton.accessibilityLabel, "custom-limited")
+        
+        view.collapseLimitedButtonTitle()
+        XCTAssertEqual(view.limitedButton.accessibilityLabel, "custom-limited")
+        XCTAssertNil(view.limitedButton.configuration?.title)
+        
+        let selectButton = NumberCircleLGButton(type: .system)
+        selectButton.configuration = .glass()
+        selectButton.update(options: options)
+        selectButton.setNum(2, isSelected: true, animated: false)
+        XCTAssertEqual(selectButton.accessibilityIdentifier, "select-configured")
+        XCTAssertEqual(selectButton.accessibilityLabel, "custom-select")
+        
+        let toolBar = PreviewLGToolBar(frame: .zero)
+        toolBar.update(options: options)
+        XCTAssertEqual(toolBar.editButton.configuration?.titleTextAttributesTransformer?(AttributeContainer()).font, .systemFont(ofSize: 18))
+        XCTAssertEqual(toolBar.originalButton.configuration?.titleTextAttributesTransformer?(AttributeContainer()).font, .systemFont(ofSize: 16))
+        XCTAssertTrue(toolBar.originalButton.configuration?.image === checkOff)
+        toolBar.setOriginalSelected(true)
+        XCTAssertTrue(toolBar.originalButton.configuration?.image === checkOn)
+        XCTAssertEqual(toolBar.doneButton.configuration?.titleTextAttributesTransformer?(AttributeContainer()).font, .systemFont(ofSize: 18, weight: .bold))
+    }
+    
+    func testGlassButtonConfigurationIsSkippedInCompatibilityMode() {
+        guard #available(iOS 26.0, *) else { return }
+        
+        BundleInfoDictionaryStub.compatibility = true
+        BundleInfoDictionaryStub.swizzle()
+        defer {
+            BundleInfoDictionaryStub.swizzle()
+            BundleInfoDictionaryStub.compatibility = nil
+        }
+        
+        let theme = PickerTheme(style: .light)
+        theme.configurationGlassButton(for: .album) { button in
+            button.accessibilityIdentifier = "album-ran"
+        }
+        theme.configurationGlassButton(for: .limitedPermission) { button in
+            button.accessibilityIdentifier = "limited-ran"
+        }
+        var options = PickerOptionsInfo()
+        options.theme = theme
+        
+        let view = AssetLGView(frame: .zero)
+        view.update(options: options)
+        view.setAlbumTitle("Trip")
+        view.collapseLimitedButtonTitle()
+        
+        XCTAssertNil(view.albumButton.accessibilityIdentifier)
+        XCTAssertNil(view.limitedButton.accessibilityIdentifier)
+        XCTAssertEqual(view.albumButton.title(for: .normal), "Trip")
+    }
+}
+
+private enum BundleInfoDictionaryStub {
+    static var compatibility: Bool?
+    private static var didSwizzle = false
+    
+    static func swizzle() {
+        let original = class_getInstanceMethod(Bundle.self, #selector(Bundle.object(forInfoDictionaryKey:)))
+        let stub = class_getInstanceMethod(Bundle.self, #selector(Bundle.aik_test_object(forInfoDictionaryKey:)))
+        guard let original, let stub else { return }
+        if !didSwizzle {
+            method_exchangeImplementations(original, stub)
+            didSwizzle = true
+        } else {
+            method_exchangeImplementations(original, stub)
+            didSwizzle = false
+        }
+    }
+}
+
+private extension Bundle {
+    @objc func aik_test_object(forInfoDictionaryKey key: String) -> Any? {
+        if key == "UIDesignRequiresCompatibility", let compatibility = BundleInfoDictionaryStub.compatibility {
+            return compatibility
+        }
+        return aik_test_object(forInfoDictionaryKey: key)
     }
 }
