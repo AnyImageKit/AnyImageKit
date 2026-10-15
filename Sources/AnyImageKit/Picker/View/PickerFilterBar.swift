@@ -104,10 +104,10 @@ extension PickerFilterBar {
         guard isFirst else { return }
         isFirst = false
         if #available(iOS 26.0, *), !options.designRequiresCompatibility {
+            segmentedControl.selectedSegmentTintColor = .systemGray4
             addSubview(segmentedControl)
             segmentedControl.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
-//                make.width.equalTo(180)
                 make.height.equalTo(48)
             }
             return

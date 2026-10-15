@@ -98,11 +98,20 @@ extension AssetPickerViewController {
             leadingSpace.width = 8
             let trailingSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
             trailingSpace.width = 8
+            let filterItem = UIBarButtonItem(customView: lgView.filterBarContainer)
+            #if compiler(>=6.4)
+            if #available(iOS 27.0, *) {
+                // The segmented control supplies its own padding. Additional bar-item
+                // padding can push this full-width custom view into the overflow menu.
+                filterItem.isPaddingRemoved = true
+                filterItem.visibilityPriority = .high
+            }
+            #endif
             
             lgView.toolBar.items = [
                 lgView.previewButton,
                 leadingSpace,
-                UIBarButtonItem(customView: lgView.filterBarContainer),
+                filterItem,
                 trailingSpace,
                 lgView.moreButton
             ]
@@ -352,6 +361,7 @@ extension AssetPickerViewController {
     func lgUpdateToolBarLayout() {
         guard #available(iOS 26.0, *), !manager.options.designRequiresCompatibility else { return }
         guard showsMediaTypeFilterBar else { return }
+        guard lgView.toolBar.bounds.width > 0 else { return }
         let horizontalMargins = lgView.toolBar.layoutMargins.left + lgView.toolBar.layoutMargins.right
         let buttonReservedWidth: CGFloat = 72
         let availableWidth = lgView.toolBar.bounds.width - horizontalMargins - buttonReservedWidth - buttonReservedWidth - 8 - 8

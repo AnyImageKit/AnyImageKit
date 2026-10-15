@@ -63,6 +63,7 @@ final class AssetLGView: UIView {
     
     func updateFilterBarWidth(_ width: CGFloat) {
         let finalWidth = max(width, 120)
+        guard filterBarWidthConstraint?.constant != finalWidth else { return }
         filterBarContainer.frame.size = CGSize(width: finalWidth, height: 48)
         filterBarWidthConstraint?.constant = finalWidth
         filterBarContainer.layoutIfNeeded()
