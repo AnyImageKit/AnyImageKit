@@ -81,8 +81,13 @@ public struct PickerOptionsInfo {
     /// Indicates whether to use the legacy UI design.
     /// Reads `UIDesignRequiresCompatibility` from the host app's Info.plist.
     /// When the value is `true`, the library will switch to the old-style UI instead of using the new Liquid Glass design (iOS 26+).
+    /// This key is only honored when building with Xcode 26 (iOS 26 SDK). Xcode 27+ always returns `false`.
     public var designRequiresCompatibility: Bool {
-        Bundle.main.object(forInfoDictionaryKey: "UIDesignRequiresCompatibility") as? Bool ?? false
+#if compiler(>=6.4) // Xcode 27+
+        return false
+#else
+        return Bundle.main.object(forInfoDictionaryKey: "UIDesignRequiresCompatibility") as? Bool ?? false
+#endif
     }
     
     /// Enable Debug Log
