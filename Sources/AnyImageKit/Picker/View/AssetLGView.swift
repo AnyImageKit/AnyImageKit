@@ -18,6 +18,8 @@ final class AssetLGView: UIView {
     let filterBarContainer = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 48))
     private var filterBarWidthConstraint: NSLayoutConstraint?
     private var albumTitle: String?
+    private var options: PickerOptionsInfo?
+    private var didCollapseLimitedButton = false
     
     private(set) lazy var albumButton: UIButton = {
         guard #available(iOS 26.0, *) else {
@@ -68,14 +70,20 @@ final class AssetLGView: UIView {
     
     func setAlbumTitle(_ title: String) {
         albumTitle = title
-        albumButton.accessibilityLabel = String(format: BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker), title)
-        if #available(iOS 26.0, *) {
-            albumButton.configuration?.title = title
-        } else {
-            albumButton.setTitle(title, for: .normal)
-        }
+        refreshAlbumButton()
     }
-
+    
+    func collapseLimitedButtonTitle() {
+        guard #available(iOS 26.0, *), options?.designRequiresCompatibility != true else { return }
+        didCollapseLimitedButton = true
+        if let options {
+            options.theme.applyGlassButtonConfiguration(.limitedPermission, to: limitedButton)
+        }
+        var config = limitedButton.configuration
+        config?.title = nil
+        limitedButton.configuration = config
+    }
+    
     private func setupFilterBarContainer() {
         filterBarContainer.backgroundColor = .clear
         filterBarContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -88,19 +96,42 @@ final class AssetLGView: UIView {
 extension AssetLGView: PickerOptionsConfigurable {
 
     func update(options: PickerOptionsInfo) {
-        let currentAlbumTitle = albumTitle ?? options.theme[string: .pickerRecentAlbumTitle]
-        let albumAccessibilityLabel = String(format: options.theme[string: .pickerA11ySwitchAlbumTips], currentAlbumTitle)
-        let limitedTitle = options.theme[string: .pickerLimitedPhotosPermissionButtonTitle]
-        if #available(iOS 26.0, *) {
-            albumButton.configuration?.title = currentAlbumTitle
-            albumButton.accessibilityLabel = albumAccessibilityLabel
-            limitedButton.configuration?.title = limitedTitle
-        } else {
-            albumButton.setTitle(currentAlbumTitle, for: .normal)
-            albumButton.accessibilityLabel = albumAccessibilityLabel
-            limitedButton.setTitle(limitedTitle, for: .normal)
-        }
-        limitedButton.accessibilityLabel = limitedTitle
+        self.options = options
+        refreshAlbumButton()
+        refreshLimitedButton()
         updateChildrenConfigurable(options: options)
+    }
+    
+    private func refreshAlbumButton() {
+        let title = albumTitle ?? options?.theme[string: .pickerRecentAlbumTitle] ?? BundleHelper.localizedString(key: "RECENT_ALBUM_TITLE", module: .picker)
+        let accessibilityFormat = options?.theme[string: .pickerA11ySwitchAlbumTips] ?? BundleHelper.localizedString(key: "A11Y_SWITCH_ALBUM_TIPS", module: .picker)
+        let accessibilityLabel = String(format: accessibilityFormat, title)
+        if #available(iOS 26.0, *), options?.designRequiresCompatibility != true {
+            let menu = albumButton.menu
+            options?.theme.applyGlassButtonConfiguration(.album, to: albumButton)
+            albumButton.menu = menu
+            albumButton.showsMenuAsPrimaryAction = true
+            var config = albumButton.configuration
+            config?.title = title
+            albumButton.configuration = config
+            albumButton.accessibilityLabel = accessibilityLabel
+        } else {
+            albumButton.setTitle(title, for: .normal)
+            albumButton.accessibilityLabel = accessibilityLabel
+        }
+    }
+    
+    private func refreshLimitedButton() {
+        let title = options?.theme[string: .pickerLimitedPhotosPermissionButtonTitle] ?? BundleHelper.localizedString(key: "LIMITED_PHOTOS_PERMISSION_BUTTON_TITLE", module: .picker)
+        if #available(iOS 26.0, *), options?.designRequiresCompatibility != true {
+            limitedButton.accessibilityLabel = title
+            options?.theme.applyGlassButtonConfiguration(.limitedPermission, to: limitedButton)
+            var config = limitedButton.configuration
+            config?.title = didCollapseLimitedButton ? nil : title
+            limitedButton.configuration = config
+        } else {
+            limitedButton.setTitle(title, for: .normal)
+            limitedButton.accessibilityLabel = title
+        }
     }
 }

@@ -35,12 +35,13 @@ extension AssetPickerViewController {
         guard #available(iOS 26.0, *), !manager.options.designRequiresCompatibility else { return }
         
         let children: [UIMenuElement] = albums.map { album in
-            return UIAction(title: "\(album.title) (\(album.count.description))", image: nil, state: self.album == album ? .on : .off) { [weak self] _ in
+            let action = UIAction(title: "\(album.title) (\(album.count.description))", image: nil, state: self.album == album ? .on : .off) { [weak self] _ in
                 guard let self = self else { return }
                 self.displayAlbum(album)
                 self.lgSetupAlbumMenu()
                 self.lgView.setAlbumTitle(album.title)
             }
+            return action
         }
         
         lgView.albumButton.menu = UIMenu(title: "", children: children)
@@ -120,9 +121,11 @@ extension AssetPickerViewController {
     
     func updateLimitedButton() {
         guard #available(iOS 26.0, *), !manager.options.designRequiresCompatibility else { return }
+        guard !didCollapseLimitedButton else { return }
         guard lgView.limitedButton.frame.width > 48, didAppear else { return }
+        didCollapseLimitedButton = true
         UIView.animate(withDuration: 0.25) {
-            self.lgView.limitedButton.configuration?.title = nil
+            self.lgView.collapseLimitedButtonTitle()
             self.lgView.limitedButton.snp.remakeConstraints { make in
                 make.left.equalToSuperview().inset(15)
                 make.bottom.equalTo(self.lgView.toolBar.snp.top).offset(-16)
@@ -137,16 +140,20 @@ extension AssetPickerViewController {
 
         lgView.closeButton.image = options.theme[icon: .closeButton]
         lgView.closeButton.accessibilityLabel = options.theme[string: .cancel]
+        options.theme.applyBarButtonConfiguration(.close, to: lgView.closeButton)
 
         lgView.doneButton.image = options.theme[icon: .doneButton]
         lgView.doneButton.tintColor = options.theme[color: .primary]
         lgView.doneButton.accessibilityLabel = options.theme[string: .done]
+        options.theme.applyBarButtonConfiguration(.done, to: lgView.doneButton)
 
         lgView.previewButton.image = options.theme[icon: .previewButton]
         lgView.previewButton.accessibilityLabel = options.theme[string: .preview]
+        options.theme.applyBarButtonConfiguration(.preview, to: lgView.previewButton)
 
         lgView.moreButton.image = options.theme[icon: .moreButton]
         lgView.moreButton.accessibilityLabel = options.theme[string: .pickerMoreOptions]
+        options.theme.applyBarButtonConfiguration(.more, to: lgView.moreButton)
     }
 
     private func makeLGToolBarMenu() -> UIMenu {
@@ -158,47 +165,52 @@ extension AssetPickerViewController {
         var children: [UIMenuElement] = []
         
         if manager.options.allowUseOriginalImage {
-            children.append(UIAction(title: manager.options.theme[string: .pickerOriginalImage],
-                                     image: UIImage(systemName: manager.useOriginalImage ? "checkmark.circle" : "circle"),
-                                     identifier: nil,
-                                     discoverabilityTitle: nil,
-                                     attributes: lgMenuActionAttributes(enabled: true),
-                                     state: .off) { [weak self] _ in
+            let action = UIAction(title: manager.options.theme[string: .pickerOriginalImage],
+                                  image: UIImage(systemName: manager.useOriginalImage ? "checkmark.circle" : "circle"),
+                                  identifier: nil,
+                                  discoverabilityTitle: nil,
+                                  attributes: lgMenuActionAttributes(enabled: true),
+                                  state: .off) { [weak self] _ in
                 self?.toggleLGOriginalImage()
-            })
+            }
+            children.append(action)
         }
         
+        let zoomIn = UIAction(title: manager.options.theme[string: .pickerZoomIn],
+                              image: UIImage(systemName: "plus.magnifyingglass"),
+                              identifier: nil,
+                              discoverabilityTitle: nil,
+                              attributes: lgMenuActionAttributes(enabled: canZoomIn),
+                              state: .off) { [weak self] _ in
+            self?.changeLGColumnNumber(by: -1)
+        }
+        let zoomOut = UIAction(title: manager.options.theme[string: .pickerZoomOut],
+                               image: UIImage(systemName: "minus.magnifyingglass"),
+                               identifier: nil,
+                               discoverabilityTitle: nil,
+                               attributes: lgMenuActionAttributes(enabled: canZoomOut),
+                               state: .off) { [weak self] _ in
+            self?.changeLGColumnNumber(by: 1)
+        }
         children.append(
             UIMenu(title: manager.options.theme[string: .pickerDisplayOptions], options: .displayInline, children: [
-                UIAction(title: manager.options.theme[string: .pickerZoomIn],
-                         image: UIImage(systemName: "plus.magnifyingglass"),
-                         identifier: nil,
-                         discoverabilityTitle: nil,
-                         attributes: lgMenuActionAttributes(enabled: canZoomIn),
-                         state: .off) { [weak self] _ in
-                    self?.changeLGColumnNumber(by: -1)
-                },
-                UIAction(title: manager.options.theme[string: .pickerZoomOut],
-                         image: UIImage(systemName: "minus.magnifyingglass"),
-                         identifier: nil,
-                         discoverabilityTitle: nil,
-                         attributes: lgMenuActionAttributes(enabled: canZoomOut),
-                         state: .off) { [weak self] _ in
-                    self?.changeLGColumnNumber(by: 1)
-                }
+                zoomIn,
+                zoomOut
             ])
         )
 
+        let sortByDateCaptured = UIAction(title: manager.options.theme[string: .pickerSortByDateCaptured],
+                                          state: lgAssetSortOption == .capturedDate ? .on : .off) { [weak self] _ in
+            self?.changeLGAssetSortOption(.capturedDate)
+        }
+        let sortByRecentlyAdded = UIAction(title: manager.options.theme[string: .pickerSortByRecentlyAdded],
+                                           state: lgAssetSortOption == .recentlyAdded ? .on : .off) { [weak self] _ in
+            self?.changeLGAssetSortOption(.recentlyAdded)
+        }
         children.append(
             UIMenu(title: "", options: .displayInline, children: [
-                UIAction(title: manager.options.theme[string: .pickerSortByDateCaptured],
-                         state: lgAssetSortOption == .capturedDate ? .on : .off) { [weak self] _ in
-                    self?.changeLGAssetSortOption(.capturedDate)
-                },
-                UIAction(title: manager.options.theme[string: .pickerSortByRecentlyAdded],
-                         state: lgAssetSortOption == .recentlyAdded ? .on : .off) { [weak self] _ in
-                    self?.changeLGAssetSortOption(.recentlyAdded)
-                }
+                sortByDateCaptured,
+                sortByRecentlyAdded
             ])
         )
         

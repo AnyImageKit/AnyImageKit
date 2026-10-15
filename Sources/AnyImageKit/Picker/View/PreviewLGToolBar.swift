@@ -101,9 +101,10 @@ extension PreviewLGToolBar: PickerOptionsConfigurable {
     private func applyEditStyle(options: PickerOptionsInfo) {
         applyGlassStyle(to: editButton,
                         title: options.theme[string: .edit],
-                        foregroundColor: options.theme[color: .text])
-        editButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+                        foregroundColor: options.theme[color: .text],
+                        font: .systemFont(ofSize: 18))
         editButton.setTitleColor(options.theme[color: .text].withAlphaComponent(0.3), for: .disabled)
+        options.theme.applyGlassButtonConfiguration(.edit, to: editButton)
     }
     
     private func applyOriginalStyle(options: PickerOptionsInfo) {
@@ -112,22 +113,39 @@ extension PreviewLGToolBar: PickerOptionsConfigurable {
         applyGlassStyle(to: originalButton,
                         title: options.theme[string: .pickerOriginalImage],
                         foregroundColor: foregroundColor,
-                        image: image)
-        originalButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+                        image: image,
+                        font: .systemFont(ofSize: 16))
+        // Reapplied on every original-image toggle. The theme closure must be idempotent.
+        options.theme.applyGlassButtonConfiguration(.originalImage, to: originalButton)
+        restoreOriginalCheckImage(image)
+    }
+    
+    private func restoreOriginalCheckImage(_ image: UIImage?) {
+        if #available(iOS 26.0, *) {
+            var config = originalButton.configuration
+            config?.image = image
+            config?.imagePlacement = .leading
+            config?.imagePadding = image == nil ? 0 : 6
+            originalButton.configuration = config
+        } else {
+            originalButton.setImage(image, for: .normal)
+        }
     }
     
     private func applyDoneStyle(options: PickerOptionsInfo) {
         applyGlassStyle(to: doneButton,
                         title: options.theme[string: .done],
-                        foregroundColor: options.theme[color: .primary])
-        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+                        foregroundColor: options.theme[color: .primary],
+                        font: .systemFont(ofSize: 18, weight: .bold))
         doneButton.setTitleColor(options.theme[color: .primary].withAlphaComponent(0.3), for: .disabled)
+        options.theme.applyGlassButtonConfiguration(.done, to: doneButton)
     }
     
     private func applyGlassStyle(to button: UIButton,
                                  title: String,
                                  foregroundColor: UIColor,
-                                 image: UIImage? = nil) {
+                                 image: UIImage? = nil,
+                                 font: UIFont) {
         if #available(iOS 26.0, *) {
             var config = UIButton.Configuration.glass()
             config.title = title
@@ -137,12 +155,18 @@ extension PreviewLGToolBar: PickerOptionsConfigurable {
             config.background.backgroundColor = .clear
             config.baseForegroundColor = foregroundColor
             config.contentInsets = .zero
+            config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = font
+                return outgoing
+            }
             button.configuration = config
         } else {
             button.setTitle(title, for: .normal)
             button.setImage(image, for: .normal)
             button.setTitleColor(foregroundColor, for: .normal)
             button.tintColor = foregroundColor
+            button.titleLabel?.font = font
         }
     }
 }
