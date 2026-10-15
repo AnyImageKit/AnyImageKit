@@ -365,7 +365,8 @@ extension AssetPickerViewController {
         let horizontalMargins = lgView.toolBar.layoutMargins.left + lgView.toolBar.layoutMargins.right
         let buttonReservedWidth: CGFloat = 72
         let availableWidth = lgView.toolBar.bounds.width - horizontalMargins - buttonReservedWidth - buttonReservedWidth - 8 - 8
-        lgView.updateFilterBarWidth(availableWidth)
+        let filterHorizontalInset: CGFloat = 16
+        lgView.updateFilterBarWidth(availableWidth - filterHorizontalInset * 2)
     }
     
     private func refreshLGMoreMenu() {
