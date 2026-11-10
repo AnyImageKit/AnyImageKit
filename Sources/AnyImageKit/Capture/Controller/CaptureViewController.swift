@@ -96,11 +96,19 @@ final class CaptureViewController: AnyImageViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.shared.isIdleTimerDisabled = true
+        if permissionsChecked {
+            capture.startRunning()
+            orientationUtil.startRunning()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.isIdleTimerDisabled = false
+        if permissionsChecked {
+            capture.stopRunning()
+            orientationUtil.stopRunning()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -271,8 +279,6 @@ extension CaptureViewController: CaptureDelegate {
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
-            self.capture.stopRunning()
-            self.orientationUtil.stopRunning()
         }
         #else
         if let url = FileHelper.write(photoData: photoData, utType: fileType.utType) {
@@ -313,8 +319,6 @@ extension CaptureViewController: RecorderDelegate {
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
-            self.capture.stopRunning()
-            self.orientationUtil.stopRunning()
         }
         #else
         delegate?.capture(self, didOutput: url, type: .video)
@@ -339,8 +343,6 @@ extension CaptureViewController: DeviceOrientationUtilDelegate {
 extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
-        capture.startRunning()
-        orientationUtil.startRunning()
         previewView.isRunning = true
         editor.dismiss(animated: false, completion: nil)
     }

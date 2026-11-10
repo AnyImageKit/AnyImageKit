@@ -25,6 +25,7 @@ final class Capture {
     
     private let options: CaptureOptionsInfo
     private let session: AVCaptureSession
+    private let sessionQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.CaptureSession")
     private let audioIO: AudioIOComponent
     private let videoIO: VideoIOComponent
     
@@ -48,7 +49,7 @@ extension Capture {
     
     func startRunning() {
         #if !targetEnvironment(simulator)
-        DispatchQueue.global().async {
+        sessionQueue.async {
             self.session.startRunning()
         }
         #endif
@@ -56,7 +57,7 @@ extension Capture {
     
     func stopRunning() {
         #if !targetEnvironment(simulator)
-        DispatchQueue.global().async {
+        sessionQueue.async {
             self.session.stopRunning()
         }
         #endif
