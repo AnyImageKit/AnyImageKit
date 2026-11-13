@@ -266,7 +266,10 @@ final class AssetPickerViewController: AnyImageViewController {
     private func setupSection() {
         section.selectedEvent.delegate(on: self) { (self, model) in
             self.selectItem(model.index)
-            if self.manager.options.selectLimit == 1 && self.manager.selectedAssets.count == 1 {
+            // Only quickPick finishes picking on select; in preview mode the select button just toggles selection
+            if self.manager.options.selectionTapAction == .quickPick
+                && self.manager.options.selectLimit == 1
+                && self.manager.selectedAssets.count == 1 {
                 self.doneButtonTapped(self.toolBar.doneButton)
             }
         }
